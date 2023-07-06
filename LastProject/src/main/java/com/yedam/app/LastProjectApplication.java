@@ -15,9 +15,4 @@ public class LastProjectApplication {
 		SpringApplication.run(LastProjectApplication.class, args);
 	}
 	
-	@GetMapping("main")
-	public String test() {
-		return "domain/stock";
-	}
-	
 }
