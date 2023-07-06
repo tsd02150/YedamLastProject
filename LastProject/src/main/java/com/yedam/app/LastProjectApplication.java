@@ -15,4 +15,14 @@ public class LastProjectApplication {
 		SpringApplication.run(LastProjectApplication.class, args);
 	}
 	
+	@GetMapping("stock")
+	public String stock() {
+		return "domain/stock";
+	}
+	
+	@GetMapping("mall")
+	public String mall() {
+		return "domain/mall";
+	}
+	
 }
