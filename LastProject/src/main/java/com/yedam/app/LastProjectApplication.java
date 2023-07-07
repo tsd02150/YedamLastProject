@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @SpringBootApplication
 @MapperScan(basePackages = "com.yedam.app.**.mapper")
-@Controller
 public class LastProjectApplication {
 
 	public static void main(String[] args) {
