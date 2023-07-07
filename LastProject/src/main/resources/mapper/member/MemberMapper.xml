@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yedam.app.member.mapper.MemberMapper">
+
+	<!-- login 시 회원 정보 조회 -->
+	<select id="loginCheck" resultType="MembVO">
+		SELECT * FROM MEMBER
+		WHERE
+		id=#{id}
+		AND pwd=#{pwd}
+	</select>
+
+	<!-- 회원가입 시 닉네임 중복확인 -->
+	<select id="nickCheck" resultType="int">
+		SELECT COUNT(*) 
+		FROM MEMBER
+		WHERE nick = #{nick}
+	</select>
+	
+	<!-- 회원가입 시 id 중복확인 -->
+	<select id="idceck" resultType="int">
+		SELECT COUNT(*) 
+		FROM MEMBER
+		WHERE nick = #{nick}
+	</select>
+	
+	
+</mapper>
