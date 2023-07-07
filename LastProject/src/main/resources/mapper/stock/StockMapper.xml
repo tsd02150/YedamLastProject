@@ -3,5 +3,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yedam.app.stock.mapper.StockMapper">
-
+	<select id="getThemeList" resultType="String">
+		select * from common_code
+		where common_cd like '#{code}'||'%'
+		and length(common_cd) = 4;
+	</select>
 </mapper>

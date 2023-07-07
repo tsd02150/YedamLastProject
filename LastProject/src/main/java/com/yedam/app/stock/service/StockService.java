@@ -1,5 +1,7 @@
 package com.yedam.app.stock.service;
 
-public interface StockService {
+import java.util.List;
 
+public interface StockService {
+	public List<String> getThemeList(String code);
 }
