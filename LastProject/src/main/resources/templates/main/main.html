@@ -5,10 +5,144 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+	.outer-block{
+		width:1100px;
+		margin: 0 auto;
+	}
+	div{
+		box-sizing : border-box;
+	}
+	section{
+		box-sizing : border-box;
+		
+	}
+	.flex-block{
+		display: flex;
+	}
+	#chart{
+		width:800px;
+		height:400px;
+		padding:20px;
+		background-color: gray;
+		background-clip: content-box;
+	}
+	#ranking{
+		width:400px;
+		height:300px;
+		padding:20px;
+		background-color: gray;
+		background-clip: content-box;
+	}
+	#updown{
+		width:400px;
+		height:300px;
+		padding:20px;
+		background-color: gray;	
+		background-clip: content-box;
+	}
+	#login{
+		width:300px;
+		height:300px;
+		padding:20px;
+		background-color: gray;
+		background-clip: content-box;
+	}
+	#login input{
+		width:200px;
+	}
+	#survey{
+		width:300px;
+		height:400px;
+		padding:20px;
+		background-color: gray;
+		background-clip: content-box;
+	}
+	#mall{
+		width:1100px;
+		height:200px;
+		padding:20px;
+		background-color: gray;
+		background-clip: content-box;
+	}
+	#news{
+		width:800px;
+		height:400px;
+		padding:20px;
+		background-color: gray;
+		background-clip: content-box;
+	}
+	#notice{
+		width:300px;
+		height:400px;
+		padding:20px;
+		background-color: gray;
+		background-clip: content-box;
+	}
+	#freeboard{
+		width:400px;
+		height:400px;
+		padding:20px;
+		background-color: gray;
+		background-clip: content-box;
+	}
+	#stockboard{
+		width:400px;
+		height:400px;
+		padding:20px;
+		background-color: gray;
+		background-clip: content-box;
+	}
+	#qna{
+		width:300px;
+		height:400px;
+		padding:20px;
+		background-color: gray;
+		background-clip: content-box;
+	}
+</style>
 </head>
 <body>
-	<div layout:fragment="content">
-		메인페이지
+	<div layout:fragment="content" class="outer-block">
+		<div class="flex-block">
+			<div>
+				<div id="chart">
+				</div>
+				<div class="flex-block">
+					<section id="ranking">
+					
+					</section>
+					<section id="updown">
+					
+					</section>
+				</div>
+			</div>
+			<div>
+				<div id="login">
+					<form action="#" method="post">
+						<label>id</label>
+						<input>
+						<label for="">password</label>
+						<input name="
+						">
+					</form>
+				</div>			
+				<div id="survey">
+				
+				</div>			
+			</div>
+		</div>
+		<div id="mall">
+		</div>
+		<div class="flex-block">
+			<section id="news"></section>
+			<section id="notice"></section>
+		</div>
+		<div class="flex-block">
+			<section id="freeboard"></section>
+			<section id="stockboard"></section>
+			<section id="qna"></section>
+		</div>
 	</div>
 </body>
 </html>
