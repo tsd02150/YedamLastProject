@@ -2,9 +2,7 @@ package com.yedam.app.member.controller;
 
 import javax.servlet.http.HttpSession;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.app.member.service.MemberService;
 import com.yedam.app.member.service.impl.MembVO;
-import com.yedam.app.member.service.impl.MemberService;
 
 @Controller
 @RequestMapping("member")
@@ -21,10 +19,10 @@ public class MemberController {
 	@Autowired
 	MemberService membService;
 	
-	@GetMapping("main")
-	public String mainForm() {
-		return "main/layout";
-	}
+//	@GetMapping("main")
+//	public String mainForm() {
+//		return "main/layout";
+//	}
 	
 	@GetMapping("userLogin")
 	public String loginForm() {
@@ -63,7 +61,12 @@ public class MemberController {
 		return result;
 	}
 	
+	//아이디 중복확인
+	@ResponseBody
+	@GetMapping("idCheck")
+	public int idCheck(String id, Model model) {
+		int result = membService.idCheckBoolean(id);
+		return result;
+	}
 	
-	
-
 }

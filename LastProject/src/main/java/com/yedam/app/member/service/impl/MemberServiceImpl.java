@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.member.mapper.MemberMapper;
+import com.yedam.app.member.service.MemberService;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -17,10 +18,16 @@ public class MemberServiceImpl implements MemberService {
 		return membMapper.loginCheck(membVO);
 	}
 
-	//회원가입
+	//닉네임 중복확인
 	@Override
 	public int nickCheckBoolean(String nick) {
 		return membMapper.nickCheck(nick);
+	}
+
+	//아이디 중복확인
+	@Override
+	public int idCheckBoolean(String id) {
+		return membMapper.idCheck(id);
 	}
 
 }

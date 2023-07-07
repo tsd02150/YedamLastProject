@@ -20,11 +20,10 @@
 	</select>
 	
 	<!-- 회원가입 시 id 중복확인 -->
-	<select id="idceck" resultType="int">
+	<select id="idCheck" resultType="int">
 		SELECT COUNT(*) 
 		FROM MEMBER
-		WHERE nick = #{nick}
+		WHERE id = #{id}
 	</select>
-	
 	
 </mapper>
