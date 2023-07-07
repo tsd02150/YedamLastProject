@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yedam.app.mall.mapper.MallMapper">
+
+	<!-- 전체조회 -->
+  	<select id="getProductList" resultType="ProductVO">
+  		SELECT prdt_no
+  			   ,nm
+  			   ,prc
+  			   ,dc_rate
+  			   ,desct
+  			   ,thumb
+  			   ,img
+  			   ,drwup_dt
+  			   ,common_cd
+  			 
+  		FROM product
+  		ORDER BY prdt_no DESC
+  	
+  	</select>
+  	
+  	<!-- 단건조회 -->
+  	<select id="getProductInfo" resultType="ProductVO">
+  		SELECT prdt_no
+  			   ,nm
+  			   ,prc
+  			   ,dc_rate
+  			   ,desct
+  			   ,thumb
+  			   ,img
+  			   ,drwup_dt
+  			   ,common_cd
+  			 
+  		FROM product
+  		WHERE prdt_no = #{prdtNo}
+  	</select>
+  	
+  	
+  	
+</mapper>
