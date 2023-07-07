@@ -4,10 +4,10 @@
 
 
 ## 팀 소개
-- [신재영](https://github.com/tsd02150) - 프로젝트 총괄, 메인페이지, 커뮤니티, 익명채팅
-- [김태연](https://github.com/Benhur41) - 주식시장, 관리자모드, 실시간 알림
-- [신지은](https://github.com/shinji56n) - 포인트 몰, 결제, 관리자모드
-- [김미향](https://github.com/kmhyang) - 회원관리, 현황, 투자성향분석
+- <b>[신재영]</b> (https://github.com/tsd02150) - 프로젝트 총괄, 메인페이지, 커뮤니티, 익명채팅
+- <b>[김태연]</b> (https://github.com/Benhur41) - 주식시장, 관리자모드, 실시간 알림
+- <b>[신지은]</b> (https://github.com/shinji56n) - 포인트 몰, 결제, 관리자모드
+- <b>[김미향]</b> (https://github.com/kmhyang) - 회원관리, 현황, 투자성향분석
 
 ## 개발환경
 - Spring Tool Suite 3
@@ -17,6 +17,9 @@
 - Github
 - Slack
 
+
+## 배포
+- AWS
 
 ## 사용기술
   * JAVA
