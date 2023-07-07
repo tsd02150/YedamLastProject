@@ -1,8 +1,9 @@
 package com.yedam.app.stock.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 public interface StockMapper {
-	public List<String> getThemeList(String code);
+	public List<Map<String,Object>> getThemeList(String code);
 
 }

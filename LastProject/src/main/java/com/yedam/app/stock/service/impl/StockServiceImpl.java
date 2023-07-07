@@ -1,6 +1,7 @@
 package com.yedam.app.stock.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ public class StockServiceImpl implements StockService {
 	StockMapper stockMapper;
 
 	@Override
-	public List<String> getThemeList(String code) {
+	public List<Map<String,Object>> getThemeList(String code) {
 		return stockMapper.getThemeList(code);
 	}
 	

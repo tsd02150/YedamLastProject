@@ -13,7 +13,7 @@
       integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
       crossorigin="anonymous"
     />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    
     <style>
       ul {
         list-style: none;
@@ -48,19 +48,18 @@
                 </ul>
               </td>
               <td>
-                2
                 <ul id="theme">
-                  <li></li>
+                 
                 </ul>
               </td>
               <td>
                 <ul id="item">
-                  <li></li>
+                  
                 </ul>
               </td>
               <td>
                 <ul id="itemInfo">
-                  <li></li>
+                  
                 </ul>
               </td>
             </table>
@@ -71,21 +70,23 @@
           <div class="col-xs-12"></div>
         </div>
       </div>
-    </div>
     <script>
       // 증권 선택시 테마 리스트 출력
-      $("#sc").on("click", function () {
+      $("#sc").on("click",'li', function () {
         let ctg = $(event.target).data("cd");
         if (ctg == "S1") {
-          // $.get("themeList?code=" + ctg).done(function (data) {
-          //   console.log(data);
-          // });
-          console.log("zz");
+           $.ajax({
+        	   url:'themeList?code='+ctg,
+        	   success:function(result){
+        		   
+        	   }
+           })
         }
       });
 
       //테마 클릭시 종목 리스트 출력
-      $("#theme").on("click", function () {});
+      $("#theme").on("click", function (){});
     </script>
+    </div>
   </body>
 </html>
