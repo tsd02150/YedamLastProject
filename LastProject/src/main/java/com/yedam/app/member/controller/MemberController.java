@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.yedam.app.member.service.impl.MembVO;
 import com.yedam.app.member.service.impl.MemberService;
 
-
-//@MapperScan(basePackages = "com.yedam.app.**.mapper")
 @Controller
-//@RequestMapping("/member")
+@RequestMapping("member")
 public class MemberController {
 	@Autowired
 	MemberService membService;
@@ -33,7 +31,7 @@ public class MemberController {
 		return "member/loginForm2";
 	}
 	
-	@PostMapping("/userLogin")
+	@PostMapping("userLogin")
 	public String loginPost(MembVO membVO, Model model, HttpSession session) {
 		//로그인 정보 비교
 		MembVO loggedInMember = membService.loginCheck(membVO);

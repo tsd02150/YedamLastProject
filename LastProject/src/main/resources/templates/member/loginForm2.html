@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{member/layout}">
+	layout:decorate="~{layout/layout}">
 <head>
 <meta charset="UTF-8">
 <title>로그인</title>
@@ -50,7 +50,7 @@
 	</section>
 	<script>
     function validateForm() {
-    	event.stoppropagation();
+    	event.stopPropagation();
     	alert("a");
         // 아이디와 비밀번호가 공란인 경우
         if (loginemail.value === "" || loginPassword.value === "") {

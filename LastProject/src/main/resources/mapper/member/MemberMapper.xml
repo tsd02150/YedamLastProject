@@ -18,4 +18,13 @@
 		FROM MEMBER
 		WHERE nick = #{nick}
 	</select>
+	
+	<!-- 회원가입 시 id 중복확인 -->
+	<select id="idceck" resultType="int">
+		SELECT COUNT(*) 
+		FROM MEMBER
+		WHERE nick = #{nick}
+	</select>
+	
+	
 </mapper>
