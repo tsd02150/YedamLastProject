@@ -37,7 +37,7 @@
   - 반드시 <b>작업 전 main branch의 내용(팀원의 작업물)을 pull 받고</b> 작업 시작한다.
   - 반드시 <b>개인 브랜치</b>에서 작업 후 merge한다.
   - 브랜치명은 각자의 이름으로한다
-  - push전 main branch pull은 필수로 이행한다.
+  - 작업 후 push전 <b>main branch pull은 필수로 이행</b>한다.
   - 별도의 Pakage 추가 시 즉시 psuh & 알려준다.
   
 ## 1. Local에 Repository Clone
