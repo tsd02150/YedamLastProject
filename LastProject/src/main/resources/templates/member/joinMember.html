@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{member/layout}">
+<head>
+<meta charset="UTF-8">
+<title>회원가입</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<style>
+    #errormsg {background-color: GhostWhite; width: 15%; height: 40px;}
+    .olmessagef {color: red; font-style: Italic;}
+    .olmessaget {color: blue; font-style: Italic;}
+</style>
+</head>
+<body>
+ <section class="login-signup section-padding" layout:fragment="joinMemb">
+   <div class="row align-items-center justify-content-center">
+        <div class="col-lg-7">
+            <div class="signup">
+                <div class="text-center"><a href="index.html"><img src="images/logos/logo.png" alt="" class="img-fluid"></a></div>
+                <div class="py-40"></div>
+                <h3 class="mt-4">회원가입</h3>
+                <div class="py-40"></div>
+                <form action="#" class="signup-form row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="f-name">이름</label>
+                            <input type="text" class="form-control" id="f-name" th:name="nm" placeholder="이름을 입력하세요">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="nickname">닉네임</label>
+                            <input type="text" class="form-control" id="nickname" th:name="nick" placeholder="특수문자를 제외한 3~10자리여야 합니다.">
+                            <button type="button" id="checkNick" th:onclick="checkNickInfo()">중복확인</button>
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="email-address">아이디</label>
+                            <input type="email" class="form-control" th:name="id" id="id-address" placeholder="이메일 형식으로 입력하세요">
+                            <button type="button">중복확인</button><span id=errormsg></span>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="pass">Password</label>
+                            <input type="password" class="form-control" id="pass" th:name="pwd" placeholder="비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="pwdCheck">Password</label>
+                            <input type="password" class="form-control" id="pwdCheck" th:name="pwdCheck">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <button class="btn btn-primary" type="submit">Sign Up</button>
+                        <p class="mt-5 mb-0">이미 회원이신가요? <a href="loginForm.html">로그인</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript">
+ const nickBtn = document.querySelector("#checkNick");
+ nickBtn.addEventListener('click', () => {
+	 const nickObj = {nickname : document.querySelector("#nickname".value)}
+
+     const nickCheckUrl = "/nickCheck/"+nickObj.nickname;
+     fetch(nickCheckUrll, {
+        method : "post",
+        body : JSON.stringify(comment),
+        headers : {
+            "Content-Type": "application/json",
+        }
+     })
+     .then(response => {
+        const msg = document.querySelector("#errormsg");
+        msg.textContent = (response.ok) ? "이미 사용중인 닉네임 입니다." : "사용가능한 닉네임 입니다.";
+     })
+     .catch(err=>console.log(err));
+ });
+	
+    // function checkNickInfo(e) {
+    //     console.log(e.target);
+    //     let nick = nickname.value;
+    //     /fetch("http://localhost:8080/member/idCheck",{
+    //         method : 'POST',
+    //         data : {nick : nick}
+    //     })
+    //     .then(response => response.json())
+    //     .then(result => {
+    //         console.log(result);
+    //         let errormsg = document.getElementById("errormsg");
+    //         if(result == 1){
+    //         	errormsg.textContent = "이미 사용중인 닉네임 입니다.";
+    //             errormsg.attr("class","olmessagef");
+    //             errormsg.removeAttribute('class');
+    //         }else{
+    //             errormsg.textContent = "사용가능한 닉네임 입니다.";
+    //             errormsg.attr("class","olmessagef");
+    //             errormsg.removeAttribute('class');
+    //         }
+    //         })
+    //     .catch(); 
+  
+    // }
+</script>
+ 
+</body>
+</html>

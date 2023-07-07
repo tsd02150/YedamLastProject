@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout}">
+<head>
+<meta charset="UTF-8">
+<title>로그인</title>
+</head>
+<body>
+ <section class="login-signup section-padding" layout:fragment="login">
+        <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-lg-7">
+            <div class="login">
+                <div class="text-center">
+                <a href="main.html"><img src="images/logos/logo.png" alt="" class="img-fluid"></a>
+                <div class="py-40"></div>
+                <h3>000에 오신 것을 환영합니다.</h3>
+                </div>
+                <div class="py-40"></div>
+
+                <form method="post" th:action="@{/userlogin}" class="login-form row" onsubmit="return validateForm()">
+                <div class="col-md-12">
+                    <div class="form-group">
+                    <label for="loginemail">Id</label>
+                    <input type="email" id="loginemail" class="form-control" th:name="id" placeholder="aaa111@aaa.com" required>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" class="form-control" th:name="pwd" placeholder="Password" required>
+                    <div th:if="${not #strings.isEmpty(message)}">
+                        <p style="color: red; font-size: 12px;" th:text="${message}"></p>
+                    </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <button class="btn btn-primary" type="submit">Login</button>
+
+                    <p class="mt-5 mb-0">아직 회원이 아니세요? <a href="signup.html">회원가입</a></p>
+                </div>
+                </form>
+            </div>
+            </div>
+        </div>
+        </div>
+    </section>
+<script>
+    function validateForm() {
+        // 아이디와 비밀번호가 공란인 경우
+        if (loginemail.value === "" || loginPassword.value === "") {
+          if (loginemail.value === "") {
+            loginemail.classList.add("form-input-error");
+          }
+          if (loginPassword.value === "") {
+            user_pw.classList.add("form-input-error");
+          }
+          return false;
+        }
+
+        
+        // 비밀번호가 6자리 이상 16자리 이하가 아닌 경우
+        if (loginPassword.value.length < 6 || loginPassword.value.length > 16) {
+            loginPassword.classList.add("form-input-error");
+          return false;
+        }
+        
+        return true;
+      }
+</script>
+</body>
+</html>
