@@ -3,12 +3,22 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yedam.app.stock.mapper.StockMapper">
-
+	<!-- 카테고리 리스트 -->
 	<select id="getThemeList" resultType="map">
 		select common_cd , ctgr 
 		from common_code
 		where common_cd like #{code}||'%'
-		and length(common_cd) = 4
+		<if test="code.length == 2">
+			and length(common_cd) = 4
+		</if>
+		<if test="code.length == 4">
+			and length(common_cd) = 6
+		</if>
+	</select>
+	
+	<!-- 종목정보 조회 -->
+	<select id="getItemInfo" resultType="ItemVO">
+		select * from item where common_cd = #{code}
 	</select>
 
 </mapper>

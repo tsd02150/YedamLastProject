@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yedam.app.member.service.ItemVO;
 import com.yedam.app.stock.mapper.StockMapper;
 import com.yedam.app.stock.service.StockService;
 
@@ -18,6 +19,11 @@ public class StockServiceImpl implements StockService {
 	@Override
 	public List<Map<String,Object>> getThemeList(String code) {
 		return stockMapper.getThemeList(code);
+	}
+
+	@Override
+	public ItemVO getItemInfo(String code) {
+		return stockMapper.getItemInfo(code);
 	}
 	
 	

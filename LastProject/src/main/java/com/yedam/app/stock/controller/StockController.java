@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.app.member.service.ItemVO;
 import com.yedam.app.stock.service.StockService;
 
 
@@ -35,8 +36,17 @@ public class StockController {
 		return list;
 	}
 	
+	//종목 정보
+	@GetMapping("itemInfo")
+	@ResponseBody
+	public ItemVO getItemInfo(String code) {
+		ItemVO vo = stockservice.getItemInfo(code);
+		return vo;
+	}
+	
 	@GetMapping("main")
 	public String itemListPage2() {
 		return "domain/stock";
 	}
+	
 }
