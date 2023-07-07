@@ -18,7 +18,45 @@
 	
 	<!-- 종목정보 조회 -->
 	<select id="getItemInfo" resultType="ItemVO">
-		select * from item where common_cd = #{code}
+	
+		select * 
+		from item 
+		where 
+		<if test='code.substring(0,1).equals("S")'>
+		common_cd = #{value}
+		</if>
+		<if test='!code.substring(0,1).equals("S")'>
+		nm = #{value}
+		</if>
 	</select>
-
+	<!-- 자동완성 기능 -->
+	<select id="autocomplete" parameterType="map" resultType="map">
+		select ctgr ,common_cd
+		from common_code
+		where ctgr like '%'||#{value}||'%'
+		and length(common_cd) =6
+	</select>
+	
+	<!-- 자동완성 이용한 카테고리 종목정보 출력 -->
+	<select id="autoInfo" resultType="map">
+		select common_cd , h_cd 
+		from common_code 
+		where ctgr =(     
+					  select h_ctgr
+                      from common_code
+                      where ctgr = #{value}
+                      )
+	</select>
+	<!-- 모든종목조회 -->
+	<select id="allItemList" resultType="StockVO">
+		select case substr(common_cd,1,2) when 'S1' then '농산물'
+                                  when 'S2' then '수산물'
+                                  end sc
+                                  ,h_ctgr theme
+                                  , ctgr item
+                                  ,common_cd
+		from common_code
+		where length(common_cd) =6
+		order by common_cd 
+	</select>
 </mapper>

@@ -6,9 +6,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.yedam.app.member.service.ItemVO;
 import com.yedam.app.stock.mapper.StockMapper;
+import com.yedam.app.stock.service.ItemVO;
 import com.yedam.app.stock.service.StockService;
+import com.yedam.app.stock.service.StockVO;
 
 @Service
 public class StockServiceImpl implements StockService {
@@ -22,8 +23,23 @@ public class StockServiceImpl implements StockService {
 	}
 
 	@Override
-	public ItemVO getItemInfo(String code) {
-		return stockMapper.getItemInfo(code);
+	public ItemVO getItemInfo(String value) {
+		return stockMapper.getItemInfo(value);
+	}
+
+	@Override
+	public List<Map<String, Object>> autocomplete(Map<String, Object> paramMap) {
+		return stockMapper.autocomplete(paramMap);
+	}
+
+	@Override
+	public Map<String, Object> autoInfo(String value) {
+		return stockMapper.autoInfo(value);
+	}
+
+	@Override
+	public List<StockVO> allItemList() {
+		return stockMapper.allItemList();
 	}
 	
 	

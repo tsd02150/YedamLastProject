@@ -1,5 +1,11 @@
 package com.yedam.app.stock.service;
 
-public class StockVO {
+import lombok.Data;
 
+@Data
+public class StockVO {
+	private String sc;
+	private String theme;
+	private String item;
+	private String commonCd;
 }

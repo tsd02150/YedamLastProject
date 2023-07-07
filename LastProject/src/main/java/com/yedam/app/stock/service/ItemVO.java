@@ -1,4 +1,4 @@
-package com.yedam.app.member.service;
+package com.yedam.app.stock.service;
 
 import lombok.Data;
 
@@ -15,6 +15,4 @@ public class ItemVO {
 	private String nm;
 	private String origin;
 	private String desct;
-	private String commonCd;
-	private String inq;
 }

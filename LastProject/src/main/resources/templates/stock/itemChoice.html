@@ -1,138 +1,319 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layout/layout}">
-<head>
-<meta charset="UTF-8" />
-<!-- CSS only -->
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
-	crossorigin="anonymous" />
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout/layout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- CSS only -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
 
-<style>
-ul {
-	list-style: none;
-}
+    <style>
+      ul {
+        list-style: none;
+      }
 
-li {
-	padding: 20px;
-}
+      li {
+        padding: 20px;
+      }
 
-table {
-	width: 100%;
-	height: 300px;
-	padding: 10px;
-}
+      table {
+        width: 100%;
+      }
+      #choice {
+        height: 300px;
+        padding: 10px;
+      }
 
-td:not(:last-of-type) {
-	width: 25%;
-	height: 300px;
-	border-right: black solid 1px;
-}
+      #choice td:not(:last-of-type) {
+        width: 20%;
+        height: 300px;
+        border-right: black solid 1px;
+      }
 
-table td div {
-	height:300px;
-	overflow-y: scroll;
-}
-</style>
-<title>Insert title here</title>
-</head>
-<body>
-	<div layout:fragment="content">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-9">
-					<input id="searchItem" type="text" name="search" value="" />
-					<button>검색</button>
-					<table style="border: black solid 1px">
-						<td>
-							<div>
-								<ul id="sc">
-									<li data-cd="S1">농산물</li>
-									<li data-cd="S2">수산물</li>
-								</ul>
-							</div>
-						</td>
-						<td>
-							<div>
-								<ul id="theme">
+      #item {
+        height: 300px;
+        overflow-y: scroll;
+      }
 
-								</ul>
-							</div>
-						</td>
-						<td>
-							<div>
-								<ul id="item">
+      #itemInfo {
+        padding: 20px;
+      }
+      #hot {
+        width: 100%;
+        height: 347.2px;
+        border: black solid 1px;
+      }
+      #hot p{
+      	text-align: center;
+      	padding:20px;
+      }
+      #hot li{
+      	padding:10px;
+      }
+      #itemDiv {
+        margin-top: 40px;
+      }
+      #itemDiv div{
+      	padding:0;
+      }
+      #itemDiv td{
+      	width:33%;
+      }
+    </style>
+    <title>Insert title here</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-9">
+            <input
+              id="searchItem"
+              type="text"
+              name="search"
+              placeholder="종목을 검색하세요."
+            />
+            <table id="choice" style="border: black solid 1px">
+              <td>
+                <div>
+                  <ul id="sc">
+                    <li data-cd="S1">농산물</li>
+                    <li data-cd="S2">수산물</li>
+                  </ul>
+                </div>
+              </td>
+              <td>
+                <div>
+                  <ul id="theme"></ul>
+                </div>
+              </td>
+              <td>
+                <div>
+                  <ul id="item"></ul>
+                </div>
+              </td>
+              <td>
+                <div id="itemInfo"></div>
+              </td>
+            </table>
+          </div>
+          <div class="col-md-3">
+            <!-- 인기 검색순위 -->
+            <div id="hot">
+              <p>인기검색순위</p>
+              <ul>
+                <li>1.쌀</li>
+                <li>2.밀</li>
+                <li>3.고등어</li>
+                <li>4.갈치</li>
+                <li>5.망고</li>
+              </ul>
+            </div>
+          </div>
 
-								</ul>
-							</div>
-						</td>
-						<td>
-							<div id="itemInfo">
-								
-							</div>
-						</td>
-					</table>
-				</div>
-				<div class="col-md-3">
-					<!-- 인기 검색순위 -->
-				</div>
-				<div class="col-xs-12"></div>
-			</div>
-		</div>
-		<script>
-      // 증권 선택시 테마 리스트 출력
-      $("#sc").on("click",'li', function () {
-    	  $('#theme').html('');
-    	  $('#item').html('');
-        let ctg = $(event.target).data("cd");
-        
-           $.ajax({
-        	   url:'themeList?code='+ctg,
-        	   success:function(result){
-        		   result.forEach(th => {
-        		   $('#theme').append($('<li/>').text(th.CTGR).attr('data-cd',th.COMMON_CD))
-        			   
-        		   })
-        	   }
-           })
-        
-      });
+          <div class="col-xs-12">
+            <!-- 종목리스트 -->
+            <div id="itemDiv" class="row">
+              <div class="col-md-6">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>증권</th>
+                      <th>테마</th>
+                      <th>종목</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr th:each="item : ${itemList}">
+                      <td th:text="${item.sc}"></td>
+                      <td th:text="${item.theme}"></td>
+                      <td>
+                        <a th:href="@{chart(itemNo=${item.commonCd})}"
+                          >[[${item.item}]]</a
+                        >
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-md-6">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>현재가</th>
+                      <th>전일비</th>
+                      <th>상승률</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr th:each="item : ${itemList}">
+                      <td th:text="${item.sc}"></td>
+                      <td th:text="${item.theme}"></td>
+                      <td th:text="${item.item}"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script>
+        // 증권 선택시 테마 리스트 출력
+        $("#sc").on("click", "li", themeList);
 
-      //테마 클릭시 종목 리스트 출력
-      $("#theme").on("click",'li', function (){
-    	  $('#item').html('');
-          let ctg = $(event.target).data("cd");
-          
-             $.ajax({
-          	   url:'themeList?code='+ctg,
-          	   success:function(result){
-          		   result.forEach(th => {
-          		   $('#item').append($('<li/>').text(th.CTGR).attr('data-cd',th.COMMON_CD))
-          			   
-          		   })
-          	   }
-             })
-      });
-      
-      //종목 클릭시 정보 출력
-      $('#item').on('click','li',function(){
-    		  let ctg = $(event.target).data("cd");
-    		  $('#itemInfo').html('');
-    	  $.ajax({
-          	   url:'itemInfo?code='+ctg,
-          	   success:function(result){	
-          		  	for(let i in result){
-          		  		$('#itemInfo').append($('<p/>').text(result[i]))
-          		  	}
-          		  	
-          		   
-          	   }
-             })
-      })
-    </script>
-	</div>
-</body>
+        // 테마 리스트 출력
+        function themeList(value) {
+          let ctg;
+          console.log(value);
+          if (typeof value == "object") {
+            ctg = $(event.target).data("cd");
+            console.log("1" + ctg);
+          } else {
+            ctg = value;
+            console.log("2" + ctg);
+          }
+          $("#theme").html("");
+          $("#item").html("");
+
+          $.ajax({
+            url: "themeList?code=" + encodeURI(ctg),
+            success: function (result) {
+              result.forEach((th) => {
+                $("#theme").append(
+                  $("<li/>").text(th.CTGR).attr("data-cd", th.COMMON_CD)
+                );
+              });
+            },
+          });
+        }
+
+        //테마 클릭시 종목 리스트 출력
+        $("#theme").on("click", "li", itemList);
+
+        //종목리스트 출력
+        function itemList(value) {
+          let ctg;
+          if (typeof value == "object") {
+            ctg = $(event.target).data("cd");
+          } else {
+            ctg = value;
+          }
+          $("#item").html("");
+
+          $.ajax({
+            url: "themeList?code=" + encodeURI(ctg),
+            success: function (result) {
+              result.forEach((th) => {
+                $("#item").append(
+                  $("<li/>").text(th.CTGR).attr("data-cd", th.COMMON_CD)
+                );
+              });
+            },
+          });
+        }
+
+        //종목 클릭시 정보 출력
+        $("#item").on("click", "li", itemInfo);
+        //종목 정보 출력
+        function itemInfo(value) {
+          let ctg;
+          if (typeof value == "object") {
+            ctg = $(event.target).data("cd");
+          } else {
+            ctg = value;
+          }
+          $("#itemInfo").html("");
+          $.ajax({
+            url: "itemInfo?value=" + ctg,
+            success: function (result) {
+              for (let i in result) {
+                if (i == "itemNo") {
+                  $("#itemInfo").append(
+                    $("<p/>")
+                      .css("display", "none")
+                      .text(result[i])
+                      .attr("data-in", result[i])
+                  );
+                } else {
+                  $("#itemInfo").append($("<p/>").text(result[i]));
+                }
+              }
+
+              $("#itemInfo").append(
+                $("<button/>").text("차트 페이지 이동").on("click", chartPage)
+              );
+            },
+          });
+        }
+        //차트페이지 이동
+        function chartPage() {
+          let itemNo = $("p[data-in]").data("in");
+          location.href = "main";
+        }
+
+        //자동완성기능
+        $("#searchItem").autocomplete({
+          source: function (request, response) {
+            //source: 입력시 보일 목록
+            $.ajax({
+              url: "autoComplete",
+              type: "POST",
+              dataType: "JSON",
+              data: { value: request.term }, // 검색 키워드
+              success: function (data) {
+                // 성공
+                console.log(data);
+                response(
+                  $.map(data.resultList, function (item) {
+                    return {
+                      label: item.CTGR, // 목록에 표시되는 값
+                      value: item.CTGR, // 선택 시 input창에 표시되는 값
+                      idx: item.SEQ, // index
+                    };
+                  })
+                ); //response
+              },
+              error: function () {
+                //실패
+                alert("오류가 발생했습니다.");
+              },
+            });
+          },
+          focus: function (event, ui) {
+            // 방향키로 자동완성단어 선택 가능하게 만들어줌
+            return false;
+          },
+          minLength: 1, // 최소 글자수
+          autoFocus: true, // true == 첫 번째 항목에 자동으로 초점이 맞춰짐
+          delay: 100, //autocomplete 딜레이 시간(ms)
+          select: function (evt, ui) {
+            // 아이템 선택시 실행 ui.item 이 선택된 항목을 나타내는 객체, lavel/value/idx를 가짐
+            console.log(ui.item.value);
+            searchChoice(ui.item.value);
+            itemInfo(ui.item.value);
+          },
+        });
+
+        //자동완성 목록 선택시 카테고리 출력
+        function searchChoice(value) {
+          $.ajax({
+            url: "autoInfo?ctrg=" + value,
+            success: function (result) {
+              themeList(result.H_CD);
+              itemList(result.COMMON_CD);
+            },
+          });
+        }
+        $("#searchItem").css("width", $("#choice").css("width"));
+      </script>
+    </div>
+  </body>
 </html>
