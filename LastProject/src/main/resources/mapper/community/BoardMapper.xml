@@ -4,7 +4,13 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
   <mapper namespace="com.yedam.app.community.mapper.BoardMapper">
-   <select id="ii">
- 	select 1 from dual
- </select>  
+	<select id="getBoardList" resultType="BoardVO">
+		SELECT board_no, nick, ttl, drwup_dt, inq, common_cd, ctgr
+		FROM COMMON_CODE JOIN
+	 		(SELECT board_no, nick, ttl, drwup_dt, inq, common_cd
+	 		FROM BOARD JOIN MEMBER
+	 		USING (memb_no)
+	 		WHERE common_cd LIKE #{commonCd}||'%')
+	 	USING (common_cd)
+ 	</select>  
   </mapper>

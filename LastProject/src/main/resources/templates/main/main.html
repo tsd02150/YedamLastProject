@@ -83,7 +83,7 @@
 					<h3 class="news-title">
 						<span>TRENDING NEWS</span>
 					</h3>
-					<div>
+					<div id="newsContent">
 						
 					</div>
 				</div>
@@ -131,9 +131,24 @@
 				</div>
 			</section>
 		</div>
-	</div>
 	<script>
-		
+		fetch("getNewsLists")
+		.then(result=>result.json())
+		.then(data=>{
+			console.log(data);
+			let newsContent = document.getElementById('newsContent');
+			for(let i=0;i<6;i++){
+				let p = document.createElement('p');
+				let a = document.createElement('a');
+				a.innerHTML=data.items[i].title;
+				a.href=data.items[i].link;
+				p.append(a);
+				newsContent.append(p);
+			}
+			
+		})
+		.catch(err=>console.log(err));
 	</script>
+	</div>
 </body>
 </html>
