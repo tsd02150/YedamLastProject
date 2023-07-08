@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.stock.mapper.StockMapper;
+import com.yedam.app.stock.service.InqVO;
 import com.yedam.app.stock.service.ItemVO;
 import com.yedam.app.stock.service.StockService;
 import com.yedam.app.stock.service.StockVO;
@@ -40,6 +41,11 @@ public class StockServiceImpl implements StockService {
 	@Override
 	public List<StockVO> allItemList() {
 		return stockMapper.allItemList();
+	}
+
+	@Override
+	public List<InqVO> inqChart() {
+		return stockMapper.inqChart();
 	}
 	
 	

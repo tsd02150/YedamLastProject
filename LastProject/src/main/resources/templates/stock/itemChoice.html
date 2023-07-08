@@ -64,7 +64,7 @@
       	padding:0;
       }
       #itemDiv td{
-      	width:33%;
+      	width:16%;
       }
     </style>
     <title>Insert title here</title>
@@ -109,11 +109,11 @@
             <div id="hot">
               <p>인기검색순위</p>
               <ul>
-                <li>1.쌀</li>
-                <li>2.밀</li>
-                <li>3.고등어</li>
-                <li>4.갈치</li>
-                <li>5.망고</li>
+              	<th:block th:each="inq : ${inqList}">
+	              	<li><a th:href="@{chart(itemNo = ${inq.itemNo})}">[[${inqStat.index+1}]] [[${inq.nm}]]</a>
+	              		<span> [[${inq.change}]] [[${inq.rate}]]</span>
+	              	</li>
+              	</th:block>
               </ul>
             </div>
           </div>
@@ -121,32 +121,13 @@
           <div class="col-xs-12">
             <!-- 종목리스트 -->
             <div id="itemDiv" class="row">
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <table>
                   <thead>
                     <tr>
                       <th>증권</th>
                       <th>테마</th>
                       <th>종목</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr th:each="item : ${itemList}">
-                      <td th:text="${item.sc}"></td>
-                      <td th:text="${item.theme}"></td>
-                      <td>
-                        <a th:href="@{chart(itemNo=${item.commonCd})}"
-                          >[[${item.item}]]</a
-                        >
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="col-md-6">
-                <table>
-                  <thead>
-                    <tr>
                       <th>현재가</th>
                       <th>전일비</th>
                       <th>상승률</th>
@@ -156,7 +137,10 @@
                     <tr th:each="item : ${itemList}">
                       <td th:text="${item.sc}"></td>
                       <td th:text="${item.theme}"></td>
-                      <td th:text="${item.item}"></td>
+                      <td><a th:href="@{chart(itemNo=${item.itemNo})}">[[${item.nm}]]</a></td>
+                      <td th:text="${item.tprc}"></td>
+                      <td th:text="${item.change}"></td>
+                      <td th:text="${item.rate}"></td>
                     </tr>
                   </tbody>
                 </table>
@@ -166,6 +150,29 @@
         </div>
       </div>
       <script>
+      	//조회수차트
+      	setInterval(() => {
+      		
+      		$.ajax({
+      			url:'inqChart',
+      			success:function(data){
+      				let list = `<li><a href="chart?itemNo="+${data[0].itemNo}}>1 ${data[0].nm}</a> <span class="rate"> ${data[0].change} ${data[0].rate}</span>`
+      					list+= `<li><a href="chart?itemNo="+${data[1].itemNo}}>2 ${data[1].nm}</a> <span class="rate"> ${data[1].change} ${data[1].rate}</span>`
+      					list+= `<li><a href="chart?itemNo="+${data[2].itemNo}}>3 ${data[2].nm}</a> <span class="rate"> ${data[2].change} ${data[2].rate}</span>`
+      					list+= `<li><a href="chart?itemNo="+${data[3].itemNo}}>4 ${data[3].nm}</a> <span class="rate"> ${data[3].change} ${data[3].rate}</span>`
+      					list+= `<li><a href="chart?itemNo="+${data[4].itemNo}}>5 ${data[4].nm}</a> <span class="rate"> ${data[4].change} ${data[4].rate}</span>`
+      				$('#hot ul').html(list)
+      			}
+      		})
+      		
+      		$.ajax({
+      			url:'allItemList',
+      			success:function(data){
+      				
+      			}
+      		})
+      	}, 2000);
+      
         // 증권 선택시 테마 리스트 출력
         $("#sc").on("click", "li", themeList);
 
@@ -312,7 +319,10 @@
             },
           });
         }
+        
         $("#searchItem").css("width", $("#choice").css("width"));
+        
+        
       </script>
     </div>
   </body>
