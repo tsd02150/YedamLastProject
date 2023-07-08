@@ -9,57 +9,92 @@
 	.outer-block{
 		width:1100px;
 		margin: 0 auto;
-	}
-	div{
 		box-sizing : border-box;
-	}
-	section{
-		box-sizing : border-box;
-		
 	}
 	.flex-block{
 		display: flex;
+	}
+	.Space{
+		border:1px solid #dddddd;
+		padding: 20px;
+		height: 100%;	
 	}
 	#chart{
 		width:800px;
 		height:400px;
 		padding:20px;
-		background-color: gray;
 		background-clip: content-box;
+	}
+	
+	#chart>div{
+	
+	}
+	#chartList{
+		width:100px;
+		background-color: #DDDDDD;	
+	}
+	#chartContent{
+		width:660px;
+		border: 1px solid #DDDDDD;
 	}
 	#ranking{
 		width:400px;
 		height:300px;
 		padding:20px;
-		background-color: gray;
 		background-clip: content-box;
+	}
+
+	#ranking .row{
+		height:218px;
+	}
+	.highRank, .lowRank{
+		padding:10px;
+		width:50%;
+		height:100%;
 	}
 	#updown{
 		width:400px;
 		height:300px;
 		padding:20px;
-		background-color: gray;	
 		background-clip: content-box;
+	}
+
+	#updown .row{
+		height:218px;
+	}
+	.up, .down{
+		padding:10px;
+		width:50%;
+		height:100%;
 	}
 	#login{
 		width:300px;
 		height:300px;
 		padding:20px;
-		padding-top:50px;
 		background-clip: content-box;
 	}
+	#loginForm{
+		border-top: 1px solid #dddddd;
+		border-bottom: 1px solid #dddddd;
+		padding-top:30px;
+		padding-bottom:30px;
+		box-shadow:0px 5px 5px #dddddddd;
+		border-top-left-radius: 20px;
+		border-top-right-radius: 20px;
+	}
 	#login input{
-		width:200px;
+		width:250px;
 		margin:auto;
+		margin-bottom: 5px; 
 	}
 	#login button{
-		width:200px;
+		width:250px;
 		margin:auto;
-		margin-top:10px;
+		margin-bottom:10px;
 		display:block;
 	}
 	#login section{
-		width:200px;
+		width:250px;
 		margin:auto;
 	}
 
@@ -81,36 +116,35 @@
 		width:800px;
 		height:400px;
 		padding:20px;
-		background-color: gray;
 		background-clip: content-box;
 	}
 	#notice{
 		width:300px;
 		height:400px;
 		padding:20px;
-		background-color: gray;
 		background-clip: content-box;
 	}
 	#freeboard{
 		width:400px;
 		height:400px;
 		padding:20px;
-		background-color: gray;
 		background-clip: content-box;
 	}
 	#stockboard{
 		width:400px;
 		height:400px;
 		padding:20px;
-		background-color: gray;
 		background-clip: content-box;
 	}
 	#qna{
 		width:300px;
 		height:400px;
 		padding:20px;
-		background-color: gray;
 		background-clip: content-box;
+	}
+	.list-group-item.active{
+		background-color: #DC3545;
+		border-color: #DC3545;
 	}
 </style>
 </head>
@@ -118,19 +152,54 @@
 	<div layout:fragment="content" class="outer-block">
 		<div class="flex-block">
 			<div>
-				<div id="chart">
+				<div id="chart" class="flex-block">
+					<section id="chartList" class="list-group">
+						<a href="#" class="list-group-item list-group-item-action active" aria-current="true">..</a>
+						<a href="#" class="list-group-item list-group-item-action">..</a>
+						<a href="#" class="list-group-item list-group-item-action">..</a>
+						<a href="#" class="list-group-item list-group-item-action">..</a>
+					</section>
+					<section id="chartContent">
+					</section>
 				</div>
 				<div class="flex-block">
 					<section id="ranking">
-					
+						<div class="Space">
+							<div class="row">
+								<div class="highRank">
+									<h5 class="news-title">
+										<span>농산물 랭킹</span>
+									</h5>
+								</div>
+								<div class="lowRank">
+									<h5 class="news-title">
+										<span>수산물 랭킹</span>
+									</h5>
+								</div>
+							</div>
+						</div>
 					</section>
 					<section id="updown">
-					
+						<div class="Space">
+							<div class="row">
+								<div class="up">
+									<h5 class="news-title">
+										<span>상승 종목</span>
+									</h5>
+								</div>
+								<div class="down">
+									<h5 class="news-title">
+										<span>하락 종목</span>
+									</h5>
+								</div>
+							</div>
+						</div>
 					</section>
 				</div>
 			</div>
 			<div>
 				<div id="login">
+					<div id="loginForm">
 					<form action="userLogin" method="post">
 						<input type="email" id="loginemail" class="form-control" th:name="id" placeholder="aaa111@aaa.com">
 						<input type="password" id="loginPassword" class="form-control" th:name="pwd" placeholder="Password" >
@@ -140,6 +209,7 @@
 							<img src="main/source/images/Kakao_logo.png" alt="kakao_login"  width=50px />
 						</section>
 					</form>
+					</div>
 				</div>			
 				<div id="survey">
 				
@@ -149,13 +219,58 @@
 		<div id="mall">
 		</div>
 		<div class="flex-block">
-			<section id="news"></section>
-			<section id="notice"></section>
+			<section id="news" class="news-style-one">
+				<div class="Space">
+					<h3 class="news-title">
+						<span>TRENDING NEWS</span>
+					</h3>
+					<div>
+						
+					</div>
+				</div>
+			</section>
+			<section id="notice">
+				<div class="Space">
+					<h3 class="news-title">
+						<span>NOTICE</span>
+					</h3>
+					<div>
+						
+					</div>
+				</div>
+			</section>
 		</div>
 		<div class="flex-block">
-			<section id="freeboard"></section>
-			<section id="stockboard"></section>
-			<section id="qna"></section>
+			<section id="freeboard">
+				<div class="Space">
+					<h3 class="news-title">
+						<span>자유게시판</span>
+					</h3>
+					<div>
+						
+					</div>
+				</div>
+			</section>
+			<section id="stockboard">
+				<div class="Space">
+					<h3 class="news-title">
+						<span>주식게시판</span>
+					</h3>
+					<div>
+						
+					</div>
+				</div>
+			</section>
+			<section id="qna">
+				<div class="Space">
+					<h3 class="news-title">
+						<span>QnA</span>
+					</h3>
+					<div>
+						
+					</div>
+				</div>
+			</section>
 		</div>
 	</div>
 </body>
