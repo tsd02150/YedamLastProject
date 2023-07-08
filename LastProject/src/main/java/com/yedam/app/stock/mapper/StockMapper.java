@@ -3,6 +3,7 @@ package com.yedam.app.stock.mapper;
 import java.util.List;
 import java.util.Map;
 
+import com.yedam.app.stock.service.InqVO;
 import com.yedam.app.stock.service.ItemVO;
 import com.yedam.app.stock.service.StockVO;
 
@@ -17,4 +18,6 @@ public interface StockMapper {
 	public Map<String,Object> autoInfo(String value);
 	// 모든 종목 리스트
 	public List<StockVO> allItemList();
+	//조회수 순위 차트
+	public List<InqVO> inqChart();
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.app.stock.service.InqVO;
 import com.yedam.app.stock.service.ItemVO;
 import com.yedam.app.stock.service.StockService;
 import com.yedam.app.stock.service.StockVO;
@@ -27,7 +28,9 @@ public class StockController {
 	@GetMapping("itemListPage")
 	public String itemListPage(Model m) {
 		List<StockVO> list = stockservice.allItemList();
+		List<InqVO> listInq = stockservice.inqChart();
 		m.addAttribute("itemList", list);
+		m.addAttribute("inqList",listInq);
 		return "stock/itemChoice";
 	}
 
@@ -67,6 +70,19 @@ public class StockController {
 		return map;
 	}
 	
+	//조회수 순위 차트
+	@ResponseBody
+	@GetMapping("inqChart")
+	public List<InqVO> inqChart(){
+		return stockservice.inqChart();
+	}
+	
+	//모든 종목 리스트
+	@ResponseBody
+	@GetMapping("allItemList")
+	public List<StockVO> allItemList(){
+		return stockservice.allItemList();
+	}
 	@GetMapping("main")
 	public String itemListPage2() {
 		return "main/main";
