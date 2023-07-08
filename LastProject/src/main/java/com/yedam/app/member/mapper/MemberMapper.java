@@ -1,6 +1,7 @@
 package com.yedam.app.member.mapper;
 
-import com.yedam.app.member.service.impl.MembVO;
+import com.yedam.app.member.service.AddrVO;
+import com.yedam.app.member.service.MembVO;
 
 public interface MemberMapper {
 	
@@ -12,6 +13,14 @@ public interface MemberMapper {
 	
 	//id 중복확인
 	public int idCheck(String id);
+	
+	//회원가입 - member table
+	public int signUpMemb(MembVO membVO);
+	
+	//주소 추가
+	public int insertAddr(AddrVO addrVO);  
+	
+	public String getLastMembNo();
 	
 	
 

@@ -26,4 +26,58 @@
 		WHERE id = #{id}
 	</select>
 	
+	<insert id="signUpMemb" parameterType="MembVO">
+		<selectKey keyProperty="membNo" resultType="string" order="BEFORE">
+			select 'mem-' || (TO_NUMBER(MAX(SUBSTR(NVL(memb_no,0),5)))+1) as memb_no from member
+		</selectKey>
+		INSERT INTO MEMBER(MEMB_NO
+												,NM
+												,ID
+												,PWD
+												,NICK
+												,EMAIL
+												,TEL
+												,POINT
+												,JOIN_DT)
+								VALUES( #{membNo}
+												,#{nm}
+												,#{id}
+												,#{pwd}
+												,#{nick}
+												,#{email}
+												,#{tel}
+												,0
+												,sysdate)
+	</insert>
+	
+		<insert id="insertAddr" parameterType="AddrVO">
+			<selectKey keyProperty="addrNo" resultType="string" order="BEFORE">
+				select 'adr-' || (TO_NUMBER(MAX(SUBSTR(NVL(addr_no,0),5)))+1) as addr_no from address
+			</selectKey>
+			INSERT INTO ADDRESS(ADDR_NO,
+													MEMB_NO,
+													BASE_ADDR_YN,
+													ZIP,
+													ADDR,
+													DETA_ADDR)
+									VALUES(#{addrNo}
+												,#{membNo}
+												,'N'
+												,#{zip}
+												,#{addr}
+												,#{detaAddr})
+		</insert>
+		
+		<select id="getLastMembNo" resultType="String">
+			<![CDATA[
+				SELECT memb_no
+						FROM (
+						    SELECT memb_no
+						    FROM member
+						    ORDER BY memb_no DESC
+						)
+				WHERE ROWNUM = 1
+				]]>
+		</select>
+	
 </mapper>

@@ -35,18 +35,18 @@
         <div class="signup">
           <h3 class="mt-4">회원가입</h3>
           <div class="py-40"></div>
-          <form action="#" class="signup-form row">
-            <div class="col-md-6">
+          <form action="join" class="signup-form row" method="post" onsubmit="nullCheck()">
+            <div class="col-md-12">
                <div class="form-group">
                    <label for="f-name">이름</label>
-                   <input type="text" class="form-control" id="f-name" th:name="nm" placeholder="이름을 입력하세요">
+                   <input type="text" class="form-control" id="f-name" name="nm" placeholder="이름을 입력하세요" style="width: 60%;">
                </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="form-group">
-                    <label for="nickname">닉네임</label>
-                    <input type="text" class="form-control" id="nickname" th:name="nick" placeholder="특수문자를 제외한 3~10자리여야 합니다.">
-                    <button type="button" id="checkNick">중복확인</button><span id="nickmsg"></span>
+                    <label for="nickname">닉네임</label><br>
+                    <input type="text" class="form-control" id="nickname" name="nick" placeholder="특수문자를 제외한 3~10자리여야 합니다." style="width: 60%; display: inline;">
+                    <button type="button" id="checkNick">중복확인</button><span id="nickmsg"></span><br>
                 </div>
                 
             </div>
@@ -65,21 +65,21 @@
             </div>
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="pwdCheck">비밀번호 확인</label>
-                    <input type="password" class="form-control" id="pwdCheck" name="pwdCheck" placeholder="비밀번호를 다시 입력하세요">
+                    <label for="passCheck">비밀번호 확인</label>
+                    <input type="password" class="form-control" id="passCheck" name="pwdCheck" placeholder="비밀번호를 다시 입력하세요">
+                    <div id="pwd-warning">오류</div>
                 </div>
             </div>
             <div class="col-md-12">
             		<div class="form-group">
                     <label for="email-address">이메일</label>
-                    <input type="email" class="form-control" name="email" id="email-address" placeholder="이메일 형식으로 입력하세요">
+                    <input type="email" class="form-control" id="email-address" name="email" placeholder="이메일 형식으로 입력하세요">
                 </div>
             </div>
             <div class="col-md-12">
            		<div class="form-group">
-                 <label for="user-tel">연락처</label><br>
+                 <label for="telInput">연락처</label><br>
                  <input type="text" class="form-control" oninput="autoHyphen(this)" maxlength="13" name="tel" id="telInput" placeholder="전화번호를 입력하세요">
-                 <button type="button" class="testBtn">연락처Test</button>
                  <button type="button" class="send-sms-code">인증코드 발송</button>
            		</div>
             
@@ -87,66 +87,98 @@
            
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="findzip">주소</label><br>
-                    <input type="text" class="form-control" style="width: 40%; display: inline;" id="addr1" name="zip" placeholder="우편번호 검색" readonly>
+                    <label for="addr1">주소</label><br>
+                    <input type="type" class="form-control" style="width: 40%; display: inline;" id="addr1" name="zip" placeholder="우편번호 검색" readonly>
                     <button type="button" class="zipbtn">우편번호 찾기</button>
                 </div>
                 <div class="form-group">
+                    <label for="addr2"></label>
                     <input type="text" class="form-control" style="top: 5px;" id="addr2" name="addr" placeholder="도로명주소" readonly>
                 </div>
                 <div class="form-group">
+                    <label for="addr3"></label>
                     <input type="text" class="form-control" id="addr3" name="detaAddr" placeholder="상세주소를 입력하세요">
                 </div>
             </div>
             <div class="col-md-12">
-                <button class="btn btn-primary" type="submit">Sign Up</button>
+                <button class="btn btn-primary" type="submit" id="subBtn">Sign Up</button>
                 <p class="mt-5 mb-0">이미 회원이신가요? <a href="loginForm.html">로그인</a></p>
             </div>
           </form>
         </div>
       </div>
     </div>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript">
+ const pwdInput = document.getElementById('pass');
+ const pwdCorrectInput = document.getElementById('passCheck');
+ const pwdWarning = document.getElementById('pwd-warning');
+
+ pwdInput.addEventListener('input', checkPwdValidity);
+ pwdCorrectInput.addEventListener('input', checkPwdMatch);
+
+ function checkPwdValidity() {
+     const pwdValue = pwdInput.value;
+     const pwdRegex = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[\W_]).{8,16}$/;
+
+     if (!pwdValue) {
+         pwdWarning.textContent = "비밀번호를 입력해주세요.";
+     } else if (!pwdRegex.test(pwdValue)) {
+         pwdWarning.textContent = "영어 대소문자, 숫자, 특수문자를 모두 사용하고 8자 이상, 16자 이하여야 합니다.";
+     } else {
+         pwdWarning.textContent = "";
+     }
+ }
+
+ function checkPwdMatch() {
+     const pwdValue = pwdInput.value;
+     const pwdCorrectValue = pwdCorrectInput.value;
+
+     if (pwdValue !== pwdCorrectValue) {
+         pwdWarning.style.borderWidth = "2px";
+         pwdWarning.textContent = "입력한 비밀번호와 일치하지 않습니다.";
+     } else {
+         pwdWarning.style.borderWidth = "";
+         pwdWarning.textContent = "";
+     }
+ }
+
+ 
  const nickBtn = document.querySelector("#checkNick");
  const idBtn = document.querySelector("#checkId");
- 
+
  //닉네임 중복확인
- nickBtn.addEventListener('click', () => {
-	 const nickObj = {nickname : document.querySelector("#nickname").value}
-    // console.log(event.target);
-     const nickCheckUrl = "/nickCheck/"+nickObj.nickname;
-     fetch(nickCheckUrl, {
-        method : "post",
-        body : JSON.stringify(nickObj),
-        headers : {
-            "Content-Type": "application/json",
-        }
-     })
-     .then(response => {
-        const msg = document.querySelector("#nickmsg");
-        msg.textContent = (response.ok) ? "이미 사용중인 닉네임 입니다." : "사용가능한 닉네임 입니다.";
-     })
-     .catch(err=>console.log(err));
+ nickBtn.addEventListener('click', function() {
+     let nick = document.querySelector("#nickname").value;
+     const nickCheckUrl = "/member/nickCheck?nick=" + encodeURIComponent(nick);
+     fetch(nickCheckUrl)
+         .then(response => response.json())
+         .then(result => {
+             const msg = document.querySelector("#nickmsg");
+             if (nick !== "") {
+                 msg.textContent = (result === 1) ? "이미 사용중인 닉네임 입니다." : "사용가능한 닉네임 입니다.";
+             } else {
+                 msg.textContent = "닉네임을 입력하세요";
+             }
+         })
+         .catch(err => console.log(err));
  }); //닉네임 중복확인 끝
  
- idBtn.addEventListener('click', () => {
-	 const idObj = {idAddr : document.querySelector("#id-address").value}
-    // console.log(event.target);
-     const idCheckUrl = "/idCheck/"+idObj.idAddr;
-     fetch(idCheckUrl, {
-        method : "post",
-        body : JSON.stringify(idObj),
-        headers : {
-            "Content-Type": "application/json",
-        }
-     })
-     .then(response => {
-        const msg = document.querySelector("#idmsg");
-        msg.textContent = (response.ok) ? "이미 사용중인 아이디 입니다." : "사용가능한 아이디 입니다.";
-     })
-     .catch(err=>console.log(err));
- });
+ idBtn.addEventListener('click', function() {
+	    let idAddr = document.querySelector("#id-address").value;
+	    const idCheckUrl = "/member/idCheck?id=" + encodeURIComponent(idAddr);
+	    fetch(idCheckUrl)
+	        .then(response => response.json())
+	        .then(result => {
+	            const msg = document.querySelector("#idmsg");
+	            if (idAddr !== "") {
+	                msg.textContent = (result === 1) ? "이미 사용중인 아이디 입니다." : "사용가능한 아이디 입니다.";
+	            } else {
+	                msg.textContent = "아이디를 입력하세요";
+	            }
+	        })
+	        .catch(err => console.log(err));
+	});
  
  // 연락처 처리
  const autoHyphen = (target) => {
@@ -225,8 +257,53 @@ document.querySelector('form').addEventListener('submit', (event) => {
 
         }
     }).open();
- })
+ });
  
+ 
+ let isNm = document.querySelector("#f-name");
+ let isNick = document.querySelector("#nickname");
+ let isPwd = document.querySelector("#pass");
+ let isPwd2 = document.querySelector("#passCheck");
+ let isId = document.querySelector("#id-address");
+ let isEmail = document.querySelector("#email-address");
+ let isTel = document.querySelector("#telInput");
+ 
+ function nullCheck(event) {
+	    event.preventDefault();
+
+	    if (isNick.value === "") {
+	        isNick.focus();
+	        return; 
+	    }
+	    if (isPwd.value === "") {
+	        isPwd.focus();
+	        return;
+	    }
+	    if (isPwd2.value === "") {
+	        isPwd2.focus();
+	        return; 
+	    }
+	    if (isId.value === "") {
+	        isId.focus();
+	        return; 
+	    }
+	    if (isEmail.value === "") {
+	        isEmail.focus();
+	        return; 
+	    }
+	    if (isTel.value === "") {
+	        isTel.focus();
+	        return; 
+	    }
+	    if (isNm.value === "") {
+	        isNm.focus();
+	        return; 
+	    }
+
+	    // 모든 조건을 만족했을 때 호출
+        document.querySelector('form').submit();
+	    
+	}
 </script>
 
 

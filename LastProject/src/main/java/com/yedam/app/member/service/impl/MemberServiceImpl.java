@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.member.mapper.MemberMapper;
+import com.yedam.app.member.service.AddrVO;
+import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
 
 @Service
@@ -28,6 +30,22 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int idCheckBoolean(String id) {
 		return membMapper.idCheck(id);
+	}
+
+	@Override
+	public int signUpMemb(MembVO membVO) {
+		return membMapper.signUpMemb(membVO);
+	}
+
+
+	@Override
+	public int insertAddr(AddrVO addrVO) {
+		return membMapper.insertAddr(addrVO);
+	}
+
+	@Override
+	public String getLastMembNo() {
+		return membMapper.getLastMembNo();
 	}
 
 }

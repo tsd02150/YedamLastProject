@@ -1,4 +1,4 @@
-package com.yedam.app.member.service.impl;
+package com.yedam.app.member.service;
 
 import java.sql.Date;
 
