@@ -22,6 +22,8 @@ public interface MemberMapper {
 	
 	public String getLastMembNo();
 	
+	public String selectMembNO();
+	
 	
 
 }
