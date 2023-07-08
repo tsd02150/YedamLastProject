@@ -1,46 +1,99 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{main/layout}">
+	layout:decorate="~{layout/layout}">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick.min.js"></script>
 
-  <!-- Favicon -->
-  <link rel="shortcut icon" type="image/x-icon" href="mall/source/images/favicon.png" />
-  
-  <!-- Themefisher Icon font -->
-  <link rel="stylesheet" href="mall/source/plugins/themefisher-font/style.css">
-  <!-- bootstrap.min css -->
-  <link rel="stylesheet" href="mall/source/plugins/bootstrap/css/bootstrap.min.css">
-  
-  <!-- Animate css -->
-  <link rel="stylesheet" href="mall/source/plugins/animate/animate.css">
-  <!-- Slick Carousel -->
-  <link rel="stylesheet" href="mall/source/plugins/slick/slick.css">
-  <link rel="stylesheet" href="mall/source/plugins/slick/slick-theme.css">
-  
-  <!-- Main Stylesheet -->
-  <link rel="stylesheet" href="mall/theme/css/style.css">
-  
-  
+<!-- Favicon -->
+<link rel="shortcut icon" type="image/x-icon"
+	href="mall/source/images/favicon.png" />
+<!-- Themefisher Icon font -->
+<link rel="stylesheet"
+	href="mall/source/plugins/themefisher-font/style.css">
+<!-- bootstrap.min css -->
+<link rel="stylesheet"
+	href="mall/source/plugins/bootstrap/css/bootstrap.min.css">
+<!-- Animate css -->
+<link rel="stylesheet" href="mall/source/plugins/animate/animate.css">
+<!-- Slick Carousel -->
+<link rel="stylesheet" href="mall/source/plugins/slick/slick.css">
+<link rel="stylesheet" href="mall/source/plugins/slick/slick-theme.css">
+<!-- Main Stylesheet -->
+<link rel="stylesheet" href="mall/theme/css/style.css">
+
+<style>
+.container {
+	width: 1100px;
+	margin: 0 auto;
+}
+
+.div {
+	box-sizing: border-box;
+}
+
+.section {
+	box-sizing: border-box;
+}
+
+.flex-block {
+	display: flex;
+}
+
+.product-slide {
+	width: 400px;
+	margin: 0 auto;
+}
+
+.product-slide img {
+	width: 100%;
+}
+
+#ranking {
+	width: 400px;
+	height: 300px;
+	padding: 20px;
+	background-color: gray;
+	background-clip: content-box;
+}
+
+#updown {
+	width: 400px;
+	height: 300px;
+	padding: 20px;
+	background-color: gray;
+	background-clip: content-box;
+}
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.min.js"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick.min.js"></script>
+
+
+<title>Insert title here</title>
 </head>
 <body id="body">
+
 	<div layout:fragment="content">
 
+		<!-- main image start -->
 		<div class="hero-slider">
+
 			<div class="slider-item th-fullpage hero-area"
 				style="background-image: url(mall/source/images/slider/농산물메인.jpg);">
+
 				<div class="container">
 					<div class="row">
 						<div class="col-lg-8 text-center">
-							<p data-duration-in=".3" data-animation-in="fadeInUp"
-								data-delay-in=".1">PRODUCTS</p>
-							<h1 data-duration-in=".3" data-animation-in="fadeInUp"
-								data-delay-in=".5">
-								The beauty of nature <br> is hidden in details.
-							</h1>
+							<div class="ft">
+								<p data-duration-in=".3" data-animation-in="fadeInUp"
+									data-delay-in=".1">You haven't lost until you sell</p>
+								<h1 data-duration-in=".3" data-animation-in="fadeInUp"
+									data-delay-in=".5">I wish I had sold it yesterday</h1>
+							</div>
 							<a data-duration-in=".3" data-animation-in="fadeInUp"
 								data-delay-in=".8" class="btn" href="#">Shop Now</a>
 						</div>
@@ -48,19 +101,67 @@
 				</div>
 			</div>
 		</div>
+		<!-- main image end -->
 
+
+		<!-- 농산물 목록 -->
+
+		<section th:each="prdt:${product}" class="product-category section">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="title text-center">
+							<h1 th:text="${product.nm}"></h1>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="category-box">
+							<a href="#!"> <img
+								src="mall/source/images/shop/category/category-1.jpg" alt="" />
+								<div class="content">
+									<h3>곡류</h3>
+									<p th:text="${prdt.nm}"></p>
+								</div>
+							</a>
+						</div>
+						<div class="category-box">
+							<a href="#!"> <img
+								src="mall/source/images/shop/category/category-2.jpg" alt="" />
+								<div class="content">
+									<h3>콩류</h3>
+									<p th:text="${prdt.nm}">Get Wide Range Selection</p>
+								</div>
+							</a>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="category-box category-box-2">
+							<a href="#!"> <img
+								src="mall/source/images/shop/category/category-3.jpg" alt="" />
+								<div class="content">
+									<h3>과실류</h3>
+									<p>Special Design Comes First</p>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- 수산물 목록  -->
 		<section class="product-category section">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-12">
 						<div class="title text-center">
-							<h2>Product Category</h2>
+							<h1>수산물</h1>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="category-box">
-							<a href="#!"> <img src="mall/source/images/shop/category/category-1.jpg"
-								alt="" />
+							<a href="#!"> <img
+								src="mall/source/images/shop/category/category-1.jpg" alt="" />
 								<div class="content">
 									<h3>Clothes Sales</h3>
 									<p>Shop New Season Clothing</p>
@@ -68,8 +169,8 @@
 							</a>
 						</div>
 						<div class="category-box">
-							<a href="#!"> <img src="mall/source/images/shop/category/category-2.jpg"
-								alt="" />
+							<a href="#!"> <img
+								src="mall/source/images/shop/category/category-2.jpg" alt="" />
 								<div class="content">
 									<h3>Smart Casuals</h3>
 									<p>Get Wide Range Selection</p>
@@ -79,8 +180,8 @@
 					</div>
 					<div class="col-md-6">
 						<div class="category-box category-box-2">
-							<a href="#!"> <img src="mall/source/images/shop/category/category-3.jpg"
-								alt="" />
+							<a href="#!"> <img
+								src="mall/source/images/shop/category/category-3.jpg" alt="" />
 								<div class="content">
 									<h3>Jewellery</h3>
 									<p>Special Design Comes First</p>
@@ -92,280 +193,12 @@
 			</div>
 		</section>
 
-		<section class="products section bg-gray">
-			<div class="container">
-				<div class="row">
-					<div class="title text-center">
-						<h2>Trendy Products</h2>
-					</div>
-				</div>
-				<div class="row">
+		<div class="flex-block">
+			<section id=""></section>
+			<section id="updown"></section>
+		</div>
 
-					<div class="col-md-4">
-						<div class="product-item">
-							<div class="product-thumb">
-								<span class="bage">Sale</span> <img class="img-responsive"
-									src="mall/source/images/shop/products/product-1.jpg" alt="product-img" />
-								<div class="preview-meta">
-									<ul>
-										<li><span data-toggle="modal"
-											data-target="#product-modal"> <i
-												class="tf-ion-ios-search-strong"></i>
-										</span></li>
-										<li><a href="#!"><i class="tf-ion-ios-heart"></i></a></li>
-										<li><a href="#!"><i class="tf-ion-android-cart"></i></a>
-										</li>
-									</ul>
-								</div>
-							</div>
-							<div class="product-content">
-								<h4>
-									<a href="product-single.html">Reef Boardsport</a>
-								</h4>
-								<p class="price">$200</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="product-item">
-							<div class="product-thumb">
-								<img class="img-responsive"
-									src="mall/source/images/shop/products/product-2.jpg" alt="product-img" />
-								<div class="preview-meta">
-									<ul>
-										<li><span data-toggle="modal"
-											data-target="#product-modal"> <i
-												class="tf-ion-ios-search-strong"></i>
-										</span></li>
-										<li><a href="#"><i class="tf-ion-ios-heart"></i></a></li>
-										<li><a href="#!"><i class="tf-ion-android-cart"></i></a>
-										</li>
-									</ul>
-								</div>
-							</div>
-							<div class="product-content">
-								<h4>
-									<a href="product-single.html">Rainbow Shoes</a>
-								</h4>
-								<p class="price">$200</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="product-item">
-							<div class="product-thumb">
-								<img class="img-responsive"
-									src="mall/source/images/shop/products/product-3.jpg" alt="product-img" />
-								<div class="preview-meta">
-									<ul>
-										<li><span data-toggle="modal"
-											data-target="#product-modal"> <i
-												class="tf-ion-ios-search-strong"></i>
-										</span></li>
-										<li><a href="#"><i class="tf-ion-ios-heart"></i></a></li>
-										<li><a href="#!"><i class="tf-ion-android-cart"></i></a>
-										</li>
-									</ul>
-								</div>
-							</div>
-							<div class="product-content">
-								<h4>
-									<a href="product-single.html">Strayhorn SP</a>
-								</h4>
-								<p class="price">$230</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="product-item">
-							<div class="product-thumb">
-								<img class="img-responsive"
-									src="mall/source/images/shop/products/product-4.jpg" alt="product-img" />
-								<div class="preview-meta">
-									<ul>
-										<li><span data-toggle="modal"
-											data-target="#product-modal"> <i
-												class="tf-ion-ios-search-strong"></i>
-										</span></li>
-										<li><a href="#"><i class="tf-ion-ios-heart"></i></a></li>
-										<li><a href="#!"><i class="tf-ion-android-cart"></i></a>
-										</li>
-									</ul>
-								</div>
-							</div>
-							<div class="product-content">
-								<h4>
-									<a href="product-single.html">Bradley Mid</a>
-								</h4>
-								<p class="price">$200</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="product-item">
-							<div class="product-thumb">
-								<img class="img-responsive"
-									src="mall/source/images/shop/products/product-5.jpg" alt="product-img" />
-								<div class="preview-meta">
-									<ul>
-										<li><span data-toggle="modal"
-											data-target="#product-modal"> <i
-												class="tf-ion-ios-search-strong"></i>
-										</span></li>
-										<li><a href="#"><i class="tf-ion-ios-heart"></i></a></li>
-										<li><a href="#!"><i class="tf-ion-android-cart"></i></a>
-										</li>
-									</ul>
-								</div>
-							</div>
-							<div class="product-content">
-								<h4>
-									<a href="product-single.html">Rainbow Shoes</a>
-								</h4>
-								<p class="price">$200</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="product-item">
-							<div class="product-thumb">
-								<img class="img-responsive"
-									src="mall/source/images/shop/products/product-6.jpg" alt="product-img" />
-								<div class="preview-meta">
-									<ul>
-										<li><span data-toggle="modal"
-											data-target="#product-modal"> <i
-												class="tf-ion-ios-search-strong"></i>
-										</span></li>
-										<li><a href="#"><i class="tf-ion-ios-heart"></i></a></li>
-										<li><a href="#!"><i class="tf-ion-android-cart"></i></a>
-										</li>
-									</ul>
-								</div>
-							</div>
-							<div class="product-content">
-								<h4>
-									<a href="product-single.html">Rainbow Shoes</a>
-								</h4>
-								<p class="price">$200</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="product-item">
-							<div class="product-thumb">
-								<span class="bage">Sale</span> <img class="img-responsive"
-									src="mall/source/images/shop/products/product-7.jpg" alt="product-img" />
-								<div class="preview-meta">
-									<ul>
-										<li><span data-toggle="modal"
-											data-target="#product-modal"> <i
-												class="tf-ion-ios-search-strong"></i>
-										</span></li>
-										<li><a href="#"><i class="tf-ion-ios-heart"></i></a></li>
-										<li><a href="#!"><i class="tf-ion-android-cart"></i></a>
-										</li>
-									</ul>
-								</div>
-							</div>
-							<div class="product-content">
-								<h4>
-									<a href="product-single.html">Rainbow Shoes</a>
-								</h4>
-								<p class="price">$200</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="product-item">
-							<div class="product-thumb">
-								<img class="img-responsive"
-									src="mall/source/images/shop/products/product-8.jpg" alt="product-img" />
-								<div class="preview-meta">
-									<ul>
-										<li><span data-toggle="modal"
-											data-target="#product-modal"> <i
-												class="tf-ion-ios-search-strong"></i>
-										</span></li>
-										<li><a href="#"><i class="tf-ion-ios-heart"></i></a></li>
-										<li><a href="#!"><i class="tf-ion-android-cart"></i></a>
-										</li>
-									</ul>
-								</div>
-							</div>
-							<div class="product-content">
-								<h4>
-									<a href="product-single.html">Rainbow Shoes</a>
-								</h4>
-								<p class="price">$200</p>
-							</div>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="product-item">
-							<div class="product-thumb">
-								<img class="img-responsive"
-									src="mall/source/images/shop/products/product-9.jpg" alt="product-img" />
-								<div class="preview-meta">
-									<ul>
-										<li><span data-toggle="modal"
-											data-target="#product-modal"> <i
-												class="tf-ion-ios-search-strong"></i>
-										</span></li>
-										<li><a href="#"><i class="tf-ion-ios-heart"></i></a></li>
-										<li><a href="#!"><i class="tf-ion-android-cart"></i></a>
-										</li>
-									</ul>
-								</div>
-							</div>
-							<div class="product-content">
-								<h4>
-									<a href="product-single.html">Rainbow Shoes</a>
-								</h4>
-								<p class="price">$200</p>
-							</div>
-						</div>
-					</div>
 
-					<!-- Modal -->
-					<div class="modal product-modal fade" id="product-modal">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<i class="tf-ion-close"></i>
-						</button>
-						<div class="modal-dialog " role="document">
-							<div class="modal-content">
-								<div class="modal-body">
-									<div class="row">
-										<div class="col-md-8 col-sm-6 col-xs-12">
-											<div class="modal-image">
-												<img class="img-responsive"
-													src="mall/source/images/shop/products/modal-product.jpg"
-													alt="product-img" />
-											</div>
-										</div>
-										<div class="col-md-4 col-sm-6 col-xs-12">
-											<div class="product-short-details">
-												<h2 class="product-title">GM Pendant, Basalt Grey</h2>
-												<p class="product-price">$200</p>
-												<p class="product-short-description">Lorem ipsum dolor
-													sit amet, consectetur adipisicing elit. Rem iusto nihil
-													cum. Illo laborum numquam rem aut officia dicta cumque.</p>
-												<a href="cart.html" class="btn btn-main">Add To Cart</a> <a
-													href="product-single.html" class="btn btn-transparent">View
-													Product Details</a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- /.modal -->
-
-				</div>
-			</div>
-		</section>
 
 
 		<!--
@@ -420,28 +253,54 @@ Start Call To Action
 			</div>
 		</section>
 
+
+
+		<!-- Main jQuery -->
+		<script src="mall/source/plugins/jquery/dist/jquery.min.js"></script>
+		<!-- Bootstrap 3.1 -->
+		<script src="mall/source/plugins/bootstrap/js/bootstrap.min.js"></script>
+		<!-- Bootstrap Touchpin -->
+		<script
+			src="mall/source/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
+		<!-- Instagram Feed Js -->
+		<script src="mall/source/plugins/instafeed/instafeed.min.js"></script>
+		<!-- Video Lightbox Plugin -->
+		<script
+			src="mall/source/plugins/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
+		<!-- Count Down Js -->
+		<script
+			src="mall/source/plugins/syo-timer/build/jquery.syotimer.min.js"></script>
+
+		<!-- slick Carousel -->
+		<script src="mall/source/plugins/slick/slick.min.js"></script>
+		<script src="mall/source/plugins/slick/slick-animation.min.js"></script>
+
+		<!-- Main Js File -->
+		<script src="mall/source/js/script.js"></script>
+
+
+
+		<!--  <script>
+      $(document).ready(function() {
+         $('.product-slide').slick({
+            slidesToShow : 4,
+            slidesToScroll : 1,
+            autoplay : true,
+            autoplaySpeed : 2000,
+            responsive : [ {
+               breakpoint : 768,
+               settings : {
+                  slidesToShow : 2
+               }
+            }, {
+               breakpoint : 480,
+               settings : {
+                  slidesToShow : 1
+               }
+            } ]
+         });
+      });
+   </script> -->
 	</div>
-
-    <!-- Main jQuery -->
-    <script src="mall/source/plugins/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap 3.1 -->
-    <script src="mall/source/plugins/bootstrap/js/bootstrap.min.js"></script>
-    <!-- Bootstrap Touchpin -->
-    <script src="mall/source/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
-    <!-- Instagram Feed Js -->
-    <script src="mall/source/plugins/instafeed/instafeed.min.js"></script>
-    <!-- Video Lightbox Plugin -->
-    <script src="mall/source/plugins/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
-    <!-- Count Down Js -->
-    <script src="mall/source/plugins/syo-timer/build/jquery.syotimer.min.js"></script>
-
-    <!-- slick Carousel -->
-    <script src="mall/source/plugins/slick/slick.min.js"></script>
-    <script src="mall/source/plugins/slick/slick-animation.min.js"></script>
-
-    <!-- Main Js File -->
-    <script src="mall/source/js/script.js"></script>
-
-
 </body>
 </html>
