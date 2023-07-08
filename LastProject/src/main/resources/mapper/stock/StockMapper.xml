@@ -59,4 +59,5 @@
 		where length(common_cd) =6
 		order by common_cd 
 	</select>
+	
 </mapper>

@@ -48,7 +48,7 @@ public class StockController {
 		return vo;
 	}
 
-	// 자동완성
+	// 자동완성 목록
 	@PostMapping("autoComplete")
 	@ResponseBody
 	public Map<String, Object> autocomplete(@RequestParam Map<String, Object> paramMap) throws Exception {
@@ -59,7 +59,7 @@ public class StockController {
 		return paramMap;
 	}
 	
-	//자동완성 정보출력
+	//자동완성 목록 선택시 정보출력
 	@ResponseBody
 	@GetMapping("autoInfo")
 	public Map<String,Object> autoInfo(String ctrg){
