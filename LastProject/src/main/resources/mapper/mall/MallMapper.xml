@@ -6,15 +6,7 @@
 
 	<!-- 전체조회 -->
   	<select id="getProductList" resultType="ProductVO">
-  		SELECT prdt_no
-  			   ,nm
-  			   ,prc
-  			   ,dc_rate
-  			   ,desct
-  			   ,thumb
-  			   ,img
-  			   ,drwup_dt
-  			   ,common_cd
+  		SELECT *
   			 
   		FROM product
   		ORDER BY prdt_no DESC
@@ -23,15 +15,7 @@
   	
   	<!-- 단건조회 -->
   	<select id="getProductInfo" resultType="ProductVO">
-  		SELECT prdt_no
-  			   ,nm
-  			   ,prc
-  			   ,dc_rate
-  			   ,desct
-  			   ,thumb
-  			   ,img
-  			   ,drwup_dt
-  			   ,common_cd
+  		SELECT *
   			 
   		FROM product
   		WHERE prdt_no = #{prdtNo}
