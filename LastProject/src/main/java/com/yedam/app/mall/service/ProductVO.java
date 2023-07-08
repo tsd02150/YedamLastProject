@@ -12,13 +12,14 @@ public class ProductVO {
 	private String prdtNo;
 	private String nm;
 	private int prc;
-	private int dc_rate;
+	private int dcRate;
 	private String desct;
 	private String thumb;
 	private String img;
+	private int stcCnt;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date drwupDt;
 	private String commonCd;
-	
+		
 
 }
