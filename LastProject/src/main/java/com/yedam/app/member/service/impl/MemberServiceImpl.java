@@ -48,4 +48,9 @@ public class MemberServiceImpl implements MemberService {
 		return membMapper.getLastMembNo();
 	}
 
+	@Override
+	public String selectMembNO() {
+		return membMapper.selectMembNO();
+	}
+
 }
