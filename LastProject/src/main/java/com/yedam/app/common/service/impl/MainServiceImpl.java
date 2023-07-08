@@ -19,29 +19,67 @@ import com.yedam.app.common.service.MainService;
 @Service
 public class MainServiceImpl implements MainService {
 
+	// 차트정보	
+	@Override
+	public Object getChart() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	// 주식정보
+	@Override
+	public Object getStock() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	// 공지사항 정보
+	@Override
+	public Object getNotice() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	// QnA 정보
+	@Override
+	public Object getQuestion() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	// 자유게시판 정보
+	@Override
+	public Object getFreeBoard() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	// 주식게시판 정보
+	@Override
+	public Object getStockBoard() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	// 농수산물 관련 뉴스 정보
 	@Override
 	public String getNews() {
 		String clientId = "Tvcb97zOj2AcVXaZgr7J"; //애플리케이션 클라이언트 아이디
         String clientSecret = "rsLu6clOBi"; //애플리케이션 클라이언트 시크릿
 
-
         String text = null;
         try {
-            text = URLEncoder.encode("농산물", "UTF-8");
+            text = URLEncoder.encode("농수산물", "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("검색어 인코딩 실패",e);
         }
 
-
-        String apiURL = "https://openapi.naver.com/v1/search/blog?query=" + text;    // JSON 결과
-        //String apiURL = "https://openapi.naver.com/v1/search/blog.xml?query="+ text; // XML 결과
-
+        String apiURL = "https://openapi.naver.com/v1/search/news.json?query=" + text;    // JSON 결과
 
         Map<String, String> requestHeaders = new HashMap<>();
         requestHeaders.put("X-Naver-Client-Id", clientId);
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);
         String responseBody = get(apiURL,requestHeaders);
-
 
 		return responseBody;
 	}
@@ -53,7 +91,6 @@ public class MainServiceImpl implements MainService {
             for(Map.Entry<String, String> header :requestHeaders.entrySet()) {
                 con.setRequestProperty(header.getKey(), header.getValue());
             }
-
 
             int responseCode = con.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 호출
@@ -79,6 +116,7 @@ public class MainServiceImpl implements MainService {
             throw new RuntimeException("연결이 실패했습니다. : " + apiUrl, e);
         }
     }
+    
     private static String readBody(InputStream body){
         InputStreamReader streamReader = new InputStreamReader(body);
 

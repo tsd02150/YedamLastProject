@@ -79,5 +79,9 @@
 				WHERE ROWNUM = 1
 				]]>
 		</select>
+		
+		<select id="selectMembNO" resultType="String">
+			select 'mem-' || (TO_NUMBER(MAX(SUBSTR(NVL(memb_no,0),5)))+1) as memb_no from member
+		</select>
 	
 </mapper>

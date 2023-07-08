@@ -8,7 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.MembVO;
@@ -22,10 +24,10 @@ public class MemberController {
 
 	
 	@GetMapping("login")
-	public String loginForm() {
+	public String loginForm(HttpSession session) {
 		return "member/loginForm";
 	}
-	
+	 
 	@PostMapping("login")
 	public String loginPost(MembVO membVO, Model model, HttpSession session) {
 		//로그인 정보 비교
@@ -53,11 +55,11 @@ public class MemberController {
 	//회원가입 - member insert
 	@PostMapping("join")
 	public String joinMemb(MembVO membVO, AddrVO addrVO) {
-		if(addrVO.getZip().isEmpty()) {
+		if(addrVO.getZip().isEmpty()) { // 주소 입력하지 않았을 경우
 			membService.signUpMemb(membVO);
 			System.out.println(membVO);
 			System.out.println(addrVO);
-		} else if(!addrVO.getZip().isEmpty()){
+		} else if(!addrVO.getZip().isEmpty()){ // 주소 입력했을 경우
 			membService.signUpMemb(membVO);
 	        membVO.setMembNo(membService.getLastMembNo()); // membNo 값을 가져와서 membVO에 설정
 	        addrVO.setMembNo(membVO.getMembNo()); // membNo 값을 addrVO에 설정
@@ -68,6 +70,29 @@ public class MemberController {
 			return "redirect:join";
 		}
 		return "redirect:login";			
+	}
+	
+	//카카오 로그인
+	@ResponseBody
+	@RequestMapping("kakao") // 비밀번호는 지정해야되는데? 소셜로그인 테이블을 만든다 or 소셜로그인이면 비번 비교 어떻게 하지? 
+	public String kakaoLogin(MembVO membVO, @RequestParam String nick, @RequestParam String id, HttpSession session) {
+		if(membVO.getId()==null) { //처음 로그인하면 
+			membVO.setMembNo(membService.selectMembNO());
+			membVO.setNick(nick);
+			membVO.setId(id);
+			session.setAttribute("loggedInMember", membVO);
+		}else {
+			session.setAttribute("id", membVO.getId());
+			session.setAttribute("nick", membVO.getNick());
+			session.setAttribute("membNo", membVO.getMembNo());			
+		}
+		return "redirect:/";
+	}
+	
+	@ResponseBody
+	@RequestMapping("naver")
+	public String naverLogin() {
+		return null;
 	}
 	
 	//닉네임 중복확인
@@ -85,5 +110,6 @@ public class MemberController {
 		int result = membService.idCheckBoolean(id);
 		return result;
 	}
+
 	
 }

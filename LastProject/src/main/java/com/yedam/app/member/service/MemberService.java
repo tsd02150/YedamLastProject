@@ -18,6 +18,8 @@ public interface MemberService {
 
 	public String getLastMembNo();  
 	
+	public String selectMembNO();
+	
 	
 	
 

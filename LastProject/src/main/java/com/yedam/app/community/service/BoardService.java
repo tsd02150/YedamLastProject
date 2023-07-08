@@ -1,5 +1,7 @@
 package com.yedam.app.community.service;
 
-public interface BoardService {
+import java.util.List;
 
+public interface BoardService {
+	public List<BoardVO> getBoardList(BoardVO vo);
 }
