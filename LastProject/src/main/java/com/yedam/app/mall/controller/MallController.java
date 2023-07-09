@@ -25,7 +25,7 @@ public class MallController {
 	public String mallMain(Model model) {
 		List<ProductVO> list = mallService.getProductList();
 		model.addAttribute("product", list);
-		System.out.println(list);
+		
 		return "mall/mallMain";
 	}
 	
@@ -45,4 +45,14 @@ public class MallController {
 		model.addAttribute("seafoodList", seafoodList);
 		return "mall/seafoodList";
 	}
+	
+	//장바구니
+	@GetMapping("basket")
+	public String basket(Model model) {
+		
+		
+		return "mall/basket";
+	}
+	
+	
 }
