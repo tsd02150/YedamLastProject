@@ -48,6 +48,10 @@
       #itemInfo {
         padding: 20px;
       }
+      #itemInfo p {
+      	margin-bottom:5px;
+      	font-size: 14px;
+      }
       #hot {
         width: 100%;
         height: 347.2px;
@@ -183,7 +187,6 @@
             $.ajax({
           url: "allItemList",
           success: function (data) {
-          	console.log(data)
           	let list = '';
     			for(let i =0; i< data.length ; i++){
     				let plma = data[i].change > 0 ? 'plus' : 'minus';
@@ -277,6 +280,14 @@
                       .text(result[i])
                       .attr("data-in", result[i])
                   );
+                }else if(i == "tprc"){
+                	$("#itemInfo").append($("<p/>").text("현재가 : " +result[i]+" 원"));
+                }else if(i == "change"){
+                	let plma = result[i]==0 ? 'zero' : (result[i] > 0 ? 'plus':'minus');
+                	$("#itemInfo").append($("<p class="+plma+"/>").text("전일비 : " +result[i]+" "));
+                }else if(i == "rate"){
+                	let plma = result[i]==0 ? 'zero' : (result[i] > 0 ? 'plus':'minus');
+                	$("#itemInfo").append($("<p class="+plma+"/>").text("변동률 : ( "+ result[i]+"% )"));
                 } else {
                   $("#itemInfo").append($("<p/>").text(result[i]));
                 }

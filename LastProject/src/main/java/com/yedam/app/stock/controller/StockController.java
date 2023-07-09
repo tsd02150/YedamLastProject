@@ -33,6 +33,13 @@ public class StockController {
 		m.addAttribute("inqList",listInq);
 		return "stock/itemChoice";
 	}
+	
+	//상세 차트 페이지로 이동
+	@GetMapping("chart")
+	public String chartPage(String itemNo,Model m) {
+		m.addAttribute("itemNo",itemNo);
+		return "stock/chartPage";
+	}
 
 	// 테마리스트 ajax
 	@GetMapping("themeList")

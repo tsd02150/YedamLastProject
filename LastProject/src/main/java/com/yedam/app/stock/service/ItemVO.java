@@ -12,7 +12,12 @@ public class ItemVO {
 //	INQ                NUMBER     
 	
 	private String itemNo;
+	private String sc;
+	private String theme;
 	private String nm;
+	private Integer tprc;
+	private Integer change;
+	private Integer rate;
 	private String origin;
 	private String desct;
 }
