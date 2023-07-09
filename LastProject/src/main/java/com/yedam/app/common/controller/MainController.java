@@ -16,10 +16,9 @@ public class MainController {
 	
 	// 프로젝트 메인페이지
 	@GetMapping("/")
-	public String mainPage(Model model) {
-		
+	public String mainPage(Model model) {	
 		model.addAttribute(model);
-		System.out.println(mainService.getNews());
+
 		return "main/main";
 	}
 	

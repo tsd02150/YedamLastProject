@@ -4,13 +4,23 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
   <mapper namespace="com.yedam.app.community.mapper.BoardMapper">
+  	
+  	<select id="getBoardName" resultType="String">
+  		SELECT ctgr
+  		FROM COMMON_CODE
+  		WHERE common_cd=#{commonCd}
+  	</select>
+  
 	<select id="getBoardList" resultType="BoardVO">
-		SELECT board_no, nick, ttl, drwup_dt, inq, common_cd, ctgr
-		FROM COMMON_CODE JOIN
+		<![CDATA[
+ 		SELECT board_no, nick, ttl, drwup_dt, inq, common_cd, ctgr
+ 		FROM COMMON_CODE JOIN
 	 		(SELECT board_no, nick, ttl, drwup_dt, inq, common_cd
 	 		FROM BOARD JOIN MEMBER
 	 		USING (memb_no)
-	 		WHERE common_cd LIKE #{commonCd}||'%')
+	 		WHERE rcom>=#{rcom} AND common_cd LIKE #{commonCd}||'%')
 	 	USING (common_cd)
+	 	]]> 
  	</select>  
+
   </mapper>

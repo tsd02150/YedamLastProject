@@ -16,8 +16,14 @@ public class BoardServiceImpl implements BoardService {
 	BoardMapper boardMapper;
 
 	@Override
+	public String getBoardName(String commonCd) {
+		return boardMapper.getBoardName(commonCd);
+	}
+
+	@Override
 	public List<BoardVO> getBoardList(BoardVO vo) {
 		return boardMapper.getBoardList(vo);
 	}
+
 	
 }
