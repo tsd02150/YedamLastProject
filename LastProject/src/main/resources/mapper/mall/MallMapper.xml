@@ -14,7 +14,7 @@
   	</select>
   	
   	<!-- 단건조회 -->
-  	<select id="getProductInfo" resultType="ProductVO">
+  	<select id="getProductInfo" >
   		SELECT *
   			 
   		FROM product

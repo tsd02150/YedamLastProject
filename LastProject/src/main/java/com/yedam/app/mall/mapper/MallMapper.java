@@ -22,4 +22,6 @@ public interface MallMapper {
 	//삭제
 	public int deleteReviewInfo(int revNo);
 
+	public ProductVO getProductInfo(String prdtNo);
+
 }

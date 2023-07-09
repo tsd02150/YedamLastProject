@@ -1,0 +1,178 @@
+	.outer-block{
+		width:1110px;
+		margin: 0 auto;
+		box-sizing : border-box;
+	}
+	.flex-block{
+		display: flex;
+	}
+	.Space{
+		border:1px solid #dddddd;
+		padding: 20px;
+		height: 100%;	
+	}
+	#chart{
+		width:800px;
+		height:400px;
+		padding:20px;
+		background-clip: content-box;
+	}
+	
+	#chart>div{
+	
+	}
+	#chartList{
+		width:100px;
+		background-color: #DDDDDD;	
+	}
+	#chartContent{
+		width:1100px;
+		border: 1px solid #DDDDDD;
+	}
+	#ranking{
+		width:400px;
+		height:300px;
+		padding:20px;
+		background-clip: content-box;
+	}
+
+	#ranking .row{
+		height:218px;
+	}
+	.highRank, .lowRank{
+		padding:10px;
+		width:50%;
+		height:100%;
+	}
+	#updown{
+		width:400px;
+		height:300px;
+		padding:20px;
+		background-clip: content-box;
+	}
+
+	#updown .row{
+		height:218px;
+	}
+	.up, .down{
+		padding:10px;
+		width:50%;
+		height:100%;
+	}
+	#login{
+		width:300px;
+		height:300px;
+		padding:20px;
+		background-clip: content-box;
+	}
+	#loginForm{
+		border-top: 1px solid #dddddd;
+		border-bottom: 1px solid #dddddd;
+		padding-top:30px;
+		padding-bottom:30px;
+		box-shadow:0px 5px 5px #dddddddd;
+		border-top-left-radius: 20px;
+		border-top-right-radius: 20px;
+	}
+	#login input{
+		width:250px;
+		margin:auto;
+		margin-bottom: 5px; 
+	}
+	#login button{
+		width:250px;
+		margin:auto;
+		margin-bottom:10px;
+		display:block;
+	}
+	#login section{
+		width:250px;
+		margin:auto;
+	}
+
+	#survey{
+		width:300px;
+		height:400px;
+		padding:20px;
+		background-color: gray;
+		background-clip: content-box;
+	}
+	#mall{
+		width:1100px;
+		height:200px;
+		padding:20px;
+		background-color: gray;
+		background-clip: content-box;
+	}
+	#news{
+		width:800px;
+		height:400px;
+		padding:20px;
+		background-clip: content-box;
+	}
+	#notice{
+		width:300px;
+		height:400px;
+		padding:20px;
+		background-clip: content-box;
+	}
+	#freeboard{
+		width:400px;
+		height:400px;
+		padding:20px;
+		background-clip: content-box;
+	}
+	#stockboard{
+		width:400px;
+		height:400px;
+		padding:20px;
+		background-clip: content-box;
+	}
+	#qna{
+		width:300px;
+		height:400px;
+		padding:20px;
+		background-clip: content-box;
+	}
+	.list-group-item.active{
+		background-color: #DC3545;
+		border-color: #DC3545;
+	}
+	
+	
+	 #container{
+        width: 1100px;
+        margin: 0 auto;
+      }
+    
+      section{
+        width: 1100px;
+        float: left;
+      }
+      article{
+        float: left;
+        width: 275px;
+        height: 330px;
+        border: 1px solid #ddd;
+        margin-bottom: 0px;
+        margin-right: 0px;
+        padding: 0px;
+        text-align: justify;
+      }
+      article p{
+        text-indent: 16px;
+        /* letter-spacing: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis; */
+      }
+    
+      ul{
+        list-style: none;
+        text-align: center;
+      }
+      a{
+        text-decoration: none;
+        color: #000;
+      }
+   

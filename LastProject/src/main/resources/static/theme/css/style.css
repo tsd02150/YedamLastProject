@@ -1575,7 +1575,7 @@ a.post-category.absolute {
 /* 6. FEATURE POST STYLES 
 ================================================== */
 .featured-posts {
-  padding: 20px 0;
+  padding: 0px 0;
 }
 .featured-posts .second-post {
   margin-top: 10px;
