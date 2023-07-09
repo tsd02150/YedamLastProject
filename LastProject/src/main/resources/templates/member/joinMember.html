@@ -5,115 +5,182 @@
 <head>
 <meta charset="UTF-8">
 <title>회원가입</title>
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script
+	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <style>
-    #errormsg {background-color: GhostWhite; width: 15%; height: 40px;}
-    .olmessagef {color: red; font-style: Italic;}
-    .olmessaget {color: blue; font-style: Italic;}
-    label{font-weight: bold;}
-    
-    /* Chrome, Safari, Edge, Opera */
-		input::-webkit-outer-spin-button,
-		input::-webkit-inner-spin-button {
-		  -webkit-appearance: none;
-		  margin: 0;
-		}
-		
-		/* Firefox  */
-		input[type='number'] {
-		  -moz-appearance: textfield;
-		}
-	 .signup{padding: 0;}
-	 .login-signup section-padding{padding: 0;}
-	 
+#errormsg {
+	background-color: GhostWhite;
+	width: 15%;
+	height: 40px;
+}
+
+.olmessagef {
+	color: red;
+	font-style: Italic;
+}
+
+.olmessaget {
+	color: blue;
+	font-style: Italic;
+}
+
+label {
+	font-weight: bold;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox  */
+input[type='number'] {
+	-moz-appearance: textfield;
+}
+
+.signup {
+	padding: 0;
+}
+
+.login-signup section-padding {
+	padding: 0;
+}
 </style>
 </head>
 <body>
- <section class="login-signup section-padding" layout:fragment="content">
-   <div class="row align-items-center justify-content-center">
-      <div class="col-lg-7">
-        <div class="signup">
-          <h3 class="mt-4">회원가입</h3>
-          <div class="py-40"></div>
-          <form action="join" class="signup-form row" method="post" onsubmit="nullCheck()">
-            <div class="col-md-12">
-               <div class="form-group">
-                   <label for="f-name">이름</label>
-                   <input type="text" class="form-control" id="f-name" name="nm" placeholder="이름을 입력하세요" style="width: 60%;">
-               </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="nickname">닉네임</label><br>
-                    <input type="text" class="form-control" id="nickname" name="nick" placeholder="특수문자를 제외한 3~10자리여야 합니다." style="width: 60%; display: inline;">
-                    <button type="button" id="checkNick">중복확인</button><span id="nickmsg"></span><br>
-                </div>
-                
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="id-address">아이디</label>
-                    <input type="email" class="form-control" name="id" id="id-address" placeholder="이메일 형식으로 입력하세요">
-                    <button type="button" id="checkId">중복확인</button><span id="idmsg"></span>
-                    <button type="button" class="checkEmail">인증코드 발송</button>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="pass">비밀번호</label>
-                    <input type="password" class="form-control" id="pass" name="pwd" placeholder="비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.">
-                </div>
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="passCheck">비밀번호 확인</label>
-                    <input type="password" class="form-control" id="passCheck" name="pwdCheck" placeholder="비밀번호를 다시 입력하세요">
-                    <div id="pwd-warning">오류</div>
-                </div>
-            </div>
-            <div class="col-md-12">
-            		<div class="form-group">
-                    <label for="email-address">이메일</label>
-                    <input type="email" class="form-control" id="email-address" name="email" placeholder="이메일 형식으로 입력하세요">
-                </div>
-            </div>
-            <div class="col-md-12">
-           		<div class="form-group">
-                 <label for="telInput">연락처</label><br>
-                 <input type="text" class="form-control" oninput="autoHyphen(this)" maxlength="13" name="tel" id="telInput" placeholder="전화번호를 입력하세요">
-           		</div>
-            
-            </div>
-           
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="addr1">주소</label><br>
-                    <input type="type" class="form-control" style="width: 40%; display: inline;" id="addr1" name="zip" placeholder="우편번호 검색" readonly>
-                    <button type="button" class="zipbtn">우편번호 찾기</button>
-                </div>
-                <div class="form-group">
-                    <label for="addr2"></label>
-                    <input type="text" class="form-control" style="top: 5px;" id="addr2" name="addr" placeholder="도로명주소" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="addr3"></label>
-                    <input type="text" class="form-control" id="addr3" name="detaAddr" placeholder="상세주소를 입력하세요">
-                </div>
-            </div>
-            <div class="col-md-12">
-                <button class="btn btn-primary" type="submit" id="subBtn">Sign Up</button>
-                <p class="mt-5 mb-0">이미 회원이신가요? <a href="loginForm.html">로그인</a></p>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript">
+	<section class="login-signup section-padding" layout:fragment="content">
+		<div class="row align-items-center justify-content-center">
+			<div class="col-lg-7">
+				<div class="signup">
+					<h3 class="mt-4">회원가입</h3>
+					<div class="py-40"></div>
+					<form action="join" class="signup-form row" method="post"
+						onsubmit="nullCheck()">
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="f-name">이름</label> <input type="text"
+									class="form-control" id="f-name" name="nm"
+									placeholder="이름을 입력하세요" style="width: 60%;"><br>
+									<span id="nameCheck"></span>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="nickname">닉네임</label><br> <input type="text"
+									class="form-control" id="nickname" name="nick"
+									placeholder="특수문자를 제외한 3~10자리여야 합니다."
+									style="width: 60%; display: inline;">
+								<button type="button" id="checkNick">중복확인</button>
+								<span id="nickmsg"></span><br>
+							</div>
+
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="id-address">아이디</label><br> <input type="email"
+									class="form-control" name="id" id="id-address"
+									placeholder="이메일 형식으로 입력하세요"
+									style="width: 60%; display: inline;">
+								<button type="button" id="checkId">중복확인</button>
+								<br>
+								<span id="idmsg"></span>
+								<!-- 
+								<label for="memailconfirm"></label>
+								<input type="text" class="form-control" id="memailconfirm" placeholder="인증번호를 입력하세요"
+									style="width: 80%; display: inline;">
+								<button type="button" class="checkEmail">인증코드 발송</button>
+								<button type="button" id="checkEmailBtn">인증 확인</button><br>
+								<span id="memailconfirmTxt"></span>
+								 -->
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="pass">비밀번호</label> <input type="password"
+									class="form-control" id="pass" name="pwd"
+									placeholder="비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.">
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="passCheck">비밀번호 확인</label> <input type="password"
+									class="form-control" id="passCheck" name="pwdCheck"
+									placeholder="비밀번호를 다시 입력하세요">
+								<div id="pwd-warning"></div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="email-address">이메일</label> <input type="email"
+									class="form-control" id="email-address" name="email"
+									placeholder="이메일 형식으로 입력하세요">
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="telInput">연락처</label><br> <input type="text"
+									class="form-control" oninput="autoHyphen(this)" maxlength="13"
+									name="tel" id="telInput" placeholder="전화번호를 입력하세요">
+							</div>
+
+						</div>
+
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="addr1">주소</label><br> <input type="type"
+									class="form-control" style="width: 40%; display: inline;"
+									id="addr1" name="zip" placeholder="우편번호 검색" readonly>
+								<button type="button" class="zipbtn">우편번호 찾기</button>
+							</div>
+							<div class="form-group">
+								<label for="addr2"></label> <input type="text"
+									class="form-control" style="top: 5px;" id="addr2" name="addr"
+									placeholder="도로명주소" readonly>
+							</div>
+							<div class="form-group">
+								<label for="addr3"></label> <input type="text"
+									class="form-control" id="addr3" name="detaAddr"
+									placeholder="상세주소를 입력하세요">
+							</div>
+						</div>
+						<div class="col-md-12">
+							<button class="btn btn-primary" type="submit" id="subBtn">Sign
+								Up</button>
+							<p class="mt-5 mb-0">
+								이미 회원이신가요? <a href="loginForm.html">로그인</a>
+							</p>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script type="text/javascript">
+ const idInput = document.querySelector("#id-address");
  const pwdInput = document.getElementById('pass');
  const pwdCorrectInput = document.getElementById('passCheck');
  const pwdWarning = document.getElementById('pwd-warning');
+ const idMsg = document.querySelector("#idmsg");
+ const nickMsg = document.querySelector("#nickmsg");
+ //const memailConfirmTxt = document.querySelector("#memailconfirmTxt");
 
+const nameInput = document.querySelector("#f-name");
+const nameCheck = document.querySelector("#nameCheck");
+
+nameInput.addEventListener("input", function() {
+    const name = nameInput.value;
+
+    // Regular expression to validate Korean name
+    const nameRegex = /^[가-힣]{2,5}$/;
+
+    if (nameRegex.test(name)) {
+        nameCheck.textContent = "";
+    } else {
+        nameCheck.textContent = "올바르게 입력하세요.";
+    }
+});
+ 
  pwdInput.addEventListener('input', checkPwdValidity);
  pwdCorrectInput.addEventListener('input', checkPwdMatch);
 
@@ -149,41 +216,61 @@
 
  //닉네임 중복확인
  nickBtn.addEventListener('click', function() {
-     let nick = document.querySelector("#nickname").value;
-     const nickCheckUrl = "/member/nickCheck?nick=" + encodeURIComponent(nick);
-     fetch(nickCheckUrl)
-         .then(response => response.json())
-         .then(result => {
-             const msg = document.querySelector("#nickmsg");
-             if (nick !== "") {
-                 msg.textContent = (result === 1) ? "이미 사용중인 닉네임 입니다." : "사용가능한 닉네임 입니다.";
-             } else {
-                 msg.textContent = "닉네임을 입력하세요";
-             }
-         })
-         .catch(err => console.log(err));
- }); //닉네임 중복확인 끝
+	    let nick = document.querySelector("#nickname").value;
+	    const nickCheckUrl = "/member/nickCheck?nick=" + encodeURIComponent(nick);
+	    fetch(nickCheckUrl)
+	        .then(response => response.json())
+	        .then(result => {
+	            if (nick !== "") {
+	            	nickMsg.textContent = (result === 1) ? "이미 사용중인 닉네임 입니다." : "사용가능한 닉네임 입니다.";
+	                
+	                // 중복확인이 완료되면 checkedBtn 클래스를 추가
+	                nickBtn.classList.add("checkedBtn");
+	            } else {
+	            	nickMsg.textContent = "닉네임을 입력하세요";
+	            }
+	        })
+	        .catch(err => console.log(err));
+	}); //닉네임 중복확인 끝
  
+	//아이디 중복확인
  idBtn.addEventListener('click', function() {
 	    let idAddr = document.querySelector("#id-address").value;
 	    const idCheckUrl = "/member/idCheck?id=" + encodeURIComponent(idAddr);
 	    fetch(idCheckUrl)
 	        .then(response => response.json())
 	        .then(result => {
-	            const msg = document.querySelector("#idmsg");
 	            if (idAddr !== "") {
-	                msg.textContent = (result === 1) ? "이미 사용중인 아이디 입니다." : "사용가능한 아이디 입니다.";
+	            	idMsg.textContent = (result === 1) ? "이미 사용중인 아이디 입니다." : "사용가능한 아이디 입니다.";
+	                idBtn.classList.add("checkedBtn");
 	            } else {
-	                msg.textContent = "아이디를 입력하세요";
+	            	idMsg.textContent = "아이디를 입력하세요";
 	            }
 	        })
 	        .catch(err => console.log(err));
+	}); //아이디 중복확인 끝
+	
+ // 아이디 이메일형식 유효성검사 확인
+	idInput.addEventListener("input", function() {
+	    const email = idInput.value;
+	    const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/;
+
+	    if (email.length >= 6 && email.length < 64 && email.match(emailRegex)) {
+	        const atIndex = email.indexOf("@");
+	        const dotIndex = email.lastIndexOf(".");
+
+	        if (atIndex !== -1 && dotIndex > atIndex && dotIndex !== email.length - 1) {
+	            idMsg.textContent = "";
+	        } else {
+	            idMsg.textContent = "올바른 이메일 형식을 입력하세요.";
+	        }
+	    } else {
+	        idMsg.textContent = "올바른 이메일 형식을 입력하세요.";
+	    }
 	});
- 
+	
  // 연락처 처리
  const autoHyphen = (target) => {
-    // console.log(target);
-   // target.value = target.value.replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3").replace(/\-{1,2}$/g, "");
     target.value = target.value.replace(/[^0-9]/g, '').replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`);
 };
 
@@ -271,7 +358,7 @@ document.querySelector('form').addEventListener('submit', (event) => {
  function nullCheck(event) {
 	    event.preventDefault();
 
-	    if (isNick.value === "") {
+	    if (isNick.value === "" || nickBtn.classList.contains("checkedBtn") || nickMsg.textContent.includes("사용 가능한")) {
 	        isNick.focus();
 	        return; 
 	    }
@@ -283,7 +370,7 @@ document.querySelector('form').addEventListener('submit', (event) => {
 	        isPwd2.focus();
 	        return; 
 	    }
-	    if (isId.value === "") {
+	    if (isId.value === "" || idBtn.classList.contains("checkedBtn")) {
 	        isId.focus();
 	        return; 
 	    }
@@ -299,19 +386,18 @@ document.querySelector('form').addEventListener('submit', (event) => {
 	        isNm.focus();
 	        return; 
 	    }
-	     //0709 완성할거
-	    //중복체크 필수 확인
-	    //본인인증 다 하고나서 버튼마다 클래스 추가해서 넣기
-	    //추가된 클래스 없으면 인증하라고 메세지 띄워주기
 
+//	    if(memailConfirmTxt.textContent === "인증 확인되었습니다."){
+//	    	document.getElementById("memailconfirm").focus();
+//	    }
+	    
 	    // 모든 조건을 만족했을 때 호출
         document.querySelector('form').submit();
-	    
 	}
 </script>
 
 
-</section>
- 
+	</section>
+
 </body>
 </html>

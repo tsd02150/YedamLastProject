@@ -1,10 +1,13 @@
 package com.yedam.app.member.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.member.mapper.MemberMapper;
 import com.yedam.app.member.service.AddrVO;
+import com.yedam.app.member.service.CommonVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
 
@@ -57,6 +60,18 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public String selectMembNO() {
 		return membMapper.selectMembNO();
+	}
+
+	//비밀번호 변경
+	@Override
+	public int updatePwd(MembVO membVO) {
+		return membMapper.updatePwd(membVO);
+	}
+
+	//관심종목 선택 리스트
+	@Override
+	public List<CommonVO> myItemCheck() {
+		return membMapper.myItemCheck();
 	}
 
 

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head>
+<meta charset="UTF-8" />
+<style>
+.itemBox {
+	width: 200px;
+	height: 200px;
+	border: 1px solid #dddddd;
+	display: inline-block;
+}
+
+#title {
+	text-align: center;
+	display: block;
+}
+
+.selectBtn, .resetBtn {
+  margin: 0 auto;
+  display: block;
+  width: fit-content;
+}
+.selectedBox {
+	border: 2px solid red;
+}
+</style>
+</head>
+<body>
+	<section layout:fragment="content">
+		<div class="py-40"></div>
+		<h2 id="title">관심종목 선택 리스트</h2>
+		<div class="py-40"></div>
+		<div id="randomList"></div>
+
+		<script>
+		$.ajax({
+			url: "myItemCheck",
+			success: function (data) {
+				// 데이터를 랜덤하게 섞음
+				let randomData = randomArray(data);
+
+				// 랜덤하게 섞인 데이터에서 처음 25개만 선택
+				let selectedData = randomData.slice(0, 25);
+
+				selectedData.forEach(function (item) {
+					let itemBox = $("<div>").addClass("itemBox");
+					$("<p>").text("종목번호").appendTo(itemBox);
+					$("<h3>").text(item.ctgr).appendTo(itemBox);
+					$("<p>").text("상승률").append("<br>").appendTo(itemBox);
+					$("<p>").text("현재가 10,000원").appendTo(itemBox);
+					itemBox.appendTo("#randomList");
+				});
+
+				$("<div>").addClass("py-40").appendTo("#randomList");
+				$("<button>").addClass("selectBtn").text("저장").appendTo("#randomList");
+				$("<button>").addClass("resetBtn").text("취소").appendTo("#randomList");
+				$("<div>").addClass("py-40").appendTo("#randomList");
+
+				// 배열을 랜덤하게 섞는 함수
+				function randomArray(array) {
+					let currentIndex = array.length;
+					let temporaryValue, randomIndex;
+
+					while (0 !== currentIndex) {
+						randomIndex = Math.floor(Math.random() * currentIndex);
+						currentIndex -= 1;
+
+						temporaryValue = array[currentIndex];
+						array[currentIndex] = array[randomIndex];
+						array[randomIndex] = temporaryValue;
+					}
+					return array;
+				}
+
+				let selectedItems = [];
+
+				// itemBox 클릭 이벤트 처리
+				$(document).on("click", ".itemBox", function () {
+					let itemText = $(this).text();
+
+					// 이미 선택된 itemBox인 경우, 선택 취소
+					if ($(this).hasClass("selectedBox")) {
+						$(this).removeClass("selectedBox");
+						selectedItems = selectedItems.filter(item => item.종목번호 !== itemText);
+					} else if (selectedItems.length >= 5) {
+						// 이미 5개가 선택되었을 때 경고창 표시
+						alert("최대 5개까지만 선택할 수 있습니다.");
+					} else {
+						// 선택된 itemBox 추가
+						$(this).addClass("selectedBox");
+						selectedItems.push({
+							"item_no": itemText,
+							"ctgr": "메론",
+							"rate": "상승률",
+							"현재가": "10,000"
+						});
+					}
+
+					// 선택된 아이템 리스트 출력
+					console.log("Selected items:", selectedItems);
+				});
+
+				// 저장 버튼 클릭 이벤트 처리
+				$(document).on("click", ".selectBtn", function () {
+					// 선택된 아이템 처리 로직 추가
+					console.log("Selected items:", selectedItems);
+				});
+
+				// 취소 버튼 클릭 이벤트 처리
+				$(document).on("click", ".resetBtn", function () {
+					// 선택된 아이템 초기화 로직 추가
+					$(".itemBox").removeClass("selectedBox");
+					selectedItems = [];
+
+					// 선택된 아이템 리스트 출력
+					console.log("Selected items:", selectedItems);
+		    window.location.href = "/member/login";
+				});
+			}
+		});
+		
+		
+		</script>
+		
+	</section>
+
+</body>
+</html>
