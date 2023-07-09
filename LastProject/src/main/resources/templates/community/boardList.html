@@ -5,33 +5,189 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+	#boardSection{
+		padding-top: 50px;
+		padding-bottom:50px;
+	}
+	#boardSection hr{
+		margin-top: 10px;
+	}
+	#category{
+		display: flex;
+		justify-content:space-between;
+	}
+</style>
 </head>
 <body>
 	<div layout:fragment="content">
-		<table>
-			<thead>
-				<tr>
-					<td>게시물번호</td>
-					<td>제목</td>
-					<td>닉네임</td>
-					<td>작성일</td>
-					<td>조회수</td>
-					<td>공통코드</td>
-					<td>공통코드이름</td>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="board:${boardList}">
-					<td th:text="${board.boardNo}"></td>
-					<td th:text="${board.ttl}"></td>
-					<td th:text="${board.nick}"></td>
-					<td th:text="${board.drwupDt}"></td>
-					<td th:text="${board.inq}"></td>
-					<td th:text="${board.commonCd}"></td>
-					<td th:text="${board.ctgr}"></td>
-				</tr>
-			</tbody>
-		</table>
+		<div id="boardSection">
+			<h2 th:text="${boardName}">자유게시판</h2>
+			<hr>
+			<div id="category">
+				<div>
+					<button class="btn btn-dark  mt-3 mt-lg-0" type="button" id="allBoard">전체글</button>
+					<button class="btn btn-dark  mt-3 mt-lg-0" type="button" id="bestBoard">인기글</button>
+				</div>
+				<div th:if="${boardName=='자유게시판'}">
+					<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C101">드립</button>
+					<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C102">일지</button>
+					<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C103">자료</button>
+					<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C104">질문</button>
+				</div>
+				<div th:if="${boardName=='주식게시판'}">
+					<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C201">농산물</button>
+					<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C202">수산물</button>
+				</div>
+				<div class="dropdown">
+					<select class="btn btn-secondary dropdown-toggle" id="sort" name="sort">
+						<option value="">작성일</option>
+						<option value="">조회순</option>
+						<option value="">추천순</option>
+					</select>
+				</div>
+			</div>
+
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<td>글번호</td>
+						<td>머리말</td>
+						<td style="width:50%;">제목</td>
+						<td>글쓴이</td>
+						<td>작성일</td>
+						<td>조회수</td>
+					</tr>
+				</thead>
+				<tbody id="boardList">
+					<tr th:each="board,idx:${boardList}" th:attr="data-boardno=${board.boardNo}">
+						<td th:text=${idx.count}></td>
+						<td th:text="${board.ctgr}"></td>
+						<td th:text="${board.ttl}"></td>
+						<td th:text="${board.nick}"></td>
+						<td th:text="${board.drwupDt}"></td>
+						<td th:text="${board.inq}"></td>
+					</tr>
+				</tbody>
+			</table>
+			<hr>
+			<div>
+			<button class="btn btn-primary  mt-3 mt-lg-0 pull-right" type="button">글쓰기</button>
+			</div>
+			<div class="text-center">
+				<ul class="pagination">
+					<li><a href="#">1</a></li>
+					<li><a href="#">2</a></li>
+					<li><a href="#">3</a></li>
+					<li><a href="#">4</a></li>
+					<li><a href="#">5</a></li>
+				</ul>
+			</div>
+		</div>
+		
+	<script th:inline="javascript">
+		
+		// 전체글 버튼 클릭
+		document.getElementById('allBoard').addEventListener('click',function(){
+			fetch("/community/getBoardList",{
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: 'commonCd='+[[${boardCode}]] 
+			})
+			.then(result=>result.json())
+			.then(data=>{
+				let tbody = document.getElementById("boardList");
+				let items=["ctgr","ttl","nick","drwupDt","inq"];
+				while(tbody.firstChild){
+					tbody.firstChild.remove();
+				}
+				data.forEach((board,index)=>{
+					let tr = document.createElement('tr');
+					tr.setAttribute('data-boardno',board.boardNo);
+					let td = document.createElement('td');
+					td.textContent=index+1;
+					tr.append(td);
+					for(let item of items){
+						let td = document.createElement('td');
+						td.textContent=board[item];
+						tr.append(td);
+					}
+					tbody.append(tr);
+				})
+			})
+			.catch(err=>console.log(err));	
+		})
+		
+		// 인기글 클릭
+		document.getElementById('bestBoard').addEventListener('click',function(){
+			fetch("/community/getBoardList",{
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: 'commonCd='+[[${boardCode}]]+'&rcom=30'
+			})
+			.then(result=>result.json())
+			.then(data=>{
+				let tbody = document.getElementById("boardList");
+				let items=["ctgr","ttl","nick","drwupDt","inq"];
+				while(tbody.firstChild){
+					tbody.firstChild.remove();
+				}
+				data.forEach((board,index)=>{
+					let tr = document.createElement('tr');
+					tr.setAttribute('data-boardno',board.boardNo);
+					let td = document.createElement('td');
+					td.textContent=index+1;
+					tr.append(td);
+					for(let item of items){
+						let td = document.createElement('td');
+						td.textContent=board[item];
+						tr.append(td);
+					}
+					tbody.append(tr);
+				})
+			})
+			.catch(err=>console.log(err));	
+		})
+		
+		// 카테고리 클릭
+		document.querySelectorAll(".ctgr").forEach(ctgr=>
+			ctgr.addEventListener('click',function(){
+				fetch("/community/getBoardList",{
+					method: "POST",
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					body: 'commonCd='+ctgr.getAttribute('data-common-cd')
+				})
+				.then(result=>result.json())
+				.then(data=>{
+					let tbody = document.getElementById("boardList");
+					let items=["ctgr","ttl","nick","drwupDt","inq"];
+					while(tbody.firstChild){
+						tbody.firstChild.remove();
+					}
+					data.forEach((board,index)=>{
+						let tr = document.createElement('tr');
+						tr.setAttribute('data-boardno',board.boardNo);
+						let td = document.createElement('td');
+						td.textContent=index+1;
+						tr.append(td);
+						for(let item of items){
+							let td = document.createElement('td');
+							td.textContent=board[item];
+							tr.append(td);
+						}
+						tbody.append(tr);
+					})
+				})
+				.catch(err=>console.log(err));	
+			})
+		)
+	</script>
 	</div>
 </body>
 </html>
