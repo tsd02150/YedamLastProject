@@ -15,17 +15,26 @@ import org.springframework.web.bind.annotation.RestController;
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
+import com.yedam.app.member.service.RegisterMail;
 
 @Controller
 @RequestMapping("member")
 public class MemberController {
 	@Autowired
 	MemberService membService;
+	
+	@Autowired
+	RegisterMail registerMail;
 
 	
 	@GetMapping("login")
-	public String loginForm(HttpSession session) {
+	public String loginForm() {
 		return "member/loginForm";
+	}
+	
+	@GetMapping("mypage")
+	public String myPageForm() {
+		return "member/myPageInfo";
 	}
 	 
 	@PostMapping("login")
@@ -111,5 +120,13 @@ public class MemberController {
 		return result;
 	}
 
-	
+	// 이메일 인증
+	@PostMapping("mailConfirm")
+	@ResponseBody
+	String mailConfirm(@RequestParam("email") String email) throws Exception {
+
+		String code = registerMail.sendSimpleMessage(email);
+		System.out.println("인증코드 : " + code);
+		return code;
+	}
 }
