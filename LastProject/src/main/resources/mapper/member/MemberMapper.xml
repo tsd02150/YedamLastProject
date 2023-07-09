@@ -88,5 +88,18 @@
 		<select id="selectMembNO" resultType="String">
 			select 'mem-' || (TO_NUMBER(MAX(SUBSTR(NVL(memb_no,0),5)))+1) as memb_no from member
 		</select>
+		
+		<!-- 비밀번호 변경 -->
+		<update id="updatePwd" parameterType="MembVO">
+			UPDATE member
+			SET 	 pwd = #{pwd}
+			WHERE  id = #{id}
+		</update>
+		
+		<!-- 관심종목 선택시 List 조회 -->
+		<select id="myItemCheck">
+			SELECT * FROM common_code
+			WHERE  h_cd LIKE '%S___'
+		</select>
 	
 </mapper>

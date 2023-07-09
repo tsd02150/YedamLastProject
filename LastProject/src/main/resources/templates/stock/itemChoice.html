@@ -15,6 +15,9 @@
     />
 
     <style>
+      .row {
+        margin: 40px 0;
+      }
       ul {
         list-style: none;
       }
@@ -45,26 +48,36 @@
       #itemInfo {
         padding: 20px;
       }
+      #itemInfo p {
+      	margin-bottom:5px;
+      	font-size: 14px;
+      }
       #hot {
         width: 100%;
         height: 347.2px;
         border: black solid 1px;
       }
-      #hot p{
-      	text-align: center;
-      	padding:20px;
+      #hot p {
+        text-align: center;
+        padding: 20px;
       }
-      #hot li{
-      	padding:10px;
+      #hot li {
+        padding: 10px;
       }
       #itemDiv {
         margin-top: 40px;
       }
-      #itemDiv div{
-      	padding:0;
+      #itemDiv div {
+        padding: 0;
       }
-      #itemDiv td{
-      	width:16%;
+      #itemDiv td {
+        width: 16%;
+      }
+      .plus{
+      	color: red;
+      }
+      .minus{
+      	color:blue;
       }
     </style>
     <title>Insert title here</title>
@@ -73,7 +86,7 @@
     <div layout:fragment="content">
       <div class="container">
         <div class="row">
-          <div class="col-md-9">
+          <div id="fstDiv" class="col-md-9">
             <input
               id="searchItem"
               type="text"
@@ -109,11 +122,14 @@
             <div id="hot">
               <p>인기검색순위</p>
               <ul>
-              	<th:block th:each="inq : ${inqList}">
-	              	<li><a th:href="@{chart(itemNo = ${inq.itemNo})}">[[${inqStat.index+1}]] [[${inq.nm}]]</a>
-	              		<span> [[${inq.change}]] [[${inq.rate}]]</span>
-	              	</li>
-              	</th:block>
+                <th:block th:each="inq : ${inqList}">
+                  <li>
+                    <a th:href="@{chart(itemNo = ${inq.itemNo})}"
+                      >[[${inqStat.index+1}]] [[${inq.nm}]]</a
+                    >
+                    <span th:class="${inq.change} > 0 ? 'plus':'minus'"> [[${inq.change}]] ([[${inq.rate}]]%)</span>
+                  </li>
+                </th:block>
               </ul>
             </div>
           </div>
@@ -133,14 +149,18 @@
                       <th>상승률</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="allList">
                     <tr th:each="item : ${itemList}">
                       <td th:text="${item.sc}"></td>
                       <td th:text="${item.theme}"></td>
-                      <td><a th:href="@{chart(itemNo=${item.itemNo})}">[[${item.nm}]]</a></td>
+                      <td>
+                        <a th:href="@{chart(itemNo=${item.itemNo})}"
+                          >[[${item.nm}]]</a
+                        >
+                      </td>
                       <td th:text="${item.tprc}"></td>
-                      <td th:text="${item.change}"></td>
-                      <td th:text="${item.rate}"></td>
+                      <td><span th:class="${item.change} > 0 ? 'plus':'minus'"> [[${item.change}]] </span></td>
+                      <td><span th:class="${item.rate} > 0 ? 'plus':'minus'"> ([[${item.rate}]]%) </span></td>
                     </tr>
                   </tbody>
                 </table>
@@ -150,29 +170,40 @@
         </div>
       </div>
       <script>
-      	//조회수차트
-      	setInterval(() => {
-      		
-      		$.ajax({
-      			url:'inqChart',
-      			success:function(data){
-      				let list = `<li><a href="chart?itemNo="+${data[0].itemNo}}>1 ${data[0].nm}</a> <span class="rate"> ${data[0].change} ${data[0].rate}</span>`
-      					list+= `<li><a href="chart?itemNo="+${data[1].itemNo}}>2 ${data[1].nm}</a> <span class="rate"> ${data[1].change} ${data[1].rate}</span>`
-      					list+= `<li><a href="chart?itemNo="+${data[2].itemNo}}>3 ${data[2].nm}</a> <span class="rate"> ${data[2].change} ${data[2].rate}</span>`
-      					list+= `<li><a href="chart?itemNo="+${data[3].itemNo}}>4 ${data[3].nm}</a> <span class="rate"> ${data[3].change} ${data[3].rate}</span>`
-      					list+= `<li><a href="chart?itemNo="+${data[4].itemNo}}>5 ${data[4].nm}</a> <span class="rate"> ${data[4].change} ${data[4].rate}</span>`
-      				$('#hot ul').html(list)
+        //조회수차트
+        setInterval(() => {
+          $.ajax({
+            url: "inqChart",
+            success: function (data) {
+            	
+      			let list = '';
+      			for(let i =0; i< data.length ; i++){
+      				list +=`<li><a href="chart?itemNo="+${data[i].itemNo}}>${i+1} ${data[i].nm}</a> <span ${data[i].change > 0 ? 'class="plus"':'class="minus"'}> ${data[i].change} (${data[i].rate}%)</span>`;
       			}
-      		})
-      		
-      		$.ajax({
-      			url:'allItemList',
-      			success:function(data){
-      				
-      			}
-      		})
-      	}, 2000);
-      
+              $("#hot ul").html(list);
+            },
+          });
+
+            $.ajax({
+          url: "allItemList",
+          success: function (data) {
+          	let list = '';
+    			for(let i =0; i< data.length ; i++){
+    				let plma = data[i].change > 0 ? 'plus' : 'minus';
+          			list += `<tr>`;
+    				list +=`<td>${data[i].sc}</td>`;
+    				list +=`<td>${data[i].theme}</td>`;
+    				list +=`<td><a href="chart?itemNo=${data[i].itemNo}">${data[i].nm}</a></td>`;
+    				list +=`<td>${data[i].tprc}</td>`;
+    				list +=`<td><span class="${plma}"> ${data[i].change} </span></td>`;
+    				list +=`<td><span class="${plma}" > (${data[i].rate}%) </span></td>`;
+    				list +=`</tr>`;
+    			}
+    			$('#allList').html(list);
+          },
+        }); 
+        }, 2000);
+
         // 증권 선택시 테마 리스트 출력
         $("#sc").on("click", "li", themeList);
 
@@ -249,6 +280,14 @@
                       .text(result[i])
                       .attr("data-in", result[i])
                   );
+                }else if(i == "tprc"){
+                	$("#itemInfo").append($("<p/>").text("현재가 : " +result[i]+" 원"));
+                }else if(i == "change"){
+                	let plma = result[i]==0 ? 'zero' : (result[i] > 0 ? 'plus':'minus');
+                	$("#itemInfo").append($("<p class="+plma+"/>").text("전일비 : " +result[i]+" "));
+                }else if(i == "rate"){
+                	let plma = result[i]==0 ? 'zero' : (result[i] > 0 ? 'plus':'minus');
+                	$("#itemInfo").append($("<p class="+plma+"/>").text("변동률 : ( "+ result[i]+"% )"));
                 } else {
                   $("#itemInfo").append($("<p/>").text(result[i]));
                 }
@@ -319,9 +358,8 @@
             },
           });
         }
-        
+		$('#choice').css("width",$('fstDiv').css("width"));
         $("#searchItem").css("width", $("#choice").css("width"));
-        
         
       </script>
     </div>

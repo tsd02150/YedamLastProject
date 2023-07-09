@@ -1,5 +1,7 @@
 package com.yedam.app.member.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.app.member.mapper.MemberMapper;
 import com.yedam.app.member.service.AddrVO;
-import com.yedam.app.member.service.FindPwMail;
+import com.yedam.app.member.service.CommonVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
 import com.yedam.app.member.service.RegisterMail;
@@ -39,25 +42,6 @@ public class MemberController {
 		return "member/myPageInfo";
 	}
 	
-	//아이디 찾기 페이지
-	@GetMapping("findid")
-	public String findIdForm() {
-		return "member/findIdForm";
-	}
-	
-	//비밀번호 찾기 페이지
-	@GetMapping("findpwd")
-	public String findPwdForm() {
-		return "member/findPwdForm";
-	}
-	
-	//인증코드 확인 후 메일발송 완료 페이지로 호출
-	@ResponseBody
-	@GetMapping("tempPwdSuccess")
-	public String renewPwd() {
-		return "member/tempPwdSuccess";
-	}
-	 
 	@PostMapping("login")
 	public String loginPost(MembVO membVO, Model model, HttpSession session) {
 		//로그인 정보 비교
@@ -84,7 +68,7 @@ public class MemberController {
 	
 	//회원가입 - member insert
 	@PostMapping("join")
-	public String joinMemb(MembVO membVO, AddrVO addrVO) {
+	public String joinMemb(MembVO membVO, AddrVO addrVO, Model model) {
 		if(addrVO.getZip().isEmpty()) { // 주소 입력하지 않았을 경우
 			membService.signUpMemb(membVO);
 			System.out.println(membVO);
@@ -99,12 +83,13 @@ public class MemberController {
 		} else {
 			return "redirect:join";
 		}
-		return "redirect:login";			
+		model.addAttribute("joinInfoId", membVO.getId());
+		return "member/myItemCheckForm";			
 	}
 	
 	//카카오 로그인
 	@ResponseBody
-	@RequestMapping("kakao") // 비밀번호는 지정해야되는데? 소셜로그인 테이블을 만든다 or 소셜로그인이면 비번 비교 어떻게 하지? 
+	@RequestMapping("kakao")
 	public String kakaoLogin(MembVO membVO, @RequestParam String nick, @RequestParam String id, HttpSession session) {
 		if(membVO.getId()==null) { //처음 로그인하면 
 			membVO.setMembNo(membService.selectMembNO());
@@ -141,22 +126,68 @@ public class MemberController {
 		return result;
 	}
 
-	// 이메일 인증
-//	@PostMapping("mailConfirm")
-//	@ResponseBody
-//	String mailConfirm(@RequestParam("email") String email) throws Exception {
-//		String code = registerMail.sendSimpleMessage(email);
-//		System.out.println("인증코드 : " + code);
-//		return code;
-//	}
-
-	// 비밀번호 인증 이메일
+	//아이디 찾기 페이지
+		@GetMapping("findid")
+		public String findIdForm() {
+			return "member/findIdForm";
+		}
+		
+		//비밀번호 찾기 페이지
+		@GetMapping("findpwd")
+		public String findPwdForm() {
+			return "member/findPwdForm";
+		}
+		 
+	// 이메일 인증번호 발송
+	@PostMapping("mailConfirm")
 	@ResponseBody
-	@PostMapping("mailConfirmPwd")
-	String findPwdEmail(@RequestParam("id") String id, MembVO membVO) throws Exception {
+	String mailConfirm(@RequestParam("id") String id) throws Exception {
 		String email = membService.selectOneMemb(id).getEmail();
-		String code = registerMail.sendTempPwdMessage(email); 
+		System.out.println(email);
+		String code = registerMail.sendSimpleMessage(email);
 		System.out.println("인증코드 : " + code);
 		return code;
 	}
+
+	// 임시비밀번호 발급 - 이메일
+	@ResponseBody
+	@PostMapping("mailConfirmPwd")
+	public String findPwdEmail(@RequestParam("id") String id, MembVO membVO) throws Exception {
+		String email = membService.selectOneMemb(id).getEmail();
+		String code = registerMail.sendTempPwdMessage(email); 
+		System.out.println("임시비밀번호 : " + code);
+		
+		//기존 비밀번호 임시 비밀번호로 수정.
+		membVO.setPwd(code);
+		membVO.setId(id);
+		membService.updatePwd(membVO);
+		
+		return code;
+	}
+	
+	//임시 비밀번호 발급 후 페이지 호출
+//	@ResponseBody
+	@PostMapping("tempPwdSuccess")
+	public String renewPwd(@RequestParam("id") String id, Model model) {
+		System.out.println(id);
+		String email = membService.selectOneMemb(id).getEmail();
+		System.out.println(email);
+		model.addAttribute("email", email);
+		return "member/tempPwdSuccess";
+	}
+	
+	//관심종목 리스트 정보
+	@ResponseBody
+	@GetMapping("myItemCheck")
+	public List<CommonVO> interestItemList(){
+		return membService.myItemCheck();
+	}
+	
+	//관심종목 리스트 선택 페이지
+	@GetMapping("myItemCheckForm")
+	public String interestItemPage(Model model, CommonVO commonVO) {
+//		model.addAttribute("listctgr", membService.myItemCheck());
+		return "member/myItemCheckForm";
+	}
+	
 }
