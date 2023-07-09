@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+
+<head>
+	<meta charset="UTF-8">
+	<title>로그인</title>
+	<style>
+		.login {
+			padding: 0;
+		}
+
+		.login-signup section-padding {
+			padding-top: 0;
+		}
+
+		.py-20 {
+			clear: both;
+			height: 20px;
+		}
+	</style>
+</head>
+
+<body>
+	<section class="login-signup section-padding" layout:fragment="content" onsubmit="validateForm()">
+		<div class="container">
+			<div class="row align-items-center justify-content-center">
+				<div class="col-lg-7">
+					<div class="login">
+						<div class="text-center">
+							<a href="index.html"><img src="images/logos/logo.png" alt="" class="img-fluid"></a>
+							<h3>비밀번호 찾기</h3>
+						</div>
+						<div class="py-20"></div>
+					</div>
+
+					<form action="tempPwdSuccess" class="login-form row" method="post">
+						<!-- th:onsubmit="validateForm()" -->
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="mname">이름</label> <input type="text" id="mname" class="form-control" name="nm"
+									placeholder="이름을 입력하세요" required>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="loginemail">아이디</label><br>
+                <input type="email" class="form-control" name="id" id="loginemail" placeholder="이메일 형식으로 입력하세요" style="width: 80%;">
+                <button type="button" class="checkEmail" style="display: inline;">인증코드 발송</button>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="memailconfirm" id="memailconfirmTxt"></label>
+                <input type="text" class="form-control" id="memailconfirm" placeholder="인증번호를 입력하세요" style="width: 80%; display: inline;">
+                <button type="button" class="checkEmailInput">인증 확인</button>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="col-md-12">
+						<button class="btn btn-primary" type="submit">비밀번호 찾기</button>
+				</div>
+			</div>
+		</div>
+<script>
+	var emconfirmchk = false; // 이메일 인증
+	
+	var checkEmail = $(".checkEmail"); // 인증번호 발송 버튼
+	var memailconfirm = $("#memailconfirm"); // 인증번호 확인 input
+	var memailconfirmTxt = $("#memailconfirmTxt"); // 인증번호 확인 txt
+	
+		// 이메일 인증번호
+		checkEmail.on("click", function() {
+			$.ajax({
+				type : "POST",
+				url : "/member/mailConfirmPwd",
+				data : {
+					"id" : $('#loginemail').val()
+				},
+				success : function(data){
+					alert("해당 이메일로 인증번호 발송이 완료되었습니다. \n 확인부탁드립니다.")
+					console.log("data : "+data);
+					chkEmailConfirm(data, memailconfirm, memailconfirmTxt);
+				}
+			})
+		})
+		
+	// 이메일 인증번호 체크
+	
+	function chkEmailConfirm(data, $memailconfirm, $memailconfirmTxt){
+		checkEmailInput.on("click", function(){
+			if (data != $memailconfirm.val()) { //
+				emconfirmchk = false;
+				memailconfirmTxt.html("<span id='emconfirmchk'>인증번호가 잘못되었습니다</span>")
+				$("#emconfirmchk").css({
+					"color" : "#FA3E3E",
+					"font-weight" : "bold",
+					"font-size" : "10px"
+				})
+			} else { // 아니면 중복아님
+				emconfirmchk = true;
+				memailconfirmTxt.html("<span id='emconfirmchk'>인증번호 확인 완료</span>")
+
+				$("#emconfirmchk").css({
+					"color" : "#0D6EFD",
+					"font-weight" : "bold",
+					"font-size" : "10px"
+
+				})
+			}
+		})
+	}
+
+    function validateForm() {
+    	event.preventDefault();
+        // 아이디와 비밀번호가 공란인 경우
+        if (loginemail.value === "" || mname.value === "") {
+          if (loginemail.value === "") {
+            loginemail.focus();
+          }
+          if (mname.value === "") {
+            mname.focus();
+          }
+        }
+
+				//인증코드 확인 후 인증메일 발송했다는 페이지로 이동.
+        document.querySelector('form').submit();
+      }
+		</script>
+
+	</section>
+</body>
+
+</html>

@@ -97,4 +97,10 @@ public class RegisterMail implements MailServiceInter {
 
 		return ePw; // 메일로 보냈던 인증 코드를 서버로 반환
 	}
+
+	@Override
+	public String sendTempPwdMessage(String to) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

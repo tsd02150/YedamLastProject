@@ -1,4 +1,4 @@
-package com.yedam.app.member.service.impl;
+package com.yedam.app.member.service;
 import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
@@ -12,8 +12,6 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import com.yedam.app.member.service.MailServiceInter;
-
 @Service
 public class FindPwMail implements MailServiceInter {
 
@@ -22,6 +20,8 @@ public class FindPwMail implements MailServiceInter {
 
     // 임시 패스워드
     private String tempPW;
+    
+    private String ePw; // 인증번호
 
     // 메일 내용 작성
     @Override
@@ -31,7 +31,7 @@ public class FindPwMail implements MailServiceInter {
         MimeMessage message = emailsender.createMimeMessage();
 
         message.addRecipients(RecipientType.TO, to);// 보내는 대상
-        message.setSubject("GoodJob 계정 임시 패스워드");// 제목
+        message.setSubject("어제살걸 계정 임시 패스워드");// 제목
 
         String msgg = "";
         msgg += "<div style='margin:100px;'>";
@@ -89,7 +89,7 @@ public class FindPwMail implements MailServiceInter {
 
     // 메일 발송
     @Override
-    public String sendSimpleMessage(String to) throws Exception {
+    public String sendTempPwdMessage(String to) throws Exception {
         tempPW = createKey();
 
         MimeMessage message = createMessage(to);
@@ -101,4 +101,10 @@ public class FindPwMail implements MailServiceInter {
         }
         return tempPW;
     }
+
+	@Override
+	public String sendSimpleMessage(String to) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

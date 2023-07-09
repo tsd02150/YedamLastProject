@@ -8,6 +8,9 @@ public interface MemberMapper {
 	//login - 회원정보 조회
 	public MembVO loginCheck(MembVO membVO);
 	
+	//단건조회
+	public MembVO selectOneMemb(String id);
+	
 	//닉네임 중복확인
 	public int nickCheck(String nick);
 	

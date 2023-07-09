@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head>
+	<meta charset="UTF-8">
+	<style>
+		.login {
+			padding: 0;
+		}
+
+		.login-signup section-padding {
+			padding-top: 0;
+		}
+
+		.py-20 {
+			clear: both;
+			height: 20px;
+		}
+		
+		label{ display: inline-block; margin-right: 5px; }
+	</style>
+</head>
+
+<body>
+	<section class="login-signup section-padding" layout:fragment="content">
+		<div class="container">
+			<div class="row align-items-center justify-content-center">
+				<div class="col-lg-7">
+					<div class="findMyId">
+						<div class="text-center">
+							<h3>아이디 찾기</h3>
+						</div>
+						<div class="py-20"></div>
+					</div>
+
+					<form action="#" class="login-form row" method="post">
+						<!-- th:onsubmit="validateForm()" -->
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="mname">이름</label><input type="email" id="mname" class="form-control" name="nm"
+									placeholder="이름을 입력하세요" required>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="telInput">연락처</label><br><input type="text" class="form-control" oninput="autoHyphen(this)"
+									maxlength="13" name="tel" id="telInput" placeholder="전화번호를 입력하세요">
+							</div>
+						</div>
+						<div class="col-md-12">
+								<button class="btn btn-primary" type="submit">아이디찾기</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<!--  <script>
+    function validateForm() {
+    	event.stopPropagation();
+    	alert("a");
+        // 아이디와 비밀번호가 공란인 경우
+        if (loginemail.value === "" || loginPassword.value === "") {
+          if (loginemail.value === "") {
+            loginemail.classList.add("form-input-error");
+          }
+          if (loginPassword.value === "") {
+            user_pw.classList.add("form-input-error");
+          }
+          return false;
+        }
+
+        // 비밀번호가 6자리 이상 16자리 이하가 아닌 경우
+        if (loginPassword.value.length < 6 || loginPassword.value.length > 16) {
+            loginPassword.classList.add("form-input-error");
+          return false;
+        }
+        
+        return true;
+      }
+		</script>-->
+
+	</section>
+</body>
+
+</html>

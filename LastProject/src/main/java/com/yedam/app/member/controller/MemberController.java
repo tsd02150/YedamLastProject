@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.yedam.app.member.service.AddrVO;
+import com.yedam.app.member.service.FindPwMail;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
 import com.yedam.app.member.service.RegisterMail;
@@ -27,14 +27,35 @@ public class MemberController {
 	RegisterMail registerMail;
 
 	
+	//로그인 페이지
 	@GetMapping("login")
 	public String loginForm() {
 		return "member/loginForm";
 	}
 	
+	//회원관리
 	@GetMapping("mypage")
 	public String myPageForm() {
 		return "member/myPageInfo";
+	}
+	
+	//아이디 찾기 페이지
+	@GetMapping("findid")
+	public String findIdForm() {
+		return "member/findIdForm";
+	}
+	
+	//비밀번호 찾기 페이지
+	@GetMapping("findpwd")
+	public String findPwdForm() {
+		return "member/findPwdForm";
+	}
+	
+	//인증코드 확인 후 메일발송 완료 페이지로 호출
+	@ResponseBody
+	@GetMapping("tempPwdSuccess")
+	public String renewPwd() {
+		return "member/tempPwdSuccess";
 	}
 	 
 	@PostMapping("login")
@@ -121,11 +142,20 @@ public class MemberController {
 	}
 
 	// 이메일 인증
-	@PostMapping("mailConfirm")
-	@ResponseBody
-	String mailConfirm(@RequestParam("email") String email) throws Exception {
+//	@PostMapping("mailConfirm")
+//	@ResponseBody
+//	String mailConfirm(@RequestParam("email") String email) throws Exception {
+//		String code = registerMail.sendSimpleMessage(email);
+//		System.out.println("인증코드 : " + code);
+//		return code;
+//	}
 
-		String code = registerMail.sendSimpleMessage(email);
+	// 비밀번호 인증 이메일
+	@ResponseBody
+	@PostMapping("mailConfirmPwd")
+	String findPwdEmail(@RequestParam("id") String id, MembVO membVO) throws Exception {
+		String email = membService.selectOneMemb(id).getEmail();
+		String code = registerMail.sendTempPwdMessage(email); 
 		System.out.println("인증코드 : " + code);
 		return code;
 	}

@@ -20,6 +20,12 @@ public class MemberServiceImpl implements MemberService {
 		return membMapper.loginCheck(membVO);
 	}
 
+	//아이디로 단건조회
+	@Override
+	public MembVO selectOneMemb(String id) {
+		return membMapper.selectOneMemb(id);
+	}
+	
 	//닉네임 중복확인
 	@Override
 	public int nickCheckBoolean(String nick) {
@@ -52,5 +58,6 @@ public class MemberServiceImpl implements MemberService {
 	public String selectMembNO() {
 		return membMapper.selectMembNO();
 	}
+
 
 }

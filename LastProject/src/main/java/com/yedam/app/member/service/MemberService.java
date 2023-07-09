@@ -4,6 +4,10 @@ public interface MemberService {
 	//로그인
 	public MembVO loginCheck(MembVO membVO);
 	
+	//아이디로 단건조회
+	public MembVO selectOneMemb(String id);
+	
+	
 	//일반회원가입
 	public int signUpMemb(MembVO membVO);
 	
