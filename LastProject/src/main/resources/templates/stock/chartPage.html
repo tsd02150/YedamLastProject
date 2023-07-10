@@ -1,14 +1,260 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{layout/layout}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
 <head>
 <meta charset="UTF-8">
+<style>
+.container {
+	margin: 20px 0;
+}
+
+#favItem {
+	height: 400px;
+	overflow-y: scroll;
+}
+
+#favItem p {
+	padding: 10px;
+	position: relative;
+	font-weight: 700;
+}
+
+#favItem p span {
+	text-align: right;
+	position: absolute;
+	right: 5px;
+}
+
+h3 {
+	text-align: center;
+	margin: 10px 10px 0 10px;
+}
+
+.plus {
+	color: red;
+}
+
+.minus {
+	color: blue;
+}
+
+ol {
+	margin-top: 10px;
+	height: 295px;
+}
+
+ol li {
+	padding: 10px;
+}
+
+#CP2D21 > div {
+	padding: 10px;
+}
+#CP2D22 table {
+	margin:20px;
+}
+#CP2D22 table button {
+	margin-left: 10px;
+}
+#CP2D22 div {
+	text-align: center;
+	margin-top:40px;
+}
+#CP2D22 div h4{
+	margin:10px;
+}
+#CP3D11 input {
+	margin:10px;
+}
+</style>
 <title>Insert title here</title>
 </head>
 <body>
 	<div layout:fragment="content">
-		
+
+		<div class="container">
+			<div class="row">
+				<div class="p-1 col-md-3 border">
+					<div id="CP1D1" class="mb-1 border">
+						<h3>관심종목</h3>
+						<div id="favItem" class="border m-1">
+							<p class="border my-1">
+								예시종목 <span class="plus">예시값)200 (10%)</span>
+							</p>
+							<p class="border my-1">
+								예시종목 <span class="plus">예시값)200 (10%)</span>
+							</p>
+							<p class="border my-1">
+								예시종목 <span class="plus">예시값)200 (10%)</span>
+							</p>
+							<p class="border my-1">
+								예시종목 <span class="plus">예시값)200 (10%)</span>
+							</p>
+							<p class="border my-1">
+								예시종목 <span class="plus">예시값)200 (10%)</span>
+							</p>
+							<p class="border my-1">
+								예시종목 <span class="plus">예시값)200 (10%)</span>
+							</p>
+							<p class="border my-1">
+								예시종목 <span class="plus">예시값)200 (10%)</span>
+							</p>
+							<p class="border my-1">
+								예시종목 <span class="plus">예시값)200 (10%)</span>
+							</p>
+							<p class="border my-1">
+								예시종목 <span class="plus">예시값)200 (10%)</span>
+							</p>
+							<p class="border my-1">
+								예시종목 <span class="plus">예시값)200 (10%)</span>
+							</p>
+							<p class="border my-1">
+								예시종목 <span class="plus">예시값)200 (10%)</span>
+							</p>
+							<p class="border my-1">
+								예시종목 <span class="plus">예시값)200 (10%)</span>
+							</p>
+							<p class="border my-1">
+								예시종목 <span class="plus">예시값)200 (10%)</span>
+							</p>
+							<p class="border my-1">
+								예시종목 <span class="plus">예시값)200 (10%)</span>
+							</p>
+							<p class="border my-1">
+								예시종목 <span class="plus">예시값)200 (10%)</span>
+							</p>
+							<p class="border my-1">
+								예시종목 <span class="plus">예시값)200 (10%)</span>
+							</p>
+							<p class="border my-1">
+								예시종목 <span class="plus">예시값)200 (10%)</span>
+							</p>
+							<p class="border my-1">
+								예시종목 <span class="plus">예시값)200 (10%)</span>
+							</p>
+						</div>
+					</div>
+					<div id="CP1D2" class="border">
+						<h3>주식순위</h3>
+						<ul class="nav nav-tabs">
+							<li class="nav-item"><a class="nav-link active"
+								data-toggle="tab" href="#qwe">거래량</a></li>
+							<li class="nav-item"><a class="nav-link" data-toggle="tab"
+								href="#asd">상승률</a></li>
+							<li class="nav-item"><a class="nav-link" data-toggle="tab"
+								href="#zxc">하락률</a></li>
+						</ul>
+						<div class="tab-content">
+							<div class="tab-pane fade show active" id="qwe">
+								<ol>
+									<li>예시 값</li>
+									<li>예시 값</li>
+									<li>예시 값</li>
+									<li>예시 값</li>
+									<li>예시 값</li>
+								</ol>
+							</div>
+							<div class="tab-pane fade" id="asd">
+								<ol>
+									<li>예시 값</li>
+									<li>예시 값</li>
+									<li>예시 값</li>
+									<li>예시 값</li>
+									<li>예시 값</li>
+								</ol>
+							</div>
+							<div class="tab-pane fade" id="zxc">
+								<ol>
+									<li>예시 값</li>
+									<li>예시 값</li>
+									<li>예시 값</li>
+									<li>예시 값</li>
+									<li>예시 값</li>
+								</ol>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="p-1 col-md-6 border">
+					<div id="CP2D1" class="mb-1 border">
+						<p>[[${itemNo}]] 페이지 입니다</p>
+						<div id="candleChart"></div>
+						<div id="stickChart"></div>
+					</div>
+					<div id="CP2D2" class="border">
+						<div class="row">
+							<div id="CP2D21" class="col-6">
+								<div>
+									<button>매도</button>
+									<button>매수</button>
+								</div>
+								<div>
+								<input type="number" name="stockCnt">주
+								<p class="mb-0">
+									구매가능한 주수 <span>00</span>주
+								</p>
+								</div>
+								<div>
+								<input type="number" name="stockPrc">원<br> <label><input
+									type="checkbox">시장가 주문</label>
+								<h4>
+									총 주문 금액: <span>00</span>원
+								</h4>
+								<button>주문</button>
+								</div>
+							</div>
+							<div id="CP2D22" class="col-6">
+								<table>
+									<tr>
+										<td><button>10 %</button></td>
+										<td><button>50 %</button></td>
+										<td><button>100 %</button></td>
+									</tr>
+								</table>
+								<div>
+									<p>종목 : [[${itemNo}]]  </p>
+									<p>총 보유주 <span>00</span> 주</p>
+									<p>수익률 : <span>00</span>%</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="p-1 col-md-3 border">
+					<div id="CP3D1" class="mb-1 border">
+						
+							<div id="CP3D11" class="col-md-12 border">
+								<input type="text" placeholder="종목을 검색하세요">
+							</div>
+							<div class="col-md-12">
+								<table>
+									<thead>
+										<tr>
+											<th>종목 게시판</th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+					</div>
+					<div id="CP3D2" class="border">
+						<h1>호가</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+		<script
+			src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+		<script src="../stock/candleChart.js"></script>
+		<script src="../stock/stickChart.js"></script>
+		<script>
+			
+		</script>
 	</div>
+</body>
 </body>
 </html>
