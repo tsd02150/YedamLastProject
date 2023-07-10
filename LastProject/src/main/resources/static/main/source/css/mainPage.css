@@ -61,6 +61,7 @@
 		background-clip: content-box;
 	}
 	#loginForm{
+		height:290px;
 		border-top: 1px solid #dddddd;
 		border-bottom: 1px solid #dddddd;
 		padding-top:30px;
@@ -74,7 +75,7 @@
 		margin:auto;
 		margin-bottom: 5px; 
 	}
-	#login button{
+	#login form button{
 		width:250px;
 		margin:auto;
 		margin-bottom:10px;
@@ -85,8 +86,30 @@
 		margin:auto;
 	}
 	
-	#myInfo{
-		padding:50px;
+	#infoText{
+		margin:20px;
+	}
+	
+	#infoText p{
+		font-size: small;
+	}
+	.logout{
+		width:250px;
+		margin:auto;
+		margin-bottom:10px;
+		display:block;
+		height:40px;
+		line-height: 15px;
+	}
+	#infoBtnBlock{
+		margin:5px;
+		display:flex;
+		justify-content:space-between;
+	}
+	.infoBtn{
+		width:120px;
+		height:40px;
+		line-height: 15px;
 	}
 
 	#survey{
@@ -102,6 +125,11 @@
 		padding:20px;
 		background-color: gray;
 		background-clip: content-box;
+	}
+	#mall img{
+		width:100%;
+		height:100%;
+		border : 1px solid #dddddd;
 	}
 	#news{
 		width:800px;

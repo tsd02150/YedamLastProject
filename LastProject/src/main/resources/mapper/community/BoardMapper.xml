@@ -20,7 +20,7 @@
 	 		USING (memb_no)
 	 		WHERE rcom>=#{rcom} 
 			AND common_cd LIKE #{commonCd}||'%')
-			USING (common_cd)
+		USING (common_cd)
 	 	]]>
 			<choose>
 				<when test="order==null">

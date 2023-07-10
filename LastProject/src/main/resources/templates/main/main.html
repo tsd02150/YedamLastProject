@@ -69,8 +69,15 @@
 							</section>
 						</form>
 						<div id="myInfo" th:unless="${session.loggedInMember}==null">
-							<div class="flex-box">
-								<p th:text="${session.loggedInMember.nick}"></p>
+							<div id="infoText">
+								<p><b><span th:text="${session.loggedInMember.nm}"></span>(<span th:text="${session.loggedInMember.nick}"></span>)</b> 님 환영합니다</p>
+								<p th:text="${session.loggedInMember.id}"></p>
+								<p><b>point : <span th:text="${session.loggedInMember.point}"></span>p</b></p>
+							</div>
+							<button class="btn-primary logout" type="button">LogOut</button>
+							<div id="infoBtnBlock">
+								<button class="btn infoBtn" type="button">MyPage</button>
+								<button class="btn infoBtn" type="button">충전</button>
 							</div>
 						
 						</div>
@@ -82,6 +89,7 @@
 			</div>
 		</div>
 		<div id="mall">
+			<img src="mall/source/images/pointmall_banner.png">
 		</div>
 		<div class="flex-block">
 			<section id="news" class="news-style-one">
@@ -154,6 +162,8 @@
 			
 		})
 		.catch(err=>console.log(err));
+		
+		
 	</script>
 	</div>
 </body>

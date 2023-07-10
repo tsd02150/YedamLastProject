@@ -25,7 +25,6 @@ public class BoardController {
 	// 게시판 목록 출력
 	@GetMapping("boardList")
 	public String getBoard(Model model,BoardVO vo) {
-		System.out.println(vo);
 		model.addAttribute("boardCode",vo.getCommonCd().substring(0,2));
 		model.addAttribute("boardName",boardService.getBoardName(vo.getCommonCd().substring(0,2)));
 		model.addAttribute("boardList",boardService.getBoardList(vo));
@@ -35,8 +34,7 @@ public class BoardController {
 	// 게시판 전체
 	@PostMapping("getBoardList")
 	@ResponseBody
-	public List<BoardVO> getBoardList(BoardVO vo) {
-		System.out.println(vo); 
+	public List<BoardVO> getBoardList(BoardVO vo) { 
 		return boardService.getBoardList(vo);
 	}
 
