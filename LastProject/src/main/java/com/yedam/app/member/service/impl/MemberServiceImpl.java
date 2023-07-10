@@ -85,6 +85,12 @@ public class MemberServiceImpl implements MemberService {
 		return membMapper.updateTempPwd(membVO);
 	}
 
+	// id 찾기 시 정보 조회
+	@Override
+	public List<MembVO> findIdSelect(MembVO membVO) {
+		return membMapper.findIdSelect(membVO);
+	}
+
 
 
 }

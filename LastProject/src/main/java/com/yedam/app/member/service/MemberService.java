@@ -33,5 +33,7 @@ public interface MemberService {
 	//관심종목 선택 리스트
 	public List<CommonVO> myItemCheck();
 	
+	//
+	public List<MembVO> findIdSelect(MembVO membVO);
 
 }

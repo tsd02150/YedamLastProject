@@ -33,18 +33,23 @@
 						<div class="py-20"></div>
 					</div>
 
-					<form action="#" class="login-form row" method="post">
+					<form action="findid" class="login-form row" method="post">
 						<!-- th:onsubmit="validateForm()" -->
 						<div class="col-md-12">
 							<div class="form-group">
-								<label for="mname">이름</label><input type="email" id="mname" class="form-control" name="nm"
-									placeholder="이름을 입력하세요" required>
+								<label for="mname">이름</label>
+								<input type="text" id="mname" class="form-control" name="nm" placeholder="이름을 입력하세요" required>
+								<span id="nameCheck"></span>
 							</div>
 						</div>
 						<div class="col-md-12">
 							<div class="form-group">
 								<label for="telInput">연락처</label><br><input type="text" class="form-control" oninput="autoHyphen(this)"
-									maxlength="13" name="tel" id="telInput" placeholder="전화번호를 입력하세요">
+									maxlength="13" name="tel" id="telInput" placeholder="전화번호를 입력하세요" style="width : 70%; display : inline;">
+									<button type="button" id="codeBtn">인증번호 발송</button>
+								<label for="codeCheckInput"></label>
+								<input type="text" class="form-control" name="confirmcode" id="codeCheckInput" placeholder="인증번호를 입력하세요"style="width : 70%; display : inline;">
+								<button type="button" id="codeCheckBtn">인증번호 확인</button>
 							</div>
 						</div>
 						<div class="col-md-12">
@@ -54,31 +59,67 @@
 				</div>
 			</div>
 		</div>
+		
+		<script>
+		//연락처 저장 포맷 & 유효성검사
+		 const autoHyphen = (target) => {
+			    target.value = target.value.replace(/[^0-9]/g, '').replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`);
+			   	//console.log(target.value);
+			};
+			
+			//이름 유효성 검사
+			const nameInput = document.querySelector("#mname");
+			const nameCheck = document.querySelector("#nameCheck");
+			const telInput = document.querySelector("#telInput");
 
-		<!--  <script>
-    function validateForm() {
-    	event.stopPropagation();
-    	alert("a");
-        // 아이디와 비밀번호가 공란인 경우
-        if (loginemail.value === "" || loginPassword.value === "") {
-          if (loginemail.value === "") {
-            loginemail.classList.add("form-input-error");
-          }
-          if (loginPassword.value === "") {
-            user_pw.classList.add("form-input-error");
-          }
-          return false;
-        }
+			nameInput.addEventListener("input", function() {
+			    const name = nameInput.value;
 
-        // 비밀번호가 6자리 이상 16자리 이하가 아닌 경우
-        if (loginPassword.value.length < 6 || loginPassword.value.length > 16) {
-            loginPassword.classList.add("form-input-error");
-          return false;
-        }
-        
-        return true;
-      }
-		</script>-->
+			    // Regular expression to validate Korean name
+			    const nameRegex = /^[가-힣]{2,5}$/;
+
+			    if (nameRegex.test(name)) {
+			        nameCheck.textContent = "";
+			    } else {
+			        nameCheck.textContent = "올바르게 입력하세요.";
+			    }
+			});
+			
+			//sms 인증번호 발송
+			document.getElementById("codeBtn").addEventListener("click", function(){
+				if(nameInput.value == ""){
+					nameInput.focus();
+					return;
+				}
+				if(telInput.value == ""){
+					telInput.focus();
+					return;
+				}
+				//if()
+					console.log(nameInput.value);
+					console.log(telInput.value);
+				
+				//이름&연락처 비교
+				const url = "/member/findIdCheck?nm="+encodeURIComponent(nameInput.value)+"&tel="+encodeURIComponent(telInput.value);
+				fetch(url)
+				.then(response => response.json())
+				.then(res =>{
+					console.log(res);
+					res.forEach(data=>{
+						console.log(data.tel);
+					})
+				})
+				.catch(err => console.log(err));
+				
+				
+			}) //sms 인증번호 발송 끝
+			
+			//sms 인증번호 확인.
+			document.getElementById("codeCheckBtn").addEventListener("click", function(){
+				console.log(this);
+			}) //sms 인증번호 확인 끝.
+			
+		</script>
 
 	</section>
 </body>

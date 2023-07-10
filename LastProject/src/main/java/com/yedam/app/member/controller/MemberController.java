@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.CommonVO;
@@ -33,6 +34,12 @@ public class MemberController {
 	@GetMapping("mypage")
 	public String myPageForm() {
 		return "member/myPageInfo";
+	}
+	
+	//로그아웃
+	public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
 	}
 	
 	//로그인 페이지
@@ -148,21 +155,31 @@ public class MemberController {
 	}
 
 	//아이디 찾기 페이지
-		@GetMapping("findid")
-		public String findIdForm() {
-			return "member/findIdForm";
-		}
+	@GetMapping("findid")
+	public String findIdForm() {
+		return "member/findIdForm";
+	}
 		
-		//비밀번호 찾기 페이지
-		@GetMapping("findpwd")
-		public String findPwdForm() {
-			return "member/findPwdForm";
-		}
+	//비밀번호 찾기 페이지
+	@GetMapping("findpwd")
+	public String findPwdForm() {
+		return "member/findPwdForm";
+	}
 		 
 	// 이메일 인증번호 발송
 	@PostMapping("mailConfirm")
 	@ResponseBody
 	String mailConfirm(@RequestParam("id") String id) throws Exception {
+		String email = membService.selectOneMemb(id).getEmail();
+		System.out.println(email);
+		String code = registerMail.sendSimpleMessage(email);
+		System.out.println("인증코드 : " + code);
+		return code;
+	}
+	
+	@PostMapping("smsConfirm")
+	@ResponseBody
+	String smsConfirm(@RequestParam("id") String id) throws Exception {
 		String email = membService.selectOneMemb(id).getEmail();
 		System.out.println(email);
 		String code = registerMail.sendSimpleMessage(email);
@@ -237,6 +254,22 @@ public class MemberController {
 	public String interestItemPage(Model model, CommonVO commonVO) {
 //		model.addAttribute("listctgr", membService.myItemCheck());
 		return "member/myItemCheckForm";
+	}
+	
+	//인증번호 sms 발송
+	@GetMapping("sms")
+	public String sendSMS() {
+		return "";
+	}
+	
+	//id찾기 이름-연락처 비교
+	@ResponseBody
+	@GetMapping("findIdCheck")
+	public List<MembVO> findIdSelectCheck(MembVO membVO,String nm, String tel, Model model) {
+		membVO.setNm(nm);
+		membVO.setTel(tel);
+		System.out.println(membService.findIdSelect(membVO));
+		return membService.findIdSelect(membVO);
 	}
 	
 }

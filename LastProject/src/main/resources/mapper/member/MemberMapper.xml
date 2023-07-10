@@ -116,5 +116,11 @@
 			SELECT * FROM common_code
 			WHERE  h_cd LIKE '%S___'
 		</select>
+		
+		<select id="findIdSelect" parameterType="String">
+			SELECT id, nm, regexp_replace(tel,'[[:punct:]]','') AS tel FROM member
+			WHERE  nm = #{nm}
+			AND    tel = #{tel}
+		</select>
 	
 </mapper>

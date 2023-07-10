@@ -74,7 +74,6 @@ public class RegisterMail implements MailService {
                 buf.append(rnd.nextInt(10));
             }
         }
-
         return buf.toString();
     }
 
