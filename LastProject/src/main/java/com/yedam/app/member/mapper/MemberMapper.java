@@ -10,6 +10,7 @@ public interface MemberMapper {
 	
 	//login - 회원정보 조회
 	public MembVO loginCheck(MembVO membVO);
+	public MembVO loginCheckPwd(MembVO membVO); //임시비밀번호 발급 후 로그인 할 경우
 	
 	//단건조회
 	public MembVO selectOneMemb(String id);
@@ -32,6 +33,7 @@ public interface MemberMapper {
 	
 	//비밀번호 변경
 	public int updatePwd(MembVO membVO);
+	public int updateTempPwd(MembVO membVO);
 	
 	//관심종목 선택(회원가입 시)
 	public List<CommonVO> myItemCheck(); // 데이터 쌓이면 상승률 기준 list로 바꿔야함

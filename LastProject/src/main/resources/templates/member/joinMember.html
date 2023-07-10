@@ -55,8 +55,7 @@ input[type='number'] {
 				<div class="signup">
 					<h3 class="mt-4">회원가입</h3>
 					<div class="py-40"></div>
-					<form action="join" class="signup-form row" method="post"
-						onsubmit="nullCheck()">
+					<form id="joinfrm" action="join" class="signup-form row" method="post" onsubmit="nullCheck()">
 						<div class="col-md-12">
 							<div class="form-group">
 								<label for="f-name">이름</label> <input type="text"
@@ -191,7 +190,7 @@ nameInput.addEventListener("input", function() {
      if (!pwdValue) {
          pwdWarning.textContent = "비밀번호를 입력해주세요.";
      } else if (!pwdRegex.test(pwdValue)) {
-         pwdWarning.textContent = "영어 대소문자, 숫자, 특수문자를 모두 사용하고 8자 이상, 16자 이하여야 합니다.";
+         pwdWarning.textContent = "영어 대소문자, 숫자, 특수문자 1개이상 사용해야 합니다.";
      } else {
          pwdWarning.textContent = "";
      }
@@ -392,7 +391,7 @@ document.querySelector('form').addEventListener('submit', (event) => {
 //	    }
 	    
 	    // 모든 조건을 만족했을 때 호출
-        document.querySelector('form').submit();
+        document.getElementById('joinfrm').submit();
 	}
 </script>
 

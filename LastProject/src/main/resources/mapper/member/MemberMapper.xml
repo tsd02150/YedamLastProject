@@ -7,9 +7,15 @@
 	<!-- login 시 회원 정보 조회 -->
 	<select id="loginCheck" resultType="MembVO">
 		SELECT * FROM MEMBER
-		WHERE
-		id=#{id}
+		WHERE id=#{id}
 		AND pwd=#{pwd}
+	</select>
+	
+	<!-- 임시 비밀번호 발급 후 로그인 시 정보 조회 -->
+	<select id="loginCheckPwd" resultType="MembVO">
+		SELECT * FROM MEMBER
+		WHERE id = #{id}
+		AND temp_pwd = #{tempPwd}
 	</select>
 	
 	<!-- 아이디로 단건조회 -->
@@ -92,7 +98,16 @@
 		<!-- 비밀번호 변경 -->
 		<update id="updatePwd" parameterType="MembVO">
 			UPDATE member
-			SET 	 pwd = #{pwd}
+			SET 	 pwd = #{pwd},
+			temp_pwd = #{tempPwd}
+			WHERE  id = #{id}
+		</update>
+		
+		<!-- 임시 비밀번호 변경 -->
+		<update id="updateTempPwd" parameterType="MembVO">
+			UPDATE member
+			SET 	 pwd = #{pwd},
+			temp_pwd = ''
 			WHERE  id = #{id}
 		</update>
 		

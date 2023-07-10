@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.yedam.app.member.mapper.MemberMapper;
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.CommonVO;
 import com.yedam.app.member.service.MembVO;
@@ -30,23 +29,28 @@ public class MemberController {
 	RegisterMail registerMail;
 
 	
-	//로그인 페이지
-	@GetMapping("login")
-	public String loginForm() {
-		return "member/loginForm";
-	}
-	
 	//회원관리
 	@GetMapping("mypage")
 	public String myPageForm() {
 		return "member/myPageInfo";
 	}
 	
+	//로그인 페이지
+	@GetMapping("login")
+	public String loginForm() {
+		return "member/loginForm";
+	}
+	
+	@GetMapping("loginpwd")
+	public String loginFormPwd() {
+		return "member/loginFormPwd";
+	}
+	
+	
 	@PostMapping("login")
 	public String loginPost(MembVO membVO, Model model, HttpSession session) {
 		//로그인 정보 비교
 		MembVO loggedInMember = membService.loginCheck(membVO);
-		System.out.println(loggedInMember);
 		if (loggedInMember != null) {
 	        // 로그인 성공한 경우
 	        session.setAttribute("loggedInMember", loggedInMember); // 세션에 member 정보 저장
@@ -60,6 +64,23 @@ public class MemberController {
 	    }
 	}
 	
+	@PostMapping("loginpwd")
+	public String loginPostPwd(MembVO membVO, Model model) {
+		MembVO loggedInMember = membService.loginCheckPwd(membVO);
+		if (loggedInMember != null) {
+	        // 로그인 성공한 경우
+	        model.addAttribute("id", membVO.getId()); // 세션에 member 정보 저장
+	        System.out.println("id : "+membVO.getId());
+	        System.out.println("로그인성공(임시비밀번호)");
+	        return "member/tempPwdUpdate"; // 로그인 후 메인 페이지로 리다이렉트
+	    } else {
+	        // 로그인 실패한 경우
+	    	System.out.println("실패");
+	        model.addAttribute("message", "아이디 또는 비밀번호가 틀렸습니다.");
+	        return "redirect:loginpwd"; // 로그인 실패 시 다시 loginForm 호출
+	    }
+	}
+	    
 	//회원가입 Form
 	@GetMapping("join")
 	public String joinForm() {
@@ -160,6 +181,7 @@ public class MemberController {
 		//기존 비밀번호 임시 비밀번호로 수정.
 		membVO.setPwd(code);
 		membVO.setId(id);
+		membVO.setTempPwd(code);
 		membService.updatePwd(membVO);
 		
 		return code;
@@ -174,6 +196,33 @@ public class MemberController {
 		System.out.println(email);
 		model.addAttribute("email", email);
 		return "member/tempPwdSuccess";
+	}
+	
+	//임시 비밀번호 변경
+	@GetMapping("tempPwdUpdate")
+	public String tempPwdUpdate() {
+		return "member/tempPwdUpdate";
+	}
+	
+	@PostMapping("tempPwdUpdate")
+	public String tempPwdUpdate(MembVO membVO, HttpSession session, Model model) {
+		if(membService.loginCheckPwd(membVO) !=null) {
+			int result = membService.updateTempPwd(membVO);
+			
+			if(result == 1) {
+				session.setAttribute("loggedInMember", membService.loginCheck(membVO));
+				System.out.println("비밀번호 변경 성공");
+				return "redirect:/";							
+			}else {
+				model.addAttribute("id",membVO.getId());
+				System.out.println("비밀번호 변경 실패");
+				return "member/tempPwdUpdate";
+			}
+		} else {
+			model.addAttribute("id",membVO.getId());
+			model.addAttribute("message","비밀번호가 일치하지 않습니다. 다시 확인해주세요");
+			return "member/tempPwdUpdate";
+		}
 	}
 	
 	//관심종목 리스트 정보

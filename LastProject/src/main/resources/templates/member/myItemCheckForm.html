@@ -46,10 +46,10 @@
 
 				selectedData.forEach(function (item) {
 					let itemBox = $("<div>").addClass("itemBox");
-					$("<p>").text("종목번호").appendTo(itemBox);
-					$("<h3>").text(item.ctgr).appendTo(itemBox);
-					$("<p>").text("상승률").append("<br>").appendTo(itemBox);
-					$("<p>").text("현재가 10,000원").appendTo(itemBox);
+					$("<p>").text("종목번호").addClass("itemNo").appendTo(itemBox);
+					$("<h3>").text(item.ctgr).addClass("itemCtgr").appendTo(itemBox);
+					$("<p>").text("상승률").addClass("rate").append("<br>").appendTo(itemBox);
+					$("<p>").text("현재가 10,000원").addClass("prc").appendTo(itemBox);
 					itemBox.appendTo("#randomList");
 				});
 
@@ -79,11 +79,18 @@
 				// itemBox 클릭 이벤트 처리
 				$(document).on("click", ".itemBox", function () {
 					let itemText = $(this).text();
+					console.log("this : "+ itemText);
 
 					// 이미 선택된 itemBox인 경우, 선택 취소
 					if ($(this).hasClass("selectedBox")) {
+						console.log($(this));
+						
+						/* $(".itemBox").removeClass("selectedBox");
+						selectedItems = []; */
+						
 						$(this).removeClass("selectedBox");
 						selectedItems = selectedItems.filter(item => item.종목번호 !== itemText);
+						
 					} else if (selectedItems.length >= 5) {
 						// 이미 5개가 선택되었을 때 경고창 표시
 						alert("최대 5개까지만 선택할 수 있습니다.");
@@ -91,9 +98,9 @@
 						// 선택된 itemBox 추가
 						$(this).addClass("selectedBox");
 						selectedItems.push({
-							"item_no": itemText,
-							"ctgr": "메론",
-							"rate": "상승률",
+							"item_no": $(".itemNo").text(),
+							"ctgr": $(".itemCtgr").text(),
+							"rate": $(".rate").text(),
 							"현재가": "10,000"
 						});
 					}
@@ -104,13 +111,11 @@
 
 				// 저장 버튼 클릭 이벤트 처리
 				$(document).on("click", ".selectBtn", function () {
-					// 선택된 아이템 처리 로직 추가
 					console.log("Selected items:", selectedItems);
 				});
 
 				// 취소 버튼 클릭 이벤트 처리
 				$(document).on("click", ".resetBtn", function () {
-					// 선택된 아이템 초기화 로직 추가
 					$(".itemBox").removeClass("selectedBox");
 					selectedItems = [];
 
@@ -120,8 +125,6 @@
 				});
 			}
 		});
-		
-		
 		</script>
 		
 	</section>
