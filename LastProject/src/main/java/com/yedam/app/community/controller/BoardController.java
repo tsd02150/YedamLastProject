@@ -25,10 +25,10 @@ public class BoardController {
 	// 게시판 목록 출력
 	@GetMapping("boardList")
 	public String getBoard(Model model,BoardVO vo) {
+		System.out.println(vo);
 		model.addAttribute("boardCode",vo.getCommonCd().substring(0,2));
 		model.addAttribute("boardName",boardService.getBoardName(vo.getCommonCd().substring(0,2)));
 		model.addAttribute("boardList",boardService.getBoardList(vo));
-		System.out.println(boardService.getBoardList(vo));
 		return "community/boardList";
 	}
 	
@@ -36,12 +36,8 @@ public class BoardController {
 	@PostMapping("getBoardList")
 	@ResponseBody
 	public List<BoardVO> getBoardList(BoardVO vo) {
+		System.out.println(vo); 
 		return boardService.getBoardList(vo);
 	}
-	// 게시판 인기글
-	@PostMapping("getBestBoardList")
-	@ResponseBody
-	public List<BoardVO> getBestBoardList(BoardVO vo) {
-		return boardService.getBoardList(vo);
-	}
+
 }

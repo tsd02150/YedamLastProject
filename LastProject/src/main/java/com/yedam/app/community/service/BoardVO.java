@@ -33,7 +33,8 @@ public class BoardVO {
 	///////////////////
 	//회원 닉네임
 	private String nick;
-	
 	// 공통코드 이름
 	private String ctgr;
+	// 정렬
+	private String order;
 }

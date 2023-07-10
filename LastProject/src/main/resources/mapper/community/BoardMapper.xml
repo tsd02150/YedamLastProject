@@ -2,25 +2,40 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
-  <mapper namespace="com.yedam.app.community.mapper.BoardMapper">
-  	
-  	<select id="getBoardName" resultType="String">
-  		SELECT ctgr
-  		FROM COMMON_CODE
-  		WHERE common_cd=#{commonCd}
-  	</select>
-  
+
+<mapper namespace="com.yedam.app.community.mapper.BoardMapper">
+
+	<select id="getBoardName" resultType="String">
+		SELECT ctgr
+		FROM COMMON_CODE
+		WHERE common_cd=#{commonCd}
+	</select>
+
 	<select id="getBoardList" resultType="BoardVO">
 		<![CDATA[
- 		SELECT board_no, nick, ttl, drwup_dt, inq, common_cd, ctgr
+ 		SELECT board_no, nick, ttl, drwup_dt, inq, common_cd, ctgr,rcom
  		FROM COMMON_CODE JOIN
-	 		(SELECT board_no, nick, ttl, drwup_dt, inq, common_cd
+	 		(SELECT board_no, nick, ttl, drwup_dt, inq, common_cd,rcom
 	 		FROM BOARD JOIN MEMBER
 	 		USING (memb_no)
-	 		WHERE rcom>=#{rcom} AND common_cd LIKE #{commonCd}||'%')
-	 	USING (common_cd)
-	 	]]> 
- 	</select>  
+	 		WHERE rcom>=#{rcom} 
+			AND common_cd LIKE #{commonCd}||'%')
+			USING (common_cd)
+	 	]]>
+			<choose>
+				<when test="order==null">
+					ORDER BY drwup_dt DESC
+				</when>
+				<when test="order.equals('inq')">
+					ORDER BY inq DESC
+				</when>
+				<when test="order.equals('rcom')">
+						ORDER BY rcom DESC
+				</when>
+				<otherwise>
+					ORDER BY drwup_dt DESC
+				</otherwise>
+			</choose>
+	</select>
 
-  </mapper>
+</mapper>
