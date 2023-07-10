@@ -66,26 +66,36 @@
 	<!-- 모든종목조회 -->
 	<select id="allItemList" resultType="StockVO">
 		<![CDATA[
-		select t.item_no, c.sc, c.theme, t.nm,t.prc tprc, t.prc - i.cl_prc change ,trunc(((t.prc-i.cl_prc)/i.cl_prc)*100) rate
-		from (select item_no, cl_prc 
-		      from item_info 
-		      where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
-		      ) i 
-		join ( SELECT nm,i.item_no, MAX(ta_dt) , ta_prc prc
-		        FROM ta_hr t join item i 
+		select *
+		from(select rownum rn , f.*
+		        from (  select t.item_no, c.sc, c.theme, t.nm,t.prc tprc, t.prc - i.cl_prc change ,trunc(((t.prc-i.cl_prc)/i.cl_prc)*100) rate
+		        from (select item_no, cl_prc 
+		                  from item_info 
+		                  where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
+		                  ) i 
+		        join ( SELECT nm,i.item_no, MAX(ta_dt) , ta_prc prc
+		                    FROM ta_hr t join item i 
+		                    on i.item_no = t.item_no
+		                    GROUP BY nm,i.item_no,ta_prc
+		                    order by item_no ) t
 		        on i.item_no = t.item_no
-		        GROUP BY nm,i.item_no,ta_prc
-		        order by item_no ) t  
-		on i.item_no = t.item_no
-		join (select case substr(common_cd,1,2) when 'S1' then '농산물'
-		                                  when 'S2' then '수산물'
-		                                  end sc
-		                                  ,h_ctgr theme
-		                                  , ctgr item
-		from common_code
-		where length(common_cd) =6
-		order by common_cd ) c on c.item=t.nm
+		        join ( select case substr(common_cd,1,2) when 'S1' then '농산물'
+		                                              when 'S2' then '수산물'
+		                                              end sc
+		                                              ,h_ctgr theme
+		                                              , ctgr item
+		                                              ,common_cd
+		                    from common_code
+		                    where length(common_cd) =6
+		                    order by common_cd ) c on c.item=t.nm
+		            order by common_cd) f
+		        where rownum <= #{page}*10) 
+		where rn >= (#{page}-1)*10
 		]]>
+	</select>
+	<select id="allItemCnt" resultType="int">
+		select count(*)
+        from item
 	</select>
 	<!-- 조회수 순위 및 전일비 및 변동률 -->
 	<select id="inqChart" resultType="InqVO">

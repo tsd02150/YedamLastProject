@@ -1,175 +1,211 @@
 <!DOCTYPE html>
-<html
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{layout/layout}"
->
-  <head>
-    <meta charset="UTF-8" />
-    <!-- CSS only -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
-      crossorigin="anonymous"
-    />
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head>
+<meta charset="UTF-8" />
+<!-- CSS only -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+	crossorigin="anonymous" />
 
-    <style>
-      .row {
-        margin: 40px 0;
-      }
-      ul {
-        list-style: none;
-      }
+<style>
+.item.row {
+	margin: 40px 0;
+}
 
-      li {
-        padding: 20px;
-      }
+ul {
+	list-style: none;
+}
 
-      table {
-        width: 100%;
-      }
-      #choice {
-        height: 300px;
-        padding: 10px;
-      }
+li {
+	padding: 20px;
+}
 
-      #choice td:not(:last-of-type) {
-        width: 20%;
-        height: 300px;
-        border-right: black solid 1px;
-      }
+table {
+	width: 100%;
+}
 
-      #item {
-        height: 300px;
-        overflow-y: scroll;
-      }
+#choice {
+	height: 300px;
+	padding: 10px;
+}
 
-      #itemInfo {
-        padding: 20px;
-      }
-      #itemInfo p {
-      	margin-bottom:5px;
-      	font-size: 14px;
-      }
-      #hot {
-        width: 100%;
-        height: 347.2px;
-        border: black solid 1px;
-      }
-      #hot p {
-        text-align: center;
-        padding: 20px;
-      }
-      #hot li {
-        padding: 10px;
-      }
-      #itemDiv {
-        margin-top: 40px;
-      }
-      #itemDiv div {
-        padding: 0;
-      }
-      #itemDiv td {
-        width: 16%;
-      }
-      .plus{
-      	color: red;
-      }
-      .minus{
-      	color:blue;
-      }
-    </style>
-    <title>Insert title here</title>
-  </head>
-  <body>
-    <div layout:fragment="content">
-      <div class="container">
-        <div class="row">
-          <div id="fstDiv" class="col-md-9">
-            <input
-              id="searchItem"
-              type="text"
-              name="search"
-              placeholder="종목을 검색하세요."
-            />
-            <table id="choice" style="border: black solid 1px">
-              <td>
-                <div>
-                  <ul id="sc">
-                    <li data-cd="S1">농산물</li>
-                    <li data-cd="S2">수산물</li>
-                  </ul>
-                </div>
-              </td>
-              <td>
-                <div>
-                  <ul id="theme"></ul>
-                </div>
-              </td>
-              <td>
-                <div>
-                  <ul id="item"></ul>
-                </div>
-              </td>
-              <td>
-                <div id="itemInfo"></div>
-              </td>
-            </table>
-          </div>
-          <div class="col-md-3">
-            <!-- 인기 검색순위 -->
-            <div id="hot">
-              <p>인기검색순위</p>
-              <ul>
-                <th:block th:each="inq : ${inqList}">
-                  <li>
-                    <a th:href="@{chart(itemNo = ${inq.itemNo})}"
-                      >[[${inqStat.index+1}]] [[${inq.nm}]]</a
-                    >
-                    <span th:class="${inq.change} > 0 ? 'plus':'minus'"> [[${inq.change}]] ([[${inq.rate}]]%)</span>
-                  </li>
-                </th:block>
-              </ul>
-            </div>
-          </div>
+#choice td:not(:last-of-type) {
+	width: 20%;
+	height: 300px;
+	border-right: grey solid 1px;
+}
 
-          <div class="col-xs-12">
-            <!-- 종목리스트 -->
-            <div id="itemDiv" class="row">
-              <div class="col-md-12">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>증권</th>
-                      <th>테마</th>
-                      <th>종목</th>
-                      <th>현재가</th>
-                      <th>전일비</th>
-                      <th>상승률</th>
-                    </tr>
-                  </thead>
-                  <tbody id="allList">
-                    <tr th:each="item : ${itemList}">
-                      <td th:text="${item.sc}"></td>
-                      <td th:text="${item.theme}"></td>
-                      <td>
-                        <a th:href="@{chart(itemNo=${item.itemNo})}"
-                          >[[${item.nm}]]</a
-                        >
-                      </td>
-                      <td th:text="${item.tprc}"></td>
-                      <td><span th:class="${item.change} > 0 ? 'plus':'minus'"> [[${item.change}]] </span></td>
-                      <td><span th:class="${item.rate} > 0 ? 'plus':'minus'"> ([[${item.rate}]]%) </span></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <script>
+#item {
+	height: 300px;
+	overflow-y: scroll;
+}
+
+#itemInfo {
+	padding: 20px;
+}
+
+#itemInfo p {
+	margin-bottom: 5px;
+	font-size: 14px;
+}
+
+#hot {
+	width: 100%;
+	height: 347.2px;
+	border: black solid 1px;
+}
+
+#hot p {
+	text-align: center;
+	padding: 20px;
+}
+
+#hot li {
+	padding: 10px;
+}
+
+#itemDiv {
+	margin-top: 40px;
+}
+
+#itemDiv div {
+	padding: 0;
+}
+
+#itemDiv td {
+	width: 16%;
+}
+
+.plus {
+	color: red;
+}
+
+.minus {
+	color: blue;
+}
+
+.pagination2 {
+	display: inline-block;
+	text-align: center;
+}
+
+.pagination2 a {
+	color: black;
+	float: left;
+	padding: 15px 30px;
+	text-decoration: none;
+}
+
+.pagination2 a.active1 {
+	background-color: #4CAF50;
+	color: white;
+}
+
+.pagination2 a:hover:not(.active1) {
+	background-color: #ddd;
+}
+</style>
+<title>Insert title here</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div class="container">
+			<div class="item row">
+				<div id="fstDiv" class="col-md-9">
+					<input id="searchItem" type="text" name="search"
+						placeholder="종목을 검색하세요." />
+					<table id="choice" class="border">
+						<td>
+							<div>
+								<ul id="sc">
+									<li data-cd="S1">농산물</li>
+									<li data-cd="S2">수산물</li>
+								</ul>
+							</div>
+						</td>
+						<td>
+							<div>
+								<ul id="theme"></ul>
+							</div>
+						</td>
+						<td>
+							<div>
+								<ul id="item"></ul>
+							</div>
+						</td>
+						<td>
+							<div id="itemInfo"></div>
+						</td>
+					</table>
+				</div>
+				<div class="col-md-3">
+					<!-- 인기 검색순위 -->
+					<div id="hot">
+						<p>인기검색순위</p>
+						<ul>
+							<th:block th:each="inq : ${inqList}">
+								<li><a th:href="@{chart(itemNo = ${inq.itemNo})}">[[${inqStat.index+1}]]
+										[[${inq.nm}]]</a> <span
+									th:class="${inq.change} > 0 ? 'plus':'minus'">
+										[[${inq.change > 0 ? "+"+inq.change : inq.change}]]
+										([[${inq.rate > 0 ? "+"+inq.rate : inq.rate}]]%)</span></li>
+							</th:block>
+						</ul>
+					</div>
+				</div>
+
+				<div class="col-xs-12">
+					<!-- 종목리스트 -->
+					<div id="itemDiv" class="row">
+						<div class="col-md-12">
+							<table>
+								<thead>
+									<tr>
+										<th>증권</th>
+										<th>테마</th>
+										<th>종목</th>
+										<th>현재가</th>
+										<th>전일비</th>
+										<th>상승률</th>
+									</tr>
+								</thead>
+								<tbody id="allList">
+									<tr th:each="item : ${itemList}">
+										<td th:text="${item.sc}"></td>
+										<td th:text="${item.theme}"></td>
+										<td><a th:href="@{chart(itemNo=${item.itemNo})}">[[${item.nm}]]</a>
+										</td>
+										<td th:text="${item.tprc}"></td>
+										<td><span th:class="${item.change} > 0 ? 'plus':'minus'">
+												[[${item.change == 0 ? item.change : (item.change > 0 ?
+												"+"+item.change : item.change)}]] </span></td>
+										<td><span th:class="${item.rate} > 0 ? 'plus':'minus'">
+												([[${item.rate == 0 ? item.change : (item.change > 0 ?
+												"+"+item.change : item.change)}]]%) </span></td>
+									</tr>
+								</tbody>
+							</table>
+							<div class="pagination2">
+								<th:block th:if="${pageInfo.prev }">
+									<a href="#">Previous</a>
+								</th:block>
+								<th:block th:each="page : ${#numbers.sequence(1, 4)}">
+									<a class="${page == pageInfo.pageNum ? 'active1' : '' }" href="#">[[${page}]]</a>
+								</th:block>
+								<th:block th:if="${pageInfo.next }">
+									<a href="#">Next</a>
+								</th:block>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
         //조회수차트
         setInterval(() => {
           $.ajax({
@@ -178,7 +214,7 @@
             	
       			let list = '';
       			for(let i =0; i< data.length ; i++){
-      				list +=`<li><a href="chart?itemNo="+${data[i].itemNo}}>${i+1} ${data[i].nm}</a> <span ${data[i].change > 0 ? 'class="plus"':'class="minus"'}> ${data[i].change} (${data[i].rate}%)</span>`;
+      				list +=`<li><a href="chart?itemNo="+${data[i].itemNo}}>${i+1} ${data[i].nm}</a> <span ${data[i].change > 0 ? 'class="plus"':'class="minus"'}> ${data[i].change > 0 ? "+"+data[i].change : data[i].change} (${data[i].rate > 0 ? "+"+data[i].rate : data[i].rate}%)</span>`;
       			}
               $("#hot ul").html(list);
             },
@@ -189,14 +225,14 @@
           success: function (data) {
           	let list = '';
     			for(let i =0; i< data.length ; i++){
-    				let plma = data[i].change > 0 ? 'plus' : 'minus';
+    				let plma = data[i].change == 0 ? ' ': (data[i].change > 0 ? 'plus' : 'minus');
           			list += `<tr>`;
     				list +=`<td>${data[i].sc}</td>`;
     				list +=`<td>${data[i].theme}</td>`;
     				list +=`<td><a href="chart?itemNo=${data[i].itemNo}">${data[i].nm}</a></td>`;
     				list +=`<td>${data[i].tprc}</td>`;
-    				list +=`<td><span class="${plma}"> ${data[i].change} </span></td>`;
-    				list +=`<td><span class="${plma}" > (${data[i].rate}%) </span></td>`;
+    				list +=`<td><span class="${plma}"> ${data[i].change <= 0 ? data[i].change : "+"+data[i].change } </span></td>`;
+    				list +=`<td><span class="${plma}" > (${data[i].rate <= 0 ? data[i].rate : "+"+data[i].rate}%) </span></td>`;
     				list +=`</tr>`;
     			}
     			$('#allList').html(list);
@@ -360,8 +396,11 @@
         }
 		$('#choice').css("width",$('fstDiv').css("width"));
         $("#searchItem").css("width", $("#choice").css("width"));
+        $('#choice').on('mouseover','li',function(){
+        	$(this).css('cursor','pointer')
+        })
         
       </script>
-    </div>
-  </body>
+	</div>
+</body>
 </html>

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.stock.service.InqVO;
 import com.yedam.app.stock.service.ItemVO;
+import com.yedam.app.stock.service.PageDTO;
 import com.yedam.app.stock.service.StockService;
 import com.yedam.app.stock.service.StockVO;
 
@@ -27,8 +28,11 @@ public class StockController {
 	// 종목선택 페이지 이동
 	@GetMapping("itemListPage")
 	public String itemListPage(Model m) {
-		List<StockVO> list = stockservice.allItemList();
+		int total = stockservice.allItemCnt();
+		PageDTO pageDto = new PageDTO(1,total);
+		List<StockVO> list = stockservice.allItemList(1);
 		List<InqVO> listInq = stockservice.inqChart();
+		m.addAttribute("pageInfo",pageDto);
 		m.addAttribute("itemList", list);
 		m.addAttribute("inqList",listInq);
 		return "stock/itemChoice";
@@ -87,12 +91,9 @@ public class StockController {
 	//모든 종목 리스트
 	@ResponseBody
 	@GetMapping("allItemList")
-	public List<StockVO> allItemList(){
-		return stockservice.allItemList();
+	public List<StockVO> allItemList(Integer page){
+		return stockservice.allItemList(page);
 	}
-	@GetMapping("main")
-	public String itemListPage2() {
-		return "main/main";
-	}
-
+	
+	
 }

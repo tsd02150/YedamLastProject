@@ -39,13 +39,18 @@ public class StockServiceImpl implements StockService {
 	}
 
 	@Override
-	public List<StockVO> allItemList() {
-		return stockMapper.allItemList();
+	public List<StockVO> allItemList(Integer page) {
+		return stockMapper.allItemList(page);
 	}
 
 	@Override
 	public List<InqVO> inqChart() {
 		return stockMapper.inqChart();
+	}
+
+	@Override
+	public int allItemCnt() {
+		return stockMapper.allItemCnt();
 	}
 	
 	

@@ -17,7 +17,9 @@ public interface StockMapper {
 	//자동완성사용 정보 출력
 	public Map<String,Object> autoInfo(String value);
 	// 모든 종목 리스트
-	public List<StockVO> allItemList();
+	public List<StockVO> allItemList(Integer page);
+	// 모든 종목 수
+	public int allItemCnt();
 	//조회수 순위 차트
 	public List<InqVO> inqChart();
 }

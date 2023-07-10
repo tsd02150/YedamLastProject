@@ -8,6 +8,7 @@ public interface StockService {
 	public ItemVO getItemInfo(String value);
 	public List<Map<String, Object>> autocomplete(Map<String, Object> paramMap);
 	public Map<String,Object> autoInfo(String value);
-	public List<StockVO> allItemList();
+	public List<StockVO> allItemList(Integer page);
+	public int allItemCnt();
 	public List<InqVO> inqChart();
 }
