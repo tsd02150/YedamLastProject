@@ -17,6 +17,9 @@
 		display: flex;
 		justify-content:space-between;
 	}
+	.active{
+		color:red;
+	}
 </style>
 </head>
 <body>
@@ -41,9 +44,9 @@
 				</div>
 				<div class="dropdown">
 					<select class="btn btn-secondary dropdown-toggle" id="sort" name="sort">
-						<option value="">작성일</option>
-						<option value="">조회순</option>
-						<option value="">추천순</option>
+						<option value="drwup_dt">작성일</option>
+						<option value="inq">조회순</option>
+						<option value="rcom">추천순</option>
 					</select>
 				</div>
 			</div>
@@ -86,20 +89,24 @@
 		</div>
 		
 	<script th:inline="javascript">
+		let currentState=[[${boardCode}]];
+		let currentRcom=0;
+		let items=["ctgr","ttl","nick","drwupDt","inq"];
 		
 		// 전체글 버튼 클릭
-		document.getElementById('allBoard').addEventListener('click',function(){
+		allBoard.addEventListener('click',function(){
+			currentState=[[${boardCode}]];
+			currentRcom=0;
 			fetch("/community/getBoardList",{
 				method: "POST",
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded'
 				},
-				body: 'commonCd='+[[${boardCode}]] 
+				body: 'commonCd='+currentState
 			})
 			.then(result=>result.json())
 			.then(data=>{
 				let tbody = document.getElementById("boardList");
-				let items=["ctgr","ttl","nick","drwupDt","inq"];
 				while(tbody.firstChild){
 					tbody.firstChild.remove();
 				}
@@ -121,18 +128,18 @@
 		})
 		
 		// 인기글 클릭
-		document.getElementById('bestBoard').addEventListener('click',function(){
+		bestBoard.addEventListener('click',function(){
+			currentRcom=30;
 			fetch("/community/getBoardList",{
 				method: "POST",
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded'
 				},
-				body: 'commonCd='+[[${boardCode}]]+'&rcom=30'
+				body: 'commonCd='+currentState+'&rcom='+currentRcom
 			})
 			.then(result=>result.json())
 			.then(data=>{
 				let tbody = document.getElementById("boardList");
-				let items=["ctgr","ttl","nick","drwupDt","inq"];
 				while(tbody.firstChild){
 					tbody.firstChild.remove();
 				}
@@ -156,17 +163,18 @@
 		// 카테고리 클릭
 		document.querySelectorAll(".ctgr").forEach(ctgr=>
 			ctgr.addEventListener('click',function(){
+				//document.querySelector(".active").classList.remove('active');
+				currentState = ctgr.getAttribute('data-common-cd');
 				fetch("/community/getBoardList",{
 					method: "POST",
 					headers: {
 						'Content-Type': 'application/x-www-form-urlencoded'
 					},
-					body: 'commonCd='+ctgr.getAttribute('data-common-cd')
+					body: 'commonCd='+currentState+'&rcom='+currentRcom
 				})
 				.then(result=>result.json())
 				.then(data=>{
 					let tbody = document.getElementById("boardList");
-					let items=["ctgr","ttl","nick","drwupDt","inq"];
 					while(tbody.firstChild){
 						tbody.firstChild.remove();
 					}
@@ -187,6 +195,40 @@
 				.catch(err=>console.log(err));	
 			})
 		)
+		
+		// 정렬 드롭다운
+		sort.addEventListener("change",function(){
+			fetch("/community/getBoardList",{
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: 'commonCd='+currentState+'&rcom='+currentRcom+'&order='+this.value
+			})
+			.then(result=>result.json())
+			.then(data=>{
+				let tbody = document.getElementById("boardList");
+				while(tbody.firstChild){
+					tbody.firstChild.remove();
+				}
+				data.forEach((board,index)=>{
+					let tr = document.createElement('tr');
+					tr.setAttribute('data-boardno',board.boardNo);
+					let td = document.createElement('td');
+					td.textContent=index+1;
+					tr.append(td);
+					for(let item of items){
+						let td = document.createElement('td');
+						td.textContent=board[item];
+						tr.append(td);
+					}
+					tbody.append(tr);
+				})
+			})
+			.catch(err=>console.log(err));
+		})
+		
+		
 	</script>
 	</div>
 </body>

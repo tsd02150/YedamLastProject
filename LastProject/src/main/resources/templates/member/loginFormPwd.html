@@ -36,7 +36,7 @@
 						</div>
 
 						<h3 class="mt-4">로그인</h3>
-						<form action="login" class="login-form row" method="post"><!-- th:onsubmit="validateForm()" -->
+						<form action="loginpwd" class="login-form row" method="post"><!-- th:onsubmit="validateForm()" -->
 							<div class="col-md-12">
                     <div class="form-group">
                     <label for="loginemail">Id</label>
@@ -46,7 +46,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                     <label for="loginPassword">Password</label>
-                    <input type="password" id="loginPassword" class="form-control" name="pwd" placeholder="Password" required>
+                    <input type="password" id="loginPassword" class="form-control" name="tempPwd" placeholder="Password" required>
                     <div th:if="${not #strings.isEmpty(message)}">
                         <p style="color: red; font-size: 12px;" th:text="${message}"></p>
                     </div>

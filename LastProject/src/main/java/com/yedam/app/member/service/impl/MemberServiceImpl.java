@@ -1,10 +1,13 @@
 package com.yedam.app.member.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.member.mapper.MemberMapper;
 import com.yedam.app.member.service.AddrVO;
+import com.yedam.app.member.service.CommonVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
 
@@ -19,7 +22,13 @@ public class MemberServiceImpl implements MemberService {
 	public MembVO loginCheck(MembVO membVO) {
 		return membMapper.loginCheck(membVO);
 	}
-
+	
+	//임시 비밀번호 발급 후 로그인
+	@Override
+	public MembVO loginCheckPwd(MembVO membVO) {
+		return membMapper.loginCheckPwd(membVO);
+	}
+	
 	//아이디로 단건조회
 	@Override
 	public MembVO selectOneMemb(String id) {
@@ -58,6 +67,24 @@ public class MemberServiceImpl implements MemberService {
 	public String selectMembNO() {
 		return membMapper.selectMembNO();
 	}
+
+	//비밀번호 변경
+	@Override
+	public int updatePwd(MembVO membVO) {
+		return membMapper.updatePwd(membVO);
+	}
+
+	//관심종목 선택 리스트
+	@Override
+	public List<CommonVO> myItemCheck() {
+		return membMapper.myItemCheck();
+	}
+
+	@Override
+	public int updateTempPwd(MembVO membVO) {
+		return membMapper.updateTempPwd(membVO);
+	}
+
 
 
 }
