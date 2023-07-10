@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.yedam.app.member.mapper.MemberMapper;
 import com.yedam.app.member.service.AddrVO;
-import com.yedam.app.member.service.CommonVO;
+import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
 
@@ -76,7 +76,7 @@ public class MemberServiceImpl implements MemberService {
 
 	//관심종목 선택 리스트
 	@Override
-	public List<CommonVO> myItemCheck() {
+	public List<InterestVO> myItemCheck() {
 		return membMapper.myItemCheck();
 	}
 
@@ -89,6 +89,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<MembVO> findIdSelect(MembVO membVO) {
 		return membMapper.findIdSelect(membVO);
+	}
+
+	@Override
+	public int insertInterestItem(MembVO membVO) {
+		return membMapper.insertInterestItem(membVO);
 	}
 
 

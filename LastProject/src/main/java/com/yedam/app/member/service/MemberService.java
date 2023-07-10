@@ -31,9 +31,13 @@ public interface MemberService {
 	public int updateTempPwd(MembVO membVO);
 	
 	//관심종목 선택 리스트
-	public List<CommonVO> myItemCheck();
+	public List<InterestVO> myItemCheck();
 	
-	//
+	// 아이디 찾기 - 이름, 연락처 비교
 	public List<MembVO> findIdSelect(MembVO membVO);
+	
+	//관심종목 선택
+	public int insertInterestItem(MembVO membVO);
+	
 
 }

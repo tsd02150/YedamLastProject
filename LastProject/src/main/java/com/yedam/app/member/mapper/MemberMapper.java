@@ -3,7 +3,7 @@ package com.yedam.app.member.mapper;
 import java.util.List;
 
 import com.yedam.app.member.service.AddrVO;
-import com.yedam.app.member.service.CommonVO;
+import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 
 public interface MemberMapper {
@@ -36,10 +36,13 @@ public interface MemberMapper {
 	public int updateTempPwd(MembVO membVO);
 	
 	//관심종목 선택(회원가입 시)
-	public List<CommonVO> myItemCheck(); // 데이터 쌓이면 상승률 기준 list로 바꿔야함
+	public List<InterestVO> myItemCheck(); // 데이터 쌓이면 상승률 기준 list로 바꿔야함
 	
 	// 아이디 찾기 - 이름, 연락처 비교 & 이름, 연락처, id 조회
 	public List<MembVO> findIdSelect(MembVO membVO);
+	
+	//관심종목 추가
+	public int insertInterestItem(MembVO membVO);
 	
 
 }

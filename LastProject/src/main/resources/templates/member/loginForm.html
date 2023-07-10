@@ -36,7 +36,7 @@
 						</div>
 
 						<h3 class="mt-4">로그인</h3>
-						<form action="login" class="login-form row" method="post"><!-- th:onsubmit="validateForm()" -->
+						<form action="login" class="login-form row" method="post">
 							<div class="col-md-12">
                     <div class="form-group">
                     <label for="loginemail">Id</label>
@@ -47,10 +47,8 @@
                     <div class="form-group">
                     <label for="loginPassword">Password</label>
                     <input type="password" id="loginPassword" class="form-control" name="pwd" placeholder="Password" required>
-                    <div th:if="${not #strings.isEmpty(message)}">
-                        <p style="color: red; font-size: 12px;" th:text="${message}"></p>
                     </div>
-                    </div>
+                    <div th:if="${message ne null}"><p th:text="${message}" style="color: red; font-size: 12px;"></p></div>
                 </div>
             <div class="col-md-12">
          <span th:if="${membNo == null}">
@@ -74,6 +72,10 @@
 			</div>
 			
 			<div id="ADimg"></div>
+			
+			<script>
+				
+			</script>
 <!-- 			
 		<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
 		<script>
