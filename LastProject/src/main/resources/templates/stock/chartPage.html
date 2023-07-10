@@ -48,24 +48,70 @@ ol li {
 	padding: 10px;
 }
 
-#CP2D21 > div {
+#CP2D1 p {
+	font-weight: 700; position : relative;
+	display: inline-block;
+	margin-left: 10px;
+	position: relative;
+}
+
+#CP2D1 button {
+	position: absolute;
+	right: 5px;
+}
+
+#CP2D21>div {
 	padding: 10px;
 }
+
 #CP2D22 table {
-	margin:20px;
+	margin: 20px;
 }
+
 #CP2D22 table button {
 	margin-left: 10px;
 }
+
 #CP2D22 div {
 	text-align: center;
-	margin-top:40px;
+	margin-top: 40px;
 }
-#CP2D22 div h4{
-	margin:10px;
+
+#CP2D22 div h4 {
+	margin: 10px;
 }
+
 #CP3D11 input {
-	margin:10px;
+	margin: 10px;
+}
+
+#CP3D1 table {
+	width: 100%;
+}
+
+thead {
+	border-bottom: 1px solid black;
+}
+
+#CP3D2 table {
+	width: 100%;
+	text-align: center;
+}
+#CP3D2 h3{
+	margin:50px 0;
+}
+
+#sell td:last-of-type {
+	width: 60%;
+	text-align: left;
+}
+
+#buy td:first-of-type {
+	width: 60%;
+	text-align: right;
+}
+#price {
+	margin: 0 0 85px 0 ;
 }
 </style>
 <title>Insert title here</title>
@@ -178,7 +224,8 @@ ol li {
 				</div>
 				<div class="p-1 col-md-6 border">
 					<div id="CP2D1" class="mb-1 border">
-						<p>[[${itemNo}]] 페이지 입니다</p>
+						<p>종목 : [[${itemNo}]] 전일비 : -- 변동률 : --</p>
+						<button>관심종목추가</button>
 						<div id="candleChart"></div>
 						<div id="stickChart"></div>
 					</div>
@@ -190,18 +237,18 @@ ol li {
 									<button>매수</button>
 								</div>
 								<div>
-								<input type="number" name="stockCnt">주
-								<p class="mb-0">
-									구매가능한 주수 <span>00</span>주
-								</p>
+									<input type="number" name="stockCnt">주
+									<p class="mb-0">
+										구매가능한 주수 <span>00</span>주
+									</p>
 								</div>
 								<div>
-								<input type="number" name="stockPrc">원<br> <label><input
-									type="checkbox">시장가 주문</label>
-								<h4>
-									총 주문 금액: <span>00</span>원
-								</h4>
-								<button>주문</button>
+									<input type="number" name="stockPrc">원<br> <label><input
+										type="checkbox">시장가 주문</label>
+									<h4>
+										총 주문 금액: <span>00</span>원
+									</h4>
+									<button>주문</button>
 								</div>
 							</div>
 							<div id="CP2D22" class="col-6">
@@ -213,9 +260,13 @@ ol li {
 									</tr>
 								</table>
 								<div>
-									<p>종목 : [[${itemNo}]]  </p>
-									<p>총 보유주 <span>00</span> 주</p>
-									<p>수익률 : <span>00</span>%</p>
+									<p>종목 : [[${itemNo}]]</p>
+									<p>
+										총 보유주 <span>00</span> 주
+									</p>
+									<p>
+										수익률 : <span>00</span>%
+									</p>
 								</div>
 							</div>
 						</div>
@@ -223,22 +274,102 @@ ol li {
 				</div>
 				<div class="p-1 col-md-3 border">
 					<div id="CP3D1" class="mb-1 border">
-						
-							<div id="CP3D11" class="col-md-12 border">
-								<input type="text" placeholder="종목을 검색하세요">
-							</div>
-							<div class="col-md-12">
-								<table>
-									<thead>
-										<tr>
-											<th>종목 게시판</th>
-										</tr>
-									</thead>
-								</table>
-							</div>
+
+						<div id="CP3D11" class="col-md-12 border">
+							<input id="searchItem" type="text" placeholder="종목을 검색하세요">
+						</div>
+						<div class="col-md-12">
+							<table>
+								<thead>
+									<tr>
+										<th>종목 게시판</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>[농산물] 영차 영차 ..</td>
+									</tr>
+									<tr>
+										<td>[농산물] 영차 영차 ..</td>
+									</tr>
+									<tr>
+										<td>[농산물] 영차 영차 ..</td>
+									</tr>
+									<tr>
+										<td>[농산물] 영차 영차 ..</td>
+									</tr>
+									<tr>
+										<td>[농산물] 영차 영차 ..</td>
+									</tr>
+									<tr>
+										<td>[농산물] 영차 영차 ..</td>
+									</tr>
+									<tr>
+										<td>[농산물] 영차 영차 ..</td>
+									</tr>
+									<tr>
+										<td>[농산물] 영차 영차 ..</td>
+									</tr>
+									<tr>
+										<td>[농산물] 영차 영차 ..</td>
+									</tr>
+									<tr>
+										<td>[농산물] 영차 영차 ..</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
 					<div id="CP3D2" class="border">
-						<h1>호가</h1>
+						<h3>호가</h3>
+						<div id="price">
+						<table id="sell">
+							<tr>
+								<td class="minus">200</td>
+								<td>10000</td>
+							</tr>
+							<tr>
+								<td class="minus">200</td>
+								<td>10000</td>
+							</tr>
+							<tr>
+								<td class="minus">200</td>
+								<td>10000</td>
+							</tr>
+							<tr>
+								<td class="minus">200</td>
+								<td>10000</td>
+							</tr>
+							<tr>
+								<td class="minus">200</td>
+								<td>10000</td>
+							</tr>
+
+						</table>
+						<table id="buy">
+							<tr>
+								<td>10000</td>
+								<td class="plus">200</td>
+							</tr>
+							<tr>
+								<td>10000</td>
+								<td class="plus">200</td>
+							</tr>
+							<tr>
+								<td>10000</td>
+								<td class="plus">200</td>
+							</tr>
+							<tr>
+								<td>10000</td>
+								<td class="plus">200</td>
+							</tr>
+							<tr>
+								<td>10000</td>
+								<td class="plus">200</td>
+							</tr>
+
+						</table>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -251,6 +382,11 @@ ol li {
 			src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 		<script src="../stock/candleChart.js"></script>
 		<script src="../stock/stickChart.js"></script>
+		<link rel="stylesheet"
+			href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+		<script src="../stock/autoComplete.js"></script>
 		<script>
 			
 		</script>
