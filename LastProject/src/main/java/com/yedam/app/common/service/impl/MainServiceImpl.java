@@ -75,7 +75,6 @@ public class MainServiceImpl implements MainService {
         }
 
         String apiURL = "https://openapi.naver.com/v1/search/news.json?query=" + text;    // JSON 결과
-
         Map<String, String> requestHeaders = new HashMap<>();
         requestHeaders.put("X-Naver-Client-Id", clientId);
         requestHeaders.put("X-Naver-Client-Secret", clientSecret);

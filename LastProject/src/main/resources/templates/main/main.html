@@ -149,7 +149,6 @@
 		fetch("getNewsLists")
 		.then(result=>result.json())
 		.then(data=>{
-			console.log(data);
 			let newsContent = document.getElementById('newsContent');
 			for(let i=0;i<6;i++){
 				let p = document.createElement('p');
@@ -162,7 +161,7 @@
 			
 		})
 		.catch(err=>console.log(err));
-		
+
 		
 	</script>
 	</div>

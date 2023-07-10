@@ -28,6 +28,13 @@ public class MembVO {
 	private int point;
 	private String tempPwd;
 	private Date joinDt;
+	
+//	INTEREST_NO NOT NULL VARCHAR2(10) 
+//	MEMB_NO     NOT NULL VARCHAR2(10) 
+//	ITEM_NO     NOT NULL VARCHAR2(10)
+	
+	private String interestNo;
+	private String itemNo;
 
 
 }
