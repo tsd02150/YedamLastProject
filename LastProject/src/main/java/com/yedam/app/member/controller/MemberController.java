@@ -1,5 +1,9 @@
 package com.yedam.app.member.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -9,17 +13,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.client.RestClientException;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
 import com.yedam.app.member.service.RegisterMail;
+import com.yedam.app.sms.service.MessageDTO;
+import com.yedam.app.sms.service.SmsResponseDTO;
+import com.yedam.app.sms.service.SmsService;
 
 @Controller
 @RequestMapping("member")
@@ -30,6 +37,8 @@ public class MemberController {
 	@Autowired
 	RegisterMail registerMail;
 
+	@Autowired
+	SmsService smsService;
 	
 	//회원관리
 	@GetMapping("mypage")
@@ -206,6 +215,15 @@ public class MemberController {
 		return code;
 	}
 	
+	//인증번호 발송
+	@ResponseBody
+	@PostMapping("sendSms")
+	public String findId(MessageDTO messageDto, Model model) throws JsonProcessingException, RestClientException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException, URISyntaxException {
+		SmsResponseDTO response = smsService.sendSms(messageDto);
+		model.addAttribute("response", response);
+		return "result";
+	}
+	
 	//임시 비밀번호 발급 후 페이지 호출
 //	@ResponseBody
 	@PostMapping("tempPwdSuccess")
@@ -271,19 +289,15 @@ public class MemberController {
 		return test;
 	}
 	
-	//인증번호 sms 발송
-	@GetMapping("sms")
-	public String sendSMS() {
-		return "";
-	}
-	
 	//id찾기 이름-연락처 비교
-	@ResponseBody
-	@GetMapping("findIdCheck")
-	public List<MembVO> findIdSelectCheck(MembVO membVO,String nm, String tel, Model model) {
-		membVO.setNm(nm);
-		membVO.setTel(tel);
-		System.out.println(membService.findIdSelect(membVO));
-		return membService.findIdSelect(membVO);
-	}
+//	@ResponseBody
+//	@GetMapping("findIdCheck")
+//	public List<MembVO> findIdSelectCheck(MembVO membVO,String nm, String tel, Model model) {
+//		membVO.setNm(nm);
+//		membVO.setTel(tel);
+//		System.out.println(membService.findIdSelect(membVO));
+//		return membService.findIdSelect(membVO);
+//	}
+	
+	
 }

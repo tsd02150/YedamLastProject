@@ -1,5 +1,4 @@
 package com.yedam.app.sms.service;
-
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
@@ -12,8 +11,15 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class SmsResponseDTO {
-	String requestId;
-	LocalDateTime requestTime;
-	String statusCode;
-	String statusName;
+	private String requestId;
+	private LocalDateTime requestTime;
+	private String statusCode;
+	private String statusName;
+	private String smsConfirmNum;
+	
+	public SmsResponseDTO(String smsConfirmNum) {
+		this.smsConfirmNum = smsConfirmNum;
+	}
+
+
 }

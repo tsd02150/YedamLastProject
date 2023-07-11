@@ -45,7 +45,7 @@
 						<div class="col-md-12">
 							<div class="form-group">
 								<label for="telInput">연락처</label><br><input type="text" class="form-control" oninput="autoHyphen(this)"
-									maxlength="13" name="tel" id="telInput" placeholder="전화번호를 입력하세요" style="width : 70%; display : inline;">
+									maxlength="13" name="to" id="telInput" placeholder="전화번호를 입력하세요" style="width : 70%; display : inline;">
 									<button type="button" id="codeBtn">인증번호 발송</button>
 								<label for="codeCheckInput"></label>
 								<input type="text" class="form-control" name="confirmcode" id="codeCheckInput" placeholder="인증번호를 입력하세요"style="width : 70%; display : inline;">
@@ -95,30 +95,31 @@
 					telInput.focus();
 					return;
 				}
-				//if()
-					console.log(nameInput.value);
-					console.log(telInput.value);
 				
-				//이름&연락처 비교
-				const url = "/member/findIdCheck?nm="+encodeURIComponent(nameInput.value)+"&tel="+encodeURIComponent(telInput.value);
-				fetch(url)
-				.then(response => response.json())
-				.then(res =>{
-					console.log(res);
-					res.forEach(data=>{
-						console.log(data.tel);
-					})
+				$.ajax({
+					url : "sendSms",
+					method : "POST",
+					data : {
+						to : telInput.val(),
+						content : "[SMS] 인증번호 ["+createSmsKey()+"]를 입력해주세요" //
+					},
+					success : function(response){
+					},
+					error : function(err){
+						console.log(err);
+					}
 				})
-				.catch(err => console.log(err));
-				
-				
-			}) //sms 인증번호 발송 끝
+			})
 			
 			//sms 인증번호 확인.
 			document.getElementById("codeCheckBtn").addEventListener("click", function(){
 				console.log(this);
 			}) //sms 인증번호 확인 끝.
 			
+			
+			function createSmsKey(){
+				return 123456;
+			}
 		</script>
 
 	</section>

@@ -6,7 +6,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.messaging.MessagingException;
 
-public interface MailService {
+public interface MailService{
 	// 메일 내용 작성
 		MimeMessage createMessage(String to) throws MessagingException, UnsupportedEncodingException, javax.mail.MessagingException;
 		MimeMessage createMessageNum(String to) throws MessagingException, UnsupportedEncodingException, javax.mail.MessagingException;
