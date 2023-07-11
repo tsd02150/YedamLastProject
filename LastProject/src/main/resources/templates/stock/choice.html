@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<title>Insert title here</title>
+</head>
+<body>
+	<div id="fstDiv" class="col-md-9">
+		<input id="searchItem" type="text" name="search"
+			placeholder="종목을 검색하세요." />
+		<table id="choice" class="border">
+			<td>
+				<div>
+					<ul id="sc">
+						<li data-cd="S1">농산물</li>
+						<li data-cd="S2">수산물</li>
+					</ul>
+				</div>
+			</td>
+			<td>
+				<div>
+					<ul id="theme"></ul>
+				</div>
+			</td>
+			<td>
+				<div>
+					<ul id="item"></ul>
+				</div>
+			</td>
+			<td>
+				<div id="itemInfo"></div>
+			</td>
+		</table>
+	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script src="../stock/itemChoice.js"></script>
+</body>
+</html>

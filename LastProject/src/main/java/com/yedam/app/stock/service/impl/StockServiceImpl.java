@@ -39,8 +39,8 @@ public class StockServiceImpl implements StockService {
 	}
 
 	@Override
-	public List<StockVO> allItemList(Integer page) {
-		return stockMapper.allItemList(page);
+	public List<StockVO> allItemList() {
+		return stockMapper.allItemList();
 	}
 
 	@Override
@@ -51,6 +51,11 @@ public class StockServiceImpl implements StockService {
 	@Override
 	public int allItemCnt() {
 		return stockMapper.allItemCnt();
+	}
+
+	@Override
+	public List<StockVO> getIntStock(String membNo) {
+		return stockMapper.getIntStock(membNo);
 	}
 	
 	

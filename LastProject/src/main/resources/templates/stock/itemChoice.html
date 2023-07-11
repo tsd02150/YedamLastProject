@@ -108,6 +108,36 @@ table {
 .pagination2 a:hover:not(.active1) {
 	background-color: #ddd;
 }
+#pagingul {
+	margin-left:300px;
+    text-align: center;
+    display: inline-block;
+	padding-left :0;
+}
+#pagingul li {
+	margin-left:10px;
+	display : inline-block;
+    text-align: center;
+	list-style:none;
+
+}
+
+#pagingul li a {
+    display: block;
+    font-size: 14px;
+	color: black;
+    padding: 9px 12px;
+    box-sizing: border-box;
+	text-decoration-line:none;
+}
+
+#pagingul li.on {
+    background: #eda712;
+}
+
+#pagingul li.on a {
+    color: #fff;
+}
 </style>
 <title>Insert title here</title>
 </head>
@@ -173,74 +203,21 @@ table {
 										<th>상승률</th>
 									</tr>
 								</thead>
+								
 								<tbody id="allList">
-									<tr th:each="item : ${itemList}">
-										<td th:text="${item.sc}"></td>
-										<td th:text="${item.theme}"></td>
-										<td><a th:href="@{chart(itemNo=${item.itemNo})}">[[${item.nm}]]</a>
-										</td>
-										<td th:text="${item.tprc}"></td>
-										<td><span th:class="${item.change} > 0 ? 'plus':'minus'">
-												[[${item.change == 0 ? item.change : (item.change > 0 ?
-												"+"+item.change : item.change)}]] </span></td>
-										<td><span th:class="${item.rate} > 0 ? 'plus':'minus'">
-												([[${item.rate == 0 ? item.change : (item.change > 0 ?
-												"+"+item.change : item.change)}]]%) </span></td>
-									</tr>
 								</tbody>
+								
 							</table>
-							<div class="pagination2">
-								<th:block th:if="${pageInfo.prev }">
-									<a href="#">Previous</a>
-								</th:block>
-								<th:block th:each="page : ${#numbers.sequence(1, 4)}">
-									<a class="${page == pageInfo.pageNum ? 'active1' : '' }" href="#">[[${page}]]</a>
-								</th:block>
-								<th:block th:if="${pageInfo.next }">
-									<a href="#">Next</a>
-								</th:block>
-							</div>
+							<ul id="pagingul">
+							</ul>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+		<script src="../stock/itemChoice.js"></script>
 		<script>
-        //조회수차트
-        setInterval(() => {
-          $.ajax({
-            url: "inqChart",
-            success: function (data) {
-            	
-      			let list = '';
-      			for(let i =0; i< data.length ; i++){
-      				list +=`<li><a href="chart?itemNo="+${data[i].itemNo}}>${i+1} ${data[i].nm}</a> <span ${data[i].change > 0 ? 'class="plus"':'class="minus"'}> ${data[i].change > 0 ? "+"+data[i].change : data[i].change} (${data[i].rate > 0 ? "+"+data[i].rate : data[i].rate}%)</span>`;
-      			}
-              $("#hot ul").html(list);
-            },
-          });
-
-            $.ajax({
-          url: "allItemList",
-          success: function (data) {
-          	let list = '';
-    			for(let i =0; i< data.length ; i++){
-    				let plma = data[i].change == 0 ? ' ': (data[i].change > 0 ? 'plus' : 'minus');
-          			list += `<tr>`;
-    				list +=`<td>${data[i].sc}</td>`;
-    				list +=`<td>${data[i].theme}</td>`;
-    				list +=`<td><a href="chart?itemNo=${data[i].itemNo}">${data[i].nm}</a></td>`;
-    				list +=`<td>${data[i].tprc}</td>`;
-    				list +=`<td><span class="${plma}"> ${data[i].change <= 0 ? data[i].change : "+"+data[i].change } </span></td>`;
-    				list +=`<td><span class="${plma}" > (${data[i].rate <= 0 ? data[i].rate : "+"+data[i].rate}%) </span></td>`;
-    				list +=`</tr>`;
-    			}
-    			$('#allList').html(list);
-          },
-        }); 
-        }, 2000);
-
-        // 증권 선택시 테마 리스트 출력
+		// 증권 선택시 테마 리스트 출력
         $("#sc").on("click", "li", themeList);
 
         // 테마 리스트 출력
@@ -399,8 +376,7 @@ table {
         $('#choice').on('mouseover','li',function(){
         	$(this).css('cursor','pointer')
         })
-        
-      </script>
+		</script>
 	</div>
 </body>
 </html>
