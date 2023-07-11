@@ -18,7 +18,8 @@
 		justify-content:space-between;
 	}
 	.active{
-		color:red;
+		background-color:#DC3545;
+		color:white;
 	}
 </style>
 </head>
@@ -78,7 +79,7 @@
 							<span aria-hidden="true">&laquo;</span>
 						</a>
 					</li>
-				    <li class="page-item"><a class="page-link" href="#">1</a></li>
+				    <li class="page-item"><a class="page-link active" href="#">1</a></li>
 				    <li class="page-item"><a class="page-link" href="#">2</a></li>
 				    <li class="page-item"><a class="page-link" href="#">3</a></li>
 				    <li class="page-item">
@@ -202,7 +203,6 @@
 		// 카테고리 클릭
 		document.querySelectorAll(".ctgr").forEach(ctgr=>
 			ctgr.addEventListener('click',function(){
-				//document.querySelector(".active").classList.remove('active');
 				currentState = ctgr.getAttribute('data-common-cd');
 				$("#sort option[value=drwup_dt]").attr('selected', 'selected');
 
