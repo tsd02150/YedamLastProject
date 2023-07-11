@@ -38,6 +38,7 @@ public class MemberController {
 	}
 	
 	//로그아웃
+	@GetMapping("logout")
 	public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/";
@@ -247,7 +248,7 @@ public class MemberController {
 	@ResponseBody
 	@GetMapping("myItemCheck")
 	public List<InterestVO> interestItemList(){
-		System.out.println(membService.myItemCheck());
+//		System.out.println(membService.myItemCheck());
 		return membService.myItemCheck();
 	}
 	
@@ -265,7 +266,9 @@ public class MemberController {
 		membVO.setMembNo(membNo);
 		membVO.setItemNo(itemNo);
 		System.out.println(membVO);
-		return membService.insertInterestItem(membVO);
+		int test =membService.insertInterestItem(membVO);
+		System.out.println(membVO);
+		return test;
 	}
 	
 	//인증번호 sms 발송

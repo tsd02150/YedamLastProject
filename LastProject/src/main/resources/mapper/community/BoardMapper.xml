@@ -12,30 +12,54 @@
 	</select>
 
 	<select id="getBoardList" resultType="BoardVO">
-		<![CDATA[
- 		SELECT board_no, nick, ttl, drwup_dt, inq, common_cd, ctgr,rcom
- 		FROM COMMON_CODE JOIN
-	 		(SELECT board_no, nick, ttl, drwup_dt, inq, common_cd,rcom
-	 		FROM BOARD JOIN MEMBER
-	 		USING (memb_no)
-	 		WHERE rcom>=#{rcom} 
-			AND common_cd LIKE #{commonCd}||'%')
-		USING (common_cd)
-	 	]]>
-			<choose>
-				<when test="order==null">
-					ORDER BY drwup_dt DESC
-				</when>
-				<when test="order.equals('inq')">
-					ORDER BY inq DESC
-				</when>
-				<when test="order.equals('rcom')">
+		SELECT *
+		FROM(
+	 		SELECT rownum rn ,board_no, nick, ttl, drwup_dt, inq, common_cd, ctgr,rcom
+	 		FROM COMMON_CODE JOIN
+		 		(
+		 		SELECT board_no, nick, ttl, drwup_dt, inq, common_cd,rcom
+		 		FROM BOARD JOIN MEMBER
+		 		USING (memb_no)
+		 		WHERE rcom>=#{rcom} AND common_cd LIKE #{commonCd}||'%'
+				<choose>
+					<when test="order==null">
+						ORDER BY drwup_dt DESC
+					</when>
+					<when test="order.equals('inq')">
+						ORDER BY inq DESC
+					</when>
+					<when test="order.equals('rcom')">
 						ORDER BY rcom DESC
-				</when>
-				<otherwise>
-					ORDER BY drwup_dt DESC
-				</otherwise>
-			</choose>
+					</when>
+					<otherwise>
+						ORDER BY drwup_dt DESC
+					</otherwise>
+				</choose>
+				)
+			USING (common_cd)
+		<![CDATA[
+			WHERE rownum <= (${page}*10)
+		]]>
+			)
+		where rn > (${page}-1)*10
 	</select>
-
+	
+	<select id="getFreeBoardTop6" resultType="BoardVO">
+		<![CDATA[
+		SELECT board_no,ttl
+		FROM BOARD
+		WHERE rcom>30 AND common_cd LIKE 'C1%' AND rownum<=6
+		ORDER BY drwup_dt DESC
+		]]>
+	</select>
+	
+	<select id="getStockBoardTop6" resultType="BoardVO">
+		<![CDATA[
+		SELECT board_no,ttl
+		FROM BOARD
+		WHERE rcom>30 AND common_cd LIKE 'C2%' AND rownum<=6
+		ORDER BY drwup_dt DESC
+		]]>
+	</select>
+	
 </mapper>

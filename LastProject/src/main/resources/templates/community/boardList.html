@@ -63,40 +63,78 @@
 					</tr>
 				</thead>
 				<tbody id="boardList">
-					<tr th:each="board,idx:${boardList}" th:attr="data-boardno=${board.boardNo}">
-						<td th:text=${idx.count}></td>
-						<td th:text="${board.ctgr}"></td>
-						<td th:text="${board.ttl}"></td>
-						<td th:text="${board.nick}"></td>
-						<td th:text="${board.drwupDt}"></td>
-						<td th:text="${board.inq}"></td>
-					</tr>
+
 				</tbody>
 			</table>
 			<hr>
 			<div>
-			<button class="btn btn-primary  mt-3 mt-lg-0 pull-right" type="button">글쓰기</button>
+			<button class="btn btn-primary mt-3 mt-lg-0 pull-right" type="button">글쓰기</button>
 			</div>
-			<div class="text-center">
+			<div>
+			<nav aria-label="Page navigation example" class="d-flex justify-content-center">
 				<ul class="pagination">
-					<li><a href="#">1</a></li>
-					<li><a href="#">2</a></li>
-					<li><a href="#">3</a></li>
-					<li><a href="#">4</a></li>
-					<li><a href="#">5</a></li>
+					<li class="page-item">
+						<a class="page-link" href="#" aria-label="Previous">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+				    <li class="page-item"><a class="page-link" href="#">1</a></li>
+				    <li class="page-item"><a class="page-link" href="#">2</a></li>
+				    <li class="page-item"><a class="page-link" href="#">3</a></li>
+				    <li class="page-item">
+						<a class="page-link" href="#" aria-label="Next">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
 				</ul>
+			</nav>
 			</div>
 		</div>
 		
 	<script th:inline="javascript">
 		let currentState=[[${boardCode}]];
 		let currentRcom=0;
+		let currentOrder='drwup_dt'
 		let items=["ctgr","ttl","nick","drwupDt","inq"];
+	
+		fetch("/community/getBoardList",{
+			method: "POST",
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			body: 'commonCd='+currentState
+		})
+		.then(result=>result.json())
+		.then(data=>{
+			let tbody = document.getElementById("boardList");
+			while(tbody.firstChild){
+				tbody.firstChild.remove();
+			}
+			data.forEach((board,index)=>{
+				let tr = document.createElement('tr');
+				tr.setAttribute('data-boardno',board.boardNo);
+				let td = document.createElement('td');
+				td.textContent=index+1;
+				tr.append(td);
+				for(let item of items){
+					let td = document.createElement('td');
+					td.textContent=board[item];
+					tr.append(td);
+				}
+				tbody.append(tr);
+			})
+		})
+		.catch(err=>console.log(err));
+		
+		// 페이징 버튼클릭
+		
 		
 		// 전체글 버튼 클릭
 		allBoard.addEventListener('click',function(){
 			currentState=[[${boardCode}]];
+			console.log(currentState);
 			currentRcom=0;
+			$("#sort option[value=drwup_dt]").attr('selected', 'selected');
 			fetch("/community/getBoardList",{
 				method: "POST",
 				headers: {
@@ -130,6 +168,7 @@
 		// 인기글 클릭
 		bestBoard.addEventListener('click',function(){
 			currentRcom=30;
+			$("#sort option[value=drwup_dt]").attr('selected', 'selected');
 			fetch("/community/getBoardList",{
 				method: "POST",
 				headers: {
@@ -165,6 +204,8 @@
 			ctgr.addEventListener('click',function(){
 				//document.querySelector(".active").classList.remove('active');
 				currentState = ctgr.getAttribute('data-common-cd');
+				$("#sort option[value=drwup_dt]").attr('selected', 'selected');
+
 				fetch("/community/getBoardList",{
 					method: "POST",
 					headers: {
@@ -192,12 +233,13 @@
 						tbody.append(tr);
 					})
 				})
-				.catch(err=>console.log(err));	
+				.catch(err=>console.log(err));
 			})
 		)
 		
 		// 정렬 드롭다운
 		sort.addEventListener("change",function(){
+			currentOrder=this.value;
 			fetch("/community/getBoardList",{
 				method: "POST",
 				headers: {

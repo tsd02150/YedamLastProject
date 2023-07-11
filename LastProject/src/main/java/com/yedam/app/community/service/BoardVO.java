@@ -37,4 +37,6 @@ public class BoardVO {
 	private String ctgr;
 	// 정렬
 	private String order;
+	// 페이징용
+	private int page = 1;
 }
