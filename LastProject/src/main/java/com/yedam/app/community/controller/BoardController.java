@@ -33,9 +33,15 @@ public class BoardController {
 	// 게시판 전체
 	@PostMapping("getBoardList")
 	@ResponseBody
-	public List<BoardVO> getBoardList(BoardVO vo) { 
-		System.out.println(vo);
+	public List<BoardVO> getBoardList(BoardVO vo) {  
 		return boardService.getBoardList(vo);
+	}
+	
+	// 게시물 개수
+	@PostMapping("getBoardCount")
+	@ResponseBody
+	public int getBoardCount(BoardVO vo) {
+		return boardService.getBoardCount(vo);
 	}
 	
 }

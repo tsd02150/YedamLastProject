@@ -35,5 +35,10 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.getStockBoardTop6();
 	}
 
+	@Override
+	public int getBoardCount(BoardVO vo) {
+		return boardMapper.getBoardCount(vo);
+	}
+
 	
 }

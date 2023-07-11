@@ -11,36 +11,37 @@
 		WHERE common_cd=#{commonCd}
 	</select>
 
-	<select id="getBoardList" resultType="BoardVO">
-		SELECT *
+	<select id="getBoardList" resultType="BoardVO">		
+		SELECT board_no, nick, ttl, drwup_dt, inq,rcom, common_cd, ctgr
 		FROM(
-	 		SELECT rownum rn ,board_no, nick, ttl, drwup_dt, inq, common_cd, ctgr,rcom
-	 		FROM COMMON_CODE JOIN
-		 		(
-		 		SELECT board_no, nick, ttl, drwup_dt, inq, common_cd,rcom
-		 		FROM BOARD JOIN MEMBER
-		 		USING (memb_no)
-		 		WHERE rcom>=#{rcom} AND common_cd LIKE #{commonCd}||'%'
-				<choose>
+    		SELECT rownum rn,board_no, nick, ttl, drwup_dt, inq,rcom, common_cd, ctgr
+    		FROM(        
+        		SELECT board_no, nick, ttl, drwup_dt, inq,rcom, common_cd, ctgr
+        		FROM COMMON_CODE JOIN
+            		(SELECT board_no, nick, ttl, drwup_dt, inq,rcom, common_cd
+            		FROM BOARD JOIN MEMBER
+            		USING (memb_no)
+            		WHERE rcom>=#{rcom} AND common_cd LIKE #{commonCd}||'%')
+        		USING (common_cd)
+        		<choose>
 					<when test="order==null">
 						ORDER BY drwup_dt DESC
 					</when>
 					<when test="order.equals('inq')">
-						ORDER BY inq DESC
+						ORDER BY inq DESC, drwup_dt DESC
 					</when>
 					<when test="order.equals('rcom')">
-						ORDER BY rcom DESC
+						ORDER BY rcom DESC, drwup_dt DESC
 					</when>
 					<otherwise>
 						ORDER BY drwup_dt DESC
 					</otherwise>
 				</choose>
-				)
-			USING (common_cd)
-		<![CDATA[
-			WHERE rownum <= (${page}*10)
-		]]>
-			)
+        		)
+        	<![CDATA[
+    		WHERE rownum<=(${page}*10)
+    		]]>
+    		)
 		where rn > (${page}-1)*10
 	</select>
 	
@@ -62,4 +63,9 @@
 		]]>
 	</select>
 	
+	<select id="getBoardCount" resultType="int">
+		SELECT COUNT(board_no)
+		FROM BOARD
+		WHERE rcom>=#{rcom} AND common_cd LIKE #{commonCd}||'%'
+	</select>
 </mapper>

@@ -18,8 +18,16 @@
 		justify-content:space-between;
 	}
 	.active{
+		color:white;	
+	}
+	.active a{
 		background-color:#DC3545;
-		color:white;
+	}
+	#prevpage{
+		visibility: hidden;
+	}
+	#nextpage{
+		visibility: hidden;
 	}
 </style>
 </head>
@@ -75,15 +83,15 @@
 			<nav aria-label="Page navigation example" class="d-flex justify-content-center">
 				<ul class="pagination">
 					<li class="page-item">
-						<a class="page-link" href="#" aria-label="Previous">
+						<a class="page-link" id="prevpage" href="javascript:prevPage()" aria-label="Previous">
 							<span aria-hidden="true">&laquo;</span>
 						</a>
 					</li>
-				    <li class="page-item"><a class="page-link active" href="#">1</a></li>
+				    <!-- <li class="page-item active"><a class="page-link" href="#">1</a></li>
 				    <li class="page-item"><a class="page-link" href="#">2</a></li>
-				    <li class="page-item"><a class="page-link" href="#">3</a></li>
+				    <li class="page-item"><a class="page-link" href="#">3</a></li> -->
 				    <li class="page-item">
-						<a class="page-link" href="#" aria-label="Next">
+						<a class="page-link" id="nextpage" href="javascript:nextPage()" aria-label="Next">
 							<span aria-hidden="true">&raquo;</span>
 						</a>
 					</li>
@@ -93,84 +101,24 @@
 		</div>
 		
 	<script th:inline="javascript">
+		//초기값
 		let currentState=[[${boardCode}]];
 		let currentRcom=0;
-		let currentOrder='drwup_dt'
+		let currentOrder='drwup_dt';
+		let targetPage = 1;
+		let startPage=1;
+		let endPage=10;
+		let totalBoardCnt;
 		let items=["ctgr","ttl","nick","drwupDt","inq"];
-	
-		fetch("/community/getBoardList",{
-			method: "POST",
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded'
-			},
-			body: 'commonCd='+currentState
-		})
-		.then(result=>result.json())
-		.then(data=>{
-			let tbody = document.getElementById("boardList");
-			while(tbody.firstChild){
-				tbody.firstChild.remove();
-			}
-			data.forEach((board,index)=>{
-				let tr = document.createElement('tr');
-				tr.setAttribute('data-boardno',board.boardNo);
-				let td = document.createElement('td');
-				td.textContent=index+1;
-				tr.append(td);
-				for(let item of items){
-					let td = document.createElement('td');
-					td.textContent=board[item];
-					tr.append(td);
-				}
-				tbody.append(tr);
-			})
-		})
-		.catch(err=>console.log(err));
 		
-		// 페이징 버튼클릭
-		
-		
-		// 전체글 버튼 클릭
-		allBoard.addEventListener('click',function(){
-			currentState=[[${boardCode}]];
-			console.log(currentState);
-			currentRcom=0;
-			$("#sort option[value=drwup_dt]").attr('selected', 'selected');
-			fetch("/community/getBoardList",{
-				method: "POST",
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded'
-				},
-				body: 'commonCd='+currentState
-			})
-			.then(result=>result.json())
-			.then(data=>{
-				let tbody = document.getElementById("boardList");
-				while(tbody.firstChild){
-					tbody.firstChild.remove();
-				}
-				data.forEach((board,index)=>{
-					let tr = document.createElement('tr');
-					tr.setAttribute('data-boardno',board.boardNo);
-					let td = document.createElement('td');
-					td.textContent=index+1;
-					tr.append(td);
-					for(let item of items){
-						let td = document.createElement('td');
-						td.textContent=board[item];
-						tr.append(td);
-					}
-					tbody.append(tr);
-				})
-			})
-			.catch(err=>console.log(err));	
-		})
-		
-		// 인기글 클릭
-		bestBoard.addEventListener('click',function(){
-			currentRcom=30;
-			$("#sort option[value=drwup_dt]").attr('selected', 'selected');
-			fetch("/community/getBoardList",{
+		// 초기 게시판 목록
+		getBoardList();
+		// 페이징 버튼 생성
+		createPageBtn();
+
+		// 페이징위해 게시물 개수생성 및 페이지생성 호출
+		function createPageBtn(){
+			fetch("/community/getBoardCount",{
 				method: "POST",
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded'
@@ -179,73 +127,127 @@
 			})
 			.then(result=>result.json())
 			.then(data=>{
-				let tbody = document.getElementById("boardList");
-				while(tbody.firstChild){
-					tbody.firstChild.remove();
+				totalBoardCnt=data;
+				if(totalBoardCnt<100){
+					endPage=(totalBoardCnt-1)/10 + 1;
 				}
-				data.forEach((board,index)=>{
-					let tr = document.createElement('tr');
-					tr.setAttribute('data-boardno',board.boardNo);
-					let td = document.createElement('td');
-					td.textContent=index+1;
-					tr.append(td);
-					for(let item of items){
-						let td = document.createElement('td');
-						td.textContent=board[item];
-						tr.append(td);
-					}
-					tbody.append(tr);
+				if(totalBoardCnt>100){
+					nextpage.style.visibility="visible";
+				}
+				createPageCntBtn(startPage,endPage);
+			})			
+		}
+		
+		// 페이징 버튼생성
+		function createPageCntBtn(start,end){
+			if(document.querySelectorAll('.pagebtn')!=null){
+				document.querySelectorAll('.pagebtn').forEach(item=>{
+					item.remove();
 				})
+			}
+			for(let i=start;i<=end;i++){
+				let liTag = document.createElement('li');
+				liTag.classList.add('page-item','pagebtn');
+				if(i%10==1){
+					liTag.classList.add('active');
+				}
+				let aTag = document.createElement('a');
+				aTag.classList.add('page-link');
+				aTag.href="javascript:pageMove("+i+");";
+				aTag.textContent=i;
+				liTag.append(aTag);
+				nextpage.before(liTag);
+			}
+		}
+		
+		// 페이징 버튼클릭
+		function pageMove(page){
+			document.querySelector('.pagebtn.active').classList.remove('active');
+			targetPage=page;
+			getBoardList();
+			document.querySelectorAll('.pagebtn').forEach(item=>{
+				if(item.children[0].textContent==page){
+					item.classList.add('active');
+				}
 			})
-			.catch(err=>console.log(err));	
+		}
+		
+		// 페이징 << 버튼 클릭
+		function prevPage(){
+			nextPage.style.visibility="visible";
+			startPage-=10;
+			endPage-=10;
+			if(startPage==1){
+				prevpage.style.visibility="hidden";
+			}
+		}
+		
+		// 페이징 >> 버튼 클릭
+		function nextPage(){
+			prevpage.style.visibility="visible";
+			startPage+=10;
+			endPage+=10;
+			if(endPage>=totalBoardCnt/10+1){
+				endPage=totalBoardCnt/10+1;
+				nextPage.style.visibility="hidden";
+			}
+		}
+		
+		// 전체글 버튼 클릭이벤트
+		allBoard.addEventListener('click',function(){
+			currentState=[[${boardCode}]];
+			console.log(currentState);
+			currentRcom=0;
+			targetPage = 1;
+			startPage=1;
+			endPage=10;
+			$("#sort option[value=drwup_dt]").attr('selected', 'selected');
+			getBoardList();
+			createPageBtn();
 		})
 		
-		// 카테고리 클릭
+		// 인기글 클릭이벤트
+		bestBoard.addEventListener('click',function(){
+			currentRcom=30;
+			targetPage = 1;
+			startPage=1;
+			endPage=10;
+			$("#sort option[value=drwup_dt]").attr('selected', 'selected');
+			getBoardList();
+			createPageBtn();
+		})
+		
+		// 카테고리 클릭이벤트
 		document.querySelectorAll(".ctgr").forEach(ctgr=>
 			ctgr.addEventListener('click',function(){
+				targetPage = 1;
+				startPage=1;
+				endPage=10;
 				currentState = ctgr.getAttribute('data-common-cd');
 				$("#sort option[value=drwup_dt]").attr('selected', 'selected');
-
-				fetch("/community/getBoardList",{
-					method: "POST",
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded'
-					},
-					body: 'commonCd='+currentState+'&rcom='+currentRcom
-				})
-				.then(result=>result.json())
-				.then(data=>{
-					let tbody = document.getElementById("boardList");
-					while(tbody.firstChild){
-						tbody.firstChild.remove();
-					}
-					data.forEach((board,index)=>{
-						let tr = document.createElement('tr');
-						tr.setAttribute('data-boardno',board.boardNo);
-						let td = document.createElement('td');
-						td.textContent=index+1;
-						tr.append(td);
-						for(let item of items){
-							let td = document.createElement('td');
-							td.textContent=board[item];
-							tr.append(td);
-						}
-						tbody.append(tr);
-					})
-				})
-				.catch(err=>console.log(err));
+				getBoardList();
+				createPageBtn();
 			})
 		)
 		
-		// 정렬 드롭다운
+		// 정렬 드롭다운 변경 이벤트
 		sort.addEventListener("change",function(){
+			targetPage = 1;
+			startPage=1;
+			endPage=10;
 			currentOrder=this.value;
+			getBoardList();
+			createPageBtn();
+		})
+		
+		// 게시판 목록 출력
+		function getBoardList(){
 			fetch("/community/getBoardList",{
 				method: "POST",
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded'
 				},
-				body: 'commonCd='+currentState+'&rcom='+currentRcom+'&order='+this.value
+				body: 'commonCd='+currentState+'&rcom='+currentRcom+'&order='+currentOrder+'&page='+targetPage
 			})
 			.then(result=>result.json())
 			.then(data=>{
@@ -268,8 +270,12 @@
 				})
 			})
 			.catch(err=>console.log(err));
-		})
+		}
 		
+		
+
+		
+
 		
 	</script>
 	</div>

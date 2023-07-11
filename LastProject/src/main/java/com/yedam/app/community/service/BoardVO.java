@@ -38,5 +38,6 @@ public class BoardVO {
 	// 정렬
 	private String order;
 	// 페이징용
-	private int page = 1;
+	private int page;
+	private int totalCnt;
 }
