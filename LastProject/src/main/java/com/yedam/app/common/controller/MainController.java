@@ -9,17 +9,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.common.service.MainService;
-import com.yedam.app.member.service.MembVO;
+import com.yedam.app.community.service.BoardService;
 
 @Controller
 public class MainController {
 	
 	@Autowired
 	MainService mainService;
+	@Autowired
+	BoardService boardService;
 	
 	// 프로젝트 메인페이지
 	@GetMapping("/")
-	public String mainPage(Model model, HttpSession session) {	
+	public String mainPage(Model model, HttpSession session) {
+		model.addAttribute("freeBoardList",boardService.getFreeBoardTop6());
+		System.out.println(boardService.getFreeBoardTop6());
+		model.addAttribute("stockBoardList",boardService.getStockBoardTop6());
+		System.out.println(boardService.getStockBoardTop6());
 		return "main/main";
 	}
 	

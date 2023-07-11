@@ -27,7 +27,6 @@ public class BoardController {
 	public String getBoard(Model model,BoardVO vo) {
 		model.addAttribute("boardCode",vo.getCommonCd().substring(0,2));
 		model.addAttribute("boardName",boardService.getBoardName(vo.getCommonCd().substring(0,2)));
-		model.addAttribute("boardList",boardService.getBoardList(vo));
 		return "community/boardList";
 	}
 	
@@ -35,7 +34,8 @@ public class BoardController {
 	@PostMapping("getBoardList")
 	@ResponseBody
 	public List<BoardVO> getBoardList(BoardVO vo) { 
+		System.out.println(vo);
 		return boardService.getBoardList(vo);
 	}
-
+	
 }

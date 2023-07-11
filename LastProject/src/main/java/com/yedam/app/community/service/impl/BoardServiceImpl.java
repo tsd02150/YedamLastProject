@@ -25,5 +25,15 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.getBoardList(vo);
 	}
 
+	@Override
+	public List<BoardVO> getFreeBoardTop6() {
+		return boardMapper.getFreeBoardTop6();
+	}
+
+	@Override
+	public List<BoardVO> getStockBoardTop6() {
+		return boardMapper.getStockBoardTop6();
+	}
+
 	
 }
