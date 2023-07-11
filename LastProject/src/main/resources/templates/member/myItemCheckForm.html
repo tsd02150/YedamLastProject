@@ -10,6 +10,32 @@
 	height: 200px;
 	border: 1px solid #dddddd;
 	display: inline-block;
+	padding : 10px;
+}
+.tprc{
+	margin-top : 20px;
+	font-size : 20px;
+	text-align : right;
+	display : inline-block;
+}
+.rise_rate{
+	margin-top : 20px;
+	text-align : right;
+	font-size : 20px;
+	color : red;
+	font-weight : bold;
+}
+.drop_rate{
+	margin-top : 20px;
+	text-align : right;
+	font-size : 20px;
+	color : blue;
+	font-weight : bold;
+}
+.txt{
+	display : inline-block;
+	font-size : 20px;
+	margin-right : 10px;
 }
 
 #title {
@@ -21,9 +47,16 @@
   margin: 0 auto;
   display: block;
   width: fit-content;
+  display : inline-block;
 }
+
 .selectedBox {
-	border: 2px solid red;
+	border: 4px solid red;
+}
+
+#Btn{
+        margin-left : 410px;
+        width:200px;
 }
 </style>
 </head>
@@ -31,9 +64,11 @@
 	<section layout:fragment="content">
 		<div class="py-40"></div>
 		<h2 id="title">관심종목 선택 리스트</h2>
-		<input type="text" id="joinMembNo" th:value="${joinInfoNo}">
+		<input type="hidden" id="joinMembNo" th:value="${joinInfoNo}">
 		<div class="py-40"></div>
-		<div id="randomList"></div>
+		<div id="randomList">
+		</div>
+		<div id="Btn"></div>
 
 		<script>
 		$.ajax({
@@ -50,14 +85,20 @@
 		            $("<p>").text(item.itemNo).addClass("itemNo").attr("hidden", true).appendTo(itemBox).append("<br>");
 		            $("<p>").text(item.commonCd).addClass("commonCd").appendTo(itemBox).append("<br>");
 		            $("<h3>").text(item.nm).addClass("itemNm").appendTo(itemBox);
-		            $("<p>").text(item.clPrc).addClass("clPrc").appendTo(itemBox);
+		            if(item.rate >0){
+		            	$("<p>").text("+"+item.rate).addClass("rise_rate").appendTo(itemBox);
+		            } else{
+		            	$("<p>").text(item.rate).addClass("drop_rate").appendTo(itemBox);
+		            }
+		            $("<p>").text("현재가").addClass("txt").appendTo(itemBox);
+		            $("<p>").text(item.tprc+"원").addClass("tprc").appendTo(itemBox);
 		            itemBox.attr("data-common-cd", item.commonCd).appendTo("#randomList");
 		        });
-
-		        $("<div>").addClass("py-40").appendTo("#randomList");
-		        $("<button>").addClass("selectBtn").text("저장").appendTo("#randomList");
-		        $("<button>").addClass("resetBtn").text("취소").appendTo("#randomList");
-		        $("<div>").addClass("py-40").appendTo("#randomList");
+		        
+		        $("<div>").addClass("py-30").appendTo("#Btn");
+		        $("<button>").addClass("selectBtn").addClass("btn-primary").text("저장").appendTo("#Btn");
+		        $("<button>").addClass("resetBtn").addClass("btn-dark").text("취소").appendTo("#Btn");
+		        $("<div>").addClass("py-30").appendTo("#Btn");
 
 		        // 배열을 랜덤하게 섞는 함수
 		        function randomArray(array) {
@@ -107,8 +148,10 @@
 		     // 저장 버튼 클릭 이벤트
 	        $(".selectBtn").on("click", function () {
 	            console.log("Selected items:", selectedItems);
-
+	            
+	            //promise
 	            selectedItems.forEach(function (item) {
+	            	console.log(item);
 	                $.ajax({
 	                    url: "insertInterestItem",
 	                    method: "POST",
@@ -116,6 +159,7 @@
 	                        itemNo: item.itemNo,
 	                        membNo: $("#joinMembNo").val()
 	                    },
+	                    async : false,
 	                    success: function (response) {
 	                        console.log("Item inserted:", item.itemNo);
 	                        window.location.href = "/";

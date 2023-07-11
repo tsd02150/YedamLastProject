@@ -39,7 +39,8 @@
 	
 	<insert id="signUpMemb" parameterType="MembVO">
 		<selectKey keyProperty="membNo" resultType="string" order="BEFORE">
-			SELECT 'mem-' || (COALESCE(TO_NUMBER(MAX(SUBSTR(NVL(memb_no, '0'), 5))), 0) + 1) AS memb_no from member
+			SELECT concat('mem-',NVL(MAX(TO_NUMBER(SUBSTR(memb_no, 5))), 0)+1)
+		  FROM member
 		</selectKey>
 		INSERT INTO MEMBER(MEMB_NO
 												,NM
@@ -63,7 +64,8 @@
 	
 		<insert id="insertAddr" parameterType="AddrVO">
 			<selectKey keyProperty="addrNo" resultType="string" order="BEFORE">
-				SELECT 'adr-' || (COALESCE(TO_NUMBER(MAX(SUBSTR(NVL(addr_no, '0'), 5))), 0) + 1) AS addr_no from address
+				SELECT concat('adr-',NVL(MAX(TO_NUMBER(SUBSTR(addr_no, 5))), 0)+1)
+		    FROM address
 			</selectKey>
 			INSERT INTO ADDRESS(ADDR_NO,
 													MEMB_NO,
@@ -113,7 +115,32 @@
 		
 		<!-- 관심종목 선택시 List 조회 -->
 		<select id="myItemCheck" resultType="InterestVO">
-			SELECT item_no, nm, common_cd, cl_prc FROM item JOIN item_info USING(item_no)
+			SELECT t.item_no, c.common_cd, t.nm,t.prc tprc, t.prc - i.cl_prc change ,TRUNC(((t.prc-i.cl_prc)/i.cl_prc)*100) rate
+        FROM (
+        			SELECT 	item_no, cl_prc 
+              FROM 		item_info 
+              WHERE 	to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
+              ) i 		--전일주가정보
+        JOIN ( 
+        			SELECT 	nm,i.item_no, MAX(ta_dt) , ta_prc prc
+              FROM 		ta_hr t JOIN item i 
+              ON 			i.item_no = t.item_no
+              GROUP 	BY nm,i.item_no,ta_prc
+              ORDER 	by item_no ) t  		-- 최근 체결가
+        ON 		i.item_no = t.item_no
+        JOIN ( 
+        			SELECT 	CASE SUBSTR(common_cd,1,2) 
+		        					WHEN 'S1' THEN '농산물'
+		                  WHEN 'S2' THEN '수산물'
+		                  END sc
+		               			 	,h_ctgr theme
+		                			,ctgr item
+		                  		,common_cd
+              FROM 		common_code
+              WHERE 	length(common_cd) =6
+              ORDER 	by common_cd ) c 
+         ON c.item=t.nm
+         ORDER by common_cd
 		</select>
 		
 		<select id="findIdSelect" parameterType="String">
@@ -124,9 +151,8 @@
 		
 		<insert id="insertInterestItem" parameterType="MembVO">
 		  <selectKey keyProperty="interestNo" resultType="string" order="BEFORE">
-		    SELECT 'int-' || (COALESCE(TO_NUMBER(MAX(SUBSTR(NVL(interest_no, '0'), 5))), 0) + 1) AS interest_no
+		    SELECT concat('int-',NVL(MAX(TO_NUMBER(SUBSTR(interest_no, 5))), 0)+1)
 		    FROM interest_item
-		    WHERE memb_no = #{membNo}
 		  </selectKey>
 			  INSERT INTO interest_item (interest_no, memb_no, item_no)
 			  VALUES (#{interestNo}, #{membNo}, #{itemNo})
