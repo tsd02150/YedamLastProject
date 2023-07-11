@@ -3,6 +3,8 @@ package com.yedam.app.stock.mapper;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.yedam.app.stock.service.InqVO;
 import com.yedam.app.stock.service.ItemVO;
 import com.yedam.app.stock.service.StockVO;
@@ -24,4 +26,8 @@ public interface StockMapper {
 	public List<InqVO> inqChart();
 	//유저의 관심종목 불러오기
 	public List<StockVO> getIntStock(String membNo);
+	//관심종목추가
+	public int insertInterestItem(@Param("membNo")String membNo ,@Param("itemNo") String itemNo);
+	//관심종목추가 중복체크기능
+	public String intItemCheck(@Param("membNo")String membNo ,@Param("itemNo") String itemNo);
 }

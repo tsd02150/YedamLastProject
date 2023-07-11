@@ -125,6 +125,7 @@
 			order by inq desc
 		]]>
 	</select>
+	<!-- 관심종목 가져오기 -->
 	<select id="getIntStock" resultType="StockVO">
 		select t.item_no, t.nm,t.prc tprc, t.prc - i.cl_prc change ,trunc(((t.prc-i.cl_prc)/i.cl_prc)*100) rate
 		from (select b.item_no, cl_prc 
@@ -141,5 +142,20 @@
 		                    GROUP BY nm,i.item_no,ta_prc
 		                    order by item_no ) t  -- 최근 체결가
 		on i.item_no = t.item_no
+	</select>
+	<insert id="insertInterestItem" parameterType="MembVO">
+		  <selectKey keyProperty="interestNo" resultType="string" order="BEFORE">
+		    SELECT concat('int-',NVL(MAX(TO_NUMBER(SUBSTR(interest_no, 5))), 0)+1)
+		    FROM interest_item
+		  </selectKey>
+			  INSERT INTO interest_item (interest_no, memb_no, item_no)
+			  VALUES (#{interestNo}, #{membNo}, #{itemNo})
+	</insert>
+	<!-- 관심종목추가 중복체크기능 -->
+	<select id="intItemCheck" resultType="String">
+		select item_no 
+		from interest_item 
+		where memb_no = #{membNo} 
+		and item_no = #{itemNo}
 	</select>
 </mapper>

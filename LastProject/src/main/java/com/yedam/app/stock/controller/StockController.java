@@ -9,23 +9,31 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.stock.service.InqVO;
 import com.yedam.app.stock.service.ItemVO;
-import com.yedam.app.stock.service.PageDTO;
 import com.yedam.app.stock.service.StockService;
 import com.yedam.app.stock.service.StockVO;
 
 @Controller
 @RequestMapping("stock")
 public class StockController {
-
+	
+	@ExceptionHandler(Exception.class)
+	public String exceptionCatcher(Exception ex,Model m) {
+		System.out.println("ExceptionHandler 발동");
+		m.addAttribute("message","error");
+		return "stock/itemChoice";
+	}
+	
 	@Autowired
 	StockService stockservice;
 
@@ -41,7 +49,7 @@ public class StockController {
 	@GetMapping("chart")
 	public String chartPage(String itemNo,Model m, HttpSession session) {
 		MembVO mem = (MembVO)session.getAttribute("loggedInMember");
-		System.out.println("mem 의 형태는 무엇일까:" + mem);
+		System.out.println("mem 의 형태는 무엇일까 ? :" + mem);
 		String membNo = mem == null ? null : mem.getMembNo();
 		
 		List<StockVO> list = stockservice.getIntStock(membNo);
@@ -104,7 +112,16 @@ public class StockController {
 		map.put("itemList", list);
 		return map;
 	}
-	//종목선택기능
-	//@Response
+	
+	@ResponseBody
+	@PostMapping("insertIntItem")
+	public List<StockVO> insertIntItem(String membNo , String itemNo) throws Exception {
+		System.out.println("insertController 들오왔음");
+		System.out.println(membNo + " " + itemNo + " 가 들어왔습니다");
+		List<StockVO> result = stockservice.insertInterestItem(membNo, itemNo);
+			
+		return result;
+		
+	}
 	
 }

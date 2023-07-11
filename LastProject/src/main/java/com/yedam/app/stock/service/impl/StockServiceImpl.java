@@ -57,7 +57,24 @@ public class StockServiceImpl implements StockService {
 	public List<StockVO> getIntStock(String membNo) {
 		return stockMapper.getIntStock(membNo);
 	}
+
+	@Override
+	public List<StockVO> insertInterestItem(String membNo, String itemNo) throws Exception {
+		if(!interestItemCheck(membNo, itemNo)) throw new Exception();
+		int result = stockMapper.insertInterestItem(membNo, itemNo);
+		List<StockVO> list;
+		if(result > 0) {
+			 list = stockMapper.getIntStock(membNo);
+		}else {
+			throw new Exception();
+		}
+		return list;
+	}
 	
+	public boolean interestItemCheck(String membNo, String itemNo) {
+		String check = stockMapper.intItemCheck(membNo, itemNo);
+		return check == null;
+	}
 	
 	
 	
