@@ -12,5 +12,7 @@ public interface BoardMapper {
 	// 자유게시판 6개 출력
 	public List<BoardVO> getFreeBoardTop6();
 	// 주식게시판 6개 출력
-	public List<BoardVO> getStockBoardTop6();	
+	public List<BoardVO> getStockBoardTop6();
+	// 게시물 개수
+	public int getBoardCount(BoardVO vo);
 }

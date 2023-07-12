@@ -11,4 +11,6 @@ public interface BoardService {
 	public List<BoardVO> getFreeBoardTop6();
 	// 주식게시판 6개 출력
 	public List<BoardVO> getStockBoardTop6();
+	// 게시판 개수
+	public int getBoardCount(BoardVO vo);
 }
