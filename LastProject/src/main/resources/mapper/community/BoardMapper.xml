@@ -68,4 +68,10 @@
 		FROM BOARD
 		WHERE rcom>=#{rcom} AND common_cd LIKE #{commonCd}||'%'
 	</select>
+	
+	<select id="getCtgr" resultType="BoardVO">
+		SELECT common_cd,ctgr
+		FROM COMMON_CODE
+		WHERE common_cd LIKE #{commonCd}||'0%'
+	</select>
 </mapper>

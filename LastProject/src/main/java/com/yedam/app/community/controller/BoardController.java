@@ -1,7 +1,10 @@
 package com.yedam.app.community.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.yedam.app.common.service.CommonCodeVO;
 import com.yedam.app.community.service.BoardService;
@@ -51,7 +55,16 @@ public class BoardController {
 	@GetMapping("addBoard")
 	public String addBoardForm(Model model,BoardVO boardVo, HttpSession session) {
 		model.addAttribute("boardInfo",boardVo);
-		model.addAttribute("BoardVO",new BoardVO());
+		System.out.println(boardService.getCtgr(boardVo.getCommonCd()));
+		model.addAttribute("category",boardService.getCtgr(boardVo.getCommonCd()));
 		return "community/insertBoard";
 	}
+	
+	@PostMapping("addBoard")
+	public void addBoard() {
+		
+	}
+	
+	
+
 }

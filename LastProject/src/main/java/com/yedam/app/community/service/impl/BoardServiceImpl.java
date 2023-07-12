@@ -40,5 +40,10 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.getBoardCount(vo);
 	}
 
+	@Override
+	public List<BoardVO> getCtgr(String commonCd) {
+		return boardMapper.getCtgr(commonCd);
+	}
+
 	
 }
