@@ -30,4 +30,6 @@ public interface StockMapper {
 	public int insertInterestItem(@Param("membNo")String membNo ,@Param("itemNo") String itemNo);
 	//관심종목추가 중복체크기능
 	public String intItemCheck(@Param("membNo")String membNo ,@Param("itemNo") String itemNo);
+	//관심종목 제거기능
+	public int deleteIntItem(@Param("membNo")String membNo , @Param("itemNo")String itemNo);
 }

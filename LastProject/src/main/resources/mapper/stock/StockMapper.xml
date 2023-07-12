@@ -158,4 +158,7 @@
 		where memb_no = #{membNo} 
 		and item_no = #{itemNo}
 	</select>
+	<delete id="deleteIntItem">
+		delete from interest_item where item_no = #{itemNo} and memb_no = #{membNo}
+	</delete>
 </mapper>

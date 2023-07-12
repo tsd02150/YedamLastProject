@@ -246,7 +246,15 @@ to {
 </head>
 <body>
 	<div layout:fragment="content">
-		<p id="sessionMembNo" style="display:none" th:text="${session.loggedInMember.membNo}"></p>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<button id="toastTest">토스트</button>
+		<th:block th:if="${session.loggedInMember} != null">
+			<p id="sessionMembNo" style="display:none" th:text="${session.loggedInMember.membNo}"></p>
+		</th:block>
+		<th:block th:unless="${session.loggedInMember} != null">
+			<p id="sessionMembNo" style="display:none" th:text="nonLoginUser"></p>
+		</th:block>
 		<div class="cp container">
 			<div class="chartpage row">
 				<div class="p-1 col-md-3 border">
@@ -526,9 +534,27 @@ to {
 			}
 			
 			$('#favItem').on('click','input[type=button]',function(){
+				let membInfo = $('#sessionMembNo').text(); 
+				let itemInfo = $(this).data('info');
+				$.ajax('deleteIntItem',{
+					method:'post',
+					data:{ membNo: membInfo, itemNo:itemInfo},
+					success:function(data){
+						console.log(data)
+						$(this).parent().remove();
+					},
+					error:function(xhr){
+						console.log(xhr);
+					}
+				})
 				
-				$(this).parent().remove();
 			})
+			
+			$('#toastTest').on('click',function(){
+				toastShow("토스트 알림","토스트 테스트입니다.","success")
+			})
+			
+			
 		</script>
 	</div>
 </body>
