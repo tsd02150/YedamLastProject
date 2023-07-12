@@ -15,4 +15,5 @@ public interface StockService {
 	public List<InqVO> inqChart();
 	public List<StockVO> getIntStock(String membNo);
 	public List<StockVO> insertInterestItem(String membNo , String itemNo) throws Exception;
+	public String deleteIntItem(String membNo ,String itemNo);
 }

@@ -75,6 +75,19 @@ public class StockServiceImpl implements StockService {
 		String check = stockMapper.intItemCheck(membNo, itemNo);
 		return check == null;
 	}
+
+	@Override
+	public String deleteIntItem(String membNo, String itemNo) {
+		String message;
+		int result = stockMapper.deleteIntItem(membNo, itemNo);
+		
+		if(result > 0) {
+			message = "관심종목에서 제거 되었습니다.";
+		}else {
+			message = "제거에 실패했습니다";
+		}
+		return message;
+	}
 	
 	
 	

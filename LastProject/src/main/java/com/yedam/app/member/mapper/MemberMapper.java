@@ -9,11 +9,18 @@ import com.yedam.app.member.service.MembVO;
 public interface MemberMapper {
 	
 	//login - 회원정보 조회
-	public MembVO loginCheck(MembVO membVO);
-	public MembVO loginCheckPwd(MembVO membVO); //임시비밀번호 발급 후 로그인 할 경우
+	public MembVO loginCheck(String id);
+	
+	
+	public MembVO loginCheckInfo(MembVO membVO);
+	//role 체크
+	public List<String> selectRole(String id);
 	
 	//단건조회
 	public MembVO selectOneMemb(String id);
+	
+	//member 정보 조회
+	public MembVO getMember(MembVO membVO);
 	
 	//닉네임 중복확인
 	public int nickCheck(String nick);
@@ -42,7 +49,6 @@ public interface MemberMapper {
 	public List<MembVO> findIdSelect(MembVO membVO);
 	
 	//관심종목 추가
-	public int insertInterestItem(MembVO membVO);
-	
+	public int insertInterestItem(MembVO membVO);	
 
 }

@@ -9,13 +9,13 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.stock.service.InqVO;
@@ -113,15 +113,20 @@ public class StockController {
 		return map;
 	}
 	
+	
+	//관심종목 추가기능
 	@ResponseBody
 	@PostMapping("insertIntItem")
 	public List<StockVO> insertIntItem(String membNo , String itemNo) throws Exception {
-		System.out.println("insertController 들오왔음");
-		System.out.println(membNo + " " + itemNo + " 가 들어왔습니다");
 		List<StockVO> result = stockservice.insertInterestItem(membNo, itemNo);
-			
 		return result;
-		
 	}
 	
+	//관심종목 삭제기능
+	@ResponseBody
+	@PostMapping("deleteIntItem")
+	public String deleteIntItem(String membNo , String itemNo) {
+		String message = stockservice.deleteIntItem(membNo, itemNo);
+		return message;
+	}
 }
