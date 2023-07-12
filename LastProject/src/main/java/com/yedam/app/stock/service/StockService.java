@@ -3,7 +3,8 @@ package com.yedam.app.stock.service;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
+import com.yedam.app.community.service.BoardVO;
+
 
 public interface StockService {
 	public List<Map<String,Object>> getThemeList(String code);
@@ -14,6 +15,8 @@ public interface StockService {
 	public int allItemCnt();
 	public List<InqVO> inqChart();
 	public List<StockVO> getIntStock(String membNo);
-	public List<StockVO> insertInterestItem(String membNo , String itemNo) throws Exception;
-	public String deleteIntItem(String membNo ,String itemNo);
+	public Map<String,Object> insertInterestItem(String membNo , String itemNo);
+	public Map<String,Object> deleteIntItem(String membNo ,String itemNo);
+	public String nmGetNo(String nm);
+	public List<BoardVO> getScBoardList(String sc);
 }

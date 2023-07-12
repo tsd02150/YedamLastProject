@@ -1,3 +1,5 @@
+
+
 function toastShow(title, content, condition){
     		
 
@@ -78,7 +80,7 @@ function toastShow(title, content, condition){
 	
     		// [토스트 활성 실시]
     		if(condition == 'info'){
-    			toastr.info(title, content, {timeOut: 5000}); // [일반]
+    			toastr.info(title, content, {timeOut: 5000000}); // [일반]
     		}else if(condition == 'success'){
     			toastr.success(title, content, {timeOut: 5000}); // [성공]
     		}else if(condition == 'warning'){

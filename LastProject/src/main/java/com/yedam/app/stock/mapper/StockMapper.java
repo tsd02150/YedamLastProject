@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.stock.service.InqVO;
 import com.yedam.app.stock.service.ItemVO;
 import com.yedam.app.stock.service.StockVO;
@@ -32,4 +33,8 @@ public interface StockMapper {
 	public String intItemCheck(@Param("membNo")String membNo ,@Param("itemNo") String itemNo);
 	//관심종목 제거기능
 	public int deleteIntItem(@Param("membNo")String membNo , @Param("itemNo")String itemNo);
+	// 종목명으로 종목번호 받기
+	public String nmGetNo(String nm);
+	//증권별 최근 게시판 가져오기
+	public List<BoardVO> getScBoardList(String sc);
 }

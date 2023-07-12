@@ -150,9 +150,6 @@
         	  success:function(data){
         		  let list='';
         		  let lastPage = Math.ceil(data.itemList.length/10);
-        		  console.log(data);
-        		  console.log(lastPage)
-        		  console.log(globalCurrentPage)
         		  if(globalCurrentPage == lastPage){
         			  for(var i =(globalCurrentPage - 1) * 10 ; i < data.itemList.length ; i++ ){
         				  let plma = data.itemList[i].change == 0 ? ' ': (data.itemList[i].change > 0 ? 'plus' : 'minus');

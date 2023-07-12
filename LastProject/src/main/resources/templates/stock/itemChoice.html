@@ -4,12 +4,6 @@
 	layout:decorate="~{layout/layout}">
 <head>
 <meta charset="UTF-8" />
-<!-- CSS only -->
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"
-	integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
-	crossorigin="anonymous" />
 
 <style>
 .item.row {
@@ -88,26 +82,7 @@ table {
 	color: blue;
 }
 
-.pagination2 {
-	display: inline-block;
-	text-align: center;
-}
 
-.pagination2 a {
-	color: black;
-	float: left;
-	padding: 15px 30px;
-	text-decoration: none;
-}
-
-.pagination2 a.active1 {
-	background-color: #4CAF50;
-	color: white;
-}
-
-.pagination2 a:hover:not(.active1) {
-	background-color: #ddd;
-}
 #pagingul {
 	margin-left:300px;
     text-align: center;
@@ -188,11 +163,11 @@ table {
 					</div>
 				</div>
 
-				<div class="col-xs-12">
+				<div class="col-md-12">
 					<!-- 종목리스트 -->
 					<div id="itemDiv" class="row">
 						<div class="col-md-12">
-							<table>
+							<table class="table">
 								<thead>
 									<tr>
 										<th>증권</th>
@@ -210,18 +185,21 @@ table {
 							</table>
 							<ul id="pagingul">
 							</ul>
+							<input style="display:none" id="ctgr"/>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<script src="../stock/itemChoice.js"></script>
-		<script>
+		<script  th:inline="javascript">
 		// 증권 선택시 테마 리스트 출력
         $("#sc").on("click", "li", themeList);
 
         // 테마 리스트 출력
         function themeList(value) {
+        	$('#ctgr').val($(this).data('cd'));
+        	$("#itemInfo").html("");
           let ctg;
           console.log(value);
           if (typeof value == "object") {
@@ -251,6 +229,7 @@ table {
 
         //종목리스트 출력
         function itemList(value) {
+        	$("#itemInfo").html("");
           let ctg;
           if (typeof value == "object") {
             ctg = $(event.target).data("cd");
@@ -306,9 +285,8 @@ table {
                 }
               }
 
-              $("#itemInfo").append(
-                $("<button/>").text("차트 페이지 이동").on("click", chartPage)
-              );
+              $("#itemInfo").append($("<button/>").text("차트 페이지 이동").on("click", chartPage))
+              				.append($("<button/>").text("관심종목 추가").on("click",addInterest));
             },
           });
         }
@@ -317,7 +295,34 @@ table {
           let itemNo = $("p[data-in]").data("in");
           location.href = "chart?itemNo="+itemNo;
         }
-
+        /*<![CDATA[*/
+        //관심종목추가
+        function addInterest(){
+        	if([[${session.loggedInMember}]] != null){
+        		let membinfo = [[${session.loggedInMember.membNo}]];
+        		let iteminfo = $('p[data-in]').data('in');
+        		 $.ajax("insertIntItem", {
+        			    method: "post",
+        			    data: { membNo: membinfo, itemNo: iteminfo },
+        			    success: function (data) {
+        			    	if(data.code == 'success'){
+        			    		  toastShow("관심종목 추가" , data.msg , "success");
+        			    	}else if(data.code == 'fail'){
+        			    		toastShow("관심종목 추가" , data.msg , "error");
+        			    	}else if(data.code == 'warning'){
+        			    		toastShow(data.msg ,"관심종목 추가" , "warning");
+        			    	}
+        			    },
+        			    error: function (xhr) {
+        			      console.log(xhr);
+        			    }
+        			  });
+        		
+        	}else{
+        		toastShow('회원서비스 입니다','로그인 후 실행해주세요','info');
+        	}
+        }
+        /*]]>*/
         //자동완성기능
         $("#searchItem").autocomplete({
           source: function (request, response) {
@@ -355,7 +360,6 @@ table {
           delay: 100, //autocomplete 딜레이 시간(ms)
           select: function (evt, ui) {
             // 아이템 선택시 실행 ui.item 이 선택된 항목을 나타내는 객체, lavel/value/idx를 가짐
-            console.log(ui.item.value);
             searchChoice(ui.item.value);
             itemInfo(ui.item.value);
           },
@@ -370,7 +374,8 @@ table {
               itemList(result.COMMON_CD);
             },
           });
-        }
+        };
+        
 		$('#choice').css("width",$('fstDiv').css("width"));
         $("#searchItem").css("width", $("#choice").css("width"));
         $('#choice').on('mouseover','li',function(){

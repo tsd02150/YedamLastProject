@@ -246,8 +246,6 @@ to {
 </head>
 <body>
 	<div layout:fragment="content">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<button id="toastTest">토스트</button>
 		<th:block th:if="${session.loggedInMember} != null">
 			<p id="sessionMembNo" style="display:none" th:text="${session.loggedInMember.membNo}"></p>
@@ -322,8 +320,8 @@ to {
 				</div>
 				<div class="p-1 col-md-6 border">
 					<div id="CP2D1" class="mb-1 border">
-						<p>종목 : [[${itemNo}]] 전일비 : -- 변동률 : --</p>
-						<button>관심종목추가</button>
+						<p th:attr="data-in=${itemNo}">종목 : [[${itemNo}]] 전일비 : -- 변동률 : --</p>
+						<button id="addInt2">관심종목추가</button>
 						<div id="candleChart"></div>
 						<div id="stickChart"></div>
 					</div>
@@ -374,7 +372,7 @@ to {
 					<div id="CP3D1" class="mb-1 border">
 
 						<div id="CP3D11" class="col-md-12 border">
-							<input class="searchItem" type="text" placeholder="종목을 검색하세요">
+							<input class="searchItem move" type="text" placeholder="종목을 검색하세요">
 						</div>
 						<div class="col-md-12">
 							<table>
@@ -456,7 +454,7 @@ to {
 				</div>
 				<div class="modal-body">
 					<div id="fstDiv" class="col-md-9">
-						<input class="searchItem" type="text" name="search"
+						<input class="searchItem interest" type="text" name="search"
 							placeholder="종목을 검색하세요." />
 						<table id="choice" class="border">
 							<td>
@@ -501,8 +499,8 @@ to {
 			href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-		<script src="../stock/autoComplete.js"></script>
-		<script>
+		<script th:inline="javascript" src="../stock/autoComplete.js"></script>
+		<script th:inline="javascript">
 			// Get the modal
 			var modal = document.getElementById("myModal");
 
@@ -513,11 +511,16 @@ to {
 			var span = document.getElementsByClassName("close")[0];
 
 			// When the user clicks the button, open the modal 
+			/*<![CDATA[*/
 			btn.onclick = function() {
+				if([[${session.loggedInMember}]] != null){
 				$('div.apexcharts-toolbars').css('visibility', 'hidden')
 				modal.style.display = "block";
+				}else{
+					toastShow('로그인 후 실행해주세요','회원서비스 입니다','info');
+				}
 			}
-
+			/*]]>*/
 			// When the user clicks on <span> (x), close the modal
 			span.onclick = function() {
 				console.log($('.apexcharts-toolbars').css('visibility'))
@@ -532,27 +535,36 @@ to {
 					modal.style.display = "none";
 				}
 			}
-			
+			// 관심종목 제거 기능
 			$('#favItem').on('click','input[type=button]',function(){
 				let membInfo = $('#sessionMembNo').text(); 
 				let itemInfo = $(this).data('info');
+				let btn = $(this);
 				$.ajax('deleteIntItem',{
 					method:'post',
 					data:{ membNo: membInfo, itemNo:itemInfo},
 					success:function(data){
-						console.log(data)
-						$(this).parent().remove();
+						if(data.code == 'success'){
+							toastShow("관심종목 제거",data.msg,"success");
+							btn.parent().remove();
+						}else if(data.code == 'fail'){
+							toastShow("관심종목 제거",data.msg,"error");
+						}
 					},
 					error:function(xhr){
 						console.log(xhr);
+						
 					}
 				})
 				
 			})
-			
-			$('#toastTest').on('click',function(){
-				toastShow("토스트 알림","토스트 테스트입니다.","success")
+			//관심종목 클릭시 이동
+			$('#favItem').on("click","p",function(){
+				if(event.target.tagName != 'INPUT') return;
+				let itemInfo = $(this).children('input').data('info');
+				//location.href="chart?itemNo="+itemInfo;
 			})
+			
 			
 			
 		</script>

@@ -35,6 +35,15 @@ $(".searchItem").autocomplete({
   select: function (evt, ui) {
     // 아이템 선택시 실행 ui.item 이 선택된 항목을 나타내는 객체, lavel/value/idx를 가짐
     console.log(ui.item.value);
+    console.log($(this).hasClass('move'))
+    if($(this).hasClass('move')){
+    	$.ajax('nmGetNo?nm='+ui.item.value).done(function(data){
+    		location.href='chart?itemNo='+data;
+    	})
+    }else if($(this).hasClass('interest')){
+    	console.log('여기는 관심종목 추가 하는곳')
+    	itemInfo(ui.item.value);
+    }
   },
 });
 
@@ -140,28 +149,81 @@ function itemInfo(value) {
   });
 }
 
+$('#addInt2').on('click',function(){
+	
+				if($('#sessionMembNo').text() != 'nonLoginUser'){
+					console.log('zz')
+					addInterest();
+				}else{
+					toastShow('로그인 후 실행해주세요','회원서비스 입니다','info');
+				}
+			
+	
+});
+
+
+// 관심종목 추가기능
 function addInterest() {
-  console.log($(this).parent().children("p:first-of-type").data("in"));
-  let iteminfo = $(this).parent().children("p:first-of-type").data("in");
+  
+  let iteminfo = event.target.parentElement.children[0].dataset.in;
+  console.log(this);
+  console.log(event.target);
+  console.log(iteminfo)
   let membinfo = $('#sessionMembNo').text();
   console.log(membinfo);
   $.ajax("insertIntItem", {
     method: "post",
     data: { membNo: membinfo, itemNo: iteminfo },
     success: function (data) {
-      let html='';
-      for (let i = 0; i < data.length; i++) {
-        html += `<p class="border my-1">
-                ${data[i].nm} <span class="${data[i].change == 0 ? '_' : (data[i].change > 0 ? 'plus' : 'minus')}">
-                ${data[i].change == 0 ? data[i].change : (data[i].change > 0 ? "+" + data[i].change : data[i].change) }
-                (${data[i].rate == 0 ? data[i].rate : (data[i].rate > 0 ? "+"+data[i].rate : data[i].rate) }%)
-                </span>
-                </p>`;
-      }
-      $("#favItem").html(html);
+    	if(data.code == 'success'){
+    		  toastShow("관심종목 추가" , data.msg , "success");
+    		  let html='';
+		      for (let i = 0; i < data.list.length; i++) {
+		        html += `<p class="border my-1"><input type="button" value="x" data-info="${data.list[i].itemNo}">
+		                ${data.list[i].nm} <span class="${data.list[i].change == 0 ? '_' : (data.list[i].change > 0 ? 'plus' : 'minus')}">
+		                ${data.list[i].change == 0 ? data.list[i].change : (data.list[i].change > 0 ? "+" + data.list[i].change : data.list[i].change) }
+		                (${data.list[i].rate == 0 ? data.list[i].rate : (data.list[i].rate > 0 ? "+"+data.list[i].rate : data.list[i].rate) }%)
+		                </span>
+		                </p>`;
+		      }
+		      $("#favItem").html(html);
+    	}else if(data.code == 'fail'){
+    		toastShow("관심종목 추가" , data.msg , "error");
+    	}else if(data.code == 'warning'){
+    		toastShow(data.msg ,"관심종목 추가" , "warning");
+    	}
+      
     },
     error: function (xhr) {
       console.log(xhr);
-    },
+    }
   });
 }
+
+//실시간 정보 변동
+  setInterval(() => {
+  	if($('#sessionMembNo').text() != 'nonLoginUser'){
+  	let membinfo = $('#sessionMembNo').text();
+  	
+  	$.ajax('ajaxUsetInt',{
+  		method:'post',
+  		data:{membNo : membinfo},
+  		success:function(data){
+  			let html='';
+		      for (let i = 0; i < data.list.length; i++) {
+		        html += `<p class="border my-1"><input type="button" value="x" data-info="${data.list[i].itemNo}">
+		                ${data.list[i].nm} <span class="${data.list[i].change == 0 ? '_' : (data.list[i].change > 0 ? 'plus' : 'minus')}">
+		                ${data.list[i].change == 0 ? data.list[i].change : (data.list[i].change > 0 ? "+" + data.list[i].change : data.list[i].change) }
+		                (${data.list[i].rate == 0 ? data.list[i].rate : (data.list[i].rate > 0 ? "+"+data.list[i].rate : data.list[i].rate) }%)
+		                </span>
+		                </p>`;
+		      }
+		      $("#favItem").html(html);
+  		},
+  		error:function(xhr){
+  			console.log(xhr);
+  		}
+  	});
+  	
+  	}
+  },3000);

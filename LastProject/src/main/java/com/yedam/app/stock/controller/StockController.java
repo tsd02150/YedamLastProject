@@ -117,16 +117,34 @@ public class StockController {
 	//관심종목 추가기능
 	@ResponseBody
 	@PostMapping("insertIntItem")
-	public List<StockVO> insertIntItem(String membNo , String itemNo) throws Exception {
-		List<StockVO> result = stockservice.insertInterestItem(membNo, itemNo);
-		return result;
+	public Map<String,Object> insertIntItem(String membNo , String itemNo) throws Exception {
+		Map<String,Object> map = stockservice.insertInterestItem(membNo, itemNo);
+		return map;
 	}
 	
 	//관심종목 삭제기능
 	@ResponseBody
 	@PostMapping("deleteIntItem")
-	public String deleteIntItem(String membNo , String itemNo) {
-		String message = stockservice.deleteIntItem(membNo, itemNo);
-		return message;
+	public Map<String,Object> deleteIntItem(String membNo , String itemNo) {
+		Map<String,Object> map = stockservice.deleteIntItem(membNo, itemNo);
+		return map;
+	}
+	
+	//종목명으로 종목번호 받기
+	@ResponseBody
+	@GetMapping("nmGetNo")
+	public String nmGetNo(String nm) {
+		String itemNo = stockservice.nmGetNo(nm);
+		return itemNo;
+	}
+	
+	//유저 관심종목
+	@ResponseBody
+	@PostMapping("ajaxUsetInt")
+	public Map<String,Object> ajaxUserInt(String membNo ){
+		List<StockVO> list = stockservice.getIntStock(membNo);
+		Map<String,Object> map = new HashMap<>();
+		map.put("list", list);
+		return map;
 	}
 }
