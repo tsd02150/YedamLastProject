@@ -5,11 +5,35 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<style>
+	#boardSection{
+		padding-top: 50px;
+		padding-bottom:50px;
+	}
+	#titlename{
+		font-size: 30px;
+	}
+	#titlename span{
+		line-height: 46px;
+	}
+	#titlename span:after{
+		width:150px;
+	}
+</style>
 </head>
 <body>
 	<div layout:fragment="content">
+		<div id="boardSection">
+			<h1 class="news-title" id="titlename">
+				<span th:text="${boardInfo.ctgr}">NOTICE</span>
+			</h1>
+			<p th:text="${boardInfo.commonCd}"></p>
+			<form th:action="${/community/addBoard}" method="post">
+				<input type="text">
+				<button type="submit">제출</button>
+			</form>
 		
-		
+		</div>
 	</div>
 </body>
 </html>

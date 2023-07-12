@@ -10,12 +10,10 @@
 		padding-top: 50px;
 		padding-bottom:50px;
 	}
-	#boardSection hr{
-		margin-top: 10px;
-	}
 	#category{
 		display: flex;
 		justify-content:space-between;
+
 	}
 	.active{
 		color:white;	
@@ -29,29 +27,54 @@
 	#nextpage{
 		visibility: hidden;
 	}
+	#titlename{
+		font-size: 30px;
+	}
+	#titlename span{
+		line-height: 46px;
+	}
+	#titlename span:after{
+		width:150px;
+	}
+	.categoryBtn{
+		width:250px;
+	}
+	.dropdown{
+		position: relative;
+	}
+	#sort{
+		position: absolute;
+ 	 	top: 0;
+  		right: 0;
+	}
 </style>
 </head>
 <body>
 	<div layout:fragment="content">
 		<div id="boardSection">
-			<h2 th:text="${boardName}">자유게시판</h2>
-			<hr>
+
+			<h1 class="news-title" id="titlename">
+				<span th:text="${boardName}">NOTICE</span>
+			</h1>
+
 			<div id="category">
-				<div>
+				<div class="categoryBtn">
 					<button class="btn btn-dark  mt-3 mt-lg-0" type="button" id="allBoard">전체글</button>
 					<button class="btn btn-dark  mt-3 mt-lg-0" type="button" id="bestBoard">인기글</button>
 				</div>
-				<div th:if="${boardName=='자유게시판'}">
-					<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C101">드립</button>
-					<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C102">일지</button>
-					<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C103">자료</button>
-					<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C104">질문</button>
+				<div class="categoryBtn">
+					<div th:if="${boardName=='자유게시판'}">
+						<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C101">드립</button>
+						<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C102">일지</button>
+						<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C103">자료</button>
+						<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C104">질문</button>
+					</div>
+					<div th:if="${boardName=='주식게시판'}">
+						<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C201">농산물</button>
+						<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C202">수산물</button>
+					</div>
 				</div>
-				<div th:if="${boardName=='주식게시판'}">
-					<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C201">농산물</button>
-					<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C202">수산물</button>
-				</div>
-				<div class="dropdown">
+				<div class="dropdown categoryBtn">
 					<select class="btn btn-secondary dropdown-toggle" id="sort" name="sort">
 						<option value="drwup_dt">작성일</option>
 						<option value="inq">조회순</option>
@@ -77,26 +100,24 @@
 			</table>
 			<hr>
 			<div>
-			<button class="btn btn-primary mt-3 mt-lg-0 pull-right" type="button">글쓰기</button>
+				<button class="btn btn-primary mt-3 mt-lg-0 pull-right" id="insertBoard" type="button">글쓰기</button>
 			</div>
 			<div>
-			<nav aria-label="Page navigation example" class="d-flex justify-content-center">
-				<ul class="pagination">
-					<li class="page-item">
-						<a class="page-link" id="prevpage" href="javascript:prevPage()" aria-label="Previous">
-							<span aria-hidden="true">&laquo;</span>
-						</a>
-					</li>
-				    <!-- <li class="page-item active"><a class="page-link" href="#">1</a></li>
-				    <li class="page-item"><a class="page-link" href="#">2</a></li>
-				    <li class="page-item"><a class="page-link" href="#">3</a></li> -->
-				    <li class="page-item">
-						<a class="page-link" id="nextpage" href="javascript:nextPage()" aria-label="Next">
-							<span aria-hidden="true">&raquo;</span>
-						</a>
-					</li>
-				</ul>
-			</nav>
+				<nav aria-label="Page navigation example" class="d-flex justify-content-center">
+					<ul class="pagination">
+						<li class="page-item">
+							<a class="page-link" id="prevpage" href="javascript:prevPage()" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+							</a>
+						</li>
+						<!-- 페이징버튼 들어갈 공간 -->
+					    <li class="page-item">
+							<a class="page-link" id="nextpage" href="javascript:nextPage()" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+							</a>
+						</li>
+					</ul>
+				</nav>
 			</div>
 		</div>
 		
@@ -115,6 +136,38 @@
 		getBoardList();
 		// 페이징 버튼 생성
 		createPageBtn();
+		
+		// 게시판 목록 출력
+		function getBoardList(){
+			fetch("/community/getBoardList",{
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: 'commonCd='+currentState+'&rcom='+currentRcom+'&order='+currentOrder+'&page='+targetPage
+			})
+			.then(result=>result.json())
+			.then(data=>{
+				let tbody = document.getElementById("boardList");
+				while(tbody.firstChild){
+					tbody.firstChild.remove();
+				}
+				data.forEach((board,index)=>{
+					let tr = document.createElement('tr');
+					tr.setAttribute('data-boardno',board.boardNo);
+					let td = document.createElement('td');
+					td.textContent=index+1;
+					tr.append(td);
+					for(let item of items){
+						let td = document.createElement('td');
+						td.textContent=board[item];
+						tr.append(td);
+					}
+					tbody.append(tr);
+				})
+			})
+			.catch(err=>console.log(err));
+		}
 
 		// 페이징위해 게시물 개수생성 및 페이지생성 호출
 		function createPageBtn(){
@@ -196,8 +249,9 @@
 		// 전체글 버튼 클릭이벤트
 		allBoard.addEventListener('click',function(){
 			currentState=[[${boardCode}]];
-			console.log(currentState);
 			currentRcom=0;
+			sort.children[0].selected=true;
+			currentOrder='drwup_dt';
 			targetPage = 1;
 			startPage=1;
 			endPage=10;
@@ -209,10 +263,11 @@
 		// 인기글 클릭이벤트
 		bestBoard.addEventListener('click',function(){
 			currentRcom=30;
+			sort.children[0].selected=true;
+			currentOrder='drwup_dt';
 			targetPage = 1;
 			startPage=1;
 			endPage=10;
-			$("#sort option[value=drwup_dt]").attr('selected', 'selected');
 			getBoardList();
 			createPageBtn();
 		})
@@ -220,11 +275,12 @@
 		// 카테고리 클릭이벤트
 		document.querySelectorAll(".ctgr").forEach(ctgr=>
 			ctgr.addEventListener('click',function(){
+				sort.children[0].selected=true;
+				currentOrder='drwup_dt';
 				targetPage = 1;
 				startPage=1;
 				endPage=10;
 				currentState = ctgr.getAttribute('data-common-cd');
-				$("#sort option[value=drwup_dt]").attr('selected', 'selected');
 				getBoardList();
 				createPageBtn();
 			})
@@ -240,38 +296,10 @@
 			createPageBtn();
 		})
 		
-		// 게시판 목록 출력
-		function getBoardList(){
-			fetch("/community/getBoardList",{
-				method: "POST",
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded'
-				},
-				body: 'commonCd='+currentState+'&rcom='+currentRcom+'&order='+currentOrder+'&page='+targetPage
-			})
-			.then(result=>result.json())
-			.then(data=>{
-				let tbody = document.getElementById("boardList");
-				while(tbody.firstChild){
-					tbody.firstChild.remove();
-				}
-				data.forEach((board,index)=>{
-					let tr = document.createElement('tr');
-					tr.setAttribute('data-boardno',board.boardNo);
-					let td = document.createElement('td');
-					td.textContent=index+1;
-					tr.append(td);
-					for(let item of items){
-						let td = document.createElement('td');
-						td.textContent=board[item];
-						tr.append(td);
-					}
-					tbody.append(tr);
-				})
-			})
-			.catch(err=>console.log(err));
-		}
-		
+		// 글쓰기 버튼 클릭
+		insertBoard.addEventListener('click',function(){
+			window.location.href="/community/addBoard?ctgr="+[[${boardName}]]+"&commonCd="+[[${boardCode}]];
+		})
 		
 
 		

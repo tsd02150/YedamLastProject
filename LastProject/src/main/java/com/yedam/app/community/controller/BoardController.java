@@ -2,6 +2,8 @@ package com.yedam.app.community.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.app.common.service.CommonCodeVO;
 import com.yedam.app.community.service.BoardService;
 import com.yedam.app.community.service.BoardVO;
+import com.yedam.app.member.service.MembVO;
 
 @Controller
 @RequestMapping("community")
@@ -44,4 +48,10 @@ public class BoardController {
 		return boardService.getBoardCount(vo);
 	}
 	
+	@GetMapping("addBoard")
+	public String addBoardForm(Model model,BoardVO boardVo, HttpSession session) {
+		model.addAttribute("boardInfo",boardVo);
+		model.addAttribute("BoardVO",new BoardVO());
+		return "community/insertBoard";
+	}
 }
