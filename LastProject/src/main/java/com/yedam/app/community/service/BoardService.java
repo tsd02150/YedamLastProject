@@ -13,4 +13,6 @@ public interface BoardService {
 	public List<BoardVO> getStockBoardTop6();
 	// 게시판 개수
 	public int getBoardCount(BoardVO vo);
+	// 게시물 작성 카테고리 정보
+	public List<BoardVO> getCtgr(String commonCd);
 }
