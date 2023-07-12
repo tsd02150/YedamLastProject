@@ -134,8 +134,8 @@ public class StockServiceImpl implements StockService {
 	
 	//증권별 게시판 리스트
 	@Override
-	public List<BoardVO> getScBoardList(String sc) {
-		return stockMapper.getScBoardList(sc);
+	public List<BoardVO> getScBoardList(String itemNo) {
+		return stockMapper.getScBoardList(itemNo);
 	}
 	
 	

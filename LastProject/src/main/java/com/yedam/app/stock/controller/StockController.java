@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.stock.service.InqVO;
 import com.yedam.app.stock.service.ItemVO;
@@ -51,9 +52,10 @@ public class StockController {
 		MembVO mem = (MembVO)session.getAttribute("loggedInMember");
 		System.out.println("mem 의 형태는 무엇일까 ? :" + mem);
 		String membNo = mem == null ? null : mem.getMembNo();
-		
+		List<BoardVO> boardList = stockservice.getScBoardList(itemNo);
 		List<StockVO> list = stockservice.getIntStock(membNo);
 		System.out.println("list의형태는 무엇일까 ? : " + list);
+		m.addAttribute("boardList",boardList);
 		m.addAttribute("interestStock",list);
 		m.addAttribute("itemNo",itemNo);
 		return "stock/chartPage";
@@ -147,4 +149,6 @@ public class StockController {
 		map.put("list", list);
 		return map;
 	}
+	
+	
 }

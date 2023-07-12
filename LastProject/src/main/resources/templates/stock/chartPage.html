@@ -241,12 +241,28 @@ to {
 #favItem p input{
 	visibility: hidden;
 }
+#boardTable {
+	
+}
+#boardTable td {
+	padding:0;
+	
+	
+}
+#boardTable p {
+	width:200px;
+	display:block;
+	white-space: nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	margin :0;
+	font-size: 14px;
+}
 </style>
 <title>Insert title here</title>
 </head>
 <body>
 	<div layout:fragment="content">
-	<button id="toastTest">토스트</button>
 		<th:block th:if="${session.loggedInMember} != null">
 			<p id="sessionMembNo" style="display:none" th:text="${session.loggedInMember.membNo}"></p>
 		</th:block>
@@ -375,17 +391,18 @@ to {
 							<input class="searchItem move" type="text" placeholder="종목을 검색하세요">
 						</div>
 						<div class="col-md-12">
-							<table>
+							<table id="boardTable" class=table>
 								<thead>
 									<tr>
 										<th>종목 게시판</th>
 									</tr>
 								</thead>
 								<tbody>
-
-									<tr>
-										<td>[농산물] 영차 영차 ..</td>
-									</tr>
+									<th:block th:each="list : ${boardList}">
+										<tr>
+											<td><p th:attr="data-boardno=${list.boardNo}" th:text="|[${list.cntn}]   ${list.ttl}|"></p> </td>
+										</tr>
+									</th:block>
 								</tbody>
 							</table>
 						</div>

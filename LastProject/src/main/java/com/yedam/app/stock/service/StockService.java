@@ -18,5 +18,5 @@ public interface StockService {
 	public Map<String,Object> insertInterestItem(String membNo , String itemNo);
 	public Map<String,Object> deleteIntItem(String membNo ,String itemNo);
 	public String nmGetNo(String nm);
-	public List<BoardVO> getScBoardList(String sc);
+	public List<BoardVO> getScBoardList(String itemNo);
 }

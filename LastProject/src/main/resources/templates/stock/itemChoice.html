@@ -10,15 +10,15 @@
 	margin: 40px 0;
 }
 
-ul {
+#choice ul {
 	list-style: none;
 }
 
-li {
+#choice li {
 	padding: 20px;
 }
 
-table {
+#choice table {
 	width: 100%;
 }
 
@@ -46,11 +46,15 @@ table {
 	margin-bottom: 5px;
 	font-size: 14px;
 }
-
+#itemInfo button{
+	border-radius: 7%;
+	font-size: 14px;
+	margin-right:5px;
+}
 #hot {
 	width: 100%;
-	height: 347.2px;
-	border: black solid 1px;
+	height: 355px;
+	
 }
 
 #hot p {
@@ -82,36 +86,35 @@ table {
 	color: blue;
 }
 
-
 #pagingul {
-	margin-left:300px;
-    text-align: center;
-    display: inline-block;
-	padding-left :0;
+	margin-left: 300px;
+	text-align: center;
+	display: inline-block;
+	padding-left: 0;
 }
-#pagingul li {
-	margin-left:10px;
-	display : inline-block;
-    text-align: center;
-	list-style:none;
 
+#pagingul li {
+	margin-left: 10px;
+	display: inline-block;
+	text-align: center;
+	list-style: none;
 }
 
 #pagingul li a {
-    display: block;
-    font-size: 14px;
+	display: block;
+	font-size: 14px;
 	color: black;
-    padding: 9px 12px;
-    box-sizing: border-box;
-	text-decoration-line:none;
+	padding: 9px 12px;
+	box-sizing: border-box;
+	text-decoration-line: none;
 }
 
 #pagingul li.on {
-    background: #eda712;
+	background: #eda712;
 }
 
 #pagingul li.on a {
-    color: #fff;
+	color: #fff;
 }
 </style>
 <title>Insert title here</title>
@@ -120,7 +123,7 @@ table {
 	<div layout:fragment="content">
 		<div class="container">
 			<div class="item row">
-				<div id="fstDiv" class="col-md-9">
+				<div id="fstDiv" class="col-md-8 m-1">
 					<input id="searchItem" type="text" name="search"
 						placeholder="종목을 검색하세요." />
 					<table id="choice" class="border">
@@ -147,9 +150,9 @@ table {
 						</td>
 					</table>
 				</div>
-				<div class="col-md-3">
+				<div class="col-md-3 m-1">
 					<!-- 인기 검색순위 -->
-					<div id="hot">
+					<div id="hot" class="border">
 						<p>인기검색순위</p>
 						<ul>
 							<th:block th:each="inq : ${inqList}">
@@ -178,27 +181,25 @@ table {
 										<th>상승률</th>
 									</tr>
 								</thead>
-								
+
 								<tbody id="allList">
 								</tbody>
-								
+
 							</table>
 							<ul id="pagingul">
 							</ul>
-							<input style="display:none" id="ctgr"/>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 		<script src="../stock/itemChoice.js"></script>
-		<script  th:inline="javascript">
+		<script th:inline="javascript">
 		// 증권 선택시 테마 리스트 출력
         $("#sc").on("click", "li", themeList);
 
         // 테마 리스트 출력
         function themeList(value) {
-        	$('#ctgr').val($(this).data('cd'));
         	$("#itemInfo").html("");
           let ctg;
           console.log(value);
@@ -297,9 +298,9 @@ table {
         }
         /*<![CDATA[*/
         //관심종목추가
-        function addInterest(){
+         function addInterest(){
         	if([[${session.loggedInMember}]] != null){
-        		let membinfo = [[${session.loggedInMember.membNo}]];
+        		let membinfo = [[${session.loggedInMember?.membNo}]];
         		let iteminfo = $('p[data-in]').data('in');
         		 $.ajax("insertIntItem", {
         			    method: "post",
@@ -321,7 +322,7 @@ table {
         	}else{
         		toastShow('회원서비스 입니다','로그인 후 실행해주세요','info');
         	}
-        }
+        } 
         /*]]>*/
         //자동완성기능
         $("#searchItem").autocomplete({
@@ -376,7 +377,7 @@ table {
           });
         };
         
-		$('#choice').css("width",$('fstDiv').css("width"));
+		$('#choice').css("width",$('#fstDiv').css("width"));
         $("#searchItem").css("width", $("#choice").css("width"));
         $('#choice').on('mouseover','li',function(){
         	$(this).css('cursor','pointer')

@@ -36,5 +36,5 @@ public interface StockMapper {
 	// 종목명으로 종목번호 받기
 	public String nmGetNo(String nm);
 	//증권별 최근 게시판 가져오기
-	public List<BoardVO> getScBoardList(String sc);
+	public List<BoardVO> getScBoardList(String itemNo);
 }

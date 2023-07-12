@@ -55,7 +55,7 @@
 		and length(common_cd) =6
 	</select>
 	
-	<!-- 자동완성 이용한 카테고리 종목정보 출력 // ?? 안쓰는거같음 -->
+	<!-- 자동완성 이용한 카테고리 종목정보 출력 -->
 	<select id="autoInfo" resultType="map">
 		select common_cd , h_cd 
 		from common_code 
@@ -183,16 +183,25 @@
 	
 	<!-- 게시판 리스트 가져오기 -->
 	<select id="getScBoardList" resultType="BoardVO">
-		select board_no,ttl
-		from board 
-		where common_cd = (
-		                    select common_cd
-		                    from common_code
-		                    where ctgr =(select ctgr 
-		                                from common_code 
-		                                where common_cd = #{sc})
-		                    and common_cd like 'C%'
-		) 
-		order by drwup_dt desc
+	<![CDATA[
+		select rownum , board_no , ttl , case common_cd when 'C201' then '농산물'
+                                                when 'C202' then '수산물'
+                                                end cntn
+		from (  select board_no,ttl,common_cd
+		        from board 
+		        where common_cd = (
+		                            select common_cd
+		                            from common_code
+		                            where ctgr =(  select case substr(c.common_cd,1,2) when 'S1' then '농산물'
+		                                                                          when 'S2' then '수산물'
+		                                                                          end sc
+		                                            from common_code c join item i
+		                                            on c.common_cd = i.common_cd
+		                                            where item_no = #{itemNo})
+		                            and common_cd like 'C%'
+		                            ) 
+		        order by drwup_dt desc) a
+		where rownum <= 10
+		]]>
 	</select>
 </mapper>
