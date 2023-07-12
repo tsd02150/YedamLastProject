@@ -45,7 +45,7 @@ public class SmsService{
     @Value("${naver-cloud-sms.senderPhone}")
     private String phone;
     
-    private String smsConfirmNum = createSmsKey();
+//    private String smsConfirmNum = createSmsKey();
     
     public SmsResponseDTO sendSms(MessageDTO messageDto) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
 		Long time = System.currentTimeMillis();
@@ -93,7 +93,7 @@ public class SmsService{
         String timestamp = time.toString();
         String accessKey = this.accessKey;
         String secretKey = this.secretKey;
- 
+        
         String message = new StringBuilder()
                 .append(method)
                 .append(space)
@@ -113,16 +113,5 @@ public class SmsService{
  
         return encodeBase64String;
 	}
-    
-    
-// 6자리의 난수를 조합을 통해 인증코드 만들기
-    public static String createSmsKey() {
-        StringBuffer key = new StringBuffer();
-        Random rnd = new Random();
-
-        for (int i = 0; i < 5; i++) { // 인증코드 6자리
-            key.append((rnd.nextInt(10)));
-        }
-        return key.toString();
-    }
+   
 }

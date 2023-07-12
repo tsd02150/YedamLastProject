@@ -237,7 +237,7 @@ nameInput.addEventListener("input", function() {
 	//아이디 중복확인
  idBtn.addEventListener('click', function() {
 	    let idAddr = document.querySelector("#id-address").value;
-	    const idCheckUrl = "/member/idCheck?id=" + encodeURIComponent(idAddr);
+	    let idCheckUrl = "/member/idCheck?id=" + encodeURIComponent(idAddr);
 	    fetch(idCheckUrl)
 	        .then(response => response.json())
 	        .then(result => {
