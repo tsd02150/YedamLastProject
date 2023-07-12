@@ -4,11 +4,11 @@ import java.util.List;
 
 public interface MemberService {
 	//로그인
-	public MembVO loginCheck(MembVO membVO);
-	public MembVO loginCheckPwd(MembVO membVO); //임시비밀번호 발급 후
-	
+//	public MembVO loginCheck(MembVO membVO);
+	public MembVO loginCheckInfo(MembVO membVO);
 	//아이디로 단건조회
 	public MembVO selectOneMemb(String id);
+	public MembVO getMember(MembVO membVO);
 	
 	//일반회원가입
 	public int signUpMemb(MembVO membVO);

@@ -100,7 +100,7 @@
 								$("#emconfirmchk").css({
 									"color": "#FA3E3E",
 									"font-weight": "bold",
-									"font-size": "10px"
+									"font-size": "14px"
 								});
 							} else {
 								emconfirmchk = true;
@@ -108,7 +108,7 @@
 								$("#emconfirmchk").css({
 									"color": "#0D6EFD",
 									"font-weight": "bold",
-									"font-size": "10px"
+									"font-size": "14px"
 								});
 							}
 						}); //이메일 인증번호 확인 완료
@@ -118,7 +118,6 @@
 
 			function validateForm() {
 				event.preventDefault();
-
 					//임시비밀번호 발급
 					$.ajax({
 					type: "POST",
@@ -130,14 +129,12 @@
 						console.log("임시비밀번호: " + data);
 						
 						// 이메일 전송 완료 페이지 호출
-						let id = document.getElementById("loginemail");
+						//let id = document.getElementById("loginemail");
 						document.getElementById('frm').submit();
 					}
 				}); //임시비밀번호 발급 end
-		}
+			}
 		</script>
-
 	</section>
 </body>
-
 </html>
