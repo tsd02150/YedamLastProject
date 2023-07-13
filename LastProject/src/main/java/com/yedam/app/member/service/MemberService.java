@@ -7,7 +7,7 @@ public interface MemberService {
 	public MembVO mainLoginCheck(MembVO membVO);
 	//아이디로 단건조회
 	public MembVO selectOneMemb(String id);
-	public MembVO getMember(MembVO membVO);
+	public MembVO getMemberTel(MembVO membVO);
 	
 	//일반회원가입
 	public int signUpMemb(MembVO membVO);
@@ -33,7 +33,7 @@ public interface MemberService {
 	public List<InterestVO> myItemCheck();
 	
 	// 아이디 찾기 - 이름, 연락처 비교
-	public List<MembVO> findIdSelect(MembVO membVO);
+	public MembVO findIdSelect(MembVO membVO);
 	
 	//관심종목 선택
 	public int insertInterestItem(MembVO membVO);

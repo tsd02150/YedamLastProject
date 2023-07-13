@@ -34,5 +34,12 @@ public class MembVO {
 	private String addr;
 	private String detaAddr;
 	
+	private String sc;
+	private String theme;
+	private Integer tprc;
+	private Integer change;
+	private Integer rate;
+	private Integer vol;
+	
 
 }

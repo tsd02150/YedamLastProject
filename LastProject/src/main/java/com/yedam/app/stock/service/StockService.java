@@ -3,6 +3,8 @@ package com.yedam.app.stock.service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.yedam.app.community.service.BoardVO;
 
 
@@ -21,4 +23,5 @@ public interface StockService {
 	public List<BoardVO> getScBoardList(String itemNo);
 	public List<StockVO> topVolChart();
 	public List<StockVO> getPrcPercent(String type);
+	public List<Map<String,Object>> orderTable(String type , String itemNo);
 }

@@ -267,4 +267,32 @@
 		where rownum <= 5
 		]]>
 	</select>
+	
+	<!-- 호가 -->
+	<select id="orderTable" resultType="Map">
+		select rownum , a.*
+		from(	select prc , sum(rmn_cnt) cnt
+				<choose>
+					<when test='type.equals("sell")'>
+						from sell_order
+					</when>
+					<otherwise>
+						from buy_order
+					</otherwise>
+				</choose>
+				
+				where item_no = #{itemNo}
+				group by prc
+				order by prc
+				<if test='type.equals("buy")'>
+				desc
+				</if>
+				) a
+				<![CDATA[
+		where rownum <=5
+		]]>
+		<if test='type.equals("sell")'>
+		order by prc desc
+		</if>
+	</select>
 </mapper>

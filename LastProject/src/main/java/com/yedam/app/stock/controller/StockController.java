@@ -28,12 +28,6 @@ import com.yedam.app.stock.service.StockVO;
 @RequestMapping("stock")
 public class StockController {
 	
-	@ExceptionHandler(Exception.class)
-	public String exceptionCatcher(Exception ex,Model m) {
-		System.out.println("ExceptionHandler 발동");
-		m.addAttribute("message","error");
-		return "stock/itemChoice";
-	}
 	
 	@Autowired
 	StockService stockservice;
@@ -53,7 +47,7 @@ public class StockController {
 		String membNo = mem == null ? null : mem.getMembNo();
 		m.addAttribute("boardList",stockservice.getScBoardList(itemNo)); // 종목게시판
 		m.addAttribute("interestStock",stockservice.getIntStock(membNo)); // 유저관심종목리스트
-		m.addAttribute("topVolChart",stockservice.topVolChart());
+		m.addAttribute("topVolChart",stockservice.topVolChart()); // 거래량 top 5 순위
 		m.addAttribute("itemNo",itemNo);
 		return "stock/chartPage";
 	}
@@ -147,6 +141,7 @@ public class StockController {
 		return map;
 	}
 	
+	//변동률 데이터 가져오기
 	@ResponseBody
 	@GetMapping("getPercentage")
 	public List<StockVO> getPercentage(String type){
@@ -154,4 +149,13 @@ public class StockController {
 		return list;
 	}
 	
+	// 호가 데이터
+	@ResponseBody
+	@GetMapping("orderTable")
+	public List<Map<String,Object>> orderTable(String type, String itemNo){
+		System.out.println(type + " " + itemNo);
+		List<Map<String,Object>> list = stockservice.orderTable(type, itemNo);
+		System.out.println(list);
+		return list;
+	}
 }

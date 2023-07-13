@@ -28,14 +28,13 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 	      UserVO userVO = (UserVO) authentication.getPrincipal();
 	      System.out.println(userVO);
 	      
-	 
-	    	  System.out.println(userVO.getTempPwd());
-	    	  if(userVO.getTempPwd() == null) {
-	    		  session.setAttribute("loggedInMember", userVO);  
-	    		  response.sendRedirect("/");
-	    	  } else {
-	    		  session.setAttribute("loggedInMember", userVO.getId());  
-	    		  response.sendRedirect("/member/tempPwdUpdate");
-	    	  }
+    	  System.out.println(userVO.getTempPwd());
+    	  if(userVO.getTempPwd() == null) {
+    		  session.setAttribute("loggedInMember", userVO);  
+    		  response.sendRedirect("/");
+    	  } else {
+    		  session.setAttribute("loggedInMember", userVO.getId());  
+    		  response.sendRedirect("/member/tempPwdUpdate");
+    	  }
 	   }
 	}

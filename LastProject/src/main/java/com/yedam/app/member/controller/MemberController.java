@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +51,7 @@ public class MemberController {
 	//회원관리
 	@GetMapping("mypage")
 	public String myPageForm() {
-		return "member/myPageInfo";
+		return "member/mypage";
 	}
 	
 	//로그아웃
@@ -201,9 +200,9 @@ public class MemberController {
 		System.out.println("임시비밀번호 : " + code);
 		
 		//기존 비밀번호 임시 비밀번호로 수정.
-		membVO.setPwd(code);
+		membVO.setPwd(pwEncoder.encode(code));
 		membVO.setId(id);
-		membVO.setTempPwd(code);
+		membVO.setTempPwd(pwEncoder.encode(code));
 		membService.updatePwd(membVO);
 		
 		return code;
@@ -239,8 +238,13 @@ public class MemberController {
 	@PostMapping("tempPwdUpdate")
 	public String tempPwdUpdate(MembVO membVO, HttpSession session, Model model) {
 		MembVO loggedInMember = membService.selectOneMemb(membVO.getId());
+		System.out.println("=========>");
 		System.out.println(loggedInMember);
-		if(pwEncoder.matches(membVO.getPwd(),loggedInMember.getPwd())) {
+		System.out.println(membVO.getTempPwd());
+		System.out.println(loggedInMember.getPwd());
+		
+		System.out.println(pwEncoder.matches(membVO.getPwd(),loggedInMember.getPwd()));
+		if(pwEncoder.matches(membVO.getTempPwd(),loggedInMember.getPwd())) { //암호화된 비밀번호 맞는지 확인
 			membVO.setPwd(pwEncoder.encode(membVO.getPwd()));//비밀번호 암호화
 			int result = membService.updateTempPwd(membVO);
 			if(result == 1) {
@@ -289,13 +293,15 @@ public class MemberController {
 	//id찾기 이름-연락처 비교
 	@ResponseBody
 	@GetMapping("findIdCheck")
-	public List<MembVO> findIdSelectCheck(MembVO membVO,String nm, String tel, Model model) {
+	public MembVO findIdSelectCheck(MembVO membVO,String nm, String tel, Model model) {
 		membVO.setNm(nm);
 		membVO.setTel(tel);
-		System.out.println(membService.findIdSelect(membVO));
-		return membService.findIdSelect(membVO);
+		MembVO membInfo = membService.findIdSelect(membVO);
+		model.addAttribute("membInfo", membInfo);
+		return membInfo;
 	}
 	
+	//@ResponseBody
 	@PostMapping("findIdSuccess")
 	public String findIdSuccessPage(@RequestParam String id, Model model) {
 		model.addAttribute("id", id);
@@ -304,11 +310,11 @@ public class MemberController {
 	
 	//tel 정보 비교
 	@ResponseBody
-	@GetMapping("getMember")
-	public MembVO idChecks(String tel, String nm, MembVO membVO, Model model) {
+	@PostMapping("getMemberTel")
+	public MembVO getMemberTel(@RequestParam String tel, @RequestParam String nm, MembVO membVO, Model model) {
 		membVO.setTel(tel);
 		membVO.setNm(nm);
-		MembVO result = membService.getMember(membVO);
+		MembVO result = membService.getMemberTel(membVO);
 		return result;
 	}
 }

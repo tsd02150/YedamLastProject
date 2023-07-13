@@ -27,6 +27,17 @@ public class UserVO implements UserDetails{
 	private String addr;
 	private String detaAddr;
 
+	private String interestNo;
+	private String itemNo;
+	
+	private String sc;
+	private String theme;
+	private Integer tprc;
+	private Integer change;
+	private Integer rate;
+	private Integer vol;
+	
+	
 	@Override
 	public String getPassword() {
 		return pwd;

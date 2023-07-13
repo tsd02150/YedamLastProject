@@ -3,6 +3,7 @@ package com.yedam.app.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -35,23 +36,22 @@ public class WebSecurityConfig{
 	      http
 	      	 .csrf().disable()
 	         .authorizeHttpRequests()
-	         .antMatchers("/","/member/survey", "/stock/**", "/comunity/**","../static/**").permitAll()
-//	         .antMatchers("/community/chat")
-	         //.authenticated().anyRequest().authenticated()
+	         .antMatchers("/","/member/survey", "/stock/**", "/comunity/**","/static/**").permitAll()
+	         .antMatchers("/member/mypage").authenticated()
+//	         .anyRequest().authenticated()
 	         .anyRequest().permitAll()
-	         //.anyRequest().authenticated()
 	         .and()
 	         .formLogin() // 로그인하는 경우에 대해 설정
 	         //.loginProcessingUrl("/member/login")
+	         //.usernameParameter("id")
 	         .passwordParameter("pwd")
 	         .successHandler(authenticationSuccessHandler())
 	         .failureHandler(authenticationFailureHandler())
 	         .loginPage("/member/login")
-	         .loginPage("/")
+//	         .loginPage("/")
 	         .permitAll()
 	         .and()
 	         .logout((logout) -> logout.permitAll());
 	      return http.build();
 	   }
-
 }
