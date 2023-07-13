@@ -110,32 +110,7 @@
 			    },
 			    success: function(response) {
 			      console.log("key: " + smscode);
-			      
-			      let clickCount = 0; //클릭 횟수 제한
-			      
-						// sms 인증번호 확인.
-						$("codeCheckBtn").on("click", function(){
-							if(telInput.val() !== smscode.toString()){
-								clickCount++;
-								$("#codeCheck").text("인증번호를 다시 입력하세요");
-								$("#codeCheck").css({
-									"color": "#FA3E3E",
-									"font-weight": "bold",
-									"font-size": "14px"
-								});
-							} else{
-								$("#codeCheck").text("인증이 완료되었습니다.");
-								$("#codeCheck").css({
-									"color": "#0D6EFD",
-									"font-weight": "bold",
-									"font-size": "14px"
-								});
-							}
-							if (clickCount >= 5) {
-					      alert("5회 이상 실패하셨습니다.\n본인인증을 다시 진행해주세요.");
-					      window.location.reload();
-							}
-						})
+			      checkCode(smscode);
 						
 			    },
 			    error: function(err) {
@@ -154,11 +129,41 @@
 				  return key;
 				}
 			
+			let clickCount = 0; //클릭 횟수 제한
+			
+			// sms 인증번호 확인.
+			document.getElementById("codeCheckBtn").addEventListener("click", checkCode);
+			
+			function checkCode(smscode){
+				console.log(telInput.value);
+				console.log(smscode.toString());
+				
+				if(telInput.value !== smscode.toString()){
+					clickCount++;
+					$("#codeCheck").text("인증번호를 다시 입력하세요");
+					$("#codeCheck").css({
+						"color": "#FA3E3E",
+						"font-weight": "bold",
+						"font-size": "14px"
+					});
+				} else{
+					$("#codeCheck").text("인증이 완료되었습니다.");
+					$("#codeCheck").css({
+						"color": "#0D6EFD",
+						"font-weight": "bold",
+						"font-size": "14px"
+					});
+				}
+				if (clickCount >= 5) {
+		      alert("5회 이상 실패하셨습니다.\n본인인증을 다시 진행해주세요.");
+		      window.location.reload();
+				}
+			})
 			
 			function validateForm() {
 				event.preventDefault();
 
-				let telCheckUrl = "/member/getMember?tel=" + encodeURI(telInput.val()) + "&nm=" + encodeURI(nameInput.val());
+				let telCheckUrl = "/member/getMember?tel=" + encodeURI(telInput.value) + "&nm=" + encodeURI(nameInput.value);
 
 			    $.ajax({
 			        url: telCheckUrl,
