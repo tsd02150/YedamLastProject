@@ -87,7 +87,7 @@
 			        nameCheck.textContent = "잘못 입력하셨습니다.";
 			    }
 			};
-			
+			let smscode;
 			//sms 인증번호 발송
 			document.getElementById("codeBtn").addEventListener("click", function() {
 			  if (nameInput.value == "") {
@@ -100,7 +100,7 @@
 			  }
 			
 			  let toUser = telInput.value.replace(/[^0-9]/g, '').replace(/^(\d{3})(\d{4})(\d{4})$/, '$1$2$3');
-			  let smscode = createSmsKey();
+			  smscode = createSmsKey();
 			  $.ajax({
 			    url: "sendSms",
 			    method: "POST",
@@ -110,7 +110,7 @@
 			    },
 			    success: function(response) {
 			      console.log("key: " + smscode);
-			      checkCode(smscode);
+			      //checkCode(smscode);
 						
 			    },
 			    error: function(err) {
@@ -132,13 +132,13 @@
 			let clickCount = 0; //클릭 횟수 제한
 			
 			// sms 인증번호 확인.
-			document.getElementById("codeCheckBtn").addEventListener("click", checkCode);
+			document.getElementById("codeCheckBtn").addEventListener("click", checkCode(smscode));
 			
-			function checkCode(smscode){
+			function checkCode(codesms){
 				console.log(telInput.value);
-				console.log(smscode.toString());
+				console.log(codesms);
 				
-				if(telInput.value !== smscode.toString()){
+				if(telInput.value !== codesms){
 					clickCount++;
 					$("#codeCheck").text("인증번호를 다시 입력하세요");
 					$("#codeCheck").css({
@@ -154,11 +154,12 @@
 						"font-size": "14px"
 					});
 				}
+				
 				if (clickCount >= 5) {
 		      alert("5회 이상 실패하셨습니다.\n본인인증을 다시 진행해주세요.");
 		      window.location.reload();
 				}
-			})
+			}
 			
 			function validateForm() {
 				event.preventDefault();

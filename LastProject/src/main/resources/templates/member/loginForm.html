@@ -50,7 +50,7 @@
                     <!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"> -->
 										<input type="password" id="loginPassword" class="form-control" name="pwd" placeholder="비밀번호를 입력하세요" required>
                     </div>
-                    <div th:if="${session.message} != null"><p th:text="${session.message}" style="color: red; font-size: 12px;"></p></div>
+                    <div th:if="${session.message}"><p th:text="${session.message}" style="color: red; font-size: 12px;"></p></div>
                 </div>
             <div class="col-md-12">
          <span th:if="${membNo == null}">
@@ -75,7 +75,7 @@
 			<!-- <div id="ADimg"></div> -->
 			
 			<script>
-				
+
 			</script>
 <!-- 			
 		<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
