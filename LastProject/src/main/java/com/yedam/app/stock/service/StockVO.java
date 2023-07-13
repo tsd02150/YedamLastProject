@@ -11,4 +11,5 @@ public class StockVO {
 	private Integer tprc;
 	private Integer change;
 	private Integer rate;
+	private Integer vol;
 }

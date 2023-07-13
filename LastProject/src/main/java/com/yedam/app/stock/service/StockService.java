@@ -19,4 +19,6 @@ public interface StockService {
 	public Map<String,Object> deleteIntItem(String membNo ,String itemNo);
 	public String nmGetNo(String nm);
 	public List<BoardVO> getScBoardList(String itemNo);
+	public List<StockVO> topVolChart();
+	public List<StockVO> getPrcPercent(String type);
 }

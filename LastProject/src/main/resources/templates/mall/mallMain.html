@@ -4,14 +4,14 @@
 	layout:decorate="~{layout/layout}">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>mallMain.html</title>
 
-<link rel="stylesheet" type="text/css" href="source/css/mallMain.css">
+<link rel="stylesheet" type="text/css" href="css/mallMain.css">
 <link rel="stylesheet"
 	href="mall/source/plugins/themefisher-font/style.css">
 
 <!-- Main Stylesheet -->
-<link rel="stylesheet" href="mall/theme/css/style.css">
+<link rel="stylesheet" type="text/css" href="mall/theme/css/style.css">
 
 
 <!-- <style>
@@ -20,13 +20,14 @@
 
 
 </head>
-<body>
+<body id="body">
 	<div layout:fragment="content" class="outer-block">
 		<div>
+		<!-- main image -->
 			<div class="hero-slider">
 				<div class="main-img"></div>
 				<div class="slider-item th-fullpage hero-area"
-					style="background-image: url(source/images/main/mainImg.jpg);">
+					style="background-image: url(images/main/mainImg.jpg);">
 					<div class="container">
 						<div class="row">
 
@@ -48,12 +49,12 @@
 			</div>
 		</div>
 
-
+		<!-- second image -->
 		<div>
 			<section>
 				<div class="container-fluid p-sm-0">
 					<div class="row2 featured-post-slider">
-						<div class="col-lg-3 col-sm-6 mb-2 mb-lg-0 px-1">
+						<div class="col-lg-3 col-sm-6 mb-2 mb-lg-0 px-1" >
 							<article
 								class="card bg-dark text-center text-white border-0 rounded-0">
 								<img class="card-img rounded-0 img-fluid w-100"
@@ -71,68 +72,13 @@
 								</div>
 							</article>
 						</div>
-						<div class="col-lg-3 col-sm-6 mb-2 mb-lg-0 px-1">
-							<article
-								class="card bg-dark text-center text-white border-0 rounded-0">
-								<img class="card-img rounded-0 img-fluid w-100"
-									src="images/featured-post/post-2.jpg" alt="post-thumb">
-								<div class="card-img-overlay">
-									<div class="card-content">
-										<p class="text-uppercase">Philosophy</p>
-										<h4 class="card-title mb-4">
-											<a class="text-white" href="blog-single.html">Organize
-												Your Life With 10 Simple rule</a>
-										</h4>
-										<a class="btn btn-outline-light" href="blog-single.html">read
-											more</a>
-									</div>
-								</div>
-							</article>
-						</div>
-						<div class="col-lg-3 col-sm-6 mb-2 mb-lg-0 px-1">
-							<article
-								class="card bg-dark text-center text-white border-0 rounded-0">
-								<img class="card-img rounded-0 img-fluid w-100"
-									src="images/featured-post/post-3.jpg" alt="post-thumb">
-								<div class="card-img-overlay">
-									<div class="card-content">
-										<p class="text-uppercase">Fashion</p>
-										<h4 class="card-title mb-4">
-											<a class="text-white" href="blog-single.html">Organize
-												Your Life With 10 Simple rule</a>
-										</h4>
-										<a class="btn btn-outline-light" href="blog-single.html">read
-											more</a>
-									</div>
-								</div>
-							</article>
-						</div>
-						<div class="col-lg-3 col-sm-6 mb-2 mb-lg-0 px-1">
-							<article
-								class="card bg-dark text-center text-white border-0 rounded-0">
-								<img class="card-img rounded-0 img-fluid w-100"
-									src="images/featured-post/post-4.jpg" alt="post-thumb">
-								<div class="card-img-overlay">
-									<div class="card-content">
-										<p class="text-uppercase">Article</p>
-										<h4 class="card-title mb-4">
-											<a class="text-white" href="blog-single.html">Organize
-												Your Life With 10 Simple rule</a>
-										</h4>
-										<a class="btn btn-outline-light" href="blog-single.html">read
-											more</a>
-									</div>
-								</div>
-							</article>
-						</div>
-
+						
 					</div>
 				</div>
 			</section>
 		</div>
 
-
-		<!-- intro end-->
+		<!-- 정부 바우처 링크 -->
 		<ul class="amount">
 			<li>
 				<div>
@@ -160,7 +106,8 @@
 			</li>
 		</ul>
 		<!-- amount end -->
-
+		
+		<!-- 농산물 -->
 		<div class="main_text0">
 			<h1>농산물</h1>
 			<div class="contents1">당신이 찾는 모든 농산물,
@@ -170,29 +117,30 @@
 				<li th:each="prdt, iterStat : ${product}"
 					th:if="${iterStat.index} >= 1 and ${iterStat.index} <= 3">
 					<div class="icon_img">
-						<img th:src="@{'classpath:images/main/' + ${prdt.img}}">
+						<img th:src="|/mall/images/main/${prdt.img}|">
 					</div>
 					<div th:text="${prdt.nm}" class="contents1_bold"></div>
 					<div th:text="${prdt.desct}" class="contents2"></div> <span
 					th:text="${prdt.prc} + '₩'"></span>
 					<div class="">
-						<a class="btn btn-outline-light" href="blog-single.html">read
+						<a class="btn btn-outline-light" href="farmDetail.html">read
 							more</a>
 					</div>
 				</li>
 			</ul>
 		</div>
-
+	
+		<!-- 수산물 -->
 		<div class="main_text0">
 			<h1>수산물</h1>
 			<div class="contents1">당신이 찾는 모든 해산물,
 신선한 해산물을 우리 집 식탁에서</div>
 
 			<ul class="icons">
-				<li th:each="prdt, iterStat : ${product}"
+				<li class="li" th:each="prdt, iterStat : ${product}"
 					th:if="${iterStat.index} >= 28 and ${iterStat.index} <= 30 ">
 					<div class="icon_img">
-						<img src="image/icon2.svg">
+						<img th:src="|/mall/images/main/${prdt.img}|">
 					</div>
 					<div th:text="${prdt.nm}" class="contents1_bold">치밀한 계획</div>
 					<div th:text="${prdt.desct}" class="contents2"></div> <span
@@ -207,21 +155,19 @@
 	</div>
 
 
-
-
 	<!-- Main jQuery -->
-	<script src="mall/source/plugins/jquery/dist/jquery.min.js"></script>
+	<script src="plugins/jquery/dist/jquery.min.js"></script>
 	<!-- Bootstrap 3.1 -->
-	<script src="mall/source/plugins/bootstrap/js/bootstrap.min.js"></script>
-	<script src="mall/source/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
-	<script src="mall/source/plugins/instafeed/instafeed.min.js"></script>
-	<script src="mall/source/plugins/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
-	<script src="mall/source/plugins/syo-timer/build/jquery.syotimer.min.js"></script>
+	<script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+	<script src="plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
+	<script src="plugins/instafeed/instafeed.min.js"></script>
+	<script src="plugins/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
+	<script src="plugins/syo-timer/build/jquery.syotimer.min.js"></script>
 
-	<script src="mall/source/plugins/slick/slick.min.js"></script>
-	<script src="mall/source/plugins/slick/slick-animation.min.js"></script>
+	<script src="plugins/slick/slick.min.js"></script>
+	<script src="plugins/slick/slick-animation.min.js"></script>
 
-	<script src="mall/source/js/script.js"></script>
+	<script src="mall/js/script.js"></script>
 
 
 </body>

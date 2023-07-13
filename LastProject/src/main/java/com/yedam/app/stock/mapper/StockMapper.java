@@ -37,4 +37,8 @@ public interface StockMapper {
 	public String nmGetNo(String nm);
 	//증권별 최근 게시판 가져오기
 	public List<BoardVO> getScBoardList(String itemNo);
+	// 거래량 top 5 순위 목록
+	public List<StockVO> topVolChart();
+	// 오늘날짜 변동률
+	public List<StockVO> getPrcPercent(String type);
 }
