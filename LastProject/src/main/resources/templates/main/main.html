@@ -59,9 +59,9 @@
 			<div>
 				<div id="login">
 					<div id="loginForm">
-						<form th:if="${session.loggedInMember}==null" action="member/mainLogin" method="post">
-							<input type="email" id="loginemail" class="form-control" th:name="id" placeholder="aaa111@aaa.com">
-							<input type="password" id="loginPassword" class="form-control" th:name="pwd" placeholder="Password" >
+						<form th:if="${session.loggedInMember}==null" action="/member/login" method="post">
+							<input type="email" id="loginemail" class="form-control" name="username" placeholder="aaa111@aaa.com">
+							<input type="password" id="loginPassword" class="form-control" name="pwd" placeholder="Password" >
 							<button class="btn-primary" type="submit">Login</button>
 							<section>
 								<img src="main/source/images/Naver_logo.png" alt="naver_login" width=50px/>

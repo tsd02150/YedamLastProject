@@ -4,8 +4,7 @@ import java.util.List;
 
 public interface MemberService {
 	//로그인
-//	public MembVO loginCheck(MembVO membVO);
-	public MembVO loginCheckInfo(MembVO membVO);
+	public MembVO mainLoginCheck(MembVO membVO);
 	//아이디로 단건조회
 	public MembVO selectOneMemb(String id);
 	public MembVO getMember(MembVO membVO);

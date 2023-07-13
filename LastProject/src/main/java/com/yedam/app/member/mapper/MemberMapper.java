@@ -9,10 +9,8 @@ import com.yedam.app.member.service.MembVO;
 public interface MemberMapper {
 	
 	//login - 회원정보 조회
-	public MembVO loginCheck(String id);
+	public MembVO mainLoginCheck(MembVO membVO);
 	
-	
-	public MembVO loginCheckInfo(MembVO membVO);
 	//role 체크
 	public List<String> selectRole(String id);
 	
