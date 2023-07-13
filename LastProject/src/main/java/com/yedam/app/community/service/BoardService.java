@@ -15,4 +15,8 @@ public interface BoardService {
 	public int getBoardCount(BoardVO vo);
 	// 게시물 작성 카테고리 정보
 	public List<BoardVO> getCtgr(String commonCd);
+	// 멤버번호
+	public String getMembNo(String nick);
+	// 게시물 추가
+	public boolean insertBoard(BoardVO vo); 
 }

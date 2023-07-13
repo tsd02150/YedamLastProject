@@ -22,11 +22,26 @@
 #titlename span:after {
 	width: 150px;
 }
-#writer{
+
+#writer {
 	display: flex;
 }
-#writer input,select{
+
+#writer input, select {
 	width:
+}
+#fileList{
+	display: flex;
+}
+#fileList strong{
+	margin-right: 100px;
+}
+#uploadFileList{
+	list-style: none;
+}
+#uploadFileList span{
+	color: red;
+	margin-left: 10px;
 }
 </style>
 </head>
@@ -36,40 +51,47 @@
 			<h1 class="news-title" id="titlename">
 				<span th:text="${boardInfo.ctgr}">NOTICE</span>
 			</h1>
-			<form id="form" enctype="multipart/form-data" onsubmit="return false">
+			<form id="myForm" onsubmit="return false">
 				<div class="form-group row">
-					<label for="title" class="col-sm-2 col-form-label"><strong>제목</strong></label>
+					<label for="ttl" class="col-sm-2 col-form-label"><strong>제목</strong></label>
 					<div class="col-sm-10">
-						<input type="text" name="title" class="form-control" id="title" ></input>
+						<input type="text" name="ttl" class="form-control" id="ttl"></input>
 					</div>
 				</div>
 				<div class="form-group row">
-						<label for="memberId" class="col-sm-2 col-form-label"><strong>작성자</strong></label>
+					<label for="memberId" class="col-sm-2 col-form-label"><strong>작성자</strong></label>
 					<div class="col-sm-10" id="writer">
-						<input type="text" name="memberName" class="form-control" id="memberName" th:value="${session.loggedInMember.nick}" readonly>
-						<label for="sort" class="col-sm-2 col-form-label"><strong>카테고리</strong></label>
-						<select class="form-control dropdown-toggle" id="sort" name="sort">
-							<option th:each="item:${category}" th:value="${item.commonCd}" th:text="${item.ctgr}">카테고리</option>
+						<input type="text" name="nick" class="form-control" id="nick"
+							th:value="${session.loggedInMember.nick}" readonly> <label
+							for="sort" class="col-sm-2 col-form-label"><strong>카테고리</strong></label>
+						<select class="form-control dropdown-toggle" id="sort" name="commonCd">
+							<option th:each="item:${category}"
+								th:value="${item.commonCd}" th:text="${item.ctgr}">카테고리</option>
 						</select>
 					</div>
 				</div>
 				<div class="form-group row">
 					<label for="contents" class="col-sm-2 col-form-label"><strong>내용</strong></label>
 					<div class="col-sm-10">
-						<textarea name="contents" class="form-control" id="contents"></textarea>
+						<textarea name="cntn" class="form-control" id="cntn"></textarea>
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="files" class="col-sm-2 col-form-label"><strong>첨부 파일</strong></label>
+					<label for="files" class="col-sm-2 col-form-label">
+						<strong>첨부 파일</strong>
+					</label>
 					<div class="col-sm-10">
 						<div class="custom-file" id="inputFile">
-							<input name="files" id="files" type="file" multiple="multiple" class="custom-file-input"> 
-							<label class="custom-file-label" for="customFile">파일을 선택해 주세요.</label>
+							<input name="attachFile" id="attachFile" type="file" multiple class="custom-file-input"> 
+							<label class="custom-file-label" for="AttachFile">파일을 선택해 주세요.</label>
 						</div>
 					</div>
 					<div id="fileList" style="margin: 40px;">
-						<strong>첨부파일 : </strong> <br>
-						<div id=uploadFileList></div>
+						<strong>첨부파일 : </strong>
+						<div>
+							<ul id=uploadFileList>
+							</ul>
+						</div>
 					</div>
 				</div>
 				<div class="row mt-3">
@@ -82,125 +104,72 @@
 			</form>
 
 		</div>
-		<script src="/js/ckeditor/ckeditor.js"></script>
+		<script
+			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+		<script
+			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
+		<script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
 		<script type="text/javascript" th:inline="javascript">
-			$(function() {
-				CKEDITOR.replace(
-					'contents',
-					{
-						filebrowserUploadUrl : '/common/ckeditor/fileUpload',
-						font_names : "맑은 고딕/Malgun Gothic;굴림/Gulim;돋움/Dotum;바탕/Batang;궁서/Gungsuh;Arial/Arial;Comic Sans MS/Comic Sans MS;Courier New/Courier New;Georgia/Georgia;Lucida Sans Unicode/Lucida Sans Unicode;Tahoma/Tahoma;Times New Roman/Times New Roman;MS Mincho/MS Mincho;Trebuchet MS/Trebuchet MS;Verdana/Verdana",
-						font_defaultLabel : "맑은 고딕/Malgun Gothic",
-						fontSize_defaultLabel : "12",
-						skin : "moono-dark",
-						language : "ko"
-					}
-				);
-				$("#files").on("change", function(e) {
-					inputFile(e);
-				});
 
-				$("#btnSave").on("click", function() {
-					saveGallery();
-				});
-				
-				$("#btnCancel").on("click", function() {
-					window.history.back();
-				});
+		let editor;
+		let attachFileList=[];
+		ClassicEditor.create(document.querySelector('#cntn'), {
+				language: "ko",
+				ckfinder: {
+					uploadUrl: '/image/upload'
+				}
+			})
+			.then(newEditor => {
+				editor = newEditor;
+			})
+			.catch(error => {
+				console.error(error);
 			});
+
+		//ckEditor 데이터 가져오기
+		$('#btnSave').on('click', function () {
+			let ckData = editor.getData()
+			console.log("ckData: "+ckData)
+			let formData = $('#myForm').serializeObject()
+			formData.cntn = ckData
 			
-			var fileCount = 0;
-			var totalCount = 10;
-			var fileNum = 0;
-			var inputFileList = new Array();
-			var deleteFileList = new Array();
+			console.log("formData : "+formData)
+			console.log("Attach : "+formData.attachFile)
+
+			$.ajax({
+				url:"addBoard",
+				method : "POST",
+				data : formData
+			})
+			.done(function(result){
+				alert('success');
+				location.href="/community/boardList?commonCd="+[[${boardInfo.commonCd}]]
+			})
+			.fail(function(result){
+				alert('fail');
+			})
+		})
+		
+		$("#attachFile").on('change',function(){
+			var inputFile = $("#attachFile");
+			// input 태그의 type이 file인것을 찾아서 inputFile이라는 변수로 지정
 			
-			function inputFile(e) {
-				
-				var files = e.target.files;
-
-				var filesArr = Array.prototype.slice.call(files);
-
-				if (fileCount + filesArr.length > totalCount) {
-					alert('파일은 최대 ' + totalCount + '개까지 업로드 할 수 있습니다.');
-					return;
-				} else {
-					fileCount = fileCount + filesArr.length;
-				}
-
-				filesArr.forEach(function(f) {
-					var reader = new FileReader();
-					reader.onload = function(e) {
-						inputFileList.push(f);
-						$('#uploadFileList').append('<div id="file' + fileNum + '">' 
-								+ '<span style="font-size:15px">' + f.name + '</span>'
-								+ '&nbsp;<button type="button" onclick="fileDelete(\'file' + fileNum + '\')" class="btn btn-danger btn-xs">X</button><div/>');
-						fileNum++;
-					};
-					reader.readAsDataURL(f);
-				});
-				$("#files").val("");
+			var files = inputFile[0].files;
+			// files: 선택한 모든 파일을 나열하는 FileList 객체
+			// multiple 특성을 지정하지 않았다면 두 개 이상의 파일을 포함하지 않습니다.
+			for(var i=0;i<files.length;i++){
+				let liTag=document.createElement("li");
+				let spanTag=document.createElement("span");
+				liTag.append(files[i].name);
+				spanTag.innerHTML="&times;";
+				liTag.append(spanTag);
+				uploadFileList.append(liTag);
+				attachFileList.push(files[i].name);
 			}
-
-			function deleteFile(elem) {
-				
-				console.log(elem.value);
-				$(elem).parent().remove();
-				
-				if (!deleteFileList.includes(elem.value)) {
-					deleteFileList.push(elem.value);
-				}
-			}
-
-			function fileDelete(fileNum) {
-				
-				var no = fileNum.replace(/[^0-9]/g, "");
-				inputFileList[no].is_delete = true;
-				$('#' + fileNum).remove();
-				fileCount--;
-			}
-
-
-			function saveGallery() {
-				
-				if (!confirm("저장하시겠습니까?")) {
-					return;
-				}
-
-			 	var formData = new FormData($("form")[0]);
-			 	
-				formData.append("deleteFiles", deleteFileList);
-				formData.set("contents", CKEDITOR.instances.contents.getData());
-
-				for (var i = 0; i < inputFileList.length; i++) {
-					if(!inputFileList[i].is_delete){
-						 formData.append("files", inputFileList[i]);
-					}
-				}
-
-				for (var pair of formData.entries()) { 
-					console.log(pair[0]+ ', ' + pair[1]); 
-				}
-				
-				$.ajax({
-					type : "POST",
-					enctype : "multipart/form-data",
-					url : "/gallery",
-					data : formData,
-					dataType:"json",
-					processData : false,
-					contentType : false,
-					success : function(result) {
-						if (result.response == "OK") {
-							alert("저장되었습니다.");
-							location.href = "/community/boardList?commonCd="+[[${boardInfo.commonCd}]];
-						} else {
-							alert(result.errorMsg);
-						}
-					},
-				});
-			}
+		})
+		$("#uploadFileList").on('click','span',function(){
 			
+		})
 		</script>
 	</div>
 </body>

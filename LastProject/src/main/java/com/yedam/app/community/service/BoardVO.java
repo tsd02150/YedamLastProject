@@ -1,6 +1,7 @@
 package com.yedam.app.community.service;
 
 import java.sql.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -25,8 +26,6 @@ public class BoardVO {
 	private int rcom;
 	// 비추천수
 	private int nrcom;
-	// 사진
-	private String img;
 	// 공통코드
 	private String commonCd;
 	
@@ -40,4 +39,7 @@ public class BoardVO {
 	// 페이징용
 	private int page;
 	private int totalCnt;
+	
+	// 파일첨부
+	private List<String> attachFile;
 }

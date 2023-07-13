@@ -45,5 +45,15 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.getCtgr(commonCd);
 	}
 
+	@Override
+	public String getMembNo(String nick) {
+		return boardMapper.getMembNo(nick);
+	}
+
+	@Override
+	public boolean insertBoard(BoardVO vo) {
+		return boardMapper.insertBoard(vo)>0;
+	}
+
 	
 }

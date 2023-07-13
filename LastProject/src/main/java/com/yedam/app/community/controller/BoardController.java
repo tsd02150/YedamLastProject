@@ -26,45 +26,52 @@ import com.yedam.app.member.service.MembVO;
 @Controller
 @RequestMapping("community")
 public class BoardController {
-	
+
 	@Autowired
 	BoardService boardService;
-	
+
 	// 게시판 목록 출력
 	@GetMapping("boardList")
-	public String getBoard(Model model,BoardVO vo) {
-		model.addAttribute("boardCode",vo.getCommonCd().substring(0,2));
-		model.addAttribute("boardName",boardService.getBoardName(vo.getCommonCd().substring(0,2)));
+	public String getBoard(Model model, BoardVO vo) {
+		model.addAttribute("boardCode", vo.getCommonCd().substring(0, 2));
+		model.addAttribute("boardName", boardService.getBoardName(vo.getCommonCd().substring(0, 2)));
 		return "community/boardList";
 	}
-	
+
 	// 게시판 전체
 	@PostMapping("getBoardList")
 	@ResponseBody
-	public List<BoardVO> getBoardList(BoardVO vo) {  
+	public List<BoardVO> getBoardList(BoardVO vo) {
 		return boardService.getBoardList(vo);
 	}
-	
+
 	// 게시물 개수
 	@PostMapping("getBoardCount")
 	@ResponseBody
 	public int getBoardCount(BoardVO vo) {
 		return boardService.getBoardCount(vo);
 	}
-	
+
 	@GetMapping("addBoard")
-	public String addBoardForm(Model model,BoardVO boardVo, HttpSession session) {
-		model.addAttribute("boardInfo",boardVo);
+	public String addBoardForm(Model model, BoardVO boardVo, HttpSession session) {
+		model.addAttribute("boardInfo", boardVo);
 		System.out.println(boardService.getCtgr(boardVo.getCommonCd()));
-		model.addAttribute("category",boardService.getCtgr(boardVo.getCommonCd()));
+		model.addAttribute("category", boardService.getCtgr(boardVo.getCommonCd()));
 		return "community/insertBoard";
 	}
-	
+
 	@PostMapping("addBoard")
-	public void addBoard() {
-		
+	@ResponseBody
+	public String addBoard(BoardVO vo) {
+		System.out.println(vo);
+		vo.setMembNo(boardService.getMembNo(vo.getNick()));
+		boolean result = boardService.insertBoard(vo);
+
+		if (result) {
+			return "success";
+		} else {
+			return "fail";
+		}
 	}
-	
-	
 
 }

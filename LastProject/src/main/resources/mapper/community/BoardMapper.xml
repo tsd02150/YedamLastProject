@@ -74,4 +74,19 @@
 		FROM COMMON_CODE
 		WHERE common_cd LIKE #{commonCd}||'0%'
 	</select>
+	
+	<select id="getMembNo" resultType="String">
+		SELECT memb_no
+		FROM MEMBER
+		WHERE nick=#{nick}
+	</select>
+	
+	<insert id="insertBoard" parameterType="BoardVO">
+		<selectKey keyProperty="boardNo" resultType="string" order="BEFORE">
+			SELECT CONCAT('boa-',NVL(MAX(TO_NUMBER(SUBSTR(board_no, 5))), 0)+1)
+			FROM BOARD
+		</selectKey>
+		INSERT INTO BOARD(board_no,memb_no,ttl,cntn,drwup_dt,common_cd)
+		VALUES(#{boardNo},#{membNo},#{ttl},#{cntn},sysdate,#{commonCd})
+	</insert>
 </mapper>
