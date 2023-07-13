@@ -36,15 +36,9 @@ public class WebSecurityConfig{
 	      http
 	      	 .csrf().disable()
 	         .authorizeHttpRequests()
-<<<<<<< HEAD
-	         .antMatchers("/","/member/survey", "/stock/**","/comunity/**","../static/**").permitAll()
-//	         .antMatchers("/community/chat")
-	         //.authenticated().anyRequest().authenticated()
-=======
 	         .antMatchers("/","/member/survey", "/stock/**", "/comunity/**","/static/**").permitAll()
 	         .antMatchers("/member/mypage").authenticated()
 //	         .anyRequest().authenticated()
->>>>>>> branch 'main' of https://github.com/tsd02150/YedamLastProject.git
 	         .anyRequest().permitAll()
 	         .and()
 	         .formLogin() // 로그인하는 경우에 대해 설정
