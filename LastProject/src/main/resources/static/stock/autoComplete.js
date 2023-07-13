@@ -246,8 +246,27 @@ function addInterest() {
   			})
   		$('#zxc ol').html(html);
   		
-  		
   		})
+  		
+  		//호가
+  		//매도
+  		let itemNo = $('p[data-in]').data('in');
+  		$.ajax('orderTable?type=sell&itemNo='+itemNo).done(function(data){
+  			let html='';
+  			data.forEach(dt => {
+  				html+=`<tr><td class="minus">${dt.CNT}</td><td>${dt.PRC}</td></tr>`
+  			})
+  			$('#sell').html(html);
+  		})
+  		//매수
+  		$.ajax('orderTable?type=buy&itemNo='+itemNo).done(function(data){
+  			let html='';
+  			data.forEach(dt => {
+  				html+=`<tr><td>${dt.PRC}</td><td class="plus">${dt.CNT}</td></tr>`
+  			})
+  			$('#buy').html(html);
+  		})
+  		
   },3000);
   
   
@@ -272,7 +291,23 @@ function addInterest() {
   		})//end 하락률
   		
   		//호가
-  		
-  		
+  		//매도
+  		let itemNo = $('p[data-in]').data('in');
+  		$.ajax('orderTable?type=sell&itemNo='+itemNo).done(function(data){
+  			data.forEach(dt => {
+  				console.log(dt)
+  				$('#sell').append($('<tr/>').append($('<td class="minus"/>').text(dt.CNT))
+  										.append($('<td/>').text(dt.PRC)))
+  			})
+  			
+  		})
+  		//매수
+  		$.ajax('orderTable?type=buy&itemNo='+itemNo).done(function(data){
+  			data.forEach(dt => {
+  				$('#buy').append($('<tr/>').append($('<td/>').text(dt.PRC))
+  										.append($('<td class="plus"/>').text(dt.CNT)))
+  			})
+  			
+  		})
 	});
   	

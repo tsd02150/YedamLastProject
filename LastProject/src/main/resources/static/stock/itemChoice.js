@@ -66,7 +66,7 @@
 		  }
 		  
 		  $("#allList").html(list);
-		}
+		}//displayData end
 		
 		//페이징
 		function paging(totalData, dataPerPage, pageCount, currentPage) {
@@ -126,7 +126,7 @@
 			    //글 목록 표시 재호출
 			    displayData(selectedPage, dataPerPage);
 			  });
-			}
+			}//paging end
 		
 		
         //2초마다 인기검색어 순위 / 종목정보 변동 가져오기

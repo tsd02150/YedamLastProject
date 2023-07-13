@@ -150,6 +150,12 @@ public class StockServiceImpl implements StockService {
 		return stockMapper.getPrcPercent(type);
 	}
 	
+	//호가 데이터
+	@Override
+	public List<Map<String,Object>> orderTable(String type, String itemNo) {
+		return stockMapper.orderTable(type, itemNo);
+	}
+	
 	
 	
 	

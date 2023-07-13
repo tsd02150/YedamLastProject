@@ -41,4 +41,6 @@ public interface StockMapper {
 	public List<StockVO> topVolChart();
 	// 오늘날짜 변동률
 	public List<StockVO> getPrcPercent(String type);
+	// 호가 데이터
+	public List<Map<String,Object>> orderTable(@Param("type")String type , @Param("itemNo")String itemNo);
 }
