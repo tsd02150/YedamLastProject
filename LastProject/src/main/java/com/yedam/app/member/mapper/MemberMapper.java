@@ -18,7 +18,7 @@ public interface MemberMapper {
 	public MembVO selectOneMemb(String id);
 	
 	//member 정보 조회
-	public MembVO getMember(MembVO membVO);
+	public MembVO getMemberTel(MembVO membVO);
 	
 	//닉네임 중복확인
 	public int nickCheck(String nick);
@@ -44,9 +44,9 @@ public interface MemberMapper {
 	public List<InterestVO> myItemCheck(); // 데이터 쌓이면 상승률 기준 list로 바꿔야함
 	
 	// 아이디 찾기 - 이름, 연락처 비교 & 이름, 연락처, id 조회
-	public List<MembVO> findIdSelect(MembVO membVO);
+	public MembVO findIdSelect(MembVO membVO);
 	
 	//관심종목 추가
-	public int insertInterestItem(MembVO membVO);	
+	public int insertInterestItem(MembVO membVO);
 
 }

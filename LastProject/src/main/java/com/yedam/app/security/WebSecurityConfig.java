@@ -35,7 +35,7 @@ public class WebSecurityConfig{
 	      http
 	      	 .csrf().disable()
 	         .authorizeHttpRequests()
-	         .antMatchers("/","/member/survey", "/stock/**", "/comunity/**","../static/**").permitAll()
+	         .antMatchers("/","/member/survey", "/stock/**","/comunity/**","../static/**").permitAll()
 //	         .antMatchers("/community/chat")
 	         //.authenticated().anyRequest().authenticated()
 	         .anyRequest().permitAll()
@@ -43,6 +43,7 @@ public class WebSecurityConfig{
 	         .and()
 	         .formLogin() // 로그인하는 경우에 대해 설정
 	         //.loginProcessingUrl("/member/login")
+	         //.usernameParameter("id")
 	         .passwordParameter("pwd")
 	         .successHandler(authenticationSuccessHandler())
 	         .failureHandler(authenticationFailureHandler())

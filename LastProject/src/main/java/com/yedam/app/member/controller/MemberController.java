@@ -201,9 +201,9 @@ public class MemberController {
 		System.out.println("임시비밀번호 : " + code);
 		
 		//기존 비밀번호 임시 비밀번호로 수정.
-		membVO.setPwd(code);
+		membVO.setPwd(pwEncoder.encode(code));
 		membVO.setId(id);
-		membVO.setTempPwd(code);
+		membVO.setTempPwd(pwEncoder.encode(code));
 		membService.updatePwd(membVO);
 		
 		return code;
@@ -289,13 +289,15 @@ public class MemberController {
 	//id찾기 이름-연락처 비교
 	@ResponseBody
 	@GetMapping("findIdCheck")
-	public List<MembVO> findIdSelectCheck(MembVO membVO,String nm, String tel, Model model) {
+	public MembVO findIdSelectCheck(MembVO membVO,String nm, String tel, Model model) {
 		membVO.setNm(nm);
 		membVO.setTel(tel);
-		System.out.println(membService.findIdSelect(membVO));
-		return membService.findIdSelect(membVO);
+		MembVO membInfo = membService.findIdSelect(membVO);
+		model.addAttribute("membInfo", membInfo);
+		return membInfo;
 	}
 	
+	//@ResponseBody
 	@PostMapping("findIdSuccess")
 	public String findIdSuccessPage(@RequestParam String id, Model model) {
 		model.addAttribute("id", id);
@@ -304,11 +306,11 @@ public class MemberController {
 	
 	//tel 정보 비교
 	@ResponseBody
-	@GetMapping("getMember")
-	public MembVO idChecks(String tel, String nm, MembVO membVO, Model model) {
+	@PostMapping("getMemberTel")
+	public MembVO getMemberTel(@RequestParam String tel, @RequestParam String nm, MembVO membVO, Model model) {
 		membVO.setTel(tel);
 		membVO.setNm(nm);
-		MembVO result = membService.getMember(membVO);
+		MembVO result = membService.getMemberTel(membVO);
 		return result;
 	}
 }

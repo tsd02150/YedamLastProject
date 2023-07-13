@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 
 import com.yedam.app.security.service.UserService;
 import com.yedam.app.security.service.UserVO;
@@ -27,15 +28,18 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 	      HttpSession session = request.getSession();
 	      UserVO userVO = (UserVO) authentication.getPrincipal();
 	      System.out.println(userVO);
-	      
-	 
-	    	  System.out.println(userVO.getTempPwd());
-	    	  if(userVO.getTempPwd() == null) {
-	    		  session.setAttribute("loggedInMember", userVO);  
-	    		  response.sendRedirect("/");
-	    	  } else {
-	    		  session.setAttribute("loggedInMember", userVO.getId());  
-	    		  response.sendRedirect("/member/tempPwdUpdate");
-	    	  }
+      
+    	  System.out.println(userVO.getTempPwd());
+    	  if(userVO.getTempPwd() == null) {
+    		  System.out.println("======");
+    		  System.out.println(userVO);
+    		  System.out.println("======");
+    		  //request.getSession().setAttribute("loggedInMember", userVO);
+    		  session.setAttribute("loggedInMember", userVO);
+    		  response.sendRedirect("/");
+    	  } else {
+    		  session.setAttribute("loggedInMember", userVO.getId());  
+    		  response.sendRedirect("/member/tempPwdUpdate");
+    	  }
 	   }
 	}

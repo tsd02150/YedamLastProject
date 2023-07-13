@@ -83,7 +83,7 @@ public class MemberServiceImpl implements MemberService {
 
 	// id 찾기 시 정보 조회
 	@Override
-	public List<MembVO> findIdSelect(MembVO membVO) {
+	public MembVO findIdSelect(MembVO membVO) {
 		return membMapper.findIdSelect(membVO);
 	}
 
@@ -93,13 +93,12 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public MembVO getMember(MembVO membVO) {
-		return membMapper.getMember(membVO);
+	public MembVO getMemberTel(MembVO membVO) {
+		return membMapper.getMemberTel(membVO);
 	}
 
 	@Override
 	public MembVO mainLoginCheck(MembVO membVO) {
 		return membMapper.mainLoginCheck(membVO);
 	}
-
 }
