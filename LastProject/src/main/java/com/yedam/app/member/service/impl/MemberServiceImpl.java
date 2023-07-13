@@ -18,17 +18,13 @@ public class MemberServiceImpl implements MemberService {
 	MemberMapper membMapper;
 
 	//로그인
-//	@Override
-//	public MembVO loginCheck(MembVO membVO) {
-//		return membMapper.loginCheck(membVO);
-//	}
-	
+
 	//임시 비밀번호 발급 후 로그인
 //	@Override
 //	public MembVO loginCheckPwd(MembVO membVO) {
-//		return membMapper.loginCheckPwd(membVO);
+////		return membMapper.loginCheckPwd(membVO);
 //	}
-//	
+		
 	//아이디로 단건조회
 	@Override
 	public MembVO selectOneMemb(String id) {
@@ -97,15 +93,13 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public MembVO loginCheckInfo(MembVO membVO) {
-		return membMapper.loginCheckInfo(membVO);
-	}
-
-	@Override
 	public MembVO getMember(MembVO membVO) {
 		return membMapper.getMember(membVO);
 	}
 
-
+	@Override
+	public MembVO mainLoginCheck(MembVO membVO) {
+		return membMapper.mainLoginCheck(membVO);
+	}
 
 }

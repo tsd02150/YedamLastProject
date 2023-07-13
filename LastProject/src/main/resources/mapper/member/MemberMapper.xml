@@ -5,27 +5,19 @@
 <mapper namespace="com.yedam.app.member.mapper.MemberMapper">
 
 	<!-- login 시 회원 정보 조회 -->
-	<select id="loginCheck" resultType="String">
+	<select id="mainLoginCheck" resultType="MembVO">
 		SELECT * FROM MEMBER
 		WHERE id = #{id}
+		AND   pwd = #{pwd}
 	</select>
-	
-	<select id="loginCheckInfo" resultType="MembVO">
-		SELECT * FROM MEMBER
-		WHERE id = #{id}
-		AND pwd = #{pwd}
-	</select>
-	
-	<select id="selectRole" resultType="String">
-		SELECT * FROM member
-		WHERE id = #{id}
-	</select>
-	
+
 	<!-- 아이디로 단건조회 -->
 	<select id="selectOneMemb" resultType="MembVO" parameterType="String">
 		SELECT * 
-		FROM   MEMBER 
-		WHERE  id = #{id}
+		FROM member 
+		JOIN address 
+		USING(memb_no)
+		WHERE id = #{id}
 	</select>
 	
 	<select id="getMember" parameterType="MembVO" resultType="MembVO">

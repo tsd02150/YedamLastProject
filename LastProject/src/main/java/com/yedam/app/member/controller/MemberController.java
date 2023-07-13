@@ -64,33 +64,31 @@ public class MemberController {
 	}
 	
 	//로그인 페이지
-//	@GetMapping("login")
-//	public String loginForm() {
-//		return "member/loginForm";
-//	}
-// 
-	@PostMapping("mainLogin")
-	public String loginPost(MembVO membVO, Model model, HttpSession session) {
-		//로그인 정보 비교
-		MembVO loggedInMember = membService.selectOneMemb(membVO.getId());
-		System.out.println("login Post" + loggedInMember);
-		if (loggedInMember.getTempPwd() == null) {
-	        // 로그인 성공한 경우
-	        session.setAttribute("loggedInMember", loggedInMember); // 세션에 member 정보 저장
-	        System.out.println("로그인성공");
-	        return "redirect:/"; // 로그인 후 메인 페이지로 리다이렉트
-	    } else if(loggedInMember.getTempPwd() != null){
-	    	model.addAttribute("id", loggedInMember.getId());
-	    	session.setAttribute("loggedInMember", loggedInMember); // 세션에 member 정보 저장
-	    	System.out.println("로그인성공(임시비밀번호)");
-	    	return "member/tempPwdUpdate";
-	    } else {
+	/*@PostMapping("mainLogin")
+	public String loginPost(@RequestParam String id, @RequestParam String pwd, MembVO membVO, Model model, HttpSession session) {
+		System.out.println(membService.selectOneMemb(id).getPwd());
+		System.out.println(membVO.getPwd());
+		if(pwEncoder.matches(membService.selectOneMemb(id).getPwd(), membVO.getPwd())) {
+			MembVO loggedInMember = membService.mainLoginCheck(membVO);
+			System.out.println(loggedInMember);
+			if (loggedInMember.getTempPwd() == null) {
+				// 로그인 성공한 경우
+				session.setAttribute("loggedInMember", loggedInMember); // 세션에 member 정보 저장
+				System.out.println("로그인성공");
+				return "redirect:/"; // 로그인 후 메인 페이지로 리다이렉트
+			} else{
+				model.addAttribute("id", loggedInMember.getId());
+				session.setAttribute("loggedInMember", loggedInMember); // 세션에 member 정보 저장
+				System.out.println("로그인성공(임시비밀번호)");
+				return "member/tempPwdUpdate";
+			}
+		}else {
 	        // 로그인 실패한 경우
 	    	System.out.println("일반 로그인 실패");
 	    	model.addAttribute("message", "아이디 또는 비밀번호가 틀렸습니다."); // 세션에 member 정보 저장	    	
 	        return "redirect:/"; // 로그인 실패 시 다시 loginForm 호출
 	    }
-	}
+	}*/
 	
 	//회원가입 Form
 	@GetMapping("join")
@@ -101,24 +99,14 @@ public class MemberController {
 	//회원가입 - member insert
 	@PostMapping("join")
 	public String joinMemb(MembVO membVO, AddrVO addrVO, Model model) {
-		String rawPwd = "";
-        String encodePwd = "";
         
 		if(addrVO.getZip().isEmpty()) { // 주소 입력하지 않았을 경우
-			//비밀번호 암호화
-			rawPwd = membVO.getPwd();
-			encodePwd = pwEncoder.encode(rawPwd);
-			System.out.println("암호화 비밀번호"+encodePwd);
-			membVO.setPwd(encodePwd);
+			membVO.setPwd(pwEncoder.encode(membVO.getPwd()));//비밀번호 암호화
 			membService.signUpMemb(membVO);
 			System.out.println(membVO);
 			System.out.println(addrVO);
 		} else if(!addrVO.getZip().isEmpty()){ // 주소 입력했을 경우
-			//비밀번호 암호화
-			rawPwd = membVO.getPwd();
-			encodePwd = pwEncoder.encode(rawPwd);
-			membVO.setPwd(encodePwd);
-			
+			membVO.setPwd(pwEncoder.encode(membVO.getPwd()));//비밀번호 암호화
 			membService.signUpMemb(membVO);
 	        membVO.setMembNo(membService.getLastMembNo()); // membNo 값을 가져와서 membVO에 설정
 	        addrVO.setMembNo(membVO.getMembNo()); // membNo 값을 addrVO에 설정
@@ -242,33 +230,34 @@ public class MemberController {
 		return "member/tempPwdSuccess";
 	}
 	
-	
 	//임시 비밀번호 변경
 	@GetMapping("tempPwdUpdate")
 	public String tempPwdUpdate() {
 		return "member/tempPwdUpdate";
 	}
 	
-//	@PostMapping("tempPwdUpdate")
-//	public String tempPwdUpdate(MembVO membVO, HttpSession session, Model model) {
-//		if(membService.loginCheckPwd(membVO) !=null) {
-//			int result = membService.updateTempPwd(membVO);
-//			
-//			if(result == 1) {
-//				session.setAttribute("loggedInMember", membService.loginCheck(membVO.getId()));
-//				System.out.println("비밀번호 변경 성공");
-//				return "redirect:/";							
-//			}else {
-//				model.addAttribute("id",membVO.getId());
-//				System.out.println("비밀번호 변경 실패");
-//				return "member/tempPwdUpdate";
-//			}
-//		} else {
-//			model.addAttribute("id",membVO.getId());
-//			model.addAttribute("message","비밀번호가 일치하지 않습니다. 다시 확인해주세요");
-//			return "member/tempPwdUpdate";
-//		}
-//	}
+	@PostMapping("tempPwdUpdate")
+	public String tempPwdUpdate(MembVO membVO, HttpSession session, Model model) {
+		MembVO loggedInMember = membService.selectOneMemb(membVO.getId());
+		System.out.println(loggedInMember);
+		if(pwEncoder.matches(membVO.getPwd(),loggedInMember.getPwd())) {
+			membVO.setPwd(pwEncoder.encode(membVO.getPwd()));//비밀번호 암호화
+			int result = membService.updateTempPwd(membVO);
+			if(result == 1) {
+				session.setAttribute("loggedInMember", loggedInMember);
+				System.out.println("비밀번호 변경 성공");
+				return "redirect:/";							
+			}else {
+				model.addAttribute("id",membVO.getId());
+				System.out.println("비밀번호 변경 실패");
+				return "member/tempPwdUpdate";
+			}
+		} else {
+			model.addAttribute("id",membVO.getId());
+			model.addAttribute("message","비밀번호가 일치하지 않습니다. 다시 확인해주세요");
+			return "member/tempPwdUpdate";
+		}
+	}
 	
 	//관심종목 리스트 정보
 	@ResponseBody

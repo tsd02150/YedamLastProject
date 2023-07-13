@@ -15,6 +15,7 @@ import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 
 import com.yedam.app.security.service.UserService;
+import com.yedam.app.security.service.UserVO;
 
 public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
@@ -25,10 +26,19 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 
-		System.out.println("customHandler 성공");
-
-//		HttpSession session = session.setAttribute("lo", authentication);
-//		session.setAttribute(null, session);
-		response.sendRedirect("/");
+		 System.out.println("success handler 실행");
+	      HttpSession session = request.getSession();
+	      UserVO userVO = (UserVO) authentication.getPrincipal();
+	      System.out.println(userVO);
+	      
+	 
+	    	  System.out.println(userVO.getTempPwd());
+	    	  if(userVO.getTempPwd() == null) {
+	    		  session.setAttribute("loggedInMember", userVO);  
+	    		  response.sendRedirect("/");
+	    	  } else {
+	    		  session.setAttribute("loggedInMember", userVO.getId());  
+	    		  response.sendRedirect("/member/tempPwdUpdate");
+	    	  }
+	   }
 	}
-}
