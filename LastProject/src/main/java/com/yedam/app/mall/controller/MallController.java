@@ -25,10 +25,8 @@ public class MallController {
 	public String mallMain(Model model) {
 		List<ProductVO> list = mallService.getProductList();
 		model.addAttribute("product", list);
-		
 		return "mall/mallMain";
 	}
-	
 	
 	// 농산물 페이지
 	@GetMapping("farmList")
@@ -36,6 +34,14 @@ public class MallController {
 		List<ProductVO> farmList = mallService.getProductList();
 		model.addAttribute("farmList", farmList);
 		return "mall/farmList";
+	}
+	
+	//농산물 상세 페이지
+	@GetMapping("getFarm")
+	public String farmDetail(Model model) {
+		List<ProductVO> farmList = mallService.getProductList();
+		model.addAttribute("farmList", farmList);
+		return "mall/getFarm";
 	}
 
 	// 수산물 페이지
@@ -47,11 +53,10 @@ public class MallController {
 	}
 	
 	//장바구니
-	@GetMapping("basket")
+	@GetMapping("basketList")
 	public String basket(Model model) {
 		
-		
-		return "mall/basket";
+		return "mall/basketList";
 	}
 	
 	

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head>
+<meta charset="UTF-8">
+<title>getFarm.html</title>
+
+<link rel="stylesheet" type="text/css" href="css/getFarm.css">
+<link rel="stylesheet" type="text/css" href="mall/theme/css/style.css">
+
+
+</head>
+<body id="body">
+	<div layout:fragment="content" class="outer-block">
+		<div class="row mt-20">
+			<div class="col-md-5">
+				<div class="single-product-slider">
+					<div id='carousel-custom' class='carousel slide' data-ride='carousel'>
+						<div class='carousel-outer'>
+							<!-- me art lab slider -->
+							<div class='carousel-inner '>
+								<div class='item active' th:each="prdt : ${product}">
+									<img th:src="|/mall/images/main/${prdt.img}|" alt=''/>
+								</div>
+							</div>
+							
+							<!-- sag sol -->
+							<a class='left carousel-control' href='#carousel-custom' data-slide='prev'>
+								<i class="tf-ion-ios-arrow-left"></i>
+							</a>
+							<a class='right carousel-control' href='#carousel-custom' data-slide='next'>
+								<i class="tf-ion-ios-arrow-right"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-7">
+				<div class="single-product-details">
+					<h2>Eclipse Crossbody</h2>
+					<p class="${product.prc}">${product.prc}</p>
+					
+					<p class="product-description mt-20">
+						Lorem ipsum dolor sit amet,
+					</p>
+					<p>Lorem ipsum dolor sit amet </p>
+					<div class="color-swatches">
+						<span>color:</span>
+						<ul>
+							<li>
+								<a href="#!" class="swatch-violet"></a>
+							</li>
+							<li>
+								<a href="#!" class="swatch-black"></a>
+							</li>
+							<li>
+								<a href="#!" class="swatch-cream"></a>
+							</li>
+						</ul>
+					</div>
+					<div class="product-size">
+						<span>Size:</span>
+						<select class="form-control">
+							<option>S</option>
+							<option>M</option>
+							<option>L</option>
+							<option>XL</option>
+						</select>
+					</div>
+					<div class="product-quantity">
+						<span>Quantity:</span>
+						<div class="product-quantity-slider">
+							<input id="product-quantity" type="text" value="0" name="product-quantity">
+						</div>
+					</div>
+					<div class="product-category">
+						<span>Categories:</span>
+						<ul>
+							<li><a href="product-single.html">Products</a></li>
+							<li><a href="product-single.html">Soap</a></li>
+						</ul>
+					</div>
+					<a href="cart.html" class="btn btn-main mt-20">Add To Cart</a>
+				</div>
+			</div>
+		</div>
+	
+	</div>
+</body>
+</html>

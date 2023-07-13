@@ -18,6 +18,7 @@
 	height: 100%;
 }
 
+
 #chart {
 	width: 800px;
 	height: 400px;
@@ -333,7 +334,7 @@ a {
 	border-collapse: collapse;
 	margin: 0px;
 	padding: 0px;
-	color: #000;
+	
 }
 
 h1 {
@@ -400,12 +401,12 @@ h1 {
 .main_text0 {
 	width: 1100px;
 	height: 601px;
-	margin-top: -132px;
+
 	background: #f1f2f3;
 }
 
 .main_text0>h1 {
-	padding-top: 165px;
+	padding-top: 50px;
 	text-align: center;
 }
 
@@ -425,12 +426,18 @@ h1 {
 	flex: 1;
 	background: white;
 	margin-top: 49px;
-	height: 302px;
+	height: 100%;
 	text-align: center;
 }
 
 .icons>li>.icon_img {
-	margin-top: 18px;
+	
+	display: flex;
+	height: 100%;
+	width: 100%;
+	align-item : center;
+	justify-content: center;
+	
 }
 
 .icons>li:not(:last-child) {
