@@ -14,10 +14,10 @@
 	<!-- 아이디로 단건조회 -->
 	<select id="selectOneMemb" resultType="MembVO" parameterType="String">
 		SELECT * 
-		FROM member 
-		JOIN address 
-		USING(memb_no)
-		WHERE id = #{id}
+		FROM member m
+		LEFT OUTER JOIN address a
+    ON m.memb_no = a.memb_no
+		WHERE id  = #{id}
 	</select>
 	
 	<select id="getMemberTel" parameterType="MembVO" resultType="MembVO">
@@ -125,11 +125,14 @@
               WHERE 	to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
               ) i 		--전일주가정보
         JOIN ( 
-        			SELECT 	nm,i.item_no, MAX(ta_dt) , ta_prc prc
-              FROM 		ta_hr t JOIN item i 
-              ON 			i.item_no = t.item_no
-              GROUP 	BY nm,i.item_no,ta_prc
-              ORDER 	by item_no ) t  		-- 최근 체결가
+        			select distinct(a.item_no),nm,dt,ta_prc prc
+                     from(   SELECT nm,i.item_no, MAX(ta_dt) dt
+                           FROM ta_hr t join item i 
+                           on i.item_no = t.item_no
+                           GROUP BY nm,i.item_no
+                           order by item_no) a join ta_hr t
+                     on a.item_no= t.item_no and a.dt=t.ta_dt
+                     order by 1) t  		-- 최근 체결가
         ON 		i.item_no = t.item_no
         JOIN ( 
         			SELECT 	CASE SUBSTR(common_cd,1,2) 

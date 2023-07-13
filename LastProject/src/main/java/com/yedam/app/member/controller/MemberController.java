@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +51,7 @@ public class MemberController {
 	//회원관리
 	@GetMapping("mypage")
 	public String myPageForm() {
-		return "member/myPageInfo";
+		return "member/mypage";
 	}
 	
 	//로그아웃
@@ -239,8 +238,13 @@ public class MemberController {
 	@PostMapping("tempPwdUpdate")
 	public String tempPwdUpdate(MembVO membVO, HttpSession session, Model model) {
 		MembVO loggedInMember = membService.selectOneMemb(membVO.getId());
+		System.out.println("=========>");
 		System.out.println(loggedInMember);
-		if(pwEncoder.matches(membVO.getPwd(),loggedInMember.getPwd())) {
+		System.out.println(membVO.getTempPwd());
+		System.out.println(loggedInMember.getPwd());
+		
+		System.out.println(pwEncoder.matches(membVO.getPwd(),loggedInMember.getPwd()));
+		if(pwEncoder.matches(membVO.getTempPwd(),loggedInMember.getPwd())) { //암호화된 비밀번호 맞는지 확인
 			membVO.setPwd(pwEncoder.encode(membVO.getPwd()));//비밀번호 암호화
 			int result = membService.updateTempPwd(membVO);
 			if(result == 1) {
