@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -34,21 +35,23 @@ public class WebSecurityConfig{
 	      http
 	      	 .csrf().disable()
 	         .authorizeHttpRequests()
-	         .antMatchers("/","/member/survey", "/stock/**", "/comunity/**").permitAll()
-//	         .anyRequest().permitAll()
-	         .antMatchers("/community/chat","/member/mypage").permitAll() //로그인 하고 로그인 해야 들어가는 페이지로 수정하기
-//	         .anyRequest().authenticated()
+	         .antMatchers("/","/member/survey", "/stock/**", "/comunity/**","../static/**").permitAll()
+//	         .antMatchers("/community/chat")
+	         //.authenticated().anyRequest().authenticated()
+	         .anyRequest().permitAll()
+	         //.anyRequest().authenticated()
 	         .and()
-	         .formLogin()// 로그인하는 경우에 대해 설정
+	         .formLogin() // 로그인하는 경우에 대해 설정
+	         //.loginProcessingUrl("/member/login")
 	         .passwordParameter("pwd")
 	         .successHandler(authenticationSuccessHandler())
 	         .failureHandler(authenticationFailureHandler())
-	         .loginPage("/member/login") //로그인 페이지 2개일 경우 어떻게 처리하는지
-//	         .loginPage("/")
+	         .loginPage("/member/login")
+	         .loginPage("/")
 	         .permitAll()
 	         .and()
 	         .logout((logout) -> logout.permitAll());
-
 	      return http.build();
 	   }
+
 }

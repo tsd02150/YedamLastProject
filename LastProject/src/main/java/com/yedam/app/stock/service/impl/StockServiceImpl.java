@@ -138,6 +138,18 @@ public class StockServiceImpl implements StockService {
 		return stockMapper.getScBoardList(itemNo);
 	}
 	
+	// 거래량 top 5 순위목록 가져오기
+	@Override
+	public List<StockVO> topVolChart() {
+		return stockMapper.topVolChart();
+	}
+
+	//변동률 가져오기
+	@Override
+	public List<StockVO> getPrcPercent(String type) {
+		return stockMapper.getPrcPercent(type);
+	}
+	
 	
 	
 	

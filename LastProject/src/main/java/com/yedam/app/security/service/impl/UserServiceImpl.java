@@ -1,6 +1,9 @@
 package com.yedam.app.security.service.impl;
 
+import java.net.http.HttpRequest;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +24,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		System.out.println("----------------------------------------------");
 		System.out.println(username);
-		
 		UserVO userVO = userMapper.loginCheck(username);
 		
 		System.out.println(userVO);
