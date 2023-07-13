@@ -1,6 +1,7 @@
 package com.yedam.app.mall.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class MallServiceImpl implements MallService {
 	public ProductVO getProductInfo(ProductVO prdtVO) {
 		return mallMapper.getProductInfo(prdtVO);
 	}
-
+	
 	//수정
 	@Override
 	public int updateReviewInfo(ProductReviewVO reviewVO) {
@@ -39,6 +40,17 @@ public class MallServiceImpl implements MallService {
 	public int deleteReviewInfo(int revNo) {
 		return mallMapper.deleteReviewInfo(revNo);
 	}
+
+	@Override
+	public Optional<ProductVO> ProductOne(String pid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/*
+	 * @Override public Optional<ProductVO> ProductOne(String pid) { return
+	 * result.stream().findAny(); }
+	 */
 	
 
 }
