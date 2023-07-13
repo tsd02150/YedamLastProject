@@ -52,6 +52,7 @@ $("#sc").on("click", "li", themeList);
 
 // 테마 리스트 출력
 function themeList(value) {
+$("#itemInfo").html("");
   let ctg;
   console.log(value);
   if (typeof value == "object") {
@@ -81,6 +82,7 @@ $("#theme").on("click", "li", itemList);
 
 //종목리스트 출력
 function itemList(value) {
+$("#itemInfo").html("");
   let ctg;
   if (typeof value == "object") {
     ctg = $(event.target).data("cd");
@@ -226,4 +228,51 @@ function addInterest() {
   	});
   	
   	}
+  	
+  		// 상승률
+  		$.ajax('getPercentage?type=plus').done(function(data){
+  		let html='';
+  		data.forEach(dt => {
+  			html +=`<li><a href="chart?itemNo=${dt.itemNo}">${dt.nm}</a> <span class="plus">(+ ${dt.rate} %)</span></li>`
+  			})
+  		$('#asd ol').html(html);
+  		
+  		})
+  			// 하락률
+  		$.ajax('getPercentage?type=minus').done(function(data){
+  		let html='';
+  		data.forEach(dt => {
+  			html +=`<li><a href="chart?itemNo=${dt.itemNo}">${dt.nm}</a> <span class="minus">( ${dt.rate} %)</span></li>`
+  			})
+  		$('#zxc ol').html(html);
+  		
+  		
+  		})
   },3000);
+  
+  
+  // dom tree 형성후 실행
+  $(document).ready(function(){
+  
+  			// 상승률
+  		$.ajax('getPercentage?type=plus').done(function(data){
+  		data.forEach(dt => {
+  			$('#asd ol').append($('<li/>').append($('<a/>').text(dt.nm).attr('href','chart?itemNo='+dt.itemNo))
+  										  .append($('<span class="plus"/>').text("(+ "+dt.rate+" %)"))
+  										  );
+  			})
+  		})//end 상승률
+  			// 하락률
+  		$.ajax('getPercentage?type=minus').done(function(data){
+  		data.forEach(dt => {
+  			$('#zxc ol').append($('<li/>').append($('<a/>').text(dt.nm).attr('href','chart?itemNo='+dt.itemNo))
+  										  .append($('<span class="minus"/>').text("( "+dt.rate+" %)"))
+  										  );
+  			})
+  		})//end 하락률
+  		
+  		//호가
+  		
+  		
+	});
+  	

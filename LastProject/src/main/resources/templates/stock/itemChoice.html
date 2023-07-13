@@ -265,6 +265,7 @@
           $.ajax({
             url: "itemInfo?value=" + ctg,
             success: function (result) {
+            	console.log(result);
               for (let i in result) {
                 if (i == "itemNo") {
                   $("#itemInfo").append(

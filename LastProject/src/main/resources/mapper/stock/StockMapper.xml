@@ -25,11 +25,15 @@
 		      from item_info 
 		      where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
 		      ) i --item_info 전날 주가정보
-		join ( SELECT nm,i.item_no, MAX(ta_dt) , ta_prc prc,i.origin,i.desct
-		        FROM ta_hr t join item i 
-		        on i.item_no = t.item_no
-		        GROUP BY nm,i.item_no,ta_prc,i.origin,i.desct
-		        order by item_no ) t  --오늘날짜 중 가장최근 거래가 (=현재가)
+		join (  select b.item_no , b.nm,dt,prc,origin,desct            
+				from(	select distinct(a.item_no),nm,dt,ta_prc prc
+						from(	SELECT nm,i.item_no, MAX(ta_dt) dt
+								FROM ta_hr t join item i 
+								on i.item_no = t.item_no
+								GROUP BY nm,i.item_no
+								order by item_no) a join ta_hr t
+						on a.item_no= t.item_no and a.dt=t.ta_dt) b join item i
+				on b.item_no=i.item_no ) t  --오늘날짜 중 가장최근 거래가 (=현재가)
 		on i.item_no = t.item_no
 		join (select case substr(common_cd,1,2) when 'S1' then '농산물'
 		                                  when 'S2' then '수산물'
@@ -74,11 +78,14 @@
                   from item_info 
                   where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
                   ) i 
-        join ( SELECT nm,i.item_no, MAX(ta_dt) , ta_prc prc
-                    FROM ta_hr t join item i 
-                    on i.item_no = t.item_no
-                    GROUP BY nm,i.item_no,ta_prc
-                    order by item_no ) t 
+        join ( select distinct(a.item_no),nm,dt,ta_prc prc
+				from(   SELECT nm,i.item_no, MAX(ta_dt) dt
+						FROM ta_hr t join item i 
+						on i.item_no = t.item_no
+						GROUP BY nm,i.item_no
+						order by item_no) a join ta_hr t
+				on a.item_no= t.item_no and a.dt=t.ta_dt
+				order by 1 ) t 
         on i.item_no = t.item_no
         join ( select case substr(common_cd,1,2) when 'S1' then '농산물'
                                               when 'S2' then '수산물'
@@ -91,7 +98,7 @@
                     order by common_cd ) c on c.item=t.nm
             order by common_cd
 		
-	</select>
+	</select>	
 	
 	<!-- 모든종목개수 -->
 	<select id="allItemCnt" resultType="int">
@@ -102,7 +109,9 @@
 	<!-- 조회수 순위 및 전일비 및 변동률 -->
 	<select id="inqChart" resultType="InqVO">
 		<![CDATA[
-			select rownum 
+			 
+                            
+             select rownum 
 					,nm 
 					, a.item_no
 					,inq 
@@ -120,11 +129,14 @@
 			              from item_info 
 			              where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
 			              ) i 
-			        join ( SELECT nm,i.item_no, MAX(ta_dt) , ta_prc prc
-			                FROM ta_hr t join item i 
-			                on i.item_no = t.item_no
-			                GROUP BY nm,i.item_no,ta_prc
-			                order by item_no ) t  
+			        join (  select distinct(a.item_no),nm,dt,ta_prc prc
+							from(   SELECT nm,i.item_no, MAX(ta_dt) dt
+									FROM ta_hr t join item i 
+									on i.item_no = t.item_no
+									GROUP BY nm,i.item_no
+									order by item_no) a join ta_hr t
+							on a.item_no= t.item_no and a.dt=t.ta_dt
+							order by 1  ) t  
 			        on i.item_no = t.item_no) b 
 			on a.item_no = b.item_no
 			where rownum <6
@@ -143,11 +155,14 @@
 		      on a.item_no = b.item_no
 		      where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
 		                  ) i --전일주가정보
-		join ( SELECT nm,i.item_no, MAX(ta_dt) , ta_prc prc
-		                    FROM ta_hr t join item i 
-		                    on i.item_no = t.item_no
-		                    GROUP BY nm,i.item_no,ta_prc
-		                    order by item_no ) t  -- 최근 체결가
+		join ( select distinct(a.item_no),nm,dt,ta_prc prc
+							from(   SELECT nm,i.item_no, MAX(ta_dt) dt
+									FROM ta_hr t join item i 
+									on i.item_no = t.item_no
+									GROUP BY nm,i.item_no
+									order by item_no) a join ta_hr t
+							on a.item_no= t.item_no and a.dt=t.ta_dt
+							order by 1 ) t  -- 최근 체결가
 		on i.item_no = t.item_no
 	</select>
 	
@@ -202,6 +217,54 @@
 		                            ) 
 		        order by drwup_dt desc) a
 		where rownum <= 10
+		]]>
+	</select>
+	
+	<!-- 오늘날짜 거래량 top 5 순위 -->
+	<select id="topVolChart" resultType="StockVO">
+		<![CDATA[
+			select rownum , a.*
+			from(select t.item_no,i.nm,NVL(sum(stock_cnt),0) vol
+			    from ta_hr t join item i
+			    on t.item_no = i.item_no
+			    where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate , 'yyyy-MM-dd')
+			    group by t.item_no,i.nm
+			    order by 3 desc) a 
+			where rownum <= 5
+		]]>
+	</select>
+	
+	<!-- 오늘날짜 변동률 순위 -->
+	<select id="getPrcPercent" resultType="StockVO">
+		
+		select rownum, f.*
+		from (  select t.item_no, t.nm,trunc(((t.prc-i.cl_prc)/i.cl_prc)*100) rate
+		        from (select item_no, cl_prc 
+		              from item_info 
+		              where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
+		              ) i --전일주가정보
+		        join ( select distinct(a.item_no),nm,dt,ta_prc prc
+							from(   SELECT nm,i.item_no, MAX(ta_dt) dt
+									FROM ta_hr t join item i 
+									on i.item_no = t.item_no
+									GROUP BY nm,i.item_no
+									order by item_no) a join ta_hr t
+							on a.item_no= t.item_no and a.dt=t.ta_dt
+							order by 1 ) t  -- 최근 체결가
+		        on i.item_no = t.item_no
+		        
+		        <choose>
+			        <when test='type.equals("plus")'>
+			        	order by rate desc
+			        </when>
+			        <otherwise>
+			        	order by rate
+			        </otherwise>
+		        </choose>
+		        
+		        ) f
+		        <![CDATA[
+		where rownum <= 5
 		]]>
 	</select>
 </mapper>

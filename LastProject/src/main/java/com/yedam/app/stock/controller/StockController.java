@@ -50,13 +50,10 @@ public class StockController {
 	@GetMapping("chart")
 	public String chartPage(String itemNo,Model m, HttpSession session) {
 		MembVO mem = (MembVO)session.getAttribute("loggedInMember");
-		System.out.println("mem 의 형태는 무엇일까 ? :" + mem);
 		String membNo = mem == null ? null : mem.getMembNo();
-		List<BoardVO> boardList = stockservice.getScBoardList(itemNo);
-		List<StockVO> list = stockservice.getIntStock(membNo);
-		System.out.println("list의형태는 무엇일까 ? : " + list);
-		m.addAttribute("boardList",boardList);
-		m.addAttribute("interestStock",list);
+		m.addAttribute("boardList",stockservice.getScBoardList(itemNo)); // 종목게시판
+		m.addAttribute("interestStock",stockservice.getIntStock(membNo)); // 유저관심종목리스트
+		m.addAttribute("topVolChart",stockservice.topVolChart());
 		m.addAttribute("itemNo",itemNo);
 		return "stock/chartPage";
 	}
@@ -150,5 +147,11 @@ public class StockController {
 		return map;
 	}
 	
+	@ResponseBody
+	@GetMapping("getPercentage")
+	public List<StockVO> getPercentage(String type){
+		List<StockVO> list = stockservice.getPrcPercent(type);
+		return list;
+	}
 	
 }
