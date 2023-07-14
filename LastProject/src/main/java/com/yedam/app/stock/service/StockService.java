@@ -11,6 +11,7 @@ import com.yedam.app.community.service.BoardVO;
 public interface StockService {
 	public List<Map<String,Object>> getThemeList(String code);
 	public ItemVO getItemInfo(String value);
+	public StockVO itemNoGetInfo(String itemNo);
 	public List<Map<String, Object>> autocomplete(Map<String, Object> paramMap);
 	public Map<String,Object> autoInfo(String value);
 	public List<StockVO> allItemList();

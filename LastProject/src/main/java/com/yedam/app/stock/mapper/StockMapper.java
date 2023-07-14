@@ -13,8 +13,10 @@ import com.yedam.app.stock.service.StockVO;
 public interface StockMapper {
 	// 카테고리 선택
 	public List<Map<String,Object>> getThemeList(String code);
-	// 종목정보조회
+	// 공통코드 / 카테고리로 종목정보조회
 	public ItemVO getItemInfo(String value);
+	//아이템 번호로
+	public StockVO itemNoGetInfo(String itemNo);
 	//자동완성
 	public List<Map<String, Object>> autocomplete(Map<String, Object> paramMap);
 	//자동완성사용 정보 출력
@@ -43,4 +45,5 @@ public interface StockMapper {
 	public List<StockVO> getPrcPercent(String type);
 	// 호가 데이터
 	public List<Map<String,Object>> orderTable(@Param("type")String type , @Param("itemNo")String itemNo);
+	 
 }

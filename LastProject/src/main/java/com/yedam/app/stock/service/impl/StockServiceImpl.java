@@ -26,10 +26,15 @@ public class StockServiceImpl implements StockService {
 		return stockMapper.getThemeList(code);
 	}
 	
-	//종목리스트 가져오기
+	//종목정보 가져오기
 	@Override
 	public ItemVO getItemInfo(String value) {
 		return stockMapper.getItemInfo(value);
+	}
+	// 아이템번호로 종목정보가져오기
+	@Override
+	public StockVO itemNoGetInfo(String itemNo) {
+		return stockMapper.itemNoGetInfo(itemNo);
 	}
 	
 	//자동완성기능
@@ -155,6 +160,8 @@ public class StockServiceImpl implements StockService {
 	public List<Map<String,Object>> orderTable(String type, String itemNo) {
 		return stockMapper.orderTable(type, itemNo);
 	}
+
+	
 	
 	
 	

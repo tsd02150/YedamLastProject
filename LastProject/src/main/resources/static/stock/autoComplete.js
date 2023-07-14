@@ -204,6 +204,10 @@ function addInterest() {
 
 //실시간 정보 변동
   setInterval(() => {
+  //아이템 번호
+  let itemNo = $('p[data-in]').data('in');
+  
+  
   	if($('#sessionMembNo').text() != 'nonLoginUser'){
   	let membinfo = $('#sessionMembNo').text();
   	
@@ -232,7 +236,7 @@ function addInterest() {
   		// 상승률
   		$.ajax('getPercentage?type=plus').done(function(data){
   		let html='';
-  		data.forEach(dt => {
+  		data.perList.forEach(dt => {
   			html +=`<li><a href="chart?itemNo=${dt.itemNo}">${dt.nm}</a> <span class="plus">(+ ${dt.rate} %)</span></li>`
   			})
   		$('#asd ol').html(html);
@@ -241,16 +245,26 @@ function addInterest() {
   			// 하락률
   		$.ajax('getPercentage?type=minus').done(function(data){
   		let html='';
-  		data.forEach(dt => {
+  		data.perList.forEach(dt => {
   			html +=`<li><a href="chart?itemNo=${dt.itemNo}">${dt.nm}</a> <span class="minus">( ${dt.rate} %)</span></li>`
   			})
   		$('#zxc ol').html(html);
   		
   		})
   		
+  		//거래량
+  		$.ajax('getPercentage?type=plus').done(function(data){
+  		let html='';
+  		data.volList.forEach(dt => {
+  			html +=`<li><a href="chart?itemNo=${dt.itemNo}">${dt.nm}</a> <span>${dt.vol}</span></li>`
+  			})
+  		$('#qwe ol').html(html);
+  		
+  		})
+  		
   		//호가
   		//매도
-  		let itemNo = $('p[data-in]').data('in');
+  		
   		$.ajax('orderTable?type=sell&itemNo='+itemNo).done(function(data){
   			let html='';
   			data.forEach(dt => {
@@ -265,8 +279,14 @@ function addInterest() {
   				html+=`<tr><td>${dt.PRC}</td><td class="plus">${dt.CNT}</td></tr>`
   			})
   			$('#buy').html(html);
-  		})
+  		})//
   		
+  		//아이템 정보
+  		$.ajax('getItemInfo?itemNo='+itemNo).done(function(data){
+  			let html='';
+  			html = `<p data-in="${data.itemNo}"> 종목 : ${data.nm} <span class="${data.change > 0 ? 'plus' : 'minus'}"> 전일비 : ${data.change > 0? "+"+data.change : data.change} 변동률 : ${data.rate > 0 ? "+"+data.rate+"%" : data.rate+"%"}</span></p>`
+  			$('#itemPtag').html(html);
+  		})
   },3000);
   
   
@@ -275,7 +295,7 @@ function addInterest() {
   
   			// 상승률
   		$.ajax('getPercentage?type=plus').done(function(data){
-  		data.forEach(dt => {
+  		data.perList.forEach(dt => {
   			$('#asd ol').append($('<li/>').append($('<a/>').text(dt.nm).attr('href','chart?itemNo='+dt.itemNo))
   										  .append($('<span class="plus"/>').text("(+ "+dt.rate+" %)"))
   										  );
@@ -283,19 +303,27 @@ function addInterest() {
   		})//end 상승률
   			// 하락률
   		$.ajax('getPercentage?type=minus').done(function(data){
-  		data.forEach(dt => {
+  		data.perList.forEach(dt => {
   			$('#zxc ol').append($('<li/>').append($('<a/>').text(dt.nm).attr('href','chart?itemNo='+dt.itemNo))
   										  .append($('<span class="minus"/>').text("( "+dt.rate+" %)"))
   										  );
   			})
   		})//end 하락률
   		
+  		// 거래량
+  		$.ajax('getPercentage?type=minus').done(function(data){
+  		data.volList.forEach(dt => {
+  			$('#qwe ol').append($('<li/>').append($('<a/>').text(dt.nm).attr('href','chart?itemNo='+dt.itemNo))
+  										  .append($('<span/>').text(dt.vol))
+  										  );
+  			})
+  		})//end 거래량
+  		
   		//호가
   		//매도
   		let itemNo = $('p[data-in]').data('in');
   		$.ajax('orderTable?type=sell&itemNo='+itemNo).done(function(data){
   			data.forEach(dt => {
-  				console.log(dt)
   				$('#sell').append($('<tr/>').append($('<td class="minus"/>').text(dt.CNT))
   										.append($('<td/>').text(dt.PRC)))
   			})

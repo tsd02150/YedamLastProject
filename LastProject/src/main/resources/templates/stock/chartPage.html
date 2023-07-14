@@ -68,7 +68,25 @@ h3 {
 #CP2D21>div {
 	padding: 10px;
 }
-
+#CP2D2 {
+	position:relative;
+	height:288px;
+	
+}
+#CP2D2 .row{
+	
+	z-index: 1;
+}
+#CP2D2 #forNonlogin{
+	position:absolute;
+	z-index:10;
+	top:0;
+	left:0;
+	text-align: center;
+}
+#CP2D2 #forNonlogin h3{
+	margin:20px;
+}
 #CP2D22 table {
 	margin: 20px;
 }
@@ -265,6 +283,20 @@ to {
 	margin :0;
 	font-size: 14px;
 }
+.orderActive {
+	background-color: black;
+	color:white;
+}
+#orderType {
+	font-weight: 700;
+	color:red;
+	
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 </style>
 <title>Insert title here</title>
 </head>
@@ -333,31 +365,33 @@ to {
 				</div>
 				<div class="p-1 col-md-6 border">
 					<div id="CP2D1" class="mb-1 border">
-						<p th:attr="data-in=${itemNo}">종목 : [[${itemNo}]] 전일비 : -- 변동률 : --</p>
+						<div id="itemPtag" style="display:inline-block">
+							<p th:attr="data-in=${itemInfo?.itemNo}">종목 : [[${itemInfo?.nm}]] <span th:class="${itemInfo?.change} &lt; 0 ? 'plus' : 'minus'"> 전일비 : [[${itemInfo?.change &lt; 0 ? "+ "+itemInfo?.change : itemInfo?.change}]] 변동률 : [[${itemInfo?.rate &lt; 0 ? "+"+itemInfo?.rate : itemInfo?.rate }]]%</span></p>
+						</div>
 						<button id="addInt2">관심종목추가</button>
 						<div id="candleChart"></div>
 						<div id="stickChart"></div>
 					</div>
 					<div id="CP2D2" class="border">
-						<div class="row">
+						<div class="row" >
 							<div id="CP2D21" class="col-6">
-								<div>
+								<div id="orderBtn" >
 									<button>매도</button>
 									<button>매수</button>
 								</div>
 								<div>
-									<input type="number" name="stockCnt">주
-									<p class="mb-0">
-										구매가능한 주수 <span>00</span>주
-									</p>
+									<input id="stockPrc" type="number" name="stockPrc" value="0">원<br> 
+									<label><input type="checkbox">시장가 주문</label>
 								</div>
 								<div>
-									<input type="number" name="stockPrc">원<br> <label><input
-										type="checkbox">시장가 주문</label>
+									<input id="stockCnt" type="number" name="stockCnt" value="0" >주
+									<p class="mb-0">
+										<span id="orderName">구매</span>가능한 주수 <input id="afford" type="button" value="0">주
+									</p>
 									<h4>
-										총 주문 금액: <span>00</span>원
+										총 주문 금액: <span id="totalPrc">0</span>원
 									</h4>
-									<button>주문</button>
+									<button >주문</button> <span id="orderType" data-order=""></span>
 								</div>
 							</div>
 							<div id="CP2D22" class="col-6">
@@ -369,15 +403,21 @@ to {
 									</tr>
 								</table>
 								<div>
-									<p>종목 : [[${itemNo}]]</p>
+									<p>종목 : [[${itemInfo?.nm}]]</p>
 									<p>
 										총 보유주 <span>00</span> 주
 									</p>
 									<p>
 										수익률 : <span>00</span>%
 									</p>
+									<p th:if="${session.loggedInMember} != null" th:attr="data-point=${session.loggedInMember.point}">보유 포인트 : [[${session.loggedInMember.point}]]</p>
+									<p th:unless="${session.loggedInMember} != null">로그인 해주세요.</p>
 								</div>
 							</div>
+						</div>
+						<div id="forNonlogin" th:if="${session.loggedInMember} == null">
+							<h3>로그인 후 이용할 수 있는 기능입니다.</h3>
+							<button onclick="location.href='/member/login'">로그인</button> <button onclick="location.href='/member/join'">회원가입</button>
 						</div>
 					</div>
 				</div>
@@ -473,6 +513,10 @@ to {
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 		<script th:inline="javascript" src="../stock/autoComplete.js"></script>
 		<script th:inline="javascript">
+		$('#forNonlogin').css('width',$('#CP2D2').css('width')).css('height',$('#CP2D2').css('height'))
+		if([[${session.loggedInMember}]] == null){
+			$('#CP2D2 .row').css('filter','blur(5px)');
+		}
 			// Get the modal
 			var modal = document.getElementById("myModal");
 
@@ -539,7 +583,145 @@ to {
 			
 			$('.searchItem.interest').css('width',$('#choice').css('width'));
 			
+			// 매도 매수버튼 클릭 이벤트
+			$('#orderBtn').on('click','button',function(){
+				//주문 종류 선택시 값 입력 가능해짐
+				$('#CP2D21 input').attr('readonly',false);
+				$('#CP2D21 input[type=checkbox]').attr('disabled',false);
+				//주문 종류 변경시 마다 입력칸 값 초기화
+				if(!$(this).hasClass('orderActive')){
+					$('#afford').val(0);
+					$('#CP2D21 input[type=number]').val(0);
+					$('#CP2D21 input[type=checkbox]').attr('checked',false)
+				}
+				//orderActive 클래스가 존재한다면 삭제
+				$(this).parent().find('.orderActive').removeClass('orderActive');
+				//클릭한 버튼 클래스 추가
+				$(this).toggleClass('orderActive'); 
+				
+				//주문 종류에 따라 출력되는 경고메세지
+				if($(this).is(':contains("매도")')){
+					$('#orderType').attr('data-order','sell').text('매도주문입니다');
+					$('#orderName').text('판매');
+				}else{
+					$('#orderType').attr('data-order','buy').text('매수주문입니다');
+					$('#orderName').text('구매');
+				}
+				
+				})
+			// input값 작성이벤트
+				$('#CP2D21 input[type=number]').on('click',function(){
+					let orderType = $('#orderType').attr('data-order');
+					if(orderType == ''){
+						$('#CP2D21 input[type=number]').val('');
+						$('#CP2D21 input').attr('readonly',true);
+						toastShow('매도/매수 버튼 선택','주문의 종류를 선택해주세요.','info');
+					}
+				})
+				
+			//checkbox (시장가주문 선택 이벤트)
+			$('#CP2D21 input[type=checkbox]').on('click',function(){
+				let tof = $(this).is(':checked');// check 여부확인
+				let orderType = $('#orderType').attr('data-order'); // 매수매도 중 선택된 주문의 종류
+				let sellPrc = $('#buy tr:first-of-type td:first-of-type').text(); // 매도주문의 시장가
+				let buyPrc = $('#sell tr:last-of-type td:last-of-type').text();	//매수주문의 시장가
+				let ckbox = $(this);
+				let point = $('p[data-point]').attr('data-point');//유저의 보유 포인트
+				
+				// 매수매도버튼을 클릭하지 않았을시 함수
+				if(orderType == ''){
+					$('#CP2D21 input').attr('checked',false);
+					toastShow('매도/매수 버튼 선택','주문의 종류를 선택해주세요.','info');
+					return;
+				}
+				
+				if(orderType == 'sell'){
+					// 호가 매수 테이블의 가장 높은 가격이 가격입력칸에 출력
+					if(tof){
+						$('#stockPrc').val(sellPrc);
+					}else{
+						$('#stockPrc').val('');
+					}
+				}else if(orderType == 'buy'){
+					// 호가 매도 테이블의 가장 낮은 가격이 가격입력칸에 출력
+					if(tof){
+						$('#stockCnt').val(0);
+						$('#stockPrc').val(buyPrc);
+						// 구매가능한 주수 버튼에 값 입력
+						let affordStockCnt = Math.floor(point/$('#stockPrc').val());
+						$('#afford').val(affordStockCnt);
+					}else{
+						$('#stockPrc').val('');
+					}
+				}
+			})
 			
+			
+			//구매가능한 주수 버튼 클릭시 입력칸에 입력
+			$('#afford').on('click',function(){
+				let cnt = $(this).val();
+				let stockPrc = Number($('#stockPrc').val());
+				$('#stockCnt').val(cnt);
+				//총 값도 출력
+				let total = Number(cnt * stockPrc);
+				$('#totalPrc').text(total.toLocaleString('ko-KR'));
+				
+			})
+			
+			//거래가 변경시 기능
+			$('#stockPrc').on('keyup' ,function(){
+				let orderType = $('#orderType').attr('data-order'); // 매수매도 중 선택된 주문의 종류
+				
+				if(orderType == 'buy'){
+					
+				$(this).val(Number($(this).val()))
+				$('#stockCnt').val(0);
+				let point = $('p[data-point]').attr('data-point');//유저의 보유 포인트
+				let stockPrc = $('#stockPrc').val();
+				if(this.value <= 0 || this.value > Number(point)){
+					alert('거래가격은 0 밑이나 보유한 포인트 이상으로 입력할 수 없습니다.')
+					$('#afford').val('0');
+					this.value=0;
+					return;
+				}
+				$('#CP2D2 input[type=checkbox]').attr('checked',false);
+				let affordStockCnt = Math.floor(point/stockPrc);
+				$('#afford').val(affordStockCnt);
+				$('#totalPrc').text(0)
+					
+				}
+				
+			})
+			
+			
+			//주문 수량 변경시 기능
+			$('#stockCnt').on('keyup',function(){
+				let orderType = $('#orderType').attr('data-order'); // 매수매도 중 선택된 주문의 종류
+				
+				if(orderType == 'buy'){
+					
+				$(this).val(Number($(this).val()))
+				let affordStockCnt = Number($('#afford').val());
+				let stockPrc = Number($('#stockPrc').val());
+				
+				if($('#stockPrc').val() == 0){
+					alert('거래가격을 먼저 입력해주세요.')
+					$(this).val(0);
+					$('#stockPrc').focus();
+					return;
+				}
+				if($(this).val() > affordStockCnt || $(this).val() <=0 ){
+					alert('주문수량이 0이하 이거나 주문가능한 수량을 벗어났습니다.')
+					$(this).val(0);
+					
+				}
+				
+				//총가격 설정
+				let total = Number($(this).val() * stockPrc);
+				$('#totalPrc').text(total.toLocaleString('ko-KR'));
+					
+				}
+			})
 		</script>
 	</div>
 </body>

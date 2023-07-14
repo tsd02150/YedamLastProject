@@ -9,16 +9,13 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.yedam.app.community.service.BoardVO;
-import com.yedam.app.member.service.MembVO;
+import com.yedam.app.security.service.UserVO;
 import com.yedam.app.stock.service.InqVO;
 import com.yedam.app.stock.service.ItemVO;
 import com.yedam.app.stock.service.StockService;
@@ -43,11 +40,11 @@ public class StockController {
 	//상세 차트 페이지로 이동
 	@GetMapping("chart")
 	public String chartPage(String itemNo,Model m, HttpSession session) {
-		MembVO mem = (MembVO)session.getAttribute("loggedInMember");
+		UserVO mem = (UserVO)session.getAttribute("loggedInMember");
 		String membNo = mem == null ? null : mem.getMembNo();
 		m.addAttribute("boardList",stockservice.getScBoardList(itemNo)); // 종목게시판
 		m.addAttribute("interestStock",stockservice.getIntStock(membNo)); // 유저관심종목리스트
-		m.addAttribute("topVolChart",stockservice.topVolChart()); // 거래량 top 5 순위
+		m.addAttribute("itemInfo",stockservice.itemNoGetInfo(itemNo));
 		m.addAttribute("itemNo",itemNo);
 		return "stock/chartPage";
 	}
@@ -141,21 +138,32 @@ public class StockController {
 		return map;
 	}
 	
-	//변동률 데이터 가져오기
+	//변동률 데이터,거래량 데이터 가져오기
 	@ResponseBody
 	@GetMapping("getPercentage")
-	public List<StockVO> getPercentage(String type){
-		List<StockVO> list = stockservice.getPrcPercent(type);
-		return list;
+	public Map<String,Object> getPercentage(String type){
+		List<StockVO> perList = stockservice.getPrcPercent(type);
+		List<StockVO> volList = stockservice.topVolChart();
+		Map<String,Object> map = new HashMap<>();
+		map.put("perList", perList);
+		map.put("volList",volList);
+		return map;
 	}
 	
 	// 호가 데이터
 	@ResponseBody
 	@GetMapping("orderTable")
 	public List<Map<String,Object>> orderTable(String type, String itemNo){
-		System.out.println(type + " " + itemNo);
 		List<Map<String,Object>> list = stockservice.orderTable(type, itemNo);
-		System.out.println(list);
 		return list;
 	}
+	
+	//아이템 번호로 정보가져오기
+	@ResponseBody
+	@GetMapping("getItemInfo")
+	public StockVO itemNoGetInfo(String itemNo) {
+		StockVO vo = stockservice.itemNoGetInfo(itemNo);
+		return vo;
+	}
+	
 }
