@@ -29,4 +29,10 @@ public interface BoardService {
 	public MembVO getMembInfo(String membNo);
 	// 게시물 댓글 정보
 	public List<CommentsVO> getComments(String boardNo);
+	// 추천수 증가
+	public boolean addRcom(BoardVO vo);
+	// 비추천수 증가
+	public boolean addNrcom(BoardVO vo);
+	// 게시물 삭제
+	public boolean deleteBoard(BoardVO vo);
 }

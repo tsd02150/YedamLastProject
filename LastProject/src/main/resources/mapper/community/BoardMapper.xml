@@ -115,4 +115,18 @@
 		WHERE board_no=#{boardNo}
 		ORDER BY h_comm_no
 	</select>
+	<update id="addRcom" parameterType="BoardVO">
+		UPDATE BOARD
+		SET rcom=rcom+1
+		WHERE board_no=#{boardNo}
+	</update>
+	<update id="addNrcom" parameterType="BoardVO">
+		UPDATE BOARD
+		SET nrcom=nrcom+1
+		WHERE board_no=#{boardNo}
+	</update>
+	<delete id="deleteBoard" parameterType="BoardVO">
+		DELETE FROM BOARD
+		WHERE board_no=#{boardNo}
+	</delete>
 </mapper>

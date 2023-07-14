@@ -77,5 +77,20 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.getComments(boardNo);
 	}
 
+	@Override
+	public boolean addRcom(BoardVO vo) {
+		return boardMapper.addRcom(vo)>0;
+	}
+
+	@Override
+	public boolean addNrcom(BoardVO vo) {
+		return boardMapper.addNrcom(vo)>0;
+	}
+
+	@Override
+	public boolean deleteBoard(BoardVO vo) {
+		return boardMapper.deleteBoard(vo)>0;
+	}
+
 	
 }

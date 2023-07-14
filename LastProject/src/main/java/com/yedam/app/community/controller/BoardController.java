@@ -34,6 +34,7 @@ public class BoardController {
 	// 게시판 목록 출력
 	@GetMapping("boardList")
 	public String getBoard(Model model, BoardVO vo) {
+		model.addAttribute("startPage",1);
 		model.addAttribute("boardCode", vo.getCommonCd().substring(0, 2));
 		model.addAttribute("boardName", boardService.getBoardName(vo.getCommonCd().substring(0, 2)));
 		return "community/boardList";
@@ -55,7 +56,7 @@ public class BoardController {
 
 	@GetMapping("addBoard")
 	public String addBoardForm(Model model, BoardVO boardVo, HttpSession session) {
-		model.addAttribute("boardInfo", boardVo);
+		model.addAttribute("boardInfo", boardVo);	
 		System.out.println(boardService.getCtgr(boardVo.getCommonCd()));
 		model.addAttribute("category", boardService.getCtgr(boardVo.getCommonCd()));
 		return "community/insertBoard";
@@ -76,8 +77,17 @@ public class BoardController {
 	}
 	
 	@GetMapping("boardDetail")
-	public String boardDetail(Model model,BoardVO vo) {
+	public String boardDetail(Model model,BoardVO vo, HttpSession session) {
 		boardService.increaseInquery(vo.getBoardNo());
+		System.out.println(session.getAttribute("loggedInMember"));
+		if(session.getAttribute("loggedInMember")!=null) {
+			model.addAttribute("myInfo",session.getAttribute("loggedInMember"));
+		}else {
+			MembVO myInfo = new MembVO();
+			myInfo.setMembNo("noLogin");
+			model.addAttribute("myInfo",myInfo);
+		}
+		model.addAttribute("startPage",vo.getPage());
 		model.addAttribute("boardCode", vo.getCommonCd().substring(0, 2));
 		model.addAttribute("boardName", boardService.getBoardName(vo.getCommonCd().substring(0, 2)));
 		vo = boardService.getBoardDetail(vo.getBoardNo());
@@ -86,6 +96,36 @@ public class BoardController {
 		model.addAttribute("comments",boardService.getComments(vo.getBoardNo()));
 		
 		return "community/boardDetailForm";
+	}
+	
+	@PostMapping("addRcom")
+	@ResponseBody
+	public String addRcom(BoardVO vo) {
+		if(boardService.addRcom(vo)) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	@PostMapping("addNrcom")
+	@ResponseBody
+	public String addNrcom(BoardVO vo) {
+		if(boardService.addNrcom(vo)) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	@PostMapping("deleteBoard")
+	@ResponseBody
+	public String deleteBoard(BoardVO vo) {
+		if(boardService.deleteBoard(vo)) {
+			return "success";
+		}else {
+			return "fail";
+		}
 	}
 
 }

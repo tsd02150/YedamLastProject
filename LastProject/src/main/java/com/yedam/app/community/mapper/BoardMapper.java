@@ -31,4 +31,10 @@ public interface BoardMapper {
 	public MembVO getMembInfo(String membNo);
 	// 게시물 댓글 정보
 	public List<CommentsVO> getComments(String boardNo);
+	// 추천수 증가
+	public int addRcom(BoardVO vo);
+	// 비추천수 증가
+	public int addNrcom(BoardVO vo);
+	// 게시물 삭제
+	public int deleteBoard(BoardVO vo);
 }
