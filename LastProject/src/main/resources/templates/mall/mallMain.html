@@ -116,15 +116,17 @@
 				<li th:each="prdt, iterStat : ${product}"
 					th:if="${iterStat.index} >= 1 and ${iterStat.index} <= 3">
 					<div class="icon_img">
-						<img class="img" th:src="|/mall/images/main/${prdt.img}|">
+						<img class="img" th:src="|/mall/images/main/${prdt.thumb}|">
 					</div>
 					<div th:text="${prdt.nm}" class="contents1_bold"></div>
 					<div th:text="${prdt.desct}" class="contents2"></div> <span
 					th:text="${prdt.prc} + '₩'"></span>
 					<div class="">
-					 <a
+					<!--  <a
 					class="btn btn-outline-light" href="getFarm.html"
-					th:href="@{getFarm/{pid}(pid=${prdt.prdtNo})}">read more</a>
+					th:href="@{getFarm/{pid}(pid=${prdt.prdtNo})}">read more</a> -->
+					<a class="btn btn-outline-light" th:onclick="|location.href='@{farmList}'|">read more</a>
+					
 					</div>
 				</li>
 			</ul>
@@ -139,14 +141,13 @@
 				<li class="li" th:each="prdt, iterStat : ${product}"
 					th:if="${iterStat.index} >= 28 and ${iterStat.index} <= 30 ">
 					<div class="icon_img">
-						<img class="img" th:src="|/mall/images/main/${prdt.img}|">
+						<img class="img" th:src="|/mall/images/main/${prdt.thumb}|">
 					</div>
 					<div th:text="${prdt.nm}" class="contents1_bold">치밀한 계획</div>
 					<div th:text="${prdt.desct}" class="contents2"></div> <span
 					th:text="${prdt.prc} + '₩'"></span>
 					<div class="">
-						<a class="btn btn-outline-light" href="blog-single.html">read
-							more</a>
+						<a class="btn btn-outline-light" th:onclick="|location.href='@{farmList}'|">read more</a>
 					</div>
 				</li>
 			</ul>

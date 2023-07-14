@@ -13,9 +13,11 @@ public interface MallService {
 	//상품 단건조회
 	public ProductVO getProductInfo(ProductVO prdtVO);
 	
-	//상품 디테일
-	public Optional<ProductVO> ProductOne(String pid);
-
+	//해당 상품 
+	
+	//카테고리 정보
+	public List<ProductVO> getCtgr(String commonCd);
+	
 	//상품후기
 	
 	//리뷰 수정

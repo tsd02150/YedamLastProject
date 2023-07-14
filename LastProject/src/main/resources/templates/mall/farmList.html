@@ -25,11 +25,11 @@
 					<div class="category-container">
 						<!-- 농산물 카테고리 -->
 
-						<h2>농산물</h2>
+						<h2 data-common-cd="S1">농산물</h2>
 
 						<div class="category">
 							<ul>
-								<li class="li_1"><a href="#">곡류</a>
+								<li class="li_1" data-common-cd="S101"><a href="#">곡류</a>
 									<ul>
 										<li class="sub_li_1" th:each="prdt : ${farmList}"
 											th:text="${prdt.nm}"></li>
@@ -38,7 +38,7 @@
 						</div>
 						<div class="category">
 							<ul>
-								<li class="li_1"><a href="#">곡류</a>
+								<li class="li_1" data-common-cd="S102"><a href="#">콩류</a>
 									<ul>
 										<li class="sub_li_1" th:each="prdt : ${farmList}"
 											th:text="${prdt.nm}"></li>
@@ -47,90 +47,79 @@
 						</div>
 						<div class="category">
 							<ul>
-								<li class="li_1"><a href="#">곡류</a>
+								<li class="li_1" data-common-cd="S103"><a href="#">과실류</a>
 									<ul>
 										<li class="sub_li_1" th:each="prdt : ${farmList}"
-											th:text="${prdt.nm}"></li>
+											th:text="${prdt.nm}" data-common-cd="S103"></li>
 									</ul></li>
 							</ul>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class="row">
+				<!-- category end -->
 
-			<div class="col-md-4" th:each="prdt: ${farmList}">
-				<div class="product-item">
-					<div class="product-thumb">
-						<span class="bage">Sale</span> <img
-							th:src="|/mall/images/main/${prdt.img}|">
-						<div class="preview-meta">
-							<ul>
-								<li><span data-toggle="modal" data-target="#product-modal">
-										<i class="tf-ion-ios-search-strong"></i>
-								</span></li>
-								<li><a href="#!"><i class="tf-ion-ios-heart"></i></a></li>
-								<li><a href="#!"><i class="tf-ion-android-cart"></i></a></li>
-							</ul>
-						</div>
+				<div class="row">
+					<div class="selectBtn">
+						<button class="btn btn-light mt-3 mt-lg-0" type="button" id="low">낮은 가격순</button>
+						<button class="btn btn-light mt-3 mt-lg-0" type="button" id="high">높은 가격순</button>
+						<button class="btn btn-light mt-3 mt-lg-0" type="button" id="sales">판매량</button>
 					</div>
-					<div class="product-content">
-						<h4>
-							<a href="product-single.html" th:text=${prdt.nm}></a>
-						</h4>
-						<p>
-							<span th:if="${prdt.dcRate}" class="discounted-price"
-								th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))}"
-								style="text-decoration: line-through;"></span>
-								
-							<span
-								th:unless="${prdt.dcRate}" class="original-price"
-								th:text="${prdt.prc}"></span>
-						</p>
-					</div>
+					<input type="text" id="search">
 				</div>
-			</div>
-			
-			<!-- Modal -->
-			<div class="modal product-modal fade" id="product-modal">
-				<button type="button" class="close" data-dismiss="modal"
-					aria-label="Close">
-					<i class="tf-ion-close"></i>
-				</button>
-				<div class="modal-dialog " role="document">
-					<div class="modal-content">
-						<div class="modal-body">
-							<div class="row">
-								<div class="col-md-8 col-sm-6 col-xs-12">
-									<div class="modal-image">
-										<img class="img-responsive"
-											src="mall/source/images/shop/products/modal-product.jpg"
-											alt="product-img" />
-									</div>
+
+				<div class="row">
+					<div class="col-md-4" th:each="prdt : ${farmList}" >
+						<div class="product-item" th:onclick="|location.href='@{getFarm(prdtNo=${prdt.prdtNo})}'|">
+							<div class="product-thumb">
+								<span class="bage">Sale</span> <img
+									th:src="|/mall/images/main/${prdt.thumb}|">
+								<div class="preview-meta">
+									<ul>
+										<li><span data-toggle="modal"
+											data-target="#product-modal"> <i
+												class="tf-ion-ios-search-strong"></i>
+										</span></li>
+										<li><a href="#!"><i class="tf-ion-ios-heart"></i></a></li>
+										<li><a href="#!"><i class="tf-ion-android-cart"></i></a></li>
+									</ul>
 								</div>
-								<div class="col-md-4 col-sm-6 col-xs-12">
-									<div class="product-short-details">
-										<h2 class="product-title">GM Pendant, Basalt Grey</h2>
-										<p class="product-price">$200</p>
-										<p class="product-short-description">Lorem ipsum dolor sit
-											amet, consectetur adipisicing elit. Rem iusto nihil cum. Illo
-											laborum numquam rem aut officia dicta cumque.</p>
-										<a href="cart.html" class="btn btn-main">Add To Cart</a> <a
-											href="product-single.html" class="btn btn-transparent">View
-											Product Details</a>
-									</div>
-								</div>
+							</div>
+							<div class="product-content">
+							<div class="product-detail">	
+							
+							<!--  th:onclick="|location.href='@{getFarm(prdtNo=${getFarm.prdtNo})}'|" -->
+								<h4>
+									<a th:text=${prdt.nm}></a>
+								</h4>
+								<p>
+									<span class="original-price" th:text="${prdt.prc} + '원'"
+										style="text-decoration: line-through;"></span> <br> <span
+										class="discounted-price"
+										th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + '원'"></span>
+								</p>
+							</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
+			<!-- list-end -->
 		</div>
 	</div>
 
-
+	<!-- <script th:inline="javascript">
+	
+		//초기값 
+		let currentState=[[S{prdtCode}]];
+		
+		document.querySelectorAll(".ctgr").forEach(ctgr=>
+			ctgr.addEventListener('click', function(){
+				sort.children[0].selected=true;
+				currentState = ctgr.getAttribute('data-common-cd');
+		}))
+	
+	</script> -->
 
 	<!-- Main jQuery -->
 	<script src="plugins/jquery/dist/jquery.min.js"></script>

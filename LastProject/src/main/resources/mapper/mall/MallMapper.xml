@@ -21,6 +21,16 @@
   		WHERE prdt_no = #{prdtNo}
   	</select>
   	
+  	<select id="getCategoryName" resultType="String">
+  		SELECT ctgr
+  		FROM COMMON_CODE
+  		WHERE common_code=#{commonCd}
+  	</select>
   	
+  	<select id="getCtgr" resultType="ProductVO">
+  		SELECT common_cd, ctgr
+  		FROM COMMON_CODE
+  		WHERE common_cd LIKE #{commonCd}||'0%'
+  	</select>
   	
 </mapper>

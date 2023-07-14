@@ -12,7 +12,8 @@ public interface MallMapper {
 
 	//단건조회
 	public ProductVO getProductInfo(ProductVO prdtVO);
-
+	//카테고리 정보
+	public List<ProductVO> getCtgr(String commonCd);
 	
 	//상품후기
 	

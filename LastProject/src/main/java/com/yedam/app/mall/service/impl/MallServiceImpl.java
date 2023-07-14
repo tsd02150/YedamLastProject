@@ -41,16 +41,11 @@ public class MallServiceImpl implements MallService {
 		return mallMapper.deleteReviewInfo(revNo);
 	}
 
+	//카테고리 정보
 	@Override
-	public Optional<ProductVO> ProductOne(String pid) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ProductVO> getCtgr(String commonCd) {
+		return mallMapper.getCtgr(commonCd);
 	}
 
-	/*
-	 * @Override public Optional<ProductVO> ProductOne(String pid) { return
-	 * result.stream().findAny(); }
-	 */
-	
 
 }

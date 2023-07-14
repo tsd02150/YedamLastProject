@@ -9,83 +9,149 @@
 <link rel="stylesheet" type="text/css" href="css/getFarm.css">
 <link rel="stylesheet" type="text/css" href="mall/theme/css/style.css">
 
+<style>
+.flex-block {
+	display: flex;
+}
+
+#detail-img {
+	width: 50%;
+	height: 500px;
+	/* border: 1px solid; */
+}
+
+#prdt-info {
+	width: 50%;
+	height: 500px;
+	/* border: 1px solid; */
+}
+
+#prdt-img {
+	width: 400px;
+	height: 400px;
+}
+
+.amount {
+	position: relative;
+	top: 0x;
+	display: flex;
+	width: 1100px;
+	background: #fff;
+	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+	margin: auto;
+}
+
+.amount>li {
+	flex: 1;
+	height: 132px;
+}
+
+.amount>li>div {
+	text-align: center;
+	margin-top: 37px;
+	height: 57px;
+}
+
+.amount {
+	list-style: none;
+}
+</style>
 
 </head>
-<body id="body">
+<body>
 	<div layout:fragment="content" class="outer-block">
-		<div class="row mt-20">
-			<div class="col-md-5">
-				<div class="single-product-slider">
-					<div id='carousel-custom' class='carousel slide' data-ride='carousel'>
-						<div class='carousel-outer'>
-							<!-- me art lab slider -->
-							<div class='carousel-inner '>
-								<div class='item active' th:each="prdt : ${product}">
-									<img th:src="|/mall/images/main/${prdt.img}|" alt=''/>
-								</div>
-							</div>
-							
-							<!-- sag sol -->
-							<a class='left carousel-control' href='#carousel-custom' data-slide='prev'>
-								<i class="tf-ion-ios-arrow-left"></i>
-							</a>
-							<a class='right carousel-control' href='#carousel-custom' data-slide='next'>
-								<i class="tf-ion-ios-arrow-right"></i>
-							</a>
-						</div>
+
+		<div class="flex-block">
+			<section id="detail-img" class="news-style-one"
+				th:each="prdt : ${getFarm}">
+				<div>
+					<img id="prdt-img" th:src="|/mall/images/main/${prdt.thumb}|">
+				</div>
+			</section>
+
+			<section id="prdt-info" th:each="prdt : ${getFarm}">
+				<div>
+					<table>
+						<tr>
+							<th>상품명</th>
+							<td th:text="${prdt.nm}"></td>
+						</tr>
+						<tr>
+							<th>판매가격</th>
+							<td th:text="${prdt.prc}"></td>
+						</tr>
+						<tr>
+							<th>할인가격</th>
+							<td
+								th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + '원'"
+								style="text-decoration: line-through;"></td>
+						</tr>
+						<tr>
+							<th>배송</th>
+							<td></td>
+						</tr>
+						<tr>
+							<th>총 결제금액</th>
+							<td></td>
+						</tr>
+					</table>
+					<div>
+						<button type="button" th:onclick="|location.href='@{basketList}'|">장바구니
+							담기</button>
+						<button type="button" th:onclick="|location.href='@{cart}'|">바로
+							주문하기</button>
 					</div>
 				</div>
-			</div>
-			<div class="col-md-7">
-				<div class="single-product-details">
-					<h2>Eclipse Crossbody</h2>
-					<p class="${product.prc}"></p>
-					
-					<p class="product-description mt-20">
-						Lorem ipsum dolor sit amet,
-					</p>
-					<p>Lorem ipsum dolor sit amet </p>
-					<div class="color-swatches">
-						<span>color:</span>
-						<ul>
-							<li>
-								<a href="#!" class="swatch-violet"></a>
-							</li>
-							<li>
-								<a href="#!" class="swatch-black"></a>
-							</li>
-							<li>
-								<a href="#!" class="swatch-cream"></a>
-							</li>
-						</ul>
-					</div>
-					<div class="product-size">
-						<span>Size:</span>
-						<select class="form-control">
-							<option>S</option>
-							<option>M</option>
-							<option>L</option>
-							<option>XL</option>
-						</select>
-					</div>
-					<div class="product-quantity">
-						<span>Quantity:</span>
-						<div class="product-quantity-slider">
-							<input id="product-quantity" type="text" value="0" name="product-quantity">
-						</div>
-					</div>
-					<div class="product-category">
-						<span>Categories:</span>
-						<ul>
-							<li><a href="product-single.html">Products</a></li>
-							<li><a href="product-single.html">Soap</a></li>
-						</ul>
-					</div>
-					<a href="cart.html" class="btn btn-main mt-20">Add To Cart</a>
+			</section>
+
+
+			<!-- <section id="prdt-info" th:each="prdt : ${getFarm}">
+				<h1 th:text="${prdt.nm}"></h1>
+				<p th:text="${prdt.prc}"></p>
+				<p th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + '원'" style="text-decoration: line-through;">할인가격</p>
+				<p >배송</p>
+				<p>총 결제금액</p>
+				<div class="">
+					<button type="button" th:onclick="|location.href='@{basketList}'|">장바구니
+						담기</button>
+					<button type="button" th:onclick="|location.href='@{cart}'|">바로
+						주문하기</button>
 				</div>
-			</div>
+			</section> -->
 		</div>
-	
+		<!-- prdt Info end-->
+
+		<ul class="amount">
+			<li>
+				<div>
+					<div class="contents1">
+						<a href="#detail" name="detail">상품 상세 정보</a>
+					</div>
+					<p></p>
+				</div>
+			</li>
+			<li>
+				<div>
+					<div class="contents1">
+						<a href="#ship" name="ship">배송/교환/환불</a>
+					</div>
+				</div>
+			</li>
+			<li>
+				<div>
+					<div class="contents1">
+						<a href="#review" name="review">상품후기</a>
+					</div>
+				</div>
+			</li>
+
+		</ul>
+		<!-- 상품 상세 정보 -->
+
+		<div></div>
+
 	</div>
+
+
 </body>
 </html>
