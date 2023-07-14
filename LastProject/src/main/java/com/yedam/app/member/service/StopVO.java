@@ -19,4 +19,5 @@ public class StopVO {
 	private Date startDt;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date endDt;
+	
 }

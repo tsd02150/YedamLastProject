@@ -33,7 +33,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     		  session.setAttribute("loggedInMember", userVO);  
     		  response.sendRedirect("/");
     	  } else {
-    		  session.setAttribute("loggedInMember", userVO.getId());  
+    		  session.setAttribute("loggedInMember", userVO);  
     		  response.sendRedirect("/member/tempPwdUpdate");
     	  }
 	   }

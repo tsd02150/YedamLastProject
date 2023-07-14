@@ -48,5 +48,11 @@ public interface MemberMapper {
 	
 	//관심종목 추가
 	public int insertInterestItem(MembVO membVO);
+	
+	//관심종목
+	public List<MembVO> myinterestList(MembVO membVO);
+	
+	//보유주식
+	public List<MembVO> myStockList(MembVO membVO);
 
 }

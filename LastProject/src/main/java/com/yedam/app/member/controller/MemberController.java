@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,12 +21,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestClientException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.yedam.app.member.mapper.MemberMapper;
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
 import com.yedam.app.member.service.RegisterMail;
 import com.yedam.app.security.service.UserService;
+import com.yedam.app.security.service.UserVO;
 import com.yedam.app.sms.service.MessageDTO;
 import com.yedam.app.sms.service.SmsResponseDTO;
 import com.yedam.app.sms.service.SmsService;
@@ -47,12 +50,6 @@ public class MemberController {
 	
 	@Autowired
 	private PasswordEncoder pwEncoder;
-	
-	//회원관리
-	@GetMapping("mypage")
-	public String myPageForm() {
-		return "member/mypage";
-	}
 	
 	//로그아웃
 	@GetMapping("logout")
@@ -248,8 +245,9 @@ public class MemberController {
 			membVO.setPwd(pwEncoder.encode(membVO.getPwd()));//비밀번호 암호화
 			int result = membService.updateTempPwd(membVO);
 			if(result == 1) {
-				session.setAttribute("loggedInMember", loggedInMember);
+				session.setAttribute("loggedInMember", membVO);
 				System.out.println("비밀번호 변경 성공");
+				System.out.println(membVO);
 				return "redirect:/";							
 			}else {
 				model.addAttribute("id",membVO.getId());
@@ -316,5 +314,41 @@ public class MemberController {
 		membVO.setNm(nm);
 		MembVO result = membService.getMemberTel(membVO);
 		return result;
+	}
+	
+	//회원관리
+	@GetMapping("mypage")
+	public String myPageForm() {
+		return "member/mypage";
+	}
+	
+	@GetMapping("mypoint")
+	public String myPointForm() {
+		return "member/mypage";
+	}
+	
+	@ResponseBody
+	@PostMapping("interestList")
+	public List<MembVO> interestList(@RequestParam String id, Model model, MembVO membVO) {
+		//UserVO meminfo = (UserVO)session.getAttribute("loggedInMember");
+		membVO.setId(id);
+		List<MembVO> interestList = membService.myinterestList(membVO);
+		model.addAttribute("interestList",interestList);
+		return interestList;
+	}
+	@ResponseBody
+	@PostMapping("stockList")
+	public List<MembVO> myPageInfo(@RequestParam String id, Model model, MembVO membVO) {
+		//UserVO meminfo = (UserVO)session.getAttribute("loggedInMember");
+		membVO.setId(id);
+		List<MembVO> stockList = membService.myStockList(membVO);
+		model.addAttribute("stocklist",stockList);
+		return stockList;
+	}
+	
+	@GetMapping("mypageInfo")
+	public String mypageInfo(HttpSession session) {
+		//UserVO membinfo = (UserVO) session.getAttribute("loggedInMember");
+		return "member/mypageInfo";
 	}
 }

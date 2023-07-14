@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.member.service.MembVO;
+import com.yedam.app.security.service.UserVO;
 import com.yedam.app.stock.service.InqVO;
 import com.yedam.app.stock.service.ItemVO;
 import com.yedam.app.stock.service.StockService;
@@ -43,7 +44,7 @@ public class StockController {
 	//상세 차트 페이지로 이동
 	@GetMapping("chart")
 	public String chartPage(String itemNo,Model m, HttpSession session) {
-		MembVO mem = (MembVO)session.getAttribute("loggedInMember");
+		UserVO mem = (UserVO)session.getAttribute("loggedInMember");
 		String membNo = mem == null ? null : mem.getMembNo();
 		m.addAttribute("boardList",stockservice.getScBoardList(itemNo)); // 종목게시판
 		m.addAttribute("interestStock",stockservice.getIntStock(membNo)); // 유저관심종목리스트
