@@ -39,7 +39,4 @@ public class BoardVO {
 	// 페이징용
 	private int page;
 	private int totalCnt;
-	
-	// 파일첨부
-	private List<String> attachFile;
 }

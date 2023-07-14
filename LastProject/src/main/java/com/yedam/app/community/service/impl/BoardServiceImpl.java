@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.yedam.app.community.mapper.BoardMapper;
 import com.yedam.app.community.service.BoardService;
 import com.yedam.app.community.service.BoardVO;
+import com.yedam.app.community.service.CommentsVO;
+import com.yedam.app.member.service.MembVO;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -53,6 +55,26 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public boolean insertBoard(BoardVO vo) {
 		return boardMapper.insertBoard(vo)>0;
+	}
+
+	@Override
+	public BoardVO getBoardDetail(String boardNo) {
+		return boardMapper.getBoardDetail(boardNo);
+	}
+
+	@Override
+	public void increaseInquery(String boardNo) {
+		boardMapper.increaseInquery(boardNo);
+	}
+
+	@Override
+	public MembVO getMembInfo(String membNo) {
+		return boardMapper.getMembInfo(membNo);
+	}
+
+	@Override
+	public List<CommentsVO> getComments(String boardNo) {
+		return boardMapper.getComments(boardNo);
 	}
 
 	

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+	#boardSection{
+		padding-top: 50px;
+		padding-bottom:50px;
+	}
+	#category{
+		display: flex;
+		justify-content:space-between;
+
+	}
+	.active{
+		color:white;	
+	}
+	.active a{
+		background-color:#DC3545;
+	}
+	#prevpage{
+		visibility: hidden;
+	}
+	#nextpage{
+		visibility: hidden;
+	}
+	#titlename{
+		font-size: 30px;
+	}
+	#titlename span{
+		line-height: 46px;
+	}
+	#titlename span:after{
+		width:150px;
+	}
+	.categoryBtn{
+		width:250px;
+	}
+	.dropdown{
+		position: relative;
+	}
+	#sort{
+		position: absolute;
+ 	 	top: 0;
+  		right: 0;
+	}
+	#boardContent{
+		width:96%;
+		margin: 0 auto;
+	}
+	#boardInfo{
+		justify-content: space-between;
+	}
+	#boardInfo p{
+		margin-bottom: 10px;
+	}
+	#boardInfoDetail p{
+		margin-left: 15px;
+	}
+	hr{
+		margin: 10px 0;
+	}
+	
+	#contentBody img{
+		max-width: 100%;
+	}
+
+	#rcomCnt{
+		margin:5px;
+		padding-top:16px;
+		width:100px;
+		height:100px;
+		border-radius: 30%;
+		background-color: #F99494;
+	}
+	#rcomCnt p{
+		text-align: center;
+	}
+	#nrcomCnt{
+		margin:5px;
+		padding-top:16px;
+		width:100px;
+		height:100px;
+		border-radius: 30%;	
+		background-color: #8692FF;
+	}
+	#nrcomCnt p{
+		text-align: center;
+	}
+	#conmmentSection hr{
+		background-color: black;
+	}
+	.hComment{
+	
+	}
+	.subComment{
+		margin-left: 50px;
+	}
+	.commentContent{
+	
+	}
+
+</style>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div id="boardSection">
+			<h1 class="news-title" id="titlename">
+				<span th:text="${boardName}">NOTICE</span>
+			</h1>
+			<div id="boardContent">
+				<div id="contentHeader">
+					<h3 th:text="${board.ttl}">제목</h3>
+					<div id="boardInfo" class="d-flex">
+						<div>
+							<p th:text="${member.nick}">이름</p>
+						</div>
+						<div id="boardInfoDetail" class="d-flex">
+							<p th:text="${#dates.format(board.drwupDt,'yyyy-MM-dd')}">날짜</p>
+							<p>조회수 [[${board.inq}]]</p>
+							<p>추천수 [[${board.rcom}]]</p>
+							<p>비추천수 [[${board.nrcom}]]</p>
+						</div>
+					</div>
+				</div>
+				<hr>
+				<div id="contentBody">
+				
+				</div>
+				
+				<div class="d-flex justify-content-center">
+					<div id="rcomCnt">
+						<p>추천</p>
+						<p th:text="${board.rcom}">0</p>
+					</div>
+					<div id="nrcomCnt">
+						<p>추천</p>
+						<p th:text="${board.rcom}">0</p>
+					</div>
+				</div>
+				<div class="d-flex justify-content-end">
+					<button>글수정</button>
+					<button>글삭제</button>					
+				</div>
+				<hr>
+				<div id="conmmentSection">
+					<p>전체 댓글 <span th:text="${#arrays.length(comments)}">0</span>개</p>
+					<hr>
+					<div id="commentContents">
+						<div th:each="comment:${comments}">
+							<div th:if="${comment.commNo}==${comment.hCommNo}" class="hComment">
+								<div class="d-flex justify-content-between">
+									<div class="d-flex">
+										<p><b>[[${comment.nick}]]</b></p>
+										<p>([[${#dates.format(comment.drwupDt,'yyyy-MM-dd')}]])</p>
+									</div>
+									<div class="commentContent">
+										<button>추천</button>
+										<button>비추천</button>
+									</div>
+								</div>
+								<div>
+									<p th:text="${comment.cntn}">내용</p>			
+								</div>
+							</div>
+							<div th:unless="${comment.commNo}==${comment.hCommNo}" class="subComment">
+								<div class="d-flex justify-content-between">
+									<div class="d-flex">
+										<p><b>[[${comment.nick}]]</b></p>
+										<p>([[${#dates.format(comment.drwupDt,'yyyy-MM-dd')}]])</p>
+									</div>
+									<div class="commentContent">
+										<button>추천</button>
+										<button>비추천</button>
+									</div>
+								</div>
+								<div>
+									<p th:text="${comment.cntn}">내용</p>			
+								</div>
+							</div>
+						</div>
+					</div>
+					<hr>
+					<div class="d-flex">
+						<textarea cols="105"></textarea>
+						<button>댓글쓰기</button>
+					</div>
+					<hr>
+				</div>
+			</div>
+			<div th:replace="community/boardList.html::myBoardList">
+			
+			</div>
+			
+		</div>
+		
+		
+		<script th:inline="javascript">
+			contentBody.innerHTML=[[${board.cntn}]];
+			
+			
+		</script>
+	</div>
+</body>
+</html>

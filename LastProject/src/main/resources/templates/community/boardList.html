@@ -56,71 +56,71 @@
 			<h1 class="news-title" id="titlename">
 				<span th:text="${boardName}">NOTICE</span>
 			</h1>
-
-			<div id="category">
-				<div class="categoryBtn">
-					<button class="btn btn-dark  mt-3 mt-lg-0" type="button" id="allBoard">전체글</button>
-					<button class="btn btn-dark  mt-3 mt-lg-0" type="button" id="bestBoard">인기글</button>
-				</div>
-				<div class="categoryBtn">
-					<div th:if="${boardName=='자유게시판'}">
-						<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C101">드립</button>
-						<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C102">일지</button>
-						<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C103">자료</button>
-						<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C104">질문</button>
+			<div th:fragment="myBoardList">
+				<div id="category">
+					<div class="categoryBtn">
+						<button class="btn btn-dark  mt-3 mt-lg-0" type="button" id="allBoard">전체글</button>
+						<button class="btn btn-dark  mt-3 mt-lg-0" type="button" id="bestBoard">인기글</button>
 					</div>
-					<div th:if="${boardName=='주식게시판'}">
-						<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C201">농산물</button>
-						<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C202">수산물</button>
+					<div class="categoryBtn">
+						<div th:if="${boardName=='자유게시판'}">
+							<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C101">드립</button>
+							<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C102">일지</button>
+							<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C103">자료</button>
+							<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C104">질문</button>
+						</div>
+						<div th:if="${boardName=='주식게시판'}">
+							<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C201">농산물</button>
+							<button class="btn btn-secondary  mt-2 mt-lg-0 ctgr" type="button" data-common-cd="C202">수산물</button>
+						</div>
+					</div>
+					<div class="dropdown categoryBtn">
+						<select class="btn btn-secondary dropdown-toggle" id="sort" name="sort">
+							<option value="drwup_dt">작성일</option>
+							<option value="inq">조회순</option>
+							<option value="rcom">추천순</option>
+						</select>
 					</div>
 				</div>
-				<div class="dropdown categoryBtn">
-					<select class="btn btn-secondary dropdown-toggle" id="sort" name="sort">
-						<option value="drwup_dt">작성일</option>
-						<option value="inq">조회순</option>
-						<option value="rcom">추천순</option>
-					</select>
+	
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<td>글번호</td>
+							<td>머리말</td>
+							<td style="width:50%;">제목</td>
+							<td>글쓴이</td>
+							<td>작성일</td>
+							<td>조회수</td>
+						</tr>
+					</thead>
+					<tbody id="boardList">
+	
+					</tbody>
+				</table>
+				<hr>
+				<div>
+					<button class="btn btn-primary mt-3 mt-lg-0 pull-right" id="insertBoard" type="button">글쓰기</button>
 				</div>
-			</div>
-
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<td>글번호</td>
-						<td>머리말</td>
-						<td style="width:50%;">제목</td>
-						<td>글쓴이</td>
-						<td>작성일</td>
-						<td>조회수</td>
-					</tr>
-				</thead>
-				<tbody id="boardList">
-
-				</tbody>
-			</table>
-			<hr>
-			<div>
-				<button class="btn btn-primary mt-3 mt-lg-0 pull-right" id="insertBoard" type="button">글쓰기</button>
-			</div>
-			<div>
-				<nav aria-label="Page navigation example" class="d-flex justify-content-center">
-					<ul class="pagination">
-						<li class="page-item">
-							<a class="page-link" id="prevpage" href="javascript:prevPage()" aria-label="Previous">
-								<span aria-hidden="true">&laquo;</span>
-							</a>
-						</li>
-						<!-- 페이징버튼 들어갈 공간 -->
-					    <li class="page-item">
-							<a class="page-link" id="nextpage" href="javascript:nextPage()" aria-label="Next">
-								<span aria-hidden="true">&raquo;</span>
-							</a>
-						</li>
-					</ul>
-				</nav>
+				<div>
+					<nav aria-label="Page navigation example" class="d-flex justify-content-center">
+						<ul class="pagination">
+							<li class="page-item">
+								<a class="page-link" id="prevpage" href="javascript:prevPage()" aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span>
+								</a>
+							</li>
+							<!-- 페이징버튼 들어갈 공간 -->
+						    <li class="page-item">
+								<a class="page-link" id="nextpage" href="javascript:nextPage()" aria-label="Next">
+									<span aria-hidden="true">&raquo;</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
 			</div>
 		</div>
-		
 	<script th:inline="javascript">
 		//초기값
 		let currentState=[[${boardCode}]];
@@ -161,6 +161,14 @@
 					for(let item of items){
 						let td = document.createElement('td');
 						td.textContent=board[item];
+						if(item=="ttl"){
+							if(board["cntn"].indexOf("img")>=0){
+								let img=document.createElement('img');
+								img.src= "../image/imageIcon.png";
+								img.style.height="16px";
+								td.append(img);
+							}
+						}
 						tr.append(td);
 					}
 					tbody.append(tr);
@@ -301,11 +309,18 @@
 			window.location.href="/community/addBoard?ctgr="+[[${boardName}]]+"&commonCd="+[[${boardCode}]];
 		})
 		
-
+		// 게시물 클릭 -> 게시물 상세
+		$("#boardList").on('click','td',function(){
+			if(event.target.tagName=="IMG")
+				return;
+			let boardNo=event.target.parentNode.dataset.boardno;
+			window.location.href="/community/boardDetail?boardNo="+boardNo+"&commonCd="+[[${boardCode}]];
+		})
 		
 
 		
 	</script>
+	
 	</div>
 </body>
 </html>

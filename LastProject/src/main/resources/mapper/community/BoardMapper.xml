@@ -12,13 +12,13 @@
 	</select>
 
 	<select id="getBoardList" resultType="BoardVO">		
-		SELECT board_no, nick, ttl, drwup_dt, inq,rcom, common_cd, ctgr
+		SELECT board_no, nick, ttl, cntn, drwup_dt, inq,rcom, common_cd, ctgr
 		FROM(
-    		SELECT rownum rn,board_no, nick, ttl, drwup_dt, inq,rcom, common_cd, ctgr
+    		SELECT rownum rn,board_no, nick, ttl, cntn, drwup_dt, inq,rcom, common_cd, ctgr
     		FROM(        
-        		SELECT board_no, nick, ttl, drwup_dt, inq,rcom, common_cd, ctgr
+        		SELECT board_no, nick, ttl, cntn, drwup_dt, inq,rcom, common_cd, ctgr
         		FROM COMMON_CODE JOIN
-            		(SELECT board_no, nick, ttl, drwup_dt, inq,rcom, common_cd
+            		(SELECT board_no, nick, ttl, cntn, drwup_dt, inq,rcom, common_cd
             		FROM BOARD JOIN MEMBER
             		USING (memb_no)
             		WHERE rcom>=#{rcom} AND common_cd LIKE #{commonCd}||'%')
@@ -89,4 +89,30 @@
 		INSERT INTO BOARD(board_no,memb_no,ttl,cntn,drwup_dt,common_cd)
 		VALUES(#{boardNo},#{membNo},#{ttl},#{cntn},sysdate,#{commonCd})
 	</insert>
+	
+	<select id="getBoardDetail" resultType="BoardVO">
+		SELECT *
+		FROM BOARD
+		WHERE board_no=#{boardNo}
+	</select>
+	
+	<update id="increaseInquery" parameterType="String">
+		UPDATE BOARD
+		SET inq=inq+1
+		WHERE board_no=#{boardNo}
+	</update>
+	
+	<select id="getMembInfo" resultType="MembVO">
+		SELECT memb_no, nick
+		FROM MEMBER
+		WHERE memb_no=#{membNo}
+	</select>
+	
+	<select id="getComments" resultType="CommentsVO">
+		SELECT comm_no,board_no,cntn,drwup_dt,rcom,nrcom,h_comm_no,memb_no,nick
+		FROM COMMENTS JOIN MEMBER
+		USING (memb_no)
+		WHERE board_no=#{boardNo}
+		ORDER BY h_comm_no
+	</select>
 </mapper>

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.yedam.app.common.service.AttachFileVO;
 import com.yedam.app.common.service.CommonCodeVO;
 import com.yedam.app.community.service.BoardService;
 import com.yedam.app.community.service.BoardVO;
@@ -63,15 +64,28 @@ public class BoardController {
 	@PostMapping("addBoard")
 	@ResponseBody
 	public String addBoard(BoardVO vo) {
-		System.out.println(vo);
 		vo.setMembNo(boardService.getMembNo(vo.getNick()));
+		System.out.println(vo);
 		boolean result = boardService.insertBoard(vo);
-
+		
 		if (result) {
-			return "success";
+			return vo.getBoardNo();
 		} else {
 			return "fail";
 		}
+	}
+	
+	@GetMapping("boardDetail")
+	public String boardDetail(Model model,BoardVO vo) {
+		boardService.increaseInquery(vo.getBoardNo());
+		model.addAttribute("boardCode", vo.getCommonCd().substring(0, 2));
+		model.addAttribute("boardName", boardService.getBoardName(vo.getCommonCd().substring(0, 2)));
+		vo = boardService.getBoardDetail(vo.getBoardNo());
+		model.addAttribute("board",vo);
+		model.addAttribute("member",boardService.getMembInfo(vo.getMembNo()));
+		model.addAttribute("comments",boardService.getComments(vo.getBoardNo()));
+		
+		return "community/boardDetailForm";
 	}
 
 }

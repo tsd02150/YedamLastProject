@@ -3,6 +3,8 @@ package com.yedam.app.community.mapper;
 import java.util.List;
 
 import com.yedam.app.community.service.BoardVO;
+import com.yedam.app.community.service.CommentsVO;
+import com.yedam.app.member.service.MembVO;
 
 public interface BoardMapper {
 	// 해당 게시판 이름
@@ -21,4 +23,12 @@ public interface BoardMapper {
 	public String getMembNo(String nick);
 	// 게시물 추가
 	public int insertBoard(BoardVO vo);
+	// 게시물 정보
+	public BoardVO getBoardDetail(String boardNo);
+	// 게시물 조회수 증가
+	public void increaseInquery(String boardNo);
+	// 게시물 작성자 정보
+	public MembVO getMembInfo(String membNo);
+	// 게시물 댓글 정보
+	public List<CommentsVO> getComments(String boardNo);
 }
