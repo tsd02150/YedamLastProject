@@ -27,6 +27,15 @@ public class MallController {
 		model.addAttribute("product", list);
 		return "mall/mallMain";
 	}
+	/*
+	 * @GetMapping("{pid}") public String detail(@PathVariable("pid") String pid,
+	 * Model model) {
+	 * 
+	 * //mallService.ViemcntUpdate(pid); Optional<Detail> result = mallService.
+	 * 
+	 * return "mall/getFarm"; }
+	 */
+	
 	
 	// 농산물 페이지
 	@GetMapping("farmList")
@@ -40,7 +49,7 @@ public class MallController {
 	@GetMapping("getFarm")
 	public String farmDetail(Model model) {
 		List<ProductVO> farmList = mallService.getProductList();
-		model.addAttribute("farmList", farmList);
+		model.addAttribute("farm", farmList);
 		return "mall/getFarm";
 	}
 
