@@ -6,10 +6,10 @@
 	<!-- login 시 회원 정보 조회 -->
 	<select id="loginCheck" parameterType="String" resultType="UserVO">
 		SELECT * 
-		FROM member 
-		JOIN address 
-		USING(memb_no)
-		WHERE id = #{id}
+		FROM member m
+		LEFT OUTER JOIN address a
+    ON m.memb_no = a.memb_no
+		WHERE id  = #{id}
 	</select>
 	
 </mapper>

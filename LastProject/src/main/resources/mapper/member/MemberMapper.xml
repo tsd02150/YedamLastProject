@@ -163,5 +163,81 @@
 			  INSERT INTO interest_item (interest_no, memb_no, item_no)
 			  VALUES (#{interestNo}, #{membNo}, #{itemNo})
 		</insert>
+		
+		<select id="myinterestList" parameterType="String" resultType="MembVO">
+			SELECT m.*, a.addr_no, a.base_addr_yn,a.zip,a.addr,a.deta_addr ,int.interest_no, t.item_no, c.common_cd, t.nm tnm, t.prc tprc, t.prc - i.cl_prc change ,TRUNC(((t.prc-i.cl_prc)/i.cl_prc)*100) rate
+        FROM (
+        			SELECT 	item_no, cl_prc 
+              FROM 		item_info 
+              WHERE 	to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
+              ) i 		--전일주가정보
+        JOIN ( 
+        			SELECT distinct(a.item_no),nm,dt,ta_prc prc
+                     FROM( SELECT nm,i.item_no, MAX(ta_dt) dt
+                           FROM ta_hr t join item i 
+                           ON i.item_no = t.item_no
+                           GROUP BY nm,i.item_no
+                           ORDER BY item_no) a join ta_hr t
+                     ON a.item_no= t.item_no and a.dt=t.ta_dt
+                     order by 1) t  		-- 최근 체결가
+        ON 		i.item_no = t.item_no
+        JOIN ( 
+        			SELECT 	CASE SUBSTR(common_cd,1,2) 
+		        					WHEN 'S1' THEN '농산물'
+		                  WHEN 'S2' THEN '수산물'
+		                  END sc
+		               			 	,h_ctgr theme
+		                			,ctgr item
+		                  		,common_cd
+              FROM 		common_code
+              WHERE 	length(common_cd) =6
+              ORDER 	by common_cd ) c 
+         ON c.item=t.nm
+         JOIN interest_item int
+         ON int.item_no = i.item_no
+         JOIN member m 
+         on m.memb_no = int.memb_no
+         LEFT OUTER JOIN address a 
+         ON m.memb_no = a.memb_no
+         WHERE id = #{id}
+         ORDER BY common_cd
+		</select>
+		
+		<select id="myStockList" resultType="MembVO">
+			SELECT m.*, p.poss_no, p.stock_cnt, p.trade_prc,t.item_no, c.common_cd, t.nm tnm,t.prc tprc, t.prc - i.cl_prc change ,TRUNC(((t.prc-i.cl_prc)/i.cl_prc)*100) rate
+        FROM (
+        			SELECT 	item_no, cl_prc 
+              FROM 		item_info 
+              WHERE 	to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
+              ) i 		--전일주가정보
+        JOIN ( 
+        			select distinct(a.item_no),nm,dt,ta_prc prc
+                     from(   SELECT nm,i.item_no, MAX(ta_dt) dt
+                           FROM ta_hr t join item i 
+                           on i.item_no = t.item_no
+                           GROUP BY nm,i.item_no
+                           order by item_no) a join ta_hr t
+                     on a.item_no= t.item_no and a.dt=t.ta_dt
+                     order by 1) t  		-- 최근 체결가
+        ON 		i.item_no = t.item_no
+        JOIN ( 
+        			SELECT 	CASE SUBSTR(common_cd,1,2) 
+		        					WHEN 'S1' THEN '농산물'
+		                  WHEN 'S2' THEN '수산물'
+		                  END sc
+		               			 	,h_ctgr theme
+		                			,ctgr item
+		                  		,common_cd
+              FROM 		common_code
+              WHERE 	length(common_cd) =6
+              ORDER 	by common_cd ) c 
+         ON c.item=t.nm
+         JOIN poss_stock p 
+         ON t.item_no = p.item_no
+         JOIN member m   
+         ON p.memb_no = m.memb_no
+         where id = #{id}
+         ORDER by common_cd
+		</select>
 	
 </mapper>

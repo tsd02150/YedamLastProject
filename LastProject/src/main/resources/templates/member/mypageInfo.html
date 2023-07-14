@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+
+<head>
+	<meta charset="UTF-8">
+	<title>회원관리</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+	<style>
+	.sidebar.sidebar-left{
+		height: 1000px;
+	}
+	.titleMenu{
+		padding-top : 20px;
+	}
+	.sidebarMenu{
+		padding-top : 40px;
+		padding-bottom : 40px;
+	}
+		#mypageBody, .sidebar {
+			border: 1px solid #DDDDDD;
+			height: auto;
+		}
+		#mypagetbl{
+		width : 611.67px;
+		font-size: larger;
+		}
+		#mypagetbl th{
+			padding : 20px;
+			width : 500px;
+		}
+		#mypagetbl td{
+			text-align : right;
+			padding-right : 20px;
+		}
+		.titleTxt{
+			text-align : center;
+		}
+		.py-20 {
+    clear: both;
+    height: 20px;
+  }
+  .bi{
+  	font-size: 50px;
+  	margin-top : 15px;
+  }
+		
+	</style>
+</head>
+<body>
+	<section class="block-wrapper flex items-center justify-center w-screen h-screen p-10 space-x-6 bg-gray-300"
+		layout:fragment="content">
+		<div class="container">
+			<div class="row">
+				<!-- article1 -->
+				<div class="col-lg-4 col-md-8 col-sm-12 col-xs-12">
+					<div class="sidebar sidebar-left">
+						<div class="widget">
+						
+							<!-- sidebar start -->
+							<div class="flex flex-col items-center w-40 h-full overflow-hidden text-gray-700 bg-gray-100 rounded">
+								<!-- [[${session.loggedInMember.id}]] -->
+							</div>
+							<!-- sidebar end -->
+							
+						</div>
+					</div>
+				</div>
+				<!-- article1 end -->
+
+				<!-- article2 -->
+				<div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
+					<div id="mypageBody">
+						<table id="mypagetbl">
+							<tr style="background-color : bisque">
+								<th>마이페이지</th>
+								<td><p class="bi bi-arrow-right-square-fill"></p></td>
+							</tr>
+							
+						</table>
+					</div>
+				</div>
+				<!-- article2 end -->
+			</div>
+		</div>
+	</section>
+</body>
+
+</html>

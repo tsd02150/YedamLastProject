@@ -4,9 +4,9 @@
 	layout:decorate="~{layout/layout}">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <title>회원가입</title>
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script
+	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <style>
 #errormsg {
 	background-color: GhostWhite;
@@ -46,40 +46,6 @@ input[type='number'] {
 .login-signup section-padding {
 	padding: 0;
 }
-		
-		* The Modal (background) */
-		.modal {
-		   display: none; /* Hidden by default */
-		   position: fixed; /* Stay in place */
-		   z-index: 1; /* Sit on top */
-		   left: 0;
-		   top: 0;
-		   width: 100%; /* Full width */
-		   height: 100%; /* Full height */
-		   overflow: auto; /* Enable scroll if needed */
-		   background-color: rgb(0,0,0); /* Fallback color */
-		   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-		}
-		
-		/* Modal Content/Box */
-		.modal-content {
-		    background-color: #fefefe;
-		    margin: 15% auto; /* 15% from the top and centered */
-		    padding: 20px;
-		    border: 1px solid #888;
-		    width: 30%; /* Could be more or less, depending on screen size */                          
-		}
-		/* Chrome, Safari, Edge, Opera */
-		input::-webkit-outer-spin-button,
-		input::-webkit-inner-spin-button {
-		  -webkit-appearance: none;
-		  margin: 0;
-		}
-		
-		/* Firefox */
-		input[type=number] {
-		  -moz-appearance: textfield;
-		}
 </style>
 </head>
 <body>
@@ -92,8 +58,8 @@ input[type='number'] {
 					<form id="joinfrm" action="join" class="signup-form row" method="post" onsubmit="nullCheck()">
 						<div class="col-md-12">
 							<div class="form-group">
-								<label for="mname">이름</label> <input type="text"
-									class="form-control" id="mname" name="nm"
+								<label for="f-name">이름</label> <input type="text"
+									class="form-control" id="f-name" name="nm"
 									placeholder="이름을 입력하세요" style="width: 60%;"><br>
 									<span id="nameCheck"></span>
 							</div>
@@ -118,6 +84,14 @@ input[type='number'] {
 								<button type="button" id="checkId">중복확인</button>
 								<br>
 								<span id="idmsg"></span>
+								<!-- 
+								<label for="memailconfirm"></label>
+								<input type="text" class="form-control" id="memailconfirm" placeholder="인증번호를 입력하세요"
+									style="width: 80%; display: inline;">
+								<button type="button" class="checkEmail">인증코드 발송</button>
+								<button type="button" id="checkEmailBtn">인증 확인</button><br>
+								<span id="memailconfirmTxt"></span>
+								 -->
 							</div>
 						</div>
 						<div class="col-md-12">
@@ -144,25 +118,11 @@ input[type='number'] {
 						</div>
 						<div class="col-md-12">
 							<div class="form-group">
-								<label for="telInput">연락처</label><br><input type="text" class="form-control" oninput="autoHyphen(this)"
-									maxlength="13" name="to" id="telInput" placeholder="연락처를 입력하세요" style="width : 70%; display : inline;">
-								<label for="telhidden"></label><br><input type="text" class="form-control" oninput="autoHyphen(this)"
-									maxlength="13" name="tel" id="telhidden" placeholder="연락처를 입력하세요" style="width : 70%; display : inline;">
-								<button type="button" id="testBtn1">인증번호 발송</button>
-								<br><span id="telCheck"></span>
+								<label for="telInput">연락처</label><br> <input type="text"
+									class="form-control" oninput="autoHyphen(this)" maxlength="13"
+									name="tel" id="telInput" placeholder="전화번호를 입력하세요">
 							</div>
 						</div>
-<<<<<<< HEAD
-						<div class="col-md-12">
-							<div class="form-group">
-								<label for="codeCheckInput"></label>
-								<input type="number" class="form-control" name="confirmcode" id="codeCheckInput" placeholder="인증번호를 입력하세요"style="width : 70%; display : inline;">
-								<button type="button" id="testBtn2">인증번호 확인</button><br>
-								<span id="codeCheck"></span>
-							</div>
-						</div>
-=======
->>>>>>> branch 'main' of https://github.com/tsd02150/YedamLastProject.git
 						<div class="col-md-12">
 							<div class="form-group">
 								<label for="addr1">주소</label><br> <input type="type"
@@ -191,17 +151,6 @@ input[type='number'] {
 					</form>
 				</div>
 			</div>
-			<div id="myModal" class="modal">
-     <!-- Modal content -->
-     <div class="modal-content">
-     	 <p class="bi bi-exclamation-circle" style="text-align: center; font-size: 24pt;"></p>
-       <p style="text-align: center; line-height: 1.5;"><br>5회 이상 실패하셨습니다.<br>본인인증을 다시 진행해주세요.</p>
-       <p><br></p>
-     	<div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();">
-     		<span class="pop_bt" style="font-size: 13pt;">닫기</span>
-     	</div>
-     </div>
-   </div>
 		</div>
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script type="text/javascript">
@@ -215,7 +164,7 @@ input[type='number'] {
 
  
  //이름 유효성 검사 : 한글로 2-5자리
-const nameInput = document.querySelector("#mname");
+const nameInput = document.querySelector("#f-name");
 const nameCheck = document.querySelector("#nameCheck");
 
 nameInput.addEventListener("input", function() {
@@ -301,138 +250,29 @@ nameInput.addEventListener("input", function() {
 	}); //아이디 중복확인 끝
 	
  // 아이디 이메일형식 유효성검사 확인
-idInput.addEventListener("input", function() {
-    const email = idInput.value;
-    const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/;
+	idInput.addEventListener("input", function() {
+	    const email = idInput.value;
+	    const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/;
 
-    if (email.length >= 6 && email.length < 64 && email.match(emailRegex)) {
-        const atIndex = email.indexOf("@");
-        const dotIndex = email.lastIndexOf(".");
+	    if (email.length >= 6 && email.length < 64 && email.match(emailRegex)) {
+	        const atIndex = email.indexOf("@");
+	        const dotIndex = email.lastIndexOf(".");
 
-        if (atIndex !== -1 && dotIndex > atIndex && dotIndex !== email.length - 1) {
-            idMsg.textContent = "";
-        } else {
-            idMsg.textContent = "올바른 이메일 형식을 입력하세요.";
-        }
-    } else {
-        if (email.length < 6) {
-            idMsg.textContent = "이메일이 너무 짧습니다.";
-        } else if (email.length >= 64) {
-            idMsg.textContent = "이메일이 너무 깁니다.";
-        } else if (!email.match(emailRegex)) {
-            idMsg.textContent = "올바른 이메일 형식을 입력하세요.";
-        }
-    }
-});
+	        if (atIndex !== -1 && dotIndex > atIndex && dotIndex !== email.length - 1) {
+	            idMsg.textContent = "";
+	        } else {
+	            idMsg.textContent = "올바른 이메일 형식을 입력하세요.";
+	        }
+	    } else {
+	        idMsg.textContent = "올바른 이메일 형식을 입력하세요.";
+	    }
+	});
 	
  // 연락처 처리
  const autoHyphen = (target) => {
     target.value = target.value.replace(/[^0-9]/g, '').replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`);
 };
 
-let testcode;
-
-let count1 = 0; // 본인인증 횟수 5회 제한 count
-let count2 = 0; // 인증번호 확인 횟수 5회 제한 count
-
-// 정보 확인 sms 발송
-$("#testBtn1").on("click", function () {
-  if ($("#telInput").val() == "") {
-    $("#telInput").focus();
-    return;
-  }
-
-  console.log($("#telInput").val());
-  console.log($("#mname").val());
-
-  let toUser = telInput.value
-    .replace(/[^0-9]/g, "")
-    .replace(/^(\d{3})(\d{4})(\d{4})$/, "$1$2$3");
-  testcode = createSmsKey();
-  console.log(testcode);
-  count1++;
-  /*$.ajax({
-        url: "sendSms",
-        method: "POST",
-        data: {
-          to: toUser,
-          content: "[SMS] 인증번호 [" + testcode + "]를 입력해주세요"
-        },
-        success: function(response) {
-          console.log("key: " + testcode);
-        },
-        error: function(err) {
-          console.log(err);
-        }
-      });// sms 발송 끝*/
-  $("#telCheck")
-    .text("인증번호가 발송되었습니다.")
-    .css({
-      color: "#0D6EFD",
-      "font-weight": "bold",
-      "font-size": "14px",
-    }); // 인증번호 확인 끝.
-	$("#telhidden").val($("#telInput").val());
-  $("#testBtn1").addClass("isOk"); //본인인증 실행 여부 체크
-
-  if (count1 >= 5) {
-    $("#myModal").show();
-  }
-});
-
-function close_pop(flag) {
-$('#myModal').hide();
-	 window.location.reload();
-};
-
-	//인증번호 비교
-	$("#testBtn2").on("click", function(){
-		if($("#telInput").val() == ""){
-			$("#telInput").focus();
-			return;
-		}
-		
-		if($("#mname").val() == ""){
-			$("#mname").focus();
-			return;
-		}
-		console.log("인증번호 비교");
-		console.log(testcode);
-		
-		if($("#codeCheckInput").val() != testcode){
-			count2++;
-			$("#codeCheck").text("인증번호가 일치하지 않습니다. 다시 입력하세요")
-			.css({
-				"color": "#FA3E3E",
-				"font-weight": "bold",
-				"font-size": "14px"
-			});
-		} else {
-			$("#codeCheck").text("인증이 완료되었습니다.")
-			.css({
-				"color": "#0D6EFD",
-				"font-weight": "bold",
-				"font-size": "14px"
-			});// 인증번호 확인 비교 끝
-			
-			$("#testBtn2").addClass("isOk"); //인증번호 비교 실행 여부 체크
-			
-		}
-		if (count2 >= 5) {
-			$('#myModal').show();
-		}
-	})
-	
-	//인증번호 발송
-	function createSmsKey() {
-	  let key = '';
-	  
-	  for (let i = 0; i < 5; i++) { 
-	    key += Math.floor(Math.random() * 10);
-	  }
-	  return key;
-	}
-	
 function phoneFormat(phoneNumber) {
   // 특수문자 제거
   const value = phoneNumber.replace(/[^0-9]/g, '');
@@ -460,50 +300,49 @@ document.querySelector('form').addEventListener('submit', (event) => {
  //주소 찾기 - 다음 주소 api
  document.querySelector(".zipbtn").addEventListener('click',function(){
     new daum.Postcode({
-        oncomplete: function (data) {
-            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+      oncomplete: function (data) {
+       // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
 
-            // 도로명 주소의 노출 규칙에 따라 주소를 조합한다.
-            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-            var fullRoadAddr = data.roadAddress; // 도로명 주소 변수
-            var extraRoadAddr = ''; // 도로명 조합형 주소 변수
+       // 도로명 주소의 노출 규칙에 따라 주소를 조합한다.
+       // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+       var fullRoadAddr = data.roadAddress; // 도로명 주소 변수
+       var extraRoadAddr = ''; // 도로명 조합형 주소 변수
 
-            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
-            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-            if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-                extraRoadAddr += data.bname;
-            }
-            // 건물명이 있고, 공동주택일 경우 추가한다.
-            if (data.buildingName !== '' && data.apartment === 'Y') {
-                extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-            }
-            // 도로명, 지번 조합형 주소가 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-            if (extraRoadAddr !== '') {
-                extraRoadAddr = ' (' + extraRoadAddr + ')';
-            }
-            // 도로명, 지번 주소의 유무에 따라 해당 조합형 주소를 추가한다.
-            if (fullRoadAddr !== '') {
-                fullRoadAddr += extraRoadAddr;
-            }
+       // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+       // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+       if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+           extraRoadAddr += data.bname;
+       }
+       // 건물명이 있고, 공동주택일 경우 추가한다.
+       if (data.buildingName !== '' && data.apartment === 'Y') {
+           extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+       }
+       // 도로명, 지번 조합형 주소가 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+       if (extraRoadAddr !== '') {
+           extraRoadAddr = ' (' + extraRoadAddr + ')';
+       }
+       // 도로명, 지번 주소의 유무에 따라 해당 조합형 주소를 추가한다.
+       if (fullRoadAddr !== '') {
+           fullRoadAddr += extraRoadAddr;
+       }
 
-            // 우편번호와 주소 정보를 해당 필드에 넣는다.
-            console.log(data.zonecode);
-            console.log(fullRoadAddr);
+       // 우편번호와 주소 정보를 해당 필드에 넣는다.
+       console.log(data.zonecode);
+       console.log(fullRoadAddr);
 
+       $("[name=addr1]").val(data.zonecode);
+       $("[name=addr2]").val(fullRoadAddr);
 
-            $("[name=addr1]").val(data.zonecode);
-            $("[name=addr2]").val(fullRoadAddr);
+       // 우편번호와 주소 정보를 해당 필드에 넣는다.
+       document.getElementById('addr1').value = data.zonecode; //5자리 새우편번호 사용
+       document.getElementById('addr2').value = fullRoadAddr;
 
-
-            // 우편번호와 주소 정보를 해당 필드에 넣는다.
-            document.getElementById('addr1').value = data.zonecode; //5자리 새우편번호 사용
-            document.getElementById('addr2').value = fullRoadAddr;
-        }
+      }
     }).open();
  });
  
  
- let isNm = document.querySelector("#mname");
+ let isNm = document.querySelector("#f-name");
  let isNick = document.querySelector("#nickname");
  let isPwd = document.querySelector("#pass");
  let isPwd2 = document.querySelector("#passCheck");
@@ -511,82 +350,44 @@ document.querySelector('form').addEventListener('submit', (event) => {
  let isEmail = document.querySelector("#email-address");
  let isTel = document.querySelector("#telInput");
  
- function nullCheck() {
-    event.preventDefault();
+ function nullCheck(event) {
+	    event.preventDefault();
 
-    if (isNick.value === "" || nickMsg.textContent.includes("사용 가능한")) {
-        isNick.focus();
-        return; 
-    }
-    if (isPwd.value === "") {
-        isPwd.focus();
-        return;
-    }
-    if (isPwd2.value === "") {
-        isPwd2.focus();
-        return; 
-    }
-    if (isId.value === "") {
-        isId.focus();
-        return; 
-    }
-    if (isEmail.value === "") {
-        isEmail.focus();
-        return; 
-    }
-    if (isTel.value === "") {
-        isTel.focus();
-        return; 
-    }
-    if (isNm.value === "") {
-        isNm.focus();
-        return; 
-    }
-   if(!$("#checkNick").hasClass("checkedBtn")){
-	   $("#nickmsg").text("중복확인 버튼을 눌러주세요	.")
-		.css({
-			"color": "#FA3E3E",
-			"font-weight": "bold",
-			"font-size": "14px"
-		});
-	   isNick.focus();
-	   return;
-   }
-    if(!$("#checkId").hasClass("checkedBtn")){
-    	$("#idmsg").text("중복확인 버튼을 눌러주세요	.")
-				.css({
-					"color": "#FA3E3E",
-					"font-weight": "bold",
-					"font-size": "14px"
-			});
-    	isId.focus();
-    	return;
-    }
-    
-   if(!$("#testBtn1").hasClass("isOk")){
-			$("#telCheck").text("본인인증 확인 후 가능합니다.")
-			.css({
-				"color": "#FA3E3E",
-				"font-weight": "bold",
-				"font-size": "14px"
-			});
-			$("#telInput").focus();
-			return;
-   }
-   
-	if(!$("#testBtn2").hasClass("isOk")){
-		$("#codeCheck").text("인증번호 확인해주세요.")
-		.css({
-			"color": "#FA3E3E",
-			"font-weight": "bold",
-			"font-size": "14px"
-		});
-		$("#codeCheckInput").focus();
-		return;
-	}
+	    if (isNick.value === "" || nickBtn.classList.contains("checkedBtn") || nickMsg.textContent.includes("사용 가능한")) {
+	        isNick.focus();
+	        return; 
+	    }
+	    if (isPwd.value === "") {
+	        isPwd.focus();
+	        return;
+	    }
+	    if (isPwd2.value === "") {
+	        isPwd2.focus();
+	        return; 
+	    }
+	    if (isId.value === "" || idBtn.classList.contains("checkedBtn")) {
+	        isId.focus();
+	        return; 
+	    }
+	    if (isEmail.value === "") {
+	        isEmail.focus();
+	        return; 
+	    }
+	    if (isTel.value === "") {
+	        isTel.focus();
+	        return; 
+	    }
+	    if (isNm.value === "") {
+	        isNm.focus();
+	        return; 
+	    }
 
-   // 모든 조건을 만족했을 때 호출
-      document.getElementById('joinfrm').submit();
+//	    if(memailConfirmTxt.textContent === "인증 확인되었습니다."){
+//	    	document.getElementById("memailconfirm").focus();
+//	    }
+	    
+	    // 모든 조건을 만족했을 때 호출
+        document.getElementById('joinfrm').submit();
 	}
 </script>
 

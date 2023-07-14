@@ -38,5 +38,13 @@ public interface MemberService {
 	//관심종목 선택
 	public int insertInterestItem(MembVO membVO);
 	
+	//마이페이지
+	
+	//관심종목
+	public List<MembVO> myinterestList(MembVO membVO);
+	
+	//보유주식
+	public List<MembVO> myStockList(MembVO membVO);
+	
 
 }

@@ -101,4 +101,14 @@ public class MemberServiceImpl implements MemberService {
 	public MembVO mainLoginCheck(MembVO membVO) {
 		return membMapper.mainLoginCheck(membVO);
 	}
+
+	@Override
+	public List<MembVO> myinterestList(MembVO membVO) {
+		return membMapper.myinterestList(membVO);
+	}
+
+	@Override
+	public List<MembVO> myStockList(MembVO membVO) {
+		return membMapper.myStockList(membVO);
+	}
 }

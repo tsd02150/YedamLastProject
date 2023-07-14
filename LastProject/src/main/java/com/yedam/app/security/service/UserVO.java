@@ -12,6 +12,7 @@ import lombok.Data;
 public class UserVO implements UserDetails{
 	private String membNo;
 	private String nm;
+	private String tnm;
 	private String id;
 	private String pwd;
 	private String nick;
@@ -20,23 +21,18 @@ public class UserVO implements UserDetails{
 	private int point;
 	private String tempPwd;
 	private Date joinDt;
-	
+
+	private String interestNo;
+	private String itemNo;
+	private String commonCd;
 	private String addrNo;
 	private String baseAddrYn;
 	private String zip;
 	private String addr;
 	private String detaAddr;
-
-	private String interestNo;
-	private String itemNo;
-	
-	private String sc;
-	private String theme;
-	private Integer tprc;
-	private Integer change;
-	private Integer rate;
-	private Integer vol;
-	
+	private int tprc;
+	private int change;
+	private int rate;
 	
 	@Override
 	public String getPassword() {
