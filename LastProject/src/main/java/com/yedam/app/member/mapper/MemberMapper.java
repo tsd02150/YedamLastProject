@@ -5,6 +5,7 @@ import java.util.List;
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
+import com.yedam.app.security.service.UserVO;
 
 public interface MemberMapper {
 	
@@ -16,6 +17,7 @@ public interface MemberMapper {
 	
 	//단건조회
 	public MembVO selectOneMemb(String id);
+	public UserVO selectOneMemb2(String id);
 	
 	//member 정보 조회
 	public MembVO getMemberTel(MembVO membVO);

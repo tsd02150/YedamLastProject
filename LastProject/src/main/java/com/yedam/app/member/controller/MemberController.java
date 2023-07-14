@@ -1,11 +1,14 @@
 package com.yedam.app.member.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,8 +36,11 @@ import com.yedam.app.sms.service.MessageDTO;
 import com.yedam.app.sms.service.SmsResponseDTO;
 import com.yedam.app.sms.service.SmsService;
 
+import lombok.RequiredArgsConstructor;
+
 @Controller
 @RequestMapping("member")
+@RequiredArgsConstructor
 public class MemberController {
 	@Autowired
 	MemberService membService;
@@ -50,7 +56,7 @@ public class MemberController {
 	
 	@Autowired
 	private PasswordEncoder pwEncoder;
-	
+
 	//로그아웃
 	@GetMapping("logout")
 	public String logout(HttpSession session) {
@@ -90,6 +96,10 @@ public class MemberController {
 	@GetMapping("join")
 	public String joinForm() {
 		return "member/joinMember";
+	}
+	@GetMapping("callback")
+	public String callback() {
+		return "member/callback";
 	}
 	
 	//회원가입 - member insert
@@ -233,12 +243,17 @@ public class MemberController {
 	}
 	
 	@PostMapping("tempPwdUpdate")
-	public String tempPwdUpdate(MembVO membVO, HttpSession session, Model model) {
+	public String tempPwdUpdate(UserVO userVO, MembVO membVO, HttpSession session, Model model) {
 		MembVO loggedInMember = membService.selectOneMemb(membVO.getId());
-		System.out.println("=========>");
+		System.out.println("=========>1");
 		System.out.println(loggedInMember);
+		System.out.println("=========>2");
+		System.out.println(membVO.getId());
+		System.out.println("=========>3");
 		System.out.println(membVO.getTempPwd());
-		System.out.println(loggedInMember.getPwd());
+		System.out.println("=========>4");
+		//System.out.println(loggedInMember.getPwd());
+		System.out.println("=========>5");
 		
 		System.out.println(pwEncoder.matches(membVO.getPwd(),loggedInMember.getPwd()));
 		if(pwEncoder.matches(membVO.getTempPwd(),loggedInMember.getPwd())) { //암호화된 비밀번호 맞는지 확인

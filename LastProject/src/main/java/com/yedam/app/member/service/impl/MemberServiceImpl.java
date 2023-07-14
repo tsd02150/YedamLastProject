@@ -10,6 +10,7 @@ import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
+import com.yedam.app.security.service.UserVO;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -29,6 +30,10 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public MembVO selectOneMemb(String id) {
 		return membMapper.selectOneMemb(id);
+	}
+	@Override
+	public UserVO selectOneMemb2(String id) {
+		return membMapper.selectOneMemb2(id);
 	}
 	
 	//닉네임 중복확인

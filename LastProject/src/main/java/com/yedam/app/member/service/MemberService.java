@@ -2,11 +2,14 @@ package com.yedam.app.member.service;
 
 import java.util.List;
 
+import com.yedam.app.security.service.UserVO;
+
 public interface MemberService {
 	//로그인
 	public MembVO mainLoginCheck(MembVO membVO);
 	//아이디로 단건조회
 	public MembVO selectOneMemb(String id);
+	public UserVO selectOneMemb2(String id);
 	public MembVO getMemberTel(MembVO membVO);
 	
 	//일반회원가입

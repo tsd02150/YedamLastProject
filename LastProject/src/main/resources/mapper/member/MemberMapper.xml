@@ -13,7 +13,14 @@
 
 	<!-- 아이디로 단건조회 -->
 	<select id="selectOneMemb" resultType="MembVO" parameterType="String">
-		SELECT * 
+		SELECT *
+		FROM member m
+		LEFT OUTER JOIN address a
+    ON m.memb_no = a.memb_no
+		WHERE id  = #{id}
+	</select>
+	<select id="selectOneMemb2" resultType="UserVO" parameterType="String">
+		SELECT *
 		FROM member m
 		LEFT OUTER JOIN address a
     ON m.memb_no = a.memb_no
