@@ -315,4 +315,24 @@
 				on b.item_no=i.item_no ) t  --오늘날짜 중 가장최근 거래가 (=현재가)
 		on i.item_no = t.item_no
 	</select>
+	
+	<!-- user 보유주식 단건 수량과 수익률 -->
+	<select id="getPossStock" resultType="PossStockVO">
+		select p.item_no,prc,sum(stock_cnt) cnt ,  trunc((prc - trunc(avg(trade_prc)))/trunc(avg(trade_prc))*100) rate
+		from poss_stock p join (
+		                            select distinct(a.item_no),nm,dt,ta_prc prc
+									from(   SELECT nm,i.item_no, MAX(ta_dt) dt
+											FROM ta_hr t join item i 
+											on i.item_no = t.item_no
+		                                    where t.item_no = #{itemNo}
+											GROUP BY nm,i.item_no
+											order by item_no) a 
+		                            join ta_hr t
+									on a.item_no= t.item_no and a.dt=t.ta_dt
+									order by 1 
+		                        ) a -- 최근체결가
+		on p.item_no = a.item_no
+		where memb_no = #{membNo}
+		group by p.item_no,prc
+	</select>
 </mapper>

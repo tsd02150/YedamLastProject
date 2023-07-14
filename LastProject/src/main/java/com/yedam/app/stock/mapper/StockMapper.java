@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.stock.service.InqVO;
 import com.yedam.app.stock.service.ItemVO;
+import com.yedam.app.stock.service.PossStockVO;
 import com.yedam.app.stock.service.StockVO;
 
 public interface StockMapper {
@@ -45,5 +46,7 @@ public interface StockMapper {
 	public List<StockVO> getPrcPercent(String type);
 	// 호가 데이터
 	public List<Map<String,Object>> orderTable(@Param("type")String type , @Param("itemNo")String itemNo);
+	// 유저 단일 보유 종목 수량과 수익률
+	public PossStockVO getPossStock(@Param("itemNo") String itemNo , @Param("membNo")String membNo);
 	 
 }

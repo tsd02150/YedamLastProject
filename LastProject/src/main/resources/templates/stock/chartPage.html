@@ -366,7 +366,7 @@ input[type="number"]::-webkit-inner-spin-button {
 				<div class="p-1 col-md-6 border">
 					<div id="CP2D1" class="mb-1 border">
 						<div id="itemPtag" style="display:inline-block">
-							<p th:attr="data-in=${itemInfo?.itemNo}">종목 : [[${itemInfo?.nm}]] <span th:class="${itemInfo?.change} &lt; 0 ? 'plus' : 'minus'"> 전일비 : [[${itemInfo?.change &lt; 0 ? "+ "+itemInfo?.change : itemInfo?.change}]] 변동률 : [[${itemInfo?.rate &lt; 0 ? "+"+itemInfo?.rate : itemInfo?.rate }]]%</span></p>
+							<p th:attr="data-in=${itemInfo?.itemNo}">종목 : [[${itemInfo?.nm}]] <span th:class="${itemInfo?.change} &gt; 0 ? 'plus' : 'minus'"> 전일비 : [[${itemInfo?.change &gt; 0 ? "+ "+itemInfo?.change : itemInfo?.change}]] 변동률 : [[${itemInfo?.rate &gt; 0 ? "+"+itemInfo?.rate : itemInfo?.rate }]]%</span></p>
 						</div>
 						<button id="addInt2">관심종목추가</button>
 						<div id="candleChart"></div>
@@ -689,6 +689,8 @@ input[type="number"]::-webkit-inner-spin-button {
 				$('#afford').val(affordStockCnt);
 				$('#totalPrc').text(0)
 					
+				}else if(orderType == 'sell'){
+					
 				}
 				
 			})
@@ -719,6 +721,8 @@ input[type="number"]::-webkit-inner-spin-button {
 				//총가격 설정
 				let total = Number($(this).val() * stockPrc);
 				$('#totalPrc').text(total.toLocaleString('ko-KR'));
+					
+				}else if(orderType == 'sell'){
 					
 				}
 			})

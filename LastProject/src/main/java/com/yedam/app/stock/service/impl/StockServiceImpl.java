@@ -11,6 +11,7 @@ import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.stock.mapper.StockMapper;
 import com.yedam.app.stock.service.InqVO;
 import com.yedam.app.stock.service.ItemVO;
+import com.yedam.app.stock.service.PossStockVO;
 import com.yedam.app.stock.service.StockService;
 import com.yedam.app.stock.service.StockVO;
 
@@ -159,6 +160,11 @@ public class StockServiceImpl implements StockService {
 	@Override
 	public List<Map<String,Object>> orderTable(String type, String itemNo) {
 		return stockMapper.orderTable(type, itemNo);
+	}
+
+	@Override
+	public PossStockVO getPossStock(String itemNo, String membNo) {
+		return stockMapper.getPossStock(itemNo, membNo);
 	}
 
 	

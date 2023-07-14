@@ -287,7 +287,7 @@ function addInterest() {
   			html = `<p data-in="${data.itemNo}"> 종목 : ${data.nm} <span class="${data.change > 0 ? 'plus' : 'minus'}"> 전일비 : ${data.change > 0? "+"+data.change : data.change} 변동률 : ${data.rate > 0 ? "+"+data.rate+"%" : data.rate+"%"}</span></p>`
   			$('#itemPtag').html(html);
   		})
-  },3000);
+  },300000);
   
   
   // dom tree 형성후 실행

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.yedam.app.security.service.UserVO;
 import com.yedam.app.stock.service.InqVO;
 import com.yedam.app.stock.service.ItemVO;
+import com.yedam.app.stock.service.PossStockVO;
 import com.yedam.app.stock.service.StockService;
 import com.yedam.app.stock.service.StockVO;
 
@@ -108,6 +109,7 @@ public class StockController {
 	@ResponseBody
 	@PostMapping("insertIntItem")
 	public Map<String,Object> insertIntItem(String membNo , String itemNo) throws Exception {
+		System.out.println(membNo + " " + itemNo + "zzzzzzzzzzzzzzzzzzzzzzzzzzz");
 		Map<String,Object> map = stockservice.insertInterestItem(membNo, itemNo);
 		return map;
 	}
@@ -166,4 +168,12 @@ public class StockController {
 		return vo;
 	}
 	
+	// 유저 보유주식 수량 수익률 (단건)
+	@ResponseBody
+	@GetMapping("possStock")
+	public PossStockVO getPossStock(String membNo , String itemNo) {
+		PossStockVO vo = stockservice.getPossStock(itemNo, membNo);
+		return vo;
+		
+	}
 }
