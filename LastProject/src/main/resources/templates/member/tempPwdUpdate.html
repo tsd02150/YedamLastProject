@@ -33,7 +33,7 @@
 					<form id="tempPwdUpdateFrm" action="tempPwdUpdate" class="login-form row" method="post" onsubmit="nullCheck()">
 						<!-- th:onsubmit="validateForm()" -->
 								<label for="loginemail"></label> 
-								<input type="hidden" id="loginemail" class="form-control" name="id" th:value="${session.loggedInMember}">
+								<input type="hidden" id="loginemail" class="form-control" name="id" th:value="${session.loggedInMember.id}">
 						<div class="col-md-12">
 							<div class="form-group">
 								<label for="temp_pwd">현재 비밀번호</label>

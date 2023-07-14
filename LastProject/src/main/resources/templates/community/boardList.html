@@ -121,12 +121,12 @@
 				</div>
 			</div>
 		</div>
-	<script th:inline="javascript">
+	<script th:inline="javascript" th:fragment="myScript">
 		//초기값
 		let currentState=[[${boardCode}]];
 		let currentRcom=0;
 		let currentOrder='drwup_dt';
-		let targetPage = 1;
+		let targetPage = [[${startPage}]];
 		let startPage=1;
 		let endPage=10;
 		let totalBoardCnt;
@@ -209,7 +209,7 @@
 			for(let i=start;i<=end;i++){
 				let liTag = document.createElement('li');
 				liTag.classList.add('page-item','pagebtn');
-				if(i%10==1){
+				if(i%10==targetPage){
 					liTag.classList.add('active');
 				}
 				let aTag = document.createElement('a');
@@ -314,7 +314,7 @@
 			if(event.target.tagName=="IMG")
 				return;
 			let boardNo=event.target.parentNode.dataset.boardno;
-			window.location.href="/community/boardDetail?boardNo="+boardNo+"&commonCd="+[[${boardCode}]];
+			window.location.href="/community/boardDetail?page="+targetPage+"&boardNo="+boardNo+"&commonCd="+[[${boardCode}]];
 		})
 		
 
