@@ -100,7 +100,7 @@
 				</table>
 				<hr>
 				<div>
-					<button class="btn btn-primary mt-3 mt-lg-0 pull-right" id="insertBoard" type="button">글쓰기</button>
+					<button th:if="${session.loggedInMember}!=null" class="btn btn-primary mt-3 mt-lg-0 pull-right" id="insertBoard" onclick="insertBoardFunc()" type="button">글쓰기</button>
 				</div>
 				<div>
 					<nav aria-label="Page navigation example" class="d-flex justify-content-center">
@@ -304,18 +304,21 @@
 			createPageBtn();
 		})
 		
-		// 글쓰기 버튼 클릭
-		insertBoard.addEventListener('click',function(){
-			window.location.href="/community/addBoard?ctgr="+[[${boardName}]]+"&commonCd="+[[${boardCode}]];
-		})
-		
 		// 게시물 클릭 -> 게시물 상세
 		$("#boardList").on('click','td',function(){
+			console.log("aaa");
 			if(event.target.tagName=="IMG")
 				return;
 			let boardNo=event.target.parentNode.dataset.boardno;
 			window.location.href="/community/boardDetail?page="+targetPage+"&boardNo="+boardNo+"&commonCd="+[[${boardCode}]];
 		})
+		
+		// 글쓰기 버튼 클릭
+		function insertBoardFunc(){
+			window.location.href="/community/addBoard?ctgr="+[[${boardName}]]+"&commonCd="+[[${boardCode}]];
+		}
+		
+		
 		
 
 		

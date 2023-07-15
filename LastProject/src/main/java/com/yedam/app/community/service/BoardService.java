@@ -35,4 +35,14 @@ public interface BoardService {
 	public boolean addNrcom(BoardVO vo);
 	// 게시물 삭제
 	public boolean deleteBoard(BoardVO vo);
+	// 게시물 수정
+	public boolean modifyBoard(BoardVO vo);
+	// 댓글 추천수 증가
+	public boolean addCommentRcom(CommentsVO vo);
+	// 댓글 비추천수 증가
+	public boolean addCommentNrcom(CommentsVO vo);
+	// 댓글 등록
+	public boolean insertComment(CommentsVO vo);
+	// 댓글 단건조회
+	public CommentsVO getComment(String commNo);
 }

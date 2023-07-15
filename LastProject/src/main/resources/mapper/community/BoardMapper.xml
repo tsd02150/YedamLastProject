@@ -109,11 +109,11 @@
 	</select>
 	
 	<select id="getComments" resultType="CommentsVO">
-		SELECT comm_no,board_no,cntn,drwup_dt,rcom,nrcom,h_comm_no,memb_no,nick
+		SELECT TO_NUMBER(SUBSTR(h_comm_no, 5)) sort_h_comm, TO_NUMBER(SUBSTR(comm_no, 5)) sort_comm,comm_no,board_no,cntn,drwup_dt,rcom,nrcom,h_comm_no,memb_no,nick
 		FROM COMMENTS JOIN MEMBER
 		USING (memb_no)
 		WHERE board_no=#{boardNo}
-		ORDER BY h_comm_no
+		ORDER BY sort_h_comm, sort_comm
 	</select>
 	<update id="addRcom" parameterType="BoardVO">
 		UPDATE BOARD
@@ -129,4 +129,33 @@
 		DELETE FROM BOARD
 		WHERE board_no=#{boardNo}
 	</delete>
+	<update id="modifyBoard" parameterType="BoardVO">
+		UPDATE BOARD
+		SET ttl=#{ttl}, cntn=#{cntn},drwup_dt=sysdate
+		WHERE board_no=#{boardNo}
+	</update>
+	<update id="addCommentRcom" parameterType="CommentsVO">
+		UPDATE COMMENTS
+		SET rcom=rcom+1
+		WHERE comm_no=#{commNo}
+	</update>
+	<update id="addCommentNrcom" parameterType="CommentsVO">
+		UPDATE COMMENTS
+		SET nrcom=nrcom+1
+		WHERE comm_no=#{commNo}
+	</update>
+	<insert id="insertComment" parameterType="CommentsVO">
+		<selectKey keyProperty="commNo" resultType="string" order="BEFORE">
+			SELECT CONCAT('com-',NVL(MAX(TO_NUMBER(SUBSTR(comm_no, 5))), 0)+1)
+			FROM COMMENTS
+		</selectKey>
+		INSERT INTO COMMENTS(comm_no,board_no,cntn,h_comm_no,memb_no)
+		VALUES(#{commNo},#{boardNo},#{cntn},#{commNo},#{membNo})
+	</insert>
+	<select id="getComment" resultType="CommentsVO">
+		SELECT comm_no,board_no,cntn,drwup_dt,rcom,nrcom,h_comm_no,memb_no,nick
+		FROM COMMENTS JOIN MEMBER
+		USING(memb_no)
+		WHERE comm_no=#{commNo}
+	</select>
 </mapper>

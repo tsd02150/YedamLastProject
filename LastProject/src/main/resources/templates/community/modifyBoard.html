@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+#boardSection {
+	padding-top: 50px;
+	padding-bottom: 50px;
+}
+
+#titlename {
+	font-size: 30px;
+}
+
+#titlename span {
+	line-height: 46px;
+}
+
+#titlename span:after {
+	width: 150px;
+}
+
+#writer {
+	display: flex;
+}
+
+#writer input, select {
+	width:
+}
+#fileList{
+	display: flex;
+}
+#fileList strong{
+	margin-right: 100px;
+}
+#uploadFileList{
+	list-style: none;
+}
+#uploadFileList span{
+	color: red;
+	margin-left: 10px;
+}
+</style>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div id="boardSection">
+			<h1 class="news-title" id="titlename">
+				<span>[[${boardInfo.ctgr}]] 수정</span>
+			</h1>
+			<form id="myForm" onsubmit="return false">
+				<div class="form-group row">
+					<label for="ttl" class="col-sm-2 col-form-label"><strong>제목</strong></label>
+					<div class="col-sm-10">
+						<input th:value="${myBoard.ttl}" type="text" name="ttl" class="form-control" id="ttl"></input>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="memberId" class="col-sm-2 col-form-label"><strong>작성자</strong></label>
+					<div class="col-sm-10" id="writer">
+						<input type="text" name="nick" class="form-control" id="nick"
+							th:value="${session.loggedInMember.nick}" readonly> <label
+							for="sort" class="col-sm-2 col-form-label"><strong>카테고리</strong></label>
+						<select class="form-control dropdown-toggle" id="sort" name="commonCd">
+							<option th:each="item:${category}" th:selected="${item.commonCd}==${myBoard.commonCd}"
+								th:value="${item.commonCd}" th:text="${item.ctgr}">카테고리</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="contents" class="col-sm-2 col-form-label"><strong>내용</strong></label>
+					<div class="col-sm-10">
+						<textarea name="cntn" class="form-control" id="cntn">[[${myBoard.cntn}]]</textarea>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label for="files" class="col-sm-2 col-form-label">
+						<strong>첨부 파일</strong>
+					</label>
+					<div class="col-sm-10">
+						<div class="custom-file" id="inputFile">
+							<input name="attachFile" id="attachFile" type="file" multiple class="custom-file-input"> 
+							<label class="custom-file-label" for="attachFile">파일을 선택해 주세요.</label>
+						</div>
+					</div>
+					<div id="fileList" style="margin: 40px;">
+						<strong>첨부파일 : </strong>
+						<div>
+							<ul id=uploadFileList>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="row mt-3">
+					<div class="col-auto mr-auto"></div>
+					<div class="col-auto">
+						<button id="btnSave" class="btn btn-primary">저장</button>
+						<button id="btnCancel" class="btn btn-light">취소</button>
+					</div>
+				</div>
+			</form>
+
+		</div>
+		<script
+			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+		<script
+			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
+		<script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+		<script type="text/javascript" th:inline="javascript">
+
+		let editor;
+
+		
+		ClassicEditor.create(document.querySelector('#cntn'), {
+				language: "ko",
+				ckfinder: {
+					uploadUrl: '/image/upload'
+				}
+			})
+			.then(newEditor => {
+				editor = newEditor;
+			})
+			.catch(error => {
+				console.error(error);
+			});
+
+		//ckEditor 데이터 가져오기
+		$('#btnSave').on('click', function () {
+			if(ttl.value==""||ttl.value==null){
+				//알림 띄울부분
+				return;
+			}
+			
+			let ckData = editor.getData()
+			if(ckData==""||ckData==null){
+				//알림 띄울부분
+				return;
+			}
+				
+			let formData = $('#myForm').serializeObject();
+			formData.cntn = ckData;
+			formData.boardNo=[[${myBoard.boardNo}]];
+			
+			var attachFileList = new FormData(); 
+			var inputFile = $("#attachFile");
+
+			var files = inputFile[0].files;
+			
+			for(var i=0;i<files.length;i++){
+				console.log(files[i]);
+				attachFileList.append("uploadFiles",files[i]); // 키, 값으로 append
+			}
+			
+			
+			$.ajax({
+				url:'modifyBoard',
+				method : "POST",
+				data : formData
+			})
+			.done(function(result){
+				if(attachFileList.get("uploadFiles")!=null){
+					attachFileList.append("boardNo",result);
+					$.ajax({
+						url:'/attach/upload',
+						method:'POST',
+						processData:false, // 기본값은 true, ajax통신을 통해 데이터를 전송할 때, 기본적으로 key와 vlaue 값을 Query String 으로 변환해서 보냅니다
+						contentType:false, // multipart/form-data타입을 사용하기 위해 false로 지정합니다.
+						data:attachFileList,
+						success:function(result){
+							// 알림 띄울 부분;
+							location.href="/community/boardDetail?page="+1+"&boardNo="+[[${myBoard.boardNo}]]+"&commonCd="+[[${boardInfo.commonCd}]];
+						},
+						error:function(reject){
+							alert('fail attach');
+							// 알림 띄울 부분;
+						}
+					})					
+				}else{
+					location.href="/community/boardDetail?page="+1+"&boardNo="+[[${myBoard.boardNo}]]+"&commonCd="+[[${boardInfo.commonCd}]];
+				}
+			})
+			.fail(function(result){
+				// 알림 띄울 부분;
+			})
+
+			
+		})
+		
+		$("#attachFile").on('change',function(){
+			var inputFile = $("#attachFile");
+			// input 태그의 type이 file인것을 찾아서 inputFile이라는 변수로 지정
+			
+			var files = inputFile[0].files;
+			// files: 선택한 모든 파일을 나열하는 FileList 객체
+			// multiple 특성을 지정하지 않았다면 두 개 이상의 파일을 포함하지 않습니다.
+			for(var i=0;i<files.length;i++){
+				let liTag=document.createElement("li");
+				let spanTag=document.createElement("span");
+				liTag.append(files[i].name);
+				spanTag.innerHTML="&times;";
+				liTag.append(spanTag);
+				uploadFileList.append(liTag);
+			}
+		})
+		$("#uploadFileList").on('click','span',function(){
+			var dataTranster = new DataTransfer();
+			Array.from($("#attachFile")[0].files)
+            .filter(file => file.name != $(event.target).parent().text().slice(0,-1))
+            .forEach(file => {
+            	dataTranster.items.add(file);
+         	});
+			$("#attachFile")[0].files=dataTranster.files;
+			
+			$(event.target).parent().remove();
+		})
+		</script>
+	</div>
+</body>
+</html>
