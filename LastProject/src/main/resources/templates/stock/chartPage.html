@@ -367,8 +367,8 @@ input[type="number"]::-webkit-inner-spin-button {
 					<div id="CP2D1" class="mb-1 border">
 						<div id="itemPtag" style="display:inline-block">
 							<p th:attr="data-in=${itemInfo?.itemNo}">종목 : [[${itemInfo?.nm}]] <span th:class="${itemInfo?.change} &gt; 0 ? 'plus' : 'minus'"> 전일비 : [[${itemInfo?.change &gt; 0 ? "+ "+itemInfo?.change : itemInfo?.change}]] 변동률 : [[${itemInfo?.rate &gt; 0 ? "+"+itemInfo?.rate : itemInfo?.rate }]]%</span></p>
+							<button id="addInt2">관심종목추가</button>
 						</div>
-						<button id="addInt2">관심종목추가</button>
 						<div id="candleChart"></div>
 						<div id="stickChart"></div>
 					</div>
@@ -388,9 +388,7 @@ input[type="number"]::-webkit-inner-spin-button {
 									<p class="mb-0">
 										<span id="orderName">구매</span>가능한 주수 <input id="afford" type="button" value="0">주
 									</p>
-									<h4>
-										총 주문 금액: <span id="totalPrc">0</span>원
-									</h4>
+									<h4><span></span><span id="totalPrc">0</span>원</h4>
 									<button >주문</button> <span id="orderType" data-order=""></span>
 								</div>
 							</div>
@@ -410,7 +408,7 @@ input[type="number"]::-webkit-inner-spin-button {
 									<p>
 										수익률 : <span>00</span>%
 									</p>
-									<p th:if="${session.loggedInMember} != null" th:attr="data-point=${session.loggedInMember.point}">보유 포인트 : [[${session.loggedInMember.point}]]</p>
+									<p th:if="${session.loggedInMember} != null" th:attr="data-point=${session.loggedInMember.point}">보유 포인트 : <span>[[${session.loggedInMember.point}]]</span></p>
 									<p th:unless="${session.loggedInMember} != null">로그인 해주세요.</p>
 								</div>
 							</div>
@@ -590,6 +588,7 @@ input[type="number"]::-webkit-inner-spin-button {
 				$('#CP2D21 input[type=checkbox]').attr('disabled',false);
 				//주문 종류 변경시 마다 입력칸 값 초기화
 				if(!$(this).hasClass('orderActive')){
+					$('#totalPrc').text('0');
 					$('#afford').val(0);
 					$('#CP2D21 input[type=number]').val(0);
 					$('#CP2D21 input[type=checkbox]').attr('checked',false)
@@ -599,13 +598,17 @@ input[type="number"]::-webkit-inner-spin-button {
 				//클릭한 버튼 클래스 추가
 				$(this).toggleClass('orderActive'); 
 				
-				//주문 종류에 따라 출력되는 경고메세지
+				//주문 종류에 따라 출력되는 경고메세지 $(this) == button
 				if($(this).is(':contains("매도")')){
 					$('#orderType').attr('data-order','sell').text('매도주문입니다');
 					$('#orderName').text('판매');
+					$('#totalPrc').parent().children('span:eq(0)').text('체결시 얻는 수익 : ');
+					// 판매가능한 주수 보유주수량으로 출력	
+					$('#afford').val($('#CP2D22 div p:nth-of-type(2) span').text());
 				}else{
 					$('#orderType').attr('data-order','buy').text('매수주문입니다');
 					$('#orderName').text('구매');
+					$('#totalPrc').parent().children('span:eq(0)').text('총 주문 금액 : ')
 				}
 				
 				})
@@ -640,7 +643,7 @@ input[type="number"]::-webkit-inner-spin-button {
 					if(tof){
 						$('#stockPrc').val(sellPrc);
 					}else{
-						$('#stockPrc').val('');
+						$('#stockPrc').val(0);
 					}
 				}else if(orderType == 'buy'){
 					// 호가 매도 테이블의 가장 낮은 가격이 가격입력칸에 출력
@@ -651,7 +654,7 @@ input[type="number"]::-webkit-inner-spin-button {
 						let affordStockCnt = Math.floor(point/$('#stockPrc').val());
 						$('#afford').val(affordStockCnt);
 					}else{
-						$('#stockPrc').val('');
+						$('#stockPrc').val(0);
 					}
 				}
 			})
@@ -668,29 +671,55 @@ input[type="number"]::-webkit-inner-spin-button {
 				
 			})
 			
+			//마우스휠 이벤트 방지
+			$('#CP2D21 input[type=number]').on('wheel',function(e){
+				e.preventDefault();
+			})
+			
 			//거래가 변경시 기능
-			$('#stockPrc').on('keyup' ,function(){
+			$('#stockPrc').on('keyup mousewheel' ,function(){
 				let orderType = $('#orderType').attr('data-order'); // 매수매도 중 선택된 주문의 종류
+				let point = $('p[data-point]').attr('data-point');//유저의 보유 포인트
+				let stockPrc = $('#stockPrc').val(); // 거래가격
+				let stockCnt = $('#stockCnt').val(); // 거래수량
+				$(this).val(Number($(this).val())); //맨 좌측의 0 제거
 				
+				
+				
+				// 매수 기능 일때
 				if(orderType == 'buy'){
 					
-				$(this).val(Number($(this).val()))
-				$('#stockCnt').val(0);
-				let point = $('p[data-point]').attr('data-point');//유저의 보유 포인트
-				let stockPrc = $('#stockPrc').val();
-				if(this.value <= 0 || this.value > Number(point)){
-					alert('거래가격은 0 밑이나 보유한 포인트 이상으로 입력할 수 없습니다.')
-					$('#afford').val('0');
-					this.value=0;
-					return;
-				}
-				$('#CP2D2 input[type=checkbox]').attr('checked',false);
-				let affordStockCnt = Math.floor(point/stockPrc);
-				$('#afford').val(affordStockCnt);
-				$('#totalPrc').text(0)
+					// 유효범위
+					if( $(this).val() > Number(point)){
+						alert('보유한 포인트보다 많게 주문할 수 없습니다.')
+						$('#afford').val('0');
+						$(this).val($('p[data-point]').attr('data-point'));//보유포인트
+						return;
+					}else if( $(this).val() == '' || $(this).val() <= 0){
+						$(this).val(0)
+						$('#afford').val(0);
+					}
 					
+					$('#stockCnt').val(0);// 거래가 변경시 주문수량은 초기화
+					$('#CP2D2 input[type=checkbox]').attr('checked',false);//값 입력시 시장가 주문 해제
+					if($(this).val() == ''|| $(this).val() <= 0 ){ // 0 이하거나 숫자아닐때 나누기 안되게하기
+						return;
+					};
+					let affordStockCnt = Math.floor(point/stockPrc);
+					$('#afford').val(affordStockCnt);
+					$('#totalPrc').text(0);
+				
+				//매도 기능 일때
 				}else if(orderType == 'sell'){
+					// 유효범위
+					if( $(this).val() == '' || $(this).val() <= 0){
+						$(this).val(0)
+						$('#afford').val(0);
+					}
 					
+					// 총가격 설정
+					let totalPrc = stockPrc * stockCnt ; 
+					$('#totalPrc').text(totalPrc.toLocaleString('ko-KR'));
 				}
 				
 			})
@@ -699,32 +728,80 @@ input[type="number"]::-webkit-inner-spin-button {
 			//주문 수량 변경시 기능
 			$('#stockCnt').on('keyup',function(){
 				let orderType = $('#orderType').attr('data-order'); // 매수매도 중 선택된 주문의 종류
+				let affordStockCnt = Number($('#afford').val()); // 구매가능 주수
+				let stockPrc = $('#stockPrc').val(); // 거래가격
+				let stockCnt = $('#stockCnt').val(); // 거래수량
+				let total = stockPrc * stockCnt; // 총 가격
+				$(this).val(Number($(this).val())) // 맨 좌측의 0 제거
 				
-				if(orderType == 'buy'){
-					
-				$(this).val(Number($(this).val()))
-				let affordStockCnt = Number($('#afford').val());
-				let stockPrc = Number($('#stockPrc').val());
-				
-				if($('#stockPrc').val() == 0){
+				// 주문주수 먼저 입력시 거래가격입력요청
+				if($('#stockPrc').val() == 0 && orderType == 'buy'){
 					alert('거래가격을 먼저 입력해주세요.')
 					$(this).val(0);
 					$('#stockPrc').focus();
 					return;
 				}
-				if($(this).val() > affordStockCnt || $(this).val() <=0 ){
-					alert('주문수량이 0이하 이거나 주문가능한 수량을 벗어났습니다.')
-					$(this).val(0);
-					
+				
+				// 공통 유효범위
+				if($(this).val() > affordStockCnt ){
+					alert('주문가능한 수량을 벗어났습니다.')
+					$(this).val(affordStockCnt);
+					$('#totalPrc').text((affordStockCnt * stockPrc).toLocaleString('ko-KR'))
+					return;
+				}else if ( $(this).val() == '' || $(this).val() <= 0){ // 0 이하이거나 '' 일시 0으로 설정
+					 $(this).val(0)
+					 return;
 				}
 				
-				//총가격 설정
-				let total = Number($(this).val() * stockPrc);
-				$('#totalPrc').text(total.toLocaleString('ko-KR'));
+				// 매수기능일때
+				if(orderType == 'buy'){
 					
+					//총가격 설정
+					$('#totalPrc').text(total.toLocaleString('ko-KR'));
+					
+				// 매도기능일때
 				}else if(orderType == 'sell'){
-					
+					$('#totalPrc').text(total.toLocaleString('ko-KR'));
 				}
+			})
+			
+			
+			// 10% 50% 100% 
+			$('#CP2D22 table button').on('click',function(){
+				let stockPrc = $('#stockPrc').val();// 거래가격
+				
+				let affordStockCnt = $('#afford').val();
+				if($(this).text() =='10 %'){
+					console.log('10')
+					let pointTen = Math.floor(affordStockCnt * 0.1);
+					$('#stockCnt').val(pointTen);
+					totalForm(stockPrc)
+				}else if($(this).text() == '50 %'){
+					console.log('50')
+					let pointFive = Math.floor(affordStockCnt * 0.5);
+					$('#stockCnt').val(pointFive);
+					totalForm(stockPrc)
+				}else{
+					console.log('100')
+					let hundred = affordStockCnt;
+					$('#stockCnt').val(hundred);
+					totalForm(stockPrc)
+				}
+			})
+			
+			//주문수량 * 거래가격 
+			function totalForm(prc){
+				let stockCnt =$('#stockCnt').val();// 주문수량
+				let total = stockCnt * prc; // 총 가격
+				$('#totalPrc').text(total.toLocaleString('ko-KR'));
+			}
+			
+			//가격 입력칸 주문수량 입력 값 변화 될떄마다 총가격 설정
+			$('#stockCnt','#stockPrc').on('change',function(){
+				let stockCnt =$('#stockCnt').val();
+				let stockPrc = $('#stockPrc').val();
+				let total = stockCnt * stockPrc;
+				$('#totalPrc').text(total);
 			})
 		</script>
 	</div>

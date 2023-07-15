@@ -8,4 +8,6 @@ public class PossStockVO {
 	private Integer prc;
 	private Integer cnt;
 	private Integer rate;
+	private String membNo;
+	private double point;
 }

@@ -170,7 +170,7 @@ public class StockController {
 	
 	// 유저 보유주식 수량 수익률 (단건)
 	@ResponseBody
-	@GetMapping("possStock")
+	@PostMapping("possStock")
 	public PossStockVO getPossStock(String membNo , String itemNo) {
 		PossStockVO vo = stockservice.getPossStock(itemNo, membNo);
 		return vo;
