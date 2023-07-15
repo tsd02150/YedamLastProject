@@ -49,7 +49,7 @@
 	<div layout:fragment="content">
 		<div id="boardSection">
 			<h1 class="news-title" id="titlename">
-				<span th:text="${boardInfo.ctgr}">NOTICE</span>
+				<span>[[${boardInfo.ctgr}]] 작성</span>
 			</h1>
 			<form id="myForm" onsubmit="return false">
 				<div class="form-group row">
@@ -156,7 +156,7 @@
 			
 			
 			$.ajax({
-				url:'addBoard',
+				url:'/community/addBoard',
 				method : "POST",
 				data : formData
 			})
@@ -171,13 +171,16 @@
 						data:attachFileList,
 						success:function(result){
 							// 알림 띄울 부분;
-							location.href="/community/boardList?commonCd="+[[${boardInfo.commonCd}]];
+							alert('aa');
+							window.location.href="/community/boardList?commonCd="+[[${boardInfo.commonCd}]];
 						},
 						error:function(reject){
 							alert('fail attach');
 							// 알림 띄울 부분;
 						}
 					})					
+				}else{
+					window.location.href="/community/boardList?commonCd="+[[${boardInfo.commonCd}]];
 				}
 			})
 			.fail(function(result){

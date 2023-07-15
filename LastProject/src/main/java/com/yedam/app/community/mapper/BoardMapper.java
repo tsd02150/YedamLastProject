@@ -37,4 +37,14 @@ public interface BoardMapper {
 	public int addNrcom(BoardVO vo);
 	// 게시물 삭제
 	public int deleteBoard(BoardVO vo);
+	// 게시물 수정
+	public int modifyBoard(BoardVO vo);
+	// 댓글 추천수 증가
+	public int addCommentRcom(CommentsVO vo);
+	// 댓글 비추천수 증가
+	public int addCommentNrcom(CommentsVO vo);
+	// 댓글 등록
+	public int insertComment(CommentsVO vo);
+	// 댓글 단건조회
+	public CommentsVO getComment(String commNo);
 }

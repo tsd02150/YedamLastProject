@@ -22,6 +22,7 @@ import com.yedam.app.common.service.AttachFileVO;
 import com.yedam.app.common.service.CommonCodeVO;
 import com.yedam.app.community.service.BoardService;
 import com.yedam.app.community.service.BoardVO;
+import com.yedam.app.community.service.CommentsVO;
 import com.yedam.app.member.service.MembVO;
 
 @Controller
@@ -65,8 +66,9 @@ public class BoardController {
 	@PostMapping("addBoard")
 	@ResponseBody
 	public String addBoard(BoardVO vo) {
-		vo.setMembNo(boardService.getMembNo(vo.getNick()));
+		vo.setMembNo(boardService.getMembNo(vo.getNick())); 
 		System.out.println(vo);
+		
 		boolean result = boardService.insertBoard(vo);
 		
 		if (result) {
@@ -126,6 +128,61 @@ public class BoardController {
 		}else {
 			return "fail";
 		}
+	}
+	
+	@GetMapping("modifyBoard")
+	public String modifyBoardForm(Model model, BoardVO boardVo, HttpSession session) {
+		model.addAttribute("boardInfo", boardVo);	
+		model.addAttribute("category", boardService.getCtgr(boardVo.getCommonCd()));
+		boardVo=boardService.getBoardDetail(boardVo.getBoardNo());
+		System.out.println(boardVo);
+		model.addAttribute("myBoard",boardVo);
+		return "community/modifyBoard";
+	}
+	
+	@PostMapping("modifyBoard")
+	@ResponseBody
+	public String modifyBoard(BoardVO vo) {
+		vo.setMembNo(boardService.getMembNo(vo.getNick()));
+		System.out.println("aaaa"+vo);
+		boolean result = boardService.modifyBoard(vo);
+		
+		if (result) {
+			return vo.getBoardNo();
+		} else {
+			return "fail";
+		}
+	}
+	
+	@PostMapping("addCommentRcom")
+	@ResponseBody
+	public String addCommentRcom(CommentsVO vo) {
+		if(boardService.addCommentRcom(vo)) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	@PostMapping("addCommentNrcom")
+	@ResponseBody
+	public String addCommentNrcom(CommentsVO vo) {
+		if(boardService.addCommentNrcom(vo)) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	@PostMapping("insertComment")
+	@ResponseBody
+	public CommentsVO insertComment(CommentsVO vo) {
+		if(boardService.insertComment(vo)) {
+			vo=boardService.getComment(vo.getCommNo());
+			System.out.println(vo);
+			return vo;
+		}
+		return null;
 	}
 
 }
