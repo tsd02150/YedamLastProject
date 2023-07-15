@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yedam.app.mall.service.OrderVO;
+import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.member.mapper.MemberMapper;
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.InterestVO;
@@ -31,11 +33,7 @@ public class MemberServiceImpl implements MemberService {
 	public MembVO selectOneMemb(String id) {
 		return membMapper.selectOneMemb(id);
 	}
-	@Override
-	public UserVO selectOneMemb2(String id) {
-		return membMapper.selectOneMemb2(id);
-	}
-	
+
 	//닉네임 중복확인
 	@Override
 	public int nickCheckBoolean(String nick) {
@@ -115,5 +113,26 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<MembVO> myStockList(MembVO membVO) {
 		return membMapper.myStockList(membVO);
+	}
+	@Override
+	public List<OrderVO> mypageOrderList(OrderVO orderVO) {
+		return membMapper.mypageOrderList(orderVO);
+	}
+	@Override
+	public List<ProductVO> mypagePrdtList(ProductVO prdtVO) {
+		return membMapper.mypagePrdtList(prdtVO);
+	}
+	@Override
+	public int updateMemberInfo(MembVO membVO) {
+		return membMapper.updateMemberInfo(membVO);
+	}
+	@Override
+	public int updateMemberAddr(AddrVO addrVO) {
+		return membMapper.updateMemberAddr(addrVO);
+	}
+
+	@Override
+	public List<MembVO> selectOneMemb2(MembVO membVO) {
+		return membMapper.selectOneMemb2(membVO);
 	}
 }

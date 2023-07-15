@@ -8,4 +8,7 @@ public class OrderDetailVO {
 	private String orderNo;
 	private String prdtNo;
 	private int cnt;
+	
+	private String id;
+	private String membNo;
 }

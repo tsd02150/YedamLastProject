@@ -20,4 +20,14 @@ public class OrderVO {
 	private String orderSt;
 	private int payAn;
 	
+	private String prdt_no;
+	private String id;
+	
+	private String orderDetaNo;
+	private String prdtNo;
+	private int cnt;
+	
+	// 정렬
+	private String order;
+	
 }

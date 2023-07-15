@@ -7,70 +7,96 @@
 	<meta charset="UTF-8">
 	<title></title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-	<style>
-	.sidebar.sidebar-left{
-		height: 1000px;
-	}
-	.titleMenu{
-		padding-top : 20px;
-	}
-	.sidebarMenu{
-		padding-top : 40px;
-		padding-bottom : 40px;
-	}
-		#mypagetbl, .sidebar , #intrestTbl{
-			border: 1px solid #DDDDDD;
-			height: auto;
-		}
-		#mypagetbl, #intrestTbl, #myordertbl{
-		width : 700px;
-		font-size: larger;
-		}
-		#mypagetbl th, .intehead, #myordertbl th{
-			padding : 20px;
-			width : 520px;
-		}
-		#mypagetbl td, #intrestTbl td, #myordertbl td{
-			text-align : right;
-			padding-right : 20px;
-			width : 200px;
-		}
-		.titleTxt{
-			text-align : center;
-		}
-		.py-20 {
-    clear: both;
-    height: 20px;
-  }
-  .bi{
-  	font-size: 50px;
-  	margin-top : 15px;
-  }
-	.int_item{
-	width : 130px;
-	height : 120px;
+<style>
+.sidebar.sidebar-left {
+	height: 1000px;
+}
+
+.titleMenu {
+	padding-top: 20px;
+}
+
+.sidebarMenu {
+	padding-top: 40px;
+	padding-bottom: 40px;
+}
+
+#mypagetbl, .sidebar, #intrestTbl, #myordertbl{
+	border: 1px solid #DDDDDD;
+	height: auto;
+}
+
+#mypagetbl, #intrestTbl, #myordertbl {
+	width: 700px;
+	font-size: larger;
+}
+
+#mypagetbl th, .intehead, #myordertbl th {
+	padding: 20px;
+	width: 520px;
+}
+
+#mypagetbl td, #intrestTbl td, #myordertbl td {
+	text-align: right;
+	padding-right: 20px;
+	width: 200px;
+}
+
+.titleTxt {
+	text-align: center;
+}
+
+.py-20 {
+	clear: both;
+	height: 20px;
+}
+
+.bi {
+	font-size: 50px;
+	margin-top: 15px;
+}
+
+.int_item {
+	width: 130px;
+	height: 120px;
 	border: 1px solid #dddddd;
 	display: inline-block;
-	padding : 15px;
-	margin : 15px;
-	
-	}
-	.itembox{
-	text-align : left;
-	padding : 10px;
-			width : 611px;
-	}
-	
-	.rate, .tprc{
-		font-size: 16px;
-	}
-	.sidebarMenu a.items-center {
-  color: black;
+	padding: 15px;
+	margin: 15px;
 }
-	.sidebarMenu a:hover:not(.items-center) {
-  color: gray;
+
+.itembox {
+	text-align: left;
+	padding: 10px;
+	width: 611px;
 }
-	</style>
+
+.rate, .tprc {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.tnm {
+	font-size: 20px;
+}
+
+.high {
+	color: red;
+}
+
+.low {
+	color: blue;
+}
+
+.orderDiv {
+	width: 200px;
+	height: 200px;
+	border: 1px solid #dddddd;
+	display: inline-block;
+	padding: 15px;
+	margin: 15px;
+}
+</style>
 </head>
 <body>
 	<div layout:fragment="mypage">
@@ -117,25 +143,19 @@
 						</div>
 					</div>
 					<!-- interest item end -->
-					<!-- order -->
+				<!-- order -->
 					<table id="myordertbl">
-							<tr class="itemhead" style="background-color : bisque">
-								<th>주문 : 배송</th>
-								<td><p class="bi bi-arrow-right-square-fill"></p></td>
-							</tr>
-							<tr>
-								<th>[[${session.loggedInMember.nm}]]</th>
-								<td></td>
-							</tr>
-							<tr>
-								<th>[[${session.loggedInMember.tel}]]</th>
-								<td><button type="button" class="btn btn-outline-secondary">수정</button></td>
-							</tr>
-							<tr>
-								<th>[[${session.loggedInMember.point}]] point</th>
-								<td><a href="#"><button type="button" class="btn btn-outline-secondary">충전</button></a></td>
-							</tr>
-						</table>
+					  <tr class="itemhead" style="background-color : bisque">
+					    <th>주문 : 배송</th>
+					    <td><p class="bi bi-arrow-right-square-fill"></p></td>
+					  </tr>
+					  <tr>
+					    <th colspan="2" style="padding-bottom: 0px;">결제완료</th>
+			 			</tr>
+					  <tr>
+					    <th id="orderBox" colspan="2" style="padding-top: 0px;"></th>
+			 			</tr>
+					</table>
 					<!-- order end -->
 				<!-- 내프로필 end -->
 				
@@ -149,31 +169,35 @@
 		
 		let box = '';
 		let box2 = '';
+		let prd = '';
 		
-			$.ajax({
-				url : "stockList",
-				method : "POST",
-				data : {
-					"id" : id
-				},
-				success : function(data){
-					data.forEach(el=>{
-						console.log(el);
-						box += `<div class="int_item">
-											<h4>${el.tnm}</h4>
-											<span class="rate">${el.rate}</span><br>
-						 					<span class="tprc">(${el.tprc}원)</span>
-						 					</div>`;
-					})
-					 
-					$("#thisbox").html(box);
-					boxClass();
-				},
-				error : function(err){
-					console.log(err)
-				}
-			});
+		//보유주식 리스트 출력
+		$.ajax({
+			url : "stockList",
+			method : "POST",
+			data : {
+				"id" : id
+			},
+			success : function(data){
+				//보유주식 최대 8개까지만 출력(rate 기준 정렬)
+				data.slice(0, 8).forEach(el => {
+				let tprc = commas(el.tprc); 
+				  box += `<div class="int_item">
+				            <p class="tnm">${el.tnm}</p>
+				            <span class="rate">${el.rate}</span><br>
+										<span class="tprc">${tprc} P</span>
+				          </div>`;
+				});
+				 
+				$("#thisbox").html(box);
+				boxClass();
+			},
+			error : function(err){
+				console.log(err)
+			}
+		});
 			
+		//관심종목 리스트 출력
 			$.ajax({
 				url : "interestList",
 				method : "POST",
@@ -181,12 +205,14 @@
 					"id" : id
 				},
 				success : function(data){
-					data.forEach(el=>{
-						console.log(el);
+					//보유주식 최대 4개까지만 출력(rate 기준 정렬)
+					data.slice(0, 4).forEach(el=>{
+						let tprc = commas(el.tprc); 
+						//console.log(el);
 						box2 += `<div class="int_item">
-											<h4>${el.tnm}</h4>
+											<p class="tnm">${el.tnm}</p>
 											<span class="rate">${el.rate}</span><br>
-						 					<span class="tprc">(${el.tprc}원)</span>
+											<span class="tprc">${tprc} P</span>
 						 					</div>`;
 					})
 					
@@ -198,12 +224,69 @@
 				}
 			});
 			
-			function boxClass(){
-				if(parseInt($(".rate").text()) >= 0){
-					$(".rate").addClass("high");
-				}else{
-					$(".rate").addClass("low");
+			function boxClass() {
+				  $(".rate").each(function() {
+				    var rate = parseInt($(this).text());
+				    if (rate >= 0) {
+				      $(this).addClass("high");
+				    } else {
+				      $(this).addClass("low");
+				    }
+				  });
 				}
+			
+			// 결제내역 : 배송완료 주문 리스트 출력
+			$.ajax({
+			  url: "mypageOrderList",
+			  method: "POST",
+			  data: {
+			    "id": id,
+			    "orderSt": "배송완료"
+			  },
+			  success: function(data) {
+			    if (data != null) {
+			      data.slice(0, 3).forEach(function(el) { //3개만 출력
+			        //console.log(el);
+			        let orderDt = new Date(el.orderDt); // 날짜 객체 생성
+			        let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
+			        var orderAm = commas(el.orderAm); 
+			        prd += `
+			          <div class="orderDiv">
+			            <p class="orderDt">${formattedDt}</p>
+			            <p class="prdtimg" data-no="${el.prdtNo}"></p>
+			            <p class="prdtnm" data-no="${el.prdtNo}"></p>
+			            <p class="orderAm">${orderAm}</p>
+			          </div>`;
+			      });
+
+			      // 상품 리스트 출력(prde_no, 상품명, 이미지)
+			      $.ajax({
+			        url: "mypagePrdtList",
+			        success: function(data) {
+			          data.forEach(function(res) {
+			            //console.log(res);
+			            $(".prdtimg[data-no='" + res.prdtNo + "']").append(res.img);
+			            $(".prdtnm[data-no='" + res.prdtNo + "']").append(res.nm);
+			          });
+			        },
+			        error: function(err) {
+			          console.log(err);
+			        }
+			      });
+
+			      $("#orderBox").html(prd);
+			    } else {
+			      console.log("주문 내역이 없습니다.");
+			    }
+			  },
+			  error: function(err) {
+			    console.log(err);
+			  }
+			});
+			
+			//천단위 콤마
+			function commas(number) {
+			  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 			}
 		</script>
 	</section>

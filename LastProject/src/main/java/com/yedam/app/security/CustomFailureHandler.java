@@ -21,5 +21,4 @@ public class CustomFailureHandler implements AuthenticationFailureHandler{
 	   session.setAttribute("message", "다시 시도해주세요");
       response.sendRedirect("/member/login");
    }
-   
 }

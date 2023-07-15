@@ -2,6 +2,8 @@ package com.yedam.app.member.mapper;
 
 import java.util.List;
 
+import com.yedam.app.mall.service.OrderVO;
+import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
@@ -17,7 +19,7 @@ public interface MemberMapper {
 	
 	//단건조회
 	public MembVO selectOneMemb(String id);
-	public UserVO selectOneMemb2(String id);
+	public List<MembVO> selectOneMemb2(MembVO membVO);
 	
 	//member 정보 조회
 	public MembVO getMemberTel(MembVO membVO);
@@ -56,5 +58,15 @@ public interface MemberMapper {
 	
 	//보유주식
 	public List<MembVO> myStockList(MembVO membVO);
+	
+	//배송, 주문 리스트
+	public List<OrderVO> mypageOrderList(OrderVO orderVO);
+	
+	//상품 이름, 이미지
+	public List<ProductVO> mypagePrdtList(ProductVO prdtVO);
+	
+	//회원정보 수정
+	public int updateMemberInfo(MembVO membVO);
+	public int updateMemberAddr(AddrVO addrVO);
 
 }

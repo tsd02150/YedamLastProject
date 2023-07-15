@@ -1,14 +1,11 @@
 package com.yedam.app.member.controller;
 
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +13,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestClientException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yedam.app.member.mapper.MemberMapper;
+import com.yedam.app.mall.service.OrderVO;
+import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
@@ -226,7 +224,6 @@ public class MemberController {
 	//model.addAttribute("response", response);
 	
 	//임시 비밀번호 발급 후 페이지 호출
-//	@ResponseBody
 	@PostMapping("tempPwdSuccess")
 	public String renewPwd(@RequestParam("id") String id, Model model) {
 		System.out.println(id);
@@ -314,7 +311,7 @@ public class MemberController {
 		return membInfo;
 	}
 	
-	//@ResponseBody
+	@ResponseBody
 	@PostMapping("findIdSuccess")
 	public String findIdSuccessPage(@RequestParam String id, Model model) {
 		model.addAttribute("id", id);
@@ -332,6 +329,15 @@ public class MemberController {
 	}
 	
 	//회원관리
+	/*
+	 * @ResponseBody
+	 * 
+	 * @PostMapping("mypageList") public MembVO mypageList(@RequestParam String
+	 * id,Model model) { model.addAttribute("myinfo",membService.selectOneMemb(id));
+	 * //System.out.println(membService.selectOneMemb(id)); return
+	 * membService.selectOneMemb(id); }
+	 */
+	
 	@GetMapping("mypage")
 	public String myPageForm() {
 		return "member/mypage";
@@ -348,22 +354,103 @@ public class MemberController {
 		//UserVO meminfo = (UserVO)session.getAttribute("loggedInMember");
 		membVO.setId(id);
 		List<MembVO> interestList = membService.myinterestList(membVO);
-		model.addAttribute("interestList",interestList);
+		//model.addAttribute("interestList",interestList);
+		System.out.println(interestList);
 		return interestList;
 	}
+	
 	@ResponseBody
 	@PostMapping("stockList")
 	public List<MembVO> myPageInfo(@RequestParam String id, Model model, MembVO membVO) {
 		//UserVO meminfo = (UserVO)session.getAttribute("loggedInMember");
 		membVO.setId(id);
 		List<MembVO> stockList = membService.myStockList(membVO);
-		model.addAttribute("stocklist",stockList);
+		//model.addAttribute("stocklist",stockList);
+		System.out.println(stockList);
 		return stockList;
 	}
 	
+	//@ResponseBody
 	@GetMapping("mypageInfo")
 	public String mypageInfo(HttpSession session) {
 		//UserVO membinfo = (UserVO) session.getAttribute("loggedInMember");
 		return "member/mypageInfo";
 	}
+	
+	//주문, 배송내역 리스트 
+	@ResponseBody
+	@PostMapping("mypageOrderList")
+	public List<OrderVO> mypageOrderList(@RequestParam String id, @RequestParam String orderSt) {
+	  OrderVO orderVO = new OrderVO();
+	  orderVO.setId(id);
+	  orderVO.setOrderSt(orderSt);
+	  //System.out.println(membService.mypageOrderList(orderVO));
+	  return membService.mypageOrderList(orderVO);
+	}
+	
+	//상품 이름, 이미지 리스트
+	@ResponseBody
+	@GetMapping("mypagePrdtList")
+	public List<ProductVO> mypagePrdtList(ProductVO prdtVO) {
+		return membService.mypagePrdtList(prdtVO);
+	}
+	
+	//회원정보 수정
+	@ResponseBody
+	@PostMapping("updateMemberInfo")
+	public MembVO updateMemberInfo(@RequestParam String nick,@RequestParam String tel,@RequestParam String pwd, @RequestParam String id,MembVO membVO, Model model) {
+		MembVO mem = membService.selectOneMemb(id);
+		membVO.setId(id);
+		membVO.setNick(nick);
+		membVO.setTel(tel);
+		if(mem.getTempPwd() == null) {
+			membVO.setPwd(pwEncoder.encode(pwd));//비밀번호 암호화
+		} else {
+			membVO.setPwd(pwEncoder.encode(pwd));
+			membVO.setTempPwd(pwEncoder.encode(pwd));
+		}
+		membService.updateMemberInfo(membVO);
+		System.out.println("!!!정 보 수 정!!!!");
+		System.out.println(membService.updateMemberInfo(membVO));
+		System.out.println("!!!!!!!");
+		return membVO;
+	}
+	
+	//주소 수정
+	@ResponseBody
+	@PostMapping("updateMemberAddr")
+	public AddrVO updateMemberAddr(@RequestParam String addrNo,@RequestParam String membNo,@RequestParam String zip,@RequestParam String addr,@RequestParam String detaAddr, AddrVO addrVO) {
+		addrVO.setAddrNo(addrNo);
+		addrVO.setZip(zip);
+		addrVO.setAddr(addr);
+		addrVO.setDetaAddr(detaAddr);
+		addrVO.setMembNo(membNo);
+		membService.updateMemberAddr(addrVO);
+		System.out.println("!!! 정 보 수 정!!!!");
+		System.out.println(membService.updateMemberAddr(addrVO));
+		System.out.println("!!!!!!!");
+		return addrVO;
+	}
+	
+	//주소 추가
+	@ResponseBody
+	@PostMapping("insertMemberAddr")
+	public AddrVO insertMemberAddr(@RequestParam String zip,@RequestParam String addr,@RequestParam String detaAddr, AddrVO addrVO) {
+		addrVO.setZip(zip);
+		addrVO.setAddr(addr);
+		addrVO.setDetaAddr(detaAddr);
+		membService.insertAddr(addrVO);
+		System.out.println("!!! 정 보 수 정!!!!");
+		System.out.println(membService.insertAddr(addrVO));
+		System.out.println("!!!!!!!");
+		return addrVO;
+	}
+	
+	@ResponseBody
+	@PostMapping("selectOneMembInfo")
+	public List<MembVO> selectOneMembInfo(@RequestParam String id, MembVO membVO) {
+		membVO.setId(id);
+		return membService.selectOneMemb2(membVO);
+	}
+	
 }

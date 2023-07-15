@@ -19,7 +19,7 @@
     ON m.memb_no = a.memb_no
 		WHERE id  = #{id}
 	</select>
-	<select id="selectOneMemb2" resultType="UserVO" parameterType="String">
+	<select id="selectOneMemb2" resultType="MembVO" parameterType="MembVO">
 		SELECT *
 		FROM member m
 		LEFT OUTER JOIN address a
@@ -207,7 +207,7 @@
          LEFT OUTER JOIN address a 
          ON m.memb_no = a.memb_no
          WHERE id = #{id}
-         ORDER BY common_cd
+         ORDER BY rate DESC
 		</select>
 		
 		<select id="myStockList" resultType="MembVO">
@@ -244,7 +244,69 @@
          JOIN member m   
          ON p.memb_no = m.memb_no
          where id = #{id}
-         ORDER by common_cd
+         ORDER BY rate DESC
 		</select>
+		
+		<select id="mypageOrderList" resultType="OrderVO">
+		  SELECT o.order_no, o.order_dt, o.order_am, od.prdt_no
+		  FROM 	 orders o
+		  JOIN 	 order_detail od 
+		  ON 		 o.order_no = od.order_no
+		  JOIN 	 member m 
+		  ON 		 m.memb_no = o.memb_no
+		  WHERE  m.id = #{id}
+		    <choose>
+		      <when test="orderSt == '배송완료'">
+		        AND o.order_st = '배송완료'
+		      </when>
+		      <when test="orderSt == '배송중'">
+		        AND o.order_st = '배송중'
+		      </when>
+		      <when test="orderSt == '상품준비중'">
+		        AND o.order_st = '상품준비중'
+		      </when>
+		      <otherwise>
+		        AND 1=1 -- 전체 데이터 출력
+		      </otherwise>
+		    </choose>
+		  ORDER BY o.order_st, o.order_dt desc
+		</select>
+		
+		<select id="mypagePrdtList" resultType="ProductVO">
+			SELECT prdt_no, nm, img 
+			FROM   product 
+			JOIN	 item 
+			USING	 (nm)
+		</select>
+		
+		<update id="updateMemberInfo" parameterType="MembVO">
+			UPDATE member
+			<set>
+				<if test="nick != null and !nick.equals('')">
+					nick = #{nick},
+				</if>
+				<if test="email != null and !email.equals('')">
+					email = #{email},
+				</if>
+				<if test="tel != null and !tel.equals('')">
+					tel = #{tel},
+				</if>
+				<if test="pwd != null and !pwd.equals('')">
+					pwd = #{pwd},
+				</if>
+				<if test="tempPwd != null and !tempPwd.equals('')">
+					tempPwd = #{tempPwd}
+				</if>
+			</set>
+			WHERE id = #{id}
+		</update>
+		<update id="updateMemberAddr" parameterType="AddrVO">
+			UPDATE address
+			SET		 zip = #{zip},
+						 addr = #{addr},
+						 deta_addr = #{detaAddr}
+			WHERE memb_no = #{membNo}
+			AND   addr_no = #{addrNo}
+		</update>
 	
 </mapper>

@@ -18,6 +18,8 @@ public class MembVO {
 	private String tnm;
 	private String id;
 	private String pwd;
+	private String oldpwd;
+	private String newpwd;
 	private String nick;
 	private String email;
 	private String tel;

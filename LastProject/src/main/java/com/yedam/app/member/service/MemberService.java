@@ -2,6 +2,8 @@ package com.yedam.app.member.service;
 
 import java.util.List;
 
+import com.yedam.app.mall.service.OrderVO;
+import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.security.service.UserVO;
 
 public interface MemberService {
@@ -9,7 +11,8 @@ public interface MemberService {
 	public MembVO mainLoginCheck(MembVO membVO);
 	//아이디로 단건조회
 	public MembVO selectOneMemb(String id);
-	public UserVO selectOneMemb2(String id);
+	public List<MembVO> selectOneMemb2(MembVO membVO);
+	
 	public MembVO getMemberTel(MembVO membVO);
 	
 	//일반회원가입
@@ -49,5 +52,12 @@ public interface MemberService {
 	//보유주식
 	public List<MembVO> myStockList(MembVO membVO);
 	
+	public List<OrderVO> mypageOrderList(OrderVO orderVO);
+	
+	public List<ProductVO> mypagePrdtList(ProductVO prdtVO);
+	
+	//회원정보 변경
+	public int updateMemberInfo(MembVO membVO);
+	public int updateMemberAddr(AddrVO addrVO);
 
 }

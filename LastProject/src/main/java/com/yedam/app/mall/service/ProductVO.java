@@ -11,6 +11,7 @@ public class ProductVO {
 	
 	private String prdtNo;
 	private String nm;
+	private String pnm;
 	private int prc;
 	private int dcRate;
 	private String desct;

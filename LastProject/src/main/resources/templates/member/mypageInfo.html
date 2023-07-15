@@ -1,89 +1,469 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layout/layout}">
+	layout:decorate="~{layout/layout2}">
 
 <head>
-	<meta charset="UTF-8">
-	<title>회원관리</title>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-	<style>
-	.sidebar.sidebar-left{
-		height: 1000px;
-	}
-	.titleMenu{
-		padding-top : 20px;
-	}
-	.sidebarMenu{
-		padding-top : 40px;
-		padding-bottom : 40px;
-	}
-		#mypageBody, .sidebar {
-			border: 1px solid #DDDDDD;
-			height: auto;
+<meta charset="UTF-8">
+<title>회원관리</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<style>
+.section-padding {
+	padding: 20px 0;
+  position: relative;
+}
+* The Modal (background) */
+		.modal {
+		   display: none; /* Hidden by default */
+		   position: fixed; /* Stay in place */
+		   z-index: 1; /* Sit on top */
+		   left: 0;
+		   top: 0;
+		   width: 100%; /* Full width */
+		   height: 100%; /* Full height */
+		   overflow: auto; /* Enable scroll if needed */
+		   background-color: rgb(0,0,0); /* Fallback color */
+		   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 		}
-		#mypagetbl{
-		width : 611.67px;
-		font-size: larger;
-		}
-		#mypagetbl th{
-			padding : 20px;
-			width : 500px;
-		}
-		#mypagetbl td{
-			text-align : right;
-			padding-right : 20px;
-		}
-		.titleTxt{
-			text-align : center;
-		}
-		.py-20 {
-    clear: both;
-    height: 20px;
-  }
-  .bi{
-  	font-size: 50px;
-  	margin-top : 15px;
-  }
 		
-	</style>
+		/* Modal Content/Box */
+		.modal-content {
+		    background-color: #fefefe;
+		    margin: 15% auto; /* 15% from the top and centered */
+		    padding: 20px;
+		    border: 1px solid #888;
+		    width: 30%; /* Could be more or less, depending on screen size */                          
+		}
+
+</style>
 </head>
 <body>
-	<section class="block-wrapper flex items-center justify-center w-screen h-screen p-10 space-x-6 bg-gray-300"
-		layout:fragment="content">
-		<div class="container">
-			<div class="row">
-				<!-- article1 -->
-				<div class="col-lg-4 col-md-8 col-sm-12 col-xs-12">
-					<div class="sidebar sidebar-left">
-						<div class="widget">
-						
-							<!-- sidebar start -->
-							<div class="flex flex-col items-center w-40 h-full overflow-hidden text-gray-700 bg-gray-100 rounded">
-								<!-- [[${session.loggedInMember.id}]] -->
+  <div layout:fragment="mypage">
+    <section class="login-signup section-padding" layout:fragment="content">
+		<div class="row align-items-center justify-content-center">
+			<div class="col-lg-12">
+				<div class="signup">
+					<h3 class="mt-4">기본 정보</h3>
+					<form id="joinfrm" action="join" class="signup-form row" method="post" onsubmit="nullCheck()">
+						<div class="col-md-12">
+							<div class="form-group">
+							<h3 class="mt-4">[[${session.loggedInMember.nm}]]</h3>
 							</div>
-							<!-- sidebar end -->
-							
 						</div>
-					</div>
+					<div class="col-md-12">
+							<div class="form-group">
+								<label for="id-address">아이디</label><br> <input type="email"
+									class="form-control" name="id" id="id-address"
+									th:value=${session.loggedInMember.id}
+									style="width: 60%; display: inline;" readonly>
+								<br>
+								<span id="idmsg"></span>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="nickname">닉네임</label><br> <input type="text"
+									class="form-control" id="nickname" name="nick"
+									th:value=${session.loggedInMember.nick}
+									style="width: 60%; display: inline;" readonly>
+								<div id="ckNick" style="display: inline;"></div>
+								<button type="button" id="changeNick">변경</button><br>
+								<span id="nickmsg"></span>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="pass">비밀번호</label><br> <input type="password"
+									class="form-control" id="pass" name="pwd"
+									placeholder="비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요."
+									th:value=${session.loggedInMember.pwd} 
+									style="width: 60%; display: inline;" readonly>
+									<button type="button" id="changePwd">변경</button><br>
+							</div>
+						</div>
+						<div class="col-md-12 ckpwddiv" style="display : none;">
+							<div class="form-group">
+								<label for="passCheck">비밀번호 확인</label> <input type="password"
+									class="form-control" id="passCheck" name="pwdCheck"
+									placeholder="비밀번호를 다시 입력하세요">
+								<div id="pwd-warning"></div>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="email-address">이메일</label><br> <input type="email"
+									class="form-control" id="email-address" name="email"
+									th:value=${session.loggedInMember.email} 
+									style="width: 60%; display: inline;" readonly>
+									<button type="button" id="changeEmail" style="display : inline-block;">변경</button>
+									<button type="button" id="sendemail" style="display : none;">인증번호 발송</button>
+									<button type="reset" id="resetEmail" style="display : none;">취소</button>
+									<br>
+							</div>
+						</div>
+						<div class="col-md-12 emaildiv" style="display : none;">
+							<div class="form-group">
+								<label for="mainCheckInput"></label>
+								<input type="number" class="form-control" name="confirmmaincode" id="mainCheckInput" placeholder="인증번호를 입력하세요"style="width : 70%; display : inline;">
+								<button type="button" id="testBtn1" class="btn btn-light">인증번호 확인</button><br>
+								<span id="mailCheck"></span>
+							</div>
+						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+								<label for="telInput">연락처</label><br>
+								<input type="text" class="form-control" oninput="autoHyphen(this)"
+									maxlength="13" name="to" id="telInput" th:value=${session.loggedInMember.tel} style="width : 70%; display : inline;" readonly>
+									<button type="button" id="changeTel">변경</button>
+									<button type="button" id="sendsms" style="display : none;">인증번호 발송</button>
+									<button type="reset" id="resetsms" style="display : none;">취소</button>
+								<br><span id="telCheck"></span>
+							</div>
+						</div>
+						<div class="col-md-12" style="display : block;">
+							<div class="form-group">
+								<label for="codeCheckInput"></label>
+								<input type="number" class="form-control" name="confirmcode" id="codeCheckInput" placeholder="인증번호를 입력하세요"style="width : 70%; display : inline;">
+								<button type="button" id="testBtn2">인증번호 확인</button><br>
+								<span id="codeCheck"></span>
+							</div>
+						</div>
+						<div class="col-md-12" th:if="${session.loggedInMember.addrNo == null}">
+					    <span>등록된 주소가 없습니다.</span>
+					    <button>주소 등록</button>
+						</div>
+						<div id="addrDiv" th:if="${session.loggedInMember.addrNo != null}" class="col-md-12" style=" padding-left: 0px;">
+						</div>
+						<div class="col-md-12">
+							<button class="btn btn-primary" type="button" id="saveBtn">저장</button>
+							<button class="btn btn-dark" type="reset" id="resetBtn">취소</button>
+						</div>
+					</form>
 				</div>
-				<!-- article1 end -->
-
-				<!-- article2 -->
-				<div class="col-lg-7 col-md-12 col-sm-12 col-xs-12">
-					<div id="mypageBody">
-						<table id="mypagetbl">
-							<tr style="background-color : bisque">
-								<th>마이페이지</th>
-								<td><p class="bi bi-arrow-right-square-fill"></p></td>
-							</tr>
-							
-						</table>
-					</div>
-				</div>
-				<!-- article2 end -->
 			</div>
 		</div>
-	</section>
+<!-- modal -->
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+  	 <p class="bi bi-exclamation-circle" style="text-align: center; font-size: 24pt;"></p>
+    <p style="text-align: center; line-height: 1.5;"><br>5회 이상 실패하셨습니다.<br>본인인증을 다시 진행해주세요.</p>
+    <p><br></p>
+  	<div style="cursor:pointer;background-color:#DDDDDD;text-align: center;padding-bottom: 10px;padding-top: 10px;" onClick="close_pop();">
+  		<span class="pop_bt" style="font-size: 13pt;">닫기</span>
+  	</div>
+  </div>
+</div>    
+<!-- modal -->
+ 
+<script>
+//주소 리스트 출력
+const id = "[[${session.loggedInMember.id}]]";
+const email = "[[${session.loggedInMember.email}]]";
+const membNo = "[[${session.loggedInMember.membNo}]]";
+
+let div = '';
+$.ajax({
+	url: "selectOneMembInfo",
+	method: "POST",
+	data: {
+		"id": id
+	},
+	success: function (data) {
+		data.forEach(el => {
+			console.log(el);
+			div += `
+				<div class="col-md-12">
+					<div class="form-group" style="margin-bottom: 0px;">
+						<input data-no="${el.addrNo}" type="checkbox" style="display: inline;">
+						<label for="addr1">주소</label>
+						<button type="button" class="changeAddr" onclick="changeAddr(this)">변경</button>
+						<button type="button" class="deleteAddr">삭제</button><br>
+						<input type="text" class="form-control" style="width: 40%; display: inline;" id="addr1" name="zip" value="${el.zip}" readonly>
+						<br>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="form-group" style="margin-bottom: 0px;">
+						<label for="addr2"></label>
+						<input type="text" class="form-control" style="width: 100%;" id="addr2" name="addr" value="${el.addr}" readonly>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="addr3"></label>
+						<input type="text" class="form-control" id="addr3" style="width: 100%" name="detaAddr" value="${el.detaAddr}" readonly>
+					</div>
+				</div>
+			`;
+			
+			
+			$("#addrDiv").html(div);	
+		})
+	},
+	error: function (error) {
+		console.log(error);
+	}
+});
+
+const pwdInput = document.getElementById('pass');
+const pwdCorrectInput = document.getElementById('passCheck');
+const pwdWarning = document.getElementById('pwd-warning');
+const idMsg = document.querySelector("#idmsg");
+const nickMsg = document.querySelector("#nickmsg");
+//회원정보 수정
+
+//닉네임 변경
+$("#changeNick").on("click", function(){
+	$("#nickname").removeAttr("readonly");
+	$("#ckNick").html(`<button type="button" id="checkNick">중복확인</button>`)
+	$("#changeNick").text("저장");
+	
+
+ const nickBtn = document.querySelector("#checkNick");
+ const idBtn = document.querySelector("#checkId");
+
+ //닉네임 중복확인
+ nickBtn.addEventListener('click', function() {
+	    let nick = document.querySelector("#nickname").value;
+	    const nickCheckUrl = "/member/nickCheck?nick=" + encodeURIComponent(nick);
+	    fetch(nickCheckUrl)
+        .then(response => response.json())
+        .then(result => {
+            if (nick !== "") {
+            	nickMsg.textContent = (result === 1) ? "이미 사용중인 닉네임 입니다." : "사용가능한 닉네임 입니다.";
+                
+                // 중복확인이 완료되면 checkedBtn 클래스를 추가
+                nickBtn.classList.add("checkedBtn");
+            } else {
+            	nickMsg.textContent = "닉네임을 입력하세요";
+            }
+        })
+        .catch(err => console.log(err));
+	}); //닉네임 중복확인 끝
+	
+	//저장버튼 클릭 시 
+ $("#changeNick").on("click", function(){
+	    if(!$("#nickBtn").hasClass("checkedBtn")){
+	        $("#nickMsg").text("중복확인 후 수정 가능합니다.")
+								       .css({
+													"color": "#FA3E3E",
+													"font-weight": "bold",
+													"font-size": "14px"
+												});
+	    }else{
+	    	console.log("저장버튼 클릭")
+	    }
+	});
+});
+//변수 선언
+let addrNo = '';
+
+// 주소 변경
+function changeAddr(target) {
+  addrNo = $(target).closest('.form-group').find('input[type="checkbox"]:checked').data('no'); // 클릭한 주소의 addrNo
+
+  let aa = target.nextElementSibling.nextElementSibling.nextElementSibling; // zip input
+
+  // 우편번호 찾기 버튼 HTML 생성
+  let zipbtnHtml = '<button type="button" class="zipbtn">우편번호 찾기</button>';
+
+  // aa 요소 뒤에 우편번호 찾기 버튼 추가
+  $(aa).after(zipbtnHtml);
+  
+  let changeButton = $(target);
+  changeButton.text('저장').removeAttr('onclick').on('click', function() {
+    updateMemberAddr(); // 저장 버튼 클릭 시 주소 변경 요청
+    $(target).next().remove();
+    $('input[data-no]').each(function() {
+      if ($(this).is(':checked')) {
+        let addButtonHtml = '<button type="button" class="changeAddr" onclick="changeAddr(this)">변경</button>' +
+                             '<button type="button" class="deleteAddr">삭제</button>';
+        $(this).next().after(addButtonHtml);
+        $(this).prop('checked', false);
+      }
+    });
+    $('input[name="detaAddr"]').attr("readonly", "readonly");
+
+    changeButton.remove();
+  });
+
+  let reBtn = $(target).next();
+  reBtn.text('취소').attr('type', 'reset').on('click', function() {
+    $(this).next().next().next().remove(); // 우편번호 찾기 버튼 제거
+    let changeAddrBtnHtml = '<button type="button" class="changeAddr" onclick="changeAddr(this)">변경</button>';
+    changeButton.replaceWith(changeAddrBtnHtml);
+  });
+
+  // 우편번호 찾기 버튼 클릭 이벤트 처리
+  $(document).on('click', '.zipbtn', function() {
+    let zipInput = $(this).closest('.form-group').find('input[name="zip"]');
+    let addrInput = $(this).closest('.col-md-12').next().find('input[name="addr"]');
+    let detaInput = $(this).closest('.col-md-12').next().next().find('input[name="detaAddr"]');
+    detaInput.val("");
+    detaInput.removeAttr("readonly");
+
+    // 주소 API
+    new daum.Postcode({
+      oncomplete: function(data) {
+        let fullRoadAddr = data.roadAddress;
+        let extraRoadAddr = '';
+
+        if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+          extraRoadAddr += data.bname;
+        }
+        if (data.buildingName !== '' && data.apartment === 'Y') {
+          extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+        }
+        if (extraRoadAddr !== '') {
+          extraRoadAddr = ' (' + extraRoadAddr + ')';
+        }
+        if (fullRoadAddr !== '') {
+          fullRoadAddr += extraRoadAddr;
+        }
+
+        // 우편번호와 주소 정보를 해당 필드에 넣는다.
+        console.log(data.zonecode);
+        console.log(fullRoadAddr);
+
+        zipInput.val(data.zonecode);
+        addrInput.val(fullRoadAddr);
+      }
+    }).open();
+  });
+}
+
+// 주소 변경 요청
+function updateMemberAddr() {
+  let zipInput = $('input[name="zip"]');
+  let addrInput = $('input[name="addr"]');
+  let detaInput = $('input[name="detaAddr"]');
+  console.log(detaInput.val());
+
+  $.ajax({
+    url: "updateMemberAddr",
+    method: "POST",
+    data: {
+      "addrNo": addrNo,
+      "zip": zipInput.val(),
+      "addr": addrInput.val(),
+      "detaAddr": detaInput.val(),
+      "membNo": membNo
+    },
+    success: function(result) {
+    	console.log(result);
+    },
+    error: function(err) {
+      console.log(err);
+    }
+  });
+}
+
+
+$("#saveBtn").on("click",function(){
+	if($("#addr3").val() == ''){
+		$("#addr3").focus();
+		return;
+	}
+	
+})
+
+$("#changePwd").on("click", function() {
+	$("#pass").val("");
+  $("#oldpass").removeAttr("readonly");
+  $(".ckpwddiv").css("display", "block");
+});
+
+let mailcode='';
+let mailcount1=0;
+let mailcount2=0;
+$("#changeEmail").on("click", function(){
+	$("#email-address").val("").removeAttr("readonly");
+  $(".emaildiv").css("display", "inline-block");
+	$("#resetEmail").css("display", "inline-block");
+
+	$("#resetEmail").on("click", function(){
+		$("#resetEmail").css("display", "none"); //변경 취소버튼 none
+		$("#sendemail").css("display", "none"); //인증번호 발송 버튼 none
+		$("#email-address").val(email).attr("readonly","readonly"); //다시 원래 이메일 값을 보여줌.
+	})
+	
+	$("#sendemail").css("display", "block");
+	$("#changeEmail").css("display", "none");
+
+	//메일 인증번호 발급
+	$("#sendemail").on("click", function(){
+		mailcount1++;
+		if($("#mainCheckInput").val()==""){
+			$("#mainCheckInput").focus();
+			return;
+		}else {
+			sendMailCode();
+			$("#sendemail").addClass("checkedBtn");
+			$("#testBtn1").on("click", checkMailCode);
+			
+		}
+
+		if(mailcount1>=5){
+			$('#myModal').show();
+		}
+	})
+})
+
+//메일 인증번호 발급
+function sendMailCode(){
+	$.ajax({
+				type: "POST",
+				url: "/member/smsConfirm",
+				data: {
+					"id": id
+				},
+				success: function (data) {
+					console.log("임시코드: " + data);
+					mailcode = data;
+				},
+				error : function(err){
+					console.log(err);
+				}
+			}); //메일 인증번호 발급 end
+}
+//인증번호 비교
+function checkMailCode(){
+	if($("#mainCheckInput").val() == "" ){
+		$("#mainCheckInput").focus();
+		return;
+	}
+	if($("#mainCheckInput").val() == data){
+		$("#mailCheck").text("인증이 완료되었습니다.")
+										.css({
+											"color": "#0D6EFD",
+											"font-weight": "bold",
+											"font-size": "14px"
+		}); 
+		$("#testBtn1").addClass("checkedBtn");
+	}else{
+		mailcount2++;
+		$("#mailCheck").text("다시 시도해주세요.")
+										.css({
+											"color": "#0D6EFD",
+											"font-weight": "bold",
+											"font-size": "14px"
+		}); 
+	}
+	if(mailcount2>=5){
+			$('#myModal').show();
+		}
+}
+
+//모달
+function close_pop(flag) {
+ $('#myModal').hide();
+	 window.location.reload();
+};
+
+      </script>
+    </section>
+  </div>
 </body>
 
 </html>

@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		System.out.println("----------------------------------------------");
 		
 		if(userVO == null) {
-			System.out.println("vo null !!!!!!!!!!!!!!!");
+			System.out.println("userVO == null");
 			throw new UsernameNotFoundException("no user");
 		}
 		return userVO;
