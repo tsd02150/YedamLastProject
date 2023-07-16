@@ -11,4 +11,6 @@ public interface NoticeService {
 	public void increaseInquery(String notiNo);
 	// 공지사항 상세
 	public NoticeVO getNoticeDetail(String notiNo);
+	// 상단 6개
+	public List<NoticeVO> getNoticeTop6();
 }

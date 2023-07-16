@@ -34,4 +34,14 @@
 		FROM NOTICE
 		WHERE noti_no=#{notiNo}
 	</select>
+	<select id="getNoticeTop6" resultType="NoticeVO">
+		<![CDATA[
+		SELECT *
+		FROM(
+			SELECT *
+			FROM NOTICE
+			ORDER BY drwup_dt DESC)
+		WHERE rownum<=6
+		]]>
+	</select>
   </mapper>

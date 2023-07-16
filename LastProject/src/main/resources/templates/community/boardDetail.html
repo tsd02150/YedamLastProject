@@ -326,6 +326,10 @@
 			 function createCommentBtn(){
 				let commentCntn=$(event.target).prev()[0];
 
+				if(commentCntn.value==""){
+					return;
+				}
+
 				fetch("insertComment",{
 					method:"POST",
 					headers:{
@@ -401,7 +405,7 @@
 			
 			// 대댓글 작성
 			function subCommentAddForm(){
-				if(event.target.tagName=="BUTTON")
+				if(event.target.tagName=="BUTTON"||event.target.tagName=="SPAN")
 					return;
 				
 				if(document.getElementById('subCommentForm')!=null){

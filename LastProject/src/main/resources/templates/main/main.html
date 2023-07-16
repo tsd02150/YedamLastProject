@@ -89,7 +89,7 @@
 			</div>
 		</div>
 		<div id="mall">
-			<img src="main/images/pointmall_banner.png">
+			<a href="/mall/mallMain"><img src="main/images/pointmall_banner.png"></a>
 		</div>
 		<div class="flex-block">
 			<section id="news" class="news-style-one">
@@ -108,7 +108,7 @@
 						<span>NOTICE</span>
 					</h3>
 					<div>
-						
+						<a th:each="notice:${noticeList}" th:href="@{/community/noticeDetail(notiNo=${notice.notiNo})}"><p th:text="${notice.ttl}"></p></a>
 					</div>
 				</div>
 			</section>
@@ -120,7 +120,7 @@
 						<span>자유게시판</span>
 					</h3>
 					<div>
-						<a th:each="board:${freeBoardList}"><p th:text="${board.ttl}"></p></a>
+						<a th:each="board:${freeBoardList}" th:href="@{/community/boardDetail(page=1,boardNo=${board.boardNo},commonCd=C1)}"><p th:text="${board.ttl}"></p></a>
 					</div>
 				</div>
 			</section>
@@ -130,7 +130,7 @@
 						<span>주식게시판</span>
 					</h3>
 					<div>
-						<a th:each="board:${stockBoardList}"><p th:text="${board.ttl}"></p></a>					
+						<a th:each="board:${stockBoardList}" th:href="@{/community/boardDetail(page=1,boardNo=${board.boardNo},commonCd=C2)}"><p th:text="${board.ttl}"></p></a>					
 					</div>
 				</div>
 			</section>

@@ -34,5 +34,10 @@ public class NoticeServiceImpl implements NoticeService {
 	public NoticeVO getNoticeDetail(String notiNo) {
 		return noticeMapper.getNoticeDetail(notiNo);
 	}
+
+	@Override
+	public List<NoticeVO> getNoticeTop6() {
+		return noticeMapper.getNoticeTop6();
+	}
 	
 }
