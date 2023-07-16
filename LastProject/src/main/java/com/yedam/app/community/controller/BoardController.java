@@ -55,6 +55,7 @@ public class BoardController {
 		return boardService.getBoardCount(vo);
 	}
 
+	// 글쓰기 페이지
 	@GetMapping("addBoard")
 	public String addBoardForm(Model model, BoardVO boardVo, HttpSession session) {
 		model.addAttribute("boardInfo", boardVo);	
@@ -63,6 +64,7 @@ public class BoardController {
 		return "community/insertBoard";
 	}
 
+	// 글쓰기 기능
 	@PostMapping("addBoard")
 	@ResponseBody
 	public String addBoard(BoardVO vo) {
@@ -78,6 +80,7 @@ public class BoardController {
 		}
 	}
 	
+	// 게시물 상세
 	@GetMapping("boardDetail")
 	public String boardDetail(Model model,BoardVO vo, HttpSession session) {
 		boardService.increaseInquery(vo.getBoardNo());
@@ -100,6 +103,7 @@ public class BoardController {
 		return "community/boardDetailForm";
 	}
 	
+	// 게시물 추천버튼
 	@PostMapping("addRcom")
 	@ResponseBody
 	public String addRcom(BoardVO vo) {
@@ -110,6 +114,7 @@ public class BoardController {
 		}
 	}
 	
+	// 게시물 비추천 버튼
 	@PostMapping("addNrcom")
 	@ResponseBody
 	public String addNrcom(BoardVO vo) {
@@ -120,6 +125,7 @@ public class BoardController {
 		}
 	}
 	
+	// 게시물 삭제
 	@PostMapping("deleteBoard")
 	@ResponseBody
 	public String deleteBoard(BoardVO vo) {
@@ -130,6 +136,7 @@ public class BoardController {
 		}
 	}
 	
+	// 게시물 수정 페이지
 	@GetMapping("modifyBoard")
 	public String modifyBoardForm(Model model, BoardVO boardVo, HttpSession session) {
 		model.addAttribute("boardInfo", boardVo);	
@@ -140,6 +147,7 @@ public class BoardController {
 		return "community/modifyBoard";
 	}
 	
+	// 게시물 수정 기능
 	@PostMapping("modifyBoard")
 	@ResponseBody
 	public String modifyBoard(BoardVO vo) {
@@ -154,6 +162,7 @@ public class BoardController {
 		}
 	}
 	
+	// 댓글 추천 버튼
 	@PostMapping("addCommentRcom")
 	@ResponseBody
 	public String addCommentRcom(CommentsVO vo) {
@@ -164,6 +173,7 @@ public class BoardController {
 		}
 	}
 	
+	// 댓글 비추천 버튼
 	@PostMapping("addCommentNrcom")
 	@ResponseBody
 	public String addCommentNrcom(CommentsVO vo) {
@@ -174,6 +184,7 @@ public class BoardController {
 		}
 	}
 	
+	// 댓글 작성
 	@PostMapping("insertComment")
 	@ResponseBody
 	public CommentsVO insertComment(CommentsVO vo) {
@@ -184,5 +195,26 @@ public class BoardController {
 		}
 		return null;
 	}
-
+	
+	//댓글 삭제
+	@PostMapping("deleteComment")
+	@ResponseBody
+	public String deleteComment(CommentsVO vo) {
+		if(boardService.deleteComment(vo)) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	// 대댓글 생성
+	@PostMapping("insertSubComment")
+	@ResponseBody
+	public CommentsVO insertSubComment(CommentsVO vo) {
+		if(boardService.insertSubComment(vo)) {
+			vo=boardService.getComment(vo.getCommNo());
+			return vo;
+		}
+		return null;
+	}
 }

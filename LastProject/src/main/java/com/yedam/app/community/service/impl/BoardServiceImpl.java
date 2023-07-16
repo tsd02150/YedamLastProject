@@ -117,5 +117,15 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.getComment(commNo);
 	}
 
+	@Override
+	public boolean deleteComment(CommentsVO vo) {
+		return boardMapper.deleteComment(vo)>0;
+	}
+
+	@Override
+	public boolean insertSubComment(CommentsVO vo) {
+		return boardMapper.insertSubComment(vo)>0;
+	}
+
 	
 }

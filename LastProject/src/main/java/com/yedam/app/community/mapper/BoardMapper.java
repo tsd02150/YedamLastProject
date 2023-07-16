@@ -47,4 +47,8 @@ public interface BoardMapper {
 	public int insertComment(CommentsVO vo);
 	// 댓글 단건조회
 	public CommentsVO getComment(String commNo);
+	// 댓글 삭제
+	public int deleteComment(CommentsVO vo);
+	// 대댓글 생성
+	public int insertSubComment(CommentsVO vo);
 }

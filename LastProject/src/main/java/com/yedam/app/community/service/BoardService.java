@@ -45,4 +45,8 @@ public interface BoardService {
 	public boolean insertComment(CommentsVO vo);
 	// 댓글 단건조회
 	public CommentsVO getComment(String commNo);
+	// 댓글 삭제
+	public boolean deleteComment(CommentsVO vo);
+	// 대댓글 생성
+	public boolean insertSubComment(CommentsVO vo);
 }

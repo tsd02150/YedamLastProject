@@ -158,4 +158,16 @@
 		USING(memb_no)
 		WHERE comm_no=#{commNo}
 	</select>
+	<delete id="deleteComment" parameterType="CommentsVO">
+		DELETE FROM COMMENTS
+		WHERE comm_no=#{commNo}
+	</delete>
+	<insert id="insertSubComment" parameterType="CommentsVO">
+		<selectKey keyProperty="commNo" resultType="string" order="BEFORE">
+			SELECT CONCAT('com-',NVL(MAX(TO_NUMBER(SUBSTR(comm_no, 5))), 0)+1)
+			FROM COMMENTS
+		</selectKey>
+		INSERT INTO COMMENTS(comm_no,board_no,cntn,h_comm_no,memb_no)
+		VALUES(#{commNo},#{boardNo},#{cntn},#{hCommNo},#{membNo})
+	</insert>
 </mapper>
