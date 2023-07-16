@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+	#noticeSection{
+		padding-top: 50px;
+		padding-bottom:50px;
+	}
+	#titlename{
+		font-size: 30px;
+	}
+	#titlename span{
+		line-height: 46px;
+	}
+	#titlename span:after{
+		width:120px;
+	}
+	.active{
+		color:white;	
+	}
+	.active a{
+		background-color:#DC3545;
+	}
+	#prevpage{
+		visibility: hidden;
+	}
+	#nextpage{
+		visibility: hidden;
+	}
+</style>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div id="noticeSection">
+			<h1 class="news-title" id="titlename">
+				<span>공지사항</span>
+			</h1>
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<td>글번호</td>
+						<td style="width:60%;">제목</td>
+						<td>작성일</td>
+						<td>조회수</td>
+					</tr>
+				</thead>
+				<tbody id="noticeList">
+
+				</tbody>
+			</table>
+			<div>
+				<nav aria-label="Page navigation example" class="d-flex justify-content-center">
+					<ul class="pagination">
+						<li class="page-item">
+							<a class="page-link" id="prevpage" href="javascript:prevPage()" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+							</a>
+						</li>
+						<!-- 페이징버튼 들어갈 공간 -->
+					    <li class="page-item">
+							<a class="page-link" id="nextpage" href="javascript:nextPage()" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+		
+		<script th:inline="javascript">
+		let targetPage = [[${startPage}]];
+		let startPage=1;
+		let endPage=10;
+		let totalNoticeCnt;
+		let items=["ttl","drwupDt","inq"];
+		
+		getNoticeList();
+		createPageBtn();
+		
+		// 공지사항 목록 출력
+		function getNoticeList(){
+			fetch("/community/getNoticeList",{
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: '&page='+targetPage
+			})
+			.then(result=>result.json())
+			.then(data=>{
+				let tbody = document.getElementById("noticeList");
+				while(tbody.firstChild){
+					tbody.firstChild.remove();
+				}
+				data.forEach((notice,index)=>{
+					let tr = document.createElement('tr');
+					tr.setAttribute('data-notino',notice.notiNo);
+					let td = document.createElement('td');
+					td.textContent=index+1+(targetPage-1)*10;
+					tr.append(td);
+					for(let item of items){
+						let td = document.createElement('td');
+						td.textContent=notice[item];
+						if(item=="ttl"){
+							if(notice["cntn"].indexOf("img")>=0){
+								let img=document.createElement('img');
+								img.src= "../image/imageIcon.png";
+								img.style.height="16px";
+								td.append(img);
+							}
+						}
+						tr.append(td);
+					}
+					tbody.append(tr);
+				})
+			})
+			.catch(err=>console.log(err));
+		}
+
+		// 페이징위해 게시물 개수생성 및 페이지생성 호출
+		function createPageBtn(){
+			fetch("/community/getNoticeCount",{
+				method: "POST"
+			})
+			.then(result=>result.json())
+			.then(data=>{
+				totalNoticeCnt=data;
+				if(totalNoticeCnt<100){
+					endPage=(totalNoticeCnt-1)/10 + 1;
+				}
+				if(totalNoticeCnt>100){
+					nextpage.style.visibility="visible";
+				}
+				createPageCntBtn(startPage,endPage);
+			})			
+		}
+		
+		// 페이징 버튼생성
+		function createPageCntBtn(start,end){
+			if(document.querySelectorAll('.pagebtn')!=null){
+				document.querySelectorAll('.pagebtn').forEach(item=>{
+					item.remove();
+				})
+			}
+			for(let i=start;i<=end;i++){
+				let liTag = document.createElement('li');
+				liTag.classList.add('page-item','pagebtn');
+				if(i%10==targetPage){
+					liTag.classList.add('active');
+				}
+				let aTag = document.createElement('a');
+				aTag.classList.add('page-link');
+				aTag.href="javascript:pageMove("+i+");";
+				aTag.textContent=i;
+				liTag.append(aTag);
+				nextpage.before(liTag);
+			}
+		}
+		
+		// 페이징 버튼클릭
+		function pageMove(page){
+			document.querySelector('.pagebtn.active').classList.remove('active');
+			targetPage=page;
+			getNoticeList();
+			document.querySelectorAll('.pagebtn').forEach(item=>{
+				if(item.children[0].textContent==page){
+					item.classList.add('active');
+				}
+			})
+		}
+		
+		// 페이징 << 버튼 클릭
+		function prevPage(){
+			nextPage.style.visibility="visible";
+			startPage-=10;
+			endPage-=10;
+			if(startPage==1){
+				prevpage.style.visibility="hidden";
+			}
+			pageMove(startPage);
+		}
+		
+		// 페이징 >> 버튼 클릭
+		function nextPage(){
+			prevpage.style.visibility="visible";
+			startPage+=10;
+			endPage+=10;
+			if(endPage>=totalBoardCnt/10+1){
+				endPage=totalBoardCnt/10+1;
+				nextPage.style.visibility="hidden";
+			}
+			pageMove(startPage);
+		}
+		
+		$("#noticeList").on('click','td',function(){
+			if(event.target.tagName=="IMG")
+				return;
+			let notiNo=event.target.parentNode.dataset.notino;
+			window.location.href="/community/noticeDetail?notiNo="+notiNo;
+		})
+		</script>
+	</div>
+</body>
+</html>

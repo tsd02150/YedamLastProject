@@ -4,7 +4,34 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="com.yedam.app.community.mapper.NoticeMapper">
- <select id="ii">
- 	select 1 from dual
- </select>  
+	 <select id="getNoticeList" resultType="NoticeVO">
+		SELECT *
+		FROM(
+		    SELECT rownum rn,noti_no,ttl,inq,drwup_dt,cntn
+		    FROM(
+		        SELECT noti_no,ttl,inq,drwup_dt,cntn
+		        FROM NOTICE
+		        ORDER BY drwup_dt DESC)
+		    <![CDATA[
+		    WHERE rownum<=(${page}*10))
+		    ]]>
+		WHERE rn > (${page}-1)*10
+	 </select>
+	 
+	 <select id="getNoticeCount" resultType="int">
+		SELECT COUNT(noti_no)
+		FROM NOTICE
+	</select>
+	
+	<update id="increaseInquery" parameterType="String">
+		UPDATE NOTICE
+		SET inq=inq+1
+		WHERE noti_no=#{notiNo}
+	</update>
+	
+	<select id="getNoticeDetail" resultType="NoticeVO">
+		SELECT *
+		FROM NOTICE
+		WHERE noti_no=#{notiNo}
+	</select>
   </mapper>

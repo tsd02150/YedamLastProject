@@ -100,7 +100,7 @@ public class BoardController {
 		model.addAttribute("member",boardService.getMembInfo(vo.getMembNo()));
 		model.addAttribute("comments",boardService.getComments(vo.getBoardNo()));
 		
-		return "community/boardDetailForm";
+		return "community/boardDetail";
 	}
 	
 	// 게시물 추천버튼

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+	#noticeSection{
+		padding-top: 50px;
+		padding-bottom:50px;
+	}
+	#titlename{
+		font-size: 30px;
+	}
+	#titlename span{
+		line-height: 46px;
+	}
+	#titlename span:after{
+		width:120px;
+	}
+</style>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div id="noticeSection">
+			<h1 class="news-title" id="titlename">
+				<span>공지사항</span>
+			</h1>
+			<div id="noticeContent">
+				<div class="d-flex justify-content-between">
+					<h3 th:text="${notice.ttl}">제목</h3>
+					<div class="d-flex justify-content-between">
+						<p>[[${#dates.format(notice.drwupDt,'yyyy-MM-dd')}]]&nbsp&nbsp&nbsp</p>
+						<p>조회수 <span>[[${notice.inq}]]</span></p>					
+					</div>
+				</div>
+				<hr>
+				<div id="contentBody">
+					
+				</div>
+				<hr>
+				<div class="d-flex justify-content-end">
+					<button class="btn btn-light mt-3 mt-lg-0" type="button">목록으로</button>
+				</div>
+			</div>
+		</div>
+		
+		<script th:inline="javascript">
+			contentBody.innerHTML=[[${notice.cntn}]];
+		</script>
+	</div>
+</body>
+</html>

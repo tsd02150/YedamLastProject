@@ -129,7 +129,7 @@
                                 <div class="dropdown-menu">
                                   <a class="dropdown-item" href="/community/boardList?commonCd=C1">자유게시판</a>
                                   <a class="dropdown-item" href="/community/boardList?commonCd=C2">주식게시판</a>
-                                  <a class="dropdown-item" href="#">공지사항</a>
+                                  <a class="dropdown-item" href="/community/noticeList">공지사항</a>
                                   <a class="dropdown-item" href="#">QnA</a>
                                   <a class="dropdown-item" href="#">익명채팅방</a>
                                 </div>
@@ -139,7 +139,7 @@
                         </ul>
                         <div class="col-md-12 col-sm-12 col-xs-12 top-nav-social-lists text-lg-right col-lg-4 ml-lg-auto">
                 			<ul class="list-unstyled mt-4 mt-lg-0">
-                   		 		<li>
+                   		 		<li th:if="${session.loggedInMember}==null">
                     				<a href="/member/login">
 			                            <span>
 			                                Sign in
@@ -148,6 +148,18 @@
 			                        <a href="/member/join">
 			                            <span>
 			                                Sign up
+			                            </span>
+			                        </a>
+			                    </li>
+                   		 		<li th:unless="${session.loggedInMember}==null">
+                    				<a href="#">
+			                            <span>
+			                                <b>[[${session.loggedInMember.nick}]]</b> 님 환영합니다
+			                            </span>
+                        			</a>
+			                        <a href="/member/logout">
+			                            <span>
+			                                Sign out
 			                            </span>
 			                        </a>
 			                        <a href="#">
