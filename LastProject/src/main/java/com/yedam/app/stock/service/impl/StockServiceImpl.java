@@ -162,9 +162,27 @@ public class StockServiceImpl implements StockService {
 		return stockMapper.orderTable(type, itemNo);
 	}
 
+	// 보유 주식수량 수익률 포인트 가져오기
 	@Override
 	public PossStockVO getPossStock(String itemNo, String membNo) {
 		return stockMapper.getPossStock(itemNo, membNo);
+	}
+
+	//주식 주문 프로시저
+	@Override
+	public Map<String,Object> callOrderProd(Map<String, Object> params) {
+		Map<String,Object> map = new HashMap<>();
+		int result = stockMapper.callOrderProd(params);
+		
+		if(result == 1) {
+			map.put("code", "success");
+			map.put("message", "주문에 성공했습니다!!");
+		}else if(result == 0) {
+			map.put("code", "fail");
+			map.put("message", "주문에 실패했습니다..");
+		}
+		
+		return map;
 	}
 
 	

@@ -19,6 +19,7 @@ import com.yedam.app.security.service.UserVO;
 import com.yedam.app.stock.service.InqVO;
 import com.yedam.app.stock.service.ItemVO;
 import com.yedam.app.stock.service.PossStockVO;
+import com.yedam.app.stock.service.StockOrderVO;
 import com.yedam.app.stock.service.StockService;
 import com.yedam.app.stock.service.StockVO;
 
@@ -176,4 +177,15 @@ public class StockController {
 		return vo;
 		
 	}
+	
+	@ResponseBody
+	@PostMapping("stockOrder")
+	public Map<String,Object> stockOrder(StockOrderVO vo ){
+		Map<String,Object> orderMap = new HashMap<>();
+		orderMap.put("order_content", vo);
+		orderMap.put("order_type", vo.getOrder_type());
+		Map<String,Object> map = stockservice.callOrderProd(orderMap);
+		return map;
+	}
+	
 }

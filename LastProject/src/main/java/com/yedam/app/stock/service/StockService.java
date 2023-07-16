@@ -26,4 +26,5 @@ public interface StockService {
 	public List<StockVO> getPrcPercent(String type);
 	public List<Map<String,Object>> orderTable(String type , String itemNo);
 	public PossStockVO getPossStock(String itemNo ,String membNo);
+	public Map<String,Object> callOrderProd(Map<String,Object> params);
 }

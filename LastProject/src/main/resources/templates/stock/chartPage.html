@@ -297,6 +297,9 @@ input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+#stockOrderBtn {
+	visibility: hidden;
+}
 </style>
 <title>Insert title here</title>
 </head>
@@ -388,8 +391,8 @@ input[type="number"]::-webkit-inner-spin-button {
 									<p class="mb-0">
 										<span id="orderName">구매</span>가능한 주수 <input id="afford" type="button" value="0">주
 									</p>
-									<h4><span></span><span id="totalPrc">0</span>원</h4>
-									<button >주문</button> <span id="orderType" data-order=""></span>
+									<h5><span></span><span id="totalPrc">0</span>원</h5>
+									<button id="stockOrderBtn" >주문</button> <span id="orderType" data-order=""></span>
 								</div>
 							</div>
 							<div id="CP2D22" class="col-6">
@@ -583,6 +586,7 @@ input[type="number"]::-webkit-inner-spin-button {
 			
 			// 매도 매수버튼 클릭 이벤트
 			$('#orderBtn').on('click','button',function(){
+				$('#stockOrderBtn').css('visibility','visible');//주문버튼 보이기
 				//주문 종류 선택시 값 입력 가능해짐
 				$('#CP2D21 input').attr('readonly',false);
 				$('#CP2D21 input[type=checkbox]').attr('disabled',false);
@@ -600,12 +604,15 @@ input[type="number"]::-webkit-inner-spin-button {
 				
 				//주문 종류에 따라 출력되는 경고메세지 $(this) == button
 				if($(this).is(':contains("매도")')){
+					
+					
 					$('#orderType').attr('data-order','sell').text('매도주문입니다');
 					$('#orderName').text('판매');
 					$('#totalPrc').parent().children('span:eq(0)').text('체결시 얻는 수익 : ');
 					// 판매가능한 주수 보유주수량으로 출력	
 					$('#afford').val($('#CP2D22 div p:nth-of-type(2) span').text());
 				}else{
+					
 					$('#orderType').attr('data-order','buy').text('매수주문입니다');
 					$('#orderName').text('구매');
 					$('#totalPrc').parent().children('span:eq(0)').text('총 주문 금액 : ')
@@ -803,6 +810,34 @@ input[type="number"]::-webkit-inner-spin-button {
 				let total = stockCnt * stockPrc;
 				$('#totalPrc').text(total);
 			})
+			
+			//주문버튼 기능
+			$('#stockOrderBtn').on('click',function(){
+				let orderType = $('#orderType').attr('data-order'); // 매수매도 중 선택된 주문의 종류
+				let stockPrc = $('#stockPrc').val(); // 거래가격
+				let stockCnt = $('#stockCnt').val(); // 거래수량
+				let iteminfo = $('p[data-in]').attr('data-in'); // itemNo
+				let membinfo = $('#sessionMembNo').text(); // membNo
+				
+					$.ajax('stockOrder',{
+						method:'post',
+						data:{
+							orderType : orderType,
+							orderItemNo : iteminfo,
+							orderMembNo :membinfo,
+							orderPrc : stockPrc,
+							orderRmnCnt : stockCnt
+						},
+						success:function(data){
+							console.log(data);
+						},
+						error:function(xhr){
+							console.log(xhr);
+						}
+					});// end of ajax
+					
+			});
+			
 		</script>
 	</div>
 </body>

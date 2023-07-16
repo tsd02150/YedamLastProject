@@ -336,4 +336,16 @@
 		where p.memb_no =#{membNo}
 		group by p.item_no,prc,point,m.memb_no
 	</select>
+	
+	<!-- 주식 주문 프로시저 -->
+	<select id="callOrderProd" statementType="CALLABLE">
+    {
+    	call order_prod(#{order_type, mode=IN, jdbcType=VARCHAR}
+	    				, #{order_content.item_no, mode=IN, jdbcType=VARCHAR}
+	    				, #{order_content.memb_no, mode=IN, jdbcType=VARCHAR}
+	    				, #{order_content.prc, mode=IN, jdbcType=INTEGER}
+	    				, #{order_content.rmn_cnt, mode=IN, jdbcType=INTEGER}
+	    				, #{isResult, mode=OUT, jdbcType=INTEGER}
+	    				)}
+	</select>
 </mapper>
