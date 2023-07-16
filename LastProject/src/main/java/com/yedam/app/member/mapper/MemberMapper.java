@@ -10,9 +10,10 @@ import com.yedam.app.member.service.MembVO;
 import com.yedam.app.security.service.UserVO;
 
 public interface MemberMapper {
+
 	
 	//login - 회원정보 조회
-	public MembVO mainLoginCheck(MembVO membVO);
+	public List<String> membListInfo(String id);
 	
 	//role 체크
 	public List<String> selectRole(String id);
@@ -20,6 +21,7 @@ public interface MemberMapper {
 	//단건조회
 	public MembVO selectOneMemb(String id);
 	public List<MembVO> selectOneMemb2(MembVO membVO);
+	public MembVO memberList(String id); //member 테이블만
 	
 	//member 정보 조회
 	public MembVO getMemberTel(MembVO membVO);

@@ -7,9 +7,9 @@ import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.security.service.UserVO;
 
 public interface MemberService {
-	//로그인
-	public MembVO mainLoginCheck(MembVO membVO);
-	//아이디로 단건조회
+	
+	public List<String> membListInfo(String id);
+	public MembVO memberList(String id); //member table만 조회
 	public MembVO selectOneMemb(String id);
 	public List<MembVO> selectOneMemb2(MembVO membVO);
 	

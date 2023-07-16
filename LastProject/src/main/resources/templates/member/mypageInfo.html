@@ -12,29 +12,41 @@
 	padding: 20px 0;
   position: relative;
 }
+.addDiv{
+height: 60px;}
 * The Modal (background) */
-		.modal {
-		   display: none; /* Hidden by default */
-		   position: fixed; /* Stay in place */
-		   z-index: 1; /* Sit on top */
-		   left: 0;
-		   top: 0;
-		   width: 100%; /* Full width */
-		   height: 100%; /* Full height */
-		   overflow: auto; /* Enable scroll if needed */
-		   background-color: rgb(0,0,0); /* Fallback color */
-		   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-		}
-		
-		/* Modal Content/Box */
-		.modal-content {
-		    background-color: #fefefe;
-		    margin: 15% auto; /* 15% from the top and centered */
-		    padding: 20px;
-		    border: 1px solid #888;
-		    width: 30%; /* Could be more or less, depending on screen size */                          
-		}
+.modal {
+  display: none; 
+  position: fixed; 
+  z-index: 1; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%; 
+  overflow: auto; 
+  background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0,0.4); 
+}
 
+/* Modal Content/Box */
+.modal-content {
+ background-color: #fefefe;
+ margin: 15% auto; 
+ padding: 20px;
+ border: 1px solid #888;
+ width: 30%;                      
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 </style>
 </head>
 <body>
@@ -44,7 +56,7 @@
 			<div class="col-lg-12">
 				<div class="signup">
 					<h3 class="mt-4">기본 정보</h3>
-					<form id="joinfrm" action="join" class="signup-form row" method="post" onsubmit="nullCheck()">
+					<form id="updateFrm" action="updateMemberInfo" class="signup-form row" method="post" onsubmit="nullCheck()">
 						<div class="col-md-12">
 							<div class="form-group">
 							<h3 class="mt-4">[[${session.loggedInMember.nm}]]</h3>
@@ -67,7 +79,9 @@
 									th:value=${session.loggedInMember.nick}
 									style="width: 60%; display: inline;" readonly>
 								<div id="ckNick" style="display: inline;"></div>
-								<button type="button" id="changeNick">변경</button><br>
+								<button type="button" id="changeNick">변경</button>
+								<!-- <button type="button" id="saveNick" style="display:none;">저장</button> -->
+								<button type="reset" id="resetNick" style="display:none;">취소</button><br>
 								<span id="nickmsg"></span>
 							</div>
 						</div>
@@ -78,13 +92,16 @@
 									placeholder="비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요."
 									th:value=${session.loggedInMember.pwd} 
 									style="width: 60%; display: inline;" readonly>
-									<button type="button" id="changePwd">변경</button><br>
+									<button type="button" id="changePwd">변경</button>
+									<button type="button" id="resetPwd" style="display : none;">취소</button>
+									<br>
 							</div>
 						</div>
 						<div class="col-md-12 ckpwddiv" style="display : none;">
 							<div class="form-group">
 								<label for="passCheck">비밀번호 확인</label> <input type="password"
 									class="form-control" id="passCheck" name="pwdCheck"
+									style="width: 60%;"
 									placeholder="비밀번호를 다시 입력하세요">
 								<div id="pwd-warning"></div>
 							</div>
@@ -113,29 +130,29 @@
 							<div class="form-group">
 								<label for="telInput">연락처</label><br>
 								<input type="text" class="form-control" oninput="autoHyphen(this)"
-									maxlength="13" name="to" id="telInput" th:value=${session.loggedInMember.tel} style="width : 70%; display : inline;" readonly>
+									maxlength="13" name="tel" id="telInput" th:value=${session.loggedInMember.tel} style="width : 60%; display : inline;" readonly>
 									<button type="button" id="changeTel">변경</button>
 									<button type="button" id="sendsms" style="display : none;">인증번호 발송</button>
 									<button type="reset" id="resetsms" style="display : none;">취소</button>
 								<br><span id="telCheck"></span>
 							</div>
 						</div>
-						<div class="col-md-12" style="display : block;">
+						<div class="col-md-12 smsCkDiv" style="display : none;">
 							<div class="form-group">
 								<label for="codeCheckInput"></label>
-								<input type="number" class="form-control" name="confirmcode" id="codeCheckInput" placeholder="인증번호를 입력하세요"style="width : 70%; display : inline;">
+								<input type="number" class="form-control" name="confirmcode" id="codeCheckInput" placeholder="인증번호를 입력하세요"style="width : 60%; display : inline;">
 								<button type="button" id="testBtn2">인증번호 확인</button><br>
 								<span id="codeCheck"></span>
 							</div>
 						</div>
-						<div class="col-md-12" th:if="${session.loggedInMember.addrNo == null}">
+						<div class="col-md-12 addDiv"th:if="${#lists.isEmpty(membList)}">
 					    <span>등록된 주소가 없습니다.</span>
 					    <button>주소 등록</button>
 						</div>
-						<div id="addrDiv" th:if="${session.loggedInMember.addrNo != null}" class="col-md-12" style=" padding-left: 0px;">
+						<div id="addrDiv" th:if="${not #lists.isEmpty(membList)}" class="col-md-12" style=" padding-left: 0px;">
 						</div>
 						<div class="col-md-12">
-							<button class="btn btn-primary" type="button" id="saveBtn">저장</button>
+							<button class="btn btn-primary" type="submit" id="saveBtn">저장</button>
 							<button class="btn btn-dark" type="reset" id="resetBtn">취소</button>
 						</div>
 					</form>
@@ -157,11 +174,39 @@
 <!-- modal -->
  
 <script>
-//주소 리스트 출력
+
 const id = "[[${session.loggedInMember.id}]]";
 const email = "[[${session.loggedInMember.email}]]";
 const membNo = "[[${session.loggedInMember.membNo}]]";
+const memnick = "[[${session.loggedInMember.nick}]]";
+const pwd = "[[${session.loggedInMember.pwd}]]";
 
+//회원정보 변경
+function updateAjax(){
+	$.ajax({
+		url : "updateMemberInfo",
+		method : "POST",
+		data : {
+			"id": id,
+			"pwd": $("#pass").val(),
+      "nick": $("#nickname").val(),
+      "email": $("#email-address").val(),
+      "tel": $("#telInput").val()
+		},
+		success : function(data){
+			console.log("정보변경 성공");
+			console.log(data);
+		},
+		error : function(err){
+			console.log(err);
+		}
+	});
+}
+//
+
+
+
+//주소 리스트 출력
 let div = '';
 $.ajax({
 	url: "selectOneMembInfo",
@@ -212,50 +257,57 @@ const pwdWarning = document.getElementById('pwd-warning');
 const idMsg = document.querySelector("#idmsg");
 const nickMsg = document.querySelector("#nickmsg");
 //회원정보 수정
+// 닉네임 변경
+$("#changeNick").on("click", function() {
+    $("#changeNick").css("display", "none");
+    $("#nickname").removeAttr("readonly");
+    $("#nickname").val("");
+    $("#ckNick").html(`<button type="button" id="checkNick">중복확인</button>`);
+    $("#resetNick").css("display", "inline-block");
 
-//닉네임 변경
-$("#changeNick").on("click", function(){
-	$("#nickname").removeAttr("readonly");
-	$("#ckNick").html(`<button type="button" id="checkNick">중복확인</button>`)
-	$("#changeNick").text("저장");
+    const nickBtn = document.querySelector("#checkNick");
+    const idBtn = document.querySelector("#checkId");
+
+    // 닉네임 중복확인
+    nickBtn.addEventListener("click", function() {
+        let nick = document.querySelector("#nickname").value;
+        if ($("#nickname").val() === "") {
+            $("#nickname").focus();
+            $("#nickMsg")
+                .text("닉네임을 입력해주세요")
+                .css({
+                    color: "#FA3E3E",
+                    "font-weight": "bold",
+                    "font-size": "14px"
+                });
+            return;
+        }else{
+	        const nickCheckUrl = "/member/nickCheck?nick=" + encodeURIComponent(nick);
+	        fetch(nickCheckUrl)
+	            .then(response => response.json())
+	            .then(result => {
+	                if (nick !== "") {
+	                	nickMsg.textContent = result === 1 ? "이미 사용중인 닉네임입니다." : "사용가능한 닉네임입니다.";
 	
+	                    // 중복확인이 완료되면 checkedBtn 클래스를 추가
+	                    nickBtn.classList.add("checkedBtn");
+	                } else {
+	                	 nickMsg.textContent = "닉네임을 입력하세요";
+	                }
+	            })
+	            .catch(err => console.log(err));
+        }
 
- const nickBtn = document.querySelector("#checkNick");
- const idBtn = document.querySelector("#checkId");
+    }); // 닉네임 중복확인 끝
 
- //닉네임 중복확인
- nickBtn.addEventListener('click', function() {
-	    let nick = document.querySelector("#nickname").value;
-	    const nickCheckUrl = "/member/nickCheck?nick=" + encodeURIComponent(nick);
-	    fetch(nickCheckUrl)
-        .then(response => response.json())
-        .then(result => {
-            if (nick !== "") {
-            	nickMsg.textContent = (result === 1) ? "이미 사용중인 닉네임 입니다." : "사용가능한 닉네임 입니다.";
-                
-                // 중복확인이 완료되면 checkedBtn 클래스를 추가
-                nickBtn.classList.add("checkedBtn");
-            } else {
-            	nickMsg.textContent = "닉네임을 입력하세요";
-            }
-        })
-        .catch(err => console.log(err));
-	}); //닉네임 중복확인 끝
-	
-	//저장버튼 클릭 시 
- $("#changeNick").on("click", function(){
-	    if(!$("#nickBtn").hasClass("checkedBtn")){
-	        $("#nickMsg").text("중복확인 후 수정 가능합니다.")
-								       .css({
-													"color": "#FA3E3E",
-													"font-weight": "bold",
-													"font-size": "14px"
-												});
-	    }else{
-	    	console.log("저장버튼 클릭")
-	    }
-	});
+    // 취소 버튼 누를 때
+    $("#resetNick").on("click", function() {
+	    	$("#changeNick").css("display", "inline-block");
+        $("#resetNick").css("display", "none");
+        $("#checkNick").css("display", "none");
+    });
 });
+
 //변수 선언
 let addrNo = '';
 
@@ -372,7 +424,15 @@ $("#changePwd").on("click", function() {
 	$("#pass").val("");
   $("#oldpass").removeAttr("readonly");
   $(".ckpwddiv").css("display", "block");
+  $("#resetPwd").css("display", "inline-block");
 });
+
+$("#resetPwd").on("click", function(){
+	$("#pass").val(pwd);
+	$("#oldpass").attr("readonly","readonly");
+  $(".ckpwddiv").css("display", "none");
+  $("#resetPwd").css("display", "none");
+})
 
 let mailcode='';
 let mailcount1=0;
@@ -381,21 +441,22 @@ $("#changeEmail").on("click", function(){
 	$("#email-address").val("").removeAttr("readonly");
   $(".emaildiv").css("display", "inline-block");
 	$("#resetEmail").css("display", "inline-block");
+	$("#sendemail").css("display", "inline-block");
+	$("#changeEmail").css("display", "none");
 
 	$("#resetEmail").on("click", function(){
 		$("#resetEmail").css("display", "none"); //변경 취소버튼 none
 		$("#sendemail").css("display", "none"); //인증번호 발송 버튼 none
+		$("#testBtn1").css("display", "none");
 		$("#email-address").val(email).attr("readonly","readonly"); //다시 원래 이메일 값을 보여줌.
 	})
 	
-	$("#sendemail").css("display", "block");
-	$("#changeEmail").css("display", "none");
 
 	//메일 인증번호 발급
 	$("#sendemail").on("click", function(){
 		mailcount1++;
-		if($("#mainCheckInput").val()==""){
-			$("#mainCheckInput").focus();
+		if($("#email-address").val()==""){
+			$("#email-address").focus();
 			return;
 		}else {
 			sendMailCode();
@@ -416,7 +477,7 @@ function sendMailCode(){
 				type: "POST",
 				url: "/member/smsConfirm",
 				data: {
-					"id": id
+					"email": $("#email-address").val()
 				},
 				success: function (data) {
 					console.log("임시코드: " + data);
@@ -427,13 +488,14 @@ function sendMailCode(){
 				}
 			}); //메일 인증번호 발급 end
 }
+
 //인증번호 비교
 function checkMailCode(){
 	if($("#mainCheckInput").val() == "" ){
 		$("#mainCheckInput").focus();
 		return;
 	}
-	if($("#mainCheckInput").val() == data){
+	if($("#mainCheckInput").val() == mailcode){
 		$("#mailCheck").text("인증이 완료되었습니다.")
 										.css({
 											"color": "#0D6EFD",
@@ -455,12 +517,107 @@ function checkMailCode(){
 		}
 }
 
+//연락처 변경 버튼 클릭
+ let testcode;
+
+ let telcount1 = 0; // 본인인증 횟수 5회 제한 count
+ let telcount2 = 0; // 인증번호 확인 횟수 5회 제한 count
+ 
+$("#changeTel").on("click", function() {
+    $("#telInput").removeAttr("readonly");
+    $("#changeTel").hide();
+    $("#sendsms").css("display", "inline-block");
+    $("#resetsms").css("display", "inline-block");
+    $(".smsCkDiv").css("display", "block");
+    $("#telInput").val("");
+});
+
+
+  // sms 인증번호 발송
+  $("#sendsms").on("click", function() {
+    telcount1++;
+   if (!$("#telInput").val()) {
+       $("#telInput").focus();
+   }else{
+	   
+   
+   
+   let toUser = $("#telInput").val().replace(/[^0-9]/g, "").replace(/^(\d{3})(\d{4})(\d{4})$/, "$1$2$3");
+   testcode = createSmsKey();
+   console.log(testcode);
+
+   $("#telCheck")
+       .text("인증번호가 발송되었습니다.")
+       .css({
+           color: "#0D6EFD",
+           "font-weight": "bold",
+           "font-size": "14px"
+       }); // 인증번호 확인 끝.
+   }
+   $("#sendsms").addClass("isOk"); //본인인증 실행 여부 체크
+   if (telcount1 >= 5) {
+       $("#myModal").show();
+   }
+});
+
+ // sms 인증코드 확인
+ $("#testBtn2").on("click", function() {
+     telcount2++;
+
+   if (testcode !== $("#codeCheckInput").val()) {
+       console.log(data.tel);
+       $("#codeCheck")
+           .text("인증번호가 일치하지 않습니다. 다시 입력하세요")
+           .css({
+               color: "#FA3E3E",
+               "font-weight": "bold",
+               "font-size": "14px"
+           });
+   } else {
+       $("#codeCheck").text("인증이 완료되었습니다.")
+           .css({
+               color: "#0D6EFD",
+               "font-weight": "bold",
+               "font-size": "14px"
+           }); // 인증번호 확인 끝.
+       $("#testBtn2").addClass("isOk"); //본인인증 실행 여부 체크
+   }
+   if (telcount2 >= 5) {
+       $("#myModal").show();
+   }
+ });
+
+
+//연락처 변경 - 취소 버튼 클릭 시
+$("#resetsms").on("click",function(){
+    $("#changeTel").css("display", "inline-block");
+    $("#sendsms").css("display", "none");
+    $("#resetsms").css("display", "none");
+    $(".smsCkDiv").css("display", "none");
+});
 //모달
 function close_pop(flag) {
  $('#myModal').hide();
 	 window.location.reload();
 };
+function close_pop(flag) {
+    $('#myModal').hide();
+		 window.location.reload();
+ };
 
+function createSmsKey() {
+	  let key = '';
+	  
+	  for (let i = 0; i < 5; i++) { 
+	    key += Math.floor(Math.random() * 10);
+	  }
+	  return key;
+	}
+//연락처 저장 포맷 & 유효성검사
+const autoHyphen = (target) => {
+    target.value = target.value.replace(/[^0-9]/g, '').replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`);
+};
+	
       </script>
     </section>
   </div>

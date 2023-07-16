@@ -40,6 +40,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("member")
 @RequiredArgsConstructor
 public class MemberController {
+	private static final String UserVO = null;
+
 	@Autowired
 	MemberService membService;
 	
@@ -188,8 +190,8 @@ public class MemberController {
 	
 	@PostMapping("smsConfirm")
 	@ResponseBody
-	String smsConfirm(@RequestParam("id") String id) throws Exception {
-		String email = membService.selectOneMemb(id).getEmail();
+	String smsConfirm(@RequestParam("email") String email) throws Exception {
+		//String email = membService.selectOneMemb(id).getEmail();
 		System.out.println(email);
 		String code = registerMail.sendSimpleMessage(email);
 		System.out.println("인증코드 : " + code);
@@ -242,15 +244,6 @@ public class MemberController {
 	@PostMapping("tempPwdUpdate")
 	public String tempPwdUpdate(UserVO userVO, MembVO membVO, HttpSession session, Model model) {
 		MembVO loggedInMember = membService.selectOneMemb(membVO.getId());
-		System.out.println("=========>1");
-		System.out.println(loggedInMember);
-		System.out.println("=========>2");
-		System.out.println(membVO.getId());
-		System.out.println("=========>3");
-		System.out.println(membVO.getTempPwd());
-		System.out.println("=========>4");
-		//System.out.println(loggedInMember.getPwd());
-		System.out.println("=========>5");
 		
 		System.out.println(pwEncoder.matches(membVO.getPwd(),loggedInMember.getPwd()));
 		if(pwEncoder.matches(membVO.getTempPwd(),loggedInMember.getPwd())) { //암호화된 비밀번호 맞는지 확인
@@ -372,8 +365,11 @@ public class MemberController {
 	
 	//@ResponseBody
 	@GetMapping("mypageInfo")
-	public String mypageInfo(HttpSession session) {
-		//UserVO membinfo = (UserVO) session.getAttribute("loggedInMember");
+	public String mypageInfo(HttpSession session, Model model, MembVO membVO) {
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		String id = mem.getId();
+		List<String> list = membService.membListInfo(id);
+		model.addAttribute("membList",list);
 		return "member/mypageInfo";
 	}
 	
@@ -398,22 +394,33 @@ public class MemberController {
 	//회원정보 수정
 	@ResponseBody
 	@PostMapping("updateMemberInfo")
-	public MembVO updateMemberInfo(@RequestParam String nick,@RequestParam String tel,@RequestParam String pwd, @RequestParam String id,MembVO membVO, Model model) {
-		MembVO mem = membService.selectOneMemb(id);
-		membVO.setId(id);
-		membVO.setNick(nick);
-		membVO.setTel(tel);
-		if(mem.getTempPwd() == null) {
-			membVO.setPwd(pwEncoder.encode(pwd));//비밀번호 암호화
-		} else {
-			membVO.setPwd(pwEncoder.encode(pwd));
-			membVO.setTempPwd(pwEncoder.encode(pwd));
-		}
-		membService.updateMemberInfo(membVO);
-		System.out.println("!!!정 보 수 정!!!!");
-		System.out.println(membService.updateMemberInfo(membVO));
-		System.out.println("!!!!!!!");
-		return membVO;
+	public String updateMemberInfo(@RequestParam String nick, @RequestParam String tel,
+	        @RequestParam String pwd, @RequestParam String id, @RequestParam String email,MembVO membVO, Model model, HttpSession session) {
+	    MembVO mem = membService.memberList(id);
+	    membVO.setId(id);
+	    membVO.setNick(nick);
+	    membVO.setEmail(email);
+	    membVO.setTel(tel);
+	    if (mem.getTempPwd() == null) {
+	        membVO.setPwd(pwEncoder.encode(pwd)); // 비밀번호 암호화
+	    } else {
+	        membVO.setPwd(pwEncoder.encode(pwd));
+	        membVO.setTempPwd(pwEncoder.encode(pwd));
+	    }
+	    membService.updateMemberInfo(membVO);
+	    System.out.println(membVO);
+	    //수정한 정보 다시 세션에 저장
+	    MembVO list = membService.memberList(id);
+	    // 수정한 정보 다시 세션에 저장
+	    /*UserVO updatedUser = new UserVO();
+	    updatedUser.setId(membVO.getId());
+	    updatedUser.setNick(membVO.getNick());
+	    updatedUser.setEmail(membVO.getEmail());
+	    updatedUser.setTel(membVO.getTel());*/
+	    
+		model.addAttribute("membList",list);
+		
+	    return "redirect:mypageInfo";
 	}
 	
 	//주소 수정
@@ -426,9 +433,7 @@ public class MemberController {
 		addrVO.setDetaAddr(detaAddr);
 		addrVO.setMembNo(membNo);
 		membService.updateMemberAddr(addrVO);
-		System.out.println("!!! 정 보 수 정!!!!");
 		System.out.println(membService.updateMemberAddr(addrVO));
-		System.out.println("!!!!!!!");
 		return addrVO;
 	}
 	
@@ -448,8 +453,10 @@ public class MemberController {
 	
 	@ResponseBody
 	@PostMapping("selectOneMembInfo")
-	public List<MembVO> selectOneMembInfo(@RequestParam String id, MembVO membVO) {
+	public List<MembVO> selectOneMembInfo(@RequestParam String id, MembVO membVO,Model model) {
 		membVO.setId(id);
+		model.addAttribute("info", membService.selectOneMemb2(membVO));
+		System.out.println(membService.selectOneMemb2(membVO));
 		return membService.selectOneMemb2(membVO);
 	}
 	

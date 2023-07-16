@@ -20,14 +20,6 @@ public class MemberServiceImpl implements MemberService {
 	@Autowired
 	MemberMapper membMapper;
 
-	//로그인
-
-	//임시 비밀번호 발급 후 로그인
-//	@Override
-//	public MembVO loginCheckPwd(MembVO membVO) {
-////		return membMapper.loginCheckPwd(membVO);
-//	}
-		
 	//아이디로 단건조회
 	@Override
 	public MembVO selectOneMemb(String id) {
@@ -101,8 +93,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public MembVO mainLoginCheck(MembVO membVO) {
-		return membMapper.mainLoginCheck(membVO);
+	public List<String> membListInfo(String id) {
+		return membMapper.membListInfo(id);
 	}
 
 	@Override
@@ -134,5 +126,10 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<MembVO> selectOneMemb2(MembVO membVO) {
 		return membMapper.selectOneMemb2(membVO);
+	}
+
+	@Override
+	public MembVO memberList(String id) {
+		return membMapper.memberList(id);
 	}
 }
