@@ -52,17 +52,39 @@
 	<div layout:fragment="content" class="outer-block">
 	
 	<!-- 퀵메뉴 -->
-		<div class="quick-menu">
+			<div class="quick-menu">
 			<ul>
-				<li th:onclick="|location.href='@{mallMain}'|" style="cursor: pointer;"><img style="width: 40ox; height: 40px;"  src="https://cdn-icons-png.flaticon.com/128/4578/4578246.png"></li>
-				<li style="font-size : 12px;" th:onclick="|location.href='@{mallMain}'|"><a href="#">포인트몰</a></li>
-				<li th:onclick="|location.href='@{farmList}'|" style="cursor: pointer;"><img style="width: 40ox; height: 40px;" src="https://cdn-icons-png.flaticon.com/128/2230/2230446.png"></li>
-				<li style="font-size : 12px;" th:onclick="|location.href='@{farmList}'|"><a href="#">농산물</a></li>
-				<li th:onclick="|location.href='@{seafoodList}'|" style="cursor: pointer;"><img style="width: 40ox; height: 40px;" src="https://cdn-icons-png.flaticon.com/128/3361/3361370.png"></li>
-				<li style="font-size : 12px;" th:onclick="|location.href='@{seafoodList}'|"><a href="#">수산물</a></li>
-				<li th:onclick="|location.href='@{basketList}'|" style="cursor: pointer;"><img style="width: 40ox; height: 40px;" src="https://cdn-icons-png.flaticon.com/128/545/545489.png"></li>
-				<li style="font-size : 12px;" th:onclick="|location.href='@{basketList}'|"><a href="#">장바구니</a></li>
-				 <li class="top-btn" style=" font-size: 12px; cursor: pointer;"><img style="width: 40px; height: 40px;" src="https://cdn-icons-png.flaticon.com/128/6015/6015743.png" alt="Top Button"><a href="#">TOP</a></li>
+				<li th:onclick="|location.href='@{mallMain}'|"
+					style="cursor: pointer;"><img
+					style="width: 40ox; height: 40px;"
+					src="https://cdn-icons-png.flaticon.com/128/4578/4578246.png"></li>
+				<li style="font-size: 12px;"
+					th:onclick="|location.href='@{mallMain}'|"><a href="#">포인트몰</a></li>
+
+				<li th:onclick="|location.href='@{/mall/farmList(commonCd=${'S10'})}'|" style="cursor: pointer;"><img
+					style="width: 40ox; height: 40px;"
+					src="https://cdn-icons-png.flaticon.com/128/2230/2230446.png"></li>
+				<li style="font-size: 12px;"><a
+					href="/mall/farmList?commonCd=S10">농산물</a></li>
+
+
+				<li th:onclick="|location.href='@{/mall/seafoodList(commonCd=${'S20'})}'|" style="cursor: pointer;"><img
+					style="width: 40ox; height: 40px;"
+					src="https://cdn-icons-png.flaticon.com/128/3361/3361370.png"></li>
+				<li style="font-size: 12px;"><a
+					href="/mall/seafoodList?commonCd=S20">수산물</a></li>
+
+
+				<li th:onclick="|location.href='@{basketList}'|"
+					style="cursor: pointer;"><img
+					style="width: 40ox; height: 40px;"
+					src="https://cdn-icons-png.flaticon.com/128/545/545489.png"></li>
+				<li style="font-size: 12px;"
+					th:onclick="|location.href='@{basketList}'|"><a href="#">장바구니</a></li>
+				<li class="top-btn" style="font-size: 12px; cursor: pointer;"><img
+					style="width: 40px; height: 40px;"
+					src="https://cdn-icons-png.flaticon.com/128/6015/6015743.png"
+					alt="Top Button"><a href="#">TOP</a></li>
 			</ul>
 		</div>
 	

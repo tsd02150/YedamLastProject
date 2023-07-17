@@ -28,6 +28,13 @@
   		WHERE common_cd Like #{commonCd}||'%'
   	</select>
   	
+	   <!-- 카테고리별 상품 조회 -->
+    <select id="getProductListByCategory" parameterType="String" resultType="ProductVO">
+        SELECT *
+        FROM PRODUCT
+        WHERE common_cd = #{commonCd}
+    </select>  	
+
 
   	<select id="getBasketInfo" resultType="BasketVO">
   		SELECT *
@@ -44,11 +51,11 @@
   	</select>
   	
  
-	<select id="getCtgr" >
+	<!-- <select id="getCtgr" >
 		SELECT common_cd, ctgr
 		FROM COMMON_CODE
 		WHERE common_cd=#{commonCd}
-	</select>
+	</select> -->
 	
   	
 </mapper>

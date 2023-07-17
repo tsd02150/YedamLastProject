@@ -49,21 +49,21 @@
 	list-style: none;
 }
 
-.fixed {
-	position: fixed;
+/* .fixed {
+	
 	top: 0;
 	opacity: 1;
 	transition: top 0.3s ease;
 }
-
+ */
 .amount>li {
 	flex: 1;
-	height: 120px;
+	height: 80px;
 }
 
 .amount>li>div {
 	text-align: center;
-	margin-top: 37px;
+	margin-top: 30px;
 }
 
 .grid_3 {
@@ -236,18 +236,25 @@ th {
 					src="https://cdn-icons-png.flaticon.com/128/4578/4578246.png"></li>
 				<li style="font-size: 12px;"
 					th:onclick="|location.href='@{mallMain}'|"><a href="#">포인트몰</a></li>
-				<li th:onclick="|location.href='@{farmList}'|"
+
+				<li
+					th:onclick="|location.href='@{/mall/farmList(commonCd=${'S10'})}'|"
 					style="cursor: pointer;"><img
 					style="width: 40ox; height: 40px;"
 					src="https://cdn-icons-png.flaticon.com/128/2230/2230446.png"></li>
-				<li style="font-size: 12px;"
-					th:onclick="|location.href='@{farmList}'|"><a href="#">농산물</a></li>
-				<li th:onclick="|location.href='@{seafoodList}'|"
+				<li style="font-size: 12px;"><a
+					href="/mall/farmList?commonCd=S10">농산물</a></li>
+
+
+				<li
+					th:onclick="|location.href='@{/mall/seafoodList(commonCd=${'S20'})}'|"
 					style="cursor: pointer;"><img
 					style="width: 40ox; height: 40px;"
 					src="https://cdn-icons-png.flaticon.com/128/3361/3361370.png"></li>
-				<li style="font-size: 12px;"
-					th:onclick="|location.href='@{seafoodList}'|"><a href="#">수산물</a></li>
+				<li style="font-size: 12px;"><a
+					href="/mall/seafoodList?commonCd=S20">수산물</a></li>
+
+
 				<li th:onclick="|location.href='@{basketList}'|"
 					style="cursor: pointer;"><img
 					style="width: 40ox; height: 40px;"
@@ -415,7 +422,7 @@ th {
 			<div class="btn-insert" style="position: statics;">
 				<!-- 리뷰 작성 버튼 -->
 				<button id="openModalBtn" type="button">리뷰 작성</button>
-				<button type="button">이전페이지</button>
+				<button onclick="goBack()">이전 페이지로</button>
 			</div>
 			<table>
 				<thead style="text-align: center;">
@@ -440,7 +447,7 @@ th {
 								<div class="info" th:text="${rev.cntn}">후기내용</div>
 							</div>
 						</td>
-						<td style="text-align: center;" th:text="${rev.maks}">★★★★★</td>
+						<td style="text-align: center;" class="maks" th:text="${rev.maks}">5</td>
 						<td style="text-align: center;" th:text="${rev.membNo}">test</td>
 						<td style="text-align: center;" th:text="${rev.drwupDt}">2023-07-16</td>
 
@@ -460,7 +467,7 @@ th {
 				<div>&nbsp;</div>
 				<div class="pic" th:each="prdt : ${getFarm}">
 					<img style="width: 200px; height: 200px;"
-						th:src="|/mall/images/main/${prdt.img}|">
+						th:src="|/mall/images/main/${prdt.thumb}|">
 				</div>
 				<div>&nbsp;</div>
 				<div>&nbsp;</div>
@@ -498,94 +505,154 @@ th {
 			</div>
 		</div>
 
-		<script th:inline="javascript">
-		
-		
-			/* top 버튼 */
-			document.querySelector('.top-btn').addEventListener('click',
-					function() {
-						window.scrollTo({
-							top : 0,
-							behavior : 'smooth'
-						});
-					});
+		<!-- 상품 후기 리스트 -->
+		<div id="reviewList">
+			<!-- 후기 아이템 반복 출력 -->
 
-			/* 메뉴바 고정  */
-			var amountMenu = document.querySelector('.amount');
-			var observer = new IntersectionObserver(function(entries) {
-				entries.forEach(function(entry) {
-					if (entry.isIntersecting) {
-						amountMenu.classList.remove('fixed');
-					} else {
-						amountMenu.classList.add('fixed');
+			<script th:inline="javascript">
+				
+		
+			
+				function goBack() {
+					window.history.back();
+				}
+
+				/* 별 모양 */
+				var maksElements = document.getElementsByClassName('maks');
+
+				for (var i = 0; i < maksElements.length; i++) {
+					var maksValue = parseInt(maksElements[i].textContent);
+					var starRating = '';
+
+					for (var j = 0; j < 5; j++) {
+						if (j < maksValue) {
+							starRating += '★';
+						} else {
+							starRating += '☆';
+						}
+					}
+
+					maksElements[i].textContent = starRating;
+				}
+
+				/* top 버튼 */
+				document.querySelector('.top-btn').addEventListener('click',
+						function() {
+							window.scrollTo({
+								top : 0,
+								behavior : 'smooth'
+							});
+						});
+
+				/* 메뉴바 고정  */
+				var amountMenu = document.querySelector('.amount');
+				var observer = new IntersectionObserver(function(entries) {
+					entries.forEach(function(entry) {
+						if (entry.isIntersecting) {
+							amountMenu.classList.remove('fixed');
+						} else {
+							amountMenu.classList.add('fixed');
+						}
+					});
+				});
+
+				observer.observe(amountMenu);
+
+				/* 모달창 */
+
+				// 모달 열기 버튼 클릭 시 모달 열림
+				document
+						.getElementById('openModalBtn')
+						.addEventListener(
+								'click',
+								function() {
+									document.getElementById('reviewModal').style.display = 'block';
+								});
+
+				// 모달 닫기 버튼 클릭 시 모달 닫힘
+				document
+						.querySelector('.close')
+						.addEventListener(
+								'click',
+								function() {
+									document.getElementById('reviewModal').style.display = 'none';
+								});
+
+				// 모달 바깥 영역 클릭 시 모달 닫힘
+				window.addEventListener('click', function(event) {
+					const modal = document.getElementById('reviewModal');
+					if (event.target === modal) {
+						modal.style.display = 'none';
 					}
 				});
-			});
 
-			observer.observe(amountMenu);
+				// 폼 제출 시 리뷰 작성 완료 처리
+				document
+						.getElementById("reviewForm")
+						.addEventListener(
+								"submit",
+								function(event) {
+									event.preventDefault();
 
-			/* 모달창 */
+									var reviewContent = document
+											.getElementById("reviewContent").value;
+									var reviewRating = document
+											.getElementById("reviewRating").value;
 
-			// 모달 열기 버튼 클릭 시 모달 열림
-			document
-					.getElementById('openModalBtn')
-					.addEventListener(
-							'click',
-							function() {
-								document.getElementById('reviewModal').style.display = 'block';
-							});
+									console.log("리뷰 내용:", reviewContent);
+									console.log("평가:", reviewRating);
 
-			// 모달 닫기 버튼 클릭 시 모달 닫힘
-			document
-					.querySelector('.close')
-					.addEventListener(
-							'click',
-							function() {
-								document.getElementById('reviewModal').style.display = 'none';
-							});
-			// 모달 바깥 영역 클릭 시 모달 닫힘
-			document
-					.querySelector('reviewModal')
-					.addEventListener(
-							'click',
-							function(e) {
-								const evTarget = e.target
-								if (evTarget.classList.contains('.modal')) {
-									document.getElementById('reviewModal').style.display = 'none';
-								}
-							});
-			// 폼 제출 시 리뷰 작성 완료 처리
-			document
-					.getElementById("reviewForm")
-					.addEventListener(
-							"submit",
-							function(event) {
-								event.preventDefault();
+									document.getElementById("reviewModal").style.display = "none";
 
-								var reviewContent = document
-										.getElementById("reviewContent").value;
-								var reviewRating = document
-										.getElementById("reviewRating").value;
+								});
 
-								console.log("리뷰 내용:", reviewContent);
-								console.log("평가:", reviewRating);
+				
+				// 상품 후기 리스트 데이터
+				const reviewData = [];
 
-								document.getElementById("reviewModal").style.display = "none";
+				// 폼 제출 시 리뷰 작성 완료 처리
+				
+				document.getElementById("reviewForm").addEventListener("submit", function(event) {
+				    event.preventDefault();
 
-							});
-			
+				    var reviewContent = document.getElementById("reviewContent").value;
+				    var reviewRating = document.querySelector('input[name="reviewRating"]:checked').value;
 
-			/* 이전 페이지 */
-		/* 	var referrer = document.referrer;
-	
-			console("이전 Url: " + preUrl);
-			
-			
-			String referer = (String)request.getHeader("REFERER");
-		 */
-		</script>
-	</div>
+				    console.log("리뷰 내용:", reviewContent);
+				    console.log("평가:", reviewRating);
 
+				    // 리뷰 데이터 추가
+				    reviewData.push({
+				        content: reviewContent,
+				        rating: reviewRating
+				    });
 
+				    // 리뷰 아이템 생성
+				    var reviewItem = document.createElement("div");
+				    reviewItem.classList.add("review-item");
+				    reviewItem.innerHTML = `
+				        <div class="review-content">${reviewContent}</div>
+				        <div class="review-rating">${reviewRating}점</div>
+				    `;
+
+				    // 상품 후기 리스트에 추가
+				    var reviewList = document.getElementById("reviewList");
+				    reviewList.appendChild(reviewItem);
+
+				    // 모달 닫기
+				    document.getElementById("reviewModal").style.display = "none";
+				});
+
+				
+				/* 이전 페이지 */
+				/* 	var referrer = document.referrer;
+				
+					console("이전 Url: " + preUrl);
+					
+					
+					String referer = (String)request.getHeader("REFERER");
+				 */
+			</script>
+		</div>
 </body>
 </html>

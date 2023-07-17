@@ -12,11 +12,14 @@ public interface MallService {
 	public ProductVO getProductInfo(ProductVO prdtVO);
 
 	// 카테고리 정보
-	public List<ProductVO> getCtgr(String commonCd);
-	
-	//카테고리 이름
+	// public List<ProductVO> getCtgr(String commonCd);
+
+	// 카테고리별 상품 조회
+	public List<ProductVO> getProductListByCategory(String categoryCode);
+
+	// 카테고리 이름
 	public List<ProductVO> getCategoryName(String commonCd);
-	
+
 	// 장바구니 출력
 	public List<BasketVO> getBasketList();
 
@@ -31,7 +34,5 @@ public interface MallService {
 
 	// 리뷰 삭제
 	public int deleteReviewInfo(int revNo);
-
-
 
 }

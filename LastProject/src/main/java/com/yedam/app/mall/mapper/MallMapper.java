@@ -15,7 +15,10 @@ public interface MallMapper {
 	public ProductVO getProductInfo(ProductVO prdtVO);
 	
 	//카테고리 정보
-	public List<ProductVO> getCtgr(String commonCd);
+	//public List<ProductVO> getCtgr(String commonCd);
+	
+	// 카테고리별 상품 조회
+	public List<ProductVO> getProductListByCategory(String categoryCode);
 	
 	//카테고리 이름
 	public List<ProductVO> getCategoryName(String commonCd);
