@@ -13,11 +13,12 @@ public interface MallMapper {
 
 	//단건조회
 	public ProductVO getProductInfo(ProductVO prdtVO);
+	
 	//카테고리 정보
 	public List<ProductVO> getCtgr(String commonCd);
 	
 	//카테고리 이름
-	public String getCategoryName(String commonCd);
+	public List<ProductVO> getCategoryName(String commonCd);
 	
 	//장바구니 출력
 	public List<BasketVO> getBasketList();

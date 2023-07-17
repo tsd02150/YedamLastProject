@@ -145,40 +145,82 @@ th {
 }
 
 /* 모달 창 */
+#myform fieldset {
+	display: inline-block;
+	direction: rtl;
+	border: 0;
+}
+
+#myform fieldset legend {
+	text-align: right;
+}
+
+#myform input[type=radio] {
+	display: none;
+}
+
+#myform label {
+	font-size: 3em;
+	color: transparent;
+	text-shadow: 0 0 0 #f0f0f0;
+}
+
+#myform label:hover {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+#myform label:hover ~ label {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+#myform input[type=radio]:checked ~ label {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+#reviewContents {
+	width: 100%;
+	height: 150px;
+	padding: 10px;
+	box-sizing: border-box;
+	border: solid 1.5px #D3D3D3;
+	border-radius: 5px;
+	font-size: 16px;
+	resize: none;
+}
+
 .modal {
-  display: none;
-  position: fixed;
-  z-index: 999;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
+	display: none;
+	position: fixed;
+	z-index: 999;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
-  background-color: #fefefe;
-  margin: 10% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
+	background-color: #fefefe;
+	margin: 10% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 40%;
+	height: 800px;
 }
 
 .close {
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+	cursor: pointer;
 }
 
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-  cursor: pointer;
+.close:hover, .close:focus {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
 }
-
 </style>
 
 </head>
@@ -318,7 +360,6 @@ th {
 		</ul>
 
 
-		<!-- <img src="https://i.pinimg.com/564x/0a/ac/5d/0aac5d0cc819117556a760eb87410409.jpg" style="width: 1100px; height: 200px;" > -->
 		<!-- 상품 상세 정보 -->
 		<div class="" th:each="prdt : ${getFarm}">
 			<a name="detail"></a>
@@ -371,6 +412,11 @@ th {
 
 		<div class="product-reviews">
 			<a name="review"></a>
+			<div class="btn-insert" style="position: statics;">
+				<!-- 리뷰 작성 버튼 -->
+				<button id="openModalBtn" type="button">리뷰 작성</button>
+				<button type="button">이전페이지</button>
+			</div>
 			<table>
 				<thead style="text-align: center;">
 					<tr>
@@ -399,97 +445,147 @@ th {
 						<td style="text-align: center;" th:text="${rev.drwupDt}">2023-07-16</td>
 
 					</tr>
-				<!-- 추가적인 후기 데이터 -->
+					<!-- 추가적인 후기 데이터 -->
 				</tbody>
 			</table>
 		</div>
 
 
+		<!-- 모달 창 -->
+		<div id="reviewModal" class="modal">
+			<div class="modal-content">
 
-	<!-- 리뷰 작성 버튼 -->
-	<button id="openModalBtn">리뷰 작성</button>
+				<span class="close">&times;</span>
+				<h2 style="text-align: center;">상품 후기</h2>
+				<div>&nbsp;</div>
+				<div class="pic" th:each="prdt : ${getFarm}">
+					<img style="width: 200px; height: 200px;"
+						th:src="|/mall/images/main/${prdt.img}|">
+				</div>
+				<div>&nbsp;</div>
+				<div>&nbsp;</div>
+				<div>&nbsp;</div>
+				<div>&nbsp;</div>
+				<div>&nbsp;</div>
+				<form class="mb-3" name="myform" id="myform" method="post">
+					<fieldset>
+						<span class="text-bold">별점을 선택해주세요</span> <input type="radio"
+							name="reviewStar" value="5" id="rate1"><label for="rate1">★</label>
+						<input type="radio" name="reviewStar" value="4" id="rate2"><label
+							for="rate2">★</label> <input type="radio" name="reviewStar"
+							value="3" id="rate3"><label for="rate3">★</label> <input
+							type="radio" name="reviewStar" value="2" id="rate4"><label
+							for="rate4">★</label> <input type="radio" name="reviewStar"
+							value="1" id="rate5"><label for="rate5">★</label>
+					</fieldset>
+					<div>
 
-	<!-- 모달 창 -->
-	<div id="reviewModal" class="modal">
-	  <div class="modal-content">
-	    <span class="close">&times;</span>
-	    <h2>리뷰 작성</h2>
-	    <form id="reviewForm">
-	      <div>
-	        <label for="reviewContent">리뷰 내용:</label>
-	        <textarea id="reviewContent" name="reviewContent"></textarea>
-	      </div>
-	      <div>
-	        <label for="reviewRating">평가:</label>
-	        <select id="reviewRating" name="reviewRating">
-	          <option value="1">1점</option>
-	          <option value="2">2점</option>
-	          <option value="3">3점</option>
-	          <option value="4">4점</option>
-	          <option value="5">5점</option>
-	        </select>
-	      </div>
-	      <button type="submit">작성 완료</button>
-	    </form>
-	  </div>
-	</div>
+						<textarea class="col-auto form-control" type="text"
+							id="reviewContents"
+							placeholder="좋은 수강평을 남겨주시면 Cocolo에 큰 힘이 됩니다! 포인트 5000p도 지급!!"></textarea>
+					</div>
+					<div>&nbsp;</div>
+					<div></div>
+					<div>&nbsp;</div>
+					<div>&nbsp;</div>
+					<div style="text-align: center;">
+						<button type="reset"
+							style="background-color: beige; border: none;">취소하기</button>
+						<button type="submit"
+							style="background-color: yellowgreen; border: none;">등록하기</button>
+					</div>
+				</form>
+			</div>
+		</div>
 
-
-	</div>
-
-	<script>
-		/* top 버튼 */
-		document.querySelector('.top-btn').addEventListener('click',
-				function() {
-					window.scrollTo({
-						top : 0,
-						behavior : 'smooth'
+		<script th:inline="javascript">
+		
+		
+			/* top 버튼 */
+			document.querySelector('.top-btn').addEventListener('click',
+					function() {
+						window.scrollTo({
+							top : 0,
+							behavior : 'smooth'
+						});
 					});
+
+			/* 메뉴바 고정  */
+			var amountMenu = document.querySelector('.amount');
+			var observer = new IntersectionObserver(function(entries) {
+				entries.forEach(function(entry) {
+					if (entry.isIntersecting) {
+						amountMenu.classList.remove('fixed');
+					} else {
+						amountMenu.classList.add('fixed');
+					}
 				});
-
-		/* 메뉴바 고정  */
-		var amountMenu = document.querySelector('.amount');
-		var observer = new IntersectionObserver(function(entries) {
-			entries.forEach(function(entry) {
-				if (entry.isIntersecting) {
-					amountMenu.classList.remove('fixed');
-				} else {
-					amountMenu.classList.add('fixed');
-				}
 			});
-		});
 
-		observer.observe(amountMenu);
-		
-		openModalBtn();
+			observer.observe(amountMenu);
 
-		/* 모달창 */
-document.addEventListener("DOMContentLoaded", function() {
-  // 모달 열기 버튼 클릭 시 모달 열림
-  document.getElementById("openModalBtn").addEventListener("click", function() {
-    document.getElementById("reviewModal").style.display = "block";
-  });
+			/* 모달창 */
 
-  // 모달 닫기 버튼 클릭 시 모달 닫힘
-  document.querySelector(".close").addEventListener("click", function() {
-    document.getElementById("reviewModal").style.display = "none";
-  });
+			// 모달 열기 버튼 클릭 시 모달 열림
+			document
+					.getElementById('openModalBtn')
+					.addEventListener(
+							'click',
+							function() {
+								document.getElementById('reviewModal').style.display = 'block';
+							});
 
-  // 폼 제출 시 리뷰 작성 완료 처리
-  document.getElementById("reviewForm").addEventListener("submit", function(event) {
-    event.preventDefault();
+			// 모달 닫기 버튼 클릭 시 모달 닫힘
+			document
+					.querySelector('.close')
+					.addEventListener(
+							'click',
+							function() {
+								document.getElementById('reviewModal').style.display = 'none';
+							});
+			// 모달 바깥 영역 클릭 시 모달 닫힘
+			document
+					.querySelector('reviewModal')
+					.addEventListener(
+							'click',
+							function(e) {
+								const evTarget = e.target
+								if (evTarget.classList.contains('.modal')) {
+									document.getElementById('reviewModal').style.display = 'none';
+								}
+							});
+			// 폼 제출 시 리뷰 작성 완료 처리
+			document
+					.getElementById("reviewForm")
+					.addEventListener(
+							"submit",
+							function(event) {
+								event.preventDefault();
 
-    var reviewContent = document.getElementById("reviewContent").value;
-    var reviewRating = document.getElementById("reviewRating").value;
+								var reviewContent = document
+										.getElementById("reviewContent").value;
+								var reviewRating = document
+										.getElementById("reviewRating").value;
 
-    console.log("리뷰 내용:", reviewContent);
-    console.log("평가:", reviewRating);
+								console.log("리뷰 내용:", reviewContent);
+								console.log("평가:", reviewRating);
 
-    document.getElementById("reviewModal").style.display = "none";
-  });
-});
+								document.getElementById("reviewModal").style.display = "none";
 
-		
-	</script>
+							});
+			
+
+			/* 이전 페이지 */
+		/* 	var referrer = document.referrer;
+	
+			console("이전 Url: " + preUrl);
+			
+			
+			String referer = (String)request.getHeader("REFERER");
+		 */
+		</script>
+	</div>
+
+
 </body>
 </html>

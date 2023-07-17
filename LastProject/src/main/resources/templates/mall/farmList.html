@@ -75,36 +75,36 @@
   <div class="category-container">
     <!-- 농산물 카테고리 -->
     <h2 data-common-cd="S1">농산물</h2>
+    
     <div class="category">
-      <ul>
-        <li class="li_1" data-common-cd="S101"><a href="#">곡류</a>
+      <ul >
+        <li class="li_1" data-common-cd="S101">
           <ul>
-            <li class="sub_li_1" th:each="prdt : ${prdtName}" th:text="${prdt.nm}"></li>
+            <li class="sub_li_1" th:each="prdt : ${S101}" th:text="${prdt.ctgr}"></li>
           </ul>
         </li>
       </ul>
     </div>
     <div class="category">
       <ul>
-        <li class="li_1" data-common-cd="S102"><a href="#">콩류</a>
+        <li class="li_1" data-common-cd="S102">
           <ul>
-            <li class="sub_li_1" th:each="prdt : ${prdtName}" th:text="${prdt.nm}"></li>
+            <li class="sub_li_1" th:each="prdt : ${S102}" th:text="${prdt.ctgr}"></li>
           </ul>
         </li>
       </ul>
     </div>
     <div class="category">
       <ul>
-        <li class="li_1" data-common-cd="S103"><a href="#">과실류</a>
+        <li class="li_1" data-common-cd="S103">
           <ul>
-            <li class="sub_li_1" th:each="prdt : ${prdtName}" th:text="${prdt.nm}"></li>
+            <li class="sub_li_1" th:each="prdt : ${S103}" th:text="${prdt.ctgr}"></li>
           </ul>
         </li>
       </ul>
     </div>
   </div>
 </div>
-		
 		
 		
 <!-- 	<div class="row-2">
@@ -145,9 +145,9 @@
 
 		<div class="row">
 			<div class="selectBtn">
-				<button class="btn btn-light mt-3 mt-lg-0" type="button" id="low">낮은 가격순</button>
-				<button class="btn btn-light mt-3 mt-lg-0" type="button" id="high">높은 가격순</button>
-				<button class="btn btn-light mt-3 mt-lg-0" type="button" id="sales">판매량</button>
+				<button class="btn btn-light mt-3 mt-lg-0 ctgr" type="button" id="low">낮은 가격순</button>
+				<button class="btn btn-light mt-3 mt-lg-0 ctgr" type="button" id="high">높은 가격순</button>
+				<button class="btn btn-light mt-3 mt-lg-0 ctgr" type="button" id="sales">판매량</button>
 			</div>
 			<input type="text" id="search">
 		</div>
@@ -204,11 +204,8 @@
 	});
 
 	
-	</script>
+	// 상품 리스트 출력
 	
-	
-
-	<!-- <script th:inline="javascript">
 	
 		//초기값 
 		let currentState=[[S{prdtCode}]];
@@ -217,9 +214,10 @@
 			ctgr.addEventListener('click', function(){
 				sort.children[0].selected=true;
 				currentState = ctgr.getAttribute('data-common-cd');
+				getProductList();
 		}))
 	
-	</script> -->
+	</script> 
 
 	
 	

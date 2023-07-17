@@ -67,7 +67,7 @@ public class MallServiceImpl implements MallService {
 	}
 
 	@Override
-	public String getCategoryName(String commonCd) {
+	public List<ProductVO> getCategoryName(String commonCd) {
 		return mallMapper.getCategoryName(commonCd);
 	}
 

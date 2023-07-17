@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.yedam.app.mall.service.BasketService;
 import com.yedam.app.mall.service.BasketVO;
 import com.yedam.app.mall.service.MallService;
 import com.yedam.app.mall.service.ProductReviewVO;
@@ -20,6 +21,9 @@ public class MallController {
 
 	@Autowired
 	MallService mallService;
+	
+	@Autowired
+	BasketService basketService;
 
 	// 포인트몰 메인 페이지
 	@GetMapping("mallMain")
@@ -32,20 +36,21 @@ public class MallController {
 	@GetMapping("farmList")
 	public String farmList(Model model, ProductVO prdtVO) {
 	    List<ProductVO> farmList = mallService.getProductList();
-	    String prdtCode = prdtVO.getCommonCd().substring(0, 2);
-	    model.addAttribute("prdtCode", prdtCode);
-	    System.out.println(prdtCode);
+	   // String prdtCode = prdtVO.getCommonCd().substring(0, 2);
+	    model.addAttribute("prdtCode", prdtVO.getCommonCd());
+	    
+	    model.addAttribute("farmName", mallService.getCategoryName(prdtVO.getCommonCd()));
+	    model.addAttribute("S101", mallService.getCategoryName(prdtVO.getCommonCd()+'1'));
+	    model.addAttribute("S102", mallService.getCategoryName(prdtVO.getCommonCd()+'2'));
+	    model.addAttribute("S103", mallService.getCategoryName(prdtVO.getCommonCd()+'3'));
+		
 	    model.addAttribute("startPage", 1);
-	    model.addAttribute("prdtName", mallService.getCategoryName(prdtVO.getCommonCd().substring(0, 2)));
 
 	    model.addAttribute("farmList", farmList);
 
 	    return "mall/farmList";
 	}
 
-	
-	
-	
 
 	/*
 	 * @GetMapping("farmList") public String farmList(Model model, ProductVO prdtVO)

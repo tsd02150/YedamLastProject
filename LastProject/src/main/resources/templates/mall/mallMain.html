@@ -48,23 +48,47 @@
 </head>
 <body>
 	<div layout:fragment="content" class="outer-block">
-	
-	<!-- 퀵메뉴 -->
+
+		<!-- 퀵메뉴 -->
 		<div class="quick-menu">
 			<ul>
-				<li th:onclick="|location.href='@{mallMain}'|" style="cursor: pointer;"><img style="width: 40ox; height: 40px;"  src="https://cdn-icons-png.flaticon.com/128/4578/4578246.png"></li>
-				<li style="font-size : 12px;" th:onclick="|location.href='@{mallMain}'|"><a href="#">포인트몰</a></li>
-				<li th:onclick="|location.href='@{farmList}'|" style="cursor: pointer;"><img style="width: 40ox; height: 40px;" src="https://cdn-icons-png.flaticon.com/128/2230/2230446.png"></li>
-				<li style="font-size : 12px;" th:onclick="|location.href='@{farmList}'|"><a href="#">농산물</a></li>
-				<li th:onclick="|location.href='@{seafoodList}'|" style="cursor: pointer;"><img style="width: 40ox; height: 40px;" src="https://cdn-icons-png.flaticon.com/128/3361/3361370.png"></li>
-				<li style="font-size : 12px;" th:onclick="|location.href='@{seafoodList}'|"><a href="#">수산물</a></li>
-				<li th:onclick="|location.href='@{basketList}'|" style="cursor: pointer;"><img style="width: 40ox; height: 40px;" src="https://cdn-icons-png.flaticon.com/128/545/545489.png"></li>
-				<li style="font-size : 12px;" th:onclick="|location.href='@{basketList}'|"><a href="#">장바구니</a></li>
-				 <li class="top-btn" style=" font-size: 12px; cursor: pointer;"><img style="width: 40px; height: 40px;" src="https://cdn-icons-png.flaticon.com/128/6015/6015743.png" alt="Top Button"><a href="#">TOP</a></li>
+				<li th:onclick="|location.href='@{mallMain}'|"
+					style="cursor: pointer;"><img
+					style="width: 40ox; height: 40px;"
+					src="https://cdn-icons-png.flaticon.com/128/4578/4578246.png"></li>
+				<li style="font-size: 12px;"
+					th:onclick="|location.href='@{mallMain}'|"><a href="#">포인트몰</a></li>
+					
+				<li 
+					style="cursor: pointer;"><img
+					style="width: 40ox; height: 40px;"
+					src="https://cdn-icons-png.flaticon.com/128/2230/2230446.png"></li>
+				<li style="font-size: 12px;"
+					><a href="/mall/farmList?commonCd=S10">농산물</a></li>
+					
+					
+				<li 
+					style="cursor: pointer;"><img
+					style="width: 40ox; height: 40px;"
+					src="https://cdn-icons-png.flaticon.com/128/3361/3361370.png"></li>
+				<li style="font-size: 12px;"
+					><a href="/mall/seafoodList?commonCd=S20">수산물</a></li>
+					
+					
+				<li th:onclick="|location.href='@{basketList}'|"
+					style="cursor: pointer;"><img
+					style="width: 40ox; height: 40px;"
+					src="https://cdn-icons-png.flaticon.com/128/545/545489.png"></li>
+				<li style="font-size: 12px;"
+					th:onclick="|location.href='@{basketList}'|"><a href="#">장바구니</a></li>
+				<li class="top-btn" style="font-size: 12px; cursor: pointer;"><img
+					style="width: 40px; height: 40px;"
+					src="https://cdn-icons-png.flaticon.com/128/6015/6015743.png"
+					alt="Top Button"><a href="#">TOP</a></li>
 			</ul>
 		</div>
-		
-		
+
+
 		<div>
 			<!-- main image -->
 			<div class="hero-slider">
@@ -165,11 +189,12 @@
 					<div th:text="${prdt.desct}" class="contents2"></div> <span
 					th:text="${prdt.prc} + '₩'"></span>
 					<div class="">
-					<!--  <a
+						<!--  <a
 					class="btn btn-outline-light" href="getFarm.html"
 					th:href="@{getFarm/{pid}(pid=${prdt.prdtNo})}">read more</a> -->
-					<a class="btn btn-outline-light" th:onclick="|location.href='@{farmList}'|">read more</a>
-					
+						<a class="btn btn-outline-light"
+							th:onclick="|location.href='@{farmList}'|">read more</a>
+
 					</div>
 				</li>
 			</ul>
@@ -190,43 +215,68 @@
 					<div th:text="${prdt.desct}" class="contents2"></div> <span
 					th:text="${prdt.prc} + '₩'"></span>
 					<div class="">
-						<a class="btn btn-outline-light" th:onclick="|location.href='@{farmList}'|">read more</a>
+						<a class="btn btn-outline-light"
+							th:onclick="|location.href='@{farmList}'|">read more</a>
 					</div>
 				</li>
 			</ul>
 		</div>
+
+
+		<script th:inline="javascript">
+		
+			/* top 버튼 */
+			document.querySelector('.top-btn').addEventListener('click',
+					function() {
+						window.scrollTo({
+							top : 0,
+							behavior : 'smooth'
+						});
+					});
+
+			/* slider */
+
+			$('.center').slick({
+				centerMode : true,
+				centerPadding : '60px',
+				slidesToShow : 3,
+				responsive : [ {
+					breakpoint : 768,
+					settings : {
+						arrows : false,
+						centerMode : true,
+						centerPadding : '40px',
+						slidesToShow : 3
+					}
+				}, {
+					breakpoint : 480,
+					settings : {
+						arrows : false,
+						centerMode : true,
+						centerPadding : '40px',
+						slidesToShow : 1
+					}
+				} ]
+			});
+		</script>
+
+
+		<!-- Main jQuery -->
+		<script src="plugins/jquery/dist/jquery.min.js"></script>
+		<!-- Bootstrap 3.1 -->
+		<script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+		<script
+			src="plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
+		<script src="plugins/instafeed/instafeed.min.js"></script>
+		<script src="plugins/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
+		<script src="plugins/syo-timer/build/jquery.syotimer.min.js"></script>
+
+		<script src="plugins/slick/slick.min.js"></script>
+		<script src="plugins/slick/slick-animation.min.js"></script>
+
+		<script src="mall/js/script.js"></script>
+
 	</div>
-	
-	<script>
-	
-	/* top 버튼 */
-	document.querySelector('.top-btn').addEventListener('click', function() {
-	    window.scrollTo({
-	        top: 0,
-	        behavior: 'smooth'
-	    });
-	});
-
-	
-	</script>
-
-
-	<!-- Main jQuery -->
-	<script src="plugins/jquery/dist/jquery.min.js"></script>
-	<!-- Bootstrap 3.1 -->
-	<script src="plugins/bootstrap/js/bootstrap.min.js"></script>
-	<script
-		src="plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
-	<script src="plugins/instafeed/instafeed.min.js"></script>
-	<script src="plugins/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
-	<script src="plugins/syo-timer/build/jquery.syotimer.min.js"></script>
-
-	<script src="plugins/slick/slick.min.js"></script>
-	<script src="plugins/slick/slick-animation.min.js"></script>
-
-	<script src="mall/js/script.js"></script>
-	
-	
 
 
 </body>

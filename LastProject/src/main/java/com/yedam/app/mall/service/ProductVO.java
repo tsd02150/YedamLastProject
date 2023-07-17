@@ -20,5 +20,5 @@ public class ProductVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date drwupDt;
 	private String commonCd;
-
+	private String ctgr;
 }

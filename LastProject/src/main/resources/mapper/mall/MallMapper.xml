@@ -21,10 +21,11 @@
   		WHERE prdt_no = #{prdtNo}
   	</select>
   	
-  	<select id="getCategoryName" resultType="String">
+  	<!-- 카테고리 리스트  -->
+  	<select id="getCategoryName" resultType="ProductVO">
   		SELECT ctgr
   		FROM COMMON_CODE
-  		WHERE common_code=#{commonCd}
+  		WHERE common_cd Like #{commonCd}||'%'
   	</select>
   	
 

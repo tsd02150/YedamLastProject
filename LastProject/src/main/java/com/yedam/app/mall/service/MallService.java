@@ -15,7 +15,7 @@ public interface MallService {
 	public List<ProductVO> getCtgr(String commonCd);
 	
 	//카테고리 이름
-	public String getCategoryName(String commonCd);
+	public List<ProductVO> getCategoryName(String commonCd);
 	
 	// 장바구니 출력
 	public List<BasketVO> getBasketList();
