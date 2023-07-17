@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout2}">
+
+<head>
+<meta charset="UTF-8">
+<title>회원관리</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<script src="https://js.tosspayments.com/v1/payment-widget"></script>
+<style>
+.sidebar.sidebar-left {
+	height: 1000px;
+}
+
+.titleMenu {
+	padding-top: 20px;
+}
+
+.sidebarMenu {
+	padding-top: 40px;
+	padding-bottom: 40px;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+#mypageBody, .sidebar {
+	border: 1px solid #DDDDDD;
+	height: auto;
+}
+#myPointList{
+	text-align: center;
+	margin : auto;
+	margin-top : 50px;
+}
+#chargeInputDiv{	
+	margin : auto;
+	margin-top: 80px;
+	margin-left : 100px;
+}
+#chargeInput{
+	width : 500px;
+	display : inline-block;
+}
+
+</style>
+</head>
+<body>
+<div layout:fragment="mypage">
+	<section class="block-wrapper flex items-center justify-center w-screen h-screen p-10 space-x-6 bg-gray-300"
+		layout:fragment="content">
+		<div id="mypageBody">
+		<div id="myPointList">
+			<h2 style="margin-bottom : 40px; color: darkcyan;">충전</h2>
+			<span>로고</span>
+			<span style="font-size:40px;">My 포인트</span>
+			<strong> <span th:text="${mypoint}" style="font-size:40px; padding-left:30px"></span></strong>
+			<span style="font-size:30px;"> point</span>
+			
+		</div>
+			<div id="chargeInputDiv">
+				<h3 style="text-align : left;">충전금액</h3>
+				<label for="chargeInput"></label>
+				<input type="number" id="chargeInput" placeholder="1천원 → 10,000 point" class="form-control" aria-describedby="button-addon2">
+				<button type="reset" id="button-addon2" class="btn btn-outline-secondary">  X  </button><br>
+				
+				<div>
+				<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+				  <li class="nav-item" role="presentation">
+				    <button class="nav-link" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">1천원</button>
+				  </li>
+				  <li class="nav-item" role="presentation">
+				    <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">5천원</button>
+				  </li>
+				  <li class="nav-item" role="presentation">
+				    <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">1만원</button>
+				  </li>
+				  <li class="nav-item" role="presentation">	
+				    <button class="nav-link  active" id="pills-disabled-tab" data-bs-toggle="pill" data-bs-target="#pills-disabled" type="button" role="tab" aria-controls="pills-disabled" aria-selected="false">3만원</button>
+				  </li>
+				</ul>
+				</div>
+			</div>
+		 	<!-- 결제위젯, 이용약관 영역 -->
+	  	<div id="payment-method"></div>
+	  	<div id="agreement"></div>
+		 	<!-- 결제하기 버튼 -->
+	  	<button id="payment-button">결제하기</button>
+		</div>
+		
+		<script>
+		
+		let name ='' ;
+		$("#button-addon2").on("click", function(){
+			$("#chargeInput").val("");
+			return;
+		})
+		
+  const clientKey = 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq' // 상점을 특정하는 키
+  const customerKey = '2eZ9NPmmdmszJ18766-6Z' // 결제 고객을 특정하는 키
+  const amount = $("#chargeInput").val(); // 결제 금액
+
+  /*결제위젯 영역 렌더링*/
+  const paymentWidget = PaymentWidget(clientKey, customerKey) // 회원 결제 초기화
+  // const paymentWidget = PaymentWidget(clientKey, PaymentWidget.ANONYMOUS) // 비회원 결제 초기화
+  paymentWidget.renderPaymentMethods('#payment-method', amount)
+  
+  /*약관 영역 렌더링*/
+  const paymentAgreement = paymentWidget.renderAgreement('#agreement')
+  
+  /*결제요청 함수 정의*/
+		document.querySelector("#payment-button").addEventListener("click",()=>{
+			console.log($("#chargeInput").val());
+
+		    paymentWidget.requestPayment({
+		    	orderId: 'u0XHU8mFoZkItvhSh6972',
+		    	orderName: '포인트',
+		    	successUrl: 'http://localhost:80/member/paysuccess',
+		    	failUrl: 'http://localhost:80/member/payfail',
+		    	customerEmail: 'ihyang00@naver.com', 
+		    	customerName: '김토스'
+		    }).catch(function (error) {
+		    	if (error.code === 'USER_CANCEL') {
+		    	// 결제 고객이 결제창을 닫았을 때 에러 처리
+		    	console.log("err");
+		    	} if (error.code === 'INVALID_CARD_COMPANY') {
+            // 유효하지 않은 카드 코드에 대한 에러 처리
+		    	console.log("err");
+          }
+	      })  
+	  })
+	  
+	</script>
+	</section>
+</div>
+</body>
+
+</html>

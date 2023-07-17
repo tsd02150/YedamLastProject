@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yedam.app.mall.service.CouponVO;
 import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.member.mapper.MemberMapper;
@@ -131,5 +132,10 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public MembVO memberList(String id) {
 		return membMapper.memberList(id);
+	}
+
+	@Override
+	public List<CouponVO> mycoupon(String id) {
+		return membMapper.mycoupon(id);
 	}
 }
