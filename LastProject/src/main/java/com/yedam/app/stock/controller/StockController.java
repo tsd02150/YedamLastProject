@@ -181,9 +181,14 @@ public class StockController {
 	@ResponseBody
 	@PostMapping("stockOrder")
 	public Map<String,Object> stockOrder(StockOrderVO vo ){
+		System.out.println(vo + "zzzzzzzzzzzzzzzzz");
 		Map<String,Object> orderMap = new HashMap<>();
-		orderMap.put("order_content", vo);
+		orderMap.put("order_item_no", vo.getOrder_item_no());
+		orderMap.put("order_memb_no", vo.getOrder_memb_no());
+		orderMap.put("order_prc", vo.getOrder_prc());
+		orderMap.put("order_rmn_cnt", vo.getOrder_rmn_cnt());
 		orderMap.put("order_type", vo.getOrder_type());
+		orderMap.put("order_result", null);
 		Map<String,Object> map = stockservice.callOrderProd(orderMap);
 		return map;
 	}

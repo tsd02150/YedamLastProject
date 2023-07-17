@@ -49,5 +49,5 @@ public interface StockMapper {
 	// 유저 단일 보유 종목 수량과 수익률
 	public PossStockVO getPossStock(@Param("itemNo") String itemNo , @Param("membNo")String membNo);
 	// 주문 프로시저
-	public int callOrderProd(Map<String,Object> params);
+	public void callOrderProd(Map<String,Object> params);
 }
