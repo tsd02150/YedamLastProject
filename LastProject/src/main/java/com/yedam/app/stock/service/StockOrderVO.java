@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class StockOrderVO {
 	private String order_type;
-	private String item_no;
-	private String memb_no;
-	private Integer prc;
-	private Integer rmn_cnt;
+	private String order_item_no;
+	private String order_memb_no;
+	private int order_prc;
+	private int order_rmn_cnt;
 }

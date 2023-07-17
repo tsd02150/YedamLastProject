@@ -2,6 +2,7 @@ package com.yedam.app.member.service;
 
 import java.util.List;
 
+import com.yedam.app.mall.service.CouponVO;
 import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.security.service.UserVO;
@@ -60,4 +61,6 @@ public interface MemberService {
 	public int updateMemberInfo(MembVO membVO);
 	public int updateMemberAddr(AddrVO addrVO);
 
+	//보유 쿠폰
+	public List<CouponVO> mycoupon(String id);
 }
