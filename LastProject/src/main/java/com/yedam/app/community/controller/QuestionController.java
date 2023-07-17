@@ -2,6 +2,8 @@ package com.yedam.app.community.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.yedam.app.community.service.FaqVO;
 import com.yedam.app.community.service.QuestionService;
 import com.yedam.app.community.service.QuestionVO;
+import com.yedam.app.member.service.MembVO;
+import com.yedam.app.security.service.UserVO;
 
 @Controller
 @RequestMapping("community")
@@ -21,7 +25,7 @@ public class QuestionController {
 	QuestionService questionService;
 	
 	@GetMapping("questionList")
-	public String qustionList(Model model) {
+	public String questionList(Model model,HttpSession session) {
 		model.addAttribute("startPage",1);
 		return "community/questionList";
 	}
@@ -51,5 +55,36 @@ public class QuestionController {
 	@ResponseBody
 	public int getQnaCount(QuestionVO vo) {
 		return questionService.getQnaCount(vo);
+	}
+	
+	@GetMapping("addQna")
+	public String insertQnaForm(HttpSession session) {
+		return "community/insertQna";
+	}
+	
+	@PostMapping("addQna")
+	@ResponseBody
+	public String insertQna(QuestionVO vo,HttpSession session) {
+		vo.setMembNo(((UserVO)session.getAttribute("loggedInMember")).getMembNo());
+		System.out.println(vo);
+		if(questionService.insertQna(vo)) {
+			return "success";
+		}else {
+			return "fail";			
+		}
+	}
+	
+	@GetMapping("qnaDetail")
+	public String qnaDetailForm(Model model, QuestionVO vo,HttpSession session) {
+		questionService.increaseInq(vo.getQstNo());
+		if(session.getAttribute("loggedInMember")!=null) {
+			model.addAttribute("myInfo",session.getAttribute("loggedInMember"));
+		}else {
+			MembVO myInfo = new MembVO();
+			myInfo.setMembNo("noLogin");
+			model.addAttribute("myInfo",myInfo);
+		}
+		model.addAttribute("qnaInfo",questionService.getQnaDetail(vo.getQstNo()));
+		return "community/qnaDetail";
 	}
 }

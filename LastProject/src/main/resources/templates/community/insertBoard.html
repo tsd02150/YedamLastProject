@@ -43,6 +43,9 @@
 	color: red;
 	margin-left: 10px;
 }
+.ck-editor__editable { 
+	height: 400px; 
+}
 </style>
 </head>
 <body>
@@ -126,17 +129,18 @@
 			.catch(error => {
 				console.error(error);
 			});
+		
 
 		//ckEditor 데이터 가져오기
 		$('#btnSave').on('click', function () {
 			if(ttl.value==""||ttl.value==null){
-				//알림 띄울부분
+				toastShow("There is no title" , "제목이 없습니다" , "error");
 				return;
 			}
 			
 			let ckData = editor.getData()
 			if(ckData==""||ckData==null){
-				//알림 띄울부분
+				toastShow("There is no content" , "내용이 없습니다" , "error");
 				return;
 			}
 				
@@ -176,7 +180,7 @@
 						},
 						error:function(reject){
 							alert('fail attach');
-							// 알림 띄울 부분;
+							toastShow("Attach File Fail" , "첨부 실패" , "error");
 						}
 					})					
 				}else{
@@ -184,7 +188,7 @@
 				}
 			})
 			.fail(function(result){
-				// 알림 띄울 부분;
+				toastShow("Insert Fail" , "등록 실패" , "error");
 			})
 
 			

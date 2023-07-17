@@ -84,7 +84,6 @@ public class BoardController {
 	@GetMapping("boardDetail")
 	public String boardDetail(Model model,BoardVO vo, HttpSession session) {
 		boardService.increaseInquery(vo.getBoardNo());
-		System.out.println(session.getAttribute("loggedInMember"));
 		if(session.getAttribute("loggedInMember")!=null) {
 			model.addAttribute("myInfo",session.getAttribute("loggedInMember"));
 		}else {

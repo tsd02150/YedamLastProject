@@ -138,10 +138,9 @@
 				<div class="Space">
 					<h3 class="news-title">
 						<span>QnA</span>
-						
 					</h3>
 					<div>
-						
+						<a th:each="qna:${qnaList}" th:href="@{/community/qnaDetail(qstNo=${qna.qstNo})}"><p th:text="${qna.ttl}"></p></a>
 					</div>
 				</div>
 			</section>

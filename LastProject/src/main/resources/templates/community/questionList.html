@@ -43,6 +43,9 @@
 	#qnanextpage{
 		visibility: hidden;
 	}
+	.contentColor{
+		background-color: #f9f9f9;
+	}
 </style>
 </head>
 <body>
@@ -51,18 +54,6 @@
 			<h1 class="news-title" id="titlename">
 				<span>자주 묻는 질문</span>
 			</h1>
-			<div class="d-flex justify-content-end">
-				<select class="btn btn-secondary dropdown-toggle" id="sort" name="sort">
-					<option value="">전체</option>
-					<option value="회원관리">회원관리</option>
-					<option value="주식이용">주식이용</option>
-					<option value="포인트몰">포인트몰</option>
-					<option value="커뮤니티">커뮤니티</option>
-				</select>
-				<input type="text" id="searchFaqText">
-				<button class="btn btn-light mt-2 mt-lg-0" type="button" onClick="faqSearch()">검색</button>
-			</div>
-			<br>
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -75,17 +66,38 @@
 
 				</tbody>
 			</table>
+			<div class="d-flex justify-content-center" style="margin-bottom:20px">
+				<select class="btn btn-secondary dropdown-toggle" id="sort" name="sort" style="margin-right:5px">
+					<option value="">전체</option>
+					<option value="회원관리">회원관리</option>
+					<option value="주식이용">주식이용</option>
+					<option value="포인트몰">포인트몰</option>
+					<option value="커뮤니티">커뮤니티</option>
+				</select>
+				<input type="text" id="searchFaqText">
+				<button class="btn btn-light mt-2 mt-lg-0" type="button" onClick="faqSearch()">검색</button>
+			</div>
 			<div>
 				<nav aria-label="Page navigation example" class="d-flex justify-content-center">
 					<ul class="pagination">
 						<li class="page-item">
-							<a class="page-link" id="faqprevpage" href="javascript:prevPage()" aria-label="Previous">
+							<a class="page-link" id="faqfirstpage" href="javascript:faqFirstPage()" aria-label="Previous">
 								<span aria-hidden="true">&laquo;</span>
+							</a>
+						</li>
+						<li class="page-item">
+							<a class="page-link" id="faqprevpage" href="javascript:faqPrevPage()" aria-label="Previous">
+								<span aria-hidden="true">&lt;</span>
 							</a>
 						</li>
 						<!-- 페이징버튼 들어갈 공간 -->
 					    <li class="page-item">
-							<a class="page-link" id="faqnextpage" href="javascript:nextPage()" aria-label="Next">
+							<a class="page-link" id="faqnextpage" href="javascript:faqNextPage()" aria-label="Next">
+								<span aria-hidden="true">&rt;</span>
+							</a>
+						</li>
+					    <li class="page-item">
+							<a class="page-link" id="faqlastpage" href="javascript:faqLastPage()" aria-label="Next">
 								<span aria-hidden="true">&raquo;</span>
 							</a>
 						</li>
@@ -116,19 +128,30 @@
 					<input type="text" id="searchQnaText">
 					<button class="btn btn-light mt-2 mt-lg-0" type="button" onClick="qnaSearch()">검색</button>
 				</div>
-				<button th:if="${session.loggedInMember}!=null" class="btn btn-primary mt-3 mt-lg-0" id="insertBoard" onclick="" type="button">글쓰기</button>
+				<button th:if="${session.loggedInMember}!=null" class="btn btn-primary mt-3 mt-lg-0" id="insertBoard" onclick="insertQna()" type="button">글쓰기</button>
+				<div th:unless="${session.loggedInMember}!=null" style="width:108px"></div>
 			</div>
 			<div>
 				<nav aria-label="Page navigation example" class="d-flex justify-content-center">
 					<ul class="pagination">
 						<li class="page-item">
-							<a class="page-link" id="qnaprevpage" href="javascript:prevPage()" aria-label="Previous">
+							<a class="page-link" id="qnafirstpage" href="javascript:qnaFirstPage()" aria-label="Previous">
 								<span aria-hidden="true">&laquo;</span>
+							</a>
+						</li>
+						<li class="page-item">
+							<a class="page-link" id="qnaprevpage" href="javascript:qnaPrevPage()" aria-label="Previous">
+								<span aria-hidden="true">&lt;</span>
 							</a>
 						</li>
 						<!-- 페이징버튼 들어갈 공간 -->
 					    <li class="page-item">
-							<a class="page-link" id="qnanextpage" href="javascript:nextPage()" aria-label="Next">
+							<a class="page-link" id="qnanextpage" href="javascript:qnaNextPage()" aria-label="Next">
+								<span aria-hidden="true">&rt;</span>
+							</a>
+						</li>
+					    <li class="page-item">
+							<a class="page-link" id="qnalastpage" href="javascript:qnaLastPage()" aria-label="Next">
 								<span aria-hidden="true">&raquo;</span>
 							</a>
 						</li>
@@ -170,7 +193,7 @@
 							<td>`+faq["category"]+`</td>
 							<td>`+faq["ttl"]+`</td>
 						</tr>
-						<tr class="trHidden">
+						<tr class="trHidden contentColor">
 							<td></td>
 							<td colspan="2">`+faq["cntn"]+`</td>
 						</tr>
@@ -201,7 +224,7 @@
 			.then(data=>{
 				totalFaqCnt=data;
 				if(totalFaqCnt<=50){
-					faqEndPage=(totalFaqCnt-1)/5 + 1;
+					faqEndPage=~~((totalFaqCnt-1)/5 + 1);
 				}
 				if(totalFaqCnt>50){
 					faqnextpage.style.visibility="visible";
@@ -220,7 +243,7 @@
 			for(let i=start;i<=end;i++){
 				let liTag = document.createElement('li');
 				liTag.classList.add('page-item','faqpagebtn');
-				if(i%10==faqTargetPage){
+				if(i%5==faqTargetPage){
 					liTag.classList.add('active');
 				}
 				let aTag = document.createElement('a');
@@ -260,11 +283,29 @@
 			faqprevpage.style.visibility="visible";
 			faqStartPage+=10;
 			faqEndPage+=10;
-			if(faqEndPage>=totalFaqCnt/5+1){
-				faqEndPage=totalFaqCnt/5+1;
+			if(faqEndPage>=~~((totalFaqCnt-1)/5 + 1)){
+				faqEndPage=~~((totalFaqCnt-1)/5 + 1);
 				faqnextPage.style.visibility="hidden";
 			}
 			faqPageMove(faqStartPage);
+		}
+		
+		function faqFirstPage(){
+			faqStartPage=1;
+			if(faqEndPage>10){
+				faqEndPage=10;
+			}
+			createFaqPageCntBtn(faqStartPage,faqEndPage);
+			faqPageMove(faqStartPage);
+		}
+		
+		function faqLastPage(){
+			if(faqEndPage>10){
+				faqEndPage=~~((totalFaqCnt-1)/5 + 1);
+			}
+			faqStartPage=faqEndPage-faqEndPage%5+1;
+			createFaqPageCntBtn(faqstartPage,faqEndPage);
+			faqPageMove(faqEndPage);
 		}
 		
 		function faqSearch(){
@@ -300,7 +341,7 @@
 				}
 				data.forEach((qna,index)=>{
 					let dataHtml = `
-						<tr data-qnano=`+qna["qstNo"]+` onClick="">
+						<tr data-qnano=`+qna["qstNo"]+` onClick="qnaDetail()">
 							<td>`+(index+1+(qnaTargetPage-1)*10)+`</td>
 							<td>`+qna["ttl"]+`</td>
 							<td>`+qna["nick"]+`</td>
@@ -327,7 +368,7 @@
 			.then(data=>{
 				totalQnaCnt=data;
 				if(totalQnaCnt<=100){
-					qnaEndPage=(totalQnaCnt-1)/10 + 1;
+					qnaEndPage=~~((totalQnaCnt-1)/10 + 1);
 				}
 				if(totalFaqCnt>100){
 					qnanextpage.style.visibility="visible";
@@ -370,7 +411,7 @@
 			})
 		}
 		
-		// 페이징 << 버튼 클릭
+		// 페이징 < 버튼 클릭
 		function qnaPrevPage(){
 			qnanextpage.style.visibility="visible";
 			qnaStartPage-=10;
@@ -381,23 +422,49 @@
 			qnaPageMove(qnaStartPage);
 		}
 		
-		// 페이징 >> 버튼 클릭
+		// 페이징 > 버튼 클릭
 		function qnaNextPage(){
 			qnaprevpage.style.visibility="visible";
 			qnaStartPage+=10;
 			qnaEndPage+=10;
-			if(qnaEndPage>=totalQnaCnt/10+1){
-				qnaEndPage=totalQnaCnt/10+1;
+			if(qnaEndPage>=~~((totalQnaCnt-1)/10+1)){
+				qnaEndPage=~~((totalQnaCnt-1)/10+1);
 				qnanextPage.style.visibility="hidden";
 			}
 			qnaPageMove(qnaStartPage);
+		}
+		
+		function qnaFirstPage(){
+			qnaStartPage=1;
+			if(qnaEndPage>10){
+				qnaEndPage=10;
+			}
+			createQnaPageCntBtn(qnaStartPage,qnaEndPage);
+			qnaPageMove(qnaStartPage);
+		}
+		
+		function qnaLastPage(){
+			if(qnaEndPage>10){
+				qnaEndPage=~~((totalQnaCnt-1)/10 + 1);
+			}
+			qnaStartPage=qnaEndPage-qnaEndPage%10+1;
+			createQnaPageCntBtn(qnaStartPage,qnaEndPage);
+			pageMove(qnaEndPage);
 		}
 		
 		function qnaSearch(){
 			qnaTtl=searchQnaText.value;
 			getQnaList();
 			searchQnaText.value='';
-			
+		}
+		
+		function insertQna(){
+			window.location.href="/community/addQna";
+		}
+		
+		function qnaDetail(){
+			let qnano=event.target.parentNode.dataset.qnano;
+			window.location.href="/community/qnaDetail?qstNo="+qnano;
 		}
 		</script>
 	</div>

@@ -56,13 +56,23 @@
 				<nav aria-label="Page navigation example" class="d-flex justify-content-center">
 					<ul class="pagination">
 						<li class="page-item">
-							<a class="page-link" id="prevpage" href="javascript:prevPage()" aria-label="Previous">
+							<a class="page-link" id="firstpage" href="javascript:firstPage()" aria-label="Previous">
 								<span aria-hidden="true">&laquo;</span>
+							</a>
+						</li>
+						<li class="page-item">
+							<a class="page-link" id="prevpage" href="javascript:prevPage()" aria-label="Previous">
+								<span aria-hidden="true">&lt;</span>
 							</a>
 						</li>
 						<!-- 페이징버튼 들어갈 공간 -->
 					    <li class="page-item">
 							<a class="page-link" id="nextpage" href="javascript:nextPage()" aria-label="Next">
+								<span aria-hidden="true">&rt;</span>
+							</a>
+						</li>
+					    <li class="page-item">
+							<a class="page-link" id="lastpage" href="javascript:lastPage()" aria-label="Next">
 								<span aria-hidden="true">&raquo;</span>
 							</a>
 						</li>
@@ -130,7 +140,7 @@
 			.then(data=>{
 				totalNoticeCnt=data;
 				if(totalNoticeCnt<=100){
-					endPage=(totalNoticeCnt-1)/10 + 1;
+					endPage=~~((totalNoticeCnt-1)/10 + 1);
 				}
 				if(totalNoticeCnt>100){
 					nextpage.style.visibility="visible";
@@ -173,7 +183,7 @@
 			})
 		}
 		
-		// 페이징 << 버튼 클릭
+		// 페이징 < 버튼 클릭
 		function prevPage(){
 			nextpage.style.visibility="visible";
 			startPage-=10;
@@ -184,16 +194,35 @@
 			pageMove(startPage);
 		}
 		
-		// 페이징 >> 버튼 클릭
+		// 페이징 > 버튼 클릭
 		function nextPage(){
 			prevpage.style.visibility="visible";
 			startPage+=10;
 			endPage+=10;
-			if(endPage>=totalBoardCnt/10+1){
-				endPage=totalBoardCnt/10+1;
+			if(endPage>=~~((totalBoardCnt-1)/10+1)){
+				endPage=~~((totalBoardCnt-1)/10+1);
 				nextPage.style.visibility="hidden";
 			}
 			pageMove(startPage);
+		}
+		
+		function firstPage(){
+			startPage=1;
+			if(endPage>10){
+				endPage=10;
+			}
+			createPageCntBtn(startPage,endPage);
+			pageMove(startPage);
+		}
+		
+		function lastPage(){
+			if(endPage>10){
+				endPage=~~((totalBoardCnt-1)/10 + 1);
+			}
+			startPage=endPage-endPage%10+1;
+			console.log(startPage,endPage);
+			createPageCntBtn(startPage,endPage);
+			pageMove(endPage);
 		}
 		
 		$("#noticeList").on('click','td',function(){

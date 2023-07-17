@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.yedam.app.common.service.MainService;
 import com.yedam.app.community.service.BoardService;
 import com.yedam.app.community.service.NoticeService;
+import com.yedam.app.community.service.QuestionService;
 
 @Controller
 public class MainController {
@@ -21,6 +22,8 @@ public class MainController {
 	BoardService boardService;
 	@Autowired
 	NoticeService noticeService;
+	@Autowired
+	QuestionService questionService;
 	
 	// 프로젝트 메인페이지
 	@GetMapping("/")
@@ -28,6 +31,7 @@ public class MainController {
 		model.addAttribute("freeBoardList",boardService.getFreeBoardTop6());
 		model.addAttribute("stockBoardList",boardService.getStockBoardTop6());
 		model.addAttribute("noticeList",noticeService.getNoticeTop6());
+		model.addAttribute("qnaList",questionService.getQnaTop6());
 		return "main/main";
 	}
 	
