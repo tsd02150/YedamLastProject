@@ -26,6 +26,7 @@
 	height: auto;
 }
 
+
 #mypagetbl, #intrestTbl, #myordertbl {
 	width: 700px;
 	font-size: larger;
@@ -96,6 +97,9 @@
 	padding: 15px;
 	margin: 15px;
 }
+.interestSection{
+height: 200px;
+}
 </style>
 </head>
 <body>
@@ -138,8 +142,10 @@
 							</tr>
 						</table>
 						<div class="py-20"></div>
+						<div class="interestSection">
 						<h4 style="padding-left : 25px;">+ 관심종목</h4>
 						<div id="thisbox2">
+						</div>
 						</div>
 					</div>
 					<!-- interest item end -->
@@ -206,6 +212,9 @@
 				},
 				success : function(data){
 					//보유주식 최대 4개까지만 출력(rate 기준 정렬)
+					if(data != null){
+						
+					
 					data.slice(0, 4).forEach(el=>{
 						let tprc = commas(el.tprc); 
 						//console.log(el);
@@ -218,6 +227,10 @@
 					
 					$("#thisbox2").html(box2);
 					boxClass();
+					}else{
+						box2 += `<a href="stock/itemListPage"><button>주식페이지로 이동<button></a>`;
+						$("#thisbox2").html(box2);
+					}
 				},
 				error : function(err){
 					console.log(err)

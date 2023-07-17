@@ -5,80 +5,163 @@
 <head>
 <meta charset="UTF-8">
 <title>basketList.html</title>
+<link rel="stylesheet" type="text/css" href="css/farmList.css">
+<link rel="stylesheet"
+	href="mall/source/plugins/themefisher-font/style.css">
 <link rel="stylesheet"
 	href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
 	integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
 	crossorigin="anonymous">
 <link rel="stylesheet" href="css/basketList.css" />
+<style>
+
+/* 퀵메뉴 */
+.quick-menu {
+	position: fixed;
+	top: 50%;
+	right: 40px;
+	transform: translateY(-50%);
+	z-index: 9999;
+	width: 80px; /* 퀵 메뉴의 가로 크기 조정 */
+	height: 450px; /* 퀵 메뉴의 세로 크기 조정 */
+	background-color: #f8f8f8;
+	padding: 10px;
+	border-radius: 40px; /* 직사각형 모양의 둥근 모서리를 위한 반지름 값 조정 */
+	text-align: center; /* 내용 가운데 정렬 */
+}
+
+.quick-menu ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.quick-menu li {
+	margin-bottom: 10px;
+}
+
+.quick-menu li a {
+	text-decoration: none;
+	color: #333;
+}
+</style>
+
+
 </head>
 <body id="body">
 	<div layout:fragment="content" class="outer-block">
 	
-		<div class="page-wrapper">
-  <div class="cart shopping">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-          <div class="block">
-            <div class="product-list">
-              <form method="post">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th class="">상품이름</th>
-                      <th class="">상품가격</th>
-                      <th class="">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr class="">
-                      <td class="">
-                        <div class="product-info">
-                          <img width="80" src="images/shop/cart/cart-1.jpg" alt="" />
-                          <a href="#!">Sunglass</a>
-                        </div>
-                      </td>
-                      <td class="">$200.00</td>
-                      <td class="">
-                        <a class="product-remove" href="#!">Remove</a>
-                      </td>
-                    </tr>
-                    <tr class="">
-                      <td class="">
-                        <div class="product-info" th:each="prdt, iterStat : ${product}">
-                          <img width="80" th:src="|/mall/images/main/${prdt.img}|" alt="" />
-                          <a href="#!">Airspace</a>
-                        </div>
-                      </td>
-                      <td class="">$200.00</td>
-                      <td class="">
-                        <a class="product-remove" href="#!">Remove</a>
-                      </td>
-                    </tr>
-                    <tr class="">
-                      <td class="">
-                        <div class="product-info">
-                          <img width="80" src="images/shop/cart/cart-3.jpg" alt="" />
-                          <a href="#!">Bingo</a>
-                        </div>
-                      </td>
-                      <td class="">$200.00</td>
-                      <td class="">
-                        <a class="product-remove" href="#!">Remove</a>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <a href="checkout.html" class="btn btn-main pull-right">Checkout</a>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+	<!-- 퀵메뉴 -->
+		<div class="quick-menu">
+			<ul>
+				<li th:onclick="|location.href='@{mallMain}'|" style="cursor: pointer;"><img style="width: 40ox; height: 40px;"  src="https://cdn-icons-png.flaticon.com/128/4578/4578246.png"></li>
+				<li style="font-size : 12px;" th:onclick="|location.href='@{mallMain}'|"><a href="#">포인트몰</a></li>
+				<li th:onclick="|location.href='@{farmList}'|" style="cursor: pointer;"><img style="width: 40ox; height: 40px;" src="https://cdn-icons-png.flaticon.com/128/2230/2230446.png"></li>
+				<li style="font-size : 12px;" th:onclick="|location.href='@{farmList}'|"><a href="#">농산물</a></li>
+				<li th:onclick="|location.href='@{seafoodList}'|" style="cursor: pointer;"><img style="width: 40ox; height: 40px;" src="https://cdn-icons-png.flaticon.com/128/3361/3361370.png"></li>
+				<li style="font-size : 12px;" th:onclick="|location.href='@{seafoodList}'|"><a href="#">수산물</a></li>
+				<li th:onclick="|location.href='@{basketList}'|" style="cursor: pointer;"><img style="width: 40ox; height: 40px;" src="https://cdn-icons-png.flaticon.com/128/545/545489.png"></li>
+				<li style="font-size : 12px;" th:onclick="|location.href='@{basketList}'|"><a href="#">장바구니</a></li>
+				 <li class="top-btn" style=" font-size: 12px; cursor: pointer;"><img style="width: 40px; height: 40px;" src="https://cdn-icons-png.flaticon.com/128/6015/6015743.png" alt="Top Button"><a href="#">TOP</a></li>
+			</ul>
+		</div>
+	
 
-	</div>
+		<form name="orderform" id="orderform" method="post" class="orderform"
+			action="/Page">
+
+			<input type="hidden" name="cmd" value="order">
+			<div class="basketdiv" id="basket">
+				<div class="row head">
+					<div class="subdiv">
+						<div class="check">선택</div>
+						<div class="img">이미지</div>
+						<div class="pname">상품명</div>
+					</div>
+					<div class="subdiv">	
+						<div class="basketprice">가격</div>
+						<div class="num">수량</div>
+						<div class="sum">합계</div>
+					</div>
+					<div class="subdiv">
+						<div class="basketcmd">삭제</div>
+					</div>
+					<div class="split"></div>
+				</div>
+
+				<div id="template"><!--  style="display: none;" -->
+					<div class="row data">
+						<div class="subdiv">
+							<div class="check">
+								<input type="checkbox" name="buy" value="260" checked>&nbsp;
+							</div>
+							<div class="img">
+								<img src="/img/cart.PNG" width="60">
+							</div>
+							<div class="pname">
+								<span>찜마마(XJ-92214/3)</span>
+							</div>
+						</div>
+						<div class="subdiv">
+							<div class="basketprice">
+								<input type="hidden" name="p_price" id="p_price1"
+									class="p_price" value="20000">20,000원
+							</div>
+							<div class="num">
+								<div class="updown">
+									<input type="text" name="p_num1" id="p_num1" size="2"
+										maxlength="4" class="p_num" value="2"> <span><i
+										class="fas fa-arrow-alt-circle-up up"></i></span> <span><i
+										class="fas fa-arrow-alt-circle-down down"></i></span>
+								</div>
+							</div>
+							<div class="sum">40,000원</div>
+						</div>
+						<div class="subdiv">
+							<div class="basketcmd">
+								<a href="javascript:void(0)" class="abutton">삭제</a>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<div class="right-align basketrowcmd">
+				<a href="javascript:void(0)" class="abutton">선택상품삭제</a> <a
+					href="javascript:void(0)" class="abutton">장바구니비우기</a>
+			</div>
+
+			<div class="bigtext right-align sumcount" id="sum_p_num">상품갯수:
+				</div>
+			<div class="bigtext right-align box blue summoney" id="sum_p_price">합계금액:
+				원</div>
+
+			<div id="goorder" class="">
+				<div class="clear"></div>
+				<div class="buttongroup center-align cmd">
+					<a href="javascript:alert('주문완료!!');">선택한 상품 주문</a>
+				</div>
+			</div>
+		</form>
+
+		<!-- <script type="text/javascript" src="../js/cart.js"></script> -->
+		<script type="module" src="mall/cart.js"></script>
+		<script type="module" src="basket.js"></script>
+		
+
+	</div>	
+		<script>
+	
+	/* top 버튼 */
+	document.querySelector('.top-btn').addEventListener('click', function() {
+	    window.scrollTo({
+	        top: 0,
+	        behavior: 'smooth'
+	    });
+	});
+
+	
+	</script>
 </body>
 </html>

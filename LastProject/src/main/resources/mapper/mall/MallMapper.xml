@@ -21,16 +21,34 @@
   		WHERE prdt_no = #{prdtNo}
   	</select>
   	
-  	<select id="getCategoryName" resultType="String">
+  	<!-- 카테고리 리스트  -->
+  	<select id="getCategoryName" resultType="ProductVO">
   		SELECT ctgr
   		FROM COMMON_CODE
-  		WHERE common_code=#{commonCd}
+  		WHERE common_cd Like #{commonCd}||'%'
   	</select>
   	
-  	<select id="getCtgr" resultType="ProductVO">
-  		SELECT common_cd, ctgr
-  		FROM COMMON_CODE
-  		WHERE common_cd LIKE #{commonCd}||'0%'
+
+  	<select id="getBasketInfo" resultType="BasketVO">
+  		SELECT *
+  			 
+  		FROM BASKET
+  		WHERE prdt_no = #{prdtNo}
+  		
   	</select>
+  	
+  	<select id="getProductReviewList" resultType="ProductReviewVO" >
+  	SELECT *
+  	FROM PRODUCT_REVIEW
+  	WHERE prdt_no = #{prdtNo}
+  	</select>
+  	
+ 
+	<select id="getCtgr" >
+		SELECT common_cd, ctgr
+		FROM COMMON_CODE
+		WHERE common_cd=#{commonCd}
+	</select>
+	
   	
 </mapper>

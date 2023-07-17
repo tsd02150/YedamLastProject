@@ -9,19 +9,86 @@
 <link rel="stylesheet" type="text/css" href="css/mallMain.css">
 <link rel="stylesheet"
 	href="mall/source/plugins/themefisher-font/style.css">
-
-<!-- Main Stylesheet -->
 <link rel="stylesheet" type="text/css" href="mall/theme/css/style.css">
 
+<style>
 
-<!-- <style>
-  @import url('https://fonts.googleapis.com/css2?family=Caprasimo&display=swap');
-</style> -->
+/* 퀵메뉴 */
+.quick-menu {
+	position: fixed;
+	top: 50%;
+	right: 40px;
+	transform: translateY(-50%);
+	z-index: 9999;
+	width: 80px; /* 퀵 메뉴의 가로 크기 조정 */
+	height: 450px; /* 퀵 메뉴의 세로 크기 조정 */
+	background-color: #f8f8f8;
+	padding: 10px;
+	border-radius: 40px; /* 직사각형 모양의 둥근 모서리를 위한 반지름 값 조정 */
+	text-align: center; /* 내용 가운데 정렬 */
+}
+
+.quick-menu ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.quick-menu li {
+	margin-bottom: 10px;
+}
+
+.quick-menu li a {
+	text-decoration: none;
+	color: #333;
+}
+</style>
 
 
 </head>
 <body>
 	<div layout:fragment="content" class="outer-block">
+
+		<!-- 퀵메뉴 -->
+		<div class="quick-menu">
+			<ul>
+				<li th:onclick="|location.href='@{mallMain}'|"
+					style="cursor: pointer;"><img
+					style="width: 40ox; height: 40px;"
+					src="https://cdn-icons-png.flaticon.com/128/4578/4578246.png"></li>
+				<li style="font-size: 12px;"
+					th:onclick="|location.href='@{mallMain}'|"><a href="#">포인트몰</a></li>
+					
+				<li 
+					style="cursor: pointer;"><img
+					style="width: 40ox; height: 40px;"
+					src="https://cdn-icons-png.flaticon.com/128/2230/2230446.png"></li>
+				<li style="font-size: 12px;"
+					><a href="/mall/farmList?commonCd=S10">농산물</a></li>
+					
+					
+				<li 
+					style="cursor: pointer;"><img
+					style="width: 40ox; height: 40px;"
+					src="https://cdn-icons-png.flaticon.com/128/3361/3361370.png"></li>
+				<li style="font-size: 12px;"
+					><a href="/mall/seafoodList?commonCd=S20">수산물</a></li>
+					
+					
+				<li th:onclick="|location.href='@{basketList}'|"
+					style="cursor: pointer;"><img
+					style="width: 40ox; height: 40px;"
+					src="https://cdn-icons-png.flaticon.com/128/545/545489.png"></li>
+				<li style="font-size: 12px;"
+					th:onclick="|location.href='@{basketList}'|"><a href="#">장바구니</a></li>
+				<li class="top-btn" style="font-size: 12px; cursor: pointer;"><img
+					style="width: 40px; height: 40px;"
+					src="https://cdn-icons-png.flaticon.com/128/6015/6015743.png"
+					alt="Top Button"><a href="#">TOP</a></li>
+			</ul>
+		</div>
+
+
 		<div>
 			<!-- main image -->
 			<div class="hero-slider">
@@ -122,11 +189,12 @@
 					<div th:text="${prdt.desct}" class="contents2"></div> <span
 					th:text="${prdt.prc} + '₩'"></span>
 					<div class="">
-					<!--  <a
+						<!--  <a
 					class="btn btn-outline-light" href="getFarm.html"
 					th:href="@{getFarm/{pid}(pid=${prdt.prdtNo})}">read more</a> -->
-					<a class="btn btn-outline-light" th:onclick="|location.href='@{farmList}'|">read more</a>
-					
+						<a class="btn btn-outline-light"
+							th:onclick="|location.href='@{farmList}'|">read more</a>
+
 					</div>
 				</li>
 			</ul>
@@ -147,28 +215,68 @@
 					<div th:text="${prdt.desct}" class="contents2"></div> <span
 					th:text="${prdt.prc} + '₩'"></span>
 					<div class="">
-						<a class="btn btn-outline-light" th:onclick="|location.href='@{farmList}'|">read more</a>
+						<a class="btn btn-outline-light"
+							th:onclick="|location.href='@{farmList}'|">read more</a>
 					</div>
 				</li>
 			</ul>
 		</div>
+
+
+		<script th:inline="javascript">
+		
+			/* top 버튼 */
+			document.querySelector('.top-btn').addEventListener('click',
+					function() {
+						window.scrollTo({
+							top : 0,
+							behavior : 'smooth'
+						});
+					});
+
+			/* slider */
+
+			$('.center').slick({
+				centerMode : true,
+				centerPadding : '60px',
+				slidesToShow : 3,
+				responsive : [ {
+					breakpoint : 768,
+					settings : {
+						arrows : false,
+						centerMode : true,
+						centerPadding : '40px',
+						slidesToShow : 3
+					}
+				}, {
+					breakpoint : 480,
+					settings : {
+						arrows : false,
+						centerMode : true,
+						centerPadding : '40px',
+						slidesToShow : 1
+					}
+				} ]
+			});
+		</script>
+
+
+		<!-- Main jQuery -->
+		<script src="plugins/jquery/dist/jquery.min.js"></script>
+		<!-- Bootstrap 3.1 -->
+		<script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+		<script
+			src="plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
+		<script src="plugins/instafeed/instafeed.min.js"></script>
+		<script src="plugins/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
+		<script src="plugins/syo-timer/build/jquery.syotimer.min.js"></script>
+
+		<script src="plugins/slick/slick.min.js"></script>
+		<script src="plugins/slick/slick-animation.min.js"></script>
+
+		<script src="mall/js/script.js"></script>
+
 	</div>
-
-
-	<!-- Main jQuery -->
-	<script src="plugins/jquery/dist/jquery.min.js"></script>
-	<!-- Bootstrap 3.1 -->
-	<script src="plugins/bootstrap/js/bootstrap.min.js"></script>
-	<script
-		src="plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
-	<script src="plugins/instafeed/instafeed.min.js"></script>
-	<script src="plugins/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
-	<script src="plugins/syo-timer/build/jquery.syotimer.min.js"></script>
-
-	<script src="plugins/slick/slick.min.js"></script>
-	<script src="plugins/slick/slick-animation.min.js"></script>
-
-	<script src="mall/js/script.js"></script>
 
 
 </body>

@@ -11,7 +11,6 @@ public class ProductVO {
 	
 	private String prdtNo;
 	private String nm;
-	private String pnm;
 	private int prc;
 	private int dcRate;
 	private String desct;
@@ -21,6 +20,5 @@ public class ProductVO {
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date drwupDt;
 	private String commonCd;
-		
-
+	private String ctgr;
 }

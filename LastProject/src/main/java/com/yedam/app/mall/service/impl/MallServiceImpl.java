@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.mall.mapper.MallMapper;
+import com.yedam.app.mall.service.BasketVO;
 import com.yedam.app.mall.service.MallService;
+
 import com.yedam.app.mall.service.ProductReviewVO;
 import com.yedam.app.mall.service.ProductVO;
 
@@ -47,5 +49,28 @@ public class MallServiceImpl implements MallService {
 		return mallMapper.getCtgr(commonCd);
 	}
 
+	
+	//장바구니 리스트
+	@Override
+	public BasketVO getBasketInfo(BasketVO bskVO) {
+		return mallMapper.getBasketInfo(bskVO);
+	}
+
+	@Override
+	public List<BasketVO> getBasketList() {
+		return mallMapper.getBasketList();
+	}
+
+	@Override
+	public List<ProductReviewVO> getProductReviewList(ProductReviewVO revVO) {
+		return mallMapper.getProductReviewList(revVO);
+	}
+
+	@Override
+	public List<ProductVO> getCategoryName(String commonCd) {
+		return mallMapper.getCategoryName(commonCd);
+	}
+
+	
 
 }

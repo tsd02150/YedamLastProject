@@ -172,11 +172,14 @@ public class StockServiceImpl implements StockService {
 	@Override
 	public Map<String,Object> callOrderProd(Map<String, Object> params) {
 		Map<String,Object> map = new HashMap<>();
-		int result = stockMapper.callOrderProd(params);
+		stockMapper.callOrderProd((Map<String, Object>) params);
+		Integer result = (Integer) params.get("order_result");
 		
 		if(result == 1) {
+			PossStockVO vo = stockMapper.getPossStock((String)params.get("order_item_no"),(String) params.get("order_memb_no"));
 			map.put("code", "success");
 			map.put("message", "주문에 성공했습니다!!");
+			map.put("possStock", vo);
 		}else if(result == 0) {
 			map.put("code", "fail");
 			map.put("message", "주문에 실패했습니다..");

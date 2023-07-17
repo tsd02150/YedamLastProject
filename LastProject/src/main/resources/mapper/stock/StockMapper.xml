@@ -340,12 +340,12 @@
 	<!-- 주식 주문 프로시저 -->
 	<select id="callOrderProd" statementType="CALLABLE">
     {
-    	call order_prod(#{order_type, mode=IN, jdbcType=VARCHAR}
-	    				, #{order_content.item_no, mode=IN, jdbcType=VARCHAR}
-	    				, #{order_content.memb_no, mode=IN, jdbcType=VARCHAR}
-	    				, #{order_content.prc, mode=IN, jdbcType=INTEGER}
-	    				, #{order_content.rmn_cnt, mode=IN, jdbcType=INTEGER}
-	    				, #{isResult, mode=OUT, jdbcType=INTEGER}
+    	call order_prod(  #{order_type, mode=IN, jdbcType=VARCHAR}
+	    				, #{order_item_no, mode=IN, jdbcType=VARCHAR}
+	    				, #{order_memb_no, mode=IN, jdbcType=VARCHAR}
+	    				, #{order_prc, mode=IN, jdbcType=INTEGER}
+	    				, #{order_rmn_cnt, mode=IN, jdbcType=INTEGER}
+	    				, #{order_result, mode=OUT, jdbcType=INTEGER}
 	    				)}
 	</select>
 </mapper>

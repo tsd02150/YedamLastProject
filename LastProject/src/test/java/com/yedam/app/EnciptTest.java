@@ -27,10 +27,12 @@ public class EnciptTest {
 		System.out.println(list);
 	}
 	
+
 	@Test
    public void test2() {
       BCryptPasswordEncoder scpwd = new BCryptPasswordEncoder();
       String password = scpwd.encode("$2a$10$Uh1c7Dn0XcCKT/La7f0deO79LuBOwJmpqQjAqyhtP/jvAm2nhFZOu");
       System.out.println(password);
    }
+
 }

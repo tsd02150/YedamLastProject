@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestClientException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.yedam.app.mall.service.CouponVO;
 import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.member.service.AddrVO;
@@ -337,8 +338,64 @@ public class MemberController {
 	}
 	
 	@GetMapping("mypoint")
-	public String myPointForm() {
-		return "member/mypage";
+	public String myPointForm(HttpSession session,MembVO membVO, Model model) {
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		MembVO member = membService.memberList(mem.getId());
+		List<CouponVO> coupon = membService.mycoupon(mem.getMembNo());
+		model.addAttribute("mypoint",member.getPoint());
+		model.addAttribute("mycoupon",coupon);
+		return "member/mypoint";
+	}
+	
+	//주식현황
+	@GetMapping("mystock")
+	public String mystock() {
+		return "member/mystock";
+	}
+	
+	//설문조사
+	@GetMapping("mysurvey")
+	public String mysurvey() {
+		return "member/mysurvey";
+	}
+	
+	//주문내역
+	@GetMapping("myorder")
+	public String myorder() {
+		return "member/myorder";
+	}
+	//결제 성공
+	//paymentKey={PAYMENT_KEY}&orderId={ORDER_ID}&amount={AMOUNT}&paymentType={PAYMENT_TYPE}
+	@GetMapping("paysuccess")
+	public String paysuccess(String paymentKey, String orderId, int amount, String paymentType, Model model) {
+		/*
+		 * model.addAttribute("paymentKey", paymentKey); model.addAttribute("orderId",
+		 * orderId); model.addAttribute("amount", amount);
+		 * model.addAttribute("paymentType", paymentType);
+		 */
+		return "member/paysuccess";
+	}
+	//주문내역
+	//?code={ERROR_CODE}&message={ERROR_MESSAGE}&orderId={ORDER_ID}
+	@GetMapping("payfail")
+	public String payfail(String code, String message, String orderId, Model model) {
+		model.addAttribute("code", code);
+		model.addAttribute("message", message);
+		model.addAttribute("orderId", orderId);
+		return "member/payfail";
+	}
+	
+	//회원정보 상세보기
+	@GetMapping("mypageIntro")
+	public String mypageIntro() {
+		return "member/mypageIntro";
+	}
+	@GetMapping("pointChargeForm")
+	public String pointChargeForm(HttpSession session,MembVO membVO, Model model) {
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		MembVO member = membService.memberList(mem.getId());
+		model.addAttribute("mypoint",member.getPoint());
+		return "member/pointChargeForm";
 	}
 	
 	@ResponseBody
@@ -369,7 +426,9 @@ public class MemberController {
 		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 		String id = mem.getId();
 		List<String> list = membService.membListInfo(id);
+		MembVO member = membService.memberList(id);
 		model.addAttribute("membList",list);
+		model.addAttribute("member",member);
 		return "member/mypageInfo";
 	}
 	
@@ -392,7 +451,7 @@ public class MemberController {
 	}
 	
 	//회원정보 수정
-	@ResponseBody
+	//@ResponseBody
 	@PostMapping("updateMemberInfo")
 	public String updateMemberInfo(@RequestParam String nick, @RequestParam String tel,
 	        @RequestParam String pwd, @RequestParam String id, @RequestParam String email,MembVO membVO, Model model, HttpSession session) {
@@ -401,22 +460,33 @@ public class MemberController {
 	    membVO.setNick(nick);
 	    membVO.setEmail(email);
 	    membVO.setTel(tel);
-	    if (mem.getTempPwd() == null) {
-	        membVO.setPwd(pwEncoder.encode(pwd)); // 비밀번호 암호화
-	    } else {
-	        membVO.setPwd(pwEncoder.encode(pwd));
-	        membVO.setTempPwd(pwEncoder.encode(pwd));
+	    if(pwd == mem.getPwd()) {
+	    	if (mem.getTempPwd() == null) {
+	    		membVO.setPwd(pwd);
+	    	} else {
+	    		mem.setTempPwd(pwd);
+	    		mem.setPwd(pwd);
+	    	}
+	    }else {
+	    	if (mem.getTempPwd() == null) {
+		        membVO.setPwd(pwEncoder.encode(pwd)); // 비밀번호 암호화
+		    } else {
+		        membVO.setPwd(pwEncoder.encode(pwd));
+		        membVO.setTempPwd(pwEncoder.encode(pwd));
+		    }
 	    }
+	    
 	    membService.updateMemberInfo(membVO);
 	    System.out.println(membVO);
 	    //수정한 정보 다시 세션에 저장
 	    MembVO list = membService.memberList(id);
-	    // 수정한 정보 다시 세션에 저장
-	    /*UserVO updatedUser = new UserVO();
-	    updatedUser.setId(membVO.getId());
-	    updatedUser.setNick(membVO.getNick());
-	    updatedUser.setEmail(membVO.getEmail());
-	    updatedUser.setTel(membVO.getTel());*/
+	    UserVO loggedInMember = new UserVO();
+	    loggedInMember.setId(membVO.getId());
+	    loggedInMember.setNick(membVO.getNick());
+	    loggedInMember.setEmail(membVO.getEmail());
+	    loggedInMember.setTel(membVO.getTel());
+	    loggedInMember.setPwd(membVO.getPwd());
+	    loggedInMember.setTempPwd(membVO.getTempPwd());
 	    
 		model.addAttribute("membList",list);
 		
@@ -460,4 +530,18 @@ public class MemberController {
 		return membService.selectOneMemb2(membVO);
 	}
 	
+	@ResponseBody
+	@PostMapping("mypageIntroCheckPwd")
+	public String mypageIntroCheckPwd(@RequestParam String pwd, @RequestParam String id, MembVO membVO, Model model) {
+		membVO = membService.memberList(id);
+		System.out.println(pwd);
+		System.out.println(membVO.getPwd());
+		System.out.println(pwEncoder.matches(pwd, membVO.getPwd()));
+		if (pwEncoder.matches(pwd, membVO.getPwd())) {
+			return "success";
+		} else {
+			//model.addAttribute("fail", "비밀번호를 다시 입력하세요");
+			return "fail";
+		}
+	}
 }

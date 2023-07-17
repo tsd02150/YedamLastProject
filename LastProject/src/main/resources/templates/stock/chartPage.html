@@ -813,23 +813,63 @@ input[type="number"]::-webkit-inner-spin-button {
 			
 			//주문버튼 기능
 			$('#stockOrderBtn').on('click',function(){
+				
+				 
+				
 				let orderType = $('#orderType').attr('data-order'); // 매수매도 중 선택된 주문의 종류
 				let stockPrc = $('#stockPrc').val(); // 거래가격
 				let stockCnt = $('#stockCnt').val(); // 거래수량
 				let iteminfo = $('p[data-in]').attr('data-in'); // itemNo
 				let membinfo = $('#sessionMembNo').text(); // membNo
+				let totalPrc = $('#totalPrc').text();
+				//매수시 보유 포인트가 총 금액보다 적을시 return
+				if(orderType == 'buy' && Number(totalPrc) > Number($('p[data-point]').attr('data-point'))){
+					if(Number($('p[data-point]').attr('data-point')) == 0){
+						toastShow('자산이 없습니다','주문 불가','warning');
+					}
+					console.log(totalPrc + ' 와 ' +$('p[data-point]').attr('data-point'));
+					toastShow('보유한 자산이 주문 금액보다 적습니다.','주문 불가','warning');
+					return;
+				}
 				
 					$.ajax('stockOrder',{
 						method:'post',
 						data:{
-							orderType : orderType,
-							orderItemNo : iteminfo,
-							orderMembNo :membinfo,
-							orderPrc : stockPrc,
-							orderRmnCnt : stockCnt
+							order_type : orderType,
+							order_item_no : iteminfo,
+							order_memb_no :membinfo,
+							order_prc : stockPrc,
+							order_rmn_cnt : stockCnt
 						},
 						success:function(data){
-							console.log(data);
+							if(data.code =='success'){
+								if(orderType == 'buy'){
+									toastShow('주문 완료',data.message ,'success');
+									let rate = data.possStock.rate > 0 ? "+ "+data.possStock.rate : data.possStock.rate;
+				  					let rateClass = data.possStock.cnt == 0 ? '' : (data.possStock.cnt > 0 ? 'plus' : 'minus');
+				  					$('#CP2D22 div p:nth-of-type(2) span').text(data.possStock.cnt);
+				  					$('#CP2D22 div p:nth-of-type(3) span').text(rate).addClass(rateClass);
+				  					$('#CP2D22 div p:nth-of-type(4)').attr('data-point',data.possStock.point);
+				  					$('#CP2D22 div p:nth-of-type(4) span').text(data.possStock.point);
+				  					
+				  					// 변경된 포인트에 맞춰 구매가능주수 변경설정
+				  					$('#afford').val(Math.floor(data.possStock.point/stockPrc));
+								}else if (orderType == 'sell'){
+									toastShow('주문 완료',data.message ,'success');
+									let rate = data.possStock.rate > 0 ? "+ "+data.possStock.rate : data.possStock.rate;
+				  					let rateClass = data.possStock.cnt == 0 ? '' : (data.possStock.cnt > 0 ? 'plus' : 'minus');
+				  					$('#CP2D22 div p:nth-of-type(2) span').text(data.possStock.cnt);
+				  					$('#CP2D22 div p:nth-of-type(3) span').text(rate).addClass(rateClass);
+				  					$('#CP2D22 div p:nth-of-type(4)').attr('data-point',data.possStock.point);
+				  					$('#CP2D22 div p:nth-of-type(4) span').text(data.possStock.point);
+				  					
+				  					//변경된 주식수량에 맞춰 판매가능주수 변경설정
+				  					$('#afford').val(data.possStock.cnt);
+								}
+								
+							}else if(data.code =='fail'){
+								toastShow('주문 실패',data.message, 'error');
+							}
 						},
 						error:function(xhr){
 							console.log(xhr);

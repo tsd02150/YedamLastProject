@@ -307,7 +307,7 @@ function addInterest() {
   			html = `<p data-in="${data.itemNo}"> 종목 : ${data.nm} <span class="${data.change > 0 ? 'plus' : 'minus'}"> 전일비 : ${data.change > 0? "+ "+data.change : data.change} 변동률 : ${data.rate > 0 ? "+"+data.rate+"%" : data.rate+"%"}</span></p><button id="addInt2">관심종목추가</button>`
   			$('#itemPtag').html(html);
   		})
-  },30000000);
+  },200000000);
   
   
   // dom tree 형성후 실행
@@ -370,6 +370,8 @@ function addInterest() {
   					let rateClass = data.cnt == 0 ? '' : (data.cnt > 0 ? 'plus' : 'minus');
   					$('#CP2D22 div p:nth-of-type(2) span').text(data.cnt); // 보유주 span
   					$('#CP2D22 div p:nth-of-type(3) span').text(rate).addClass(rateClass); // 수익률 span
+  					$('#CP2D22 div p:nth-of-type(4)').attr('data-point',data.point);
+  					$('#CP2D22 div p:nth-of-type(4) span').text(data.point);
   				},
   				error:function(xhr){
   					console.log(xhr)
