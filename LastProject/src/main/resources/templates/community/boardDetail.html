@@ -212,7 +212,7 @@
 			contentBody.innerHTML=[[${board.cntn}]];
 			
 			function needLogin(){
-				alert("로그인이 필요합니다.");
+				toastShow("Need To Sign In" , "로그인이 필요합니다." , "error");
 				// 토스트 알림
 			}
 			
@@ -372,6 +372,7 @@
 					`;
 					sectionTag.dataset.commentno=result.commNo;
 					sectionTag.innerHTML=divHtml;
+					sectionTag.className="hComment";
 					sectionTag.onclick=subCommentAddForm;
 					document.getElementById('commentContents').append(sectionTag);
 					commentCntn.value=""

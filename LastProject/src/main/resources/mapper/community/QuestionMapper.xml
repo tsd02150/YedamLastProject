@@ -3,8 +3,56 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
-    <mapper namespace="com.yedam.app.community.mapper.QuestionMapper">
-   <select id="ii">
- 	select 1 from dual
- </select>  
-  </mapper>
+<mapper namespace="com.yedam.app.community.mapper.QuestionMapper">
+	<select id="getFaqList" resultType="FaqVO">
+		SELECT *
+		FROM(
+	 		SELECT rownum rn ,faq_no,ttl,cntn,category
+	 		FROM FAQ
+	 		<![CDATA[
+		    WHERE rownum<=(${page}*10)
+		    ]]>
+	 		<if test="category!=null and(!category.equals(''))">
+	 		AND category=#{category}
+	 		</if>
+	 		<if test="ttl!=null and(!ttl.equals(''))">
+	 		AND ttl LIKE '%'||#{ttl}||'%'
+	 		</if>
+	 		)
+	 	WHERE rn > (${page}-1)*10
+	</select> 
+	<select id="getFaqCount" resultType="int">
+		SELECT COUNT(faq_no)
+		FROM FAQ
+		<where>
+			<if test="category!=null and(!category.equals(''))">
+	 		AND	category=#{category}
+	 		</if>
+			<if test="ttl!=null and(!ttl.equals(''))">
+	 		AND	 ttl LIKE '%'||#{ttl}||'%'
+	 		</if>
+		</where>
+	</select>
+	<select id="getQnaList" resultType="QuestionVO">
+		SELECT *
+		FROM(
+	 		SELECT rownum rn ,qst_no,memb_no,ttl,cntn,drwup_dt,rply,rply_dt,inq,nick
+	 		FROM QUESTION JOIN MEMBER
+	 		USING (memb_no)
+	 		<![CDATA[
+		    WHERE rownum<=(${page}*10)
+		    ]]>
+	 		<if test="ttl!=null and(!ttl.equals(''))">
+	 		AND ttl LIKE '%'||#{ttl}||'%'
+	 		</if>
+	 		)
+	 	WHERE rn > (${page}-1)*10
+	</select> 
+	<select id="getQnaCount" resultType="int">
+		SELECT COUNT(qst_no)
+		FROM QUESTION
+		<if test="ttl!=null and(!ttl.equals(''))">
+ 		AND	 ttl LIKE '%'||#{ttl}||'%'
+ 		</if>
+	</select>
+</mapper>

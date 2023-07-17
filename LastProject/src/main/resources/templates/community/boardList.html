@@ -99,8 +99,8 @@
 					</tbody>
 				</table>
 				<hr>
-				<div>
-					<button th:if="${session.loggedInMember}!=null" class="btn btn-primary mt-3 mt-lg-0 pull-right" id="insertBoard" onclick="insertBoardFunc()" type="button">글쓰기</button>
+				<div class="d-flex justify-content-end">
+					<button th:if="${session.loggedInMember}!=null" class="btn btn-primary mt-3 mt-lg-0" id="insertBoard" onclick="insertBoardFunc()" type="button">글쓰기</button>
 				</div>
 				<div>
 					<nav aria-label="Page navigation example" class="d-flex justify-content-center">
@@ -189,7 +189,7 @@
 			.then(result=>result.json())
 			.then(data=>{
 				totalBoardCnt=data;
-				if(totalBoardCnt<100){
+				if(totalBoardCnt<=100){
 					endPage=(totalBoardCnt-1)/10 + 1;
 				}
 				if(totalBoardCnt>100){
@@ -235,7 +235,7 @@
 		
 		// 페이징 << 버튼 클릭
 		function prevPage(){
-			nextPage.style.visibility="visible";
+			nextpage.style.visibility="visible";
 			startPage-=10;
 			endPage-=10;
 			if(startPage==1){

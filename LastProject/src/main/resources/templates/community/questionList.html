@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+	#faqSection{
+		padding-top: 50px;
+		padding-bottom:50px;
+	}
+	#titlename{
+		font-size: 30px;
+	}
+	#titlename span{
+		line-height: 46px;
+	}
+	#titlename span:after{
+		width:120px;
+	}
+	.active{
+		color:white;	
+	}
+	.active a{
+		background-color:#DC3545;
+	}
+	.cntnHidden{
+		display: none;
+	}
+	#faqprevpage{
+		visibility: hidden;
+	}
+	#faqnextpage{
+		visibility: hidden;
+	}
+	.trHidden{
+		display : none;
+	}
+	#qnaprevpage{
+		visibility: hidden;
+	}
+	#qnanextpage{
+		visibility: hidden;
+	}
+</style>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div id="faqSection">
+			<h1 class="news-title" id="titlename">
+				<span>자주 묻는 질문</span>
+			</h1>
+			<div class="d-flex justify-content-end">
+				<select class="btn btn-secondary dropdown-toggle" id="sort" name="sort">
+					<option value="">전체</option>
+					<option value="회원관리">회원관리</option>
+					<option value="주식이용">주식이용</option>
+					<option value="포인트몰">포인트몰</option>
+					<option value="커뮤니티">커뮤니티</option>
+				</select>
+				<input type="text" id="searchFaqText">
+				<button class="btn btn-light mt-2 mt-lg-0" type="button" onClick="faqSearch()">검색</button>
+			</div>
+			<br>
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<td>글번호</td>
+						<td>카테고리</td>
+						<td style="width:70%;">제목</td>
+					</tr>
+				</thead>
+				<tbody id="faqList">
+
+				</tbody>
+			</table>
+			<div>
+				<nav aria-label="Page navigation example" class="d-flex justify-content-center">
+					<ul class="pagination">
+						<li class="page-item">
+							<a class="page-link" id="faqprevpage" href="javascript:prevPage()" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+							</a>
+						</li>
+						<!-- 페이징버튼 들어갈 공간 -->
+					    <li class="page-item">
+							<a class="page-link" id="faqnextpage" href="javascript:nextPage()" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</div>
+		<div id="qnaSection">
+			<h1 class="news-title" id="titlename">
+				<span>QnA</span>
+			</h1>
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<td>글번호</td>
+						<td style="width:70%;">질문명</td>
+						<td>작성자</td>
+						<td>작성날짜</td>
+					</tr>
+				</thead>
+				<tbody id="qnaList">
+
+				</tbody>
+			</table>
+			<div class="d-flex justify-content-between">
+				<div style="width:108px"></div>
+				<div>
+					<input type="text" id="searchQnaText">
+					<button class="btn btn-light mt-2 mt-lg-0" type="button" onClick="qnaSearch()">검색</button>
+				</div>
+				<button th:if="${session.loggedInMember}!=null" class="btn btn-primary mt-3 mt-lg-0" id="insertBoard" onclick="" type="button">글쓰기</button>
+			</div>
+			<div>
+				<nav aria-label="Page navigation example" class="d-flex justify-content-center">
+					<ul class="pagination">
+						<li class="page-item">
+							<a class="page-link" id="qnaprevpage" href="javascript:prevPage()" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+							</a>
+						</li>
+						<!-- 페이징버튼 들어갈 공간 -->
+					    <li class="page-item">
+							<a class="page-link" id="qnanextpage" href="javascript:nextPage()" aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+							</a>
+						</li>
+					</ul>
+				</nav>
+			</div>
+			<hr>
+		</div>
+		
+		<script th:inline="javascript">
+		let faqTargetPage = [[${startPage}]];
+		let faqStartPage=1;
+		let faqEndPage=10;
+		let totalFaqCnt;
+		let faqCategory='';
+		let faqTtl='';
+		
+		getFaqList();
+		createFaqPageBtn();
+		// faq 목록 출력
+		function getFaqList(){
+			fetch("/community/getFaqList",{
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: 'page='+faqTargetPage+'&category='+faqCategory+'&ttl='+faqTtl
+			})
+			.then(result=>result.json())
+			.then(data=>{
+				let tbody = document.getElementById("faqList");
+				while(tbody.firstChild){
+					tbody.firstChild.remove();
+				}
+				data.forEach((faq,index)=>{
+					let dataHtml = `
+						<tr onClick="faqTrClick()">
+							<td>`+(index+1+(faqTargetPage-1)*10)+`</td>
+							<td>`+faq["category"]+`</td>
+							<td>`+faq["ttl"]+`</td>
+						</tr>
+						<tr class="trHidden">
+							<td></td>
+							<td colspan="2">`+faq["cntn"]+`</td>
+						</tr>
+					`;
+					
+					tbody.innerHTML+=dataHtml;					
+				})
+				faqCategory='';
+				faqTtl='';
+			})
+			.catch(err=>console.log(err));
+		}
+		
+		function faqTrClick(){
+			$(event.target).parent().next().toggleClass('trHidden');
+		}
+
+		// 페이징위해 게시물 개수생성 및 페이지생성 호출
+		function createFaqPageBtn(){
+			fetch("/community/getFaqCount",{
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: 'category='+faqCategory+'&ttl='+faqTtl
+			})
+			.then(result=>result.json())
+			.then(data=>{
+				totalFaqCnt=data;
+				if(totalFaqCnt<=50){
+					faqEndPage=(totalFaqCnt-1)/5 + 1;
+				}
+				if(totalFaqCnt>50){
+					faqnextpage.style.visibility="visible";
+				}
+				createFaqPageCntBtn(faqStartPage,faqEndPage);
+			})			
+		}
+		
+		// 페이징 버튼생성
+		function createFaqPageCntBtn(start,end){
+			if(document.querySelectorAll('.faqpagebtn')!=null){
+				document.querySelectorAll('.faqpagebtn').forEach(item=>{
+					item.remove();
+				})
+			}
+			for(let i=start;i<=end;i++){
+				let liTag = document.createElement('li');
+				liTag.classList.add('page-item','faqpagebtn');
+				if(i%10==faqTargetPage){
+					liTag.classList.add('active');
+				}
+				let aTag = document.createElement('a');
+				aTag.classList.add('page-link');
+				aTag.href="javascript:faqPageMove("+i+");";
+				aTag.textContent=i;
+				liTag.append(aTag);
+				faqnextpage.before(liTag);
+			}
+		}
+		
+		// 페이징 버튼클릭
+		function faqPageMove(page){
+			document.querySelector('.faqpagebtn.active').classList.remove('active');
+			faqTargetPage=page;
+			getFaqList();
+			document.querySelectorAll('.faqpagebtn').forEach(item=>{
+				if(item.children[0].textContent==page){
+					item.classList.add('active');
+				}
+			})
+		}
+		
+		// 페이징 << 버튼 클릭
+		function faqPrevPage(){
+			faqnextpage.style.visibility="visible";
+			faqStartPage-=10;
+			faqEndPage-=10;
+			if(startPage==1){
+				faqprevpage.style.visibility="hidden";
+			}
+			faqPageMove(faqStartPage);
+		}
+		
+		// 페이징 >> 버튼 클릭
+		function faqNextPage(){
+			faqprevpage.style.visibility="visible";
+			faqStartPage+=10;
+			faqEndPage+=10;
+			if(faqEndPage>=totalFaqCnt/5+1){
+				faqEndPage=totalFaqCnt/5+1;
+				faqnextPage.style.visibility="hidden";
+			}
+			faqPageMove(faqStartPage);
+		}
+		
+		function faqSearch(){
+			faqCategory=sort.value;
+			faqTtl=searchFaqText.value;
+			getFaqList();
+			searchFaqText.value='';
+		}
+		
+		let qnaTargetPage = [[${startPage}]];
+		let qnaStartPage=1;
+		let qnaEndPage=10;
+		let totalQnaCnt;
+		let qnaItems=["ttl","drwupDt","inq"];
+		let qnaTtl='';
+		
+		getQnaList();
+		createQnaPageBtn();
+		// 공지사항 목록 출력
+		function getQnaList(){
+			fetch("/community/getQnaList",{
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: 'page='+qnaTargetPage+'&ttl='+qnaTtl
+			})
+			.then(result=>result.json())
+			.then(data=>{
+				let tbody = document.getElementById("qnaList");
+				while(tbody.firstChild){
+					tbody.firstChild.remove();
+				}
+				data.forEach((qna,index)=>{
+					let dataHtml = `
+						<tr data-qnano=`+qna["qstNo"]+` onClick="">
+							<td>`+(index+1+(qnaTargetPage-1)*10)+`</td>
+							<td>`+qna["ttl"]+`</td>
+							<td>`+qna["nick"]+`</td>
+							<td>`+qna["drwupDt"]+`</td>
+						</tr>
+					`;
+					
+					tbody.innerHTML+=dataHtml;					
+				})
+			})
+			.catch(err=>console.log(err));
+		}
+		
+		// 페이징위해 게시물 개수생성 및 페이지생성 호출
+		function createQnaPageBtn(){
+			fetch("/community/getQnaCount",{
+				method: "POST",
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: 'ttl='+qnaTtl
+			})
+			.then(result=>result.json())
+			.then(data=>{
+				totalQnaCnt=data;
+				if(totalQnaCnt<=100){
+					qnaEndPage=(totalQnaCnt-1)/10 + 1;
+				}
+				if(totalFaqCnt>100){
+					qnanextpage.style.visibility="visible";
+				}
+				createQnaPageCntBtn(qnaStartPage,qnaEndPage);
+			})			
+		}
+		
+		// 페이징 버튼생성
+		function createQnaPageCntBtn(start,end){
+			if(document.querySelectorAll('.qnapagebtn')!=null){
+				document.querySelectorAll('.qnapagebtn').forEach(item=>{
+					item.remove();
+				})
+			}
+			for(let i=start;i<=end;i++){
+				let liTag = document.createElement('li');
+				liTag.classList.add('page-item','qnapagebtn');
+				if(i%10==qnaTargetPage){
+					liTag.classList.add('active');
+				}
+				let aTag = document.createElement('a');
+				aTag.classList.add('page-link');
+				aTag.href="javascript:qnaPageMove("+i+");";
+				aTag.textContent=i;
+				liTag.append(aTag);
+				qnanextpage.before(liTag);
+			}
+		}
+		
+		// 페이징 버튼클릭
+		function qnaPageMove(page){
+			document.querySelector('.qnapagebtn.active').classList.remove('active');
+			qnaTargetPage=page;
+			getQnaList();
+			document.querySelectorAll('.qnapagebtn').forEach(item=>{
+				if(item.children[0].textContent==page){
+					item.classList.add('active');
+				}
+			})
+		}
+		
+		// 페이징 << 버튼 클릭
+		function qnaPrevPage(){
+			qnanextpage.style.visibility="visible";
+			qnaStartPage-=10;
+			qnaEndPage-=10;
+			if(startPage==1){
+				qnaprevpage.style.visibility="hidden";
+			}
+			qnaPageMove(qnaStartPage);
+		}
+		
+		// 페이징 >> 버튼 클릭
+		function qnaNextPage(){
+			qnaprevpage.style.visibility="visible";
+			qnaStartPage+=10;
+			qnaEndPage+=10;
+			if(qnaEndPage>=totalQnaCnt/10+1){
+				qnaEndPage=totalQnaCnt/10+1;
+				qnanextPage.style.visibility="hidden";
+			}
+			qnaPageMove(qnaStartPage);
+		}
+		
+		function qnaSearch(){
+			qnaTtl=searchQnaText.value;
+			getQnaList();
+			searchQnaText.value='';
+			
+		}
+		</script>
+	</div>
+</body>
+</html>
