@@ -1,6 +1,6 @@
 import {
     basket
-} from './basket.js';
+} from '../basket.js';
 
 basket.cartList();
 

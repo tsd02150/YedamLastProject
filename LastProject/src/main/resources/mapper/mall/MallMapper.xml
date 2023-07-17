@@ -27,10 +27,27 @@
   		WHERE common_code=#{commonCd}
   	</select>
   	
-  	<select id="getCtgr" resultType="ProductVO">
-  		SELECT common_cd, ctgr
-  		FROM COMMON_CODE
-  		WHERE common_cd LIKE #{commonCd}||'0%'
+
+  	<select id="getBasketInfo" resultType="BasketVO">
+  		SELECT *
+  			 
+  		FROM BASKET
+  		WHERE prdt_no = #{prdtNo}
+  		
   	</select>
+  	
+  	<select id="getProductReviewList" resultType="ProductReviewVO" >
+  	SELECT *
+  	FROM PRODUCT_REVIEW
+  	WHERE prdt_no = #{prdtNo}
+  	</select>
+  	
+ 
+	<select id="getCtgr" >
+		SELECT common_cd, ctgr
+		FROM COMMON_CODE
+		WHERE common_cd=#{commonCd}
+	</select>
+	
   	
 </mapper>
