@@ -76,7 +76,8 @@ input[type=number] {
 							<div class="form-group">
 								<label for="nickname">닉네임</label><br> <input type="text"
 									class="form-control" id="nickname" name="nick"
-									th:value=${session.loggedInMember.nick}
+									placeholder="변경할 닉네임을 입력하세요"
+									th:value=${member.nick}
 									style="width: 60%; display: inline;" readonly>
 								<div id="ckNick" style="display: inline;"></div>
 								<button type="button" id="changeNick">변경</button>
@@ -89,8 +90,7 @@ input[type=number] {
 							<div class="form-group">
 								<label for="pass">비밀번호</label><br> <input type="password"
 									class="form-control" id="pass" name="pwd"
-									placeholder="비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요."
-									th:value=${session.loggedInMember.pwd} 
+									placeholder="PASSWORD"
 									style="width: 60%; display: inline;" readonly>
 									<button type="button" id="changePwd">변경</button>
 									<button type="button" id="resetPwd" style="display : none;">취소</button>
@@ -110,7 +110,7 @@ input[type=number] {
 							<div class="form-group">
 								<label for="email-address">이메일</label><br> <input type="email"
 									class="form-control" id="email-address" name="email"
-									th:value=${session.loggedInMember.email} 
+									th:value=${member.email} 
 									style="width: 60%; display: inline;" readonly>
 									<button type="button" id="changeEmail" style="display : inline-block;">변경</button>
 									<button type="button" id="sendemail" style="display : none;">인증번호 발송</button>
@@ -130,7 +130,7 @@ input[type=number] {
 							<div class="form-group">
 								<label for="telInput">연락처</label><br>
 								<input type="text" class="form-control" oninput="autoHyphen(this)"
-									maxlength="13" name="tel" id="telInput" th:value=${session.loggedInMember.tel} style="width : 60%; display : inline;" readonly>
+									maxlength="13" name="tel" id="telInput" th:value=${member.tel} style="width : 60%; display : inline;" readonly>
 									<button type="button" id="changeTel">변경</button>
 									<button type="button" id="sendsms" style="display : none;">인증번호 발송</button>
 									<button type="reset" id="resetsms" style="display : none;">취소</button>
@@ -344,6 +344,7 @@ function changeAddr(target) {
   reBtn.text('취소').attr('type', 'reset').on('click', function() {
     $(this).next().next().next().remove(); // 우편번호 찾기 버튼 제거
     let changeAddrBtnHtml = '<button type="button" class="changeAddr" onclick="changeAddr(this)">변경</button>';
+    $(".deleteAddr").text("삭제");
     changeButton.replaceWith(changeAddrBtnHtml);
   });
 
@@ -420,16 +421,20 @@ $("#saveBtn").on("click",function(){
 	
 })
 
+//비밀번호 변경 버튼 클릭 시
 $("#changePwd").on("click", function() {
 	$("#pass").val("");
-  $("#oldpass").removeAttr("readonly");
+  $("#pass").removeAttr("readonly");
+  $("#pass").attr("placeholder","변경할 비밀번호를 입력하세요");
   $(".ckpwddiv").css("display", "block");
   $("#resetPwd").css("display", "inline-block");
 });
 
+//비밀번호 변경 취소버튼 누를때
 $("#resetPwd").on("click", function(){
-	$("#pass").val(pwd);
-	$("#oldpass").attr("readonly","readonly");
+	$("#pass").removeAttr("value");
+	$("#pass").attr("placeholder","PASSWORD");
+	$("#pass").attr("readonly","readonly");
   $(".ckpwddiv").css("display", "none");
   $("#resetPwd").css("display", "none");
 })
@@ -444,7 +449,10 @@ $("#changeEmail").on("click", function(){
 	$("#sendemail").css("display", "inline-block");
 	$("#changeEmail").css("display", "none");
 
+	//이메일 변경 취소버튼 누를 시
 	$("#resetEmail").on("click", function(){
+		$("#changeEmail").css("display", "inline-block");
+		$("#mainCheckInput").css("display", "none");
 		$("#resetEmail").css("display", "none"); //변경 취소버튼 none
 		$("#sendemail").css("display", "none"); //인증번호 발송 버튼 none
 		$("#testBtn1").css("display", "none");
@@ -507,7 +515,7 @@ function checkMailCode(){
 		mailcount2++;
 		$("#mailCheck").text("다시 시도해주세요.")
 										.css({
-											"color": "#0D6EFD",
+											"color": "#FA3E3E",
 											"font-weight": "bold",
 											"font-size": "14px"
 		}); 
@@ -539,33 +547,70 @@ $("#changeTel").on("click", function() {
    if (!$("#telInput").val()) {
        $("#telInput").focus();
    }else{
+		 $("#telInput").attr("name","to")
+	   let toUser = $("#telInput").val().replace(/[^0-9]/g, "").replace(/^(\d{3})(\d{4})(\d{4})$/, "$1$2$3");
+	   testcode = createSmsKey();
+	   console.log(testcode);
+	   //sms 발송
+	   /* 	$.ajax({
+					    url: "sendSms",
+					    method: "POST",
+					    data: {
+					      to: toUser,
+					      content: "[SMS] 인증번호 [" + testcode + "]를 입력해주세요"
+					    },
+					    success: function(response) {
+					      console.log("key: " + testcode);
+					      $("#telCheck").text("인증번호가 발송되었습니다.")
+								    			    .css({
+												           color: "#0D6EFD",
+												           "font-weight": "bold",
+												           "font-size": "14px"
+								}); // 인증번호 확인 끝.
+								$("#telInput").attr("name","tel");
+								}
+								$("#sendsms").addClass("isOk"); //본인인증 실행 여부 체크
+					      
+					    },
+					    error: function(err) {
+					      console.log(err);
+					    }
+					  });// sms 발송 끝 */
 	   
-   
-   
-   let toUser = $("#telInput").val().replace(/[^0-9]/g, "").replace(/^(\d{3})(\d{4})(\d{4})$/, "$1$2$3");
-   testcode = createSmsKey();
-   console.log(testcode);
-
-   $("#telCheck")
-       .text("인증번호가 발송되었습니다.")
-       .css({
-           color: "#0D6EFD",
-           "font-weight": "bold",
-           "font-size": "14px"
-       }); // 인증번호 확인 끝.
-   }
-   $("#sendsms").addClass("isOk"); //본인인증 실행 여부 체크
-   if (telcount1 >= 5) {
-       $("#myModal").show();
+	   //
+	   
+	   $("#telCheck")
+	       .text("인증번호가 발송되었습니다.")
+	       .css({
+	           color: "#0D6EFD",
+	           "font-weight": "bold",
+	           "font-size": "14px"
+	       }); // 인증번호 확인 끝.
+	   }
+	   $("#sendsms").addClass("isOk"); //본인인증 실행 여부 체크
+	   
+	   if (telcount1 >= 5) {
+	       $("#myModal").show();
    }
 });
 
  // sms 인증코드 확인
  $("#testBtn2").on("click", function() {
-     telcount2++;
-
-   if (testcode !== $("#codeCheckInput").val()) {
-       console.log(data.tel);
+   if($("#codeCheckInput").val()==""){ // 인증번호 공란일 경우
+	   $("#codeCheckInput").focus();
+	   $("#codeCheck")
+           .text("인증번호를 입력하세요")
+           .css({
+               color: "#FA3E3E",
+               "font-weight": "bold",
+               "font-size": "14px"
+           });
+	   return;
+   }
+     telcount2++; //버튼 클릭 5회 제한
+     
+	   
+   if (testcode != $("#codeCheckInput").val()) {
        $("#codeCheck")
            .text("인증번호가 일치하지 않습니다. 다시 입력하세요")
            .css({
@@ -582,6 +627,7 @@ $("#changeTel").on("click", function() {
            }); // 인증번호 확인 끝.
        $("#testBtn2").addClass("isOk"); //본인인증 실행 여부 체크
    }
+   
    if (telcount2 >= 5) {
        $("#myModal").show();
    }
@@ -600,10 +646,6 @@ function close_pop(flag) {
  $('#myModal').hide();
 	 window.location.reload();
 };
-function close_pop(flag) {
-    $('#myModal').hide();
-		 window.location.reload();
- };
 
 function createSmsKey() {
 	  let key = '';
@@ -617,7 +659,37 @@ function createSmsKey() {
 const autoHyphen = (target) => {
     target.value = target.value.replace(/[^0-9]/g, '').replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`);
 };
-	
+
+//비밀번호 유효성검사
+pwdInput.addEventListener('input', checkPwdValidity);
+pwdCorrectInput.addEventListener('input', checkPwdMatch);
+
+function checkPwdValidity() {
+    const pwdValue = pwdInput.value;
+    const pwdRegex = /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[\W_]).{8,16}$/;
+
+    if (!pwdValue) {
+        pwdWarning.textContent = "비밀번호를 입력해주세요.";
+    } else if (!pwdRegex.test(pwdValue)) {
+        pwdWarning.textContent = "영어 대소문자, 숫자, 특수문자 1개이상 사용해야 합니다.";
+    } else {
+        pwdWarning.textContent = "";
+    }
+}
+
+function checkPwdMatch() {
+    const pwdValue = pwdInput.value;
+    const pwdCorrectValue = pwdCorrectInput.value;
+
+    if (pwdValue !== pwdCorrectValue) {
+        pwdWarning.style.borderWidth = "2px";
+        pwdWarning.textContent = "입력한 비밀번호와 일치하지 않습니다.";
+    } else {
+        pwdWarning.style.borderWidth = "";
+        pwdWarning.textContent = "";
+    }
+}
+
       </script>
     </section>
   </div>

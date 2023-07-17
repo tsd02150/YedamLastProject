@@ -21,9 +21,10 @@ public class EnciptTest {
 		System.out.println(password);
 	}
 	
-	@Test
+	//@Test
 	public void orderTest() {
 		List<Map<String,Object>> list = stockService.orderTable("sell", "ite-1");
 		System.out.println(list);
 	}
+	
 }

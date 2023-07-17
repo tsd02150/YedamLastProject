@@ -315,5 +315,10 @@
 			WHERE memb_no = #{membNo}
 			AND   addr_no = #{addrNo}
 		</update>
+		
+ <select id="mycoupon" resultType="CouponVO" parameterType="String">
+ 	SELECT * FROM coupon
+	WHERE memb_no = #{membNo}
+ </select>
 	
 </mapper>
