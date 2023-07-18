@@ -45,9 +45,7 @@ public class QuestionController {
 	@PostMapping("getQnaList")
 	@ResponseBody
 	public List<QuestionVO> getQnaList(QuestionVO vo) {
-		System.out.println(vo);
 		List<QuestionVO> list=questionService.getQnaList(vo);
-		System.out.println(list);
 		return list;
 	}
 	
@@ -66,7 +64,6 @@ public class QuestionController {
 	@ResponseBody
 	public String insertQna(QuestionVO vo,HttpSession session) {
 		vo.setMembNo(((UserVO)session.getAttribute("loggedInMember")).getMembNo());
-		System.out.println(vo);
 		if(questionService.insertQna(vo)) {
 			return "success";
 		}else {

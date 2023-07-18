@@ -5,6 +5,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
+
+
 <style>
 	#boardSection{
 		padding-top: 50px;
@@ -113,7 +116,27 @@
 	#commentContents svg{
 		margin-top: 4px;
 	}
-
+	#commentContents section{
+		margin-bottom:10px;
+	}
+	.commentAddBtn{
+		background-color: #f0f1f2;
+		width:202px;
+	}
+	.commentAddBtn:hover{
+		background-color: #e0e1e2;
+	}
+	.tagNick{
+		color:#8692FF;
+	}
+	.hwt-content mark {
+		border-radius: 3px;
+		background-color: #e0e1e2;
+	}
+	.contentHighlight{
+		border-radius: 3px;
+		background-color: #e0e1e2;	
+	}
 </style>
 </head>
 <body>
@@ -161,14 +184,15 @@
 					<p>전체 댓글 <span th:text="${#arrays.length(comments)}">0</span>개</p>
 					<hr>
 					<div id="commentContents">
-						<section th:each="comment:${comments}" th:data-commentno="${comment.commNo}" th:class="${comment.commNo==comment.hCommNo}?'hComment':'subComment'" th:onclick="${comment.commNo==comment.hCommNo && myInfo.nick!=null}?'subCommentAddForm()':''">
+						<section th:each="comment:${comments}" th:data-commentno="${comment.commNo}" th:class="${comment.commNo==comment.hCommNo}?'hComment':'subComment'">
 							<div th:class="${comment.commNo==comment.hCommNo}?'hComment':'subComment'">
 								<div class="d-flex justify-content-between">
 									<div class="d-flex">
-										<p><b>[[${comment.nick}]]</b></p>
+										<p><b class="commentNick">[[${comment.nick}]]</b></p>
 										<p>&nbsp([[${#dates.format(comment.drwupDt,'yyyy-MM-dd')}]])</p>
 									</div>
 									<div class="commentContent">
+										
 										<button class="btn btn-light mt-2 mt-lg-0 commentRcom" th:data-commentno="${comment.commNo}" type="button" th:onclick="${myInfo.nick==null} ? 'needLogin()' : 'commentRcom()'">
 											추천
 											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8692FF" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16">
@@ -185,9 +209,17 @@
 										</button>
 									</div>
 								</div>
-								<div class="d-flex">
-									<span th:if="${myInfo.membNo}==${comment.membNo}" style="color:red;font-size:20px;" onClick="deleteComment()">&times&nbsp</span>	
-									<p th:text="${comment.cntn}">내용</p>	
+								<div class="d-flex justify-content-between">
+									<div class="d-flex">
+										<span th:if="${myInfo.membNo}==${comment.membNo}" style="color:red;font-size:20px;" onClick="deleteComment()">&times&nbsp</span>	
+										<p class="commentContent" th:text="${comment.cntn}">내용</p>	
+									</div>
+									<button th:if="${comment.commNo==comment.hCommNo}" class="btn mt-2 mt-lg-0 commentAddBtn" th:data-commentno="${comment.commNo}" type="button" th:onclick="${myInfo.nick==null} ? 'needLogin()' : 'subCommentAddForm()'">
+										댓글 달기
+										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+ 												<path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+										</svg>
+									</button>
 								</div>
 							</div>
 						</section>
@@ -210,6 +242,16 @@
 		
 		<script th:inline="javascript">		
 			contentBody.innerHTML=[[${board.cntn}]];
+ 			document.querySelectorAll('section.subComment').forEach(sub=>{
+ 				let targetText=sub.querySelector('p.commentContent').textContent;
+				let hashTagStart=targetText.indexOf("@");
+				let hashTagEnd=targetText.indexOf(" ");
+				
+				if(hashTagStart>=0&&hashTagEnd>0){
+					sub.querySelector('p.commentContent').innerHTML="<span class='contentHighlight'>"+targetText.substring(hashTagStart,hashTagEnd)+"</span> "+targetText.substring(hashTagEnd+1);	
+				}
+			})
+ 		
 			
 			function needLogin(){
 				toastShow("Need To Sign In" , "로그인이 필요합니다." , "error");
@@ -373,7 +415,6 @@
 					sectionTag.dataset.commentno=result.commNo;
 					sectionTag.innerHTML=divHtml;
 					sectionTag.className="hComment";
-					sectionTag.onclick=subCommentAddForm;
 					document.getElementById('commentContents').append(sectionTag);
 					commentCntn.value=""
 				})
@@ -383,7 +424,7 @@
 			
 			// 댓글 삭제
 			function deleteComment(){
-				let target = event.target.parentNode.parentNode.parentNode;
+				let target = event.target.parentNode.parentNode.parentNode.parentNode;
 				
 				if(confirm("삭제허쉴?")){
 					
@@ -405,22 +446,20 @@
 			}
 			
 			// 대댓글 작성
-			function subCommentAddForm(){
-				if(event.target.tagName=="BUTTON"||event.target.tagName=="SPAN")
-					return;
-				
+			function subCommentAddForm(){				
 				if(document.getElementById('subCommentForm')!=null){
 					document.getElementById('subCommentForm').remove();
 				}
 
 				let target =$(event.target).closest('section').nextUntil('.hComment').last();
+				let commentNick = "@"+$(event.target).closest('section').find('.commentNick').text()+" ";
 				
 				let sectionTag= document.createElement("section");
 				sectionTag.style="margin-bottom:20px;margin-left:40px;"
 				sectionTag.id="subCommentForm";
 				sectionTag.innerHTML=`
 					<div class="d-flex">
-						<textarea cols="105" rows="3"></textarea>
+						<textarea id="commentTextArea" cols="100" rows="3">`+commentNick+`</textarea>
 						<button class="btn btn-light mt-2 mt-lg-0" onclick="addSubComment('`+$(event.target).closest('section')[0].dataset.commentno+`')" type="button">댓글 작성</button>
 					</div>
 				`;
@@ -430,13 +469,19 @@
 				}else{
 					$(event.target).closest('section').after(sectionTag);
 				}
+				let hashTagStart=commentTextArea.value.indexOf("@");
+				let hashTagEnd=commentTextArea.value.indexOf(" ");
+
+				$('#commentTextArea').highlightWithinTextarea({
+					highlight:[hashTagStart,hashTagEnd]
+				});
 			}
 			
 			function addSubComment(hCommNo){
-				console.log(hCommNo);
-				let cntn=event.target.previousElementSibling.value;
+				let cntn=event.target.previousElementSibling.children[1].value;
+				
 				let subCommentSpace = event.target.parentNode.parentNode;
-				console.log(subCommentSpace);
+				
 				fetch("insertSubComment",{
 					method:"POST",
 					headers:{
@@ -446,8 +491,9 @@
 				})
 				.then(response=>response.json())
 				.then(result=>{
-					console.log(result);
 					let sectionTag=document.createElement('section');
+					let hashTagStart=result.cntn.indexOf("@");
+					let hashTagEnd=result.cntn.indexOf(" ");
 					var divHtml = `
 						<div class="subComment">
 							<div class="d-flex justify-content-between">
@@ -474,7 +520,7 @@
 							</div>
 							<div class="d-flex">
 								<span style="color:red;font-size:20px;" onClick="deleteComment()">&times&nbsp</span>
-								<p>`+result.cntn+`</p>			
+								<p><span class="contentHighlight">`+result.cntn.substring(hashTagStart,hashTagEnd)+`</span> `+result.cntn.substring(hashTagEnd+1)+`</p>			
 							</div>
 						</div>
 					`;
@@ -486,9 +532,9 @@
 					
 				})
 				.catch(err=>console.log(err));
-				
-				
 			}
+			
+			
 		</script>
 		<script th:replace="community/boardList.html::myScript"></script>
 	</div>
