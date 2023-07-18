@@ -45,39 +45,36 @@ margin : auto;
 </head>
 <body>
 <div layout:fragment="mypage">
-	<section class="block-wrapper flex items-center justify-center w-screen h-screen p-10 space-x-6 bg-gray-300"
-		layout:fragment="content">
-		<div id="mypageBody">
-		<div id="myPointList">
-			<span>로고</span>
-			<span style="font-size:40px;">My 포인트</span>
-			<strong> <span th:text="${mypoint}" style="font-size:40px; padding-left:30px"></span></strong>
-			<span style="font-size:30px;"> point</span>
-			<a href="pointChargeForm" id="chargeBtn" >충전</a><br>
-		</div>
-		<div id="myCouponList">
-			<span>로고</span>
-			<span style="font-size:40px;">My 쿠폰</span>
-			<strong> <span th:text="${#lists.size(mycoupon)}" style="font-size:40px; padding-left:70px"></span></strong>
-			<span style="font-size:30px;"> 개</span>
-		</div>
-		<div id="myPointTblDiv">
-			<h4>포인트 적립 | 사용 내역</h4>
-			<table id="myPointTbl">
-				<thead>
-					<tr>
-						<th>날짜</th>
-						<th>구분</th>
-						<th>종목or제품이름</th>
-						<th>이용내역</th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
-		</div>
-		</div>
-	</section>
+	<div id="mypageBody">
+	<div id="myPointList">
+		<span>로고</span>
+		<span style="font-size:40px; color:black;">My 포인트</span>
+		<strong> <span th:text="|${#numbers.formatInteger(mypoint, 0, 'COMMA')}|" style="font-size:40px; padding-left:30px; color:black;"></span></strong>
+		<span style="font-size:30px; color:black;"> point</span>
+		<a href="pointChargeForm" id="chargeBtn" >충전</a><br>
+	</div>
+	<div id="myCouponList">
+		<span>로고</span>
+		<span style="font-size:40px; color:black;">My 쿠폰</span>
+		<strong> <span th:text="${#lists.size(mycoupon)}" style="font-size:40px; padding-left:70px; color:black;"></span></strong>
+		<span style="font-size:30px; color:black;"> 개</span>
+	</div>
+	<div id="myPointTblDiv">
+		<h4>포인트 적립 | 사용 내역</h4>
+		<table id="myPointTbl">
+			<thead>
+				<tr>
+					<th>날짜</th>
+					<th>구분</th>
+					<th>종목or제품이름</th>
+					<th>이용내역</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+	</div>
 </div>
 </body>
 
