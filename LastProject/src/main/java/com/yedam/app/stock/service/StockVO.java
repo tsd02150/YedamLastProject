@@ -8,6 +8,7 @@ public class StockVO {
 	private String sc;
 	private String theme;
 	private String nm;
+	private String tnm;
 	private Integer tprc;
 	private Integer change;
 	private Integer rate;

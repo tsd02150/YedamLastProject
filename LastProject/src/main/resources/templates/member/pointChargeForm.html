@@ -84,22 +84,22 @@ border: 1px solid #DDDDDD;
 		<div id="chargeInputDiv">
 			<h3 style="text-align : left;">충전금액</h3>
 			<label for="chargeInput"></label>
-			<input type="number" id="chargeInput" placeholder="1천원 → 10,000 point" class="form-control" aria-describedby="button-addon2">
+			<input type="text" id="chargeInput" placeholder="1천원 → 10,000 point" class="form-control" aria-describedby="button-addon2" oninput="commas(this)">
 			<button type="reset" id="button-addon2" class="btn btn-outline-secondary">  X  </button><br>
 			
 			<div>
 			<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 			  <li class="nav-item" role="presentation">
-			    <button class="nav-link" id="pills-home-tab" data-price="1000" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">1천원</button>
+			    <button class="nav-link" id="pills-home-tab" data-price="1,000" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">1천원</button>
 			  </li>
 			  <li class="nav-item" role="presentation">
-			    <button class="nav-link" id="pills-profile-tab" data-price="5000" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">5천원</button>
+			    <button class="nav-link" id="pills-profile-tab" data-price="5,000" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">5천원</button>
 			  </li>
 			  <li class="nav-item" role="presentation">
-			    <button class="nav-link" id="pills-contact-tab" data-price="10000" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">1만원</button>
+			    <button class="nav-link" id="pills-contact-tab" data-price="10,000" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">1만원</button>
 			  </li>
 			  <li class="nav-item" role="presentation">	
-			    <button class="nav-link" id="pills-disabled-tab"data-price="30000"  data-bs-toggle="pill" data-bs-target="#pills-disabled" type="button" role="tab" aria-controls="pills-disabled" aria-selected="false">3만원</button>
+			    <button class="nav-link" id="pills-disabled-tab"data-price="30,000"  data-bs-toggle="pill" data-bs-target="#pills-disabled" type="button" role="tab" aria-controls="pills-disabled" aria-selected="false">3만원</button>
 			  </li>
 			</ul>
 			</div>
@@ -117,10 +117,17 @@ border: 1px solid #DDDDDD;
 	//금액버튼 클릭 시 
 	$(".nav-item").on("click", function(){
 		//버튼
+		$(".nav-item").not(this).children().removeClass("active");
 		$(this).children().addClass("active");
 		$("#chargeInput").val($(this).children().attr("data-price"));
-		
 	})
+	
+	//콤마
+	function commas(target) {
+	  target.value = target.value.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	  console.log(target.value);
+	  console.log(typeof(target.value));
+	}
 	
 	let amount=0;
 	let name ='' ;
@@ -139,12 +146,12 @@ border: 1px solid #DDDDDD;
 	  const clientKey = 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq' // 상점을 특정하는 키
 	  const customerKey = 'C57lz4-jzjw9_VF9insuD' // 결제 고객을 특정하는 키
 	 
-		let chargeInput = $("#chargeInput").val();
+		let chargeInput = Number($("#chargeInput").val().replace(/,/g, ""));
 		amount = parseInt(chargeInput)
+		console.log(amount);
 
 		/*결제위젯 영역 렌더링*/
 	  const paymentWidget = PaymentWidget(clientKey, customerKey) // 회원 결제 초기화
-	  // const paymentWidget = PaymentWidget(clientKey, PaymentWidget.ANONYMOUS) // 비회원 결제 초기화
 	  paymentWidget.renderPaymentMethods('#payment-method', amount)
 	  
 	  /*약관 영역 렌더링*/
@@ -153,9 +160,7 @@ border: 1px solid #DDDDDD;
 		
 	  /*결제요청 함수 정의*/
 		document.querySelector("#payment-button").addEventListener("click",()=>{
-			//console.log(typeof(amount));
 			console.log(amount);
-			//console.log(amount.replace(pattern, ""));
 
 		    paymentWidget.requestPayment({
 		    	orderId: 'u0XHU8mFoZkItvhSh6972',

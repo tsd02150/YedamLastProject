@@ -36,6 +36,7 @@
 	margin-left : 10px;
 	display : inline-block;
 	width : 200px;
+	overflow: auto;
 }
 #stockList{
 	border: 1px solid #DDDDDD;
@@ -48,7 +49,14 @@
 	height: 300px;
 	margin-left : 40px;
 	margin-top : 20px;
+	overflow: auto;
 }
+#interesttbl{
+	width : 100%;
+	
+}
+.high{ color : red;}
+.low{ color : blue;}
 </style>
 </head>
 <body>
@@ -60,14 +68,229 @@
 			</div>
 			<div class="col-12" style="margin : auto;">
 				<div id="mystockDiv" class="col-7"></div>
-				<div id="myorderDiv"></div>
+				<div id="myorderDiv">
+					<div id="buyOrder"></div>
+					<div id="sellOrder"></div>
+				</div>
 			</div>
 			<div id="stockList" class="col-12"></div>
 			<div class="col-12">
-				<div id="interestDiv" class="col-5"></div>
+				<div id="interestDiv" class="col-5">
+					<table id="interesttbl">
+						<thead>
+							<tr>
+							<th>관심종목</th>
+							<th></th>
+							<th></th>
+							<th></th>
+							</tr>
+						</thead>
+						<tbody id="intbody"></tbody>
+					</table>
+				</div>
 				<div id="recomDiv" class="col-5"></div>
 			</div>
 		</div>
+		
+	<script>
+	let div1='';
+	let div2='';
+	
+ 	let membNo = "[[${session.loggedInMember.membNo}]]";
+	//매수 주문 현황
+	 $.ajax({
+		 url : "buyOrderList",
+		 method : "POST",
+		 data : {
+			 "membNo" : membNo
+		 },
+		 success : function(data){
+			 data.forEach(el=>{
+				 //console.log(el);
+				 div1 +=`
+				 				<div data-no="${el.buyNo}" style="text-align:center; border: 1px solid #DDDDDD;">
+				 					<span style="font-weight : bold;">매수 주문 예약</span><button onclick="delBuyOrder(this)"> X </button>
+				 					<table style="width : 100%;">
+				 						<tr>
+				 							<th>종목명</th>
+				 							<td>${el.nm}</td>
+				 						</tr>
+				 						<tr>
+				 							<th>주문수량</th>
+				 							<td>${el.rmnCnt}</td>
+				 						</tr>
+				 						<tr>
+				 							<th>주문가격</th>
+				 							<td>${el.prc}</td>
+				 						</tr>
+				 					</table>
+				 				</div>
+				 `; 
+			 })
+			 $("#buyOrder").html(div1);
+		 },
+		 error : function(err){
+			 console.log(err);
+		 }
+	 });
+	
+	//매도 주문 현황
+	 $.ajax({
+		 url : "sellOrderList",
+		 method : "POST",
+		 data : {
+			 "membNo" : membNo
+		 },
+		 success : function(data){
+			 data.forEach(el=>{
+				 //console.log(el);
+				 div2 +=`
+		 				<div data-no="${el.buyNo}" style="text-align:center; border: 1px solid #DDDDDD;">
+		 					<span style="font-weight : bold;">매도 주문 예약</span><button onclick="delSellOrder(this)"> X </button>
+		 					<table style="width : 100%;">
+		 						<tr>
+		 							<th>종목명</th>
+		 							<td>${el.nm}</td>
+		 						</tr>
+		 						<tr>
+		 							<th>주문수량</th>
+		 							<td>${el.rmnCnt}</td>
+		 						</tr>
+		 						<tr>
+		 							<th>주문가격</th>
+		 							<td>${el.prc}</td>
+		 						</tr>
+		 					</table>
+		 				</div>
+					 `; 
+			 })
+			 $("#sellOrder").html(div2);
+		 },
+		 error : function(err){
+			 console.log(err);
+		 }
+	 });
+	
+	//매수 주문 예약 삭제
+ function delBuyOrder(target) {
+	  let dataNo = target.parentNode.getAttribute('data-no');
+	  //console.log(dataNo);
+	  $.ajax({
+		  url : "deleteBuyOrder",
+		  method : "POST",
+		  data : {
+			  "membNo" : membNo,
+			  "buyNo" : dataNo
+		  },
+		  success : function(res){
+			  console.log(res);
+			  $(target).parent().remove();
+			  toastShow("Delete","매수 주문 예약이 삭제되었습니다.","success");
+		  },
+		  error : function(err){
+			  console.log(err);
+		  }
+	  });
+	}
+	//매도 주문 예약 삭제
+ function delSellOrder(target) {
+	  let dataNo = target.parentNode.getAttribute('data-no');
+	  //console.log(dataNo);
+	  $.ajax({
+		  url : "deleteSellOrder",
+		  method : "POST",
+		  data : {
+			  "membNo" : membNo,
+			  "sellNo" : dataNo
+		  },
+		  success : function(res){
+			  console.log(res);
+			  $(target).parent().remove();
+			  toastShow("Delete","매도 주문 예약이 삭제되었습니다.","success");
+		  },
+		  error : function(err){
+			  console.log(err);
+		  }
+	  });
+	}
+
+//관심종목 리스트
+ let tr1 = '';
+ let tr2 = '';
+	// 숫자를 콤마로 포맷하는 함수
+	function formatNumber(number) {
+	  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}	
+
+ // 관심종목 리스트 출력
+ $.ajax({
+   url: "interestList",
+   method: "POST",
+   data: {
+     "membNo": membNo
+   },
+   success: function(data) {
+     if (data != null) {
+
+    	 data.forEach(el => {
+         let itemNo = el.itemNo;
+         console.log(el);
+         tr1 += `
+           <tr data-no="${el.itemNo}">
+             <td th:onclick="|location.href='@{/stock/chart?itemNo=${itemNo}}'|">${el.tnm}</td>
+             <td>${formatNumber(el.tprc)}</td>
+             <td class="rate">${el.rate}</td>
+             <td><button onclick="deleteInterest('${el.itemNo}')">X</button></td>
+           </tr>
+         `;
+       });
+     } else {
+       tr1 += `<a href="stock/itemListPage"><button>주식페이지로 이동<button></a>`;
+     }
+
+     // 출력된 관심종목 리스트를 HTML에 추가합니다.
+     $("#intbody").html(tr1);
+     boxClass();
+   },
+   error: function(err) {
+     console.log(err);
+   }
+ });
+	
+	function boxClass() {
+		  $(".rate").each(function() {
+		    var rate = parseInt($(this).text());
+		    if (rate >= 0) {
+		      $(this).addClass("high");
+		    } else {
+		      $(this).addClass("low");
+		    }
+		  });
+		}
+	
+	//관심종목 삭제
+function deleteInterest(itemNo) {
+  $.ajax({
+    url: "deleteInterest",
+    method: "POST",
+    data: {
+      "itemNo": itemNo,
+      "membNo": membNo
+    },
+    success: function(result) {
+      if (result == 1) {
+        // 삭제된 항목을 테이블에서 제거합니다.
+        $(`tr[data-no='${itemNo}']`).remove();
+        toastShow("Delete", "관심종목이 삭제되었습니다.", "success");
+      }
+    },
+    error: function(err) {
+
+    }
+  });
+}
+
+	</script>
 </div>
 </body>
 

@@ -120,7 +120,7 @@ height: 200px;
 						<td></td>
 					</tr>
 					<tr>
-						<th>[[${session.loggedInMember.point}]] point</th>
+						<th th:text="${#numbers.formatInteger(session.loggedInMember.point, 0, 'COMMA')}"></th>
 						<td><a href="pointChargeForm"><button type="button" class="btn btn-outline-secondary">충전</button></a></td>
 					</tr>
 				</table>
@@ -171,6 +171,7 @@ height: 200px;
 		<!-- 관심종목 end -->
 <script>
 let id = "[[${session.loggedInMember.id}]]";
+let membNo = "[[${session.loggedInMember.membNo}]]";
 
 let box = '';
 let box2 = '';
@@ -187,6 +188,7 @@ $.ajax({
 	success : function(data){
 		//보유주식 최대 8개까지만 출력(rate 기준 정렬)  stock/chart?itemNo=ite-1
 				// th:onclick="|location.href='@{/mall/farmList(commonCd=${'S10'})}'|"
+	//	            <a onclick="location.href='/stock/chart?itemNo=${el.itemNo}'"><p class="tnm">${el.tnm}</p></a>
 		data.slice(0, 8).forEach(el => {
 			//console.log(el);
 		let tprc = commas(el.tprc); 
@@ -210,7 +212,7 @@ $.ajax({
 		url : "interestList",
 		method : "POST",
 		data : {
-			"id" : id
+			"membNo" : membNo
 		},
 		success : function(data){
 			//보유주식 최대 4개까지만 출력(rate 기준 정렬)
@@ -281,8 +283,8 @@ $.ajax({
 	        success: function(data) {
 	          data.forEach(function(res) {
 	            //console.log(res);
-	            img += `<img src="../../static/mall/images/main/${res.img}"`;
-	            $(".prdtimg[data-no='" + res.prdtNo + "']").append(res.img);
+	            img += `<img sth:src="|/mall/images/main/${res.img}"`;
+	            $(".prdtimg[data-no='" + res.prdtNo + "']").append(img);
 	            $(".prdtnm[data-no='" + res.prdtNo + "']").append(res.nm);
 	          });
 	        },

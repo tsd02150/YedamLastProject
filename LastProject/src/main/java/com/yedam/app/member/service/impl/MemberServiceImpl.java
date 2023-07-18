@@ -1,6 +1,7 @@
 package com.yedam.app.member.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,11 +11,14 @@ import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.member.mapper.MemberMapper;
 import com.yedam.app.member.service.AddrVO;
+import com.yedam.app.member.service.BuyOrderVO;
 import com.yedam.app.member.service.ChargeVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
+import com.yedam.app.member.service.SellOrderVO;
 import com.yedam.app.security.service.UserVO;
+import com.yedam.app.stock.service.StockVO;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -98,12 +102,7 @@ public class MemberServiceImpl implements MemberService {
 	public List<String> membListInfo(String id) {
 		return membMapper.membListInfo(id);
 	}
-
-	@Override
-	public List<MembVO> myinterestList(MembVO membVO) {
-		return membMapper.myinterestList(membVO);
-	}
-
+	
 	@Override
 	public List<MembVO> myStockList(MembVO membVO) {
 		return membMapper.myStockList(membVO);
@@ -144,4 +143,45 @@ public class MemberServiceImpl implements MemberService {
 	public int insertCharge(ChargeVO chargeVO) {
 		return membMapper.insertCharge(chargeVO);
 	}
+
+	@Override
+	public List<StockVO> interestList(String membNo) {
+		return membMapper.interestList(membNo);
+	}
+
+	@Override
+	public List<SellOrderVO> sellOrderList(String membNo) {
+		return membMapper.sellOrderList(membNo);
+	}
+
+	@Override
+	public List<BuyOrderVO> buyOrderList(String membNo) {
+		return membMapper.buyOrderList(membNo);
+	}
+
+	@Override
+	public int deleteSellOrder(SellOrderVO soVO) {
+		return membMapper.deleteSellOrder(soVO);
+	}
+
+	@Override
+	public int deleteBuyOrder(BuyOrderVO boVO) {
+		return membMapper.deleteBuyOrder(boVO);
+	}
+
+	@Override
+	public int deleteInterest(String membNo, String itemNo) {
+		return membMapper.deleteInterest(membNo, itemNo);
+	}
+
+	@Override
+	public int updateSellOrder(SellOrderVO soVO) {
+		return membMapper.updateSellOrder(soVO);
+	}
+
+	@Override
+	public int updateBuyOrder(BuyOrderVO boVO) {
+		return membMapper.updateBuyOrder(boVO);
+	}
+
 }

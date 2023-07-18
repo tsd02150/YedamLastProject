@@ -2,13 +2,18 @@ package com.yedam.app.member.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.yedam.app.mall.service.CouponVO;
 import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.member.service.AddrVO;
+import com.yedam.app.member.service.BuyOrderVO;
 import com.yedam.app.member.service.ChargeVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
+import com.yedam.app.member.service.SellOrderVO;
+import com.yedam.app.stock.service.StockVO;
 
 public interface MemberMapper {
 
@@ -57,7 +62,7 @@ public interface MemberMapper {
 	public int insertInterestItem(MembVO membVO);
 	
 	//관심종목
-	public List<MembVO> myinterestList(MembVO membVO);
+	public List<StockVO> interestList(String membNo);
 	
 	//보유주식
 	public List<MembVO> myStockList(MembVO membVO);
@@ -75,5 +80,23 @@ public interface MemberMapper {
 	//보유 쿠폰
 	public List<CouponVO> mycoupon(String id);
 	
+	//포인트 충전
 	public int insertCharge(ChargeVO chargeVO);
+	
+	//매도 주문 현황 리스트
+	public List<SellOrderVO> sellOrderList(String membNo);
+	//매수 주문 현황 리스트
+	public List<BuyOrderVO> buyOrderList(String membNo);
+	//매도 주문 현황 삭제
+	public int deleteSellOrder(SellOrderVO soVO);
+	//매수 주문 현황 삭제
+	public int deleteBuyOrder(BuyOrderVO boVO);
+	//매도 주문 현황 삭제
+	public int updateSellOrder(SellOrderVO soVO);
+	//매수 주문 현황 수정
+	public int updateBuyOrder(BuyOrderVO boVO);
+	
+	//관심종목 삭제
+	public int deleteInterest(@Param("membNo")String membNo , @Param("itemNo")String itemNo);
+	
 }

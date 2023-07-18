@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -24,16 +25,19 @@ import com.yedam.app.mall.service.CouponVO;
 import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.member.service.AddrVO;
+import com.yedam.app.member.service.BuyOrderVO;
 import com.yedam.app.member.service.ChargeVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
 import com.yedam.app.member.service.RegisterMail;
+import com.yedam.app.member.service.SellOrderVO;
 import com.yedam.app.security.service.UserService;
 import com.yedam.app.security.service.UserVO;
 import com.yedam.app.sms.service.MessageDTO;
 import com.yedam.app.sms.service.SmsResponseDTO;
 import com.yedam.app.sms.service.SmsService;
+import com.yedam.app.stock.service.StockVO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -278,7 +282,6 @@ public class MemberController {
 	//관심종목 리스트 선택 페이지
 	@GetMapping("myItemCheckForm")
 	public String interestItemPage(Model model, InterestVO commonVO) {
-//		model.addAttribute("listctgr", membService.myItemCheck());
 		return "member/myItemCheckForm";
 	}
 	
@@ -402,11 +405,9 @@ public class MemberController {
 	
 	@ResponseBody
 	@PostMapping("interestList")
-	public List<MembVO> interestList(@RequestParam String id, Model model, MembVO membVO) {
-		//UserVO meminfo = (UserVO)session.getAttribute("loggedInMember");
-		membVO.setId(id);
-		List<MembVO> interestList = membService.myinterestList(membVO);
-		//model.addAttribute("interestList",interestList);
+	public List<StockVO> interestList(@RequestParam String membNo, StockVO stockVO) {
+		//UserVO mem = (UserVO)session.getAttribute("loggedInMember");
+		List<StockVO> interestList = membService.interestList(membNo);
 		System.out.println(interestList);
 		return interestList;
 	}
@@ -550,5 +551,69 @@ public class MemberController {
 	@GetMapping("mystockInfo")
 	public String mystockInfo() {
 		return "member/mystockInfo";
+	}
+	
+	//매도 주문 현황
+	@ResponseBody
+	@PostMapping("sellOrderList")
+	public List<SellOrderVO> sellOrderList(@RequestParam String membNo){
+		List<SellOrderVO> list = membService.sellOrderList(membNo);
+		return list;
+	}
+	
+	//매수 주문 현황
+	@ResponseBody
+	@PostMapping("buyOrderList")
+	public List<BuyOrderVO> buyOrderList(@RequestParam String membNo){
+		List<BuyOrderVO> list = membService.buyOrderList(membNo);
+		return list;
+	}
+	
+	//매도 주문 삭제
+	@ResponseBody
+	@PostMapping("deleteSellOrder")
+	public int deleteSellOrder(@RequestParam String membNo, @RequestParam String sellNo, SellOrderVO soVO) {
+		soVO.setMembNo(membNo);
+		soVO.setSellNo(sellNo);
+		int result = membService.deleteSellOrder(soVO);
+		return result;
+	}
+	//매수 주문 삭제
+	@ResponseBody
+	@PostMapping("deleteBuyOrder")
+	public int deleteBuyOrder(@RequestParam String membNo, @RequestParam String buyNo, BuyOrderVO boVO) {
+		boVO.setMembNo(membNo);
+		boVO.setBuyNo(buyNo);
+		int result = membService.deleteBuyOrder(boVO);
+		return result;
+	}
+	
+	//관심종목 삭제
+	@ResponseBody
+	@PostMapping("deleteInterest")
+	public int deleteInterest(@RequestParam String membNo ,@RequestParam  String itemNo) {
+		int result = membService.deleteInterest(membNo, itemNo);
+		return result;
+	}
+	
+	@ResponseBody
+	@PostMapping("updateSellOrder")
+	public int updateSellOrder(@RequestParam String membNo, @RequestParam String sellNo,@RequestParam int prc ,@RequestParam int rmnCnt, SellOrderVO soVO) {
+		soVO.setMembNo(membNo);
+		soVO.setSellNo(sellNo);
+		soVO.setPrc(prc);
+		soVO.setRmnCnt(rmnCnt);
+		int result = membService.updateSellOrder(soVO);
+		return result;
+	}
+	@ResponseBody
+	@PostMapping("updateBuyOrder")
+	public int updateBuyOrder(@RequestParam String membNo, @RequestParam String buyNo,@RequestParam int prc ,@RequestParam int rmnCnt, BuyOrderVO boVO) {
+		boVO.setMembNo(membNo);
+		boVO.setBuyNo(buyNo);
+		boVO.setPrc(prc);
+		boVO.setRmnCnt(rmnCnt);
+		int result = membService.updateBuyOrder(boVO);
+		return result;
 	}
 }
