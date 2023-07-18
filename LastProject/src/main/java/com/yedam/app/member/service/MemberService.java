@@ -63,4 +63,6 @@ public interface MemberService {
 
 	//보유 쿠폰
 	public List<CouponVO> mycoupon(String id);
+	
+	public int insertCharge(ChargeVO chargeVO);
 }

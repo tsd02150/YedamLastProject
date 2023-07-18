@@ -45,9 +45,7 @@ public class QuestionController {
 	@PostMapping("getQnaList")
 	@ResponseBody
 	public List<QuestionVO> getQnaList(QuestionVO vo) {
-		System.out.println(vo);
 		List<QuestionVO> list=questionService.getQnaList(vo);
-		System.out.println(list);
 		return list;
 	}
 	
@@ -66,14 +64,13 @@ public class QuestionController {
 	@ResponseBody
 	public String insertQna(QuestionVO vo,HttpSession session) {
 		vo.setMembNo(((UserVO)session.getAttribute("loggedInMember")).getMembNo());
-		System.out.println(vo);
 		if(questionService.insertQna(vo)) {
 			return "success";
 		}else {
 			return "fail";			
 		}
 	}
-	
+	 
 	@GetMapping("qnaDetail")
 	public String qnaDetailForm(Model model, QuestionVO vo,HttpSession session) {
 		questionService.increaseInq(vo.getQstNo());
@@ -85,6 +82,24 @@ public class QuestionController {
 			model.addAttribute("myInfo",myInfo);
 		}
 		model.addAttribute("qnaInfo",questionService.getQnaDetail(vo.getQstNo()));
+		System.out.println(questionService.getQnaDetail(vo.getQstNo()));
 		return "community/qnaDetail";
+	}
+	
+	@PostMapping("deleteQna")
+	@ResponseBody
+	public String deleteQna(QuestionVO vo) {
+		if(questionService.deleteQna(vo.getQstNo())) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	@GetMapping("modifyQna")
+	public String modifyQnaForm(Model model,QuestionVO vo) {
+		vo = questionService.getQnaDetail(vo.getQstNo());
+		model.addAttribute("qnaInfo",vo);
+		return "community/modifyQna";
 	}
 }

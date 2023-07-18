@@ -21,18 +21,51 @@
 
 #mypageBody, .sidebar {
 	border: 1px solid #DDDDDD;
-	height: auto;
+	height: 1000px;
+}
+#myPointList{
+	text-align: center;
+	margin-top : 200px;
+	margin-bottom : 100px;
+}
+#gotoBtn{
+	margin:auto;
+	text-align: center;
+}
+#imgDiv{
+	margin:auto;
+	margin-top : 60px;
+	text-align: center;
+	width : 600px;
+	height: 200px;
+	background-color: gray;
+}
+.btn-primary{
+	width : 190px;
 }
 </style>
 </head>
 <body>
 <div layout:fragment="mypage">
-	<section class="block-wrapper flex items-center justify-center w-screen h-screen p-10 space-x-6 bg-gray-300"
-		layout:fragment="content">
-		<div id="mypageBody">
-		결제 성공
+	<div id="mypageBody">
+		<div id="myPointList">
+			<span>로고</span>
+			<span style="font-size:40px; color:black;">My 포인트</span>
+			<strong> <span th:text="|${#numbers.formatInteger(membList.point, 0, 'COMMA')}|" style="font-size:40px; padding-left:30px; color:black;"> </span></strong>
+			<span style="font-size:30px; color:black;">point</span>
+			<div class="py-40"></div>
+			<h3>충전이 완료되었습니다.</h3>
 		</div>
-	</section>
+		<div id="gotoBtn">
+		<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/stock/itemListPage}'|">주식 사이트로 이동</button>
+		<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/mall/mallMain}'|">포인트몰로 이동</button>
+		</div>
+	<div id="imgDiv">이미지??</div>
+	</div>
+	<script>
+	//document.write(urlParams.get('amount') + '<br>'); 
+	//http://localhost/member/paysuccess?paymentType=NORMAL&orderId=u0XHU8mFoZkItvhSh6972&paymentKey=ZDBYqJLQ1GKNbdOvk5rkmKGmK6E1v23n07xlzmj6R9e4oPpE&amount=15000
+	</script>
 </div>
 </body>
 

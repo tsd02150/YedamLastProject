@@ -22,4 +22,6 @@ public interface QuestionMapper {
 	public QuestionVO getQnaDetail(String qstNo);
 	// 조회수 증가
 	public void increaseInq(String qstNo);
+	// qna 삭제
+	public int deleteQna(String qstNo);
 }

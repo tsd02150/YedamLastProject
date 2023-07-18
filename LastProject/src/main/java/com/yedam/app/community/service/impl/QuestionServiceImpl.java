@@ -55,6 +55,11 @@ public class QuestionServiceImpl implements QuestionService {
 		questionMapper.increaseInq(qstNo);
 		
 	}
+
+	@Override
+	public boolean deleteQna(String qstNo) {
+		return questionMapper.deleteQna(qstNo)>0;
+	}
 	
 	
 

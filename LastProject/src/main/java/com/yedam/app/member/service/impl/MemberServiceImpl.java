@@ -10,6 +10,7 @@ import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.member.mapper.MemberMapper;
 import com.yedam.app.member.service.AddrVO;
+import com.yedam.app.member.service.ChargeVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
@@ -137,5 +138,10 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<CouponVO> mycoupon(String id) {
 		return membMapper.mycoupon(id);
+	}
+
+	@Override
+	public int insertCharge(ChargeVO chargeVO) {
+		return membMapper.insertCharge(chargeVO);
 	}
 }

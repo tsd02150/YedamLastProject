@@ -304,6 +304,9 @@
 				<if test="tempPwd != null and !tempPwd.equals('')">
 					tempPwd = #{tempPwd}
 				</if>
+				<if test="point != null">
+					point = #{point}
+				</if>
 			</set>
 			WHERE id = #{id}
 		</update>
@@ -320,5 +323,15 @@
  	SELECT * FROM coupon
 	WHERE memb_no = #{membNo}
  </select>
+ 
+ <insert id="insertCharge" parameterType="ChargeVO">
+ 	<selectKey keyProperty="chagNo" resultType="string" order="BEFORE">
+ 		SELECT CONCAT('cha-',NVL(MAX(TO_NUMBER(SUBSTR(chag_no, 5))), 0)+1)
+		FROM CHARGE
+ 	</selectKey>
+ 	INSERT INTO CHARGE(chag_no, chag_prc, chag_dt, memb_no)
+	VALUES(#{chagNo},#{chagPrc}, sysdate, #{membNo})
+ </insert>
+ 
 	
 </mapper>

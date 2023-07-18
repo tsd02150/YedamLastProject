@@ -6,33 +6,68 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
-.sidebar.sidebar-left {
-	height: 1000px;
-}
-
-.titleMenu {
-	padding-top: 20px;
-}
-
-.sidebarMenu {
-	padding-top: 40px;
-	padding-bottom: 40px;
-}
-
 #mypageBody, .sidebar {
 	border: 1px solid #DDDDDD;
 	height: auto;
+}
+#gotoInfo{
+	height: 80px;
+	background-color: bisque;
+	margin:auto;
+}
+#gotoInfo h3{
+	padding-top : 25px;
+	display : inline-block;
+}
+.bi.bi-arrow-right-square-fill{
+	display : inline-block;
+	float : right;
+}
+#mystockDiv{
+	border: 1px solid #DDDDDD;
+	height: 500px;
+	margin-top : 20px;
+	display : inline-block;
+}
+#myorderDiv{
+	border: 1px solid #DDDDDD;
+	height: 500px;
+	margin-top : 20px;
+	margin-left : 10px;
+	display : inline-block;
+	width : 200px;
+}
+#stockList{
+	border: 1px solid #DDDDDD;
+	height: 500px;
+	margin-top : 20px;
+}
+#interestDiv, #recomDiv{
+	display : inline-block;
+	border: 1px solid #DDDDDD;
+	height: 300px;
+	margin-left : 40px;
+	margin-top : 20px;
 }
 </style>
 </head>
 <body>
 <div layout:fragment="mypage">
-	<section class="block-wrapper flex items-center justify-center w-screen h-screen p-10 space-x-6 bg-gray-300"
-		layout:fragment="content">
-		<div id="mypageBody">
-		주식현황
+		<div id="mypageBody" class="z-flex">
+			<div id="gotoInfo" class="col-12">
+				<h3>주식현황</h3>
+				<a href="mystockInfo"><p class="bi bi-arrow-right-square-fill"></p></a>
+			</div>
+			<div class="col-12" style="margin : auto;">
+				<div id="mystockDiv" class="col-7"></div>
+				<div id="myorderDiv"></div>
+			</div>
+			<div id="stockList" class="col-12"></div>
+			<div class="col-12">
+				<div id="interestDiv" class="col-5"></div>
+				<div id="recomDiv" class="col-5"></div>
+			</div>
 		</div>
-	</section>
 </div>
 </body>
 

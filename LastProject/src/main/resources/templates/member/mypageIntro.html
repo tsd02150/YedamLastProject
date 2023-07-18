@@ -50,26 +50,22 @@ margin-top : 100px;
 </head>
 <body>
 	<div layout:fragment="mypage">
-	<section class="block-wrapper flex items-center justify-center w-screen h-screen p-10 space-x-6 bg-gray-300"
-		layout:fragment="content">
-		<!-- 비밀번호 비교 -->
-			<div id="mypageIntro">
-				<div class="col-12">
-				<h2>개인정보 수정</h2>
-				<hr>
-				<h4>회원 정보 확인</h4>
-				<div class="col-md-12">
-					<div class="form-group">
-						<label for="pass">비밀번호</label><input type="password"
-							class="form-control" id="pass" name="pwd"
-							placeholder="현재 비밀번호를 입력하세요."
-							style="width: 70%; display: inline;">
-							<button type="button" id="checkPwd">확인</button><br>
-							<span id="pwdCheck"></span><br>
-							<span>비밀번호가 기억나지 않으신가요?<a href="/member/findpwd">비밀번호 찾기</a></span>
-					</div>
+	<!-- 비밀번호 비교 -->
+		<div id="mypageIntro">
+			<h2>개인정보 수정</h2>
+			<hr>
+			<h4>회원 정보 확인</h4>
+			<div class="col-md-12">
+				<div class="form-group">
+					<label for="pass">비밀번호</label><input type="password"
+						class="form-control" id="pass" name="pwd"
+						placeholder="현재 비밀번호를 입력하세요."
+						style="width: 70%; display: inline;">
+						<button type="button" id="checkPwd">확인</button><br>
+						<span id="pwdCheck"></span><br>
+						<span>비밀번호가 기억나지 않으신가요?<a href="/member/findpwd">비밀번호 찾기</a></span>
 				</div>
-				</div>
+			</div>
 			</div>
 <!-- modal -->
 <div id="myModal" class="modal">
@@ -141,7 +137,6 @@ function close_pop(flag) {
 	 window.location.reload();
 };
 		</script>
-	</section>
 		</div>
 </body>
 

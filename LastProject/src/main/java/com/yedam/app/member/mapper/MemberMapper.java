@@ -6,9 +6,9 @@ import com.yedam.app.mall.service.CouponVO;
 import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.member.service.AddrVO;
+import com.yedam.app.member.service.ChargeVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
-import com.yedam.app.security.service.UserVO;
 
 public interface MemberMapper {
 
@@ -74,4 +74,6 @@ public interface MemberMapper {
 
 	//보유 쿠폰
 	public List<CouponVO> mycoupon(String id);
+	
+	public int insertCharge(ChargeVO chargeVO);
 }

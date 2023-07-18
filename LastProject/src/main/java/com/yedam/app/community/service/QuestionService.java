@@ -19,4 +19,6 @@ public interface QuestionService {
 	public QuestionVO getQnaDetail(String qstNo);
 	// 조회수 증가
 	public void increaseInq(String qstNo);
+	// qna 삭제
+	public boolean deleteQna(String qstNo);
 }

@@ -130,13 +130,13 @@
 		//ckEditor 데이터 가져오기
 		$('#btnSave').on('click', function () {
 			if(ttl.value==""||ttl.value==null){
-				//알림 띄울부분
+				toastShow("There is no title" , "제목이 없습니다" , "error");
 				return;
 			}
 			
 			let ckData = editor.getData()
 			if(ckData==""||ckData==null){
-				//알림 띄울부분
+				toastShow("There is no content" , "내용이 없습니다" , "error");
 				return;
 			}
 				

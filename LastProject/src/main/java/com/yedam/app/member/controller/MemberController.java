@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,6 +24,7 @@ import com.yedam.app.mall.service.CouponVO;
 import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.member.service.AddrVO;
+import com.yedam.app.member.service.ChargeVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
@@ -365,23 +365,25 @@ public class MemberController {
 		return "member/myorder";
 	}
 	//결제 성공
-	//paymentKey={PAYMENT_KEY}&orderId={ORDER_ID}&amount={AMOUNT}&paymentType={PAYMENT_TYPE}
 	@GetMapping("paysuccess")
-	public String paysuccess(String paymentKey, String orderId, int amount, String paymentType, Model model) {
-		/*
-		 * model.addAttribute("paymentKey", paymentKey); model.addAttribute("orderId",
-		 * orderId); model.addAttribute("amount", amount);
-		 * model.addAttribute("paymentType", paymentType);
-		 */
+	public String paysuccess(@RequestParam(value="amount") int amount, HttpSession session, ChargeVO chargeVO, Model model, MembVO membVO) {
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		chargeVO.setMembNo(mem.getMembNo());
+		chargeVO.setChagPrc(amount);
+		membService.insertCharge(chargeVO);
+		membVO.setId(mem.getId());
+		MembVO list = membService.memberList(mem.getId());
+		membVO.setPoint((amount*10)+list.getPoint());
+		membService.updateMemberInfo(membVO);
+		System.out.println("수정 성공");
+		UserVO loggedInMember = new UserVO();
+	    loggedInMember.setPoint(membVO.getPoint());
+		model.addAttribute("membList", membVO); //update된 회원 정보
 		return "member/paysuccess";
 	}
 	//주문내역
-	//?code={ERROR_CODE}&message={ERROR_MESSAGE}&orderId={ORDER_ID}
 	@GetMapping("payfail")
-	public String payfail(String code, String message, String orderId, Model model) {
-		model.addAttribute("code", code);
-		model.addAttribute("message", message);
-		model.addAttribute("orderId", orderId);
+	public String payfail() {
 		return "member/payfail";
 	}
 	
@@ -543,5 +545,10 @@ public class MemberController {
 			//model.addAttribute("fail", "비밀번호를 다시 입력하세요");
 			return "fail";
 		}
+	}
+	
+	@GetMapping("mystockInfo")
+	public String mystockInfo() {
+		return "member/mystockInfo";
 	}
 }

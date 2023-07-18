@@ -27,10 +27,63 @@
 			<h1 class="news-title" id="titlename">
 				<span>QnA</span>
 			</h1>
+			<div id="qnaContent">
+				<div>
+					<h3 th:text="${qnaInfo.ttl}">제목</h3>
+					<div class="d-flex">
+						<p>[[${#dates.format(qnaInfo.drwupDt,'yyyy-MM-dd')}]]&nbsp&nbsp&nbsp</p>
+						<p>조회수 <span>[[${qnaInfo.inq}]]</span></p>					
+					</div>
+				</div>
+				<div id="contentBody">		
+				</div>
+				<div class="d-flex justify-content-end">
+					<button th:if="${myInfo.membNo==qnaInfo.membNo}" class="btn btn-light mt-3 mt-lg-0" type="button" onClick="modifyQna()">수정</button>
+					<button th:if="${myInfo.membNo==qnaInfo.membNo}" class="btn btn-light mt-3 mt-lg-0" type="button" onClick="deleteQna()">삭제</button>
+					<button class="btn btn-light mt-3 mt-lg-0" type="button">목록</button>
+				</div>
+				<hr>
+				<h3 th:if="${qnaInfo.rply==null}">답변을 기다리고 있습니다.</h3>
+				<div th:unless="${qnaInfo.rply==null}" id="replyContent">
+					<h3>답변</h3>
+					<p>[[${#dates.format(qnaInfo.rplyDt,'yyyy-MM-dd')}]]</p>
+					<div id="replyBody">
+						<p>[[${qnaInfo.rply}]]</p>
+					</div>					
+				</div>
+				<hr>
+			</div>
 		</div>
 		
 		<script th:inline="javascript">
-		
+			contentBody.innerHTML=[[${qnaInfo.cntn}]];
+			
+			function modifyQna(){
+				if(confirm("수정허쉴?")){
+					window.location.href="/community/modifyQna?qstNo="+[[${qnaInfo.qstNo}]];
+				}
+			}
+			
+			function deleteQna(){
+				if(confirm("삭제허쉴?")){
+					fetch("deleteQna",{
+						method:"POST",
+						headers:{
+							"Content-Type":"application/x-www-form-urlencoded"
+						},
+						body:"qstNo="+[[${qnaInfo.qstNo}]]
+					})
+					.then(result=>result.text())
+					.then(data=>{
+						if(data=="success"){
+							window.location.href="/community/questionList"
+						}else{
+							toastShow("Fail Delete" , "삭제 실패" , "error");
+						}
+					})
+					.catch(err=>console.log(err));
+				}
+			}
 		</script>
 	</div>
 </body>
