@@ -45,7 +45,7 @@ public class MallController {
 		return mallService.getCtgrList(prdtVO);
 	}
 	
-	//농산물 페이지
+	
 	@GetMapping("farmList")
 	public String farmList(Model model, ProductVO prdtVO) {
 	    List<ProductVO> farmList = mallService.getProductList();
@@ -53,9 +53,10 @@ public class MallController {
 	    model.addAttribute("prdtCode", prdtVO.getCommonCd().substring(0, 2));
 	    System.out.println(prdtCode); // => S1 농산물, prdtVO.getCommonCd() => S10
 	    model.addAttribute("S10", mallService.getCategoryName(prdtVO.getCommonCd().substring(0, 2)));
-	    model.addAttribute("S101", mallService.getCategoryName(prdtVO.getCommonCd()+'1'+'0')); //곡류
-	    model.addAttribute("S102", mallService.getCategoryName(prdtVO.getCommonCd()+'2'+'0')); //콩류
-	    model.addAttribute("S103", mallService.getCategoryName(prdtVO.getCommonCd()+'3'+'0')); //과실류
+	    for (int i = 1; i <= 3; i++) {
+	        String categoryCode = prdtCode + String.format("%02d", i * 10);
+	        model.addAttribute("S" + categoryCode, mallService.getCategoryName(categoryCode));
+	    }
 	    //model.addAttribute("startPage", 1);
 	    String cd = prdtVO.getCommonCd();
 	    System.out.println(cd);
@@ -63,6 +64,28 @@ public class MallController {
 	    
 	    return "mall/farmList";
 	}
+
+	
+	/*
+	 * //농산물 페이지
+	 * 
+	 * @GetMapping("farmList") public String farmList(Model model, ProductVO prdtVO)
+	 * { List<ProductVO> farmList = mallService.getProductList(); String prdtCode =
+	 * prdtVO.getCommonCd().substring(0, 2); model.addAttribute("prdtCode",
+	 * prdtVO.getCommonCd().substring(0, 2)); System.out.println(prdtCode); // => S1
+	 * 농산물, prdtVO.getCommonCd() => S10 model.addAttribute("S10",
+	 * mallService.getCategoryName(prdtVO.getCommonCd().substring(0, 2)));
+	 * model.addAttribute("S101",
+	 * mallService.getCategoryName(prdtVO.getCommonCd()+'1'+'0')); //곡류
+	 * model.addAttribute("S102",
+	 * mallService.getCategoryName(prdtVO.getCommonCd()+'2'+'0')); //콩류
+	 * model.addAttribute("S103",
+	 * mallService.getCategoryName(prdtVO.getCommonCd()+'3'+'0')); //과실류
+	 * //model.addAttribute("startPage", 1); String cd = prdtVO.getCommonCd();
+	 * System.out.println(cd); model.addAttribute("farmList", farmList);
+	 * 
+	 * return "mall/farmList"; }
+	 */
 	
 	// 상품 게시물 갯수
 	@PostMapping("getProductCount")

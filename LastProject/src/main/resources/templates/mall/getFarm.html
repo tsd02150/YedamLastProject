@@ -25,13 +25,14 @@
 }
 
 #prdt-info {
-	width: 50%;
+	width: 488px;
 	height: 500px;
+	padding: 0px;
 	/* border: 1px solid; */
 }
 
 #prdt-img {
-	width: 400px;
+	width: 548px;
 	height: 400px;
 	position: relative;
 }
@@ -109,7 +110,63 @@
 	color: #333;
 }
 
+/* 이미지 확대 */
+.zoom-image-container {
+	position: relative;
+	display: inline-block;
+	cursor: zoom-in;
+	overflow: hidden;
+}
+
+.zoom-image {
+	display: block;
+	width: 100%;
+	height: 100%;
+	transition: transform 0.3s ease-in-out;
+}
+
+.zoom-image:hover {
+	transform: scale(1.5);
+}
+
+.zoom-overlay {
+	position: absolute;
+	top: 0; left : 0; width : 100%; height : 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	opacity: 0;
+	transition: opacity 0.3s ease-in-out;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+/* 상세정보 접기, 펼치기 css*/
+.details .toggle-button {
+	display: block;
+	margin-top: 10px;
+}
+
+.details .content {
+	display: block;
+}
+
+.toggle-button {
+	border: 1px;
+	width: 100%;
+	padding: 10px;
+}
+
 /* review */
+.btn-insert {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.btn-group {
+	display: flex;
+	gap: 10px;
+}
+
 .product-reviews {
 	margin-top: 20px;
 }
@@ -221,6 +278,72 @@ th {
 	text-decoration: none;
 	cursor: pointer;
 }
+
+/* 상세정보 */
+#prdt-info {
+  border: 1px solid #e0e0e0;
+  background-color: #f9f9f9;
+  padding: 30px;
+  text-align: left; /* 텍스트를 왼쪽 정렬 */
+}
+
+#prdt-info table {
+	width: 50%;
+	border-collapse: collapse;
+}
+
+#prdt-info th, #prdt-info td {
+	padding: 15px;
+	border: none;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+#prdt-info th {
+	text-align: left;
+	font-weight: bold;
+	color: #333;
+}
+
+#prdt-info td {
+	text-align: right;
+	color: #666;
+}
+
+#prdt-info .sit-tot-price {
+	display: flex;
+	align-items: center;
+}
+
+#prdt-info .sit-tot-price span {
+	font-weight: bold;
+	margin-right: 10px;
+	color: #333;
+}
+
+#prdt-info .sit-tot-price strong {
+	font-size: 24px;
+	color: #ff0000;
+}
+
+#prdt-info .btn-group {
+	margin-left: 20px;
+}
+
+#prdt-info .btn-group button {
+	padding: 15px 30px;
+	background-color: #007bff;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	font-size: 16px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: background-color 0.3s ease-in-out;
+}
+
+#prdt-info .btn-group button:hover {
+	background-color: #0056b3;
+}
 </style>
 
 </head>
@@ -267,19 +390,21 @@ th {
 					alt="Top Button"><a href="#">TOP</a></li>
 			</ul>
 		</div>
-
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
 		<div class="flex-block">
 
 			<section id="detail-img" class="news-style-one"
-				th:each="prdt : ${getFarm}">
-				<div>&nbsp;</div>
-				<div>&nbsp;</div>
-				<div>
-					<img id="prdt-img" th:src="|/mall/images/main/${prdt.thumb}|">
+				th:each="prdt : ${getFarm}" style="border: 1px solid;">
+				<div class="zoom-image-container">
+					<div class="zoom-overlay"></div>
+					<img class="zoom-image" id="prdt-img"
+						th:src="|/mall/images/main/${prdt.thumb}|">
 				</div>
 			</section>
 
-			<section id="prdt-info" th:each="prdt : ${getFarm}">
+			<section id="prdt-info" th:each="prdt : ${getFarm}"
+				style="border: 1px solid;">
 				<div>&nbsp;</div>
 				<div>&nbsp;</div>
 				<div>
@@ -313,17 +438,15 @@ th {
 					<b></b>
 					<div>
 						<div id="sit_tot_price">
-							<span>총 금액 :</span> <strong>31,900원</strong>
+							<span>총 금액 :</span> <strong id="total-price">31,900원</strong>
 						</div>
-
-						<button type="button" th:onclick="|location.href='@{basketList}'|">장바구니
-							담기</button>
-						<button type="button" th:onclick="|location.href='@{cart}'|">바로
-							주문하기</button>
+						<div class="btn-group">
+							<button type="button" onclick="addToCart()">장바구니 담기</button>
+							<button type="button" onclick="directOrder()">바로 주문하기</button>
+						</div>
 					</div>
 				</div>
 			</section>
-
 
 			<!-- <section id="prdt-info" th:each="prdt : ${getFarm}">
 				<h1 th:text="${prdt.nm}"></h1>
@@ -368,10 +491,15 @@ th {
 
 
 		<!-- 상품 상세 정보 -->
-		<div class="" th:each="prdt : ${getFarm}">
+		<div class="details" th:each="prdt : ${getFarm}">
 			<a name="detail"></a>
-			<p>
-				<img th:src="|/mall/images/main/${prdt.img}|">
+
+			<div class="content">
+				<img th:src="|/mall/images/main/${prdt.img}|"
+					style="text-align: center;">
+			</div>
+			<button class="toggle-button" th:onclick="toggleDetails()">상세정보
+				접기</button>
 		</div>
 
 		<!-- 배송 정보 -->
@@ -419,11 +547,14 @@ th {
 
 		<div class="product-reviews">
 			<a name="review"></a>
-			<div class="btn-insert" style="position: statics;">
-				<!-- 리뷰 작성 버튼 -->
-				<button id="openModalBtn" type="button">리뷰 작성</button>
-				<button onclick="goBack()">이전 페이지로</button>
+			<h3>상품리뷰</h3>
+			<div class="btn-insert" style="position: static;">
+				<div class="btn-group">
+					<button id="openModalBtn" type="button">리뷰 작성</button>
+					<button onclick="goBack()">이전 페이지로</button>
+				</div>
 			</div>
+			<div>&nbsp;</div>
 			<table>
 				<thead style="text-align: center;">
 					<tr>
@@ -504,19 +635,58 @@ th {
 				</form>
 			</div>
 		</div>
-	
+
 		<!-- 페이징 -->
-	
+
 		<!-- 상품 후기 리스트 -->
-		<div id="reviewList">
-			<!-- 후기 아이템 반복 출력 -->
+		<div id="reviewList"></div>
+		<!-- 후기 아이템 반복 출력 -->
 
-			<script th:inline="javascript">
+		<script th:inline="javascript">
+		
+		
+		function addToCart() {
+			  // 장바구니 담기 기능 구현
+			  alert("상품이 장바구니에 담겼습니다!");
+			}
+
+			function directOrder() {
+			  // 바로 주문하기 기능 구현
+			  alert("주문 페이지로 이동합니다!");
+			}
+
+			
+			//이미지 확대
+			const zoomImageContainer = document.querySelector('.zoom-image-container');
+			const zoomOverlay = document.querySelector('.zoom-overlay');
+			const zoomImage = document.querySelector('.zoom-image');
+			
+			zoomImageContainer.addEventListener('mousemove', function (e) {
+			  const { left, top, width, height } = this.getBoundingClientRect();
+			  const x = (e.clientX - left) / width * 100;
+			  const y = (e.clientY - top) / height * 100;
+			
+			  zoomImage.style.transformOrigin = `${x}% ${y}%`;
+			  zoomOverlay.style.backgroundPosition = `${x}% ${y}%`;
+			});
+
+
+			
+			//상세 정보 접기
+			
+		function toggleDetails() {
+			  var content = document.querySelector('.details .content');
+			  var button = document.querySelector('.details .toggle-button');
+			  
+			  if (content.style.display === 'none') {
+			    content.style.display = 'block';
+			    button.innerText = '상세정보 접기';
+			  } else {
+			    content.style.display = 'none';
+			    button.innerText = '상세정보 펼치기';
+			  }
+			}
 				
-				function goBack() {
-					window.history.back();
-				}
-
 				/* 별 모양 */
 				var maksElements = document.getElementsByClassName('maks');
 
@@ -655,6 +825,6 @@ th {
 					String referer = (String)request.getHeader("REFERER");
 				 */
 			</script>
-		</div>
+	</div>
 </body>
 </html>

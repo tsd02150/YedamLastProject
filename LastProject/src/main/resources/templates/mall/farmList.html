@@ -40,8 +40,9 @@
 	text-decoration: none;
 	color: #333;
 }
+
 .ctgr {
-	border : none;
+	border: none;
 }
 </style>
 
@@ -91,13 +92,13 @@
 		<div>
 			<div id="container">
 				<div class="row">
-					<article class="farmImage"
-						style="background-image: url(images/main/farmMain.jpg);">
-					</article>
+					<div class="farmImage"
+						style="background-image: url(images/main/farmMain.jpg);"></div>
 				</div>
 
 				<!-- 농산물 -->
 				<div>&nbsp;</div>
+				
 				<h2 data-common-cd="S1">농산물</h2>
 				<div class="row-2">
 					<div class="category-container">
@@ -181,7 +182,15 @@
 						<button class="btn btn-light mt-3 mt-lg-0 ctgr" type="button"
 							id="sales">판매량</button>
 					</div>
-					<input type="text" id="search">
+					<div class="row">
+						<div class="selectBtn">
+							<!-- 기존 버튼 코드 -->
+						</div>
+						<div id="search">
+							<input type="text"> <span class="search-icon"><i
+								class="tf-ion-ios-search"></i></span>
+						</div>
+					</div>
 				</div>
 
 				<div class="row" id="farmList">
@@ -224,7 +233,7 @@
 
 			<!-- list-end -->
 		</div>
-	</div>
+	
 
 	<script>
 		/* top 버튼 */
@@ -235,8 +244,201 @@
 						behavior : 'smooth'
 					});
 				});
+		
 		// 상품 리스트 출력
 		
+		document.querySelectorAll(".ctgr").forEach(button => {
+		  button.addEventListener('click', function() {
+		    // 버튼 ID 출력
+		    console.log(button.id);
+		  });
+		});
+		
+		
+		
+		
+	/* 	function getCtgrList() {
+    fetch("/mall/getCtgrList", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'commonCd=' + currentState + '&order=' + currentOrder
+    })
+    .then(result => result.json())
+    .then(data => {
+        var farmListContainer = document.getElementById("farmList");
+        farmListContainer.innerHTML = ""; // 상품 목록 초기화
+
+        data.forEach(product => {
+            var productItem = document.createElement("div");
+            productItem.className = "col-md-4";
+            productItem.addEventListener("click", function() {
+                location.href = "/community/getFarm?prdtNo=" + product.prdtNo;
+            });
+
+            var productThumb = document.createElement("div");
+            productThumb.className = "product-thumb";
+            productItem.appendChild(productThumb);
+
+            // 이미지 태그 생성 및 설정
+            var image = document.createElement("img");
+            image.src = "../image/main/" + product.thumb;
+            productThumb.appendChild(image);
+
+            // 미리보기 메타 정보 생성
+            var previewMeta = document.createElement("div");
+            previewMeta.className = "preview-meta";
+            productThumb.appendChild(previewMeta);
+
+            // 미리보기 메타 정보 아이콘 생성
+            var iconList = document.createElement("ul");
+            previewMeta.appendChild(iconList);
+
+            var iconListItem1 = document.createElement("li");
+            var iconLink1 = document.createElement("span");
+            iconLink1.setAttribute("data-toggle", "modal");
+            iconLink1.setAttribute("data-target", "product-modal");
+            var icon1 = document.createElement("i");
+            icon1.className = "tf-ion-ios-search-strong";
+            iconLink1.appendChild(icon1);
+            iconListItem1.appendChild(iconLink1);
+            iconList.appendChild(iconListItem1);
+
+            var iconListItem2 = document.createElement("li");
+            var iconLink2 = document.createElement("a");
+            iconLink2.href = "#!";
+            var icon2 = document.createElement("i");
+            icon2.className = "tf-ion-ios-heart";
+            iconLink2.appendChild(icon2);
+            iconListItem2.appendChild(iconLink2);
+            iconList.appendChild(iconListItem2);
+
+            var iconListItem3 = document.createElement("li");
+            var iconLink3 = document.createElement("a");
+            iconLink3.href = "#!";
+            var icon3 = document.createElement("i");
+            icon3.className = "tf-ion-android-cart";
+            iconLink3.appendChild(icon3);
+            iconListItem3.appendChild(iconLink3);
+            iconList.appendChild(iconListItem3);
+
+            var productContent = document.createElement("div");
+            productContent.className = "product-content";
+            productItem.appendChild(productContent);
+
+            var productDetail = document.createElement("div");
+            productDetail.className = "product-detail";
+            productContent.appendChild(productDetail);
+
+            // 상품 이름 생성 및 설정
+            var productName = document.createElement("h4");
+            var productNameLink = document.createElement("a");
+            productNameLink.textContent = product.nm;
+            productName.appendChild(productNameLink);
+            productDetail.appendChild(productName);
+
+            // 가격 정보 생성 및 설정
+            var priceInfo = document.createElement("p");
+            var originalPrice = document.createElement("span");
+            originalPrice.className = "original-price";
+            originalPrice.textContent = product.prc + "원";
+            originalPrice.style.textDecoration = "line-through";
+            priceInfo.appendChild(originalPrice);
+            priceInfo.appendChild(document.createElement("br"));
+            var discountedPrice = document.createElement("span");
+            discountedPrice.className = "discounted-price";
+            discountedPrice.textContent = (product.prc - (product.prc * (product.dcRate / 100.0))) + "원";
+            priceInfo.appendChild(discountedPrice);
+            productDetail.appendChild(priceInfo);
+
+            farmListContainer.appendChild(productItem);
+        });
+    })
+    .catch(err => console.log(err));
+}
+
+	//카테고리 클릭이벤트
+		document.querySelectorAll(".ctgr").forEach(ctgr=>
+			ctgr.addEventListener('click',function(){
+				sort.children[0].selected=true;
+			
+				currentState = ctgr.getAttribute('data-common-cd');
+				getCtgrList();
+				
+			})
+		)
+		 */
+		
+		$(document).ready(function() {
+    // 농산물 카테고리 클릭 이벤트
+    $(".ctgr").click(function() {
+        var commonCd = $(this).data("common-cd");
+        loadProductList(commonCd);
+    });
+
+    // 초기 농산물 카테고리 아이템 로드
+    loadProductList("S101");
+
+    // 가격 정렬 버튼 클릭 이벤트
+    $("#low").click(function() {
+        sortProductList("low");
+    });
+
+    $("#high").click(function() {
+        sortProductList("high");
+    });
+
+    // AJAX를 사용하여 농산물 카테고리의 상품 목록을 가져오는 함수
+    function loadProductList(commonCd) {
+        $.ajax({
+            url: "/mall/farmList", // 실제 요청할 URL로 수정해야 합니다.
+            type: "GET",
+            data: { commonCd: commonCd },
+            success: function(data) {
+                // 서버에서 받아온 데이터로 상품 목록을 동적으로 생성하여 추가합니다.
+                var productList = data.farmList;
+                var $categoryItem = $("#" + commonCd + " ul");
+                $categoryItem.empty();
+                for (var i = 0; i < productList.length; i++) {
+                    var product = productList[i];
+                    var $item = $("<li></li>").text(product.ctgr);
+                    $categoryItem.append($item);
+                }
+            },
+            error: function() {
+                console.log("농산물 카테고리 로드 실패");
+            }
+        });
+    }
+
+    // 가격 정렬 함수
+    function sortProductList(sortType) {
+      var $farmList = $("#farmList");
+      var $products = $farmList.find(".product-item");
+
+      $products.sort(function(a, b) {
+        var priceA = parseInt($(a).find(".discounted-price").text());
+        var priceB = parseInt($(b).find(".discounted-price").text());
+
+        if (sortType === "low") {
+          return priceA - priceB;
+        } else if (sortType === "high") {
+          return priceB - priceA;
+        }
+      });
+
+      // 기존 상품 목록의 크기 유지
+      var originalHeight = $farmList.height();
+      $farmList.empty();
+      $products.appendTo($farmList);
+      $farmList.height(originalHeight);
+    }
+
+  });
+
+		
+	/* 	
 		let currentState=[[${prdtCode}]];
 		
 		function getProductList(){
@@ -261,15 +463,64 @@
 			})
 			.catch(err=>console.log(err));
 		}
-		
+		 */
 		
 		// 카테고리 해당 리스만 출력
 		
-		//
+/* // AJAX를 사용하여 농산물 카테고리의 상품 목록을 가져오는 함수
+function loadProductList(commonCd) {
+    $.ajax({
+        url: "/mall/farmList", // 실제 요청할 URL로 수정해야 합니다.
+        type: "GET",
+        data: { commonCd: commonCd },
+        success: function(data) {
+            // 서버에서 받아온 데이터로 템플릿을 활용하여 HTML 문자열 생성
+            var productList = data.farmList;
+            var html = "";
+            for (var i = 0; i < productList.length; i++) {
+                var product = productList[i];
+                html += '<div class="product-item" onclick="location.href=\'@{getFarm(prdtNo=' + product.prdtNo + ')}\'">';
+                html += '<div class="product-thumb">';
+                // 이미지 및 상품 내용 추가
+                // ...
+                html += '</div>';
+                html += '</div>';
+            }
+
+            // 생성된 HTML 문자열을 한 번에 추가
+            $("#" + commonCd + " ul").html(html);
+        },
+        error: function() {
+            console.log("농산물 카테고리 로드 실패");
+        }
+    });
+}
+		 
+		// 낮은 가격순 정렬 버튼 클릭 시
+		 $("#low").on("click", function() {
+		     // 상품 목록을 낮은 가격순으로 정렬
+		     var sortedList = farmList.sort(function(a, b) {
+		         return a.prc - b.prc;
+		     });
+
+		     // 정렬된 상품 목록을 HTML로 생성하여 추가
+		     var html = "";
+		     for (var i = 0; i < sortedList.length; i++) {
+		         var prdt = sortedList[i];
+		         html += '<div class="col-md-4">';
+		         html += '<div class="product-item" onclick="location.href=\'@{getFarm(prdtNo=' + prdt.prdtNo + ')}\'">';
+		         // 상품 이미지 및 내용 추가
+		         // ...
+		         html += '</div>';
+		         html += '</div>';
+		     }
+
+		     // 상품 목록 영역에 새로운 HTML 적용
+		     $("#farmList").html(html);
+		 });
+ */
 
 	</script>
-
-
-
+	</div>
 </body>
 </html>
