@@ -252,7 +252,7 @@ div {
 		display: flex;
 	}
 	.category {
-		margin: auto;
+		margin: 0px;
 	}
 	
 }

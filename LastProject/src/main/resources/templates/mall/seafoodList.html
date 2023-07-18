@@ -91,42 +91,48 @@
 			</article>
 		</div>
 		
-		<!-- 농산물 -->
+		<!-- 수산물 -->
 		
 		<div class="row-2">
-  <div class="category-container">
-    <!-- 수산물 카테고리 -->
-    <h2 data-common-cd="S1">수산물</h2>
-    
-    <div class="category">
-      <ul >
-        <li class="li_1" data-common-cd="S201">
-          <ul>
-            <li class="sub_li_1" th:each="prdt : ${S201}" th:text="${prdt.ctgr}"></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-    <div class="category">
-      <ul>
-        <li class="li_1" data-common-cd="S202">
-          <ul>
-            <li class="sub_li_1" th:each="prdt : ${S202}" th:text="${prdt.ctgr}"></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-    <div class="category">
-      <ul>
-        <li class="li_1" data-common-cd="S203">
-          <ul>
-            <li class="sub_li_1" th:each="prdt : ${S203}" th:text="${prdt.ctgr}"></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </div>
-</div>
+		<div class="category-container">
+			<!-- 농산물 카테고리 -->
+			<h2 data-common-cd="S1">수산물</h2>
+
+			<div>
+				<p style="text-align: center;">어류</p>
+			</div>
+
+			<div>
+				<ul>
+					<li style="list-style: none;" class="sub_li_1"
+						th:each="prdt : ${S201}" th:text="${prdt.ctgr}"><a href=""></a></li>
+				</ul>
+			</div>
+
+			<div>
+				<p style="text-align: center;">해조류</p>
+			</div>
+			<div>
+
+				<ul>
+					<li style="list-style: none;" class="sub_li_1"
+						th:each="prdt : ${S202}" th:text="${prdt.ctgr}"><a href=""></a></li>
+				</ul>
+			</div>
+
+			<div>
+
+				<p style="text-align: center;">갑각류</p>
+			</div>
+			<div>
+
+				<ul>
+					<li style="list-style: none;" class="sub_li_1"
+						th:each="prdt : ${S203}" th:text="${prdt.ctgr}"></li>
+				</ul>
+			</div>
+		</div>
+	</div>
 		
 		
 <!-- 	<div class="row-2">

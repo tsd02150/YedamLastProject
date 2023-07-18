@@ -44,22 +44,11 @@ public class MallServiceImpl implements MallService {
 	}
 
 	//카테고리 정보
-	/*
-	 * @Override public List<ProductVO> getCtgr(String commonCd) { return
-	 * mallMapper.getCtgr(commonCd); }
-	 */
+	@Override public List<ProductVO> getCtgrList(ProductVO prdtVO) {
+		return mallMapper.getCtgrList(prdtVO); 
+	}
+	 
 	
-	//장바구니 리스트
-	@Override
-	public BasketVO getBasketInfo(BasketVO bskVO) {
-		return mallMapper.getBasketInfo(bskVO);
-	}
-
-	@Override
-	public List<BasketVO> getBasketList() {
-		return mallMapper.getBasketList();
-	}
-
 	@Override
 	public List<ProductReviewVO> getProductReviewList(ProductReviewVO revVO) {
 		return mallMapper.getProductReviewList(revVO);
@@ -74,5 +63,11 @@ public class MallServiceImpl implements MallService {
 	public List<ProductVO> getProductListByCategory(String commonCd) {
 		return mallMapper.getProductListByCategory(commonCd);
 	}
+
+	@Override
+	public int getProductCount(ProductVO prdtVO) {
+		return mallMapper.getProductCount(prdtVO);
+	}
+
 
 }

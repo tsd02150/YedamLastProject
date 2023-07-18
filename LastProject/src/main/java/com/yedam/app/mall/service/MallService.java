@@ -10,21 +10,18 @@ public interface MallService {
 
 	// 상품 단건조회
 	public ProductVO getProductInfo(ProductVO prdtVO);
+	
+	// 상품 게시물 갯수
+	public int getProductCount(ProductVO prdtVO);
 
 	// 카테고리 정보
-	// public List<ProductVO> getCtgr(String commonCd);
+	public List<ProductVO> getCtgrList(ProductVO prdtVO);
 
 	// 카테고리별 상품 조회
 	public List<ProductVO> getProductListByCategory(String categoryCode);
 
 	// 카테고리 이름
 	public List<ProductVO> getCategoryName(String commonCd);
-
-	// 장바구니 출력
-	public List<BasketVO> getBasketList();
-
-	// 장바구니 단건 가져오기
-	public BasketVO getBasketInfo(BasketVO bskVO);
 
 	// 해당 상품후기 리스트
 	public List<ProductReviewVO> getProductReviewList(ProductReviewVO revVO);

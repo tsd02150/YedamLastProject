@@ -504,15 +504,15 @@ th {
 				</form>
 			</div>
 		</div>
-
+	
+		<!-- 페이징 -->
+	
 		<!-- 상품 후기 리스트 -->
 		<div id="reviewList">
 			<!-- 후기 아이템 반복 출력 -->
 
 			<script th:inline="javascript">
 				
-		
-			
 				function goBack() {
 					window.history.back();
 				}
@@ -537,12 +537,12 @@ th {
 
 				/* top 버튼 */
 				document.querySelector('.top-btn').addEventListener('click',
-						function() {
-							window.scrollTo({
-								top : 0,
-								behavior : 'smooth'
-							});
+					function() {
+						window.scrollTo({
+							top : 0,
+							behavior : 'smooth'
 						});
+					});
 
 				/* 메뉴바 고정  */
 				var amountMenu = document.querySelector('.amount');
@@ -562,21 +562,21 @@ th {
 
 				// 모달 열기 버튼 클릭 시 모달 열림
 				document
-						.getElementById('openModalBtn')
-						.addEventListener(
-								'click',
-								function() {
-									document.getElementById('reviewModal').style.display = 'block';
-								});
+					.getElementById('openModalBtn')
+					.addEventListener(
+						'click',
+						function() {
+							document.getElementById('reviewModal').style.display = 'block';
+						});
 
 				// 모달 닫기 버튼 클릭 시 모달 닫힘
 				document
-						.querySelector('.close')
-						.addEventListener(
-								'click',
-								function() {
-									document.getElementById('reviewModal').style.display = 'none';
-								});
+					.querySelector('.close')
+					.addEventListener(
+						'click',
+						function() {
+							document.getElementById('reviewModal').style.display = 'none';
+						});
 
 				// 모달 바깥 영역 클릭 시 모달 닫힘
 				window.addEventListener('click', function(event) {
@@ -585,26 +585,28 @@ th {
 						modal.style.display = 'none';
 					}
 				});
+				
+				// 모달창 ESC 닫힘 
 
 				// 폼 제출 시 리뷰 작성 완료 처리
 				document
-						.getElementById("reviewForm")
-						.addEventListener(
-								"submit",
-								function(event) {
-									event.preventDefault();
+					.getElementById("reviewForm")
+					.addEventListener(
+						"submit",
+						function(event) {
+							event.preventDefault();
 
-									var reviewContent = document
-											.getElementById("reviewContent").value;
-									var reviewRating = document
-											.getElementById("reviewRating").value;
+							var reviewContent = document
+									.getElementById("reviewContent").value;
+							var reviewRating = document
+									.getElementById("reviewRating").value;
 
-									console.log("리뷰 내용:", reviewContent);
-									console.log("평가:", reviewRating);
+							console.log("리뷰 내용:", reviewContent);
+							console.log("평가:", reviewRating);
 
-									document.getElementById("reviewModal").style.display = "none";
+							document.getElementById("reviewModal").style.display = "none";
 
-								});
+						});
 
 				
 				// 상품 후기 리스트 데이터

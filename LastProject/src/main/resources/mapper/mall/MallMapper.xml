@@ -21,6 +21,13 @@
   		WHERE prdt_no = #{prdtNo}
   	</select>
   	
+  	<!-- 상품게시물 갯수 -->
+  	<select id="getProductCount" resultType="int">
+  		SELECT COUNT(prdt_no)
+  		FROM PRODUCT
+  		WHERE common_cd Like #{commonCd}||'S1%'
+  	</select>
+  	
   	<!-- 카테고리 리스트  -->
   	<select id="getCategoryName" resultType="ProductVO">
   		SELECT ctgr
@@ -51,11 +58,11 @@
   	</select>
   	
  
-	<!-- <select id="getCtgr" >
-		SELECT common_cd, ctgr
-		FROM COMMON_CODE
-		WHERE common_cd=#{commonCd}
-	</select> -->
+	 <select id="getCtgrList" resultType="ProductVO">
+		SELECT *
+		FROM PRODUCT
+		WHERE common_cd Like #{commonCd}||'%'
+	</select>
 	
   	
 </mapper>

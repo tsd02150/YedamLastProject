@@ -75,7 +75,6 @@
 				<li style="font-size: 12px;"><a
 					href="/mall/farmList?commonCd=S10">농산물</a></li>
 
-
 				<li
 					th:onclick="|location.href='@{/mall/seafoodList(commonCd=${'S20'})}'|"
 					style="cursor: pointer;"><img
@@ -83,7 +82,6 @@
 					src="https://cdn-icons-png.flaticon.com/128/3361/3361370.png"></li>
 				<li style="font-size: 12px;"><a
 					href="/mall/seafoodList?commonCd=S20">수산물</a></li>
-
 
 				<li th:onclick="|location.href='@{basketList}'|"
 					style="cursor: pointer;"><img
@@ -103,30 +101,16 @@
 			<!-- main image -->
 			<div class="hero-slider">
 				<div class="main-img"></div>
-				<div class="slider-item th-fullpage hero-area"
-					style="background-image: url(images/main/mainImg.jpg);">
-					<div class="container">
-						<div class="row">
-
-							<div class="col-lg-8 text-center">
-								<div class="ft">
-									<p id="mainFont" data-duration-in=".3"
-										data-animation-in="fadeInUp" data-delay-in=".1">You
-										haven't lost until you sell</p>
-									<h1 id="mainFont" data-duration-in=".3"
-										data-animation-in="fadeInUp" data-delay-in=".5">I wish I
-										had sold it yesterday</h1>
-								</div>
-								<a data-duration-in=".3" data-animation-in="fadeInUp"
-									data-delay-in=".8" class="btn" href="#">Shop Now</a>
-							</div>
-						</div>
-					</div>
+				<div class="slider-item th-fullpage hero-area">
+					<video muted autoplay loop style="width: 100%; height: 500px;">
+						<source src="images/main/frame3.mp4" type="video/mp4">
+					</video>
 				</div>
 			</div>
 		</div>
 
 		<!-- second image -->
+
 		<div>
 			<section>
 				<div class="container-fluid p-sm-0">
@@ -134,17 +118,17 @@
 						<div class="col-lg-3 col-sm-6 mb-2 mb-lg-0 px-1">
 							<article
 								class="card bg-dark text-center text-white border-0 rounded-0">
-								<img class="card-img rounded-0 img-fluid w-100"
-									src="images/featured-post/post-1.jpg" alt="post-thumb">
+								<img class="card-img rounded-0 img-fluid w-100">
 								<div class="card-img-overlay">
+									<!-- <iframe
+										src="https://assets.pinterest.com/ext/embed.html?id=374361787788782147?autoplay=1&mute=1"
+										height="100%" width="100%" frameborder="0" scrolling="no"></iframe> -->
 									<div class="card-content">
-										<p class="text-uppercase">LifeStyle</p>
+										<p class="text-uppercase"></p>
 										<h4 class="card-title mb-4">
-											<a class="text-white" href="blog-single.html">Organize
-												Your Life With 10 Simple rule</a>
+											<a class="text-white" href="#"></a>
 										</h4>
-										<a class="btn btn-outline-light" href="mall/farmList.html">read
-											more</a>
+										<a class="btn btn-outline-light" href="#">read more</a>
 									</div>
 								</div>
 							</article>
@@ -191,7 +175,7 @@
 
 			<ul class="icons">
 				<!-- center 클래스 추가 -->
-				
+
 				<li class="slider-div" th:each="prdt, iterStat : ${product}"
 					th:if="${iterStat.index} >= 1 and ${iterStat.index} <= 3 ">
 					<div class="icon_img">
@@ -207,10 +191,9 @@
 						</div>
 					</div>
 				</li>
-				
+
 			</ul>
 		</div>
-
 
 
 		<!-- 수산물 -->
@@ -239,8 +222,6 @@
 
 
 		<script th:inline="javascript">
-	
-		
 			/* top 버튼 */
 			document.querySelector('.top-btn').addEventListener('click',
 					function() {
@@ -275,7 +256,6 @@
 				} ]
 			});
 		</script>
-
 
 		<script
 			src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
