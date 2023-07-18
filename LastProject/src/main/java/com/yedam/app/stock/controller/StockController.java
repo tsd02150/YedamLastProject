@@ -189,6 +189,7 @@ public class StockController {
 		orderMap.put("order_rmn_cnt", vo.getOrder_rmn_cnt());
 		orderMap.put("order_type", vo.getOrder_type());
 		orderMap.put("order_result", null);
+		orderMap.put("order_insert_dt", null);
 		Map<String,Object> map = stockservice.callOrderProd(orderMap);
 		return map;
 	}

@@ -50,4 +50,6 @@ public interface StockMapper {
 	public PossStockVO getPossStock(@Param("itemNo") String itemNo , @Param("membNo")String membNo);
 	// 주문 프로시저
 	public void callOrderProd(Map<String,Object> params);
+	// 체결 프로시저
+	public void callTaProd(Map<String,Object> params);
 }

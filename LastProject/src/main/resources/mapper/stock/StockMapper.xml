@@ -346,6 +346,14 @@
 	    				, #{order_prc, mode=IN, jdbcType=INTEGER}
 	    				, #{order_rmn_cnt, mode=IN, jdbcType=INTEGER}
 	    				, #{order_result, mode=OUT, jdbcType=INTEGER}
+	    				, #{order_insert_dt, mode=OUT, jdbcType=TIMESTAMP}
 	    				)}
+	</select>
+	<select id="callTaProd" statementType="CALLABLE">
+	{
+    	call transaction_prod(    #{order_type, mode=IN, jdbcType=VARCHAR}
+    							, #{order_dt, mode=IN, jdbcType=DATE}
+			    				, #{ta_result, mode=OUT, jdbcType=INTEGER}
+			    				)}
 	</select>
 </mapper>

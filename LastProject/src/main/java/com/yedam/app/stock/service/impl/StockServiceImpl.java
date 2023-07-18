@@ -1,5 +1,7 @@
 package com.yedam.app.stock.service.impl;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -168,12 +170,16 @@ public class StockServiceImpl implements StockService {
 		return stockMapper.getPossStock(itemNo, membNo);
 	}
 
-	//주식 주문 프로시저
+	//주식 주문 프로시저 와 체결
 	@Override
 	public Map<String,Object> callOrderProd(Map<String, Object> params) {
-		Map<String,Object> map = new HashMap<>();
-		stockMapper.callOrderProd((Map<String, Object>) params);
-		Integer result = (Integer) params.get("order_result");
+		Map<String,Object> map = new HashMap<>(); // return map
+		Map<String ,Object> taMap = new HashMap<>(); // 체결 파라미터 맵
+		
+		stockMapper.callOrderProd((Map<String, Object>) params); // 주문 프로시저
+		
+		Integer result = (Integer) params.get("order_result"); // 결과 반환
+		
 		
 		if(result == 1) {
 			PossStockVO vo = stockMapper.getPossStock((String)params.get("order_item_no"),(String) params.get("order_memb_no"));
@@ -185,6 +191,18 @@ public class StockServiceImpl implements StockService {
 			map.put("message", "주문에 실패했습니다..");
 		}
 		
+		Timestamp insertDt = (Timestamp)params.get("order_insert_dt"); // 체결시간
+		String insertStr = insertDt.toString();
+		taMap.put("order_type",(String) params.get("order_type")); // 주문종류
+		taMap.put("order_insert_dt", insertStr.substring(0,insertStr.length()-2));
+		taMap.put("ta_result", null);
+		stockMapper.callTaProd(taMap);
+		Integer taResult = (Integer) taMap.get("ta_result");
+		if(taResult == 1) {
+			System.out.println("taResult : 성공 ");
+		}else if (taResult == 0) {
+			System.out.println("taResult : 실패 ");
+		}
 		return map;
 	}
 
