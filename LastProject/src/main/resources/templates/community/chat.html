@@ -22,7 +22,63 @@
 #titlename span:after {
 	width: 150px;
 }
+
+#infoSpace{
+	position: relative;
+	height:770px;
+}
+#chatInfo{
+	position: relative;
+    border-radius: 3px;
+    background: #FFF;
+    border-top: 3px solid #292931;
+    margin-bottom: 20px;
+    margin-right:20px;
+    width: 200px;
+    height:300px;
+    box-shadow: 0px 5px 5px #dddddddd;
+}
+#roomList{
+	overflow: auto;
+}
+#addRoom{
+	position : absolute;
+	bottom : 0;
+	margin:5px;
+	background-color:#eee;
+	text-align: center;
+	width: 190px;
+	height:30px;
+	border-radius: 3px;
+}
+#participation{
+	position: relative;
+    border-radius: 3px;
+    background: #FFF;
+    border-top: 3px solid #292931;
+    margin-bottom: 20px;
+    margin-right:20px;
+    width: 200px;
+    height:300px;
+    box-shadow: 0px 5px 5px #dddddddd;
+}
+#particiCnt{
+	position : absolute;
+	bottom : 0;
+	margin:5px;
+	background-color:#eee;
+	text-align: center;
+	width: 190px;
+	height:25px;
+	border-radius: 3px;
+}
+#resetBtn{
+	position : absolute;
+	bottom : 0;
+	width: 200px;
+}
 </style>
+<link rel="stylesheet" href="../community/css/chat.css">
 </head>
 <body>
 	<div layout:fragment="content">
@@ -30,10 +86,99 @@
 			<h1 class="news-title" id="titlename">
 				<span>익명 채팅방</span>
 			</h1>
+			<div class="d-flex justify-content-center">
+				<div id="infoSpace">
+					<div id="chatInfo">
+						<div class="box-header with-border">
+							<h3 class="box-title">채팅방 목록</h3>
+						</div>
+						<div id="roomList" class="box-body">
+							
+						</div>
+						<div id="addRoom">
+							<h4>채팅방 생성</h4>
+						</div>
+					</div>
+					<div id="participation">
+						<div class="box-header with-border">
+							<h3 class="box-title">채팅방 참여 인원</h3>
+						</div>
+						<div class="box-body">
+							
+						</div>
+						<div id="particiCnt">
+							<h5>참여인원 : n 명</h5>
+						</div>
+					</div>
+					<button type="button" id="resetBtn" class="btn-dark">채팅 초기화</button>
+				</div>
+
+				<!-- DIRECT CHAT DANGER -->
+				<div class="box box-danger direct-chat direct-chat-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">전체 채팅방</h3>
+
+						<div class="box-tools pull-right">
+							<span data-toggle="tooltip" title="3 New Messages"
+								class="badge bg-red">3</span>
+							<button type="button" class="btn btn-box-tool">
+								<i class="fa fa-comments"></i>
+							</button>
+						</div>
+					</div>
+					<!-- /.box-header -->
+					<div class="box-body">
+						<!-- Conversations are loaded here -->
+						<div class="direct-chat-messages">
+							<!-- Message. Default to the left -->
+							<div class="direct-chat-msg">
+								<div class="direct-chat-info clearfix">
+									<span class="direct-chat-name pull-left">Alexander Pierce&nbsp;&nbsp;</span> 
+									<span class="direct-chat-timestamp">23 Jan 2:00 pm</span>
+								</div>
+								<!-- /.direct-chat-info -->
+								<div class="direct-chat-text">
+									Is this template really for free? That's unbelievable!
+									
+								</div>
+								<!-- /.direct-chat-text -->
+							</div>
+							<!-- /.direct-chat-msg -->
+
+							<!-- Message to the right -->
+							<div class="direct-chat-msg right">
+								<div class="direct-chat-info clearfix">
+									<span class="direct-chat-timestamp pull-right">23 Jan 2:05 pm</span>
+									<span class="direct-chat-name pull-right">Sarah Bullock&nbsp;&nbsp;</span>
+								</div>
+								<!-- /.direct-chat-info -->
+								<div class="direct-chat-text">You better believe it!</div>
+								<!-- /.direct-chat-text -->
+							</div>
+							<!-- /.direct-chat-msg -->
+						</div>
+						<!--/.direct-chat-messages-->
+
+					</div>
+					<!-- /.box-body -->
+					<div class="box-footer">
+						<form action="#" method="post">
+							<div class="input-group">
+								<input type="text" name="message" placeholder="Type Message ..." class="form-control"> 
+								<span class="input-group-btn">
+									<button type="submit" class="btn btn-danger btn-flat">Send</button>
+								</span>
+							</div>
+						</form>
+					</div>
+					<!-- /.box-footer-->
+				</div>
+				<!--/.direct-chat -->
+			</div>
 		</div>
-		
+
 		<script th:inline="javascript">
-		
+			
 		</script>
 	</div>
 </body>
