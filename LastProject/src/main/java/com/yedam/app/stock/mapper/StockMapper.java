@@ -1,5 +1,6 @@
 package com.yedam.app.stock.mapper;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -52,4 +53,6 @@ public interface StockMapper {
 	public void callOrderProd(Map<String,Object> params);
 	// 체결 프로시저
 	public void callTaProd(Map<String,Object> params);
+	// 주문번호로 주문일시 가져오기
+	public Date getOrderDt(String orderNo);
 }

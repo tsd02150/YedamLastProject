@@ -1,6 +1,8 @@
 package com.yedam.app.stock.service.impl;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -191,13 +193,25 @@ public class StockServiceImpl implements StockService {
 			map.put("message", "주문에 실패했습니다..");
 		}
 		
-		Timestamp insertDt = (Timestamp)params.get("order_insert_dt"); // 체결시간
-		String insertStr = insertDt.toString();
+		String orderNo = (String)params.get("insert_after_no"); // 체결된 아이디
+		System.out.println(orderNo);
+		Date orderDt = stockMapper.getOrderDt(orderNo);
+		System.out.println(orderDt);
 		taMap.put("order_type",(String) params.get("order_type")); // 주문종류
-		taMap.put("order_insert_dt", insertStr.substring(0,insertStr.length()-2));
+		taMap.put("order_dt", orderDt);
 		taMap.put("ta_result", null);
+		taMap.put("error_one", null);
+		taMap.put("error_two", null);
+		taMap.put("error_thr", null);
 		stockMapper.callTaProd(taMap);
 		Integer taResult = (Integer) taMap.get("ta_result");
+		String errorOne = (String) taMap.get("error_one");
+		String errorTwo = (String) taMap.get("error_two");
+		String errorThr = (String) taMap.get("error_thr");
+		
+		System.out.println("error_one : " +errorOne);
+		System.out.println("error_two : " +errorTwo);
+		System.out.println("error_thr : " +errorThr);
 		if(taResult == 1) {
 			System.out.println("taResult : 성공 ");
 		}else if (taResult == 0) {

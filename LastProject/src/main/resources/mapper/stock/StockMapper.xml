@@ -346,14 +346,36 @@
 	    				, #{order_prc, mode=IN, jdbcType=INTEGER}
 	    				, #{order_rmn_cnt, mode=IN, jdbcType=INTEGER}
 	    				, #{order_result, mode=OUT, jdbcType=INTEGER}
-	    				, #{order_insert_dt, mode=OUT, jdbcType=TIMESTAMP}
+	    				, #{insert_after_no, mode=OUT, jdbcType=VARCHAR}
 	    				)}
 	</select>
+	<!-- 체결 프로시저 -->
 	<select id="callTaProd" statementType="CALLABLE">
 	{
     	call transaction_prod(    #{order_type, mode=IN, jdbcType=VARCHAR}
     							, #{order_dt, mode=IN, jdbcType=DATE}
 			    				, #{ta_result, mode=OUT, jdbcType=INTEGER}
+			    				, #{error_one, mode=OUT, jdbcType=VARCHAR}
+			    				, #{error_two, mode=OUT, jdbcType=VARCHAR}
+			    				, #{error_thr, mode=OUT, jdbcType=VARCHAR}
 			    				)}
+	</select>
+	
+	<!-- 주문번호 일시 불러오기 -->
+	<select id="getOrderDt" resultType="Date">
+	select
+	<choose>
+		<when test='orderNo.substring(0,1).equals("s")'>
+			sell_dt
+			from sell_order
+			where sell_no = #{orderNo}
+		</when>
+		<otherwise>
+			buy_dt
+			from buy_order
+			where buy_no = #{orderNo}
+		</otherwise>
+	</choose>
+		
 	</select>
 </mapper>
