@@ -70,7 +70,7 @@ public class QuestionController {
 			return "fail";			
 		}
 	}
-	
+	 
 	@GetMapping("qnaDetail")
 	public String qnaDetailForm(Model model, QuestionVO vo,HttpSession session) {
 		questionService.increaseInq(vo.getQstNo());
@@ -82,6 +82,24 @@ public class QuestionController {
 			model.addAttribute("myInfo",myInfo);
 		}
 		model.addAttribute("qnaInfo",questionService.getQnaDetail(vo.getQstNo()));
+		System.out.println(questionService.getQnaDetail(vo.getQstNo()));
 		return "community/qnaDetail";
+	}
+	
+	@PostMapping("deleteQna")
+	@ResponseBody
+	public String deleteQna(QuestionVO vo) {
+		if(questionService.deleteQna(vo.getQstNo())) {
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
+	@GetMapping("modifyQna")
+	public String modifyQnaForm(Model model,QuestionVO vo) {
+		vo = questionService.getQnaDetail(vo.getQstNo());
+		model.addAttribute("qnaInfo",vo);
+		return "community/modifyQna";
 	}
 }

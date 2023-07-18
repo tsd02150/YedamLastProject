@@ -36,16 +36,20 @@
 	<select id="getQnaList" resultType="QuestionVO">
 		SELECT *
 		FROM(
-	 		SELECT rownum rn ,qst_no,memb_no,ttl,cntn,drwup_dt,rply,rply_dt,inq,nick
-	 		FROM QUESTION JOIN MEMBER
-	 		USING (memb_no)
+			SELECT rownum rn ,qst_no,memb_no,ttl,cntn,drwup_dt,rply,rply_dt,inq,nick
+			FROM(
+		 		SELECT qst_no,memb_no,ttl,cntn,drwup_dt,rply,rply_dt,inq,nick
+		 		FROM QUESTION JOIN MEMBER
+		 		USING (memb_no)
+		 		<if test="ttl!=null and(!ttl.equals(''))">
+		 		WHERE ttl LIKE '%'||#{ttl}||'%'
+		 		</if>
+		 		ORDER BY drwup_dt DESC
+		 		)
 	 		<![CDATA[
 		    WHERE rownum<=(${page}*10)
 		    ]]>
-	 		<if test="ttl!=null and(!ttl.equals(''))">
-	 		AND ttl LIKE '%'||#{ttl}||'%'
-	 		</if>
-	 		)
+		    )
 	 	WHERE rn > (${page}-1)*10
 	</select> 
 	<select id="getQnaTop6" resultType="QuestionVO">
@@ -84,4 +88,8 @@
 		SET inq=inq+1
 		WHERE qst_no=#{qstNo}
 	</update>
+	<delete id="deleteQna" parameterType="String">
+		DELETE FROM QUESTION
+		WHERE qst_no=#{qstNo}
+	</delete>
 </mapper>

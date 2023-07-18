@@ -12,7 +12,7 @@ public class QuestionVO {
 	private String cntn;
 	private Date drwupDt;
 	private String rply;
-	private String rplyDt;
+	private Date rplyDt;
 	private int inq;
 	
 	private int page;
