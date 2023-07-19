@@ -260,8 +260,10 @@ public class StockServiceImpl implements StockService {
 	
 	// 체결시 실시간 알람전송
 	public void sendOrderResult( String membNo , String text) {
-		System.out.println(membNo + "zzzz 알림 시행");
-		this.template.convertAndSend("/stock/alarm/"+membNo, text);
+		System.out.println(membNo + " 알림 시행");
+		String destination = "/stock/alarm/"+membNo;
+		System.out.println(destination);
+		this.template.convertAndSend(destination, text);
 	}
 	
 	

@@ -1,23 +1,25 @@
- const stompClient = new StompJs.Client({
+const stompClient = new StompJs.Client({
     brokerURL: 'ws://localhost:80/stockserver' // 서버연결
 });
 
-
+let loginMemberName = $('#sessionMembNo').text();
+let destination = '/stock/alarm/' + loginMemberName;
+console.log(loginMemberName);
+console.log(destination);
 
 stompClient.onConnect = (frame) => {
-    setConnected(true);
+    
     console.log('Connected: ' + frame);
-    stompClient.subscribe('/topic/greetings', (greeting) => {
+    stompClient.subscribe('/stock/greetings', (greeting) => {
         showGreeting(JSON.parse(greeting.body).content); // 구독된 url 에서 넘어오는 메세지 처리
     });
-    
-    //알람 - stockServiceImpl 에서 보낸 알람
-    stompClient.subscribe('/stock/alarm/'+'mem-2', (greeting) => {
-        alert(greeting.body); // 구독된 url 에서 넘어오는 메세지 처리
+    //알람 - empController 에서 보낸 알람
+    stompClient.subscribe(destination, (greeting) => {
+    	console.log('알림성공');
+    	alert(greeting.body);
+        toastShow("체결 알림" ,greeting.body , "info"); // 구독된 url 에서 넘어오는 메세지 처리
     });
 };
-
-
 
 stompClient.onWebSocketError = (error) => {
     console.error('Error with websocket', error);
@@ -50,24 +52,6 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function sendName() {
-    stompClient.publish({
-        destination: "/app/hello",
-        body: JSON.stringify({'name': $("#name").val()})
-    });
-}
-
-function showGreeting(message) {
-    $("#greetings").append("<tr><td>" + message + "</td></tr>");
-}
 
 
 connect();
-
-// 연결 상태를 확인하는 함수 정의
-function checkStompClientStatus() {
-  const isConnected = stompClient.connected;
-  console.log(`STOMP 클라이언트 연결 상태: ${isConnected ? '연결됨' : '연결되지 않음'}`);
-}
-
-setInterval(checkStompClientStatus,2000);
