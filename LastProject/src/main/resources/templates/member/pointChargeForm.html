@@ -125,6 +125,9 @@ border: 1px solid #DDDDDD;
 		$("#chargeInput").val($(this).children().attr("data-price"));
 	})
 	
+	$("#resetpay-button").on("click",function(){
+		 $("#tosspay").css("display", "none");
+	})
 	//콤마
 	function commas(target) {
 	  target.value = target.value.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");

@@ -13,6 +13,7 @@ import com.yedam.app.member.service.ChargeVO;
 import com.yedam.app.member.service.DealVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
+import com.yedam.app.member.service.PossVO;
 import com.yedam.app.member.service.SellOrderVO;
 import com.yedam.app.stock.service.StockVO;
 
@@ -66,7 +67,7 @@ public interface MemberMapper {
 	public List<StockVO> interestList(String membNo);
 	
 	//보유주식
-	public List<MembVO> myStockList(MembVO membVO);
+	public List<StockVO> myStockList(String membNo);
 	
 	//배송, 주문 리스트
 	public List<OrderVO> mypageOrderList(OrderVO orderVO);
@@ -103,4 +104,7 @@ public interface MemberMapper {
 	//거래내역 조회
 	public List<DealVO> dealList(DealVO vo);
 	
+	//보유자산
+	public List<PossVO> myPossStockList(String membNo);
+
 }

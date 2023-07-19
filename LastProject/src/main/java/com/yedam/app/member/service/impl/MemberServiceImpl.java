@@ -16,6 +16,7 @@ import com.yedam.app.member.service.DealVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
+import com.yedam.app.member.service.PossVO;
 import com.yedam.app.member.service.SellOrderVO;
 import com.yedam.app.stock.service.StockVO;
 
@@ -103,8 +104,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	@Override
-	public List<MembVO> myStockList(MembVO membVO) {
-		return membMapper.myStockList(membVO);
+	public List<StockVO> myStockList(String membNo) {
+		return membMapper.myStockList(membNo);
 	}
 	@Override
 	public List<OrderVO> mypageOrderList(OrderVO orderVO) {
@@ -186,6 +187,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<DealVO> dealList(DealVO vo) {
 		return membMapper.dealList(vo);
+	}
+
+	@Override
+	public List<PossVO> myPossStockList(String membNo) {
+		return membMapper.myPossStockList(membNo);
 	}
 
 }

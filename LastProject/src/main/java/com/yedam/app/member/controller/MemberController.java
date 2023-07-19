@@ -4,7 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -31,6 +30,7 @@ import com.yedam.app.member.service.DealVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
+import com.yedam.app.member.service.PossVO;
 import com.yedam.app.member.service.RegisterMail;
 import com.yedam.app.member.service.SellOrderVO;
 import com.yedam.app.security.service.UserService;
@@ -409,19 +409,16 @@ public class MemberController {
 	public List<StockVO> interestList(@RequestParam String membNo, StockVO stockVO) {
 		//UserVO mem = (UserVO)session.getAttribute("loggedInMember");
 		List<StockVO> interestList = membService.interestList(membNo);
-		System.out.println(interestList);
+		//System.out.println(interestList);
 		return interestList;
 	}
 	
 	@ResponseBody
 	@PostMapping("myStockList")
-	public List<MembVO> myPageInfo(@RequestParam String membNo, Model model, MembVO membVO) {
-		//UserVO meminfo = (UserVO)session.getAttribute("loggedInMember");
-		membVO.setMembNo(membNo);
-		List<MembVO> stockList = membService.myStockList(membVO);
-		//model.addAttribute("stocklist",stockList);
-		System.out.println(stockList);
-		return stockList;
+	public List<StockVO> myStockList(@RequestParam String membNo) {
+	    List<StockVO> stockList = membService.myStockList(membNo);
+	    System.out.println(stockList);
+	    return stockList;
 	}
 	
 	//@ResponseBody
@@ -455,34 +452,37 @@ public class MemberController {
 	}
 	
 	//회원정보 수정
-	//@ResponseBody
 	@PostMapping("updateMemberInfo")
 	public String updateMemberInfo(@RequestParam String nick, @RequestParam String tel,
-	        @RequestParam String pwd, @RequestParam String id, @RequestParam String email,MembVO membVO, Model model, HttpSession session) {
+	                               @RequestParam String pwd, @RequestParam String id, @RequestParam String email,
+	                               MembVO membVO, Model model, HttpSession session) {
 	    MembVO mem = membService.memberList(id);
 	    membVO.setId(id);
 	    membVO.setNick(nick);
 	    membVO.setEmail(email);
 	    membVO.setTel(tel);
 	    membVO.setPoint(mem.getPoint());
-	    if(pwd == mem.getPwd()) {
-	    	if (mem.getTempPwd() == null) {
-	    		membVO.setPwd(pwd);
-	    	} else {
-	    		mem.setTempPwd(pwd);
-	    		mem.setPwd(pwd);
-	    	}
-	    }else {
-	    	if (mem.getTempPwd() == null) {
-		        membVO.setPwd(pwEncoder.encode(pwd)); // 비밀번호 암호화
-		    } else {
-		        membVO.setPwd(pwEncoder.encode(pwd));
-		        membVO.setTempPwd(pwEncoder.encode(pwd));
-		    }
-	    }
+
+	    System.out.println("^^^^^^^^^^^^^^");
+	    System.out.println(pwd);
+	    System.out.println(mem.getPwd());
+	    System.out.println("^^^^^^^^^^^^^^");
 	    
+	    if (pwd == null || pwd.equals("")) { // 비밀번호 변경X
+	        membVO.setPwd(mem.getPwd()); // 기존 비밀번호 그대로 저장
+	        membVO.setTempPwd(mem.getTempPwd()); // 기존 임시 비밀번호 그대로 저장
+	    } else {
+	        if (mem.getTempPwd() == null) {
+	            membVO.setPwd(pwEncoder.encode(pwd)); // 비밀번호 암호화
+	        } else {
+	            membVO.setPwd(pwEncoder.encode(pwd));
+	            membVO.setTempPwd(pwEncoder.encode(pwd));
+	        }
+	    }
+
 	    membService.updateMemberInfo(membVO);
 	    System.out.println(membVO);
+
 	    //수정한 정보 다시 세션에 저장
 	    MembVO list = membService.memberList(id);
 	    UserVO loggedInMember = new UserVO();
@@ -492,9 +492,9 @@ public class MemberController {
 	    loggedInMember.setTel(membVO.getTel());
 	    loggedInMember.setPwd(membVO.getPwd());
 	    loggedInMember.setTempPwd(membVO.getTempPwd());
-	    
-		model.addAttribute("membList",list);
-		
+
+	    model.addAttribute("membList", list);
+
 	    return "redirect:mypageInfo";
 	}
 	
@@ -588,6 +588,8 @@ public class MemberController {
 		boVO.setMembNo(membNo);
 		boVO.setBuyNo(buyNo);
 		int result = membService.deleteBuyOrder(boVO);
+		System.out.println("매수 주문 삭제 성공");
+		System.out.println(result);
 		return result;
 	}
 	
@@ -632,4 +634,13 @@ public class MemberController {
 		System.out.println(endDate);
 		return membService.dealList(vo);
 	}
+	
+	@ResponseBody
+	@PostMapping("myPossStockList")
+	public List<PossVO> myPossStockList(@RequestParam String membNo){
+		List<PossVO> list = membService.myPossStockList(membNo);
+		System.out.println(list);
+		return list;
+	}
+	
 }

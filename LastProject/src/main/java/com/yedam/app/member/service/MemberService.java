@@ -54,7 +54,7 @@ public interface MemberService {
 	public List<StockVO> interestList(String membNo);
 	
 	//보유주식
-	public List<MembVO> myStockList(MembVO membVO);
+	public List<StockVO> myStockList(String membNo);
 	
 	public List<OrderVO> mypageOrderList(OrderVO orderVO);
 	
@@ -86,4 +86,6 @@ public interface MemberService {
 	public int deleteInterest(@Param("membNo")String membNo , @Param("itemNo")String itemNo);
 	//거래내역 조회
 	public List<DealVO> dealList(DealVO vo);
+	//보유자산
+	public List<PossVO> myPossStockList(String membNo);
 }

@@ -219,8 +219,7 @@ $.ajax({
 			div += `
 				<div class="col-md-12">
 					<div class="form-group" style="margin-bottom: 0px;">
-						<input data-no="${el.addrNo}" type="checkbox" style="display: inline;">
-						<label for="addr1">주소</label>
+						<label for="addr1" data-no="${el.addrNo}">주소</label>
 						<button type="button" class="changeAddr" onclick="changeAddr(this)">변경</button>
 						<button type="button" class="deleteAddr">삭제</button><br>
 						<input type="text" class="form-control" style="width: 40%; display: inline;" id="addr1" name="zip" value="${el.zip}" readonly>
@@ -307,108 +306,102 @@ $("#changeNick").on("click", function() {
     });
 });
 
-//변수 선언
 let addrNo = '';
 
-// 주소 변경
+//주소 변경
 function changeAddr(target) {
-  addrNo = $(target).closest('.form-group').find('input[type="checkbox"]:checked').data('no'); // 클릭한 주소의 addrNo
+addrNo = $(target).prev().data('no'); // 클릭한 주소의 addrNo
 
-  let aa = target.nextElementSibling.nextElementSibling.nextElementSibling; // zip input
+let aa = target.nextElementSibling.nextElementSibling.nextElementSibling; // zip input
 
-  // 우편번호 찾기 버튼 HTML 생성
-  let zipbtnHtml = '<button type="button" class="zipbtn">우편번호 찾기</button>';
+// 우편번호 찾기 버튼 HTML 생성
+let zipbtnHtml = '<button type="button" class="zipbtn">우편번호 찾기</button>';
 
-  // aa 요소 뒤에 우편번호 찾기 버튼 추가
-  $(aa).after(zipbtnHtml);
-  
-  let changeButton = $(target);
-  changeButton.text('저장').removeAttr('onclick').on('click', function() {
-    updateMemberAddr(); // 저장 버튼 클릭 시 주소 변경 요청
-    $(target).next().remove();
-    $('input[data-no]').each(function() {
-      if ($(this).is(':checked')) {
-        let addButtonHtml = '<button type="button" class="changeAddr" onclick="changeAddr(this)">변경</button>' +
-                             '<button type="button" class="deleteAddr">삭제</button>';
-        $(this).next().after(addButtonHtml);
-        $(this).prop('checked', false);
-      }
-    });
-    $('input[name="detaAddr"]').attr("readonly", "readonly");
+// aa 요소 뒤에 우편번호 찾기 버튼 추가
+$(aa).after(zipbtnHtml);
 
-    changeButton.remove();
-  });
+let changeButton = $(target);
+changeButton.text('저장').removeAttr('onclick').on('click', function() {
+ updateMemberAddr(); // 저장 버튼 클릭 시 주소 변경 요청
+ $(target).next().remove();
+ let addButtonHtml = '<button type="button" class="changeAddr" onclick="changeAddr(this)">변경</button>' +
+                      '<button type="button" class="deleteAddr">삭제</button>';
+ $(this).after(addButtonHtml);
+ $(this).remove();
+ $('input[name="detaAddr"]').attr("readonly", "readonly");
+});
 
-  let reBtn = $(target).next();
-  reBtn.text('취소').attr('type', 'reset').on('click', function() {
-    $(this).next().next().next().remove(); // 우편번호 찾기 버튼 제거
-    let changeAddrBtnHtml = '<button type="button" class="changeAddr" onclick="changeAddr(this)">변경</button>';
-    $(".deleteAddr").text("삭제");
-    changeButton.replaceWith(changeAddrBtnHtml);
-  });
+let reBtn = $(target).next();
+reBtn.text('취소').attr('type', 'reset').on('click', function() {
+ $(this).next().next().next().remove(); // 우편번호 찾기 버튼 제거
+ let changeAddrBtnHtml = '<button type="button" class="changeAddr" onclick="changeAddr(this)">변경</button>';
+ $(".deleteAddr").text("삭제");
+ changeButton.after(changeAddrBtnHtml);
+ changeButton.remove();
+});
 
-  // 우편번호 찾기 버튼 클릭 이벤트 처리
-  $(document).on('click', '.zipbtn', function() {
-    let zipInput = $(this).closest('.form-group').find('input[name="zip"]');
-    let addrInput = $(this).closest('.col-md-12').next().find('input[name="addr"]');
-    let detaInput = $(this).closest('.col-md-12').next().next().find('input[name="detaAddr"]');
-    detaInput.val("");
-    detaInput.removeAttr("readonly");
+// 우편번호 찾기 버튼 클릭 이벤트 처리
+$(document).on('click', '.zipbtn', function() {
+ let zipInput = $(this).closest('.form-group').find('input[name="zip"]');
+ let addrInput = $(this).closest('.col-md-12').next().find('input[name="addr"]');
+ let detaInput = $(this).closest('.col-md-12').next().next().find('input[name="detaAddr"]');
+ detaInput.val("");
+ detaInput.removeAttr("readonly");
 
-    // 주소 API
-    new daum.Postcode({
-      oncomplete: function(data) {
-        let fullRoadAddr = data.roadAddress;
-        let extraRoadAddr = '';
+ // 주소 API
+ new daum.Postcode({
+   oncomplete: function(data) {
+     let fullRoadAddr = data.roadAddress;
+     let extraRoadAddr = '';
 
-        if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
-          extraRoadAddr += data.bname;
-        }
-        if (data.buildingName !== '' && data.apartment === 'Y') {
-          extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
-        }
-        if (extraRoadAddr !== '') {
-          extraRoadAddr = ' (' + extraRoadAddr + ')';
-        }
-        if (fullRoadAddr !== '') {
-          fullRoadAddr += extraRoadAddr;
-        }
+     if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+       extraRoadAddr += data.bname;
+     }
+     if (data.buildingName !== '' && data.apartment === 'Y') {
+       extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+     }
+     if (extraRoadAddr !== '') {
+       extraRoadAddr = ' (' + extraRoadAddr + ')';
+     }
+     if (fullRoadAddr !== '') {
+       fullRoadAddr += extraRoadAddr;
+     }
 
-        // 우편번호와 주소 정보를 해당 필드에 넣는다.
-        console.log(data.zonecode);
-        console.log(fullRoadAddr);
+     // 우편번호와 주소 정보를 해당 필드에 넣는다.
+     console.log(data.zonecode);
+     console.log(fullRoadAddr);
 
-        zipInput.val(data.zonecode);
-        addrInput.val(fullRoadAddr);
-      }
-    }).open();
-  });
+     zipInput.val(data.zonecode);
+     addrInput.val(fullRoadAddr);
+   }
+ }).open();
+});
 }
 
-// 주소 변경 요청
+//주소 변경 요청
 function updateMemberAddr() {
-  let zipInput = $('input[name="zip"]');
-  let addrInput = $('input[name="addr"]');
-  let detaInput = $('input[name="detaAddr"]');
-  console.log(detaInput.val());
+let zipInput = $('input[name="zip"]');
+let addrInput = $('input[name="addr"]');
+let detaInput = $('input[name="detaAddr"]');
+console.log(detaInput.val());
 
-  $.ajax({
-    url: "updateMemberAddr",
-    method: "POST",
-    data: {
-      "addrNo": addrNo,
-      "zip": zipInput.val(),
-      "addr": addrInput.val(),
-      "detaAddr": detaInput.val(),
-      "membNo": membNo
-    },
-    success: function(result) {
-    	console.log(result);
-    },
-    error: function(err) {
-      console.log(err);
-    }
-  });
+$.ajax({
+ url: "updateMemberAddr",
+ method: "POST",
+ data: {
+   "addrNo": addrNo,
+   "zip": zipInput.val(),
+   "addr": addrInput.val(),
+   "detaAddr": detaInput.val(),
+   "membNo": membNo
+ },
+ success: function(result) {
+ 	console.log(result);
+ },
+ error: function(err) {
+   console.log(err);
+ }
+});
 }
 
 
@@ -431,99 +424,99 @@ $("#changePwd").on("click", function() {
 
 //비밀번호 변경 취소버튼 누를때
 $("#resetPwd").on("click", function(){
-	$("#pass").removeAttr("value");
+	$("#pass").val("pwd");
 	$("#pass").attr("placeholder","PASSWORD");
 	$("#pass").attr("readonly","readonly");
   $(".ckpwddiv").css("display", "none");
   $("#resetPwd").css("display", "none");
 })
+let mailcode = '';
+let mailcount1 = 0;
+let mailcount2 = 0;
 
-let mailcode='';
-let mailcount1=0;
-let mailcount2=0;
-$("#changeEmail").on("click", function(){
-	$("#email-address").val("").removeAttr("readonly");
-  $(".emaildiv").css("display", "inline-block");
-	$("#resetEmail").css("display", "inline-block");
-	$("#sendemail").css("display", "inline-block");
-	$("#changeEmail").css("display", "none");
+$("#changeEmail").on("click", function () {
+    $("#email-address").val("").removeAttr("readonly");
+    $(".emaildiv").css("display", "inline-block");
+    $("#resetEmail").css("display", "inline-block");
+    $("#sendemail").css("display", "inline-block");
+    $("#changeEmail").css("display", "none");
+});
 
-	//이메일 변경 취소버튼 누를 시
-	$("#resetEmail").on("click", function(){
-		$("#changeEmail").css("display", "inline-block");
-		$("#mainCheckInput").css("display", "none");
-		$("#resetEmail").css("display", "none"); //변경 취소버튼 none
-		$("#sendemail").css("display", "none"); //인증번호 발송 버튼 none
-		$("#testBtn1").css("display", "none");
-		$("#email-address").val(email).attr("readonly","readonly"); //다시 원래 이메일 값을 보여줌.
-	})
-	
+$("#resetEmail").on("click", function () {
+    $("#changeEmail").css("display", "inline-block");
+    $("#email-address").val(email).attr("readonly", "readonly");
+    resetMailForm();
+});
 
-	//메일 인증번호 발급
-	$("#sendemail").on("click", function(){
-		mailcount1++;
-		if($("#email-address").val()==""){
-			$("#email-address").focus();
-			return;
-		}else {
-			sendMailCode();
-			$("#sendemail").addClass("checkedBtn");
-			$("#testBtn1").on("click", checkMailCode);
-			
-		}
+$("#sendemail").on("click", function () {
+    mailcount1++;
+    if ($("#email-address").val() === "") {
+        $("#email-address").focus();
+        return;
+    } else {
+        sendMailCode();
+        $("#sendemail").addClass("checkedBtn");
+        $("#testBtn1").on("click", checkMailCode);
+    }
 
-		if(mailcount1>=5){
-			$('#myModal').show();
-		}
-	})
-})
+    if (mailcount1 >= 5) {
+        $('#myModal').show();
+    }
+});
 
-//메일 인증번호 발급
-function sendMailCode(){
-	$.ajax({
-				type: "POST",
-				url: "/member/smsConfirm",
-				data: {
-					"email": $("#email-address").val()
-				},
-				success: function (data) {
-					console.log("임시코드: " + data);
-					mailcode = data;
-				},
-				error : function(err){
-					console.log(err);
-				}
-			}); //메일 인증번호 발급 end
+function resetMailForm() {
+    $(".emaildiv").css("display", "none");
+    $("#resetEmail").css("display", "none");
+    $("#sendemail").css("display", "none");
+    $("#mainCheckInput").css("display", "none");
+    $("#testBtn1").css("display", "none");
 }
 
-//인증번호 비교
-function checkMailCode(){
-	if($("#mainCheckInput").val() == "" ){
-		$("#mainCheckInput").focus();
-		return;
-	}
-	if($("#mainCheckInput").val() == mailcode){
-		$("#mailCheck").text("인증이 완료되었습니다.")
-										.css({
-											"color": "#0D6EFD",
-											"font-weight": "bold",
-											"font-size": "14px"
-		}); 
-		$("#testBtn1").addClass("checkedBtn");
-	}else{
-		mailcount2++;
-		$("#mailCheck").text("다시 시도해주세요.")
-										.css({
-											"color": "#FA3E3E",
-											"font-weight": "bold",
-											"font-size": "14px"
-		}); 
-	}
-	if(mailcount2>=5){
-			$('#myModal').show();
-		}
+function sendMailCode() {
+    $.ajax({
+        type: "POST",
+        url: "/member/smsConfirm",
+        data: {
+            "email": $("#email-address").val()
+        },
+        success: function (data) {
+            console.log("임시코드: " + data);
+            mailcode = data;
+            $("#mainCheckInput").css("display", "inline");
+            $("#testBtn1").css("display", "inline");
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
 }
 
+function checkMailCode() {
+    if ($("#mainCheckInput").val() === "") {
+        $("#mainCheckInput").focus();
+        return;
+    }
+    if ($("#mainCheckInput").val() === mailcode) {
+        $("#mailCheck").text("인증이 완료되었습니다.")
+            .css({
+                "color": "#0D6EFD",
+                "font-weight": "bold",
+                "font-size": "14px"
+            });
+        $("#testBtn1").addClass("checkedBtn");
+    } else {
+        mailcount2++;
+        $("#mailCheck").text("다시 시도해주세요.")
+            .css({
+                "color": "#FA3E3E",
+                "font-weight": "bold",
+                "font-size": "14px"
+            });
+    }
+    if (mailcount2 >= 5) {
+        $('#myModal').show();
+    }
+}
 //연락처 변경 버튼 클릭
  let testcode;
 

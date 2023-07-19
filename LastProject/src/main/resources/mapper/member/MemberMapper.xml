@@ -200,27 +200,30 @@
 		order by rate desc
 		</select>
 		
-		<select id="myStockList" resultType="StockVO">
-			select t.item_no, t.nm tnm,t.prc tprc, t.prc - i.cl_prc change ,trunc(((t.prc-i.cl_prc)/i.cl_prc)*100) rate
-		from (select b.item_no, cl_prc 
-		      from item_info a join (select i.item_no ,t.nm
-		                            from poss_stock i join item t
-		                            on i.item_no = t.item_no
-		                            where memb_no = #{membNo}) b
-		      on a.item_no = b.item_no
-		      where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
-		                  ) i --전일주가정보
-		join ( select distinct(a.item_no),nm,dt,ta_prc prc
-							from(   SELECT nm,i.item_no, MAX(ta_dt) dt
-									FROM ta_hr t join item i 
-									on i.item_no = t.item_no
-									GROUP BY nm,i.item_no
-									order by item_no) a join ta_hr t
-							on a.item_no= t.item_no and a.dt=t.ta_dt
-							order by 1 ) t  -- 최근 체결가
-		on i.item_no = t.item_no
+		<select id="myStockList" resultType="MembVO">
+    select distinct t.item_no, t.nm tnm, t.prc tprc, t.prc - i.cl_prc change, trunc(((t.prc - i.cl_prc) / i.cl_prc) * 100) rate
+    from (
+        select b.item_no, cl_prc 
+        from item_info a join (
+            select i.item_no, t.nm
+            from poss_stock i join item t ON i.item_no = t.item_no
+            where memb_no = #{membNo}
+        ) b ON a.item_no = b.item_no
+        where to_char(ta_dt, 'yyyy-MM-dd') = to_char(sysdate-1, 'yyyy-MM-dd')
+    ) i --전일주가정보
+    join (
+        select distinct(a.item_no), nm, dt, ta_prc prc
+        from (
+            select nm, i.item_no, MAX(ta_dt) dt
+            from ta_hr t join item i ON i.item_no = t.item_no
+            group by nm, i.item_no
+            order by item_no
+        ) a join ta_hr t ON a.item_no = t.item_no and a.dt = t.ta_dt
+        order by 1
+    ) t -- 최근 체결가
+    on i.item_no = t.item_no
     order by rate desc
-		</select>
+</select>
 		
 		<select id="mypageOrderList" resultType="OrderVO">
 		  SELECT o.order_no, o.order_dt, o.order_am, od.prdt_no
@@ -306,7 +309,7 @@
 	 	select s.*, i.nm, i.common_cd  from sell_order s
 		join item i on s.item_no = i.item_no
 		where memb_no = #{membNo}
-		and to_char(sell_dt,'yyyy-MM-dd') = to_char(sysdate,'yyyy-MM-dd');
+		and to_char(sell_dt,'yyyy-MM-dd') = to_char(sysdate,'yyyy-MM-dd')
  	</select>
  	
  <select id="buyOrderList" parameterType="String">
@@ -390,6 +393,40 @@
     </if>
     ORDER BY order_dt DESC
 
+</select>
+
+<select id="myPossStockList" parameterType="String" resultType="PossVO">
+SELECT distinct p.poss_no, p.item_no, aa.nm tnm, p.stock_cnt, p.trade_prc,  aa.prc tprc,
+       aa.change, aa.rate
+FROM poss_stock p
+JOIN (
+    SELECT t.item_no, t.nm, t.prc, t.prc - i.cl_prc AS change,
+           TRUNC(((t.prc - i.cl_prc) / i.cl_prc) * 100) AS rate
+    FROM (
+        SELECT b.item_no, cl_prc 
+        FROM item_info a 
+        JOIN (
+            SELECT i.item_no, t.nm
+            FROM poss_stock i 
+            JOIN item t ON i.item_no = t.item_no
+            WHERE i.memb_no = #{membNo}
+        ) b ON a.item_no = b.item_no
+        WHERE TO_CHAR(ta_dt, 'yyyy-MM-dd') = TO_CHAR(SYSDATE-1, 'yyyy-MM-dd')
+    ) i
+    JOIN (
+        SELECT DISTINCT(a.item_no), nm, dt, ta_prc AS prc
+        FROM (
+            SELECT nm, i.item_no, MAX(ta_dt) AS dt
+            FROM ta_hr t 
+            JOIN item i ON i.item_no = t.item_no
+            GROUP BY nm, i.item_no
+            ORDER BY item_no
+        ) a 
+        JOIN ta_hr t ON a.item_no = t.item_no AND a.dt = t.ta_dt
+    ) t ON i.item_no = t.item_no
+) aa ON p.item_no = aa.item_no
+WHERE p.memb_no = #{membNo}
+order by 3
 </select>
  	
 	
