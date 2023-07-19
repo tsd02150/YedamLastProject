@@ -25,6 +25,11 @@ public class StockServiceImpl implements StockService {
 	
 	private SimpMessagingTemplate template;
 	
+	@Autowired 
+	public StockServiceImpl(SimpMessagingTemplate template) {
+		this.template = template;
+	}
+	
 	//테마리스트 가져오기
 	@Override
 	public List<Map<String,Object>> getThemeList(String code) {
@@ -255,8 +260,8 @@ public class StockServiceImpl implements StockService {
 	
 	// 체결시 실시간 알람전송
 	public void sendOrderResult( String membNo , String text) {
-		
-		this.template.convertAndSendToUser(membNo , "/stock/alarm", text);
+		System.out.println(membNo + "zzzz 알림 시행");
+		this.template.convertAndSend("/stock/alarm/"+membNo, text);
 	}
 	
 	
