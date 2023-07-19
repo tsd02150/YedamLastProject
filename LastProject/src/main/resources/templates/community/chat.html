@@ -116,11 +116,11 @@
 				<!-- DIRECT CHAT DANGER -->
 				<div class="box box-danger direct-chat direct-chat-danger">
 					<div class="box-header with-border">
-						<h3 class="box-title">전체 채팅방</h3>
+						<h3 id="roomno" class="box-title" th:data-roomno="${roomInfo.roomNo}" th:text="${roomInfo.nm}">전체 채팅방</h3>
 
 						<div class="box-tools pull-right">
 							<span data-toggle="tooltip" title="3 New Messages"
-								class="badge bg-red">3</span>
+								class="badge bg-red" th:text="${roomInfo.conn}">1</span>
 							<button type="button" class="btn btn-box-tool">
 								<i class="fa fa-comments"></i>
 							</button>
@@ -129,9 +129,9 @@
 					<!-- /.box-header -->
 					<div class="box-body">
 						<!-- Conversations are loaded here -->
-						<div class="direct-chat-messages">
+						<div id="chatSpace" class="direct-chat-messages">
 							<!-- Message. Default to the left -->
-							<div class="direct-chat-msg">
+							<div class="direct-chat-msg stock-chat">
 								<div class="direct-chat-info clearfix">
 									<span class="direct-chat-name pull-left">Alexander Pierce&nbsp;&nbsp;</span> 
 									<span class="direct-chat-timestamp">23 Jan 2:00 pm</span>
@@ -164,9 +164,9 @@
 					<div class="box-footer">
 						<form action="#" method="post">
 							<div class="input-group">
-								<input type="text" name="message" placeholder="Type Message ..." class="form-control"> 
+								<input type="text" id="my-message" name="message" placeholder="Type Message ..." class="form-control"> 
 								<span class="input-group-btn">
-									<button type="submit" class="btn btn-danger btn-flat">Send</button>
+									<button type="button" class="btn btn-danger btn-flat" id="send">Send</button>
 								</span>
 							</div>
 						</form>
@@ -178,8 +178,11 @@
 		</div>
 
 		<script th:inline="javascript">
-			
+			let myAnonNick=[[${particiInfo.anonNick}]];
+			let myMembNo=[[${particiInfo.membNo}]];
 		</script>
+		<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+		<script src="../socket/js/app.js"></script>
 	</div>
 </body>
 </html>

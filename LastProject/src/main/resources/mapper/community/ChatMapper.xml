@@ -2,9 +2,49 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-  
-    <mapper namespace="com.yedam.app.community.mapper.ChatMapper">
-   <select id="ii">
- 	select 1 from dual
- </select>  
-  </mapper>
+
+<mapper namespace="com.yedam.app.community.mapper.ChatMapper">
+	<select id="roomInfo" resultType="ChatRoomVO">
+		SELECT *
+		FROM CHAT_ROOM
+		WHERE room_no=#{roomNo}
+	</select>
+	
+	<select id="sameNick" resultType="ChatParticipationVO">
+		SELECT *
+		FROM CHAT_PARTICIPATION
+		<![CDATA[
+		WHERE room_no=#{roomNo} AND anon_nick=#{anonNick} AND memb_no<>#{membNo}
+		]]>
+	</select>
+	
+	<insert id="participation" parameterType="ChatParticipationVO">
+		<selectKey keyProperty="particiNo" resultType="string" order="BEFORE">
+			SELECT CONCAT('par-',NVL(MAX(TO_NUMBER(SUBSTR(partici_no, 5))), 0)+1)
+			FROM CHAT_PARTICIPATION
+		</selectKey>
+		INSERT INTO CHAT_PARTICIPATION
+		VALUES(#{particiNo},#{roomNo},#{membNo},#{anonNick})
+	</insert>
+	
+	<select id="getParticipationInfo" resultType="ChatParticipationVO">
+		SELECT *
+		FROM CHAT_PARTICIPATION
+		WHERE memb_no=#{membNo}
+	</select>
+	
+	<insert id="insertChat" parameterType="ChatVO">
+		<selectKey keyProperty="chatNo" resultType="string" order="BEFORE">
+			SELECT CONCAT('cha-',NVL(MAX(TO_NUMBER(SUBSTR(chat_no, 5))), 0)+1)
+			FROM CHAT
+		</selectKey>
+		INSERT INTO CHAT
+		VALUES(#{chatNo},#{cntn},sysdate,#{roomNo},#{anonNick},#{membNo})
+	</insert>
+	
+	<select id="getChat" resultType="ChatVO">
+		SELECT *
+		FROM CHAT
+		WHERE chat_no=#{chatNo}
+	</select>
+</mapper>
