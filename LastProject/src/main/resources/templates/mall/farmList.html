@@ -9,6 +9,10 @@
 <link rel="stylesheet" type="text/css" href="css/farmList.css">
 <link rel="stylesheet"
 	href="mall/source/plugins/themefisher-font/style.css">
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
 <style>
 
 /* 퀵메뉴 */
@@ -44,6 +48,20 @@
 .ctgr {
 	border: none;
 }
+
+.results tr[visible='false'],
+.no-result {
+display : none;
+}
+.results tr[visible='true']{
+display : table-row;
+}
+.counter {
+padding : 8px;
+color: #ccc;
+}
+
+
 </style>
 
 </head>
@@ -82,7 +100,7 @@
 					style="width: 40ox; height: 40px;"
 					src="https://cdn-icons-png.flaticon.com/128/545/545489.png"></li>
 				<li style="font-size: 12px;"
-					th:onclick="|location.href='@{basketList}'|" ><a href="#">장바구니</a></li>
+					th:onclick="|location.href='@{basketList}'|"><a href="#">장바구니</a></li>
 				<li class="top-btn" style="font-size: 12px; cursor: pointer;"><img
 					style="width: 40px; height: 40px;"
 					src="https://cdn-icons-png.flaticon.com/128/6015/6015743.png"
@@ -98,7 +116,7 @@
 
 				<!-- 농산물 -->
 				<div>&nbsp;</div>
-				
+
 				<h2 data-common-cd="S1">농산물</h2>
 				<div class="row-2">
 					<div class="category-container">
@@ -182,15 +200,54 @@
 						<button class="btn btn-light mt-3 mt-lg-0 ctgr" type="button"
 							id="sales">판매량</button>
 					</div>
-					<div class="row">
-						<div class="selectBtn">
-							<!-- 기존 버튼 코드 -->
-						</div>
-						<div id="search">
-							<input type="text"> <span class="search-icon"><i
-								class="tf-ion-ios-search"></i></span>
-						</div>
+
+					<!-- 검색 -->
+					<div class="form-group pull-right">
+						<input type="text" class="search form-control"
+							placeholder="What you looking for?">
 					</div>
+					<span class="counter pull-right"></span>
+					<table class="table table-hover table-bordered results">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th class="col-md-5 col-xs-5">Name / Surname</th>
+								<th class="col-md-4 col-xs-4">Job</th>
+								<th class="col-md-3 col-xs-3">City</th>
+							</tr>
+							<tr class="warning no-result">
+								<td colspan="4"><i class="fa fa-warning"></i> No result</td>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">1</th>
+								<td>강낭콩 Özbeyli</td>
+								<td>UI & UX</td>
+								<td>Istanbul</td>
+							</tr>
+							<tr>
+								<th scope="row">2</th>
+								<td>조</td>
+								<td>Software Developer</td>
+								<td>Istanbul</td>
+							</tr>
+							<tr>
+								<th scope="row">3</th>
+								<td>Egemen Özbeyli</td>
+								<td>Purchasing</td>
+								<td>Kocaeli</td>
+							</tr>
+							<tr>
+								<th scope="row">4</th>
+								<td>Engin Kızıl</td>
+								<td>Sales</td>
+								<td>Bozuyük</td>
+							</tr>
+						</tbody>
+					</table>
+
+
 				</div>
 
 				<div class="row" id="farmList">
@@ -233,9 +290,9 @@
 
 			<!-- list-end -->
 		</div>
-	
 
-	<script>
+
+		<script>
 		/* top 버튼 */
 		document.querySelector('.top-btn').addEventListener('click',
 				function() {
@@ -245,15 +302,45 @@
 					});
 				});
 		
+		//검색
+		$(document).ready(function() {
+			  $(".search").keyup(function () {
+			    var searchTerm = $(".search").val();
+			    var listItem = $('.results tbody').children('tr');
+			    var searchSplit = searchTerm.replace(/ /g, "'):containsi('")
+			    
+			  $.extend($.expr[':'], {'containsi': function(elem, i, match, array){
+			        return (elem.textContent || elem.innerText || '').toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
+			    }
+			  });
+			    
+			  $(".results tbody tr").not(":containsi('" + searchSplit + "')").each(function(e){
+			    $(this).attr('visible','false');
+			  });
+			
+			  $(".results tbody tr:containsi('" + searchSplit + "')").each(function(e){
+			    $(this).attr('visible','true');
+			  });
+			
+			  var jobCount = $('.results tbody tr[visible="true"]').length;
+			    $('.counter').text(jobCount + ' item');
+			
+			  if(jobCount == '0') {$('.no-result').show();}
+			    else {$('.no-result').hide();}
+					  });
+			});
+		
+		
+		
 		// 상품 리스트 출력
 		
-		document.querySelectorAll(".ctgr").forEach(button => {
+	/* 	document.querySelectorAll(".ctgr").forEach(button => {
 		  button.addEventListener('click', function() {
 		    // 버튼 ID 출력
 		    console.log(button.id);
 		  });
 		});
-		
+		 */
 		
 		
 		

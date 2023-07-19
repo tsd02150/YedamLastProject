@@ -13,6 +13,7 @@
 
 
 <style>
+
 .flex-block {
 	display: flex;
 }
@@ -25,7 +26,7 @@
 }
 
 #prdt-info {
-	width: 488px;
+	width: 50%;
 	height: 500px;
 	padding: 0px;
 	/* border: 1px solid; */
@@ -291,7 +292,7 @@ th {
 }
 
 #prdt-info table {
-	width: 50%;
+	width: 100%;
 	border-collapse: collapse;
 }
 
@@ -302,13 +303,14 @@ th {
 }
 
 #prdt-info th {
+	width: 150px;
 	text-align: left;
 	font-weight: bold;
 	color: #333;
 }
 
 #prdt-info td {
-	text-align: right;
+	text-align: left;
 	color: #666;
 }
 
@@ -352,6 +354,10 @@ th {
     width: 140px;
     display: inline-block;
 }
+
+
+
+
 
 </style>
 
@@ -404,7 +410,7 @@ th {
 		<div class="flex-block">
 
 			<section id="detail-img" class="news-style-one"
-				th:each="prdt : ${getFarm}" style="border: 1px solid;">
+				th:each="prdt : ${getFarm}" >
 				<div class="zoom-image-container">
 					<div class="zoom-overlay"></div>
 					<img class="zoom-image" id="prdt-img"
@@ -413,18 +419,12 @@ th {
 			</section>
 
 			<section id="prdt-info" th:each="prdt : ${getFarm}"
-				style="border: 1px solid;">
-				<div>&nbsp;</div>
-				<div>&nbsp;</div>
+				>
+	
 				<div>
 					<table>
-						<a name="top"></a>
-						<colgroup>
-							<col class="grid_3">
-							<col>
-						</colgroup>
-						<tbody>
-							<tr>
+						<tbody >
+							<tr style="width: 400px;">
 								<th scope="row">상품명</th>
 								<td th:text="${prdt.nm}"></td>
 							</tr>
@@ -456,7 +456,7 @@ th {
 						<div id="sit_tot_price">
 							<span>총 금액 :</span> <strong id="total-price">31,900원</strong>
 						</div>
-						<div class="btn-group">
+						<div class="btn-group" style="text-align: center;">
 							<button th:if="${session.loggedInMember}!=null" type="button" onclick="addToCart()">장바구니 담기</button>
 							<button type="button" onclick="directOrder()">바로 주문하기</button>
 						</div>

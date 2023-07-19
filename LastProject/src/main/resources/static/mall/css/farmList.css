@@ -59,6 +59,7 @@ h2 {
   background-color: #fff;
   transition: transform 0.3s ease-in-out;
   cursor: pointer;
+  border-radius: 10px;
 }
 
 .product-item:hover {

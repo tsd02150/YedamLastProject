@@ -38,6 +38,104 @@ a {
 	color: #000;
 }
 
+
+.product-grid{
+    font-family: 'Nunito', sans-serif;
+    text-align: center;
+    border-radius: 3px;
+    
+}
+.product-grid .product-image{
+    overflow: hidden;
+    position: relative;
+    border-radius: 10px;
+}
+.product-grid .product-image a.image{ display: block; }
+.product-grid .product-image img{
+    width: 100%;
+    height: auto;
+    transition: all 0.5s ease 0s;
+}
+.product-grid:hover .product-image img{ opacity: 0.3; }
+.product-grid .product-sale-label{
+    color: #fff;
+    background: #ff3e58;
+    font-size: 13px;
+    font-weight: 800;            
+    text-transform: uppercase;
+    padding: 5px 10px 3px;
+    border-radius: 3px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+}
+.product-grid .product-like-icon{
+    color: #ff3e58;
+    font-size: 18px;
+    line-height: 18px;
+    opacity: 0;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1;
+    transition: all 0.3s ease 0s;
+}
+.product-grid:hover .product-like-icon{ opacity: 1; }   
+.product-grid:hover .product-like-icon:hover{ color: #009850; }   
+.product-grid .add-to-cart{
+    color: #fff;
+    background: #009850;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    padding: 10px;
+    width: 160px;
+    border-radius: 3px;
+    opacity: 0;
+    transform: translateX(-50%) translateY(-50%);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transition: all 0.3s ease 0s;
+}
+.product-grid:hover .add-to-cart{
+    opacity: 1;
+    transform:translateX(-50%) translateY(5%);
+}
+.product-grid .add-to-cart:hover{
+    background: #4ece92;
+    box-shadow: 0 15px 40px rgba(250,108,71,.24);
+}
+.product-grid .product-content{ padding: 14px 10px 12px; }
+.product-grid .title{
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: capitalize;
+    letter-spacing: 0.5px;
+    margin: 0 0 5px;
+}
+.product-grid .title a{
+    color: #2d3131;
+    transition: all 0.3s ease 0s;
+}
+.product-grid .title a:hover{ color: #009850; }
+.product-grid .price{
+    color: #009850;
+    font-size: 16px;
+    font-weight: 600;
+}
+.product-grid .price span{
+    color: #aaa;
+    text-decoration: line-through;
+    margin: 0 5px 0 0; 
+}   
+@media screen and (max-width: 990px){
+    .product-grid{ margin-bottom: 30px; }
+}
+
+
+
 /* video {
 	max-width: 80%;
 	display: block;
@@ -242,12 +340,12 @@ h1 {
 
 .main_text0 {
 	width: 1100px;
-	height: 601px;
-	background: #f1f2f3;
+	height: 450px;
+
 }
 
 .main_text0>h1 {
-	padding-top: 50px;
+	/* padding-top: 50px; */
 	text-align: center;
 }
 
