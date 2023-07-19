@@ -131,7 +131,10 @@
 
 .zoom-overlay {
 	position: absolute;
-	top: 0; left : 0; width : 100%; height : 100%;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 	background-color: rgba(0, 0, 0, 0.5);
 	opacity: 0;
 	transition: opacity 0.3s ease-in-out;
@@ -281,10 +284,10 @@ th {
 
 /* 상세정보 */
 #prdt-info {
-  border: 1px solid #e0e0e0;
-  background-color: #f9f9f9;
-  padding: 30px;
-  text-align: left; /* 텍스트를 왼쪽 정렬 */
+	border: 1px solid #e0e0e0;
+	background-color: #f9f9f9;
+	padding: 30px;
+	text-align: left; /* 텍스트를 왼쪽 정렬 */
 }
 
 #prdt-info table {
@@ -344,6 +347,12 @@ th {
 #prdt-info .btn-group button:hover {
 	background-color: #0056b3;
 }
+
+.product-quantity {
+    width: 140px;
+    display: inline-block;
+}
+
 </style>
 
 </head>
@@ -435,13 +444,20 @@ th {
 							</tr>
 						</tbody>
 					</table>
+					<div class="product-quantity">
+								<span>Quantity:</span>
+								<div class="product-quantity-slider">
+									<input id="product-quantity" type="text" value="0"
+										name="product-quantity">
+								</div>
+							</div>
 					<b></b>
 					<div>
 						<div id="sit_tot_price">
 							<span>총 금액 :</span> <strong id="total-price">31,900원</strong>
 						</div>
 						<div class="btn-group">
-							<button type="button" onclick="addToCart()">장바구니 담기</button>
+							<button th:if="${session.loggedInMember}!=null" type="button" onclick="addToCart()">장바구니 담기</button>
 							<button type="button" onclick="directOrder()">바로 주문하기</button>
 						</div>
 					</div>
@@ -550,7 +566,8 @@ th {
 			<h3>상품리뷰</h3>
 			<div class="btn-insert" style="position: static;">
 				<div class="btn-group">
-					<button id="openModalBtn" type="button">리뷰 작성</button>
+				<!-- 로그인 회원만 리뷰작성 띄움 -->
+					<button th:if="${session.loggedInMember}!=null" id="openModalBtn" type="button">리뷰 작성</button>
 					<button onclick="goBack()">이전 페이지로</button>
 				</div>
 			</div>
@@ -621,6 +638,9 @@ th {
 						<textarea class="col-auto form-control" type="text"
 							id="reviewContents"
 							placeholder="좋은 수강평을 남겨주시면 Cocolo에 큰 힘이 됩니다! 포인트 5000p도 지급!!"></textarea>
+					</div>
+					<div>
+						
 					</div>
 					<div>&nbsp;</div>
 					<div></div>

@@ -82,7 +82,7 @@
 					style="width: 40ox; height: 40px;"
 					src="https://cdn-icons-png.flaticon.com/128/545/545489.png"></li>
 				<li style="font-size: 12px;"
-					th:onclick="|location.href='@{basketList}'|"><a href="#">장바구니</a></li>
+					th:onclick="|location.href='@{basketList}'|" ><a href="#">장바구니</a></li>
 				<li class="top-btn" style="font-size: 12px; cursor: pointer;"><img
 					style="width: 40px; height: 40px;"
 					src="https://cdn-icons-png.flaticon.com/128/6015/6015743.png"
@@ -392,11 +392,11 @@
     // AJAX를 사용하여 농산물 카테고리의 상품 목록을 가져오는 함수
     function loadProductList(commonCd) {
         $.ajax({
-            url: "/mall/farmList", // 실제 요청할 URL로 수정해야 합니다.
+            url: "/mall/farmList", // 실제 요청할 URL
             type: "GET",
             data: { commonCd: commonCd },
             success: function(data) {
-                // 서버에서 받아온 데이터로 상품 목록을 동적으로 생성하여 추가합니다.
+                // 서버에서 받아온 데이터로 상품 목록을 동적으로 생성하여 추가
                 var productList = data.farmList;
                 var $categoryItem = $("#" + commonCd + " ul");
                 $categoryItem.empty();

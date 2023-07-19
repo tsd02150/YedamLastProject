@@ -78,33 +78,20 @@ public class BasketController {
 		 * return "redirect:/shop/myPage"; }
 		 */
 	
-	
-	
-	
-	
-	
-	
 
 	// 장바구니 리스트
 	@GetMapping("basketList")
 	public String baskeList(Model model, BasketVO bskVO, HttpSession session) throws Exception {
 		
-		final Logger logger = LoggerFactory.getLogger(BasketController.class.getName());
-		
-		logger.info("get basket list");
-		
-		Model userId = (Model)session.getAttribute("member");
-		
-//		List<BasketVO> basketList = basketService.getBasketList(userId);
-//		model.addAttribute("basketList", basketList);
-//		
-		model.addAttribute("myInfo",session.getAttribute("loggedInMember"));
-		//model.addAttribute("baskeList", basketService.getBasketList());
-		
-		MembVO myInfo = new MembVO();
-		myInfo.setMembNo("noLogin");
-		model.addAttribute("myInfo",myInfo);
-		
+
+		if(session.getAttribute("loggedInMember")!=null) {
+			model.addAttribute("myInfo",session.getAttribute("loggedInMember"));
+		}else {
+			MembVO myInfo = new MembVO();
+			myInfo.setMembNo("noLogin");
+			model.addAttribute("myInfo",myInfo);
+		}
+
 		return "mall/basketList";
 	}
 	

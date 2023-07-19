@@ -3,6 +3,8 @@ package com.yedam.app.mall.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,7 @@ import com.yedam.app.mall.service.BasketVO;
 import com.yedam.app.mall.service.MallService;
 import com.yedam.app.mall.service.ProductReviewVO;
 import com.yedam.app.mall.service.ProductVO;
+import com.yedam.app.member.service.MembVO;
 
 @Controller
 @RequestMapping("mall")
@@ -58,6 +61,8 @@ public class MallController {
 	        model.addAttribute("S" + categoryCode, mallService.getCategoryName(categoryCode));
 	    }
 	    //model.addAttribute("startPage", 1);
+	    
+	    //List<ProductVO> farmList = mallService.getProductList();
 	    String cd = prdtVO.getCommonCd();
 	    System.out.println(cd);
 	    model.addAttribute("farmList", farmList);
@@ -65,7 +70,6 @@ public class MallController {
 	    return "mall/farmList";
 	}
 
-	
 	/*
 	 * //농산물 페이지
 	 * 
@@ -96,12 +100,20 @@ public class MallController {
 	
 	//농산물 상세 페이지
 	@GetMapping("getFarm")
-	public String getFarm(Model model, ProductVO prdtVO, ProductReviewVO revVO) {
+	public String getFarm(Model model, ProductVO prdtVO, ProductReviewVO revVO, HttpSession session) {
 		model.addAttribute("getFarm", mallService.getProductInfo(prdtVO));
 		List<ProductReviewVO> review = mallService.getProductReviewList(revVO);
 		// System.out.println(review);
 		model.addAttribute("review", review);
-
+		
+		if(session.getAttribute("loggedInMember")!=null) {
+			model.addAttribute("myInfo",session.getAttribute("loggedInMember"));
+		}else {
+			MembVO myInfo = new MembVO();
+			myInfo.setMembNo("noLogin");
+			model.addAttribute("myInfo",myInfo);
+		}
+		
 		return "mall/getFarm";
 	}
 

@@ -5,8 +5,243 @@
 <head>
 <meta charset="UTF-8">
 <title>orderList.html</title>
+
+<script
+	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
 <body>
+	<div layout:fragment="content" class="outer-block">
+		<div style="width: 1100px;">
+			<div class="orderList">
+				<div>&nbsp;</div>
+				<div>&nbsp;</div>
+				<h3>주문리스트</h3>
+				<div>&nbsp;</div>
+				<table>
+					<thead style="text-align: center;">
+						<tr style="border: 1px solid;">
+							<th style="width: 60px;">번호</th>
+							<th style="width: 500px;">제품</th>
+							<th style="width: 130px;">수량</th>
+							<th style="width: 180px;">가격</th>
+							<th style="width: 130px;">적립</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr style="border: 1px solid;">
+							<td style="width: 70px; text-align: center;">40</td>
+							<td>
+								<div class="review-item">
+									<div class="pic">
+										<img style="width: 80px; height: 80px;">
+									</div>
+									<div class="info">후기내용</div>
+								</div>
+							</td>
+							<td style="text-align: center;" class="maks">5</td>
+							<td style="text-align: center;">test</td>
+							<td style="text-align: center;">2023-07-16</td>
 
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+			<div class="orderInfo">
+				<h3>주문자 정보</h3>
+				<table>
+					<tr>
+						<th>이름</th>
+						<td>신지은</td>
+					</tr>
+					<tr>
+						<th>이메일</th>
+						<td>sje3656@hanmail.net</td>
+					</tr>
+					<tr>
+						<th>연락처</th>
+						<td>
+							<div>
+								<form>
+									010-1111-2222
+									<button type="submit">수정</button>
+								</form>
+							</div>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+			<div class="shipInfo">
+				<h3>
+					배송지 정보 <input type="button" onclick="sample6_execDaumPostcode()"
+						value="배송지변경"><br>
+				</h3>
+				<table>
+					<tr>
+						<th>이름</th>
+						<td>신지은</td>
+					</tr>
+					<tr>
+						<th>휴대전화</th>
+						<td>010-1111-2222</td>
+					</tr>
+					<tr>
+						<th>배송주소</th>
+						<td>회원 기본주소 디폴트</td>
+					</tr>
+				</table>
+			</div>
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+			<div class="dis">
+				<h3>할인 적용</h3>
+				<p>
+					쿠폰 할인<input type="text" placeholder="0">P
+					<button type="button">쿠폰적용</button>
+				<p>보유쿠폰</p>
+
+			</div>
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+			<div class="">
+				<h3>결제금액</h3>
+
+				<table style="border: 1px solid;">
+					<thead style="text-align: center; border: 1px solid;">
+						<tr>
+							<th style="width: 150px;">상품 합계금액</th>
+							<th style="width: 150px;"></th>
+							<th style="width: 150px;">총 배송비</th>
+							<th style="width: 150px;">적립금</th>
+							<th style="width: 150px;"></th>
+							<th style="width: 150px;">최종 결제금액</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td style="width: 70px; text-align: center;">40,000원</td>
+							<td>
+								<div class="pic">
+									<img style="width: 80px; height: 80px;">
+								</div>
+							</td>
+							<td style="text-align: center;">0원</td>
+							<td style="text-align: center;">0원</td>
+							<td>
+								<div class="pic">
+									<img style="width: 80px; height: 80px;">
+								</div>
+							</td>
+							<td style="text-align: center;">40,000원</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div class="right-align basketrowcmd">
+					<a href="javascript:void(0)" class="abutton">선택상품삭제</a> <a
+						href="javascript:void(0)" class="abutton">장바구니비우기</a>
+				</div>
+			</div>
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+			<p style="text-align: center;">위 주문 내용을 확인 하였으며, 회원 본인은 개인정보 이용 및
+				제공(해외직구의 경우 국외제공) 및 결제에 동의합니다.</p>
+			<div style="text-align: center;">
+				<button type="reset">취소하기</button>
+				<button type="submit">주문하기</button>
+			</div>
+		</div>
+
+	<script>
+		function sample6_execDaumPostcode() {
+			new daum.Postcode(
+					{
+						oncomplete : function(data) {
+							// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+	
+							// 각 주소의 노출 규칙에 따라 주소를 조합한다.
+							// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+							var addr = ''; // 주소 변수
+							var extraAddr = ''; // 참고항목 변수
+	
+							//사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+							if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+								addr = data.roadAddress;
+							} else { // 사용자가 지번 주소를 선택했을 경우(J)
+								addr = data.jibunAddress;
+							}
+	
+							// 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+							if (data.userSelectedType === 'R') {
+								// 법정동명이 있을 경우 추가한다. (법정리는 제외)
+								// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+								if (data.bname !== ''
+										&& /[동|로|가]$/g.test(data.bname)) {
+									extraAddr += data.bname;
+								}
+								// 건물명이 있고, 공동주택일 경우 추가한다.
+								if (data.buildingName !== ''
+										&& data.apartment === 'Y') {
+									extraAddr += (extraAddr !== '' ? ', '
+											+ data.buildingName
+											: data.buildingName);
+								}
+								// 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+								if (extraAddr !== '') {
+									extraAddr = ' (' + extraAddr + ')';
+								}
+								// 조합된 참고항목을 해당 필드에 넣는다.
+								document
+										.getElementById("sample6_extraAddress").value = extraAddr;
+	
+							} else {
+								document
+										.getElementById("sample6_extraAddress").value = '';
+							}
+	
+							// 우편번호와 주소 정보를 해당 필드에 넣는다.
+							document.getElementById('sample6_postcode').value = data.zonecode;
+							document.getElementById("sample6_address").value = addr;
+							// 커서를 상세주소 필드로 이동한다.
+							document
+									.getElementById("sample6_detailAddress")
+									.focus();
+						}
+					}).open();
+		}
+
+		// 특정 항목을 클릭한 경우, 해당 정보를 받아서 처리할 콜백 함수를 정의
+		new daum.Postcode({
+			oncomplete : function(data) {
+				//data는 사용자가 선택한 주소 정보를 담고 있는 객체이며, 상세 설명은 아래 목록에서 확인하실 수 있습니다.
+			}
+		});
+
+		// 우편번호 서비스의 화면 크기가 변한 경우, 화면 크기 정보를 받아서 처리할 콜백 함수를 정의
+		new daum.Postcode({
+			onresize : function(size) {
+				//size는 우편번호 찾기 화면의 크기 데이터 객체이며, 상세 설명은 아래 목록에서 확인하실 수 있습니다.
+			}
+		});
+
+		// 검색 결과를 선택하거나, 브라우저의 닫기버튼을 통해 닫았을 때 발생하는 콜백 함수를 정의
+		new daum.Postcode({
+			onclose : function(state) {
+				//state는 우편번호 찾기 화면이 어떻게 닫혔는지에 대한 상태 변수 이며, 상세 설명은 아래 목록에서 확인하실 수 있습니다.
+				if (state === 'FORCE_CLOSE') {
+					//사용자가 브라우저 닫기 버튼을 통해 팝업창을 닫았을 경우, 실행될 코드를 작성하는 부분입니다.
+
+				} else if (state === 'COMPLETE_CLOSE') {
+					//사용자가 검색결과를 선택하여 팝업창이 닫혔을 경우, 실행될 코드를 작성하는 부분입니다.
+					//oncomplete 콜백 함수가 실행 완료된 후에 실행됩니다.
+				}
+			}
+		});
+	</script>
+	</div>
 </body>
 </html>
