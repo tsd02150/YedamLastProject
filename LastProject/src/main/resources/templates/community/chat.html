@@ -110,7 +110,7 @@
 							<h5>참여인원 : n 명</h5>
 						</div>
 					</div>
-					<button type="button" id="resetBtn" class="btn-dark">채팅 초기화</button>
+					<button type="button" id="resetBtn" class="btn-dark" onClick="resetChat()">채팅 초기화</button>
 				</div>
 
 				<!-- DIRECT CHAT DANGER -->
@@ -146,7 +146,7 @@
 							<!-- /.direct-chat-msg -->
 
 							<!-- Message to the right -->
-							<div class="direct-chat-msg right">
+							<div class="direct-chat-msg stock-chat right">
 								<div class="direct-chat-info clearfix">
 									<span class="direct-chat-timestamp pull-right">23 Jan 2:05 pm</span>
 									<span class="direct-chat-name pull-right">Sarah Bullock&nbsp;&nbsp;</span>
@@ -180,9 +180,13 @@
 		<script th:inline="javascript">
 			let myAnonNick=[[${particiInfo.anonNick}]];
 			let myMembNo=[[${particiInfo.membNo}]];
+			function resetChat() {
+			    $("#chatSpace").html("");
+			}
 		</script>
-		<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
-		<script src="../socket/js/app.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+		<script src="../community/js/chat2.js"></script>
 	</div>
 </body>
 </html>
