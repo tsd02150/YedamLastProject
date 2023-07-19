@@ -337,6 +337,12 @@
 		group by p.item_no,prc,point,m.memb_no
 	</select>
 	
+	<!-- 보유포인트 -->
+	<select id="getUserPoint">
+		select point
+		from member
+		where memb_no = #{membNo}
+	</select>
 	<!-- 주식 주문 프로시저 -->
 	<select id="callOrderProd" statementType="CALLABLE">
     {
@@ -358,6 +364,8 @@
 			    				, #{error_one, mode=OUT, jdbcType=VARCHAR}
 			    				, #{error_two, mode=OUT, jdbcType=VARCHAR}
 			    				, #{error_thr, mode=OUT, jdbcType=VARCHAR}
+			    				, #{seller, mode=OUT, jdbcType=VARCHAR}
+			    				, #{buyer, mode=OUT, jdbcType=VARCHAR}
 			    				)}
 	</select>
 	

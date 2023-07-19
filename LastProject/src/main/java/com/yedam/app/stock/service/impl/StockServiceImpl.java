@@ -1,14 +1,12 @@
 package com.yedam.app.stock.service.impl;
 
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.community.service.BoardVO;
@@ -24,6 +22,8 @@ public class StockServiceImpl implements StockService {
 	
 	@Autowired
 	StockMapper stockMapper;
+	
+	private SimpMessagingTemplate template;
 	
 	//테마리스트 가져오기
 	@Override
@@ -169,7 +169,21 @@ public class StockServiceImpl implements StockService {
 	// 보유 주식수량 수익률 포인트 가져오기
 	@Override
 	public PossStockVO getPossStock(String itemNo, String membNo) {
-		return stockMapper.getPossStock(itemNo, membNo);
+		Integer point = stockMapper.getUserPoint(membNo);
+		System.out.println(point + "pppppp");
+		PossStockVO vo = stockMapper.getPossStock(itemNo, membNo);
+		
+		// 초기 값이 없을때
+		if(vo == null) {
+			vo = new PossStockVO();
+			vo.setPoint(point);
+			vo.setRate(0);
+			vo.setCnt(0);
+		}
+		
+		System.out.println(vo + "zzzs");
+		
+		return vo;
 	}
 
 	//주식 주문 프로시저 와 체결
@@ -185,6 +199,13 @@ public class StockServiceImpl implements StockService {
 		
 		if(result == 1) {
 			PossStockVO vo = stockMapper.getPossStock((String)params.get("order_item_no"),(String) params.get("order_memb_no"));
+			Integer point = stockMapper.getUserPoint((String) params.get("order_memb_no"));
+			if(vo == null) {
+				vo = new PossStockVO();
+				vo.setPoint(point);
+				vo.setRate(0);
+				vo.setCnt(0);
+			}
 			map.put("code", "success");
 			map.put("message", "주문에 성공했습니다!!");
 			map.put("possStock", vo);
@@ -193,6 +214,7 @@ public class StockServiceImpl implements StockService {
 			map.put("message", "주문에 실패했습니다..");
 		}
 		
+		// 체결 프로시저
 		String orderNo = (String)params.get("insert_after_no"); // 체결된 아이디
 		System.out.println(orderNo);
 		Date orderDt = stockMapper.getOrderDt(orderNo);
@@ -203,24 +225,39 @@ public class StockServiceImpl implements StockService {
 		taMap.put("error_one", null);
 		taMap.put("error_two", null);
 		taMap.put("error_thr", null);
+		taMap.put("seller", null);
+		taMap.put("buyer", null);
 		stockMapper.callTaProd(taMap);
 		Integer taResult = (Integer) taMap.get("ta_result");
 		String errorOne = (String) taMap.get("error_one");
 		String errorTwo = (String) taMap.get("error_two");
 		String errorThr = (String) taMap.get("error_thr");
 		
+		String seller = (String) taMap.get("seller");
+		String buyer = (String) taMap.get("buyer");
+		
 		System.out.println("error_one : " +errorOne);
 		System.out.println("error_two : " +errorTwo);
 		System.out.println("error_thr : " +errorThr);
 		if(taResult == 1) {
 			System.out.println("taResult : 성공 ");
+			//  실시간 알림
+			System.out.println("매도자 : " + seller + " 매수자 : " + buyer);
+			if(!seller.equals("none")) {
+			sendOrderResult (seller , "매도주문이 체결되었습니다" );
+			sendOrderResult (buyer , "매수주문이 체결되었습니다" );
+			}
 		}else if (taResult == 0) {
 			System.out.println("taResult : 실패 ");
 		}
 		return map;
 	}
-
 	
+	// 체결시 실시간 알람전송
+	public void sendOrderResult( String membNo , String text) {
+		
+		this.template.convertAndSendToUser(membNo , "/stock/alarm", text);
+	}
 	
 	
 	
