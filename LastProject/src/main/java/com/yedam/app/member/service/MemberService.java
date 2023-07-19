@@ -84,4 +84,6 @@ public interface MemberService {
 	public int updateBuyOrder(BuyOrderVO boVO);
 	//관심종목 삭제
 	public int deleteInterest(@Param("membNo")String membNo , @Param("itemNo")String itemNo);
+	//거래내역 조회
+	public List<DealVO> dealList(DealVO vo);
 }

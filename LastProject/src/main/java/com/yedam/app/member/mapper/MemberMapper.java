@@ -10,6 +10,7 @@ import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.BuyOrderVO;
 import com.yedam.app.member.service.ChargeVO;
+import com.yedam.app.member.service.DealVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.SellOrderVO;
@@ -98,5 +99,8 @@ public interface MemberMapper {
 	
 	//관심종목 삭제
 	public int deleteInterest(@Param("membNo")String membNo , @Param("itemNo")String itemNo);
+	
+	//거래내역 조회
+	public List<DealVO> dealList(DealVO vo);
 	
 }

@@ -95,8 +95,7 @@
 	<script>
 	let div1='';
 	let div2='';
-	
- 	let membNo = "[[${session.loggedInMember.membNo}]]";
+ 	const membNo = "[[${session.loggedInMember.membNo}]]";
 	//매수 주문 현황
 	 $.ajax({
 		 url : "buyOrderList",
@@ -289,6 +288,23 @@ function deleteInterest(itemNo) {
     }
   });
 }
+	
+	//보유주식
+	$.ajax({
+		url : "myStockList",
+		method : "POST",
+		data : {
+			"membNo" : membNo
+		},
+		success : function(data){
+			data.forEach(el=>{
+				console.log(el)
+			})
+		},
+		error : function(err){
+			console.log(err)
+		}
+	});
 
 	</script>
 </div>

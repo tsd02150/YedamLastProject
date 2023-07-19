@@ -51,10 +51,12 @@
 }
 #buytbl, #nav-tabContent{
 	text-aline : center;
+	display : block;
 }
 #stordertbl{
 	margin-top : 20px;
 }
+
 </style>
 </head>
 <body>
@@ -135,13 +137,13 @@
 	            </tr>
             </thead>
             <tbody id="buytbody">
-            	
             </tbody>
 			  	</table>
 			  </div>
 			  <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
 			  <!-- 매수 주문 예약 -->
 			  	<table id="selltbl" class="table-light col-12">
+			  		<thead>
 			  		<tr>
               <th>종목코드</th>
               <th>종목명</th>
@@ -150,6 +152,9 @@
               <th>예약시간</th>
               <th colspan="2"></th>
             </tr>
+            </thead>
+            <tbody id="selltbody">
+            </tbody>
 			  	</table>
 			  </div>
 			</div>
@@ -161,6 +166,48 @@
 	let tr2='';
 	let date = '';
  	let membNo = "[[${session.loggedInMember.membNo}]]";
+ 	
+	
+	$("#nav-home-tab").on("click", function(){ //매수 주문현황 탭 클릭 시
+		$("#buytbl").css("display", "block");
+		//$("#selltbl").css("display", "none");
+	})
+	
+	$("#nav-profile-tab").on("click", function(){ // 매도 주문현황 탭 클릭 시
+		$("#buytbl").css("display", "none");
+		$("#selltbl").css("display", "block");
+		
+		//매도 주문 현황
+		 $.ajax({
+			 url : "sellOrderList",
+			 method : "POST",
+			 data : {
+				 "membNo" : membNo
+			 },
+			 success : function(data){
+				 data.forEach(el=>{
+					 console.log(el);
+					 let formattedSellDt = moment(el.buyDt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format("YYYY-MM-DD HH:mm:ss");
+					 tr2 += `
+							   <tr data-no="${el.sellNo}">
+							     <td>${el.commonCd}</td>
+							     <td>${el.nm}</td>
+							     <td>${el.rmnCnt}</td>
+							     <td>${el.prc}</td>
+							     <td>${formattedSellDt}</td>
+							     <td><button onclick="updateSellOrder(this)" style="display : inline-block;">수정</button></td>
+							     <td><button onclick="delSellOrder(this)">삭제</button></td>
+							   </tr>
+					 `;
+				 })
+				 $("#selltbody").html(tr2);
+			 },
+			 error : function(err){
+				 console.log(err);
+			 }
+		 });
+	})
+ 	
 	//매수 주문 현황
 	 $.ajax({
 		 url : "buyOrderList",
@@ -170,7 +217,7 @@
 		 },
 		 success : function(data){
 			 data.forEach(el=>{
-				 console.log(el);
+				 //console.log(el);
 				 let formattedBuyDt = moment(el.buyDt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format("YYYY-MM-DD HH:mm:ss");
 				 tr1 += `
 						   <tr data-no="${el.buyNo}">
@@ -190,6 +237,10 @@
 			 console.log(err);
 		 }
 	 });
+	
+	
+	
+
 	
 	//매수 주문 변경
 	function updateBuyOrder(target) {
@@ -226,8 +277,8 @@
 				data : {
 					"buyNo" : buyNo,
 					"membNo" : membNo,
-					"rmnCnt" : updateRmnCnt,
-					"prc" : updatePrc
+					"rmnCnt" : updatedRmnCnt,
+					"prc" : updatedPrc
 				},
 				success : function(result) {
 					if(result ==1){
@@ -237,6 +288,63 @@
 				    
 				    $(target).show();
 				    $(this).remove();
+				    $(".saveBtn").remove();
+					}
+				},
+				error : function(err){
+					console.log(err);
+				}
+			})
+  });
+}
+	
+	//매도 주문 변경
+	function updateSellOrder(target) {
+		let tr = $(target).closest("tr");
+		let sellNo = tr.attr("data-no");
+	  let rmnCntCell = $(target).parent().prev().prev().prev();
+	  let prcCell = $(target).parent().prev().prev();
+	
+	  let rmnCntValue = rmnCntCell.text().trim();
+	  let prcValue = prcCell.text().trim();
+	
+	  let rmnCntInput = $('<input type="number">').val(rmnCntValue).css('width', '60px');
+	  let prcInput = $('<input type="number">').val(prcValue).css('width', '70px');
+	
+	  rmnCntCell.empty().append(rmnCntInput);
+	  prcCell.empty().append(prcInput);
+	
+	  $(target).hide();
+	  
+	  let saveBtn = $('<button class="saveBtn">저장</button>').css('display', 'inline-block');
+	  $(target).parent().append(saveBtn);
+	  
+	  saveBtn.on("click", function() {
+	    let updatedRmnCnt = rmnCntInput.val();
+	    let updatedPrc = prcInput.val();
+	    
+	    console.log(updatedRmnCnt);
+	    console.log(updatedPrc);
+	    
+	    //매수 주문 수정 아작스 
+			$.ajax({
+				url : updateSellOrder,
+				method : "POST",
+				data : {
+					"sellNo" : sellNo,
+					"membNo" : membNo,
+					"rmnCnt" : updatedRmnCnt,
+					"prc" : updatedPrc
+				},
+				success : function(result) {
+					if(result ==1){
+						toastShow("Update","매도 주문 예약이 수정되었습니다.","success");
+				    rmnCntCell.text(updatedRmnCnt);
+				    prcCell.text(updatedPrc);
+				    
+				    $(target).show();
+				    $(this).remove();
+				    $(".saveBtn").remove();
 					}
 				},
 				error : function(err){
@@ -289,9 +397,7 @@
 			  }
 		  });
 		}
-	
-	
-	
+
 	
 ////chart
     var options = {

@@ -1,10 +1,5 @@
 package com.yedam.app.security.service.impl;
 
-import java.net.http.HttpRequest;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

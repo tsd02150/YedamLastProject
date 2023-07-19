@@ -206,7 +206,7 @@
 		      from item_info a join (select i.item_no ,t.nm
 		                            from poss_stock i join item t
 		                            on i.item_no = t.item_no
-		                            where memb_no = 'mem-5') b
+		                            where memb_no = #{membNo}) b
 		      on a.item_no = b.item_no
 		      where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
 		                  ) i --전일주가정보
@@ -272,7 +272,7 @@
 				<if test="tempPwd != null and !tempPwd.equals('')">
 					tempPwd = #{tempPwd}
 				</if>
-				<if test="point != null">
+				<if test="point != null and !tempPwd.equals('')">
 					point = #{point}
 				</if>
 			</set>
@@ -305,12 +305,14 @@
 	 	select s.*, i.nm, i.common_cd  from sell_order s
 		join item i on s.item_no = i.item_no
 		where memb_no = #{membNo}
+		and to_char(sell_dt,'yyyy-MM-dd') = to_char(sysdate,'yyyy-MM-dd');
  	</select>
  	
  <select id="buyOrderList" parameterType="String">
 	 	select s.*, i.nm, i.common_cd from buy_order s
 		join item i on s.item_no = i.item_no
 		where memb_no = #{membNo}
+    and to_char(buy_dt,'yyyy-MM-dd') = to_char(sysdate,'yyyy-MM-dd')
  </select>
  	
  <delete id="deleteSellOrder" parameterType="SellOrderVO">
@@ -340,6 +342,54 @@
 		where memb_no = #{membNo}
 		and   buy_no = #{buyNo}
 	</update>
+	
+	<select id="dealList" parameterType="DealVO">
+		SELECT * FROM (
+    SELECT tablename, order_no, memb_no, order_dt, order_am as point, i.item_no, i.nm
+    FROM (
+        SELECT '매도' AS tablename, sell_no AS order_no, memb_no, sell_dt AS order_dt, prc * rmn_cnt AS order_am, item_no AS item_no
+        FROM sell_order
+        UNION ALL
+        SELECT '매수' AS tablename, buy_no AS order_no, memb_no, buy_dt AS order_dt, -(prc * rmn_cnt) AS order_am, item_no AS item_no
+        FROM buy_order
+        UNION ALL
+        SELECT '충전' AS tablename, chag_no AS order_no, memb_no, chag_dt AS order_dt, chag_prc AS order_am, NULL AS item_no
+        FROM charge
+        UNION ALL
+        SELECT '포인트몰' AS tablename, o.order_no, o.memb_no, o.order_dt, -(o.order_am) AS order_am, os.prdt_no AS item_no
+        FROM orders o
+        JOIN order_detail os ON o.order_no = os.order_no
+    ) s LEFT OUTER JOIN item i ON s.item_no = i.item_no ) a
+    WHERE memb_no = #{membNo}
+    <choose>
+        <when test="tablename == '매도'">
+            AND tablename = #{tablename}
+        </when>
+        <when test="tablename == '매수'">
+            AND tablename = #{tablename}
+        </when>
+        <when test="tablename == '충전'">
+            AND tablename = #{tablename}
+        </when>
+        <when test="tablename == '포인트몰'">
+            AND tablename = #{tablename}
+        </when>
+        <otherwise>
+            AND 1=1 -- 전체 데이터 출력
+        </otherwise>
+    </choose>
+     <if test="startDate != null and endDate != null">
+    		AND order_dt BETWEEN #{startDate} AND #{endDate}
+    </if>
+    <if test="startDate != null and endDate == null">
+        AND order_dt BETWEEN #{startDate} AND CURRENT_DATE
+    </if>
+    <if test="startDate == null and endDate != null">
+        AND order_dt BETWEEN (SELECT MIN(order_dt) FROM a) AND #{endDate}
+    </if>
+    ORDER BY order_dt DESC
+
+</select>
  	
 	
 </mapper>

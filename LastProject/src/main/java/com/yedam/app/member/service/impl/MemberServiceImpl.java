@@ -1,7 +1,6 @@
 package com.yedam.app.member.service.impl;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,11 +12,11 @@ import com.yedam.app.member.mapper.MemberMapper;
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.BuyOrderVO;
 import com.yedam.app.member.service.ChargeVO;
+import com.yedam.app.member.service.DealVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
 import com.yedam.app.member.service.SellOrderVO;
-import com.yedam.app.security.service.UserVO;
 import com.yedam.app.stock.service.StockVO;
 
 @Service
@@ -182,6 +181,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int updateBuyOrder(BuyOrderVO boVO) {
 		return membMapper.updateBuyOrder(boVO);
+	}
+
+	@Override
+	public List<DealVO> dealList(DealVO vo) {
+		return membMapper.dealList(vo);
 	}
 
 }

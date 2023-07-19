@@ -4,8 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -27,6 +27,7 @@ import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.BuyOrderVO;
 import com.yedam.app.member.service.ChargeVO;
+import com.yedam.app.member.service.DealVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
@@ -414,9 +415,9 @@ public class MemberController {
 	
 	@ResponseBody
 	@PostMapping("stockList")
-	public List<MembVO> myPageInfo(@RequestParam String id, Model model, MembVO membVO) {
+	public List<MembVO> myPageInfo(@RequestParam String membNo, Model model, MembVO membVO) {
 		//UserVO meminfo = (UserVO)session.getAttribute("loggedInMember");
-		membVO.setId(id);
+		membVO.setMembNo(membNo);
 		List<MembVO> stockList = membService.myStockList(membVO);
 		//model.addAttribute("stocklist",stockList);
 		System.out.println(stockList);
@@ -558,6 +559,7 @@ public class MemberController {
 	@PostMapping("sellOrderList")
 	public List<SellOrderVO> sellOrderList(@RequestParam String membNo){
 		List<SellOrderVO> list = membService.sellOrderList(membNo);
+		//System.out.println(list);
 		return list;
 	}
 	
@@ -615,5 +617,18 @@ public class MemberController {
 		boVO.setRmnCnt(rmnCnt);
 		int result = membService.updateBuyOrder(boVO);
 		return result;
+	}
+	
+	@ResponseBody
+	@PostMapping("dealList")
+	public List<DealVO> dealList(@RequestParam String membNo, @RequestParam String tablename, @RequestParam String startDate,@RequestParam String endDate,DealVO vo){
+
+		vo.setMembNo(membNo);
+		vo.setTablename(tablename);
+		vo.setStartDate(startDate);
+		vo.setEndDate(endDate);
+		System.out.println(startDate);
+		System.out.println(endDate);
+		return membService.dealList(vo);
 	}
 }
