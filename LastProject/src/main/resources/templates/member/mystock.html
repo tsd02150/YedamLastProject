@@ -95,13 +95,13 @@
 	<script>
 	let div1='';
 	let div2='';
- 	const membNo = "[[${session.loggedInMember.membNo}]]";
+ 	const memNo = "[[${session.loggedInMember.membNo}]]";
 	//매수 주문 현황
 	 $.ajax({
 		 url : "buyOrderList",
 		 method : "POST",
 		 data : {
-			 "membNo" : membNo
+			 "membNo" : memNo
 		 },
 		 success : function(data){
 			 data.forEach(el=>{
@@ -138,7 +138,7 @@
 		 url : "sellOrderList",
 		 method : "POST",
 		 data : {
-			 "membNo" : membNo
+			 "membNo" : memNo
 		 },
 		 success : function(data){
 			 data.forEach(el=>{
@@ -178,7 +178,7 @@
 		  url : "deleteBuyOrder",
 		  method : "POST",
 		  data : {
-			  "membNo" : membNo,
+			  "membNo" : memNo,
 			  "buyNo" : dataNo
 		  },
 		  success : function(res){
@@ -199,7 +199,7 @@
 		  url : "deleteSellOrder",
 		  method : "POST",
 		  data : {
-			  "membNo" : membNo,
+			  "membNo" : memNo,
 			  "sellNo" : dataNo
 		  },
 		  success : function(res){
@@ -226,7 +226,7 @@
    url: "interestList",
    method: "POST",
    data: {
-     "membNo": membNo
+     "membNo": memNo
    },
    success: function(data) {
      if (data != null) {
@@ -274,7 +274,7 @@ function deleteInterest(itemNo) {
     method: "POST",
     data: {
       "itemNo": itemNo,
-      "membNo": membNo
+      "membNo": memNo
     },
     success: function(result) {
       if (result == 1) {
@@ -294,7 +294,7 @@ function deleteInterest(itemNo) {
 		url : "myStockList",
 		method : "POST",
 		data : {
-			"membNo" : membNo
+			"membNo" : memNo
 		},
 		success : function(data){
 			data.forEach(el=>{

@@ -2,7 +2,7 @@
     brokerURL: 'ws://localhost:80/stockserver' // 서버연결
 });
 
-let membNo = $('#sessionMembNo').text();
+
 
 stompClient.onConnect = (frame) => {
     setConnected(true);

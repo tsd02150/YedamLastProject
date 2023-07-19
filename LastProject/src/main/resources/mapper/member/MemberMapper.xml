@@ -272,12 +272,13 @@
 				<if test="tempPwd != null and !tempPwd.equals('')">
 					tempPwd = #{tempPwd}
 				</if>
-				<if test="point != null and !tempPwd.equals('')">
+				<if test="point != null and !point.equals('')">
 					point = #{point}
 				</if>
 			</set>
 			WHERE id = #{id}
 		</update>
+		
 		<update id="updateMemberAddr" parameterType="AddrVO">
 			UPDATE address
 			SET		 zip = #{zip},

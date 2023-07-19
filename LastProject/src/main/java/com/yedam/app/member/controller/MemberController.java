@@ -414,7 +414,7 @@ public class MemberController {
 	}
 	
 	@ResponseBody
-	@PostMapping("stockList")
+	@PostMapping("myStockList")
 	public List<MembVO> myPageInfo(@RequestParam String membNo, Model model, MembVO membVO) {
 		//UserVO meminfo = (UserVO)session.getAttribute("loggedInMember");
 		membVO.setMembNo(membNo);
@@ -464,6 +464,7 @@ public class MemberController {
 	    membVO.setNick(nick);
 	    membVO.setEmail(email);
 	    membVO.setTel(tel);
+	    membVO.setPoint(mem.getPoint());
 	    if(pwd == mem.getPwd()) {
 	    	if (mem.getTempPwd() == null) {
 	    		membVO.setPwd(pwd);
