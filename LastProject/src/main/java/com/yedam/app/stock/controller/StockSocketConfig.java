@@ -1,4 +1,4 @@
-package com.yedam.app.stock.controller;
+ package com.yedam.app.stock.controller;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
