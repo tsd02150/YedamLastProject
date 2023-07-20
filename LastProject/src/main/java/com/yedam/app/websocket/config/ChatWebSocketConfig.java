@@ -19,10 +19,13 @@ public class ChatWebSocketConfig implements  WebSocketMessageBrokerConfigurer{
 	public void configureMessageBroker(MessageBrokerRegistry config) {
 		config.enableSimpleBroker("/topic");					// 구독신청 (메세지 받기)
 		config.setApplicationDestinationPrefixes("/mychat");		// 메시지 전송
+		config.enableSimpleBroker("/stock");        	  // 구독신청 - 연결된 url 의 메세지 구독하여 받는다
+	    config.setApplicationDestinationPrefixes("/app"); // 메세지 전송
 	}
 
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
+		registry.addEndpoint("/stockserver");      //서버 연결 url 
 		registry.addEndpoint("/chatserver").withSockJS();					// 서버연결 url
 	}
 	
