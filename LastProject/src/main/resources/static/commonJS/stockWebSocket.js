@@ -1,5 +1,5 @@
 const stompClient = new StompJs.Client({
-    brokerURL: 'ws://localhost:80/stockserver' // 서버연결
+    brokerURL: 'ws://localhost:80/socketserver' // 서버연결
 });
 
 let loginMemberName = $('#sessionMembNo').text();
