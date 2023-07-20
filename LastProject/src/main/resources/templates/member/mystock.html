@@ -97,9 +97,9 @@
 			<h3>거래내역</h3>
 			<input type="date" id="dstart"> ~ 
 			<input type="date" id="dend">
-			<button type="button">1개월</button>
-			<button type="button">3개월</button>
-			<button type="button">6개월</button>
+			<button type="button" id="oneMonthBtn">1개월</button>
+			<button type="button" id="threeMonthsBtn">3개월</button>
+			<button type="button" id="sixMonthsBtn">6개월</button>
 			<select id="buysellsel">
 				<option value="">전체거래</option>
 				<option value="B">매수</option>
@@ -222,6 +222,7 @@
 		 success : function(data){
 			 data.forEach(el=>{
 				 //console.log(el);
+				 let prc = (el.prc).toLocaleString();
 				 div1 +=`
 				 				<div data-no="${el.buyNo}" style="text-align:center; border: 1px solid #DDDDDD;">
 				 					<span style="font-weight : bold;">매수 주문 예약</span><button onclick="delBuyOrder(this)"> X </button>
@@ -232,11 +233,11 @@
 				 						</tr>
 				 						<tr>
 				 							<th>주문수량</th>
-				 							<td>${el.rmnCnt}</td>
+				 							<td>${el.rmnCnt} 개</td>
 				 						</tr>
 				 						<tr>
 				 							<th>주문가격</th>
-				 							<td>${el.prc}</td>
+				 							<td>${prc} point </td>
 				 						</tr>
 				 					</table>
 				 				</div>
@@ -414,60 +415,89 @@ $.ajax({
 	  },
 	  success: function(data) {
 		  //console.log(data);
-		  let itemList = [];
-		  let currentItemNo;
-		  let sumRate = 0;
-		  let itemCount = 0;
+		  let asset = 0;
+		  let invest = 0;
 
-		  for (let i = 0; i < data.length; i++) {
-		    let currentItem = data[i];
-
-		    if (currentItemNo !== currentItem.itemNo) {
-		      if (itemCount !== 0) {
-		        let groupRate = sumRate / itemCount;
-		        itemList[itemList.length - 1].rate = (groupRate).toFixed(2);
-		      }
-
-		      currentItemNo = currentItem.itemNo;
-		      sumRate = currentItem.tprc / currentItem.tradePrc;
-		      itemCount = 1;
-		    } else {
-		      sumRate += currentItem.tprc / currentItem.tradePrc;
-		      itemCount++;
-		    }
-
-		    itemList.push({
-		      itemNo: currentItem.itemNo,
-		      tnm: currentItem.tnm,
-		      rate: currentItem.tprc / currentItem.tradePrc,
-		      tprc: currentItem.tprc,
-		      count: itemCount
-		    });
-
-		    if (i + 1 === data.length) {
-		      let groupRate = sumRate / itemCount;
-		      itemList[itemList.length - 1].rate = (groupRate).toFixed(2);
-		    }
-		  }
-
-		  itemList.forEach(item => {
-		    let rate = parseFloat(item.rate).toFixed(2);
+		  data.forEach(el => {
+			  let formattedRaise = (el.tradePrc - el.nowPrc).toLocaleString();
 		    let tr = `
-		      <tr>
-		        <td>${item.tnm}</td>
-		        <td>${rate}</td>
-		        <td>${item.tprc}</td>
+		      <tr data-no="${el.itemNo}">
+		        <td onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">${el.tnm}</td>
+		        <td class="rate">${formattedRaise}</td>
+		        <td class="rate">${el.rate}%</td>
 		      </tr>
 		    `;
-		    $("#ownList").append(tr);
-		  });
 
-	  },
+		    asset += el.tradePrc;
+		    invest += el.nowPrc;
+		    
+		    $("#ownList").append(tr);
+		    boxClass();
+		  });
+		  
+		  let formattedAsset = (asset * 10).toLocaleString();
+		  let formattedInvest = (invest * 10).toLocaleString();
+		  
+		  let tr2 = `
+		    <table>
+		      <tr>
+		        <th>자산(평가금액)</th>
+		        <td>${formattedAsset}원</td>
+		      </tr>
+		      <tr>
+		        <th>투자금액</th>
+		        <td>${formattedInvest}원</td>
+		      </tr>
+		    </table>
+		  `;
+
+		  $("#sum").append(tr2);
+		},
 	  error: function(err) {
 	    console.log(err);
 	  }
 	});
 
+//1개월, 3개월, 6개월 클릭
+function updateStartDate(period) {
+    let today = new Date();
+    let startDate = new Date();
+
+    switch (period) {
+      case "oneMonth":
+        startDate.setMonth(startDate.getMonth() - 1);
+        break;
+      case "threeMonths":
+        startDate.setMonth(startDate.getMonth() - 3);
+        break;
+      case "sixMonths":
+        startDate.setMonth(startDate.getMonth() - 6);
+        break;
+      default:
+        break;
+    }
+
+    let startYear = startDate.getFullYear();
+    let startMonth = startDate.getMonth() + 1 < 10 ? "0" + (startDate.getMonth() + 1) : startDate.getMonth() + 1;
+    let startDateStr = startYear + "-" + startMonth + "-" + startDate.getDate();
+    
+    $("#dstart").val(startDateStr);
+  }
+
+  $("#oneMonthBtn").on("click", function() {
+    updateStartDate("oneMonth");
+    buysell();
+  });
+
+  $("#threeMonthsBtn").on("click", function() {
+    updateStartDate("threeMonths");
+    buysell();
+  });
+
+  $("#sixMonthsBtn").on("click", function() {
+    updateStartDate("sixMonths");
+    buysell();
+  });
 
 
 	</script>

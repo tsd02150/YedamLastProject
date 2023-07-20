@@ -154,7 +154,23 @@
 		</div>
 	</div>
 	<script>
-
+	// 해당 페이지 로드시 실행
+		let membNo = "[[${session.loggedInMember != null ? session.loggedInMember.membNo : 'anonymous'}]]";
+		// membNo가 있을 경우
+		
+	$(document).ready(function() {
+		// membNo 값을 가져옴
+		if (membNo) {
+			// "투자성향 자가측정 확인" 탭에 active 클래스 추가
+			$("#nav-profile-tab").addClass("active");
+			// "투자성향 자가측정" 탭에 active 클래스 제거
+			$("#nav-home-tab").removeClass("active");
+			// "surveyDiv" 초기화 (내용 삭제)
+			$("#surveydiv").html("");
+			// analysisResult 함수 호출
+			analysisResult();
+		}
+	});
 	
 	function doSubmit() {
 			
@@ -205,8 +221,6 @@
 				$("input:radio[name=lossLevel]")[0].focus();
 				return;
 			}
-			
-			let membNo = "[[${session.loggedInMember != null ? session.loggedInMember.membNo : 'anonymous'}]]";
 
 			let q1Answer = $("input[name='investKnowLevel']:checked").val();
 			let q2Answer = $("input[name='investPracticeSect']:checked").val();
@@ -264,13 +278,13 @@
 					}
 				});
 		}
-	
+	}
 		function analysisResult(){
 			$.ajax({
 				url : "analysisResult",
 				method : "POST",
 				data : {
-					"membNo" membNo
+					"membNo" : membNo
 				},
 				success : function(data){
 					data.forEach(el=>{
@@ -283,8 +297,6 @@
 				}
 			});
 		}
-		
-	}
 	</script>
 
 </div>

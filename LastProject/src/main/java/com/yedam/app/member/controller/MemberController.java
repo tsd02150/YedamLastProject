@@ -441,7 +441,6 @@ public class MemberController {
 	  OrderVO orderVO = new OrderVO();
 	  orderVO.setId(id);
 	  orderVO.setOrderSt(orderSt);
-	  //System.out.println(membService.mypageOrderList(orderVO));
 	  return membService.mypageOrderList(orderVO);
 	}
 	
@@ -463,11 +462,6 @@ public class MemberController {
 	    membVO.setEmail(email);
 	    membVO.setTel(tel);
 	    membVO.setPoint(mem.getPoint());
-
-	    System.out.println("^^^^^^^^^^^^^^");
-	    System.out.println(pwd);
-	    System.out.println(mem.getPwd());
-	    System.out.println("^^^^^^^^^^^^^^");
 	    
 	    if (pwd == null || pwd.equals("")) { // 비밀번호 변경X
 	        membVO.setPwd(mem.getPwd()); // 기존 비밀번호 그대로 저장
@@ -552,7 +546,20 @@ public class MemberController {
 	}
 	
 	@GetMapping("mystockInfo")
-	public String mystockInfo() {
+	public String mystockInfo(HttpSession session, Model model) {
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		
+		List<PossVO> possstockList = membService.myPossStockList(mem.getMembNo());
+		model.addAttribute("possstockList", possstockList);
+		
+		int sumNowPrc = possstockList.stream().mapToInt(PossVO::getNowPrc).sum();
+	    int sumTradePrc = possstockList.stream().mapToInt(PossVO::getTradePrc).sum();
+	    double raise = (sumTradePrc / sumNowPrc) * 100;
+
+	    model.addAttribute("sumNowPrc", sumNowPrc);
+	    model.addAttribute("sumTradePrc", sumTradePrc);
+	    model.addAttribute("raise", raise);
+	    
 		return "member/mystockInfo";
 	}
 	

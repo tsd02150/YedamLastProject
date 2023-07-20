@@ -75,44 +75,55 @@
 		
 		<div id="myowntbl">
 			<table class="table-light col-12">
+			<thead>
 				<tr>
 					<th>총 매수금액</th>
 					<th>총 평가금액</th>
 					<th>평가손익</th>
 					<th>평가수익률</th>
 				</tr>
+				</thead>
+				<tbody>
 				<tr>
-					<td>153215361원</td>
-					<td>153215361원</td>
-					<td>153215361원</td>
-					<td>200%</td>
+					<td th:text="${sumNowPrc*10}">원</td>
+					<td th:text="${sumTradePrc*10}">원</td>
+					<td th:text="${(sumTradePrc-sumNowPrc)*10}">원</td>
+					<td th:text="${raise}">%</td>
 				</tr>
+				</tbody>
 			</table>
 		</div>
 		
 		<div id="myposstbl">
-			<table class="table-light col-12">
-				<tr>
-          <th><input type="checkbox"></th>
-          <th>종목코드</th>
-          <th>종목명</th>
-          <th>현재가</th>
-          <th>등락률</th>
-          <th>보유수량</th>
-          <th>평가금액</th>
-          <th>현재비율</th>
-				</tr>
-        <tr>
-          <td><input type="checkbox"></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-			</table>
+		  <table class="table-light col-12">
+		    <tr>
+		      <th>종목코드</th>
+		      <th>종목명</th>
+		      <th>현재가</th>
+		      <th>등락률</th>
+		      <th>보유수량</th>
+		      <th>평가금액</th>
+		      <th>현재비율</th>
+		    </tr>
+		    <tr th:each="stock : ${possstockList}">
+		      <td th:text="${stock.commonCd}"></td>
+		      <td th:text="${stock.tnm}" th:onclick="|location.href='@{/stock/chart(itemNo=${stock.itemNo})}'|"></td>
+		      <td th:text="${stock.nowPrc*10}"></td>
+		      <td th:text="${stock.rate}" th:classappend="${stock.rate >= 0 ? 'high' : 'low'}"></td>
+		      <td th:text="${stock.stockCnt*10}"></td>
+		      <td th:text="${stock.tradePrc*10}"></td>
+		      <td th:text="${(stock.tradePrc/sumTradePrc)*100}">%</td>
+		      <!-- <td th:text="#aggregates.sum(possstockList.![tradePrc])"></td> -->
+		      <!-- <td th:text="${#numbers.formatInteger(stock.tradePrc, 0, 'COMMA')}원"></td>
+		      <td th:text="${#numbers.formatInteger((stock.tradePrc / possstockList.![tradePrc].sum()) * 100, 2, 'COMMA')}%"></td> -->
+		    </tr>
+		    <tr>
+		      <td colspan="5"></td>
+		      <!-- <td th:text="${#numbers.formatInteger(possstockList.![tradePrc].sum(), 0, 'COMMA')}원"></td> -->
+		      <td th:text="${sumTradePrc*10}"></td>
+		      <td>100%</td>
+		    </tr>
+		  </table>
 		</div>
 		
 		<div id="stordertbl">
@@ -161,7 +172,7 @@
 		</div>
 	</div>
 	
-	<script>
+	<script>	
 	let tr1 = '';
 	let tr2 = '';
 	let date = '';
