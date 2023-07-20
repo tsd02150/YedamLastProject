@@ -33,6 +33,7 @@ import com.yedam.app.member.service.MemberService;
 import com.yedam.app.member.service.PossVO;
 import com.yedam.app.member.service.RegisterMail;
 import com.yedam.app.member.service.SellOrderVO;
+import com.yedam.app.member.service.SurveyVO;
 import com.yedam.app.security.service.UserService;
 import com.yedam.app.security.service.UserVO;
 import com.yedam.app.sms.service.MessageDTO;
@@ -440,7 +441,6 @@ public class MemberController {
 	  OrderVO orderVO = new OrderVO();
 	  orderVO.setId(id);
 	  orderVO.setOrderSt(orderSt);
-	  //System.out.println(membService.mypageOrderList(orderVO));
 	  return membService.mypageOrderList(orderVO);
 	}
 	
@@ -462,11 +462,6 @@ public class MemberController {
 	    membVO.setEmail(email);
 	    membVO.setTel(tel);
 	    membVO.setPoint(mem.getPoint());
-
-	    System.out.println("^^^^^^^^^^^^^^");
-	    System.out.println(pwd);
-	    System.out.println(mem.getPwd());
-	    System.out.println("^^^^^^^^^^^^^^");
 	    
 	    if (pwd == null || pwd.equals("")) { // 비밀번호 변경X
 	        membVO.setPwd(mem.getPwd()); // 기존 비밀번호 그대로 저장
@@ -551,7 +546,20 @@ public class MemberController {
 	}
 	
 	@GetMapping("mystockInfo")
-	public String mystockInfo() {
+	public String mystockInfo(HttpSession session, Model model) {
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		
+		List<PossVO> possstockList = membService.myPossStockList(mem.getMembNo());
+		model.addAttribute("possstockList", possstockList);
+		
+		int sumNowPrc = possstockList.stream().mapToInt(PossVO::getNowPrc).sum();
+	    int sumTradePrc = possstockList.stream().mapToInt(PossVO::getTradePrc).sum();
+	    double raise = (sumTradePrc / sumNowPrc) * 100;
+
+	    model.addAttribute("sumNowPrc", sumNowPrc);
+	    model.addAttribute("sumTradePrc", sumTradePrc);
+	    model.addAttribute("raise", raise);
+	    
 		return "member/mystockInfo";
 	}
 	
@@ -639,7 +647,42 @@ public class MemberController {
 	@PostMapping("myPossStockList")
 	public List<PossVO> myPossStockList(@RequestParam String membNo){
 		List<PossVO> list = membService.myPossStockList(membNo);
-		System.out.println(list);
+//		System.out.println(list);
+		return list;
+	}
+	
+	@ResponseBody
+	@PostMapping("buysellList")
+	public List<DealVO> buysellList(DealVO vo){
+//		vo.setMembNo(membNo);
+//		vo.setStartDate(startDate);
+//		vo.setEndDate(endDate);
+//		vo.setKind(kind);
+//		System.out.println(membNo);
+//		System.out.println("========================"+startDate);
+//		System.out.println(endDate);
+//		System.out.println(kind);
+		System.out.println("===================="+vo);
+		List<DealVO> list = membService.buysellList(vo);
+		System.out.println("매도/매수 거래내역"+list);
+		return list;
+	}
+	
+	@ResponseBody
+	@PostMapping("insertsurvey")
+	public int insertsurvey(@RequestParam String invstTypeNo, @RequestParam String membNo, SurveyVO vo) {
+		vo.setMembNo(membNo);
+		vo.setInvstTypeNo(invstTypeNo);
+		System.out.println("설문조사 : "+vo);
+		int result = membService.insertsurvey(vo);
+		System.out.println(result);
+		return result;
+	}
+	
+	@ResponseBody
+	@PostMapping("analysisResult")
+	public List<SurveyVO> analysisResult(String membNo){
+		List<SurveyVO> list = membService.analysisResult(membNo);
 		return list;
 	}
 	

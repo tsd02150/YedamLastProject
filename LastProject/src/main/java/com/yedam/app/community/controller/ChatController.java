@@ -35,11 +35,10 @@ public class ChatController {
 	@Autowired
 	public SimpMessagingTemplate template;
 	
+	public static HttpSession mySession;
+	
 	// K:방번호, V:방에 참여한 사람들 멤버번호
-	public static Map<String, List<String>> particiList = new HashMap<String, List<String>>();
-	
-	
-	
+	//public static Map<String, List<String>> particiList = new HashMap<String, List<String>>();
 	
 	@MessageMapping("/room/{roomno}")
 	public void chatMessage(ChatMessage message,@DestinationVariable String roomno) throws Exception {
@@ -50,18 +49,26 @@ public class ChatController {
 	@GetMapping("chat")
 	public String chat(Model model, HttpSession session) {
 		String membNo=((UserVO)session.getAttribute("loggedInMember")).getMembNo();
-		ChatParticipationVO vo = new ChatParticipationVO();
+		ChatParticipationVO vo = new ChatParticipationVO();	
 		
 		chatService.participation(vo, session);
-		model.addAttribute("particiInfo",chatService.getParticipationInfo(membNo));
+		vo=chatService.getParticipationInfo(membNo);
+
+		model.addAttribute("particiInfo",vo);
 		model.addAttribute("particiList",chatService.selectParticiList("room-1"));
-		chatService.addRoomCnt("room-1");
+		
 		model.addAttribute("roomInfo",chatService.roomInfo("room-1"));
 		model.addAttribute("roomList",chatService.selectRoomList());
-		System.out.println(chatService.selectParticiList("room-1"));
-		System.out.println(chatService.selectRoomList());
 		
 		return "community/chat";
+	}
+	
+	@PostMapping("mySession") 
+	@ResponseBody
+	public String mySessionGet(HttpSession session) {
+		mySession=session;
+		
+		return "success"; 
 	}
 	
 	@PostMapping("addChat")

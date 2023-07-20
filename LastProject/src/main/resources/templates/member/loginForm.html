@@ -81,96 +81,64 @@
 			<script>
 
 			</script>
-<!-- 			
+		
 		<script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
-		<script>
-		//카카오 로그인
-		Kakao.init('0d245dee44e0c90f37049f945842d279'); // JavaScript 키
-		Kakao.isInitialized();
-		console.log(Kakao.isInitialized());
+<script>
+  // 카카오 로그인
+  Kakao.init('0d245dee44e0c90f37049f945842d279'); // JavaScript 키
+  Kakao.isInitialized();
+  console.log(Kakao.isInitialized());
 
-		document.querySelector('#kakaoLoginBtn').addEventListener('click', function () {
-			sessionStorage.removeItem('loggedInMember');
-		  Kakao.Auth.login({
-		    scope: 'profile_nickname, account_email', // 동의 항목(scope) 설정
-		    success: function (response) {
-		      console.log(response);
-		      if (response.kakao_account) {
-		        console.log(response.kakao_account.profile.nickname);
-		        console.log(response.kakao_account.email);
+  document.querySelector('#kakaoLoginBtn').addEventListener('click', function () {
+    sessionStorage.removeItem('loggedInMember');
+    Kakao.Auth.login({
+      scope: 'profile_nickname, account_email', // 동의 항목(scope) 설정
+      success: function (response) {
+        console.log(response);
+        if (response.kakao_account) {
+          console.log(response.kakao_account.profile.nickname);
+          console.log(response.kakao_account.email);
 
-		        fetch('/member/kakao', {
-		          method: 'post',
-		          body: JSON.stringify({
-		            nick: response.kakao_account.profile.nickname,
-		            id: response.kakao_account.email,
-		          }),
-		        })
-		          .then((response) => response.json())
-		          .then((res) => {
-		            if (res.status === 200) {
-		              alert('카카오 로그인 완료');
-		            } else if (res.status === 403) {
-		              return res.json();
-		            }
-		          })
-		          .catch((err) => console.log(err));
-		      } else {
-		        console.log('알 수 없는 오류.'); //scope 왜 못받아..?????
-		      }
-		    },
-		    fail: function (error) {
-		      console.log('Kakao login failed:', error);
-		    },
-		  });
-		});
-		 -->
+          fetch('member/kakao', {
+            method: 'post',
+            headers: {
+              'Content-Type': 'application/json', // Content-Type 설정 추가
+            },
+            body: JSON.stringify({
+              nick: response.kakao_account.profile.nickname,
+              id: response.kakao_account.email,
+            }),
+          })
+            .then((response) => response.json())
+            .then((res) => {
+              if (res.status === 200) {
+                alert('카카오 로그인 완료');
+              } else if (res.status === 403) {
+                return res.json();
+              }
+            })
+            .catch((err) => console.log(err));
+        } else {
+          console.log('알 수 없는 오류.'); //scope 왜 못받아..?????
+        }
+      },
+      fail: function (error) {
+        console.log('Kakao login failed:', error);
+      },
+    });
+  });
+</script>
+
+<script>
+var naver_id_login = new naver_id_login("785Ub4aTNvFnfrt27PQu", "http://localhost/member/login");
+	var state = naver_id_login.getUniqState();
+	naver_id_login.setButton("white", 2,40);
+	naver_id_login.setDomain("http://localhost:80");
+	naver_id_login.setState(state);
+	naver_id_login.setPopup();
+	naver_id_login.init_naver_id_login();
 	
-			<!-- <script type="text/javascript" src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js" charset="utf-8"></script> -->
-		 <!-- 네이버아디디로로그인 초기화 Script
-			<script type="text/javascript">
-				var naverLogin = new naver.LoginWithNaverId({
-					clientId : "7Bw96BA_Uk60ekwBjrJX",
-					callbackUrl : "/member/naverLogin",
-					isPropup: true, //팝업을 통한 연동처리 여부
-					loginButton : { color : "green", type:3, height : 60}
-				});
-	//var state = naver_id_login.getUniqState();
-				//naver_id_login.setButton("white", 2,40);
-				//naver_id_login.setDomain(".service.com");
-				//naver_id_login.setState(state);
-				//naver_id_login.setPopup();
-				//naver_id_login.init_naver_id_login();
-			 // 네이버 로그인 초기화 Script
-			naverLogin.init();
-			
-			</script> -->
-
-
-	<!--  <script>
-    function validateForm() {
-    	event.stopPropagation();
-    	alert("a");
-        // 아이디와 비밀번호가 공란인 경우
-        if (loginemail.value === "" || loginPassword.value === "") {
-          if (loginemail.value === "") {
-            loginemail.classList.add("form-input-error");
-          }
-          if (loginPassword.value === "") {
-            user_pw.classList.add("form-input-error");
-          }
-          return false;
-        }
-
-        // 비밀번호가 6자리 이상 16자리 이하가 아닌 경우
-        if (loginPassword.value.length < 6 || loginPassword.value.length > 16) {
-            loginPassword.classList.add("form-input-error");
-          return false;
-        }
-        
-        return true;
-      }
-		</script>-->
+</script>
 		
 	</section>
 </body>

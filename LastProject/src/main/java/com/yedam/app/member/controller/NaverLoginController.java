@@ -57,7 +57,7 @@ public class NaverLoginController {
   public String naverCallback1(HttpSession session, HttpServletRequest request, Model model) throws IOException, ParseException {
     String code = request.getParameter("code");
     String state = request.getParameter("state");
-    String redirectURI = URLEncoder.encode("http://localhost:8080/member/callback", "UTF-8");
+    String redirectURI = URLEncoder.encode("http://localhost:80/member/callback", "UTF-8");
     String apiURL;
     apiURL = "https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&";
     apiURL += "client_id=" + CLIENT_ID;
