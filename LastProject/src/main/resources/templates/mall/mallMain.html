@@ -14,7 +14,7 @@
 <link
 	href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap"
 	rel="stylesheet">
-<link
+<link                                                                                                                           
 	href="https://fonts.googleapis.com/css?family=Playfair+Display:400,900&display=swap"
 	rel="stylesheet">
 
@@ -224,20 +224,20 @@
 					th:onclick="|location.href='@{mallMain}'|"><a href="#">포인트몰</a></li>
 
 				<li
-					th:onclick="|location.href='@{/mall/farmList(commonCd=${'S10'})}'|"
+					th:onclick="|location.href='@{/mall/productList(commonCd=${'S1'})}'|"
 					style="cursor: pointer;"><img
 					style="width: 40ox; height: 40px;"
 					src="https://cdn-icons-png.flaticon.com/128/2230/2230446.png"></li>
 				<li style="font-size: 12px;"><a
-					href="/mall/farmList?commonCd=S10">농산물</a></li>
+					href="/mall/productList?commonCd=S1">농산물</a></li>
 
 				<li
-					th:onclick="|location.href='@{/mall/seafoodList(commonCd=${'S20'})}'|"
+					th:onclick="|location.href='@{/mall/productList(commonCd=${'S2'})}'|"
 					style="cursor: pointer;"><img
 					style="width: 40ox; height: 40px;"
 					src="https://cdn-icons-png.flaticon.com/128/3361/3361370.png"></li>
 				<li style="font-size: 12px;"><a
-					href="/mall/seafoodList?commonCd=S20">수산물</a></li>
+					href="/mall/productList?commonCd=S2">수산물</a></li>
 
 				<li th:onclick="|location.href='@{basketList}'|"
 					style="cursor: pointer;"><img
@@ -273,7 +273,6 @@
 					<a href="#" class="col active">First Tab</a> <a href="#"
 						class="col">Second Tab</a> <a href="#" class="col">Third Tab</a>
 				</div>
-
 
 				<div class="owl-carousel owl-1">
 

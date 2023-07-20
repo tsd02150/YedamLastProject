@@ -6,9 +6,12 @@
 
 	<!-- 전체조회 -->
   	<select id="getProductList" resultType="ProductVO">
-  		SELECT *
-  			 
+  		SELECT *  			 
   		FROM product
+  		<if test = "commonCd != null">  		
+  		WHERE common_cd Like #{commonCd}||'%'
+  		</if>
+  		
   		ORDER BY prdt_no DESC
   	
   	</select>
@@ -25,14 +28,14 @@
   	<select id="getProductCount" resultType="int">
   		SELECT COUNT(prdt_no)
   		FROM PRODUCT
-  		WHERE common_cd Like #{commonCd}||'S1%'
+  		WHERE h_cd = #{commonCd}
   	</select>
   	
   	<!-- 카테고리 리스트  -->
-  	<select id="getCategoryName" resultType="ProductVO">
-  		SELECT ctgr
+  	<select id="getCategoryName" resultType="CommonCodeVO">
+  		SELECT ctgr, common_cd
   		FROM COMMON_CODE
-  		WHERE common_cd Like #{commonCd}||'%'
+  		WHERE h_cd = #{commonCd}
   	</select>
   	
 	   <!-- 카테고리별 상품 조회 -->
@@ -60,9 +63,38 @@
  
 	 <select id="getCtgrList" resultType="ProductVO">
 		SELECT *
-		FROM PRODUCT
+		FROM COMMON_CODE
 		WHERE common_cd Like #{commonCd}||'%'
 	</select>
 	
+	<!-- 등록 -->
+	<insert id="addReview" parameterType="ProductReviewVO">
+	<selectKey keyProperty="revNo" resultType="string" order="BEFORE">
+		SELECT CONCAT('rev_', NVL(MAX(TO_NUMBER(SUBSTR(rev_no, 5))), 0)+1)
+		FROM PRODUCT_REVIEW
+	</selectKey>
+		insert into product_review ( rev_no
+									,cntn
+									,img
+									,drwup_dt
+									,maks
+									,memb_no
+									,prdt_no
+									)
+		values(
+				#{revNo}
+				,#{cntn}
+				,#{img}
+				,sysdate
+				,#{maks}
+				,#{membNo}
+				,#{prdtNo}
+		)
+	</insert>
+	
+	<delete id="deleteReviewInfo" parameterType="ProductReviewVO">
+		DELETE FROM PRODUCT_REVIEW
+		WHERE prdt_no=#{prdtNo}
+	</delete>
   	
 </mapper>
