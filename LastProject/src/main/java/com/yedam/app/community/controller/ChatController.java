@@ -1,7 +1,9 @@
 package com.yedam.app.community.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -33,6 +35,12 @@ public class ChatController {
 	@Autowired
 	public SimpMessagingTemplate template;
 	
+	// K:방번호, V:방에 참여한 사람들 멤버번호
+	public static Map<String, List<String>> particiList = new HashMap<String, List<String>>();
+	
+	
+	
+	
 	@MessageMapping("/room/{roomno}")
 	public void chatMessage(ChatMessage message,@DestinationVariable String roomno) throws Exception {
 
@@ -41,28 +49,17 @@ public class ChatController {
 	
 	@GetMapping("chat")
 	public String chat(Model model, HttpSession session) {
-		model.addAttribute("roomInfo",chatService.roomInfo("room-1"));
-		
-		List<String> nickList1 = List.of("착한 ","나쁜 ","귀여운 ","즐거운 ","화난 ","배고픈 ","재밌는 ","궁금한 ","큰 ","멋진 ");
-		List<String> nickList2 = List.of("사자","호랑이","강아지","고양이","고래","상어","소","말","개구리","돼지","양","쥐","토끼","뱀","닭","원숭이","치타");
-		String anonNick;
-		ChatParticipationVO vo = new ChatParticipationVO();
 		String membNo=((UserVO)session.getAttribute("loggedInMember")).getMembNo();
-		vo.setMembNo(membNo);
-		vo.setRoomNo("room-1");
-		do {
-			int randomNum1 = (int)(Math.random() * nickList1.size());
-			int randomNum2 = (int)(Math.random() * nickList2.size());
-			anonNick=nickList1.get(randomNum1)+nickList2.get(randomNum2);
-			System.out.println(anonNick);
-			
-			vo.setAnonNick(anonNick);
-		}while(chatService.sameNick(vo));
+		ChatParticipationVO vo = new ChatParticipationVO();
 		
-		if(chatService.getParticipationInfo(membNo)==null)
-			chatService.participation(vo);
-		
+		chatService.participation(vo, session);
 		model.addAttribute("particiInfo",chatService.getParticipationInfo(membNo));
+		model.addAttribute("particiList",chatService.selectParticiList("room-1"));
+		chatService.addRoomCnt("room-1");
+		model.addAttribute("roomInfo",chatService.roomInfo("room-1"));
+		model.addAttribute("roomList",chatService.selectRoomList());
+		System.out.println(chatService.selectParticiList("room-1"));
+		System.out.println(chatService.selectRoomList());
 		
 		return "community/chat";
 	}

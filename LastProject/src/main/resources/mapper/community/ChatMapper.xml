@@ -47,4 +47,22 @@
 		FROM CHAT
 		WHERE chat_no=#{chatNo}
 	</select>
+	
+	<update id="addRoomCnt" parameterType="String">
+		UPDATE CHAT_ROOM
+		SET conn=conn+1
+		WHERE room_no=#{roomNo}
+	</update>
+	
+	<select id="selectRoomList" resultType="ChatRoomVO">
+		SELECT TO_NUMBER(SUBSTR(room_no, 6)) sort,room_no,nm,conn,lmt
+		FROM CHAT_ROOM
+		ORDER BY sort
+	</select>
+	
+	<select id="selectParticiList" resultType="ChatParticipationVO">
+		SELECT *
+		FROM CHAT_PARTICIPATION
+		WHERE room_no=#{roomNo}
+	</select>
 </mapper>

@@ -1,5 +1,7 @@
 package com.yedam.app.community.mapper;
 
+import java.util.List;
+
 import com.yedam.app.community.service.ChatParticipationVO;
 import com.yedam.app.community.service.ChatRoomVO;
 import com.yedam.app.community.service.ChatVO;
@@ -17,4 +19,10 @@ public interface ChatMapper {
 	public int insertChat(ChatVO vo);
 	// 채팅 정보
 	public ChatVO getChat(String chatNo);
+	// 방에 인원 추가
+	public int addRoomCnt(String roomNo);
+	// 방 전체 정보
+	public List<ChatRoomVO> selectRoomList();
+	// 참여자 전체 정보
+	public List<ChatParticipationVO> selectParticiList(String roomNo);
 }
