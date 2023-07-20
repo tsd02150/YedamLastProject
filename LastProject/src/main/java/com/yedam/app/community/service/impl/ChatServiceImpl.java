@@ -47,6 +47,7 @@ public class ChatServiceImpl implements ChatService {
 		}while(chatMapper.sameNick(vo)!=null);
 
 		if(chatMapper.getParticipationInfo(membNo)==null) {
+			chatMapper.addRoomCnt("room-1");
 			return chatMapper.participation(vo)>0;			
 		}else {
 			return false;
@@ -72,7 +73,11 @@ public class ChatServiceImpl implements ChatService {
 	public boolean addRoomCnt(String roomNo) {
 		return chatMapper.addRoomCnt(roomNo)>0;
 	}
-
+	
+	@Override
+	public boolean subtractRoomCnt(String membNo) {
+		return chatMapper.subtractRoomCnt(membNo)>0;
+	}
 	@Override
 	public List<ChatRoomVO> selectRoomList() {
 		return chatMapper.selectRoomList();
@@ -81,6 +86,11 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	public List<ChatParticipationVO> selectParticiList(String roomNo) {
 		return chatMapper.selectParticiList(roomNo);
+	}
+
+	@Override
+	public boolean deletePartici(String membNo) {
+		return chatMapper.deletePartici(membNo)>0;
 	}
 	
 	

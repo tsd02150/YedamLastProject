@@ -19,8 +19,12 @@ public interface ChatService {
 	public ChatVO getChat(String chatNo);
 	// 방에 인원 추가
 	public boolean addRoomCnt(String roomNo);
+	// 방에 인원 감소
+	public boolean subtractRoomCnt(String membNo);
 	// 방 전체 정보
 	public List<ChatRoomVO> selectRoomList();
 	// 방 참여자 전체 정보
 	public List<ChatParticipationVO> selectParticiList(String roomNo);
+	// 방 참여자 제거
+	public boolean deletePartici(String membNo);
 }

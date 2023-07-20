@@ -79,49 +79,6 @@
 }
 
 /* 모달 창 */
-#myform fieldset {
-	display: inline-block;
-	direction: rtl;
-	border: 0;
-}
-
-#myform fieldset legend {
-	text-align: right;
-}
-
-#myform input[type=radio] {
-	display: none;
-}
-
-#myform label {
-	font-size: 3em;
-	color: transparent;
-	text-shadow: 0 0 0 #f0f0f0;
-}
-
-#myform label:hover {
-	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
-}
-
-#myform label:hover ~ label {
-	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
-}
-
-#myform input[type=radio]:checked ~ label {
-	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
-}
-
-#reviewContents {
-	width: 100%;
-	height: 150px;
-	padding: 10px;
-	box-sizing: border-box;
-	border: solid 1.5px #D3D3D3;
-	border-radius: 5px;
-	font-size: 16px;
-	resize: none;
-}
-
 .modal {
 	display: none;
 	position: fixed;
@@ -140,7 +97,13 @@
 	padding: 20px;
 	border: 1px solid #888;
 	width: 40%;
-	height: 800px;
+	height: 600px;
+}
+.modal-content input{
+	border: solid 1.5px #D3D3D3;
+	border-radius: 5px;
+	font-size: 16px;
+	padding: 10px;
 }
 
 .close {
@@ -173,11 +136,11 @@
 							<h3 class="box-title">채팅방 목록</h3>
 						</div>
 						<div id="roomList" class="box-body">
-							<div th:each="room:${roomList}">
+							<div th:each="room:${roomList}"  th:data-roomno="${room.roomNo}" onClick="">
 								<p>[[${room.nm}]]</p>
 							</div>
 						</div>
-						<div id="addRoom" onClick="addRoom()">
+						<div id="addRoom" onClick="addRoomBtn()">
 							<h4>채팅방 생성</h4>
 						</div>
 					</div>
@@ -200,7 +163,7 @@
 				<!-- DIRECT CHAT DANGER -->
 				<div class="box box-danger direct-chat direct-chat-danger">
 					<div class="box-header with-border">
-						<h3 id="roomno" class="box-title" th:data-roomno="${roomInfo.roomNo}" th:text="${roomInfo.nm}">전체 채팅방</h3>
+						<h3 id="main-room-name" class="box-title" th:data-roomno="${roomInfo.roomNo}" th:text="${roomInfo.nm}">전체 채팅방</h3>
 
 						<div class="box-tools pull-right">
 							<span data-toggle="tooltip" title="3 New Messages"
@@ -236,65 +199,89 @@
 			</div>
 		</div>
 		<!-- 모달 창 -->
-		<div id="reviewModal" class="modal">
+		<div id="addChatModal" class="modal">
 			<div class="modal-content">
-
-				<span class="close">&times;</span>
-				<h2 style="text-align: center;">상품 후기</h2>
-				<div>&nbsp;</div>
-				<div class="pic" th:each="prdt : ${getFarm}">
-					<img style="width: 200px; height: 200px;"
-						th:src="|/mall/images/main/${prdt.thumb}|">
+				<span class="close" onClick="closeModal()">&times;</span>
+				<h2 style="text-align: center;">채팅방 생성 설정</h2>
+				<br/>
+				<br/>
+				<label for="roomName"><b>방 이름</b></label>
+				<input type="text" id="roomName">
+				<label for="limitCnt"><b>인원 제한</b></label>
+				<input type="text" id="limitCnt" placeholder="30" value="30">
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<div style="text-align: center;">
+					<button type="reset" class="btn btn-dark  mt-2 mt-lg-0" onClick="closeModal()">취소하기</button>
+					<button type="button" class="btn btn-primary  mt-2 mt-lg-0" onClick="addChat()">생성하기</button>
 				</div>
-				<div>&nbsp;</div>
-				<div>&nbsp;</div>
-				<div>&nbsp;</div>
-				<div>&nbsp;</div>
-				<div>&nbsp;</div>
-				<form class="mb-3" name="myform" id="myform" method="post">
-					<fieldset>
-						<span class="text-bold">별점을 선택해주세요</span> <input type="radio"
-							name="reviewStar" value="5" id="rate1"><label for="rate1">★</label>
-						<input type="radio" name="reviewStar" value="4" id="rate2"><label
-							for="rate2">★</label> <input type="radio" name="reviewStar"
-							value="3" id="rate3"><label for="rate3">★</label> <input
-							type="radio" name="reviewStar" value="2" id="rate4"><label
-							for="rate4">★</label> <input type="radio" name="reviewStar"
-							value="1" id="rate5"><label for="rate5">★</label>
-					</fieldset>
-					<div>
-
-						<textarea class="col-auto form-control" type="text"
-							id="reviewContents"
-							placeholder="좋은 수강평을 남겨주시면 Cocolo에 큰 힘이 됩니다! 포인트 5000p도 지급!!"></textarea>
-					</div>
-					<div>
-						
-					</div>
-					<div>&nbsp;</div>
-					<div></div>
-					<div>&nbsp;</div>
-					<div>&nbsp;</div>
-					<div style="text-align: center;">
-						<button type="reset"
-							style="background-color: beige; border: none;">취소하기</button>
-						<button type="submit"
-							style="background-color: yellowgreen; border: none;">등록하기</button>
-					</div>
-				</form>
+				
 			</div>
 		</div>
 
 		<script th:inline="javascript">
 			let myAnonNick=[[${particiInfo.anonNick}]];
 			let myMembNo=[[${particiInfo.membNo}]];
+			test();
+			
+			function test(){
+				fetch("/community/mySession",{
+					method: "POST",
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					body:"test=test"
+				})
+				.then(response=>response.text())
+				.then(result=>console.log(result))
+				.catch(err=>console.log(err));				
+			}
+			
+			function addRoomBtn(){
+				document.querySelector(".modal").style.display="block";
+			}
+			
+			function closeModal(){
+				document.getElementById('addChatModal').style.display = 'none';
+				
+			}
+
+			// 모달 바깥 영역 클릭 시 모달 닫힘
+			window.addEventListener('click', function(event) {
+				const modal = document.getElementById('addChatModal');
+				if (event.target === modal) {
+					modal.style.display = 'none';
+				}
+			});
+			
+			function addChat(){
+				if(roomName.value==null||roomName.value==""){
+					toastShow("Need to room name","방 이름을 입력해주세요","error");
+					return;
+				}
+				fetch("/community/addChatRoom",{
+					method: "POST",
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					body:"nm="+roomName.value+"&lmt="+limitCnt.value
+				})
+				.then(response=>response.json())
+				.then(result=>{
+					
+				})
+				.catch(err=>console.log(err));
+			}
+			
 			function resetChat() {
 			    $("#chatSpace").html("");
 			}
+	
 		</script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-		
 	</div>
 </body>
 </html>

@@ -53,6 +53,16 @@
 		SET conn=conn+1
 		WHERE room_no=#{roomNo}
 	</update>
+
+	<update id="subtractRoomCnt" parameterType="String">
+		UPDATE CHAT_ROOM
+		SET conn=conn-1
+		WHERE room_no=(
+			SELECT room_no
+			FROM CHAT_PARTICIPATION
+			WHERE memb_no=#{membNo}
+			)
+	</update>
 	
 	<select id="selectRoomList" resultType="ChatRoomVO">
 		SELECT TO_NUMBER(SUBSTR(room_no, 6)) sort,room_no,nm,conn,lmt
@@ -65,4 +75,9 @@
 		FROM CHAT_PARTICIPATION
 		WHERE room_no=#{roomNo}
 	</select>
+	
+	<delete id="deletePartici" parameterType="String">
+		DELETE FROM CHAT_PARTICIPATION
+		WHERE memb_no=#{membNo}
+	</delete>
 </mapper>

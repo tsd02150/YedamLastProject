@@ -21,8 +21,12 @@ public interface ChatMapper {
 	public ChatVO getChat(String chatNo);
 	// 방에 인원 추가
 	public int addRoomCnt(String roomNo);
+	// 방에 인원 감소
+	public int subtractRoomCnt(String membNo);
 	// 방 전체 정보
 	public List<ChatRoomVO> selectRoomList();
 	// 참여자 전체 정보
 	public List<ChatParticipationVO> selectParticiList(String roomNo);
+	// 방 참여자 제거
+	public int deletePartici(String membNo);
 }
