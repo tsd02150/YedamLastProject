@@ -29,4 +29,5 @@ public interface StockService {
 	public Map<String,Object> callOrderProd(Map<String,Object> params);
 	// 스케줄러 작업
 	public void schedulerJob();
+	public void updateInq(String itemNo);
 }

@@ -1,19 +1,12 @@
 package com.yedam.app.stock.service;
 
+import java.util.Date;
+
 import lombok.Data;
 
 @Data
 public class ItemInfoVO {
-//	INFO_NO 
-//	,ITEM_NO
-//	, TA_DT
-//	, VOL
-//	, OP_PRC
-//	, CL_PRC
-//	, L_PRC
-//	, H_PRC
-//	, RATE
-//	, INQ
+
 	private String itemNo;
 	private Integer vol;
 	private Integer opPrc;
@@ -21,6 +14,7 @@ public class ItemInfoVO {
 	private Integer lPrc;
 	private Integer hPrc;
 	private Integer inq;
+	private Date taDt;
 	
 	public ItemInfoVO() {}
 	
@@ -32,5 +26,6 @@ public class ItemInfoVO {
 		this.lPrc=0;
 		this.hPrc=0;
 		this.inq=0;
+		this.taDt=new Date();
 	}
 }

@@ -300,6 +300,10 @@ input[type="number"]::-webkit-inner-spin-button {
 #stockOrderBtn {
 	visibility: hidden;
 }
+#candleChart {
+	position:relative;
+}
+
 
 </style>
 <title>Insert title here</title>
@@ -372,8 +376,18 @@ input[type="number"]::-webkit-inner-spin-button {
 						<div id="itemPtag" style="display:inline-block">
 							<p th:attr="data-in=${itemInfo?.itemNo}">종목 : [[${itemInfo?.nm}]] <span th:class="${itemInfo?.change} &gt; 0 ? 'plus' : 'minus'"> 전일비 : [[${itemInfo?.change &gt; 0 ? "+ "+itemInfo?.change : itemInfo?.change}]] 변동률 : [[${itemInfo?.rate &gt; 0 ? "+"+itemInfo?.rate : itemInfo?.rate }]]%</span></p>
 							<button id="addInt2">관심종목추가</button>
+							<div>
+								<button>분</button>
+								<button>일</button>
+								<button>주</button>
+								<button>월</button>
+								<button>년</button>
+							</div>
 						</div>
-						<div id="candleChart"></div>
+						
+						<div id="candleChart">
+							
+						</div>
 						<div id="stickChart"></div>
 					</div>
 					<div id="CP2D2" class="border">

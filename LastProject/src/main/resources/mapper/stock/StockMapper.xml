@@ -468,9 +468,42 @@
 	
 	<!-- 조회수증가 -->
 	<update id="updateInq" parameterType="String">
-		select * from item;
 		update item
 		set inq = inq +1
 		where item_no = #{itemNo}
 	</update>
+	
+	<!-- 현재 달의 첫일 부터 당일 까지의 데이터 (일) 그래프-->
+	<select id="dayChart" resultType="ItemInfoVO">
+		select ta_dt , 
+			   vol, 
+			   op_prc , 
+			   cl_prc , 
+			   l_prc , 
+			   h_prc 
+		from item_info 
+		where to_char(ta_dt,'yyyy-MM-dd') between to_char(trunc(sysdate,'MM'),'yyyy-MM-dd') and to_char(sysdate , 'yyyy-MM-dd')
+		and item_no = 'ite-1'
+		order by ta_dt
+	</select>
+	<!-- 일년의 주간,월간 차트 -->
+	<select id="weekMonthChart" resultType="ItemInfoVO">
+		select td ,trunc(avg(vol)),  trunc(avg(op_prc)) ,  trunc(avg(cl_prc)) ,  trunc(avg(l_prc)) ,  trunc(avg(h_prc ))
+		from(
+		        select 
+		        <choose>
+		        	<when test='type.equals("week")'>
+		         		trunc(ta_dt, 'day') td 
+		        	</when>
+		        	<otherwise>
+		        	trunc(ta_dt,'MM') td
+		        	</otherwise>
+		        </choose>
+		         ,vol, op_prc , cl_prc , l_prc , h_prc
+		        from item_info
+		        where to_char(ta_dt,'yyyy-MM-dd') between to_char(trunc(sysdate,'y'),'yyyy-MM-dd') and to_char(last_day(add_months(trunc(sysdate,'y'),11)) , 'yyyy-MM-dd')
+		     ) a
+		group by td
+		order by td
+	</select>
 </mapper>

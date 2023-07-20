@@ -43,6 +43,8 @@ public class StockController {
 	//상세 차트 페이지로 이동
 	@GetMapping("chart")
 	public String chartPage(String itemNo,Model m, HttpSession session) {
+		// 조회수 증가
+		stockservice.updateInq(itemNo);
 		UserVO mem = (UserVO)session.getAttribute("loggedInMember");
 		if(mem != null) {
 			m.addAttribute("interestStock",stockservice.getIntStock(mem.getMembNo())); // 유저관심종목리스트 

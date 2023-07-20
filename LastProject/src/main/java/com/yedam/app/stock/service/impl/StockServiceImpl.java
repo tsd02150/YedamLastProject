@@ -280,6 +280,11 @@ public class StockServiceImpl implements StockService {
 		// 초기화 ( 조회수초기화 , 수량 남은 주문 반환 )
 		//stockMapper.deleteJob();
 	}
+
+	@Override
+	public void updateInq(String itemNo) {
+		stockMapper.updateInq(itemNo);
+	}
 	
 	
 }

@@ -64,4 +64,6 @@ public interface StockMapper {
 	public int insertItemInfo(ItemInfoVO vo);
 	//스케줄러 작업
 	public void deleteJob();
+	// 조회수 증가
+	public int updateInq(String itemNo);
 }
