@@ -3,10 +3,12 @@ package com.yedam.app.mall.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.yedam.app.common.service.CommonCodeVO;
+
 public interface MallService {
 
 	// 상품 전체조회
-	public List<ProductVO> getProductList();
+	public List<ProductVO> getProductList(String cd);
 
 	// 상품 단건조회
 	public ProductVO getProductInfo(ProductVO prdtVO);
@@ -21,11 +23,14 @@ public interface MallService {
 	public List<ProductVO> getProductListByCategory(String categoryCode);
 
 	// 카테고리 이름
-	public List<ProductVO> getCategoryName(String commonCd);
+	public List<CommonCodeVO> getCategoryName(String commonCd);
 
 	// 해당 상품후기 리스트
 	public List<ProductReviewVO> getProductReviewList(ProductReviewVO revVO);
-
+	
+	// 리뷰 등록
+	public boolean addReview(ProductReviewVO reviewVO);
+	
 	// 리뷰 수정
 	public int updateReviewInfo(ProductReviewVO reviewVO);
 

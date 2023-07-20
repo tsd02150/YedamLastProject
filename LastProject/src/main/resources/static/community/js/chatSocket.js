@@ -1,13 +1,6 @@
-let chatClient = null;
-
-function connected() {
-    var socket = new SockJS('/socketserver');
-    chatClient = Stomp.over(socket);
-    chatClient.connect({}, onConnected, onError);
-}
-
-
-function onConnected(frame){
+let chatClient = stompClient;
+console.log(stompClient);
+chatClient.onConnect = (frame) => {
     resetChat();
     console.log('Connected: ' + frame);
     chatClient.subscribe('/topic/sendto/'+$('#roomno').data("roomno"), (chatMessage) => {
@@ -65,7 +58,10 @@ function sendChat() {
 	})
 	.then(response=>response.json())
 	.then(result=>{
-	    chatClient.send("/mychat/room/"+$('#roomno').data("roomno"),{},JSON.stringify({'anonnick':result.anonNick,'drwupdt':result.drwupDt,'message': result.cntn}));		
+	    chatClient.publish({
+	    	destination : "/mychat/room/"+$('#roomno').data("roomno"),
+			body : JSON.stringify({'anonnick':result.anonNick,'drwupdt':result.drwupDt,'message': result.cntn})
+			});		
 		$("#my-message").val('');
 	})			
 }
@@ -83,6 +79,6 @@ function disconnect() {
 
 
 $(function () {
-    connected();
+
     $( "#send" ).click(() => sendChat());
 });

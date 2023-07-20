@@ -13,7 +13,6 @@
 
 
 <style>
-
 .flex-block {
 	display: flex;
 }
@@ -351,14 +350,14 @@ th {
 }
 
 .product-quantity {
-    width: 140px;
-    display: inline-block;
+	width: 140px;
+	display: inline-block;
 }
 
-
-
-
-
+p>img {
+	width: 100px;
+	height: 100px;
+}
 </style>
 
 </head>
@@ -376,21 +375,21 @@ th {
 					th:onclick="|location.href='@{mallMain}'|"><a href="#">포인트몰</a></li>
 
 				<li
-					th:onclick="|location.href='@{/mall/farmList(commonCd=${'S10'})}'|"
+					th:onclick="|location.href='@{/mall/productList(commonCd=${'S1'})}'|"
 					style="cursor: pointer;"><img
 					style="width: 40ox; height: 40px;"
 					src="https://cdn-icons-png.flaticon.com/128/2230/2230446.png"></li>
 				<li style="font-size: 12px;"><a
-					href="/mall/farmList?commonCd=S10">농산물</a></li>
+					href="/mall/productList?commonCd=S1">농산물</a></li>
 
 
 				<li
-					th:onclick="|location.href='@{/mall/seafoodList(commonCd=${'S20'})}'|"
+					th:onclick="|location.href='@{/mall/productList(commonCd=${'S2'})}'|"
 					style="cursor: pointer;"><img
 					style="width: 40ox; height: 40px;"
 					src="https://cdn-icons-png.flaticon.com/128/3361/3361370.png"></li>
 				<li style="font-size: 12px;"><a
-					href="/mall/seafoodList?commonCd=S20">수산물</a></li>
+					href="/mall/productList?commonCd=S2">수산물</a></li>
 
 
 				<li th:onclick="|location.href='@{basketList}'|"
@@ -410,7 +409,7 @@ th {
 		<div class="flex-block">
 
 			<section id="detail-img" class="news-style-one"
-				th:each="prdt : ${getFarm}" >
+				th:each="prdt : ${getFarm}">
 				<div class="zoom-image-container">
 					<div class="zoom-overlay"></div>
 					<img class="zoom-image" id="prdt-img"
@@ -418,24 +417,23 @@ th {
 				</div>
 			</section>
 
-			<section id="prdt-info" th:each="prdt : ${getFarm}"
-				>
-	
+			<section id="prdt-info" th:each="prdt : ${getFarm}">
+
 				<div>
 					<table>
-						<tbody >
+						<tbody>
 							<tr style="width: 400px;">
 								<th scope="row">상품명</th>
 								<td th:text="${prdt.nm}"></td>
 							</tr>
 							<tr>
 								<th>판매가격</th>
-								<td th:text="${prdt.prc}"></td>
+								<td th:text="${prdt.prc} + 'P'"></td>
 							</tr>
 							<tr>
 								<th>할인가격</th>
 								<td
-									th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + '원'"
+									th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + 'P'"
 									style="text-decoration: line-through;"></td>
 							</tr>
 							<tr>
@@ -445,19 +443,21 @@ th {
 						</tbody>
 					</table>
 					<div class="product-quantity">
-								<span>Quantity:</span>
-								<div class="product-quantity-slider">
-									<input id="product-quantity" type="text" value="0"
-										name="product-quantity">
-								</div>
-							</div>
+						<span>Quantity:</span>
+						<div class="product-quantity-slider">
+							<input id="product-quantity" type="text" value="0"
+								name="product-quantity">
+						</div>
+					</div>
 					<b></b>
 					<div>
 						<div id="sit_tot_price">
-							<span>총 금액 :</span> <strong id="total-price">31,900원</strong>
+							<span th:text="${prdt.prc}">총 금액 : </span> <strong
+								id="total-price">P</strong>
 						</div>
 						<div class="btn-group" style="text-align: center;">
-							<button th:if="${session.loggedInMember}!=null" type="button" onclick="addToCart()">장바구니 담기</button>
+							<button th:if="${session.loggedInMember}!=null" type="button"
+								onclick="addToCart()">장바구니 담기</button>
 							<button type="button" onclick="directOrder()">바로 주문하기</button>
 						</div>
 					</div>
@@ -566,8 +566,9 @@ th {
 			<h3>상품리뷰</h3>
 			<div class="btn-insert" style="position: static;">
 				<div class="btn-group">
-				<!-- 로그인 회원만 리뷰작성 띄움 -->
-					<button th:if="${session.loggedInMember}!=null" id="openModalBtn" type="button">리뷰 작성</button>
+					<!-- 로그인 회원만 리뷰작성 띄움 -->
+					<button th:if="${session.loggedInMember}!=null" id="openModalBtn"
+						type="button">리뷰 작성</button>
 					<button onclick="goBack()">이전 페이지로</button>
 				</div>
 			</div>
@@ -582,8 +583,8 @@ th {
 						<th style="width: 130px;">작성일</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr th:each="rev : ${review}">
+				<tbody id="reviewList">
+					<!-- <tr th:each="rev : ${review}">
 						<td style="width: 70px; text-align: center;"
 							th:text="${rev.revNo}">40</td>
 						<td>
@@ -599,7 +600,7 @@ th {
 						<td style="text-align: center;" th:text="${rev.membNo}">test</td>
 						<td style="text-align: center;" th:text="${rev.drwupDt}">2023-07-16</td>
 
-					</tr>
+					</tr> -->
 					<!-- 추가적인 후기 데이터 -->
 				</tbody>
 			</table>
@@ -635,13 +636,10 @@ th {
 					</fieldset>
 					<div>
 
-						<textarea class="col-auto form-control" type="text"
-							id="reviewContents"
-							placeholder="좋은 수강평을 남겨주시면 Cocolo에 큰 힘이 됩니다! 포인트 5000p도 지급!!"></textarea>
+						<label for="cntn"><textarea name="cntn"
+								class="form-control" id="cntn"></textarea></label>
 					</div>
-					<div>
-						
-					</div>
+					<div></div>
 					<div>&nbsp;</div>
 					<div></div>
 					<div>&nbsp;</div>
@@ -649,7 +647,7 @@ th {
 					<div style="text-align: center;">
 						<button type="reset"
 							style="background-color: beige; border: none;">취소하기</button>
-						<button type="submit"
+						<button type="button" id="btnSave"
 							style="background-color: yellowgreen; border: none;">등록하기</button>
 					</div>
 				</form>
@@ -662,9 +660,144 @@ th {
 		<div id="reviewList"></div>
 		<!-- 후기 아이템 반복 출력 -->
 
-		<script th:inline="javascript">
+
+		<script
+			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+		<script
+			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
+		<script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+		<script type="text/javascript" th:inline="javascript">
+
+		let editor;
+		reviewList();
+		
+		//리뷰 리스트 출력
+		function reviewList(){
+			console.log('aaa');
+			fetch("/mall/getReviewList",{
+				method:"POST",
+				headers: {
+		            'Content-Type': 'application/x-www-form-urlencoded'
+		        },
+				body:"prdtNo="+[[${getFarm.prdtNo}]]
+			})
+			.then(response=>response.json())
+			.then(result=>{
+				result.forEach(item=>{
+					console.log(item);
+					let trTag=`
+						<tr>
+						<td style="width: 70px; text-align: center;" >${item.revNo}</td>
+						<td>
+							<div class="review-item">
+								${item.cntn}
+							</div>
+						</td>
+						<td style="text-align: center;" class="maks">${item.maks}</td>
+						<td style="text-align: center;" >${item.membNo}</td>
+						<td style="text-align: center;" >${item.drwupDt}</td>
+
+					</tr>
+					`;
+					document.querySelector("#reviewList").innerHTML+=trTag;
+					
+					
+				})
+				makeStar();
+			})
+			.catch(err=>console.log(err));
+		}
 		
 		
+		// 
+		ClassicEditor.create(document.querySelector('#cntn'), {
+				language: "ko",
+				ckfinder: {
+					uploadUrl: '/reviewImage/upload'
+				}
+		})
+		.then(newEditor => {
+			editor = newEditor;
+		})
+		.catch(error => {
+			console.error(error);
+		});
+		
+		
+		$('#btnSave').on('click', function() {
+			
+			let ckData = editor.getData()
+			if(ckData=="" || ckData==null) {
+				toastShow("There is no content" , "내용이 없습니다" , "error");
+				return;
+			}
+			let formData = $('#myForm').serializeObject()
+			
+			formData.cntn = ckData;
+			formData.prdtNo=[[${getFarm.prdtNo}]];
+			formData.maks=$('input[type=radio]:checked').val();
+			
+			$.ajax({
+				url :'/mall/addReview',
+				method : "POST",
+				data : formData
+			})
+			.done(function(result) {
+					
+			})
+			.fail(function(result){
+				toastShow("Insert Fail" , "등록 실패" , "error");
+			})
+		})
+			
+			/* 	$("#attachFile").on('change',function(){
+			var inputFile = $("#attachFile");
+			// input 태그의 type이 file인것을 찾아서 inputFile이라는 변수로 지정
+			
+			var files = inputFile[0].files;
+			// files: 선택한 모든 파일을 나열하는 FileList 객체
+			// multiple 특성을 지정하지 않았다면 두 개 이상의 파일을 포함하지 않습니다.
+			for(var i=0;i<files.length;i++){
+				let liTag=document.createElement("li");
+				let spanTag=document.createElement("span");
+				liTag.append(files[i].name);
+				spanTag.innerHTML="&times;";
+				liTag.append(spanTag);
+				uploadFileList.append(liTag);
+			}
+		})
+		$("#uploadFileList").on('click','span',function(){
+			var dataTranster = new DataTransfer();
+			Array.from($("#attachFile")[0].files)
+            .filter(file => file.name != $(event.target).parent().text().slice(0,-1))
+            .forEach(file => {
+            	dataTranster.items.add(file);
+         	});
+			$("#attachFile")[0].files=dataTranster.files;
+			
+			$(event.target).parent().remove();
+		}) */
+	
+	
+		
+	/* 	let div1= '';
+		let div2='';
+		
+		const memNo = "[[${session.loggedInMember.membNo}]]";
+		
+		$.ajax({
+			url : "getFarm",
+			method: "POST",
+			data : {
+				"membNo" : memNo
+			},
+			success : function (data) {
+				data.forEach(el=> {
+					console.log(el);
+				})
+			}
+		})
+		 */
 		function addToCart() {
 			  // 장바구니 담기 기능 구현
 			  alert("상품이 장바구니에 담겼습니다!");
@@ -706,11 +839,14 @@ th {
 			    button.innerText = '상세정보 펼치기';
 			  }
 			}
-				
+			
+			function makeStar(){
+			
 				/* 별 모양 */
 				var maksElements = document.getElementsByClassName('maks');
 
 				for (var i = 0; i < maksElements.length; i++) {
+					console.log(maksElements[i].textContent);
 					var maksValue = parseInt(maksElements[i].textContent);
 					var starRating = '';
 
@@ -724,6 +860,8 @@ th {
 
 					maksElements[i].textContent = starRating;
 				}
+				
+			}
 
 				/* top 버튼 */
 				document.querySelector('.top-btn').addEventListener('click',
@@ -751,7 +889,8 @@ th {
 				/* 모달창 */
 
 				// 모달 열기 버튼 클릭 시 모달 열림
-				document
+			
+					document
 					.getElementById('openModalBtn')
 					.addEventListener(
 						'click',
@@ -759,6 +898,7 @@ th {
 							document.getElementById('reviewModal').style.display = 'block';
 						});
 
+	
 				// 모달 닫기 버튼 클릭 시 모달 닫힘
 				document
 					.querySelector('.close')
@@ -779,7 +919,7 @@ th {
 				// 모달창 ESC 닫힘 
 
 				// 폼 제출 시 리뷰 작성 완료 처리
-				document
+				/* document
 					.getElementById("reviewForm")
 					.addEventListener(
 						"submit",
@@ -796,7 +936,7 @@ th {
 
 							document.getElementById("reviewModal").style.display = "none";
 
-						});
+						}); */
 
 				
 				// 상품 후기 리스트 데이터

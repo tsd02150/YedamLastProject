@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yedam.app.common.service.CommonCodeVO;
 import com.yedam.app.mall.mapper.MallMapper;
 import com.yedam.app.mall.service.BasketVO;
 import com.yedam.app.mall.service.MallService;
@@ -21,14 +22,20 @@ public class MallServiceImpl implements MallService {
 
 	//전체조회
 	@Override
-	public List<ProductVO> getProductList() {
-		return mallMapper.getProductList();
+	public List<ProductVO> getProductList(String cd) {
+		return mallMapper.getProductList(cd);
 	}
 	
 	//단건조회
 	@Override
 	public ProductVO getProductInfo(ProductVO prdtVO) {
 		return mallMapper.getProductInfo(prdtVO);
+	}
+	
+	//등록
+	@Override
+	public boolean addReview(ProductReviewVO reviewVO) {
+		return mallMapper.addReview(reviewVO)>0;
 	}
 	
 	//수정
@@ -55,7 +62,7 @@ public class MallServiceImpl implements MallService {
 	}
 
 	@Override
-	public List<ProductVO> getCategoryName(String commonCd) {
+	public List<CommonCodeVO> getCategoryName(String commonCd) {
 		return mallMapper.getCategoryName(commonCd);
 	}
 
@@ -68,6 +75,8 @@ public class MallServiceImpl implements MallService {
 	public int getProductCount(ProductVO prdtVO) {
 		return mallMapper.getProductCount(prdtVO);
 	}
+
+	
 
 
 }

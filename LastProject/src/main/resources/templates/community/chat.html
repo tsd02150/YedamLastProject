@@ -93,9 +93,11 @@
 							<h3 class="box-title">채팅방 목록</h3>
 						</div>
 						<div id="roomList" class="box-body">
-							
+							<div th:each="room:${roomList}">
+								<p>[[${room.nm}]]</p>
+							</div>
 						</div>
-						<div id="addRoom">
+						<div id="addRoom" onClick="addRoom()">
 							<h4>채팅방 생성</h4>
 						</div>
 					</div>
@@ -104,10 +106,12 @@
 							<h3 class="box-title">채팅방 참여 인원</h3>
 						</div>
 						<div class="box-body">
-							
+							<div th:each="partici:${particiList}">
+								<p>[[${partici.anonNick}]]</p>
+							</div>
 						</div>
 						<div id="particiCnt">
-							<h5>참여인원 : n 명</h5>
+							<h5>참여인원 : [[${roomInfo.conn}]] 명</h5>
 						</div>
 					</div>
 					<button type="button" id="resetBtn" class="btn-dark" onClick="resetChat()">채팅 초기화</button>
@@ -130,32 +134,7 @@
 					<div class="box-body">
 						<!-- Conversations are loaded here -->
 						<div id="chatSpace" class="direct-chat-messages">
-							<!-- Message. Default to the left -->
-							<div class="direct-chat-msg stock-chat">
-								<div class="direct-chat-info clearfix">
-									<span class="direct-chat-name pull-left">Alexander Pierce&nbsp;&nbsp;</span> 
-									<span class="direct-chat-timestamp">23 Jan 2:00 pm</span>
-								</div>
-								<!-- /.direct-chat-info -->
-								<div class="direct-chat-text">
-									Is this template really for free? That's unbelievable!
-									
-								</div>
-								<!-- /.direct-chat-text -->
-							</div>
-							<!-- /.direct-chat-msg -->
-
-							<!-- Message to the right -->
-							<div class="direct-chat-msg stock-chat right">
-								<div class="direct-chat-info clearfix">
-									<span class="direct-chat-timestamp pull-right">23 Jan 2:05 pm</span>
-									<span class="direct-chat-name pull-right">Sarah Bullock&nbsp;&nbsp;</span>
-								</div>
-								<!-- /.direct-chat-info -->
-								<div class="direct-chat-text">You better believe it!</div>
-								<!-- /.direct-chat-text -->
-							</div>
-							<!-- /.direct-chat-msg -->
+							
 						</div>
 						<!--/.direct-chat-messages-->
 
@@ -176,6 +155,10 @@
 				<!--/.direct-chat -->
 			</div>
 		</div>
+		<div class="modal">
+			
+		
+		</div>
 
 		<script th:inline="javascript">
 			let myAnonNick=[[${particiInfo.anonNick}]];
@@ -186,7 +169,7 @@
 		</script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-		<script src="../community/js/chatSocket.js"></script>
+		
 	</div>
 </body>
 </html>

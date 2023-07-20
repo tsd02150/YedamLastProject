@@ -1,8 +1,11 @@
 package com.yedam.app.mall.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.yedam.app.common.service.CommonCodeVO;
 
 import lombok.Data;
 
@@ -19,6 +22,7 @@ public class ProductVO {
 	private int stcCnt;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date drwupDt;
-	private String commonCd;
+	private String commonCd;	
 	private String ctgr;
+
 }
