@@ -25,7 +25,7 @@
 		      from item_info 
 		      where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
 		      ) i --item_info 전날 주가정보
-		join (  select b.item_no , b.nm,dt,prc,origin,desct            
+		join (  select b.item_no , b.nm,prc,origin,desct            
 				from(	select distinct(a.item_no) item_no,nm,'tah-'||a.tano ta_no,ta_prc prc
 		                from(   SELECT nm,i.item_no, MAX(to_number(substr(ta_no,5))) tano
 		                        FROM ta_hr t join item i 
@@ -74,7 +74,13 @@
 	<!-- 모든종목조회 -->
 	<select id="allItemList" resultType="StockVO">
 		
-		select t.item_no, c.sc, c.theme, t.nm,t.prc tprc, t.prc - i.cl_prc change ,trunc(((t.prc-i.cl_prc)/i.cl_prc)*100) rate
+		select t.item_no, 
+			   c.sc, 
+			   c.theme, 
+			   t.nm,
+			   t.prc tprc, 
+			   t.prc - i.cl_prc change ,
+			   trunc(((t.prc-i.cl_prc)/i.cl_prc)*100) rate
         from (select item_no, cl_prc 
                   from item_info 
                   where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
@@ -118,14 +124,21 @@
 					,inq 
 					, change 
 					, rate 
-			from (  select i.nm, i.item_no item_no , f.inq+i.inq inq
-			        from item i join (  select item_no, sum(inq) inq
+			from (  select i.nm, 
+						   i.item_no item_no , 
+						   f.inq+i.inq inq
+			        from item i join (  select item_no, 
+			        						   sum(inq) inq
 			                            from item_info 
 			                            where ta_dt > sysdate-7 
 			                            group by item_no
 			                            order by inq desc) f
 			        on i.item_no = f.item_no) a 
-			join (  select i.item_no,i.cl_prc,t.prc tprc, t.prc - i.cl_prc change ,trunc(((t.prc-i.cl_prc)/i.cl_prc)*100) rate
+			join (  select i.item_no,
+						   i.cl_prc,
+						   t.prc tprc, 
+						   t.prc - i.cl_prc change ,
+						   trunc(((t.prc-i.cl_prc)/i.cl_prc)*100) rate
 			        from (select item_no, cl_prc 
 			              from item_info 
 			              where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
@@ -284,17 +297,16 @@
 				
 				where item_no = #{itemNo}
 				group by prc
-				order by prc
-				<if test='type.equals("buy")'>
-				desc
-				</if>
 				) a
 				<![CDATA[
 		where rownum <=5
+		and cnt <> 0
 		]]>
+		order by prc 
 		<if test='type.equals("sell")'>
-		order by prc desc
+		desc
 		</if>
+		
 	</select>
 	
 	<!-- itemNo 로 단일 종목 정보 -->
@@ -326,6 +338,7 @@
 					                from(   SELECT nm,i.item_no, MAX(to_number(substr(ta_no,5))) tano
 					                        FROM ta_hr t join item i 
 					                        on i.item_no = t.item_no
+					                        where i.item_no = #{itemNo}
 					                        GROUP BY nm,i.item_no
 					                        order by to_number(substr(item_no,5))) a join ta_hr t
 					                on a.item_no= t.item_no and to_number(substr(t.ta_no,5)) = a.tano  
@@ -384,6 +397,80 @@
 			where buy_no = #{orderNo}
 		</otherwise>
 	</choose>
-		
 	</select>
+	
+	
+	<!-- 당일 아이템 정보 가져오기 -->
+	<select id="todayItemInfo" resultType="ItemInfoVO">
+		select b.item_no , vol ,op_prc, prc cl_prc , l_prc , h_prc ,inq
+		from (  select 'tah-'||MAX(to_number(substr(ta_no,5))) ta_no, sum(stock_cnt) vol ,min(ta_prc) l_prc,max(ta_prc) h_prc
+		        from ta_hr 
+		        where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate , 'yyyy-MM-dd')
+		        group by item_no
+		        order by to_number(substr(item_no,5))) a -- 오늘 거래량 고가, 저가
+		right join (  select distinct(a.item_no) item_no,'tah-'||a.tano ta_no,ta_prc prc
+		        from(   SELECT nm,i.item_no, MAX(to_number(substr(ta_no,5))) tano
+		                FROM ta_hr t right join item i 
+		                on i.item_no = t.item_no
+		                GROUP BY nm,i.item_no
+		                order by to_number(substr(item_no,5))) a left join ta_hr t
+		        on a.item_no= t.item_no and to_number(substr(t.ta_no,5)) = a.tano  
+		        order by to_number(substr(item_no,5))) b -- 오늘 마지막 거래가
+		on b.ta_no = a.ta_no
+		join (  select z.item_no, cl_prc op_prc ,x.inq
+		        from item_info z join item x
+		        on z.item_no = x.item_no
+		        where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')) c -- 전날 종가 (=현재 시가) 와 조회수
+		on b.item_no = c.item_no
+		order by to_number(substr(item_no,5))
+	</select>
+	
+	<!-- 장마감시 주가정보 넣기 -->
+	<insert id="insertItemInfo" parameterType="ItemInfoVO">
+		insert into item_info 
+		(
+			INFO_NO 
+			,ITEM_NO
+			, TA_DT
+			, VOL
+			, OP_PRC
+			, CL_PRC
+			, L_PRC
+			, H_PRC
+			, RATE
+			, INQ
+		)
+		values
+		(
+			'inf-'||item_info_seq.nextval,
+			#{itemNo},
+			sysdate,
+			NVL(#{vol},0),
+			NVL(#{opPrc},0), 
+			NVL(#{clPrc},0),
+			NVL(#{lPrc},0),
+			NVL(#{hPrc},0),
+			0,
+			#{inq}
+		)
+		
+	</insert>
+	
+	<!-- 스케줄러 작업 -->
+	<select id="deleteJob" statementType="CALLABLE">
+		{
+    	call deleteOrder_prod(    #{del_result, mode=OUT, jdbcType=VARCHAR}
+    							, #{error_one, mode=OUT, jdbcType=DATE}
+			    				, #{error_two, mode=OUT, jdbcType=INTEGER}
+			    				, #{error_thr, mode=OUT, jdbcType=VARCHAR}
+			    				)}
+	</select>
+	
+	<!-- 조회수증가 -->
+	<update id="updateInq" parameterType="String">
+		select * from item;
+		update item
+		set inq = inq +1
+		where item_no = #{itemNo}
+	</update>
 </mapper>

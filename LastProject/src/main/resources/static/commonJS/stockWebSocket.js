@@ -16,7 +16,6 @@ stompClient.onConnect = (frame) => {
     //알람 - empController 에서 보낸 알람
     stompClient.subscribe(destination, (greeting) => {
     	console.log('알림성공');
-    	alert(greeting.body);
         toastShow("체결 알림" ,greeting.body , "info"); // 구독된 url 에서 넘어오는 메세지 처리
     });
 };

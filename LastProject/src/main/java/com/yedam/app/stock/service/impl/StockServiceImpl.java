@@ -1,5 +1,6 @@
 package com.yedam.app.stock.service.impl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.stock.mapper.StockMapper;
 import com.yedam.app.stock.service.InqVO;
+import com.yedam.app.stock.service.ItemInfoVO;
 import com.yedam.app.stock.service.ItemVO;
 import com.yedam.app.stock.service.PossStockVO;
 import com.yedam.app.stock.service.StockService;
@@ -98,6 +100,7 @@ public class StockServiceImpl implements StockService {
 			
 			return map;
 		}
+		
 		// 관심종목 추가
 		int result = stockMapper.insertInterestItem(membNo, itemNo);
 		List<StockVO> list;
@@ -265,9 +268,18 @@ public class StockServiceImpl implements StockService {
 		System.out.println(destination);
 		this.template.convertAndSend(destination, text);
 	}
-	
-	
-	
+
+	@Override
+	public void schedulerJob() {
+		// 당일 주가 정보
+		List<ItemInfoVO> list = stockMapper.todayItemInfo();
+		// 정보가 있는 종목들은 insert
+		for(ItemInfoVO vo : list) {
+			stockMapper.insertItemInfo(vo);
+		}
+		// 초기화 ( 조회수초기화 , 수량 남은 주문 반환 )
+		//stockMapper.deleteJob();
+	}
 	
 	
 }

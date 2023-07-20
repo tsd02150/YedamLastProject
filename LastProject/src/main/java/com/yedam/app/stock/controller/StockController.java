@@ -22,7 +22,7 @@ import com.yedam.app.stock.service.PossStockVO;
 import com.yedam.app.stock.service.StockOrderVO;
 import com.yedam.app.stock.service.StockService;
 import com.yedam.app.stock.service.StockVO;
-
+// 김태연 2023-07-20 주식관리 매도매수 
 @Controller
 @RequestMapping("stock")
 public class StockController {
@@ -34,6 +34,7 @@ public class StockController {
 	// 종목선택 페이지 이동
 	@GetMapping("itemListPage")
 	public String itemListPage(Model m) {
+		//인기검색어 순위
 		List<InqVO> listInq = stockservice.inqChart();
 		m.addAttribute("inqList",listInq);
 		return "stock/itemChoice";
@@ -43,9 +44,10 @@ public class StockController {
 	@GetMapping("chart")
 	public String chartPage(String itemNo,Model m, HttpSession session) {
 		UserVO mem = (UserVO)session.getAttribute("loggedInMember");
-		String membNo = mem == null ? null : mem.getMembNo();
+		if(mem != null) {
+			m.addAttribute("interestStock",stockservice.getIntStock(mem.getMembNo())); // 유저관심종목리스트 
+		}
 		m.addAttribute("boardList",stockservice.getScBoardList(itemNo)); // 종목게시판
-		m.addAttribute("interestStock",stockservice.getIntStock(membNo)); // 유저관심종목리스트
 		m.addAttribute("itemInfo",stockservice.itemNoGetInfo(itemNo));
 		m.addAttribute("itemNo",itemNo);
 		return "stock/chartPage";
@@ -71,7 +73,7 @@ public class StockController {
 	// 자동완성 목록
 	@PostMapping("autoComplete")
 	@ResponseBody
-	public Map<String, Object> autocomplete(@RequestParam Map<String, Object> paramMap) throws Exception {
+	public Map<String, Object> autocomplete(@RequestParam Map<String, Object> paramMap)  {
 
 		List<Map<String, Object>> resultList = stockservice.autocomplete(paramMap);
 		paramMap.put("resultList", resultList);
@@ -109,7 +111,7 @@ public class StockController {
 	//관심종목 추가기능
 	@ResponseBody
 	@PostMapping("insertIntItem")
-	public Map<String,Object> insertIntItem(String membNo , String itemNo) throws Exception {
+	public Map<String,Object> insertIntItem(String membNo , String itemNo) {
 		System.out.println(membNo + " " + itemNo + "zzzzzzzzzzzzzzzzzzzzzzzzzzz");
 		Map<String,Object> map = stockservice.insertInterestItem(membNo, itemNo);
 		return map;
@@ -119,8 +121,7 @@ public class StockController {
 	@ResponseBody
 	@PostMapping("deleteIntItem")
 	public Map<String,Object> deleteIntItem(String membNo , String itemNo) {
-		Map<String,Object> map = stockservice.deleteIntItem(membNo, itemNo);
-		return map;
+		return stockservice.deleteIntItem(membNo, itemNo);
 	}
 	
 	//종목명으로 종목번호 받기
@@ -178,6 +179,7 @@ public class StockController {
 		
 	}
 	
+	// 주문프로시저
 	@ResponseBody
 	@PostMapping("stockOrder")
 	public Map<String,Object> stockOrder(StockOrderVO vo ){

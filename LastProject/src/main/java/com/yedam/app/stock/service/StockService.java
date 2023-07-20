@@ -27,4 +27,6 @@ public interface StockService {
 	public List<Map<String,Object>> orderTable(String type , String itemNo);
 	public PossStockVO getPossStock(String itemNo ,String membNo);
 	public Map<String,Object> callOrderProd(Map<String,Object> params);
+	// 스케줄러 작업
+	public void schedulerJob();
 }

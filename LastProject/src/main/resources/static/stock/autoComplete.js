@@ -240,7 +240,7 @@ function addInterest() {
 	  				data:{membNo: membinfo , itemNo: itemNo},
 	  				success:function(data){
 	  					let rate = data.rate > 0 ? "+ "+data.rate : data.rate;
-	  					let rateClass = data.cnt == 0 ? '' : (data.cnt > 0 ? 'plus' : 'minus');
+	  					let rateClass = data.rate == 0 ? '' : (data.rate > 0 ? 'plus' : 'minus');
 	  					$('#CP2D22 div p:nth-of-type(2) span').text(data.cnt);
 	  					$('#CP2D22 div p:nth-of-type(3) span').text(rate).addClass(rateClass);
 	  					$('#CP2D22 div p:nth-of-type(4)').attr('data-point',data.point);
@@ -367,7 +367,7 @@ function addInterest() {
   				success:function(data){
   					console.log(data);
   					let rate = data.rate > 0 ? "+ "+data.rate : data.rate;
-  					let rateClass = data.cnt == 0 ? '' : (data.cnt > 0 ? 'plus' : 'minus');
+  					let rateClass = data.rate == 0 ? '' : (data.rate > 0 ? 'plus' : 'minus');
   					$('#CP2D22 div p:nth-of-type(2) span').text(data.cnt); // 보유주 span
   					$('#CP2D22 div p:nth-of-type(3) span').text(rate).addClass(rateClass); // 수익률 span
   					$('#CP2D22 div p:nth-of-type(4)').attr('data-point',data.point);

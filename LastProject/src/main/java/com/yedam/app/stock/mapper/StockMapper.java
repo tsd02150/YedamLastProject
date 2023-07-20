@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.stock.service.InqVO;
+import com.yedam.app.stock.service.ItemInfoVO;
 import com.yedam.app.stock.service.ItemVO;
 import com.yedam.app.stock.service.PossStockVO;
 import com.yedam.app.stock.service.StockVO;
@@ -57,4 +58,10 @@ public interface StockMapper {
 	public void callTaProd(Map<String,Object> params);
 	// 주문번호로 주문일시 가져오기
 	public Date getOrderDt(String orderNo);
+	// 오늘 종목 주가정보
+	public List<ItemInfoVO> todayItemInfo();
+	// 장마감시 종목 당일 정보 넣기
+	public int insertItemInfo(ItemInfoVO vo);
+	//스케줄러 작업
+	public void deleteJob();
 }
