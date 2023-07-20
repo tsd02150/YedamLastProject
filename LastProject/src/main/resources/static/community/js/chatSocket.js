@@ -1,7 +1,7 @@
 let chatClient = null;
 
 function connected() {
-    var socket = new SockJS('/socketserver');
+    var socket = new SockJS('/socketserver?roomno=1');
     chatClient = Stomp.over(socket);
     chatClient.connect({}, onConnected, onError);
 }

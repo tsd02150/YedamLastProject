@@ -1,4 +1,4 @@
-package com.yedam.app.community.controller;
+package com.yedam.app.common.controller;
 
 import java.io.File;
 import java.io.IOException;
