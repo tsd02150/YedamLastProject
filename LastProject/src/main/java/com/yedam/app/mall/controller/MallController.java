@@ -164,7 +164,18 @@ public class MallController {
 
 	  }
 	 
-	
+	//리뷰삭제
+	  @PostMapping("deleteReview")
+	  @ResponseBody
+	 public String deleteReview(ProductReviewVO revVO) {
+		  if(mallService.deleteReviewInfo(revVO)) {
+				return "success";
+			}else {
+				return "fail";
+			}
+	 }
+	  
+	  
 	// 수산물 페이지
 //	@GetMapping("seafoodList")
 //	public String seafoodList(Model model, ProductVO prdtVO) {

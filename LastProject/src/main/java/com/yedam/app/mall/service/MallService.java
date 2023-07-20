@@ -29,12 +29,12 @@ public interface MallService {
 	public List<ProductReviewVO> getProductReviewList(ProductReviewVO revVO);
 	
 	// 리뷰 등록
-	public boolean addReview(ProductReviewVO reviewVO);
+	public boolean addReview(ProductReviewVO revVO);
 	
 	// 리뷰 수정
-	public int updateReviewInfo(ProductReviewVO reviewVO);
+	public int updateReviewInfo(ProductReviewVO revVO);
 
 	// 리뷰 삭제
-	public int deleteReviewInfo(int revNo);
+	public boolean deleteReviewInfo(ProductReviewVO revVO);
 
 }

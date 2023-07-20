@@ -34,20 +34,20 @@ public class MallServiceImpl implements MallService {
 	
 	//등록
 	@Override
-	public boolean addReview(ProductReviewVO reviewVO) {
-		return mallMapper.addReview(reviewVO)>0;
+	public boolean addReview(ProductReviewVO revVO) {
+		return mallMapper.addReview(revVO)>0;
 	}
 	
 	//수정
 	@Override
-	public int updateReviewInfo(ProductReviewVO reviewVO) {
-		return mallMapper.updateReviewInfo(reviewVO);
+	public int updateReviewInfo(ProductReviewVO revVO) {
+		return mallMapper.updateReviewInfo(revVO);
 	}
 
 	//삭제
 	@Override
-	public int deleteReviewInfo(int revNo) {
-		return mallMapper.deleteReviewInfo(revNo);
+	public boolean deleteReviewInfo(ProductReviewVO revVO) {
+		return mallMapper.deleteReviewInfo(revVO)>0;
 	}
 
 	//카테고리 정보

@@ -32,13 +32,13 @@ public interface MallMapper {
 	public List<ProductReviewVO> getProductReviewList(ProductReviewVO revVO);
 	
 	// 리뷰등록
-	public int addReview(ProductReviewVO reviewVO);
+	public int addReview(ProductReviewVO revVO);
 	
 	// 수정
-	public int updateReviewInfo(ProductReviewVO reviewVO);
+	public int updateReviewInfo(ProductReviewVO revVO);
 
-	// 삭제
-	public int deleteReviewInfo(int revNo);
+	// 리뷰삭제
+	public int deleteReviewInfo(ProductReviewVO revVO);
 
 	public ProductVO getProductInfo(String prdtNo);
 

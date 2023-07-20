@@ -581,6 +581,7 @@ p>img {
 						<th style="width: 130px;">평가</th>
 						<th style="width: 180px;">작성자</th>
 						<th style="width: 130px;">작성일</th>
+						<th style="width: 130px;"></th>
 					</tr>
 				</thead>
 				<tbody id="reviewList">
@@ -696,6 +697,9 @@ p>img {
 						<td style="text-align: center;" class="maks">${item.maks}</td>
 						<td style="text-align: center;" >${item.membNo}</td>
 						<td style="text-align: center;" >${item.drwupDt}</td>
+						  <td style="text-align: center;">
+					        <button class="delete-review-btn" data-rev-no="${item.revNo}">삭제</button>
+					    </td>
 
 					</tr>
 					`;
@@ -709,7 +713,7 @@ p>img {
 		}
 		
 		
-		// 
+		// CK Editor
 		ClassicEditor.create(document.querySelector('#cntn'), {
 				language: "ko",
 				ckfinder: {
@@ -723,7 +727,7 @@ p>img {
 			console.error(error);
 		});
 		
-		
+		//후기 등록 여부
 		$('#btnSave').on('click', function() {
 			
 			let ckData = editor.getData()
@@ -750,54 +754,79 @@ p>img {
 			})
 		})
 			
-			/* 	$("#attachFile").on('change',function(){
-			var inputFile = $("#attachFile");
-			// input 태그의 type이 file인것을 찾아서 inputFile이라는 변수로 지정
-			
-			var files = inputFile[0].files;
-			// files: 선택한 모든 파일을 나열하는 FileList 객체
-			// multiple 특성을 지정하지 않았다면 두 개 이상의 파일을 포함하지 않습니다.
-			for(var i=0;i<files.length;i++){
-				let liTag=document.createElement("li");
-				let spanTag=document.createElement("span");
-				liTag.append(files[i].name);
-				spanTag.innerHTML="&times;";
-				liTag.append(spanTag);
-				uploadFileList.append(liTag);
-			}
-		})
-		$("#uploadFileList").on('click','span',function(){
-			var dataTranster = new DataTransfer();
-			Array.from($("#attachFile")[0].files)
-            .filter(file => file.name != $(event.target).parent().text().slice(0,-1))
-            .forEach(file => {
-            	dataTranster.items.add(file);
-         	});
-			$("#attachFile")[0].files=dataTranster.files;
-			
-			$(event.target).parent().remove();
-		}) */
-	
-	
 		
-	/* 	let div1= '';
-		let div2='';
+		  document.addEventListener("DOMContentLoaded", function () {
+    var modal = document.getElementById("reviewModal");
+    var productList = document.getElementById("productList"); // 해당 상품 리스트를 출력하는 요소의 ID를 지정합니다.
+
+
+    // 필요할 때 모달을 열기 위한 함수
+    function openModal() {
+      modal.style.display = "block";
+    }
+
+
+    // "등록하기" 버튼을 클릭했을 때 상품 리스트에 내용을 추가
+ /*    modal.querySelector("#btnSave").addEventListener("click", function () {
+      var reviewStar = document.querySelector('input[name="reviewStar"]:checked').value; // 별점을 가져옵니다.
+      var reviewContent = document.getElementById("cntn").value; // 리뷰 내용을 가져옵니다.
+		console.log(reviewContent);
+      
+      // 새로운 리뷰 요소를 생성합니다.
+      var newReview = document.createElement("div");
+      newReview.innerHTML = `
+        <p>별점: ${reviewStar}</p>
+        <p>리뷰 내용: ${reviewContent}</p>
+        <hr>
+      `;
+
+      // 상품 리스트에 새로운 리뷰를 추가합니다.
+      productList.appendChild(newReview);
+
+      // 모달 창을 닫습니다.
+      modal.style.display = "none";
+    });
+
+    // 필요한 경우 'openModal()' 함수를 호출하여 모달을 열 수 있습니다. (예시: openModal();)
+
+    // 'esc' 키 입력을 감지하기 위해 document에 이벤트 리스너를 추가합니다. (이전과 동일)
+    document.addEventListener("keydown", closeModalOnEsc);
+  });
 		
-		const memNo = "[[${session.loggedInMember.membNo}]]";
-		
-		$.ajax({
-			url : "getFarm",
-			method: "POST",
-			data : {
-				"membNo" : memNo
-			},
-			success : function (data) {
-				data.forEach(el=> {
-					console.log(el);
-				})
-			}
-		})
 		 */
+		
+		 // 리뷰 삭제 버튼을 클릭했을 때 해당 리뷰를 삭제하는 함수를 정의합니다.
+        function deleteReview(revNo) {
+            // 서버에 삭제 요청을 보내는 fetch 코드를 추가합니다.
+            fetch("/mall/deleteReview", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: "revNo=" + revNo
+            })
+            .then(response => response.json())
+            .then(result => {
+                // 삭제 요청이 성공하면, 해당 리뷰를 리스트에서 삭제합니다.
+                var reviewItem = document.getElementById("review-" + revNo);
+                if (reviewItem) {
+                    reviewItem.remove();
+                }
+            })
+            .catch(err => console.log(err));
+        }
+
+        // 리뷰 삭제 버튼을 클릭했을 때 deleteReview 함수를 호출하도록 이벤트 리스너를 추가합니다.
+        productList.addEventListener("click", function (event) {
+            if (event.target.classList.contains("delete-review-btn")) {
+                var revNo = event.target.dataset.revNo;
+                deleteReview(revNo);
+            }
+        });
+    });
+		
+		
+	
 		function addToCart() {
 			  // 장바구니 담기 기능 구현
 			  alert("상품이 장바구니에 담겼습니다!");
@@ -839,10 +868,11 @@ p>img {
 			    button.innerText = '상세정보 펼치기';
 			  }
 			}
+
 			
+			/* 별 모양 */
 			function makeStar(){
 			
-				/* 별 모양 */
 				var maksElements = document.getElementsByClassName('maks');
 
 				for (var i = 0; i < maksElements.length; i++) {
@@ -887,7 +917,6 @@ p>img {
 				observer.observe(amountMenu);
 
 				/* 모달창 */
-
 				// 모달 열기 버튼 클릭 시 모달 열림
 			
 					document
@@ -917,7 +946,40 @@ p>img {
 				});
 				
 				// 모달창 ESC 닫힘 
+			
+    document.addEventListener("DOMContentLoaded", function () {
+        var modal = document.getElementById("reviewModal");
 
+        // 'esc' 키를 눌렀을 때 모달 창이 닫히도록 하는 함수
+        function closeModalOnEsc(event) {
+            if (event.key === "Escape") {
+                modal.style.display = "none";
+            }
+        }
+
+        // 필요할 때 모달을 열기 위한 함수 
+        function openModal() {
+            modal.style.display = "block";
+        }
+
+        // '×' (닫기) 버튼을 클릭했을 때 모달 창이 닫힘
+        modal.querySelector(".close").addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+
+        // "취소하기" 버튼을 클릭했을 때 모달 창이 닫힘
+        modal.querySelector("button[type='reset']").addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+
+        // 필요한 경우 'openModal()' 함수를 호출하여 모달 오픈
+        // 예시: openModal();
+
+        // 'esc' 키 입력을 감지하기 위해 document에 이벤트 리스너를 추가
+        document.addEventListener("keydown", closeModalOnEsc);
+    });
+				
+				
 				// 폼 제출 시 리뷰 작성 완료 처리
 				/* document
 					.getElementById("reviewForm")
