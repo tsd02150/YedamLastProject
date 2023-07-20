@@ -18,6 +18,7 @@ import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
 import com.yedam.app.member.service.PossVO;
 import com.yedam.app.member.service.SellOrderVO;
+import com.yedam.app.member.service.SurveyVO;
 import com.yedam.app.stock.service.StockVO;
 
 @Service
@@ -192,6 +193,21 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<PossVO> myPossStockList(String membNo) {
 		return membMapper.myPossStockList(membNo);
+	}
+
+	@Override
+	public List<DealVO> buysellList(DealVO vo) {
+		return membMapper.buysellList(vo);
+	}
+
+	@Override
+	public int insertsurvey(SurveyVO vo) {
+		return membMapper.insertsurvey(vo);
+	}
+
+	@Override
+	public List<SurveyVO> analysisResult(String membNo) {
+		return membMapper.analysisResult(membNo);
 	}
 
 }

@@ -15,6 +15,7 @@ import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.PossVO;
 import com.yedam.app.member.service.SellOrderVO;
+import com.yedam.app.member.service.SurveyVO;
 import com.yedam.app.stock.service.StockVO;
 
 public interface MemberMapper {
@@ -106,5 +107,13 @@ public interface MemberMapper {
 	
 	//보유자산
 	public List<PossVO> myPossStockList(String membNo);
+	
+	//매도 매수 거래내역
+	public List<DealVO> buysellList(DealVO vo);
+	
+	//설문조사 추가
+	public int insertsurvey(SurveyVO vo);
+	//설문조사 결과 조회
+	public List<SurveyVO> analysisResult(String membNo);
 
 }

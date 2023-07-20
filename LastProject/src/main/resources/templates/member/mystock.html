@@ -36,6 +36,7 @@
 	height: 500px;
 	margin-top : 20px;
 	display : inline-block;
+	overflow: auto;
 }
 #myorderDiv{
 	border: 1px solid #DDDDDD;
@@ -46,10 +47,11 @@
 	width : 200px;
 	overflow: auto;
 }
-#stockList{
+#buysellList{
 	border: 1px solid #DDDDDD;
 	height: 500px;
 	margin-top : 20px;
+	padding : 5px;
 }
 #interestDiv, #recomDiv{
 	display : inline-block;
@@ -63,8 +65,14 @@
 	width : 100%;
 	
 }
+#sum{
+	height: 150px;
+}
 .high{ color : red;}
 .low{ color : blue;}
+#buyselltbl{
+	text-align: center;
+}
 </style>
 </head>
 <body>
@@ -75,7 +83,7 @@
 				<a href="mystockInfo"><p class="bi bi-arrow-right-square-fill"></p></a>
 			</div>
 			<div class="col-12" style="margin : auto;">
-				<div id="mystockDiv" class="col-12">
+				<div id="mystockDiv" class="col-7">
 					<div id="sum" class="col-12">
 					</div>
 					<div id="ownList" class="col-12"></div>
@@ -85,7 +93,34 @@
 					<div id="sellOrder"></div>
 				</div>
 			</div>
-			<div id="stockList" class="col-12"></div>
+			<div id="buysellList" class="col-12">
+			<h3>거래내역</h3>
+			<input type="date" id="dstart"> ~ 
+			<input type="date" id="dend">
+			<button type="button">1개월</button>
+			<button type="button">3개월</button>
+			<button type="button">6개월</button>
+			<select id="buysellsel">
+				<option value="">전체거래</option>
+				<option value="B">매수</option>
+				<option value="S">매도</option>
+			</select>
+				<table id="buyselltbl" class="col-12">
+					<thead>
+						<tr>
+							<th>체결날짜</th>
+							<th>구분</th>
+							<th>종목</th>
+							<th>가격</th>
+							<th>수량</th>
+							<th>수수료</th>
+							<th>합계</th>
+						</tr>
+					</thead>
+					<tbody id="buysellbody">
+					</tbody>
+				</table>
+			</div>
 			<div class="col-12">
 				<div id="interestDiv" class="col-5">
 					<table id="interesttbl">
@@ -103,11 +138,80 @@
 				<div id="recomDiv" class="col-5"></div>
 			</div>
 		</div>
+
 		
 	<script>
 	let div1='';
 	let div2='';
  	const memNo = "[[${session.loggedInMember.membNo}]]";
+ 	const dt = "[[${session.loggedInMember.joinDt}]]";
+ 	let kind = "";
+ 	let startDate = dt;
+ 	let today = new Date();   
+ 	let year = today.getFullYear(); // 년도
+ 	let month = today.getMonth() + 1 <10 ? '0'+(today.getMonth() + 1) : today.getMonth() + 1;  // 월
+ 	let date = today.getDate() < 10 ? date = '0'+today.getDate() : today.getDate();  // 날짜
+
+ 	let endDate = year + '/' + month + '/' + date ; 
+ 	
+ 	console.log(endDate);
+ 	
+ 	$("#dstart").val(startDate);
+ 	$("#dend").val(`${year}-${month}-${date}`);
+ 	
+ 	//매도 매수 거래내역 호출
+ 	buysell(); 
+ 	
+ 	$("#buysellsel").on("change",function(){
+ 		$("#buysellbody").html("");
+ 		kind = $("#buysellsel option:selected").val();
+    startDate = $("#dstart").val();
+    endDate = $("#dend").val();
+    buysell();
+ 	})
+ 	
+//매도 매수 거래내역
+ 	function buysell(){
+	$.ajax({
+		url : "buysellList",
+		method : "POST",
+		data : {
+			"membNo" : memNo,
+      "kind": kind,
+      "startDate" : $("#dstart").val(),
+      "endDate" : $("#dend").val()
+		},
+		success : function(data){
+			let tr='';
+			data.forEach(el=>{
+				let orderDt = new Date(el.taDt);
+            	let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
+				console.log(el);
+				tr += `
+					<tr>
+					<td>${formattedDt}</td>`;
+				if(el.kind === 'B'){
+					tr += `<td class="high">매수</td>`;
+				}else{
+					tr += `<td class="low">매도</td>`;
+				}
+				
+				tr += `
+					<td>${el.tnm}</td>
+					<td>${el.taPrc}</td>
+					<td>${el.stockCnt}</td>
+					<td>${(el.stockCnt*el.taPrc)*0.1}</td>
+					<td>${(el.stockCnt*el.taPrc-((el.stockCnt*el.taPrc)*0.1))}</td>
+				</tr>
+				`;
+			});
+			$("#buysellbody").html(tr);
+		}, error : function(err){
+			console.log(err);
+		}
+	});
+}
+ 	
 	//매수 주문 현황
 	 $.ajax({
 		 url : "buyOrderList",
@@ -309,49 +413,55 @@ $.ajax({
 	    "membNo": memNo
 	  },
 	  success: function(data) {
-	    let itemList = [];
-	    let currentItemNo;
-	    let sumRate = 0;
-	    let itemCount = 0;
+		  //console.log(data);
+		  let itemList = [];
+		  let currentItemNo;
+		  let sumRate = 0;
+		  let itemCount = 0;
 
-	    for (let i = 0; i < data.length; i++) {
-	      let currentItem = data[i];
-	      itemList.push({
-	        item_no: currentItem.item_no,
-	        tnm: currentItem.tnm,
-	        rate: currentItem.tprc / currentItem.tradePrc,
-	        tprc: currentItem.tprc
-	      });
+		  for (let i = 0; i < data.length; i++) {
+		    let currentItem = data[i];
 
-	      if (currentItemNo !== currentItem.item_no) {
-	        currentItemNo = currentItem.item_no;
-	        sumRate += currentItem.tprc / currentItem.tradePrc;
-	        itemCount = 1;
-	      } else {
-	        sumRate += currentItem.tprc / currentItem.tradePrc;
-	        itemCount++;
-	      }
+		    if (currentItemNo !== currentItem.itemNo) {
+		      if (itemCount !== 0) {
+		        let groupRate = sumRate / itemCount;
+		        itemList[itemList.length - 1].rate = (groupRate).toFixed(2);
+		      }
 
-	      if (i + 1 === data.length || data[i + 1].item_no !== currentItem.item_no) {
-	        let groupRate = sumRate / itemCount;
-	        let rateRounded = parseFloat(groupRate).toFixed(2);
-	        itemList[itemList.length - 1].rate = rateRounded;
-	        sumRate = 0;
-	        itemCount = 0;
-	      }
-	    }
+		      currentItemNo = currentItem.itemNo;
+		      sumRate = currentItem.tprc / currentItem.tradePrc;
+		      itemCount = 1;
+		    } else {
+		      sumRate += currentItem.tprc / currentItem.tradePrc;
+		      itemCount++;
+		    }
 
-	    // 결과를 ownList에 추가합니다.
-	    itemList.forEach(item => {
-	      let tr = `
-	        <tr>
-	          <td>${item.tnm}</td>
-	          <td>${item.rate}</td>
-	          <td>${item.tprc}</td>
-	        </tr>
-	      `;
-	      $("#ownList").append(tr);
-	    });
+		    itemList.push({
+		      itemNo: currentItem.itemNo,
+		      tnm: currentItem.tnm,
+		      rate: currentItem.tprc / currentItem.tradePrc,
+		      tprc: currentItem.tprc,
+		      count: itemCount
+		    });
+
+		    if (i + 1 === data.length) {
+		      let groupRate = sumRate / itemCount;
+		      itemList[itemList.length - 1].rate = (groupRate).toFixed(2);
+		    }
+		  }
+
+		  itemList.forEach(item => {
+		    let rate = parseFloat(item.rate).toFixed(2);
+		    let tr = `
+		      <tr>
+		        <td>${item.tnm}</td>
+		        <td>${rate}</td>
+		        <td>${item.tprc}</td>
+		      </tr>
+		    `;
+		    $("#ownList").append(tr);
+		  });
+
 	  },
 	  error: function(err) {
 	    console.log(err);

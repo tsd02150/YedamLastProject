@@ -106,14 +106,13 @@ let tablename = "";
 let startDate = dt;
 let today = new Date();   
 let year = today.getFullYear(); // 년도
-let month = today.getMonth() + 1;  // 월
-let date = today.getDate();  // 날짜
-let day = today.getDay();  // 요일
+let month = today.getMonth() + 1 <10 ? '0'+(today.getMonth() + 1) : today.getMonth() + 1;  // 월
+let date = today.getDate() < 10 ? date = '0'+today.getDate() : today.getDate();  // 날짜
 
 let endDate = year + '/' + month + '/' + date; 
-
 $("#startDate").val(startDate);
 $("#endDate").val(`${year}-${month}-${date}`);
+
 
 dealList();
 
@@ -131,9 +130,11 @@ function dealList() {
         success: function (data) {
             let tr = ''; // 각 호출마다 tr을 초기화
             data.forEach(el => {
+            	let orderDt = new Date(el.orderDt);
+            	let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
                 tr += `
                         <tr>
-                            <td>${el.orderDt}</td>
+                            <td>${formattedDt}</td>
                             <td>${el.tablename}</td>`;
                 if (el.nm == null) {
                     tr += `<td>적립</td>`;

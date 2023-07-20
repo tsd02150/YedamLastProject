@@ -395,39 +395,83 @@
 
 </select>
 
-<select id="myPossStockList" parameterType="String" resultType="PossVO">
-SELECT distinct p.poss_no, p.item_no, aa.nm tnm, p.stock_cnt, p.trade_prc,  aa.prc tprc,
-       aa.change, aa.rate
-FROM poss_stock p
-JOIN (
-    SELECT t.item_no, t.nm, t.prc, t.prc - i.cl_prc AS change,
-           TRUNC(((t.prc - i.cl_prc) / i.cl_prc) * 100) AS rate
-    FROM (
-        SELECT b.item_no, cl_prc 
-        FROM item_info a 
-        JOIN (
-            SELECT i.item_no, t.nm
-            FROM poss_stock i 
-            JOIN item t ON i.item_no = t.item_no
-            WHERE i.memb_no = #{membNo}
-        ) b ON a.item_no = b.item_no
-        WHERE TO_CHAR(ta_dt, 'yyyy-MM-dd') = TO_CHAR(SYSDATE-1, 'yyyy-MM-dd')
-    ) i
-    JOIN (
-        SELECT DISTINCT(a.item_no), nm, dt, ta_prc AS prc
-        FROM (
-            SELECT nm, i.item_no, MAX(ta_dt) AS dt
-            FROM ta_hr t 
-            JOIN item i ON i.item_no = t.item_no
-            GROUP BY nm, i.item_no
-            ORDER BY item_no
-        ) a 
-        JOIN ta_hr t ON a.item_no = t.item_no AND a.dt = t.ta_dt
-    ) t ON i.item_no = t.item_no
-) aa ON p.item_no = aa.item_no
-WHERE p.memb_no = #{membNo}
-order by 3
-</select>
- 	
+	<select id="myPossStockList" parameterType="String" resultType="PossVO">
+		SELECT distinct p.poss_no, p.item_no, aa.nm tnm, p.stock_cnt, p.trade_prc,  aa.prc tprc,
+		       aa.change, aa.rate
+		FROM poss_stock p
+		JOIN (
+		    SELECT t.item_no, t.nm, t.prc, t.prc - i.cl_prc AS change,
+		           TRUNC(((t.prc - i.cl_prc) / i.cl_prc) * 100) AS rate
+		    FROM (
+		        SELECT b.item_no, cl_prc 
+		        FROM item_info a 
+		        JOIN (
+		            SELECT i.item_no, t.nm
+		            FROM poss_stock i 
+		            JOIN item t ON i.item_no = t.item_no
+		            WHERE i.memb_no = #{membNo}
+		        ) b ON a.item_no = b.item_no
+		        WHERE TO_CHAR(ta_dt, 'yyyy-MM-dd') = TO_CHAR(SYSDATE-1, 'yyyy-MM-dd')
+		    ) i
+		    JOIN (
+		        SELECT DISTINCT(a.item_no), nm, dt, ta_prc AS prc
+		        FROM (
+		            SELECT nm, i.item_no, MAX(ta_dt) AS dt
+		            FROM ta_hr t 
+		            JOIN item i ON i.item_no = t.item_no
+		            GROUP BY nm, i.item_no
+		            ORDER BY item_no
+		        ) a 
+		        JOIN ta_hr t ON a.item_no = t.item_no AND a.dt = t.ta_dt
+		    ) t ON i.item_no = t.item_no
+		) aa ON p.item_no = aa.item_no
+		WHERE p.memb_no = #{membNo}
+		order by 3
+	</select>
+	
+	<select id="buysellList" parameterType="DealVO">
+	SELECT * FROM(
+		SELECT t.TA_NO, t.STOCK_CNT, t.TA_PRC, t.TA_DT, t.BUY_MEMB_NO AS MEMB_NO, 'B' AS kind, i.ITEM_NO, i.NM TNM
+		FROM ta_hr t join item i on t.item_no = i.item_no
+		UNION ALL
+		SELECT t.TA_NO, t.STOCK_CNT, t.TA_PRC, t.TA_DT, t.SELL_MEMB_NO AS MEMB_NO, 'S' AS kind, i.ITEM_NO, i.NM TNM
+		FROM ta_hr t join item i on t.item_no = i.item_no)
+		
+		WHERE MEMB_NO = #{membNo}
+		<choose>
+			 <when test="kind == null or kind.equals('')">
+           AND 1=1
+       </when>
+       <otherwise>
+           AND kind = #{kind}
+       </otherwise>
+    </choose>
+    AND trunc(TA_DT) BETWEEN #{startDate} AND #{endDate}
+    ORDER BY TA_DT DESC
+	</select>
+
+	<insert id="insertsurvey" parameterType="SurveyVO">
+  <selectKey keyProperty="invstNo" resultType="string" order="BEFORE">
+    SELECT concat('inv-',NVL(MAX(TO_NUMBER(SUBSTR(invst_no, 5))), 0)+1)
+    FROM analysis_result
+  </selectKey>
+	  INSERT INTO analysis_result (INVST_NO, MEMB_NO, INVST_TYPE_NO)
+	  VALUES (#{invstNo}, #{membNo}, #{invstTypeNo})
+	</insert>
+	
+	<select id="analysisResult" parameterType="String">
+		<![CDATA[
+			SELECT * FROM(
+			SELECT TO_NUMBER(SUBSTR(ar.INVST_NO, 5)) AS "INVST_NO", ar.MEMB_NO, ar.INVST_TYPE_NO, at.type_nm
+			FROM analysis_result ar JOIN analysis_type at
+      ON ar.INVST_TYPE_NO = at.INVST_TYPE_NO
+			)A
+			WHERE ROWNUM =1
+			<if test="membNo != null and !membNo.equals('')">
+				AND MEMB_NO =  #{membNo}
+			</if>
+		]]>
+	</select>
+
 	
 </mapper>

@@ -33,6 +33,7 @@ import com.yedam.app.member.service.MemberService;
 import com.yedam.app.member.service.PossVO;
 import com.yedam.app.member.service.RegisterMail;
 import com.yedam.app.member.service.SellOrderVO;
+import com.yedam.app.member.service.SurveyVO;
 import com.yedam.app.security.service.UserService;
 import com.yedam.app.security.service.UserVO;
 import com.yedam.app.sms.service.MessageDTO;
@@ -639,7 +640,42 @@ public class MemberController {
 	@PostMapping("myPossStockList")
 	public List<PossVO> myPossStockList(@RequestParam String membNo){
 		List<PossVO> list = membService.myPossStockList(membNo);
-		System.out.println(list);
+//		System.out.println(list);
+		return list;
+	}
+	
+	@ResponseBody
+	@PostMapping("buysellList")
+	public List<DealVO> buysellList(DealVO vo){
+//		vo.setMembNo(membNo);
+//		vo.setStartDate(startDate);
+//		vo.setEndDate(endDate);
+//		vo.setKind(kind);
+//		System.out.println(membNo);
+//		System.out.println("========================"+startDate);
+//		System.out.println(endDate);
+//		System.out.println(kind);
+		System.out.println("===================="+vo);
+		List<DealVO> list = membService.buysellList(vo);
+		System.out.println("매도/매수 거래내역"+list);
+		return list;
+	}
+	
+	@ResponseBody
+	@PostMapping("insertsurvey")
+	public int insertsurvey(@RequestParam String invstTypeNo, @RequestParam String membNo, SurveyVO vo) {
+		vo.setMembNo(membNo);
+		vo.setInvstTypeNo(invstTypeNo);
+		System.out.println("설문조사 : "+vo);
+		int result = membService.insertsurvey(vo);
+		System.out.println(result);
+		return result;
+	}
+	
+	@ResponseBody
+	@PostMapping("analysisResult")
+	public List<SurveyVO> analysisResult(String membNo){
+		List<SurveyVO> list = membService.analysisResult(membNo);
 		return list;
 	}
 	

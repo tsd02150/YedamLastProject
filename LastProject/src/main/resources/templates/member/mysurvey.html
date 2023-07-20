@@ -122,9 +122,9 @@
 						<td>
 							<span class="tit">6. 고객님과 고객님의 가족을 포함하여 현재와 미래의 소득수준을 가장 잘 표현한 것은 어느 것입니까?</span>
 							<ul class="faqlist">
-								<li><input type="radio" class="radio" title="현재 안정적인 소득(급여, 금융소득 등)이 발생하고 있으며, 향후 현재의 소득수준의 유지 혹은 증가 예상 선택" name="importOrigin" value="5" id="faq23"><label for="faq23">현재 안정적인 소득(급여, 금융소득 등)이 발생하고 있으며, 향후 현재의 소득수준의 유지 혹은 증가 예상</label></li>
-								<li><input type="radio" class="radio" title="현재 안정적인 소득(급여, 금융소득 등)이 발생하고 있으며, 향후 현재의 소득수준의 감소 예상 선택" name="importOrigin" value="3" id="faq24"><label for="faq24">현재 안정적인 소득(급여, 금융소득 등)이 발생하고 있으며, 향후 현재의 소득수준의 감소 예상</label></li>
-								<li><input type="radio" class="radio" title="현재나 미래에 일정한 소득(급여, 금융소득)을 통한 여유자금의 마련이 어려울 것으로 예상 선택" name="importOrigin" value="1" id="faq25"><label for="faq25">현재나 미래에 일정한 소득(급여, 금융소득)을 통한 여유자금의 마련이 어려울 것으로 예상</label></li>
+								<li><input type="radio" class="radio" title="현재 안정적인 소득(급여, 금융소득 등)이 발생하고 있으며, 향후 현재의 소득수준의 유지 혹은 증가 예상 선택" name="importOrigin" value="10" id="faq23"><label for="faq23">현재 안정적인 소득(급여, 금융소득 등)이 발생하고 있으며, 향후 현재의 소득수준의 유지 혹은 증가 예상</label></li>
+								<li><input type="radio" class="radio" title="현재 안정적인 소득(급여, 금융소득 등)이 발생하고 있으며, 향후 현재의 소득수준의 감소 예상 선택" name="importOrigin" value="6" id="faq24"><label for="faq24">현재 안정적인 소득(급여, 금융소득 등)이 발생하고 있으며, 향후 현재의 소득수준의 감소 예상</label></li>
+								<li><input type="radio" class="radio" title="현재나 미래에 일정한 소득(급여, 금융소득)을 통한 여유자금의 마련이 어려울 것으로 예상 선택" name="importOrigin" value="2" id="faq25"><label for="faq25">현재나 미래에 일정한 소득(급여, 금융소득)을 통한 여유자금의 마련이 어려울 것으로 예상</label></li>
 							</ul>
 						</td>
 					</tr>
@@ -143,18 +143,21 @@
 						<td>
 							<span class="tit">8. 고객님께서 통상적으로 투자하고자 하는 자금의 투자예상 기간은 얼마나 되십니까?</span>
 							<ul class="faqlist2">
-								<li><input type="radio" class="radio" title="3년 이상 선택" name="lossLevel" value="5" id="faq33"><label for="faq33">3년 이상</label></li>
-								<li><input type="radio" class="radio" title="1년 이상 ～ 3년 미만  선택" name="lossLevel" value="3" id="faq34"><label for="faq34">1년 이상 ～ 3년 미만</label></li>
-								<li><input type="radio" class="radio" title="1년 미만 선택" name="lossLevel" value="1" id="faq35"><label for="faq35">1년 미만</label></li>
+								<li><input type="radio" class="radio" title="3년 이상 선택" name="lossLevel" value="10" id="faq33"><label for="faq33">3년 이상</label></li>
+								<li><input type="radio" class="radio" title="1년 이상 ～ 3년 미만  선택" name="lossLevel" value="6" id="faq34"><label for="faq34">1년 이상 ～ 3년 미만</label></li>
+								<li><input type="radio" class="radio" title="1년 미만 선택" name="lossLevel" value="2" id="faq35"><label for="faq35">1년 미만</label></li>
 							</ul>
 						</td>
 					</tr>
 				</tbody></table>
+		<button type="button" onclick="doSubmit()">제출하기</button>
 		</div>
 	</div>
 	<script>
+
+	
 	function doSubmit() {
-		
+			
 			if($("input:radio[name=investKnowLevel]:checked").length==0) {
 				alert("1번항목을 선택해 주십시오.");
 				$("input:radio[name=investKnowLevel]")[0].focus();
@@ -203,6 +206,8 @@
 				return;
 			}
 			
+			let membNo = "[[${session.loggedInMember != null ? session.loggedInMember.membNo : 'anonymous'}]]";
+
 			let q1Answer = $("input[name='investKnowLevel']:checked").val();
 			let q2Answer = $("input[name='investPracticeSect']:checked").val();
 			let q3Answer = $("input[name='investTerm']:checked").val();
@@ -212,8 +217,73 @@
 			let q7Answer = $("input[name='investPurpose']:checked").val();
 			let q8Answer = $("input[name='lossLevel']:checked").val();
 
-			let score = q1Answer+q2Answer+q3Answer+q4Answer+q5Answer+q6Answer+q7Answer+q8Answer;
+			let score = (parseInt(q1Answer)+parseInt(q2Answer)+parseInt(q3Answer)+parseInt(q4Answer)+parseInt(q5Answer)+parseInt(q6Answer)+parseInt(q7Answer)+parseInt(q8Answer))*1.25;
 			console.log(score);
+			let typeNo = '';
+			
+			//설문조사 추가
+			
+			if(score <= 30) {
+				typeNo = 'E';
+			}else if(score >30 && score <=40){
+				typeNo = 'D';
+			}else if(score >41 && score <=60){
+				typeNo = 'C';
+			}else if(score >61 && score <=80){
+				typeNo = 'B';
+			}else{
+				typeNo = 'A';
+			}
+		
+			
+			 if(score != null && typeNo !=null ){
+				 console.log(typeNo);
+				 console.log(score);
+				 console.log(membNo);
+				 insertFuc();
+			 }
+
+		function insertFuc(){
+				$.ajax({
+					url : "insertsurvey",
+					method : "POST",
+					data : {
+						"membNo" : membNo,
+						"invstTypeNo" : typeNo
+					},
+					success : function(res){
+						console.log(res);
+						if(res === 1){
+							$("#nav-home-tab").removeClass("active");
+							$("#nav-profile-tab").addClass("active");
+							$("#surveydiv").html("");
+						}
+					},
+					error : function(err){
+						console.log(err);
+					}
+				});
+		}
+	
+		function analysisResult(){
+			$.ajax({
+				url : "analysisResult",
+				method : "POST",
+				data : {
+					"membNo" membNo
+				},
+				success : function(data){
+					data.forEach(el=>{
+						console.log(el);
+						//결과 정보 출력하기
+					})
+				},
+				error : function(err){
+					console.log(err);
+				}
+			});
+		}
+		
 	}
 	</script>
 
