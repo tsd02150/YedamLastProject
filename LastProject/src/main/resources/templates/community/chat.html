@@ -77,6 +77,86 @@
 	bottom : 0;
 	width: 200px;
 }
+
+/* 모달 창 */
+#myform fieldset {
+	display: inline-block;
+	direction: rtl;
+	border: 0;
+}
+
+#myform fieldset legend {
+	text-align: right;
+}
+
+#myform input[type=radio] {
+	display: none;
+}
+
+#myform label {
+	font-size: 3em;
+	color: transparent;
+	text-shadow: 0 0 0 #f0f0f0;
+}
+
+#myform label:hover {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+#myform label:hover ~ label {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+#myform input[type=radio]:checked ~ label {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+#reviewContents {
+	width: 100%;
+	height: 150px;
+	padding: 10px;
+	box-sizing: border-box;
+	border: solid 1.5px #D3D3D3;
+	border-radius: 5px;
+	font-size: 16px;
+	resize: none;
+}
+
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 999;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+	background-color: #fefefe;
+	margin: 10% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 40%;
+	height: 800px;
+}
+
+.close {
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.close:hover, .close:focus {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+
 </style>
 <link rel="stylesheet" href="../community/css/chat.css">
 </head>
@@ -155,9 +235,54 @@
 				<!--/.direct-chat -->
 			</div>
 		</div>
-		<div class="modal">
-			
-		
+		<!-- 모달 창 -->
+		<div id="reviewModal" class="modal">
+			<div class="modal-content">
+
+				<span class="close">&times;</span>
+				<h2 style="text-align: center;">상품 후기</h2>
+				<div>&nbsp;</div>
+				<div class="pic" th:each="prdt : ${getFarm}">
+					<img style="width: 200px; height: 200px;"
+						th:src="|/mall/images/main/${prdt.thumb}|">
+				</div>
+				<div>&nbsp;</div>
+				<div>&nbsp;</div>
+				<div>&nbsp;</div>
+				<div>&nbsp;</div>
+				<div>&nbsp;</div>
+				<form class="mb-3" name="myform" id="myform" method="post">
+					<fieldset>
+						<span class="text-bold">별점을 선택해주세요</span> <input type="radio"
+							name="reviewStar" value="5" id="rate1"><label for="rate1">★</label>
+						<input type="radio" name="reviewStar" value="4" id="rate2"><label
+							for="rate2">★</label> <input type="radio" name="reviewStar"
+							value="3" id="rate3"><label for="rate3">★</label> <input
+							type="radio" name="reviewStar" value="2" id="rate4"><label
+							for="rate4">★</label> <input type="radio" name="reviewStar"
+							value="1" id="rate5"><label for="rate5">★</label>
+					</fieldset>
+					<div>
+
+						<textarea class="col-auto form-control" type="text"
+							id="reviewContents"
+							placeholder="좋은 수강평을 남겨주시면 Cocolo에 큰 힘이 됩니다! 포인트 5000p도 지급!!"></textarea>
+					</div>
+					<div>
+						
+					</div>
+					<div>&nbsp;</div>
+					<div></div>
+					<div>&nbsp;</div>
+					<div>&nbsp;</div>
+					<div style="text-align: center;">
+						<button type="reset"
+							style="background-color: beige; border: none;">취소하기</button>
+						<button type="submit"
+							style="background-color: yellowgreen; border: none;">등록하기</button>
+					</div>
+				</form>
+			</div>
 		</div>
 
 		<script th:inline="javascript">
