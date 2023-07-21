@@ -1,3 +1,10 @@
+let itemNo = $('p[data-in]').data('in'); // 아이템 번호
+// 차트생성함수
+function makeChart(chart){
+				makeCandleChart(chart);
+				makeStickChart(chart);
+			}
+
 $(".searchItem").autocomplete({
   source: function (request, response) {
     //source: 입력시 보일 목록
@@ -312,7 +319,7 @@ function addInterest() {
   
   // dom tree 형성후 실행
   $(document).ready(function(){
-  		let itemNo = $('p[data-in]').data('in'); // 아이템 번호
+  		
   
   			// 상승률
   		$.ajax('getPercentage?type=plus').done(function(data){
@@ -377,7 +384,15 @@ function addInterest() {
   					console.log(xhr)
   				}
   			});// end of ajax
+  		}// end 
   			
-  		}
+  						
+  			
+  		// 초기 chart 표시
+  		$.ajax('dayChart?itemNo='+itemNo).done(function(chart){
+  			
+  			makeChart(chart);
+  			
+  		})//end chart ajax
 	});
   	

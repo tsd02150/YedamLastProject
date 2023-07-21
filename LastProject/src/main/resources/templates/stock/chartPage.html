@@ -302,9 +302,23 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 #candleChart {
 	position:relative;
+	z-index:1;
 }
-
-
+#chartBtn {
+	position:relative;
+	z-index:5;
+	list-style: none;
+	padding:0;
+	margin:0 0 0 70px;
+}
+#chartBtn li {
+	display: inline-block;
+	margin:0 0 10px 10px;
+}
+#stickChart{
+	margin:0 0 0 22px;
+	width:520px;
+}
 </style>
 <title>Insert title here</title>
 </head>
@@ -322,7 +336,7 @@ input[type="number"]::-webkit-inner-spin-button {
 					<div id="CP1D1" class="mb-1 border">
 						<h3>
 							관심종목
-							<button id="myBtn">+</button>
+							<button class="btn btn-danger" id="myBtn">+</button>
 						</h3>
 						<div id="favItem" class="border m-1">
 							<th:block th:if="${session.loggedInMember}==null">
@@ -376,18 +390,18 @@ input[type="number"]::-webkit-inner-spin-button {
 						<div id="itemPtag" style="display:inline-block">
 							<p th:attr="data-in=${itemInfo?.itemNo}">종목 : [[${itemInfo?.nm}]] <span th:class="${itemInfo?.change} &gt; 0 ? 'plus' : 'minus'"> 전일비 : [[${itemInfo?.change &gt; 0 ? "+ "+itemInfo?.change : itemInfo?.change}]] 변동률 : [[${itemInfo?.rate &gt; 0 ? "+"+itemInfo?.rate : itemInfo?.rate }]]%</span></p>
 							<button id="addInt2">관심종목추가</button>
-							<div>
-								<button>분</button>
-								<button>일</button>
-								<button>주</button>
-								<button>월</button>
-								<button>년</button>
+							<div style="position: absolute;float:left;">
+								<ul id="chartBtn" >
+									<li><input type="button" value="분"></li>
+									<li><input type="button" value="일"></li>
+									<li><input type="button" value="주"></li>
+									<li><input type="button" value="월"></li>
+									<li><input type="button" value="년"></li>
+								</ul>
 							</div>
 						</div>
 						
-						<div id="candleChart">
-							
-						</div>
+						<div id="candleChart" ></div>
 						<div id="stickChart"></div>
 					</div>
 					<div id="CP2D2" class="border">
@@ -515,12 +529,19 @@ input[type="number"]::-webkit-inner-spin-button {
 			</div>
 
 		</div>
+		
 		<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 		<script
 			src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 		<script
 			src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+		<script>
+			function makeYear(data){
+				return dayjs(data).format('YY-MM-DD');
+			}
+		</script>
 		<script src="../stock/candleChart.js"></script>
 		<script src="../stock/stickChart.js"></script>
 		<link rel="stylesheet"
@@ -891,7 +912,56 @@ input[type="number"]::-webkit-inner-spin-button {
 						}
 					});// end of ajax
 					
-			});
+			}); // 주문버튼기능 end
+			
+			// 차트 버튼 기능
+			$('#chartBtn').on('click','input',function(){
+				if($(this).val()=='분'){
+					
+				}else if($(this).val()=='일'){
+					$('#candleChart').html('');
+					$('#stickChart').html(''); 
+					$.ajax('dayChart?itemNo='+itemNo,{
+						async:false
+					}).done(function(chart){
+			  			console.log('일')
+			  			console.log(chart)
+			  			makeChart(chart);
+			  			
+			  		})
+				}else if($(this).val()=='주'){
+					$('#candleChart').html('');
+					$('#stickChart').html(''); 
+					$.ajax('weekMonthChart?itemNo='+itemNo+'&type=week',{
+						async:false
+					}).done(function(chart){
+						console.log('주')
+						console.log(chart)
+						makeChart(chart);
+					})
+				}else if($(this).val()=='월'){
+					$('#candleChart').html('');
+					$('#stickChart').html('');
+					$.ajax('weekMonthChart?itemNo='+itemNo+'&type=month',{
+						async:false
+					}).done(function(chart){
+						console.log('월')
+						console.log(chart)
+						makeChart(chart);
+					})
+				}else if($(this).val()=='년'){
+					$('#candleChart').html('');
+					$('#stickChart').html('');
+					$.ajax('weekMonthChart?itemNo='+itemNo+'&type=year',{
+						async:false
+					}).done(function(chart){
+						console.log('년')
+						console.log(chart)
+						makeChart(chart);
+					})
+				}
+			})
+			
 			
 		</script>
 	</div>

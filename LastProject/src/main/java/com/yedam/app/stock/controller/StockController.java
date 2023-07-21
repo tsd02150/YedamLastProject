@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.security.service.UserVO;
 import com.yedam.app.stock.service.InqVO;
+import com.yedam.app.stock.service.ItemInfoVO;
 import com.yedam.app.stock.service.ItemVO;
 import com.yedam.app.stock.service.PossStockVO;
 import com.yedam.app.stock.service.StockOrderVO;
@@ -196,6 +197,21 @@ public class StockController {
 		orderMap.put("insert_after_no", null);
 		Map<String,Object> map = stockservice.callOrderProd(orderMap);
 		return map;
+	}
+	
+	//일간 차트
+	@ResponseBody
+	@GetMapping("dayChart")
+	public List<ItemInfoVO> getDayChart(String itemNo){
+		return stockservice.dayChart(itemNo);
+	}
+	//주간 , 월간 차트
+	@ResponseBody
+	@GetMapping("weekMonthChart")
+	public List<ItemInfoVO> getWeekMonthChart(String itemNo , String type){
+		System.out.println(type);
+		System.out.println(itemNo);
+		return stockservice.weekMonthChart(itemNo, type);
 	}
 	
 }

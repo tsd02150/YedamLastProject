@@ -280,10 +280,22 @@ public class StockServiceImpl implements StockService {
 		// 초기화 ( 조회수초기화 , 수량 남은 주문 반환 )
 		//stockMapper.deleteJob();
 	}
-
+	
+	// 조회수 증가
 	@Override
 	public void updateInq(String itemNo) {
 		stockMapper.updateInq(itemNo);
+	}
+	// 일간 차트
+	@Override
+	public List<ItemInfoVO> dayChart(String itemNo) {
+		return stockMapper.dayChart(itemNo);
+	}
+	// 주간,월간 차트
+	@Override
+	public List<ItemInfoVO> weekMonthChart(String itemNo, String type) {
+		System.out.println("zz"+stockMapper.weekMonthChart(itemNo, type));
+		return stockMapper.weekMonthChart(itemNo, type);
 	}
 	
 	

@@ -30,4 +30,6 @@ public interface StockService {
 	// 스케줄러 작업
 	public void schedulerJob();
 	public void updateInq(String itemNo);
+	public List<ItemInfoVO> dayChart(String itemNo);
+	public List<ItemInfoVO> weekMonthChart(String itemNo , String type);
 }

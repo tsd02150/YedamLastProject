@@ -78,21 +78,24 @@
 			   c.sc, 
 			   c.theme, 
 			   t.nm,
-			   t.prc tprc, 
-			   t.prc - i.cl_prc change ,
-			   trunc(((t.prc-i.cl_prc)/i.cl_prc)*100) rate
+			   NVL(t.prc,0) tprc, 
+			   NVL(t.prc - i.cl_prc,0) change ,
+			   NVL(trunc(((t.prc-i.cl_prc)/i.cl_prc)*100),0) rate
         from (select item_no, cl_prc 
                   from item_info 
                   where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
                   ) i -- 전날 주가정보
         join (  select distinct(a.item_no) item_no,nm,'tah-'||a.tano ta_no,ta_prc prc
                 from(   SELECT nm,i.item_no, MAX(to_number(substr(ta_no,5))) tano
-                        FROM ta_hr t join item i 
+                        FROM ta_hr t right join item i 
                         on i.item_no = t.item_no
                         GROUP BY nm,i.item_no
-                        order by to_number(substr(item_no,5))) a join ta_hr t
+                        order by to_number(substr(item_no,5))
+                     ) a 
+                left join ta_hr t
                 on a.item_no= t.item_no and to_number(substr(t.ta_no,5)) = a.tano  
-                order by to_number(substr(item_no,5)) ) t -- 최근체결가
+                order by to_number(substr(item_no,5)) 
+             ) t -- 최근체결가
         on i.item_no = t.item_no
         join ( select case substr(common_cd,1,2) when 'S1' then '농산물'
                                               when 'S2' then '수산물'
@@ -104,7 +107,6 @@
                     where length(common_cd) =6
                     order by common_cd ) c on c.item=t.nm
             order by common_cd
-		
 	</select>	
 	
 	<!-- 모든종목개수 -->
@@ -238,12 +240,15 @@
 	<select id="topVolChart" resultType="StockVO">
 		<![CDATA[
 			select rownum , a.*
-			from(select t.item_no,i.nm,NVL(sum(stock_cnt),0) vol
-			    from ta_hr t join item i
-			    on t.item_no = i.item_no
-			    where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate , 'yyyy-MM-dd')
-			    group by t.item_no,i.nm
-			    order by 3 desc) a 
+			from(select i.item_no, i.nm, NVL(sum(stock_cnt),0) vol
+                 from  item i left join(  select *
+                                         from ta_hr
+                                         where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate , 'yyyy-MM-dd')
+                                       ) t
+                 on t.item_no = i.item_no
+                 group by i.item_no,i.nm
+                 order by 3 desc
+                 ) a 
 			where rownum <= 5
 		]]>
 	</select>
@@ -475,35 +480,46 @@
 	
 	<!-- 현재 달의 첫일 부터 당일 까지의 데이터 (일) 그래프-->
 	<select id="dayChart" resultType="ItemInfoVO">
-		select ta_dt , 
-			   vol, 
-			   op_prc , 
-			   cl_prc , 
-			   l_prc , 
-			   h_prc 
+		select ta_dt , vol, op_prc , cl_prc , l_prc , h_prc 
 		from item_info 
-		where to_char(ta_dt,'yyyy-MM-dd') between to_char(trunc(sysdate,'MM'),'yyyy-MM-dd') and to_char(sysdate , 'yyyy-MM-dd')
-		and item_no = 'ite-1'
+		where to_char(ta_dt,'yyyy-MM-dd') between (
+		                                            select to_char(min(ta_dt),'yyyy-MM-dd')
+		                                            from item_info
+		                                            )
+		and to_char(sysdate , 'yyyy-MM-dd')
+		and item_no = #{itemNo}
 		order by ta_dt
 	</select>
 	<!-- 일년의 주간,월간 차트 -->
 	<select id="weekMonthChart" resultType="ItemInfoVO">
-		select td ,trunc(avg(vol)),  trunc(avg(op_prc)) ,  trunc(avg(cl_prc)) ,  trunc(avg(l_prc)) ,  trunc(avg(h_prc ))
+		select ta_dt ,sum(vol) vol,  trunc(avg(op_prc)) op_prc ,  trunc(avg(cl_prc)) cl_prc,  trunc(avg(l_prc)) l_prc ,  trunc(avg(h_prc )) h_prc
 		from(
-		        select 
+		        select  
 		        <choose>
 		        	<when test='type.equals("week")'>
-		         		trunc(ta_dt, 'day') td 
+		         		trunc(ta_dt, 'day') ta_dt,
+		        	</when>
+		        	<when test='type.equals("month")'>
+		        		trunc(ta_dt,'MM') ta_dt,
 		        	</when>
 		        	<otherwise>
-		        	trunc(ta_dt,'MM') td
+		        		trunc(ta_dt,'y') ta_dt,
 		        	</otherwise>
 		        </choose>
-		         ,vol, op_prc , cl_prc , l_prc , h_prc
+		        vol, 
+		        op_prc , 
+		        cl_prc , 
+		        l_prc ,
+		        h_prc
 		        from item_info
-		        where to_char(ta_dt,'yyyy-MM-dd') between to_char(trunc(sysdate,'y'),'yyyy-MM-dd') and to_char(last_day(add_months(trunc(sysdate,'y'),11)) , 'yyyy-MM-dd')
+		        where to_char(ta_dt,'yyyy-MM-dd') between (
+		                                                    select to_char(min(ta_dt),'yyyy-MM-dd')
+		                                                    from item_info
+		                                                    )
+		        and to_char(sysdate , 'yyyy-MM-dd')
+		        and item_no = #{itemNo}
 		     ) a
-		group by td
-		order by td
+		group by ta_dt
+		order by ta_dt
 	</select>
 </mapper>
