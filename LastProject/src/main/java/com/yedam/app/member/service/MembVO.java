@@ -23,6 +23,8 @@ public class MembVO {
 	private String nick;
 	private String email;
 	private String tel;
+	private String mobile;
+	private String path;
 	private int point;
 	private String tempPwd;
 	private Date joinDt;

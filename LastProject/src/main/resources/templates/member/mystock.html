@@ -52,6 +52,7 @@
 	height: 500px;
 	margin-top : 20px;
 	padding : 5px;
+	overflow: auto;
 }
 #interestDiv, #recomDiv{
 	display : inline-block;
@@ -185,7 +186,7 @@
 			let tr='';
 			data.forEach(el=>{
 				let orderDt = new Date(el.taDt);
-            	let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
+        let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
 				console.log(el);
 				tr += `
 					<tr>

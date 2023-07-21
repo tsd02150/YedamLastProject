@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
+import com.yedam.app.security.service.PrincipalDetails;
 import com.yedam.app.security.service.UserService;
 import com.yedam.app.security.service.UserVO;
 
@@ -25,10 +26,12 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
 		 System.out.println("success handler 실행");
 	      HttpSession session = request.getSession();
-	      UserVO userVO = (UserVO) authentication.getPrincipal();
+	      PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+	      System.out.println(principalDetails);
+	      UserVO userVO = principalDetails.getUserVO();
+	      System.out.println("---------------------------------");
 	      System.out.println(userVO);
-	      
-    	  System.out.println(userVO.getTempPwd());
+    	  System.out.println("임시비밀번호"+userVO.getTempPwd());
     	  if(userVO.getTempPwd() == null) {
     		  session.setAttribute("loggedInMember", userVO);  
     		  response.sendRedirect("/");

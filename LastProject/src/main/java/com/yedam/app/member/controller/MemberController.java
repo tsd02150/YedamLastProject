@@ -43,11 +43,16 @@ import com.yedam.app.stock.service.StockVO;
 
 import lombok.RequiredArgsConstructor;
 
+//김미향 230707 회원관리 컨트롤러.
 @Controller
 @RequestMapping("member")
 @RequiredArgsConstructor
 public class MemberController {
-	private static final String UserVO = null;
+	
+	//private static final String UserVO = null;
+	
+	//인증코드 저장
+	//private static final Map<String, Object> codeList; //키, id(session)
 
 	@Autowired
 	MemberService membService;
@@ -65,12 +70,10 @@ public class MemberController {
 	private PasswordEncoder pwEncoder;
 
 	//로그아웃
-	@GetMapping("logout")
-	public String logout(HttpSession session) {
-        session.invalidate();
-        System.out.println("로그아웃");
-        return "redirect:/";
-	}
+	/*
+	 * @GetMapping("logout") public String logout(HttpSession session) {
+	 * session.invalidate(); System.out.println("로그아웃"); return "redirect:/"; }
+	 */
 	
 	//로그인 페이지
 	/*@PostMapping("mainLogin")
@@ -104,6 +107,7 @@ public class MemberController {
 	public String joinForm() {
 		return "member/joinMember";
 	}
+	
 	@GetMapping("callback")
 	public String callback() {
 		return "member/callback";
@@ -113,33 +117,30 @@ public class MemberController {
 	@PostMapping("join")
 	public String joinMemb(MembVO membVO, AddrVO addrVO, Model model) {
         
-		if(addrVO.getZip().isEmpty()) { // 주소 입력하지 않았을 경우
-			membVO.setPwd(pwEncoder.encode(membVO.getPwd()));//비밀번호 암호화
-			membService.signUpMemb(membVO);
-			System.out.println(membVO);
-			System.out.println(addrVO);
-		} else if(!addrVO.getZip().isEmpty()){ // 주소 입력했을 경우
-			membVO.setPwd(pwEncoder.encode(membVO.getPwd()));//비밀번호 암호화
-			membService.signUpMemb(membVO);
+		//회원가입 처리
+		membVO.setPwd(pwEncoder.encode(membVO.getPwd()));//비밀번호 암호화
+		membService.signUpMemb(membVO);
+		
+		//// 주소 입력했을 경우
+		if(!addrVO.getZip().isEmpty()){ 
 	        membVO.setMembNo(membService.getLastMembNo()); // membNo 값을 가져와서 membVO에 설정
 	        addrVO.setMembNo(membVO.getMembNo()); // membNo 값을 addrVO에 설정
 	        membService.insertAddr(addrVO);
-			System.out.println(membVO);
-			System.out.println(addrVO);
-		} else {
-			return "redirect:join";
 		}
+		
+		//관심등록 페이지로 이동.
 		model.addAttribute("joinInfoNo", membVO.getMembNo());
 		return "member/myItemCheckForm";			
 	}
 	
-	//카카오 로그인
+	//카카오 로그인 -
 	@ResponseBody
 	@RequestMapping("kakao")
-	public String kakaoLogin(MembVO membVO, @RequestParam String nick, @RequestParam String id, HttpSession session) {
+	public String kakaoLogin(MembVO membVO, @RequestParam String code, @RequestParam String id, HttpSession session) {
+		
 		if(membVO.getId()==null) { //처음 로그인하면 
 			membVO.setMembNo(membService.selectMembNO());
-			membVO.setNick(nick);
+			//membVO.setNick(nick);
 			membVO.setId(id);
 			session.setAttribute("loggedInMember", membVO);
 		}else {
@@ -202,6 +203,7 @@ public class MemberController {
 		System.out.println(email);
 		String code = registerMail.sendSimpleMessage(email);
 		System.out.println("인증코드 : " + code);
+		
 		return code;
 	}
 
@@ -248,6 +250,7 @@ public class MemberController {
 		return "member/tempPwdUpdate";
 	}
 	
+	//임시비밀번호 변경 처리.
 	@PostMapping("tempPwdUpdate")
 	public String tempPwdUpdate(UserVO userVO, MembVO membVO, HttpSession session, Model model) {
 		MembVO loggedInMember = membService.selectOneMemb(membVO.getId());
@@ -309,6 +312,7 @@ public class MemberController {
 		model.addAttribute("membInfo", membInfo);
 		return membInfo;
 	}
+	
 	
 	@ResponseBody
 	@PostMapping("findIdSuccess")
@@ -375,17 +379,18 @@ public class MemberController {
 		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 		chargeVO.setMembNo(mem.getMembNo());
 		chargeVO.setChagPrc(amount);
-		membService.insertCharge(chargeVO);
 		membVO.setId(mem.getId());
-		MembVO list = membService.memberList(mem.getId());
-		membVO.setPoint((amount*10)+list.getPoint());
-		membService.updateMemberInfo(membVO);
-		System.out.println("수정 성공");
-		UserVO loggedInMember = new UserVO();
-	    loggedInMember.setPoint(membVO.getPoint());
+		
+		//결제 정보 저장, 등록		//포인트적립
+		membService.insertCharge(chargeVO, membVO);
+
+		//수정된 정보 세션에 다시 저장.
+	    mem.setPoint(membVO.getPoint());
+	    session.setAttribute("loggedInMember", mem);
 		model.addAttribute("membList", membVO); //update된 회원 정보
 		return "member/paysuccess";
 	}
+	
 	//주문내역
 	@GetMapping("payfail")
 	public String payfail() {
@@ -397,6 +402,8 @@ public class MemberController {
 	public String mypageIntro() {
 		return "member/mypageIntro";
 	}
+	
+	//포인트 충전 페이지.
 	@GetMapping("pointChargeForm")
 	public String pointChargeForm(HttpSession session,MembVO membVO, Model model) {
 		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
@@ -405,6 +412,7 @@ public class MemberController {
 		return "member/pointChargeForm";
 	}
 	
+	//내 관심종목 리스트
 	@ResponseBody
 	@PostMapping("interestList")
 	public List<StockVO> interestList(@RequestParam String membNo, StockVO stockVO) {
@@ -414,6 +422,7 @@ public class MemberController {
 		return interestList;
 	}
 	
+	//내 보유 주식 리스트
 	@ResponseBody
 	@PostMapping("myStockList")
 	public List<StockVO> myStockList(@RequestParam String membNo) {
@@ -463,31 +472,28 @@ public class MemberController {
 	    membVO.setTel(tel);
 	    membVO.setPoint(mem.getPoint());
 	    
-	    if (pwd == null || pwd.equals("")) { // 비밀번호 변경X
-	        membVO.setPwd(mem.getPwd()); // 기존 비밀번호 그대로 저장
-	        membVO.setTempPwd(mem.getTempPwd()); // 기존 임시 비밀번호 그대로 저장
-	    } else {
-	        if (mem.getTempPwd() == null) {
-	            membVO.setPwd(pwEncoder.encode(pwd)); // 비밀번호 암호화
-	        } else {
-	            membVO.setPwd(pwEncoder.encode(pwd));
-	            membVO.setTempPwd(pwEncoder.encode(pwd));
-	        }
+	    if (pwd != null && !pwd.equals("")) { // 비밀번호 변경 시 
+	    	membVO.setPwd(pwEncoder.encode(pwd));
+	    	membVO.setTempPwd("");
 	    }
-
+	    
 	    membService.updateMemberInfo(membVO);
-	    System.out.println(membVO);
 
 	    //수정한 정보 다시 세션에 저장
 	    MembVO list = membService.memberList(id);
+	    System.out.println("++++++++++++++++++++");
+	    System.out.println(list);
 	    UserVO loggedInMember = new UserVO();
-	    loggedInMember.setId(membVO.getId());
-	    loggedInMember.setNick(membVO.getNick());
-	    loggedInMember.setEmail(membVO.getEmail());
-	    loggedInMember.setTel(membVO.getTel());
-	    loggedInMember.setPwd(membVO.getPwd());
-	    loggedInMember.setTempPwd(membVO.getTempPwd());
-
+	    loggedInMember.setId(list.getId());
+	    loggedInMember.setNick(list.getNick());
+	    loggedInMember.setEmail(list.getEmail());
+	    loggedInMember.setTel(list.getTel());
+	    loggedInMember.setPwd(list.getPwd());
+	    loggedInMember.setTempPwd(list.getTempPwd());
+	    loggedInMember.setPoint(list.getPoint());
+	    loggedInMember.setMembNo(list.getMembNo());
+	    loggedInMember.setJoinDt(list.getJoinDt());
+	    session.setAttribute("loggedInMember", loggedInMember);
 	    model.addAttribute("membList", list);
 
 	    return "redirect:mypageInfo";
@@ -515,9 +521,7 @@ public class MemberController {
 		addrVO.setAddr(addr);
 		addrVO.setDetaAddr(detaAddr);
 		membService.insertAddr(addrVO);
-		System.out.println("!!! 정 보 수 정!!!!");
 		System.out.println(membService.insertAddr(addrVO));
-		System.out.println("!!!!!!!");
 		return addrVO;
 	}
 	
@@ -534,9 +538,6 @@ public class MemberController {
 	@PostMapping("mypageIntroCheckPwd")
 	public String mypageIntroCheckPwd(@RequestParam String pwd, @RequestParam String id, MembVO membVO, Model model) {
 		membVO = membService.memberList(id);
-		System.out.println(pwd);
-		System.out.println(membVO.getPwd());
-		System.out.println(pwEncoder.matches(pwd, membVO.getPwd()));
 		if (pwEncoder.matches(pwd, membVO.getPwd())) {
 			return "success";
 		} else {
@@ -545,6 +546,7 @@ public class MemberController {
 		}
 	}
 	
+	//
 	@GetMapping("mystockInfo")
 	public String mystockInfo(HttpSession session, Model model) {
 		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
@@ -589,15 +591,13 @@ public class MemberController {
 		int result = membService.deleteSellOrder(soVO);
 		return result;
 	}
-	//매수 주문 삭제
+	//매수 주문 취소
 	@ResponseBody
 	@PostMapping("deleteBuyOrder")
 	public int deleteBuyOrder(@RequestParam String membNo, @RequestParam String buyNo, BuyOrderVO boVO) {
 		boVO.setMembNo(membNo);
 		boVO.setBuyNo(buyNo);
 		int result = membService.deleteBuyOrder(boVO);
-		System.out.println("매수 주문 삭제 성공");
-		System.out.println(result);
 		return result;
 	}
 	
@@ -632,14 +632,7 @@ public class MemberController {
 	
 	@ResponseBody
 	@PostMapping("dealList")
-	public List<DealVO> dealList(@RequestParam String membNo, @RequestParam String tablename, @RequestParam String startDate,@RequestParam String endDate,DealVO vo){
-
-		vo.setMembNo(membNo);
-		vo.setTablename(tablename);
-		vo.setStartDate(startDate);
-		vo.setEndDate(endDate);
-		System.out.println(startDate);
-		System.out.println(endDate);
+	public List<DealVO> dealList(DealVO vo){
 		return membService.dealList(vo);
 	}
 	

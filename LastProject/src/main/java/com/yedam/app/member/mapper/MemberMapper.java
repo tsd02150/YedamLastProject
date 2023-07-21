@@ -115,5 +115,9 @@ public interface MemberMapper {
 	public int insertsurvey(SurveyVO vo);
 	//설문조사 결과 조회
 	public List<SurveyVO> analysisResult(String membNo);
+	
+	//하루 총 수익(매수, 매도)
+	public List<DealVO> myBuyRaiseList(String membNo);
+	public List<DealVO> mySellRaiseList(String membNo);
 
 }

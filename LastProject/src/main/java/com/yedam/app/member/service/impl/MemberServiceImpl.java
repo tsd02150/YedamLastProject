@@ -141,8 +141,15 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public int insertCharge(ChargeVO chargeVO) {
-		return membMapper.insertCharge(chargeVO);
+	public int insertCharge(ChargeVO chargeVO, MembVO membVO) {
+		//결제
+		membMapper.insertCharge(chargeVO);
+		
+		//포인트 적립.
+		MembVO list = membMapper.memberList(membVO.getId());
+		membVO.setPoint((chargeVO.getChagPrc()*10)+list.getPoint());
+		
+		return membMapper.updateMemberInfo(membVO);
 	}
 
 	@Override
@@ -208,6 +215,16 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<SurveyVO> analysisResult(String membNo) {
 		return membMapper.analysisResult(membNo);
+	}
+
+	@Override
+	public List<DealVO> myBuyRaiseList(String membNo) {
+		return membMapper.myBuyRaiseList(membNo);
+	}
+
+	@Override
+	public List<DealVO> mySellRaiseList(String membNo) {
+		return membMapper.mySellRaiseList(membNo);
 	}
 
 }

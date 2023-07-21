@@ -13,7 +13,8 @@ public class PossVO {
 	private int nowPrc;
 	private int tprc;
 	private int change;
-	private int rate;
+	private double rate;
+	private double raise;
 	private String commonCd;
 	private String membNo;
 	private int stockCnt;

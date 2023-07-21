@@ -6,16 +6,16 @@
 
 	<select id="memberList" resultType="MembVO">
 		SELECT *
-		FROM member
-		WHERE id  = #{id}
+		  FROM member
+		 WHERE id  = #{id}
 	</select>
 
 	<select id="membListInfo" resultType="String">
 		SELECT *
-		FROM member m
-		LEFT OUTER JOIN address a
-    ON m.memb_no = a.memb_no
-		WHERE id  = #{id}
+		  FROM member m
+		  LEFT OUTER JOIN address a
+        ON m.memb_no = a.memb_no
+		 WHERE id  = #{id}
 	</select>
 
 	<!-- 아이디로 단건조회 -->
@@ -26,6 +26,7 @@
     ON m.memb_no = a.memb_no
 		WHERE id  = #{id}
 	</select>
+	
 	<select id="selectOneMemb2" resultType="MembVO" parameterType="MembVO">
 		SELECT *
 		FROM member m
@@ -67,7 +68,8 @@
 												,EMAIL
 												,TEL
 												,POINT
-												,JOIN_DT)
+												,JOIN_DT
+												,path)
 								VALUES( #{membNo}
 												,#{nm}
 												,#{id}
@@ -76,7 +78,11 @@
 												,#{email}
 												,#{tel}
 												,0
-												,sysdate)
+												,sysdate
+												<if test="path != null and !path.equals('')">
+												,#{path}
+												</if>
+												)
 	</insert>
 	
 		<insert id="insertAddr" parameterType="AddrVO">
@@ -117,17 +123,17 @@
 		<!-- 비밀번호 변경 -->
 		<update id="updatePwd" parameterType="MembVO">
 			UPDATE member
-			SET 	 pwd = #{pwd},
-			temp_pwd = #{tempPwd}
-			WHERE  id = #{id}
+			   SET pwd = #{pwd},
+			       temp_pwd = #{tempPwd}
+			 WHERE id = #{id}
 		</update>
 		
 		<!-- 임시 비밀번호 변경 -->
 		<update id="updateTempPwd" parameterType="MembVO">
 			UPDATE member
-			SET 	 pwd = #{pwd},
-			temp_pwd = ''
-			WHERE  id = #{id}
+			   SET pwd = #{pwd},
+			       temp_pwd = ''
+			 WHERE id = #{id}
 		</update>
 		
 		<!-- 관심종목 선택시 List 조회 -->
@@ -242,10 +248,7 @@
 		      </when>
 		      <when test="orderSt == '상품준비중'">
 		        AND o.order_st = '상품준비중'
-		      </when>
-		      <otherwise>
-		        AND 1=1 -- 전체 데이터 출력
-		      </otherwise>
+		      </when>		      
 		    </choose>
 		  ORDER BY o.order_st, o.order_dt desc
 		</select>
@@ -272,8 +275,8 @@
 				<if test="pwd != null and !pwd.equals('')">
 					pwd = #{pwd},
 				</if>
-				<if test="tempPwd != null and !tempPwd.equals('')">
-					tempPwd = #{tempPwd}
+				<if test="tempPwd != null">
+					temp_pwd = #{tempPwd},
 				</if>
 				<if test="point != null and !point.equals('')">
 					point = #{point}
@@ -324,14 +327,17 @@
 		where memb_no = #{membNo}
 		and sell_no = #{sellNo}
  </delete>
+ 
  <delete id="deleteBuyOrder" parameterType="BuyOrderVO">
 		delete from buy_order
 		where memb_no = #{membNo}
 		and buy_no = #{buyNo}
  </delete>
+ 
  <delete id="deleteInterest">
 		delete from interest_item where item_no = #{itemNo} and memb_no = #{membNo}
 	</delete>
+	
 	<update id="updateSellOrder" parameterType="SellOrderVO">
 		update sell_order
 		set		 prc = #{prc},
@@ -339,6 +345,7 @@
 		where memb_no = #{membNo}
 		and   sell_no = #{sellNo}
 	</update>
+	
 	<update id="updateBuyOrder" parameterType="BuyOrderVO">
 		update buy_order
 		set		 prc = #{prc},
@@ -404,7 +411,7 @@
 		select i.item_no, n.nm tnm, n.common_cd, a.stock_cnt, a.trade_prc, i.cl_prc*a.stock_cnt now_prc, round(a.trade_prc/(i.cl_prc*a.stock_cnt)*100-100) rate -- 현재 보유자산 / 시장가 / 수익률
 		from a join item_info i on a.item_no = i.item_no
 		join item n on i.item_no = n.item_no
-		where ta_dt = trunc(sysdate)-1
+		where TO_CHAR(ta_dt, 'yyyy-MM-dd') = TO_CHAR(sysdate-1, 'yyyy-MM-dd') 
 		order by rate desc
 	</select>
 	
@@ -453,6 +460,25 @@
 			</if>
 	</select>
 
-
+	<select id="myBuyRaiseList" parameterType="String">
+		with a as (
+			select item_no, sum(stock_cnt) stock_cnt, sum(trade_prc*stock_cnt) trade_prc --보유주식 총 수량, 총금액
+			from poss_stock 
+			where memb_no = #{membNo}
+			group by item_no )
+		select TO_CHAR(ta_dt, 'yyyy-MM-dd') ta_dt, round(sum((a.trade_prc/(i.cl_prc*a.stock_cnt)*100-100))/count(*),2) rate -- 현재 보유자산 / 시장가 / 수익률
+		from a join item_info i on a.item_no = i.item_no
+		join item n on i.item_no = n.item_no
+		where TO_CHAR(ta_dt, 'yyyy-MM-dd') = TO_CHAR(sysdate-1, 'yyyy-MM-dd') 
+		group by ta_dt
+		order by rate desc
+	</select>
+	
+	<select id="mySellRaiseList" parameterType="String">
+		SELECT TO_CHAR(ta_dt, 'yyyy-MM-dd') ta_dt, ROUND(sum((ta_prc/traded_prc*100))/count(*),2) raise FROM TA_HR
+		WHERE SELL_MEMB_NO = #{membNo}
+		group by TO_CHAR(ta_dt, 'yyyy-MM-dd')
+		order by 1
+	</select>
 	
 </mapper>

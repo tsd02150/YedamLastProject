@@ -7,11 +7,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.security.mapper.UserMapper;
+import com.yedam.app.security.service.PrincipalDetails;
 import com.yedam.app.security.service.UserService;
 import com.yedam.app.security.service.UserVO;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
+//	@Autowired
+//	UserVO userVO;
+	
 	@Autowired
 	UserMapper userMapper;
 	
@@ -28,7 +32,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 			System.out.println("userVO == null");
 			throw new UsernameNotFoundException("no user");
 		}
-		return userVO;
+		return  new PrincipalDetails(userVO);
 	}
 
 	@Override
