@@ -96,7 +96,7 @@
 	margin: 10% auto;
 	padding: 20px;
 	border: 1px solid #888;
-	width: 40%;
+	width: 400px;
 	height: 600px;
 }
 .modal-content input{
@@ -136,7 +136,7 @@
 							<h3 class="box-title">채팅방 목록</h3>
 						</div>
 						<div id="roomList" class="box-body">
-							<div th:each="room:${roomList}"  th:data-roomno="${room.roomNo}" onClick="">
+							<div th:each="room:${roomList}" th:onclick="moveRoom([[${room.roomNo}]])">
 								<p>[[${room.nm}]]</p>
 							</div>
 						</div>
@@ -148,13 +148,13 @@
 						<div class="box-header with-border">
 							<h3 class="box-title">채팅방 참여 인원</h3>
 						</div>
-						<div class="box-body">
+						<div id="particiList" class="box-body">
 							<div th:each="partici:${particiList}">
 								<p>[[${partici.anonNick}]]</p>
 							</div>
 						</div>
 						<div id="particiCnt">
-							<h5>참여인원 : [[${roomInfo.conn}]] 명</h5>
+							<h5>참여인원 : <span class="roomCnt">[[${roomInfo.conn}]]</span> 명</h5>
 						</div>
 					</div>
 					<button type="button" id="resetBtn" class="btn-dark" onClick="resetChat()">채팅 초기화</button>
@@ -163,11 +163,11 @@
 				<!-- DIRECT CHAT DANGER -->
 				<div class="box box-danger direct-chat direct-chat-danger">
 					<div class="box-header with-border">
-						<h3 id="main-room-name" class="box-title" th:data-roomno="${roomInfo.roomNo}" th:text="${roomInfo.nm}">전체 채팅방</h3>
+						<h3 id="mainRoomName" class="box-title" th:data-roomno="${roomInfo.roomNo}" th:text="${roomInfo.nm}">전체 채팅방</h3>
 
 						<div class="box-tools pull-right">
 							<span data-toggle="tooltip" title="3 New Messages"
-								class="badge bg-red" th:text="${roomInfo.conn}">1</span>
+								class="badge bg-red roomCnt" th:text="${roomInfo.conn}">1</span>
 							<button type="button" class="btn btn-box-tool">
 								<i class="fa fa-comments"></i>
 							</button>
@@ -188,7 +188,7 @@
 							<div class="input-group">
 								<input type="text" id="my-message" name="message" placeholder="Type Message ..." class="form-control"> 
 								<span class="input-group-btn">
-									<button type="button" class="btn btn-danger btn-flat" id="send">Send</button>
+									<button type="button" class="btn btn-danger btn-flat" id="sendChat">Send</button>
 								</span>
 							</div>
 						</form>
@@ -225,7 +225,7 @@
 			let myAnonNick=[[${particiInfo.anonNick}]];
 			let myMembNo=[[${particiInfo.membNo}]];
 			test();
-			
+			moveRoom("room-1");
 			function test(){
 				fetch("/community/mySession",{
 					method: "POST",
@@ -270,7 +270,47 @@
 				})
 				.then(response=>response.json())
 				.then(result=>{
-					
+					if(result==null){
+						toastShow("","이미 존재하는 방 이름입니다.","error");
+					}else{
+						let divTag=`
+							<div onclick="moveRoom('${result.roomNo}')">
+								<p>${result.nm}</p>
+							</div>
+						`;
+						roomList.innerHTML+=divTag;
+						closeModal();
+						moveRoom(result.roomNo);
+					}
+				})
+				.catch(err=>console.log(err));
+			}
+			
+			function moveRoom(roomNo){
+				console.log(roomNo)
+				fetch("/community/roomInfo",{
+					method: "POST",
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					body:"roomNo="+roomNo
+				})
+				.then(response=>response.json())
+				.then(result=>{
+					resetChat();
+					myAnonNick=result.anonNick;
+					$(".roomCnt").text(result.conn);
+					$("#mainRoomName").text(result.nm);
+					$("#mainRoomName").attr("data-roomno",result.roomNo);
+					$('#particiList').empty();
+					for(let partici of result.particiList){
+						let divTag=`
+							<div>
+								<p>${partici.anonNick}</p>
+							</div>
+						`;
+						particiList.innerHTML+=divTag;
+					}
 				})
 				.catch(err=>console.log(err));
 			}
@@ -282,6 +322,7 @@
 		</script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+		
 	</div>
 </body>
 </html>

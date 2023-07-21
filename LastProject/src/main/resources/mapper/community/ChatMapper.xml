@@ -80,4 +80,19 @@
 		DELETE FROM CHAT_PARTICIPATION
 		WHERE memb_no=#{membNo}
 	</delete>
+	
+	<insert id="insertChatRoom" parameterType="ChatRoomVO">
+		<selectKey keyProperty="roomNo" resultType="string" order="BEFORE">
+			SELECT CONCAT('room-',NVL(MAX(TO_NUMBER(SUBSTR(room_no, 6))), 0)+1)
+			FROM CHAT_ROOM
+		</selectKey>
+		INSERT INTO CHAT_ROOM(room_no,nm,lmt)
+		VALUES(#{roomNo},#{nm},#{lmt})
+	</insert>
+	
+	<select id="sameRoom" resultType="ChatRoomVO">
+		SELECT *
+		FROM CHAT_ROOM
+		WHERE nm=#{nm}
+	</select>
 </mapper>

@@ -3,6 +3,7 @@ package com.yedam.app.common.controller;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,7 @@ public class MainController {
 		model.addAttribute("stockBoardList",boardService.getStockBoardTop6());
 		model.addAttribute("noticeList",noticeService.getNoticeTop6());
 		model.addAttribute("qnaList",questionService.getQnaTop6());
+
 		return "main/main";
 	}
 	

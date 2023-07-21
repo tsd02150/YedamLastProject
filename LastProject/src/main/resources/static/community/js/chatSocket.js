@@ -1,12 +1,12 @@
 let chatClient = stompClient;
 console.log(stompClient);
 chatClient.onConnect = (frame) => {
-    resetChat();
     console.log('Connected: ' + frame);
-    chatClient.subscribe('/topic/sendto/'+$('#roomno').data("roomno"), (chatMessage) => {
-    	console.log(JSON.parse(chatMessage.body));
+    chatClient.subscribe('/topic/sendto/'+$('#mainRoomName').data("roomno"), (chatMessage) => {
+    	console.log($('#mainRoomName').data("roomno"));
         showChat(JSON.parse(chatMessage.body));
     });
+
 };
 
 function onError(error){
@@ -48,18 +48,30 @@ function showChat(chat) {
     $("#chatSpace").append(chatContent);
 }
 
+function addPartici(vo){
+	console.log("!!!!!!!!"+vo.roomNo);
+	$(".roomCnt").text(vo.conn);
+	let divTag=`
+		<div>
+			<p>${vo.anonNick}</p>
+		</div>
+	`;
+	particiList.innerHTML+=divTag;
+}
+
 function sendChat() {
+	console.log($('#mainRoomName').data("roomno"));
 	fetch("addChat",{
 		method: "POST",
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded'
 		},
-		body: 'cntn='+$("#my-message").val()+'&roomNo='+$('#roomno').data("roomno")+'&anonNick='+myAnonNick+'&membNo='+myMembNo
+		body: 'cntn='+$("#my-message").val()+'&roomNo='+$('#mainRoomName').data("roomno")+'&anonNick='+myAnonNick+'&membNo='+myMembNo
 	})
 	.then(response=>response.json())
 	.then(result=>{
 	    chatClient.publish({
-	    	destination : "/mychat/room/"+$('#roomno').data("roomno"),
+	    	destination : "/mychat/room/"+$('#mainRoomName').data("roomno"),
 			body : JSON.stringify({'anonnick':result.anonNick,'drwupdt':result.drwupDt,'message': result.cntn})
 			});		
 		$("#my-message").val('');
@@ -79,6 +91,5 @@ function disconnect() {
 
 
 $(function () {
-
-    $( "#send" ).click(() => sendChat());
+    $( "#sendChat" ).click(() => sendChat());
 });
