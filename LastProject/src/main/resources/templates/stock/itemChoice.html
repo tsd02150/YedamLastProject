@@ -160,7 +160,7 @@
 							<th:block th:each="inq : ${inqList}">
 								<li><a th:href="@{chart(itemNo = ${inq.itemNo})}">[[${inqStat.index+1}]]
 										[[${inq.nm}]]</a> <span
-									th:class="${inq.change} > 0 ? 'plus':'minus'">
+									th:class="${inq.change} == 0 ? '_' : (${inq.change} > 0 ? 'plus':'minus')">
 										[[${inq.change > 0 ? "+"+inq.change : inq.change}]]
 										([[${inq.rate > 0 ? "+"+inq.rate : inq.rate}]]%)</span></li>
 							</th:block>
