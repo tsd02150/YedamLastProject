@@ -43,7 +43,6 @@ public class ChatController {
 	
 	@MessageMapping("/room/{roomno}")
 	public void chatMessage(ChatMessage message,@DestinationVariable String roomno) throws Exception {
-		System.out.println(message);
 		template.convertAndSend("/topic/sendto/"+roomno,message);
 	}
 	
@@ -77,10 +76,8 @@ public class ChatController {
 	@PostMapping("addChat")
 	@ResponseBody
 	public ChatVO insertChat(ChatVO vo) {
-		System.out.println("++++++++"+vo);
 		chatService.insertChat(vo);
 		vo=chatService.getChat(vo.getChatNo());
-		System.out.println(vo);
 		return vo;
 	}
 	
@@ -107,9 +104,9 @@ public class ChatController {
 		chatService.subtractRoomCnt(membNo);
 		chatService.deletePartici(membNo);
 		chatService.participation(particiInfo);
-		System.out.println(chatService.getParticipationInfo(membNo));
+
 		vo=chatService.roomInfo(vo.getRoomNo());
-		System.out.println("``````````"+vo);
+
 		vo.setAnonNick(chatService.getParticipationInfo(membNo).getAnonNick());
 		vo.setParticiList(chatService.selectParticiList(vo.getRoomNo()));
 		
