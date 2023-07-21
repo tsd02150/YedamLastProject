@@ -29,4 +29,8 @@ public interface ChatMapper {
 	public List<ChatParticipationVO> selectParticiList(String roomNo);
 	// 방 참여자 제거
 	public int deletePartici(String membNo);
+	// 방 생성
+	public int insertChatRoom(ChatRoomVO vo);
+	// 방 비교
+	public ChatRoomVO sameRoom(String nm);
 }

@@ -10,7 +10,7 @@ public interface ChatService {
 	// 같은 닉네임 여부확인
 	public boolean sameNick(ChatParticipationVO vo);
 	// 방에 닉네임 생성
-	public boolean participation(ChatParticipationVO vo,HttpSession session);
+	public boolean participation(ChatParticipationVO vo);
 	// 접속정보
 	public ChatParticipationVO getParticipationInfo(String membNo);
 	// 채팅 추가
@@ -27,4 +27,8 @@ public interface ChatService {
 	public List<ChatParticipationVO> selectParticiList(String roomNo);
 	// 방 참여자 제거
 	public boolean deletePartici(String membNo);
+	// 방 생성
+	public boolean insertChatRoom(ChatRoomVO vo);
+	// 방 비교
+	public boolean sameRoom(String nm);
 }

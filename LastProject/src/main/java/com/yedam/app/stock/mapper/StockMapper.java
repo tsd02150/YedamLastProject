@@ -66,4 +66,8 @@ public interface StockMapper {
 	public void deleteJob();
 	// 조회수 증가
 	public int updateInq(String itemNo);
+	// 일일 차트
+	public List<ItemInfoVO> dayChart(String itemNo);
+	// 주간 월간 차트
+	public List<ItemInfoVO> weekMonthChart(@Param("itemNo")String itemNo ,@Param("type") String type);
 }

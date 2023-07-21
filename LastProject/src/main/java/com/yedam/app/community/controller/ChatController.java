@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.community.config.ChatMessage;
 import com.yedam.app.community.service.ChatParticipationVO;
+import com.yedam.app.community.service.ChatRoomVO;
 import com.yedam.app.community.service.ChatService;
 import com.yedam.app.community.service.ChatVO;
 import com.yedam.app.security.service.UserVO;
@@ -42,7 +43,6 @@ public class ChatController {
 	
 	@MessageMapping("/room/{roomno}")
 	public void chatMessage(ChatMessage message,@DestinationVariable String roomno) throws Exception {
-
 		template.convertAndSend("/topic/sendto/"+roomno,message);
 	}
 	
@@ -51,7 +51,9 @@ public class ChatController {
 		String membNo=((UserVO)session.getAttribute("loggedInMember")).getMembNo();
 		ChatParticipationVO vo = new ChatParticipationVO();	
 		
-		chatService.participation(vo, session);
+		vo.setMembNo(membNo);
+		vo.setRoomNo("room-1");
+		chatService.participation(vo);
 		vo=chatService.getParticipationInfo(membNo);
 
 		model.addAttribute("particiInfo",vo);
@@ -76,7 +78,40 @@ public class ChatController {
 	public ChatVO insertChat(ChatVO vo) {
 		chatService.insertChat(vo);
 		vo=chatService.getChat(vo.getChatNo());
-		System.out.println(vo);
+		return vo;
+	}
+	
+	@PostMapping("addChatRoom")
+	@ResponseBody
+	public ChatRoomVO insertChatRoom(ChatRoomVO vo) {
+		if(chatService.sameRoom(vo.getNm())) {
+			if(chatService.insertChatRoom(vo)) {
+				vo=chatService.roomInfo(vo.getRoomNo());
+			}
+			return vo;
+		}else {
+			return null;
+		}
+	}
+	
+	@PostMapping("roomInfo")
+	@ResponseBody
+	public ChatRoomVO roomInfo(ChatRoomVO vo,HttpSession session) {
+		ChatParticipationVO particiInfo=new ChatParticipationVO();
+		particiInfo.setRoomNo(vo.getRoomNo());
+		String membNo=((UserVO)session.getAttribute("loggedInMember")).getMembNo();
+		particiInfo.setMembNo(membNo);
+		chatService.subtractRoomCnt(membNo);
+		chatService.deletePartici(membNo);
+		chatService.participation(particiInfo);
+
+		vo=chatService.roomInfo(vo.getRoomNo());
+
+		vo.setAnonNick(chatService.getParticipationInfo(membNo).getAnonNick());
+		vo.setParticiList(chatService.selectParticiList(vo.getRoomNo()));
+		
+		//template.convertAndSend("/topic/partici/"+vo.getRoomNo(),vo);
+		
 		return vo;
 	}
 }
