@@ -61,7 +61,9 @@
 	text-align: center;
 	padding: 20px;
 }
-
+#hot ul {
+	list-style: none;
+}
 #hot li {
 	padding: 10px;
 }
@@ -287,8 +289,8 @@
                 }
               }
 
-              $("#itemInfo").append($("<button/>").text("차트 페이지 이동").on("click", chartPage))
-              				.append($("<button/>").text("관심종목 추가").on("click",addInterest));
+              $("#itemInfo").append($('<button class="btn btn-danger btn-sm"/>').text("차트 페이지 이동").on("click", chartPage))
+              				.append($('<button class="btn btn-danger btn-sm"/>').text("관심종목 추가").on("click",addInterest));
             },
           });
         }

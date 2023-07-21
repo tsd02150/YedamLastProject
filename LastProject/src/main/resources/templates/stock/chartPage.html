@@ -284,7 +284,7 @@ to {
 	font-size: 14px;
 }
 .orderActive {
-	background-color: black;
+	background-color: rgb(255, 0, 115);
 	color:white;
 }
 #orderType {
@@ -345,7 +345,7 @@ input[type="number"]::-webkit-inner-spin-button {
 							<th:block th:unless="${session.loggedInMember}==null"
 								th:each="stock : ${interestStock}">
 								<p class="border my-1">
-								<input type="button" value="x" th:attr="data-info=${stock.itemNo}">
+								<input class="btn btn-danger btn-sm" type="button" value="x" th:attr="data-info=${stock.itemNo}">
 									[[${stock.nm}]] <span
 										th:class="${stock.change} == 0 ? '_' : (${stock.change} > 0 ?'plus':'minus')">[[${stock.change
 										== 0 ? stock.change : (stock.change > 0 ? "+"+stock.change :
@@ -389,14 +389,13 @@ input[type="number"]::-webkit-inner-spin-button {
 					<div id="CP2D1" class="mb-1 border">
 						<div id="itemPtag" style="display:inline-block">
 							<p th:attr="data-in=${itemInfo?.itemNo}">종목 : [[${itemInfo?.nm}]] <span th:class="${itemInfo?.change} &gt; 0 ? 'plus' : 'minus'"> 전일비 : [[${itemInfo?.change &gt; 0 ? "+ "+itemInfo?.change : itemInfo?.change}]] 변동률 : [[${itemInfo?.rate &gt; 0 ? "+"+itemInfo?.rate : itemInfo?.rate }]]%</span></p>
-							<button id="addInt2">관심종목추가</button>
+							<button class="btn btn-danger btn-sm" id="addInt2">관심종목추가</button>
 							<div style="position: absolute;float:left;">
 								<ul id="chartBtn" >
-									<li><input type="button" value="분"></li>
-									<li><input type="button" value="일"></li>
-									<li><input type="button" value="주"></li>
-									<li><input type="button" value="월"></li>
-									<li><input type="button" value="년"></li>
+									<li><input class="btn btn-danger" type="button" value="일"></li>
+									<li><input class="btn btn-danger" type="button" value="주"></li>
+									<li><input class="btn btn-danger" type="button" value="월"></li>
+									<li><input class="btn btn-danger" type="button" value="년"></li>
 								</ul>
 							</div>
 						</div>
@@ -408,8 +407,8 @@ input[type="number"]::-webkit-inner-spin-button {
 						<div class="row" >
 							<div id="CP2D21" class="col-6">
 								<div id="orderBtn" >
-									<button>매도</button>
-									<button>매수</button>
+									<button class="btn btn-danger btn-sm">매도</button>
+									<button class="btn btn-danger btn-sm">매수</button>
 								</div>
 								<div>
 									<input id="stockPrc" type="number" name="stockPrc" value="0">원<br> 
@@ -418,18 +417,18 @@ input[type="number"]::-webkit-inner-spin-button {
 								<div>
 									<input id="stockCnt" type="number" name="stockCnt" value="0" >주
 									<p class="mb-0">
-										<span id="orderName">구매</span>가능한 주수 <input id="afford" type="button" value="0">주
+										<span id="orderName">구매</span>가능한 주수 <input class="btn btn-danger btn-sm" id="afford" type="button" value="0">주
 									</p>
-									<h5><span></span><span id="totalPrc">0</span>원</h5>
-									<button id="stockOrderBtn" >주문</button> <span id="orderType" data-order=""></span>
+									<h5><span></span><span id="totalPrc">0</span> point</h5>
+									<button class="btn btn-danger" id="stockOrderBtn" >주문</button> <span id="orderType" data-order=""></span>
 								</div>
 							</div>
 							<div id="CP2D22" class="col-6">
 								<table>
 									<tr>
-										<td><button>10 %</button></td>
-										<td><button>50 %</button></td>
-										<td><button>100 %</button></td>
+										<td><button class="btn btn-danger btn-sm">10 %</button></td>
+										<td><button class="btn btn-danger btn-sm">50 %</button></td>
+										<td><button class="btn btn-danger btn-sm">100 %</button></td>
 									</tr>
 								</table>
 								<div>
@@ -447,7 +446,7 @@ input[type="number"]::-webkit-inner-spin-button {
 						</div>
 						<div id="forNonlogin" th:if="${session.loggedInMember} == null">
 							<h3>로그인 후 이용할 수 있는 기능입니다.</h3>
-							<button onclick="location.href='/member/login'">로그인</button> <button onclick="location.href='/member/join'">회원가입</button>
+							<button class="btn btn-danger" onclick="location.href='/member/login'">로그인</button> <button class="btn btn-danger" onclick="location.href='/member/join'">회원가입</button>
 						</div>
 					</div>
 				</div>
@@ -673,6 +672,8 @@ input[type="number"]::-webkit-inner-spin-button {
 				let buyPrc = $('#sell tr:last-of-type td:last-of-type').text();	//매수주문의 시장가
 				let ckbox = $(this);
 				let point = $('p[data-point]').attr('data-point');//유저의 보유 포인트
+				let stockPrc = $('#stockPrc').val(); // 거래가격
+				let stockCnt = $('#stockCnt').val(); // 거래수량
 				
 				// 매수매도버튼을 클릭하지 않았을시 함수
 				if(orderType == ''){
@@ -685,9 +686,13 @@ input[type="number"]::-webkit-inner-spin-button {
 					// 호가 매수 테이블의 가장 높은 가격이 가격입력칸에 출력
 					if(tof){
 						$('#stockPrc').val(sellPrc);
+						$('#totalPrc').text((sellPrc * stockCnt).toLocaleString('ko-KR'));
 					}else{
 						$('#stockPrc').val(0);
+						$('#totalPrc').text(0);
 					}
+					
+					
 				}else if(orderType == 'buy'){
 					// 호가 매도 테이블의 가장 낮은 가격이 가격입력칸에 출력
 					if(tof){
@@ -916,8 +921,13 @@ input[type="number"]::-webkit-inner-spin-button {
 			
 			// 차트 버튼 기능
 			$('#chartBtn').on('click','input',function(){
+				
+				$(this).parent().parent().find('.orderActive').removeClass('orderActive');
+				//클릭한 버튼 클래스 추가
+				$(this).toggleClass('orderActive');
+				
 				if($(this).val()=='분'){
-					
+					// 가능하면 추가
 				}else if($(this).val()=='일'){
 					$('#candleChart').html('');
 					$('#stickChart').html(''); 

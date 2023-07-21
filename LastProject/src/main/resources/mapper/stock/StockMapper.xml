@@ -20,7 +20,7 @@
 	<!-- 종목정보 조회 -->
 	<select id="getItemInfo" resultType="ItemVO">
 	
-		select t.item_no, c.sc, c.theme, t.nm,t.prc tprc, t.prc - i.cl_prc change ,trunc(((t.prc-i.cl_prc)/i.cl_prc)*100) rate, origin,desct
+		select t.item_no, c.sc, c.theme, t.nm,NVL(t.prc,0) tprc, NVL(t.prc - i.cl_prc,0) change ,NVL(trunc(((t.prc-i.cl_prc)/i.cl_prc)*100),0) rate, origin,desct
 		from (select item_no, cl_prc 
 		      from item_info 
 		      where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
@@ -28,13 +28,16 @@
 		join (  select b.item_no , b.nm,prc,origin,desct            
 				from(	select distinct(a.item_no) item_no,nm,'tah-'||a.tano ta_no,ta_prc prc
 		                from(   SELECT nm,i.item_no, MAX(to_number(substr(ta_no,5))) tano
-		                        FROM ta_hr t join item i 
+		                        FROM ta_hr t right join item i 
 		                        on i.item_no = t.item_no
 		                        GROUP BY nm,i.item_no
-		                        order by to_number(substr(item_no,5))) a join ta_hr t
+		                        order by to_number(substr(item_no,5))
+                             ) a left join ta_hr t
 		                on a.item_no= t.item_no and to_number(substr(t.ta_no,5)) = a.tano  
-		                order by to_number(substr(item_no,5))) b join item i
-				on b.item_no=i.item_no ) t  --오늘날짜 중 가장최근 거래가 (=현재가)
+		                order by to_number(substr(item_no,5))
+                     ) b join item i
+				on b.item_no=i.item_no 
+              ) t  --오늘날짜 중 가장최근 거래가 (=현재가)
 		on i.item_no = t.item_no
 		join (select case substr(common_cd,1,2) when 'S1' then '농산물'
 		                                  when 'S2' then '수산물'
@@ -129,31 +132,35 @@
 			from (  select i.nm, 
 						   i.item_no item_no , 
 						   f.inq+i.inq inq
-			        from item i join (  select item_no, 
-			        						   sum(inq) inq
+			        from item i join (  select item_no, sum(inq) inq
 			                            from item_info 
 			                            where ta_dt > sysdate-7 
 			                            group by item_no
-			                            order by inq desc) f
-			        on i.item_no = f.item_no) a 
+			                            order by inq desc
+                                      ) f
+			        on i.item_no = f.item_no
+                  ) a 
 			join (  select i.item_no,
 						   i.cl_prc,
-						   t.prc tprc, 
-						   t.prc - i.cl_prc change ,
-						   trunc(((t.prc-i.cl_prc)/i.cl_prc)*100) rate
+						   NVL(t.prc,0) tprc, 
+						   NVL(t.prc - i.cl_prc,0) change ,
+						   NVL(trunc(((t.prc-i.cl_prc)/i.cl_prc)*100),0) rate
 			        from (select item_no, cl_prc 
 			              from item_info 
 			              where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
 			              ) i -- 전날 주가정보
 			        join (  select distinct(a.item_no) item_no,nm,'tah-'||a.tano ta_no,ta_prc prc
 			                from(   SELECT nm,i.item_no, MAX(to_number(substr(ta_no,5))) tano
-			                        FROM ta_hr t join item i 
+			                        FROM ta_hr t right join item i 
 			                        on i.item_no = t.item_no
 			                        GROUP BY nm,i.item_no
-			                        order by to_number(substr(item_no,5))) a join ta_hr t
+			                        order by to_number(substr(item_no,5))
+                                 ) a left join ta_hr t
 			                on a.item_no= t.item_no and to_number(substr(t.ta_no,5)) = a.tano  
-			                order by to_number(substr(item_no,5))  ) t  -- 최근 체결가
-			        on i.item_no = t.item_no) b 
+			                order by to_number(substr(item_no,5))  
+                          ) t  -- 최근 체결가
+			        on i.item_no = t.item_no
+                 ) b 
 			on a.item_no = b.item_no
 			where rownum <6
 			order by inq desc
@@ -316,21 +323,23 @@
 	
 	<!-- itemNo 로 단일 종목 정보 -->
 	<select id="itemNoGetInfo" resultType="StockVO">
-		select t.item_no, t.nm,t.prc tprc, t.prc - i.cl_prc change ,trunc(((t.prc-i.cl_prc)/i.cl_prc)*100) rate
+		select t.item_no, t.nm,t.prc tprc, t.prc - i.cl_prc change ,trunc(NVL((t.prc-i.cl_prc) / DECODE(i.cl_prc, 0, NULL, i.cl_prc), 0)*100) rate
 		from (select item_no, cl_prc 
 		      from item_info 
 		      where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
 		      ) i --item_info 전날 주가정보
-		join (  select b.item_no , b.nm,prc,origin,desct            
-				from(	select distinct(a.item_no) item_no,nm,'tah-'||a.tano ta_no,ta_prc prc
+		join (  select b.item_no , b.nm,NVL(prc,0) prc,origin,desct            
+				from(	select distinct(a.item_no) item_no ,a.nm,'tah-'||a.tano ta_no, ta_prc prc
 		                from(   SELECT nm,i.item_no, MAX(to_number(substr(ta_no,5))) tano
-		                        FROM ta_hr t join item i 
+		                        FROM ta_hr t right join item i 
 		                        on i.item_no = t.item_no
 		                       	where i.item_no = #{itemNo}
 		                        GROUP BY nm,i.item_no
-		                        order by to_number(substr(item_no,5))) a join ta_hr t
+		                        order by to_number(substr(item_no,5))
+                             ) a left join ta_hr t
 		                on a.item_no= t.item_no and to_number(substr(t.ta_no,5)) = a.tano  
-		                order by to_number(substr(item_no,5))) b join item i
+		                order by to_number(substr(item_no,5))
+                     ) b left join item i
 				on b.item_no=i.item_no ) t  --오늘날짜 중 가장최근 거래가 (=현재가)
 		on i.item_no = t.item_no
 	</select>
@@ -407,25 +416,28 @@
 	
 	<!-- 당일 아이템 정보 가져오기 -->
 	<select id="todayItemInfo" resultType="ItemInfoVO">
-		select b.item_no , vol ,op_prc, prc cl_prc , l_prc , h_prc ,inq
-		from (  select 'tah-'||MAX(to_number(substr(ta_no,5))) ta_no, sum(stock_cnt) vol ,min(ta_prc) l_prc,max(ta_prc) h_prc
+		select b.item_no , NVL(vol,0) vol ,op_prc, NVL(prc,0) cl_prc , NVL(l_prc,0) l_prc , NVL(h_prc,0) h_prc ,inq
+		from (  select item_no,'tah-'||MAX(to_number(substr(ta_no,5))) ta_no, sum(stock_cnt) vol ,min(ta_prc) l_prc,max(ta_prc) h_prc 
 		        from ta_hr 
 		        where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate , 'yyyy-MM-dd')
 		        group by item_no
-		        order by to_number(substr(item_no,5))) a -- 오늘 거래량 고가, 저가
-		right join (  select distinct(a.item_no) item_no,'tah-'||a.tano ta_no,ta_prc prc
-		        from(   SELECT nm,i.item_no, MAX(to_number(substr(ta_no,5))) tano
-		                FROM ta_hr t right join item i 
-		                on i.item_no = t.item_no
-		                GROUP BY nm,i.item_no
-		                order by to_number(substr(item_no,5))) a left join ta_hr t
-		        on a.item_no= t.item_no and to_number(substr(t.ta_no,5)) = a.tano  
-		        order by to_number(substr(item_no,5))) b -- 오늘 마지막 거래가
-		on b.ta_no = a.ta_no
+		        order by to_number(substr(item_no,5))
+              ) a -- 오늘 거래량 고가, 저가
+		right join (    select i.item_no , NVL(ta_prc,0) prc  
+                        from item i left join (
+                                            select item_no,ta_prc , max(ta_dt) ta_dt
+                                            from  ta_hr
+                                            where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate,'yyyy-MM-dd')
+                                            group by item_no , ta_prc
+                                           ) t
+                        on i.item_no = t.item_no
+                   ) b -- 오늘 마지막 거래가
+		on b.item_no = a.item_no
 		join (  select z.item_no, cl_prc op_prc ,x.inq
 		        from item_info z join item x
 		        on z.item_no = x.item_no
-		        where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')) c -- 전날 종가 (=현재 시가) 와 조회수
+		        where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
+              ) c -- 전날 종가 (=현재 시가) 와 조회수
 		on b.item_no = c.item_no
 		order by to_number(substr(item_no,5))
 	</select>

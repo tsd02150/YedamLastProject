@@ -17,7 +17,7 @@ public class StockSchedule {
 		this.stockService = stockService;
 	}
 	
-	@Scheduled(cron = "31 15 * * * ?")
+	@Scheduled(cron = "01 18 * * * ?")
 	public void stockJob() {
 		stockService.schedulerJob();
 	}
