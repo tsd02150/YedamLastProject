@@ -43,6 +43,8 @@ public class ChatController {
 	
 	@MessageMapping("/room/{roomno}")
 	public void chatMessage(ChatMessage message,@DestinationVariable String roomno) throws Exception {
+		System.out.println(roomno);
+		System.out.println(message);
 		template.convertAndSend("/topic/sendto/"+roomno,message);
 	}
 	

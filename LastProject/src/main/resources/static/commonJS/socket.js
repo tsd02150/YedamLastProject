@@ -1,7 +1,6 @@
 const stompClient = new StompJs.Client({
     brokerURL: 'ws://localhost:80/socketserver' // 서버연결
 });
-console.log(stompClient);
 let loginMemberName = $('#sessionMembNo').text();
 let destination = '/stock/alarm/' + loginMemberName;
 console.log(loginMemberName);
@@ -18,11 +17,7 @@ stompClient.onConnect = (frame) => {
     	console.log('알림성공');
         toastShow("체결 알림" ,greeting.body , "info"); // 구독된 url 에서 넘어오는 메세지 처리
     });
-    
-    stompClient.subscribe('/topic/sendto/'+$('#mainRoomName').data("roomno"), (chatMessage) => {
-    	console.log($('#mainRoomName').data("roomno"));
-        showChat(JSON.parse(chatMessage.body));
-    });
+
 };
 
 stompClient.onWebSocketError = (error) => {
@@ -91,18 +86,18 @@ function showChat(chat) {
 }
 
 function sendChat() {
-	console.log($('#mainRoomName').data("roomno"));
+	console.log(chatRoomNo);
 	fetch("addChat",{
 		method: "POST",
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded'
 		},
-		body: 'cntn='+$("#my-message").val()+'&roomNo='+$('#mainRoomName').data("roomno")+'&anonNick='+myAnonNick+'&membNo='+myMembNo
+		body: 'cntn='+$("#my-message").val()+'&roomNo='+chatRoomNo+'&anonNick='+myAnonNick+'&membNo='+myMembNo
 	})
 	.then(response=>response.json())
 	.then(result=>{
 	    stompClient.publish({
-	    	destination : "/mychat/room/"+$('#mainRoomName').data("roomno"),
+	    	destination : "/mychat/room/"+chatRoomNo,
 			body : JSON.stringify({'anonnick':result.anonNick,'drwupdt':result.drwupDt,'message': result.cntn})
 			});		
 		$("#my-message").val('');

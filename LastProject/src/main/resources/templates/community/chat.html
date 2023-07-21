@@ -136,7 +136,7 @@
 							<h3 class="box-title">채팅방 목록</h3>
 						</div>
 						<div id="roomList" class="box-body">
-							<div th:each="room:${roomList}" th:onclick="moveRoom([[${room.roomNo}]])">
+							<div th:each="room:${roomList}" th:data-roomno="${room.roomNo}" class="roomListContent">
 								<p>[[${room.nm}]]</p>
 							</div>
 						</div>
@@ -224,6 +224,7 @@
 		<script th:inline="javascript">
 			let myAnonNick=[[${particiInfo.anonNick}]];
 			let myMembNo=[[${particiInfo.membNo}]];
+			let chatRoomNo=$('#mainRoomName').data("roomno");
 			test();
 			moveRoom("room-1");
 			function test(){
@@ -274,7 +275,7 @@
 						toastShow("","이미 존재하는 방 이름입니다.","error");
 					}else{
 						let divTag=`
-							<div onclick="moveRoom('${result.roomNo}')">
+							<div data-roomno="${result.roomNo}" class="roomListContent">
 								<p>${result.nm}</p>
 							</div>
 						`;
@@ -285,7 +286,7 @@
 				})
 				.catch(err=>console.log(err));
 			}
-			
+			let subs;
 			function moveRoom(roomNo){
 				fetch("/community/roomInfo",{
 					method: "POST",
@@ -297,10 +298,12 @@
 				.then(response=>response.json())
 				.then(result=>{
 					resetChat();
+					console.log(result);
 					myAnonNick=result.anonNick;
 					$(".roomCnt").text(result.conn);
 					$("#mainRoomName").text(result.nm);
 					$("#mainRoomName").attr("data-roomno",result.roomNo);
+					chatRoomNo=result.roomNo;
 					$('#particiList').empty();
 					for(let partici of result.particiList){
 						let divTag=`
@@ -310,18 +313,26 @@
 						`;
 						particiList.innerHTML+=divTag;
 					}
+					subs=stompClient.subscribe('/topic/sendto/'+chatRoomNo, (chatMessage) => {
+				    	console.log(chatRoomNo);
+				        showChat(JSON.parse(chatMessage.body));
+				    });
 				})
 				.catch(err=>console.log(err));
 			}
+			
+			$('.roomListContent').click(function(){
+				if($(event.target).closest('div').data("roomno")!=chatRoomNo){
+					subs.unsubscribe();
+					moveRoom($(event.target).closest('div').data("roomno"));
+				}
+			})
 			
 			function resetChat() {
 			    $("#chatSpace").html("");
 			}
 	
 		</script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-		
 	</div>
 </body>
 </html>
