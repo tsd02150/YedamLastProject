@@ -1,61 +1,58 @@
 package com.yedam.app.mall.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.common.service.CommonCodeVO;
 import com.yedam.app.mall.mapper.MallMapper;
-import com.yedam.app.mall.service.BasketVO;
 import com.yedam.app.mall.service.MallService;
-
 import com.yedam.app.mall.service.ProductReviewVO;
 import com.yedam.app.mall.service.ProductVO;
 
 @Service
 public class MallServiceImpl implements MallService {
-	
+
 	@Autowired
 	MallMapper mallMapper;
 
-	//전체조회
+	// 전체조회
 	@Override
 	public List<ProductVO> getProductList(String cd) {
 		return mallMapper.getProductList(cd);
 	}
-	
-	//단건조회
+
+	// 단건조회
 	@Override
 	public ProductVO getProductInfo(ProductVO prdtVO) {
 		return mallMapper.getProductInfo(prdtVO);
 	}
-	
-	//등록
+
+	// 등록
 	@Override
 	public boolean addReview(ProductReviewVO revVO) {
-		return mallMapper.addReview(revVO)>0;
+		return mallMapper.addReview(revVO) > 0;
 	}
-	
-	//수정
+
+	// 수정
 	@Override
 	public int updateReviewInfo(ProductReviewVO revVO) {
 		return mallMapper.updateReviewInfo(revVO);
 	}
-
-	//삭제
-	@Override
-	public boolean deleteReviewInfo(ProductReviewVO revVO) {
-		return mallMapper.deleteReviewInfo(revVO)>0;
-	}
-
-	//카테고리 정보
-	@Override public List<ProductVO> getCtgrList(ProductVO prdtVO) {
-		return mallMapper.getCtgrList(prdtVO); 
-	}
-	 
 	
+	// 삭제
+	@Override
+	public boolean deleteReviewInfo(String revNo) {
+		return mallMapper.deleteReviewInfo(revNo) > 0;
+	}
+
+	// 카테고리 정보
+	@Override
+	public List<ProductVO> getCtgrList(ProductVO prdtVO) {
+		return mallMapper.getCtgrList(prdtVO);
+	}
+
 	@Override
 	public List<ProductReviewVO> getProductReviewList(ProductReviewVO revVO) {
 		return mallMapper.getProductReviewList(revVO);
@@ -75,8 +72,6 @@ public class MallServiceImpl implements MallService {
 	public int getProductCount(ProductVO prdtVO) {
 		return mallMapper.getProductCount(prdtVO);
 	}
-
 	
-
-
 }
+	

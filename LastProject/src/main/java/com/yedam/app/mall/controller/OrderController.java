@@ -21,7 +21,7 @@ public class OrderController {
 	BasketService basketService;
 	
 	@GetMapping("orderList")
-	public String orderList(Model model, OrderVO ordVO) {
+	public String orderList() {
 		
 		return "mall/orderList";
 		

@@ -2,8 +2,8 @@ package com.yedam.app.mall.mapper;
 
 import java.util.List;
 
+
 import com.yedam.app.common.service.CommonCodeVO;
-import com.yedam.app.mall.service.BasketVO;
 import com.yedam.app.mall.service.ProductReviewVO;
 import com.yedam.app.mall.service.ProductVO;
 
@@ -38,7 +38,7 @@ public interface MallMapper {
 	public int updateReviewInfo(ProductReviewVO revVO);
 
 	// 리뷰삭제
-	public int deleteReviewInfo(ProductReviewVO revVO);
+	public int deleteReviewInfo(String revNo);
 
 	public ProductVO getProductInfo(String prdtNo);
 

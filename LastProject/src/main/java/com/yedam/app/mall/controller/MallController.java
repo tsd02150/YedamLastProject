@@ -1,6 +1,7 @@
 package com.yedam.app.mall.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -138,11 +139,9 @@ public class MallController {
 		 
 		 List<ProductReviewVO> review = mallService.getProductReviewList(revVO);
 		 
-		 
 		 return review;
 		 
 	 }
-	
 	
 	 //리뷰등록
 	  @PostMapping("addReview") 
@@ -168,7 +167,8 @@ public class MallController {
 	  @PostMapping("deleteReview")
 	  @ResponseBody
 	 public String deleteReview(ProductReviewVO revVO) {
-		  if(mallService.deleteReviewInfo(revVO)) {
+		  
+		  if(mallService.deleteReviewInfo(revVO.getRevNo())) {
 				return "success";
 			}else {
 				return "fail";

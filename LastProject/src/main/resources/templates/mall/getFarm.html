@@ -456,8 +456,9 @@ p>img {
 								id="total-price">P</strong>
 						</div>
 						<div class="btn-group" style="text-align: center;">
+						<a href="basketList">
 							<button th:if="${session.loggedInMember}!=null" type="button"
-								onclick="addToCart()">장바구니 담기</button>
+								id="addToCart">장바구니 담기</button></a>
 							<button type="button" onclick="directOrder()">바로 주문하기</button>
 						</div>
 					</div>
@@ -698,7 +699,7 @@ p>img {
 						<td style="text-align: center;" >${item.membNo}</td>
 						<td style="text-align: center;" >${item.drwupDt}</td>
 						  <td style="text-align: center;">
-					        <button class="delete-review-btn" data-rev-no="${item.revNo}">삭제</button>
+					        <button type="button" onClick="deleteReview()" class="delete-review-btn" data-rev-no="${item.revNo}">삭제</button>
 					    </td>
 
 					</tr>
@@ -757,7 +758,7 @@ p>img {
 		
 		  document.addEventListener("DOMContentLoaded", function () {
     var modal = document.getElementById("reviewModal");
-    var productList = document.getElementById("productList"); // 해당 상품 리스트를 출력하는 요소의 ID를 지정합니다.
+    var productList = document.getElementById("productList"); // 해당 상품 리스트를 출력하는 요소의 ID 지정
 
 
     // 필요할 때 모달을 열기 위한 함수
@@ -768,11 +769,10 @@ p>img {
 
     // "등록하기" 버튼을 클릭했을 때 상품 리스트에 내용을 추가
  /*    modal.querySelector("#btnSave").addEventListener("click", function () {
-      var reviewStar = document.querySelector('input[name="reviewStar"]:checked').value; // 별점을 가져옵니다.
-      var reviewContent = document.getElementById("cntn").value; // 리뷰 내용을 가져옵니다.
+      var reviewStar = document.querySelector('input[name="reviewStar"]:checked').value; // 
+      var reviewContent = document.getElementById("cntn").value; //
 		console.log(reviewContent);
       
-      // 새로운 리뷰 요소를 생성합니다.
       var newReview = document.createElement("div");
       newReview.innerHTML = `
         <p>별점: ${reviewStar}</p>
@@ -795,48 +795,66 @@ p>img {
 		
 		 */
 		
-		 // 리뷰 삭제 버튼을 클릭했을 때 해당 리뷰를 삭제하는 함수를 정의합니다.
-        function deleteReview(revNo) {
-            // 서버에 삭제 요청을 보내는 fetch 코드를 추가합니다.
-            fetch("/mall/deleteReview", {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: "revNo=" + revNo
-            })
-            .then(response => response.json())
-            .then(result => {
-                // 삭제 요청이 성공하면, 해당 리뷰를 리스트에서 삭제합니다.
-                var reviewItem = document.getElementById("review-" + revNo);
-                if (reviewItem) {
-                    reviewItem.remove();
-                }
-            })
-            .catch(err => console.log(err));
-        }
+		
 
-        // 리뷰 삭제 버튼을 클릭했을 때 deleteReview 함수를 호출하도록 이벤트 리스너를 추가합니다.
+        /* // 리뷰 삭제 버튼을 클릭했을 때 deleteReview 함수를 호출하도록 이벤트 리스너를 추가합니다.
         productList.addEventListener("click", function (event) {
             if (event.target.classList.contains("delete-review-btn")) {
                 var revNo = event.target.dataset.revNo;
                 deleteReview(revNo);
             }
-        });
+        }); */
     });
 		
-		
+    // 리뷰 삭제 버튼을 클릭했을 때 해당 리뷰를 삭제하는 함수
+    function deleteReview() {
+       	//console.log("deleteBtn")
+       	//console.log($(event.target).closest('tr').children().first().text())
+       	
+        fetch("deleteReview", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: "revNo=" + $(event.target).closest('tr').children().first().text()
+        })
+        .then(response => response.json())
+        .then(result => {
+            // 삭제 요청이 성공하면, 해당 리뷰를 리스트 삭제
+           // var reviewItem = document.getElementById("review-" + revNo);
+            if (result=="success") {
+               window.location.href="/mall/reviewList"
+            }else {
+            	toastShow("Fail Delete", "삭제 실패", "error");
+            }
+        })
+        .catch(err => console.log(err));
+    }
 	
-		function addToCart() {
-			  // 장바구니 담기 기능 구현
-			  alert("상품이 장바구니에 담겼습니다!");
-			}
+  
+	$('#addToCart').on('click', function(){
+		console.log('test');
+		let formData = $()
+		
+		$.ajax({
+			url: '/mall/addCartItem',
+			method: "POST",
+			data : formData
+			
+		})
+		.done(function (result){
+			
+		})
+		.fail(function(result) {
+			toastShow("Add Fail", "추가 실패", "error");
+		})
+	})
 
 			function directOrder() {
 			  // 바로 주문하기 기능 구현
 			  alert("주문 페이지로 이동합니다!");
 			}
-
+	
 			
 			//이미지 확대
 			const zoomImageContainer = document.querySelector('.zoom-image-container');

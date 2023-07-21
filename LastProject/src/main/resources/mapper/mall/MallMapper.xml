@@ -92,9 +92,9 @@
 		)
 	</insert>
 	
-	<delete id="deleteReviewInfo" parameterType="ProductReviewVO">
+	<delete id="deleteReviewInfo" parameterType="String">
 		DELETE FROM PRODUCT_REVIEW
-		WHERE prdt_no=#{prdtNo}
+		WHERE rev_no=#{revNo}
 	</delete>
   	
 </mapper>

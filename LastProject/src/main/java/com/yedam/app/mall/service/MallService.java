@@ -1,7 +1,6 @@
 package com.yedam.app.mall.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.yedam.app.common.service.CommonCodeVO;
 
@@ -35,6 +34,8 @@ public interface MallService {
 	public int updateReviewInfo(ProductReviewVO revVO);
 
 	// 리뷰 삭제
-	public boolean deleteReviewInfo(ProductReviewVO revVO);
+	public boolean deleteReviewInfo(String revNo);
+
+	
 
 }
