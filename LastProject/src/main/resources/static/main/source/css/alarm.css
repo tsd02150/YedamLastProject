@@ -1,0 +1,44 @@
+.bs-canvas-overlay {
+	opacity: 0;
+	z-index: 0;
+}
+
+.bs-canvas {
+	overscroll-behavior: contain;
+	top: 0;
+	z-index: 1110;
+	overflow-x: hidden;
+	overflow-y: auto;
+	width: 330px;
+	transition: margin 0.4s ease-out;
+	-webkit-transition: margin 0.4s ease-out;
+	-moz-transition: margin 0.4s ease-out;
+	-ms-transition: margin 0.4s ease-out;
+}
+.bs-canvas header{
+	z-index:1111;
+}
+
+.bs-canvas-right {
+	right: 0;
+	margin-right: -330px;
+}
+#qwe , #asd , #zxc{
+	height:500px;
+	overscroll-behavior: contain;
+}
+.bs-canvas-content .list-group{
+	overflow:hidden;
+	overflow-y: auto; 
+}
+.bs-canvas-header{
+	height:60px;
+}
+
+.nav-tabs li {
+	width:33%;
+}
+
+.tab-content li {
+	height:70px;
+}

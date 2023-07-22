@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.security.service.UserVO;
+import com.yedam.app.stock.service.AlarmVO;
 import com.yedam.app.stock.service.InqVO;
 import com.yedam.app.stock.service.ItemInfoVO;
 import com.yedam.app.stock.service.ItemVO;
@@ -186,7 +187,6 @@ public class StockController {
 	@ResponseBody
 	@PostMapping("stockOrder")
 	public Map<String,Object> stockOrder(StockOrderVO vo ){
-		System.out.println(vo + "zzzzzzzzzzzzzzzzz");
 		Map<String,Object> orderMap = new HashMap<>();
 		orderMap.put("order_item_no", vo.getOrder_item_no());
 		orderMap.put("order_memb_no", vo.getOrder_memb_no());
@@ -213,5 +213,10 @@ public class StockController {
 		System.out.println(itemNo);
 		return stockservice.weekMonthChart(itemNo, type);
 	}
-	
+	// 미확인 알람 가져오기
+	@ResponseBody
+	@GetMapping("getNonChkAlm")
+	public List<AlarmVO> getNonChkAlm(String membNo){
+		return stockservice.nonCheckedAlarm(membNo);
+	}
 }

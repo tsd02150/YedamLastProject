@@ -532,4 +532,27 @@
 		group by ta_dt
 		order by ta_dt
 	</select>
+	
+	<!-- alarm 데이터 추가 -->
+	<insert id="insertAlarm" >
+		insert alarm (	ALARM_NO,
+						MEMB_NO,
+						CNTN,
+						ALARM_DT,
+						CHECKED)
+		values ('alm-'||alarm_seq.nextval ,
+				 #{membNo},
+				 #{cntn},
+				 sysdate,
+				 'n'
+				 )
+	</insert>
+	
+	<!-- 미확인 알람 가져오기 -->
+	<select id="nonCheckedAlarm" resultType="AlarmVO">
+		select *
+		from alarm
+		where checked = 'n'
+		and memb_no = #{membNo}
+	</select>
 </mapper>
