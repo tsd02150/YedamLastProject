@@ -131,7 +131,7 @@ height: 200px;
 			<table id="intrestTbl">
 					<tr style="background-color : bisque">
 						<th class="intehead">주식현황</th>
-						<td><a th:onclick="|location.href='@{/stock/itemListPage}'|" ><p class="bi bi-arrow-right-square-fill"></p></a></td>
+						<td><a  href="mystockInfo" ><p class="bi bi-arrow-right-square-fill"></p></a></td>
 					</tr>
 					<tr>
 						<th colspan="2" class="itembox">
@@ -180,7 +180,7 @@ let img='';
 
 //보유주식 리스트 출력
 $.ajax({
-	url : "myStockList",
+	url : "myPossStockList",
 	method : "POST",
 	data : {
 		"membNo" : membNo
@@ -189,10 +189,11 @@ $.ajax({
 		//보유주식 최대 8개까지만 출력(rate 기준 정렬)  stock/chart?itemNo=ite-1
 		data.slice(0, 8).forEach(el => {
 			//console.log(el);
-		let tprc = commas(el.tprc); 
+		let tprc = commas(el.nowPrc); 
+		let rate = commas(el.rate); 
 		  box += `<div class="int_item">
 		            <a onclick="location.href='/stock/chart?itemNo=${el.itemNo}'"><p class="tnm">${el.tnm}</p></a>
-		            <span class="rate">${el.rate}</span><br>
+		            <span class="rate">${rate}</span><br>
 								<span class="tprc">${tprc} P</span>
 		          </div>`;
 		});

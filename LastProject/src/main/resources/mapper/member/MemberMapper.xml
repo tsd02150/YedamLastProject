@@ -399,7 +399,53 @@
         AND trunc(order_dt) BETWEEN (SELECT MIN(order_dt) FROM a) AND #{endDate}
     </if>
     ORDER BY trunc(order_dt) DESC
+</select>
 
+	<select id="getDealCount" resultType="int" parameterType="DealVO">
+		SELECT COUNT(*) FROM (
+    SELECT tablename, order_no, memb_no, order_dt, order_am as point, i.item_no, i.nm
+    FROM (
+        SELECT '매도' AS tablename, ta_no  AS order_no, buy_memb_no as memb_no,ta_dt AS order_dt, (-1*stock_cnt * ta_prc)  AS order_am, item_no
+        FROM ta_hr
+        UNION ALL
+        SELECT '매수' AS tablename, ta_no  AS order_no, sell_memb_no as memb_no,  ta_dt AS order_dt,(stock_cnt * ta_prc)  AS order_am, item_no
+        FROM ta_hr
+        UNION ALL
+        SELECT '충전' AS tablename, chag_no AS order_no, memb_no, chag_dt AS order_dt, chag_prc AS order_am, NULL AS item_no
+        FROM charge
+        UNION ALL
+        SELECT '포인트몰' AS tablename, o.order_no, o.memb_no, o.order_dt, -(o.order_am) AS order_am, os.prdt_no AS item_no
+        FROM orders o
+        JOIN order_detail os ON o.order_no = os.order_no
+    ) s LEFT OUTER JOIN item i ON s.item_no = i.item_no ) a
+    WHERE memb_no = #{membNo}
+    <choose>
+        <when test="tablename == '매도'">
+            AND tablename = #{tablename}
+        </when>
+        <when test="tablename == '매수'">
+            AND tablename = #{tablename}
+        </when>
+        <when test="tablename == '충전'">
+            AND tablename = #{tablename}
+        </when>
+        <when test="tablename == '포인트몰'">
+            AND tablename = #{tablename}
+        </when>
+        <otherwise>
+            AND 1=1
+        </otherwise>
+    </choose>
+     <if test="startDate != null and endDate != null">
+    		AND trunc(order_dt) BETWEEN #{startDate} AND #{endDate}
+    </if>
+    <if test="startDate != null and endDate == null">
+        AND trunc(order_dt) BETWEEN #{startDate} AND CURRENT_DATE
+    </if>
+    <if test="startDate == null and endDate != null">
+        AND trunc(order_dt) BETWEEN (SELECT MIN(order_dt) FROM a) AND #{endDate}
+    </if>
+    ORDER BY trunc(order_dt) DESC
 </select>
 
 	<select id="myPossStockList" parameterType="String" resultType="PossVO">
@@ -460,25 +506,25 @@
 			</if>
 	</select>
 
-	<select id="myBuyRaiseList" parameterType="String">
+	<select id="myBuyRaiseList" parameterType="String" resultType="PossVO">
 		with a as (
 			select item_no, sum(stock_cnt) stock_cnt, sum(trade_prc*stock_cnt) trade_prc --보유주식 총 수량, 총금액
 			from poss_stock 
-			where memb_no = #{membNo}
+			where memb_no = 'mem-2'
 			group by item_no )
-		select TO_CHAR(ta_dt, 'yyyy-MM-dd') ta_dt, round(sum((a.trade_prc/(i.cl_prc*a.stock_cnt)*100-100))/count(*),2) rate -- 현재 보유자산 / 시장가 / 수익률
+		select TO_CHAR(ta_dt, 'yyyy-MM-dd') dt, round(sum((a.trade_prc/(i.cl_prc*a.stock_cnt)*100-100))/count(*),2) rate -- 현재 보유자산 / 시장가 / 수익률
 		from a join item_info i on a.item_no = i.item_no
 		join item n on i.item_no = n.item_no
-		where TO_CHAR(ta_dt, 'yyyy-MM-dd') = TO_CHAR(sysdate-1, 'yyyy-MM-dd') 
-		group by ta_dt
-		order by rate desc
+		GROUP BY TO_CHAR(ta_dt, 'yyyy-MM-dd')
+		order by 1
 	</select>
 	
-	<select id="mySellRaiseList" parameterType="String">
-		SELECT TO_CHAR(ta_dt, 'yyyy-MM-dd') ta_dt, ROUND(sum((ta_prc/traded_prc*100))/count(*),2) raise FROM TA_HR
-		WHERE SELL_MEMB_NO = #{membNo}
-		group by TO_CHAR(ta_dt, 'yyyy-MM-dd')
-		order by 1
+	<select id="mySellRaiseList" parameterType="String" resultType="PossVO">
+		SELECT TO_CHAR(ta_dt, 'yyyy-MM-dd') AS dt, ROUND(sum((ta_prc/traded_prc*100))/count(*),2) AS raise
+		FROM TA_HR
+		WHERE SELL_MEMB_NO =  #{membNo}
+		GROUP BY TO_CHAR(ta_dt, 'yyyy-MM-dd')
+		ORDER BY 1
 	</select>
 	
 </mapper>

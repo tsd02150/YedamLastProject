@@ -105,6 +105,9 @@ public interface MemberMapper {
 	//거래내역 조회
 	public List<DealVO> dealList(DealVO vo);
 	
+	//거래내역 개수
+	public int getDealCount(DealVO vo);
+	
 	//보유자산
 	public List<PossVO> myPossStockList(String membNo);
 	
@@ -117,7 +120,7 @@ public interface MemberMapper {
 	public List<SurveyVO> analysisResult(String membNo);
 	
 	//하루 총 수익(매수, 매도)
-	public List<DealVO> myBuyRaiseList(String membNo);
-	public List<DealVO> mySellRaiseList(String membNo);
+	public List<PossVO> myBuyRaiseList(String membNo);
+	public List<PossVO> mySellRaiseList(String membNo);
 
 }
