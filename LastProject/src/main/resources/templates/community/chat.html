@@ -224,22 +224,10 @@
 		<script th:inline="javascript">
 			let myAnonNick=[[${particiInfo.anonNick}]];
 			let myMembNo=[[${particiInfo.membNo}]];
-			let chatRoomNo=$('#mainRoomName').data("roomno");
-			test();
+			let chatRoomNo="room-1";
+
 			moveRoom("room-1");
-			function test(){
-				fetch("/community/mySession",{
-					method: "POST",
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded'
-					},
-					body:"test=test"
-				})
-				.then(response=>response.text())
-				.then(result=>console.log(result))
-				.catch(err=>console.log(err));				
-			}
-			
+
 			function addRoomBtn(){
 				document.querySelector(".modal").style.display="block";
 			}
@@ -286,9 +274,11 @@
 				})
 				.catch(err=>console.log(err));
 			}
-			let subs;
+			let chatSubs;
+			let particiSubs;
+			let removeSubs;
 			function moveRoom(roomNo){
-				fetch("/community/roomInfo",{
+				fetch("/community/moveRoom",{
 					method: "POST",
 					headers: {
 						'Content-Type': 'application/x-www-form-urlencoded'
@@ -299,12 +289,18 @@
 				.then(result=>{
 					resetChat();
 					console.log(result);
+
+					particiSubs=stompClient.subscribe('/topic/remove/'+chatRoomNo, (chatMessage) => {
+				    	console.log(JSON.parse(chatMessage.body));
+				    });
+					
 					myAnonNick=result.anonNick;
 					$(".roomCnt").text(result.conn);
 					$("#mainRoomName").text(result.nm);
 					$("#mainRoomName").attr("data-roomno",result.roomNo);
 					chatRoomNo=result.roomNo;
 					$('#particiList').empty();
+					
 					for(let partici of result.particiList){
 						let divTag=`
 							<div>
@@ -313,17 +309,37 @@
 						`;
 						particiList.innerHTML+=divTag;
 					}
-					subs=stompClient.subscribe('/topic/sendto/'+chatRoomNo, (chatMessage) => {
-				    	console.log(chatRoomNo);
+					chatSubs=stompClient.subscribe('/topic/sendto/'+chatRoomNo, (chatMessage) => {
 				        showChat(JSON.parse(chatMessage.body));
 				    });
+					particiSubs=stompClient.subscribe('/topic/partici/'+chatRoomNo, (chatMessage) => {
+				    	addPartici(JSON.parse(chatMessage.body));
+				    });
+					
 				})
 				.catch(err=>console.log(err));
 			}
 			
+			function addPartici(roomInfo){
+				console.log(roomInfo);
+				$('#particiList').empty();
+				let divTag;
+				for(let particiInfo of roomInfo.particiList){
+					divTag+=`
+						<div>
+							<p>${particiInfo.anonNick}</p>
+						</div>
+					`;
+					
+				}
+				particiList.innerHTML+=divTag;
+				$('.roomCnt').text(roomInfo.conn);
+			}
+			
 			$('.roomListContent').click(function(){
 				if($(event.target).closest('div').data("roomno")!=chatRoomNo){
-					subs.unsubscribe();
+					chatSubs.unsubscribe();
+					particiSubs.unsubscribe();
 					moveRoom($(event.target).closest('div').data("roomno"));
 				}
 			})

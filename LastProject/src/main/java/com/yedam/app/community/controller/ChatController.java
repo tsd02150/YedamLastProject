@@ -36,11 +36,6 @@ public class ChatController {
 	@Autowired
 	public SimpMessagingTemplate template;
 	
-	public static HttpSession mySession;
-	
-	// K:방번호, V:방에 참여한 사람들 멤버번호
-	//public static Map<String, List<String>> particiList = new HashMap<String, List<String>>();
-	
 	@MessageMapping("/room/{roomno}")
 	public void chatMessage(ChatMessage message,@DestinationVariable String roomno) throws Exception {
 		System.out.println(roomno);
@@ -67,14 +62,6 @@ public class ChatController {
 		return "community/chat";
 	}
 	
-	@PostMapping("mySession") 
-	@ResponseBody
-	public String mySessionGet(HttpSession session) {
-		mySession=session;
-		
-		return "success"; 
-	}
-	
 	@PostMapping("addChat")
 	@ResponseBody
 	public ChatVO insertChat(ChatVO vo) {
@@ -96,9 +83,11 @@ public class ChatController {
 		}
 	}
 	
-	@PostMapping("roomInfo")
+	@PostMapping("moveRoom")
 	@ResponseBody
-	public ChatRoomVO roomInfo(ChatRoomVO vo,HttpSession session) {
+	public ChatRoomVO moveRoom(ChatRoomVO vo,HttpSession session) {
+		System.out.println(vo);
+
 		ChatParticipationVO particiInfo=new ChatParticipationVO();
 		particiInfo.setRoomNo(vo.getRoomNo());
 		String membNo=((UserVO)session.getAttribute("loggedInMember")).getMembNo();
@@ -111,8 +100,8 @@ public class ChatController {
 
 		vo.setAnonNick(chatService.getParticipationInfo(membNo).getAnonNick());
 		vo.setParticiList(chatService.selectParticiList(vo.getRoomNo()));
-		
-		//template.convertAndSend("/topic/partici/"+vo.getRoomNo(),vo);
+		System.out.println(vo);
+		template.convertAndSend("/topic/partici/"+vo.getRoomNo(),vo);
 		
 		return vo;
 	}
