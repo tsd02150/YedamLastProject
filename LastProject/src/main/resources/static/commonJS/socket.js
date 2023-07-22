@@ -1,4 +1,4 @@
-const stompClient = new StompJs.Client({
+$(document).ready(function(){const stompClient = new StompJs.Client({
     brokerURL: 'ws://localhost:80/socketserver' // 서버연결
 });
 let loginMemberName = $('#sessionMembNo').text();
@@ -109,4 +109,6 @@ connect();
 
 $(function () {
     $( "#sendChat" ).click(() => sendChat());
+});
+
 });

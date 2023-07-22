@@ -29,5 +29,8 @@ class LastProjectApplicationTests {
 		this.template.convertAndSend("/stock/alarm/mem-2","test");
 	}
 	
-	
+	@Test
+	public void scheduler() {
+		stockService.schedulerJob();
+	}
 }
