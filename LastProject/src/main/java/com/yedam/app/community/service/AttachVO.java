@@ -12,5 +12,5 @@ public class AttachVO {
 	private String notiNo;
 	private Date drwupDt;
 	private String prdtNo;
-	private String atchOrignNm;
+	private String atchOriginNm;
 }

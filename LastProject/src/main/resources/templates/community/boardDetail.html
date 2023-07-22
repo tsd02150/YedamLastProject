@@ -5,139 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
-<style>
-	#boardSection{
-		padding-top: 50px;
-		padding-bottom:50px;
-	}
-	#category{
-		display: flex;
-		justify-content:space-between;
-
-	}
-	.active{
-		color:white;	
-	}
-	.active a{
-		background-color:#DC3545;
-	}
-	#prevpage{
-		visibility: hidden;
-	}
-	#nextpage{
-		visibility: hidden;
-	}
-	#titlename{
-		font-size: 30px;
-	}
-	#titlename span{
-		line-height: 46px;
-	}
-	#titlename span:after{
-		width:150px;
-	}
-	.categoryBtn{
-		width:250px;
-	}
-	.dropdown{
-		position: relative;
-	}
-	#sort{
-		position: absolute;
- 	 	top: 0;
-  		right: 0;
-	}
-	#boardContent{
-		width:96%;
-		margin: 0 auto 100px auto;
-	}
-	#boardInfo{
-		justify-content: space-between;
-	}
-	#boardInfo p{
-		margin-bottom: 10px;
-	}
-	#boardInfoDetail p{
-		margin-left: 15px;
-	}
-	hr{
-		margin: 10px 0;
-	}
-	
-	#contentBody img{
-		max-width: 100%;
-		max-height: 800px;
-	}
-
-	#rcomCnt{
-		margin:5px;
-		padding-top:16px;
-		width:100px;
-		height:100px;
-		border-radius: 30%;
-		background-color: #8692FF;
-	}
-	#rcomCnt:hover{
-		background-color: #6672FF;
-	}
-	
-	#rcomCnt p{
-		text-align: center;
-		color: white;
-		font-weight: bold;
-	}
-	#nrcomCnt{
-		margin:5px;
-		padding-top:16px;
-		width:100px;
-		height:100px;
-		border-radius: 30%;	
-		background-color: #F99494;
-	}
-	#nrcomCnt:hover{
-		background-color: #F97474;
-	}
-	#nrcomCnt p{
-		text-align: center;
-		color: white;
-		font-weight: bold;
-	}
-	#conmmentSection hr{
-		background-color: black;
-	}
-	.hComment{
-	
-	}
-	.subComment{
-		margin-left: 20px;
-	}
-	#commentContents svg{
-		margin-top: 4px;
-	}
-	#commentContents section{
-		margin-bottom:10px;
-	}
-	.commentAddBtn{
-		background-color: #f0f1f2;
-		width:202px;
-	}
-	.commentAddBtn:hover{
-		background-color: #e0e1e2;
-	}
-	.tagNick{
-		color:#8692FF;
-	}
-	.hwt-content mark {
-		border-radius: 3px;
-		background-color: #e0e1e2;
-	}
-	.contentHighlight{
-		border-radius: 3px;
-		background-color: #e0e1e2;	
-	}
-</style>
-
+<link rel="stylesheet" href="../community/css/board.css">
 </head>
 <body>
 	<div layout:fragment="content">
@@ -168,7 +36,7 @@
 						</button>
 						<ul class="dropdown-menu">
 							<li th:each="attach:${attachList}">
-								<a class="dropdown-item" th:href="${attach.atchNm}" download th:text="attach.atchOrignNm"></a>
+								<a class="dropdown-item" th:href="${attach.atchNm}" th:download="${attach.atchOriginNm}">[[${attach.atchOriginNm}]]</a>
 							</li>
 
 						</ul>
@@ -253,7 +121,7 @@
 		</div>
 		
 		
-		<script th:inline="javascript">		
+		<script th:inline="javascript">
 			contentBody.innerHTML=[[${board.cntn}]];
  			document.querySelectorAll('section.subComment').forEach(sub=>{
  				let targetText=sub.querySelector('p.commentContent').textContent;
