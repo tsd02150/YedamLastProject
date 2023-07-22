@@ -5,47 +5,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="../community/css/board.css">
 <style>
-#boardSection {
-	padding-top: 50px;
-	padding-bottom: 50px;
-}
-
-#titlename {
-	font-size: 30px;
-}
-
-#titlename span {
-	line-height: 46px;
-}
-
-#titlename span:after {
-	width: 150px;
-}
-
-#writer {
-	display: flex;
-}
-
-#writer input, select {
-	width:
-}
-#fileList{
-	display: flex;
-}
-#fileList strong{
-	margin-right: 100px;
-}
-#uploadFileList{
-	list-style: none;
-}
-#uploadFileList span{
-	color: red;
-	margin-left: 10px;
-}
-.ck-editor__editable { 
-	height: 400px; 
-}
+	
 </style>
 </head>
 <body>
@@ -63,13 +25,11 @@
 				</div>
 				<div class="form-group row">
 					<label for="memberId" class="col-sm-2 col-form-label"><strong>작성자</strong></label>
-					<div class="col-sm-10" id="writer">
-						<input type="text" name="nick" class="form-control" id="nick"
-							th:value="${session.loggedInMember.nick}" readonly> <label
-							for="sort" class="col-sm-2 col-form-label"><strong>카테고리</strong></label>
-						<select class="form-control dropdown-toggle" id="sort" name="commonCd">
-							<option th:each="item:${category}"
-								th:value="${item.commonCd}" th:text="${item.ctgr}">카테고리</option>
+					<div class="col-sm-10 d-flex justify-content-start" id="writer">
+						<input type="text" name="nick" class="form-control" id="nick" th:value="${session.loggedInMember.nick}" readonly> 
+							<label for="cate" class="col-sm-2 col-form-label"><strong>카테고리</strong></label>
+						<select class="form-control dropdown-toggle" id="cate" name="commonCd">
+							<option th:each="item:${category}" th:value="${item.commonCd}" th:text="${item.ctgr}">카테고리</option>
 						</select>
 					</div>
 				</div>
@@ -175,7 +135,6 @@
 						data:attachFileList,
 						success:function(result){
 							// 알림 띄울 부분;
-							alert('aa');
 							window.location.href="/community/boardList?commonCd="+[[${boardInfo.commonCd}]];
 						},
 						error:function(reject){

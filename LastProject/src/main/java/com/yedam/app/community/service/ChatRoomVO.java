@@ -13,4 +13,5 @@ public class ChatRoomVO {
 	
 	private String anonNick;
 	private List<ChatParticipationVO> particiList;
+	private String prevRoomNo;
 }

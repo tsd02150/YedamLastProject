@@ -2,6 +2,7 @@ package com.yedam.app.community.mapper;
 
 import java.util.List;
 
+import com.yedam.app.community.service.AttachVO;
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.CommentsVO;
 import com.yedam.app.member.service.MembVO;
@@ -51,4 +52,6 @@ public interface BoardMapper {
 	public int deleteComment(CommentsVO vo);
 	// 대댓글 생성
 	public int insertSubComment(CommentsVO vo);
+	// 첨부파일 가져오기
+	public List<AttachVO> getAttachList(String boardNo);
 }

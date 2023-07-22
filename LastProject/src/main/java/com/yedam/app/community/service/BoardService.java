@@ -49,4 +49,6 @@ public interface BoardService {
 	public boolean deleteComment(CommentsVO vo);
 	// 대댓글 생성
 	public boolean insertSubComment(CommentsVO vo);
+	// 첨부파일 가져오기
+	public List<AttachVO> getAttachList(String boardNo);
 }

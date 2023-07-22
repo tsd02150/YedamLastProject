@@ -4,13 +4,14 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.yedam.app.community.mapper.BoardMapper">
-
+	<!-- 해당 게시판 이름 -->
 	<select id="getBoardName" resultType="String">
 		SELECT ctgr
 		FROM COMMON_CODE
 		WHERE common_cd=#{commonCd}
 	</select>
 
+	<!-- 게시판 리스트 -->
 	<select id="getBoardList" resultType="BoardVO">		
 		SELECT board_no, nick, ttl, cntn, drwup_dt, inq,rcom, common_cd, ctgr
 		FROM(
@@ -45,6 +46,7 @@
 		where rn > (${page}-1)*10
 	</select>
 	
+	<!-- 자유게시판 6개 출력 -->
 	<select id="getFreeBoardTop6" resultType="BoardVO">
 		<![CDATA[
 		SELECT *
@@ -57,6 +59,7 @@
 		]]>
 	</select>
 	
+	<!-- 주식게시판 6개 출력 -->
 	<select id="getStockBoardTop6" resultType="BoardVO">
 		<![CDATA[
 		SELECT *
@@ -69,24 +72,28 @@
 		]]>
 	</select>
 	
+	<!-- 게시물 개수 -->
 	<select id="getBoardCount" resultType="int">
 		SELECT COUNT(board_no)
 		FROM BOARD
 		WHERE rcom>=#{rcom} AND common_cd LIKE #{commonCd}||'%'
 	</select>
 	
+	<!-- 게시물 작성 카테고리 정보 -->
 	<select id="getCtgr" resultType="BoardVO">
 		SELECT common_cd,ctgr
 		FROM COMMON_CODE
 		WHERE common_cd LIKE #{commonCd}||'0%'
 	</select>
 	
+	<!-- 멤버번호 -->
 	<select id="getMembNo" resultType="String">
 		SELECT memb_no
 		FROM MEMBER
 		WHERE nick=#{nick}
 	</select>
 	
+	<!-- 게시물 추가 -->
 	<insert id="insertBoard" parameterType="BoardVO">
 		<selectKey keyProperty="boardNo" resultType="string" order="BEFORE">
 			SELECT CONCAT('boa-',NVL(MAX(TO_NUMBER(SUBSTR(board_no, 5))), 0)+1)
@@ -96,24 +103,28 @@
 		VALUES(#{boardNo},#{membNo},#{ttl},#{cntn},sysdate,#{commonCd})
 	</insert>
 	
+	<!-- 게시물 정보 -->
 	<select id="getBoardDetail" resultType="BoardVO">
 		SELECT *
 		FROM BOARD
 		WHERE board_no=#{boardNo}
 	</select>
 	
+	<!-- 게시물 조회수 증가 -->
 	<update id="increaseInquery" parameterType="String">
 		UPDATE BOARD
 		SET inq=inq+1
 		WHERE board_no=#{boardNo}
 	</update>
 	
+	<!-- 게시물 작성자 정보 -->
 	<select id="getMembInfo" resultType="MembVO">
 		SELECT memb_no, nick
 		FROM MEMBER
 		WHERE memb_no=#{membNo}
 	</select>
 	
+	<!-- 게시물 댓글 정보 -->
 	<select id="getComments" resultType="CommentsVO">
 		SELECT TO_NUMBER(SUBSTR(h_comm_no, 5)) sort_h_comm, TO_NUMBER(SUBSTR(comm_no, 5)) sort_comm,comm_no,board_no,cntn,drwup_dt,rcom,nrcom,h_comm_no,memb_no,nick
 		FROM COMMENTS JOIN MEMBER
@@ -121,35 +132,49 @@
 		WHERE board_no=#{boardNo}
 		ORDER BY sort_h_comm, sort_comm
 	</select>
+	
+	<!-- 추천수 증가 -->
 	<update id="addRcom" parameterType="BoardVO">
 		UPDATE BOARD
 		SET rcom=rcom+1
 		WHERE board_no=#{boardNo}
 	</update>
+	
+	<!-- 비추천수 증가 -->
 	<update id="addNrcom" parameterType="BoardVO">
 		UPDATE BOARD
 		SET nrcom=nrcom+1
 		WHERE board_no=#{boardNo}
 	</update>
+	
+	<!-- 게시물 삭제 -->
 	<delete id="deleteBoard" parameterType="BoardVO">
 		DELETE FROM BOARD
 		WHERE board_no=#{boardNo}
 	</delete>
+	
+	<!-- 게시물 수정 -->
 	<update id="modifyBoard" parameterType="BoardVO">
 		UPDATE BOARD
 		SET ttl=#{ttl}, cntn=#{cntn},drwup_dt=sysdate
 		WHERE board_no=#{boardNo}
 	</update>
+	
+	<!-- 댓글 추천수 증가 -->
 	<update id="addCommentRcom" parameterType="CommentsVO">
 		UPDATE COMMENTS
 		SET rcom=rcom+1
 		WHERE comm_no=#{commNo}
 	</update>
+	
+	<!-- 댓글 비추천수 증가 -->
 	<update id="addCommentNrcom" parameterType="CommentsVO">
 		UPDATE COMMENTS
 		SET nrcom=nrcom+1
 		WHERE comm_no=#{commNo}
 	</update>
+	
+	<!-- 댓글 등록 -->
 	<insert id="insertComment" parameterType="CommentsVO">
 		<selectKey keyProperty="commNo" resultType="string" order="BEFORE">
 			SELECT CONCAT('com-',NVL(MAX(TO_NUMBER(SUBSTR(comm_no, 5))), 0)+1)
@@ -158,16 +183,22 @@
 		INSERT INTO COMMENTS(comm_no,board_no,cntn,h_comm_no,memb_no)
 		VALUES(#{commNo},#{boardNo},#{cntn},#{commNo},#{membNo})
 	</insert>
+	
+	<!-- 댓글 단건조회 -->
 	<select id="getComment" resultType="CommentsVO">
 		SELECT comm_no,board_no,cntn,drwup_dt,rcom,nrcom,h_comm_no,memb_no,nick
 		FROM COMMENTS JOIN MEMBER
 		USING(memb_no)
 		WHERE comm_no=#{commNo}
 	</select>
+	
+	<!-- 댓글 삭제 -->
 	<delete id="deleteComment" parameterType="CommentsVO">
 		DELETE FROM COMMENTS
 		WHERE comm_no=#{commNo}
 	</delete>
+	
+	<!-- 대댓글 생성 -->
 	<insert id="insertSubComment" parameterType="CommentsVO">
 		<selectKey keyProperty="commNo" resultType="string" order="BEFORE">
 			SELECT CONCAT('com-',NVL(MAX(TO_NUMBER(SUBSTR(comm_no, 5))), 0)+1)
@@ -176,4 +207,11 @@
 		INSERT INTO COMMENTS(comm_no,board_no,cntn,h_comm_no,memb_no)
 		VALUES(#{commNo},#{boardNo},#{cntn},#{hCommNo},#{membNo})
 	</insert>
+	
+	<!-- 첨부파일 가져오기 -->
+	<select id="getAttachList" resultType="AttachVO">
+		SELECT *
+		FROM ATTACH_FILE
+		WHERE board_no=#{boardNo}
+	</select>
 </mapper>

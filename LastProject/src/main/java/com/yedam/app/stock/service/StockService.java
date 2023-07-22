@@ -32,4 +32,5 @@ public interface StockService {
 	public void updateInq(String itemNo);
 	public List<ItemInfoVO> dayChart(String itemNo);
 	public List<ItemInfoVO> weekMonthChart(String itemNo , String type);
+	public List<AlarmVO> nonCheckedAlarm(String membNo);
 }

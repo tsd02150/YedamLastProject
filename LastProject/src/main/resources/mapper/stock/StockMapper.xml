@@ -20,7 +20,7 @@
 	<!-- 종목정보 조회 -->
 	<select id="getItemInfo" resultType="ItemVO">
 	
-		select t.item_no, c.sc, c.theme, t.nm,NVL(t.prc,0) tprc, NVL(t.prc - i.cl_prc,0) change ,NVL(trunc(((t.prc-i.cl_prc)/i.cl_prc)*100),0) rate, origin,desct
+		select t.item_no, c.sc, c.theme, t.nm,NVL(t.prc,0) tprc, NVL(t.prc - i.cl_prc,0) change ,trunc(NVL((t.prc-i.cl_prc) / DECODE(i.cl_prc, 0, NULL, i.cl_prc), 0)*100) rate, origin,desct
 		from (select item_no, cl_prc 
 		      from item_info 
 		      where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
@@ -83,7 +83,7 @@
 			   t.nm,
 			   NVL(t.prc,0) tprc, 
 			   NVL(t.prc - i.cl_prc,0) change ,
-			   NVL(trunc(((t.prc-i.cl_prc)/i.cl_prc)*100),0) rate
+			   trunc(NVL((t.prc-i.cl_prc) / DECODE(i.cl_prc, 0, NULL, i.cl_prc), 0)*100) rate
         from (select item_no, cl_prc 
                   from item_info 
                   where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
@@ -144,7 +144,7 @@
 						   i.cl_prc,
 						   NVL(t.prc,0) tprc, 
 						   NVL(t.prc - i.cl_prc,0) change ,
-						   NVL(trunc(((t.prc-i.cl_prc)/i.cl_prc)*100),0) rate
+						   trunc(NVL((t.prc-i.cl_prc) / DECODE(i.cl_prc, 0, NULL, i.cl_prc), 0)*100) rate
 			        from (select item_no, cl_prc 
 			              from item_info 
 			              where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
@@ -169,7 +169,7 @@
 	
 	<!-- 관심종목 가져오기 -->
 	<select id="getIntStock" resultType="StockVO">
-		select t.item_no, t.nm,t.prc tprc, t.prc - i.cl_prc change ,trunc(((t.prc-i.cl_prc)/i.cl_prc)*100) rate
+		select t.item_no, t.nm,t.prc tprc, t.prc - i.cl_prc change ,trunc(NVL((t.prc-i.cl_prc) / DECODE(i.cl_prc, 0, NULL, i.cl_prc), 0)*100) rate
 		from (select b.item_no, cl_prc 
 		      from item_info a join (select i.item_no ,t.nm
 		                            from interest_item i join item t
@@ -264,7 +264,7 @@
 	<select id="getPrcPercent" resultType="StockVO">
 		
 		select rownum, f.*
-		from (  select t.item_no, t.nm,trunc(((t.prc-i.cl_prc)/i.cl_prc)*100) rate
+		from (  select t.item_no, t.nm,trunc(NVL((t.prc-i.cl_prc) / DECODE(i.cl_prc, 0, NULL, i.cl_prc), 0)*100) rate
 		        from (select item_no, cl_prc 
 		              from item_info 
 		              where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
@@ -416,7 +416,7 @@
 	
 	<!-- 당일 아이템 정보 가져오기 -->
 	<select id="todayItemInfo" resultType="ItemInfoVO">
-		select b.item_no , NVL(vol,0) vol ,op_prc, NVL(prc,0) cl_prc , NVL(l_prc,0) l_prc , NVL(h_prc,0) h_prc ,inq
+		select b.item_no , NVL(vol,0) vol ,NVL(op_prc,0) op_prc, NVL(prc,0) cl_prc , NVL(l_prc,0) l_prc , NVL(h_prc,0) h_prc , NVL(inq,0) inq
 		from (  select item_no,'tah-'||MAX(to_number(substr(ta_no,5))) ta_no, sum(stock_cnt) vol ,min(ta_prc) l_prc,max(ta_prc) h_prc 
 		        from ta_hr 
 		        where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate , 'yyyy-MM-dd')
@@ -433,11 +433,11 @@
                         on i.item_no = t.item_no
                    ) b -- 오늘 마지막 거래가
 		on b.item_no = a.item_no
-		join (  select z.item_no, cl_prc op_prc ,x.inq
-		        from item_info z join item x
-		        on z.item_no = x.item_no
-		        where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
-              ) c -- 전날 종가 (=현재 시가) 와 조회수
+		left join (  select z.item_no, cl_prc op_prc ,x.inq
+                     from item_info z join item x
+                     on z.item_no = x.item_no
+                     where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
+                  ) c -- 전날 종가 (=현재 시가) 와 조회수
 		on b.item_no = c.item_no
 		order by to_number(substr(item_no,5))
 	</select>
@@ -454,7 +454,6 @@
 			, CL_PRC
 			, L_PRC
 			, H_PRC
-			, RATE
 			, INQ
 		)
 		values
@@ -467,7 +466,6 @@
 			NVL(#{clPrc},0),
 			NVL(#{lPrc},0),
 			NVL(#{hPrc},0),
-			0,
 			#{inq}
 		)
 		
@@ -533,5 +531,28 @@
 		     ) a
 		group by ta_dt
 		order by ta_dt
+	</select>
+	
+	<!-- alarm 데이터 추가 -->
+	<insert id="insertAlarm" >
+		insert alarm (	ALARM_NO,
+						MEMB_NO,
+						CNTN,
+						ALARM_DT,
+						CHECKED)
+		values ('alm-'||alarm_seq.nextval ,
+				 #{membNo},
+				 #{cntn},
+				 sysdate,
+				 'n'
+				 )
+	</insert>
+	
+	<!-- 미확인 알람 가져오기 -->
+	<select id="nonCheckedAlarm" resultType="AlarmVO">
+		select *
+		from alarm
+		where checked = 'n'
+		and memb_no = #{membNo}
 	</select>
 </mapper>

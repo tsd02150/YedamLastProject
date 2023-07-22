@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.stock.mapper.StockMapper;
+import com.yedam.app.stock.service.AlarmVO;
 import com.yedam.app.stock.service.InqVO;
 import com.yedam.app.stock.service.ItemInfoVO;
 import com.yedam.app.stock.service.ItemVO;
@@ -264,11 +265,13 @@ public class StockServiceImpl implements StockService {
 	// 체결시 실시간 알람전송
 	public void sendOrderResult( String membNo , String text) {
 		System.out.println(membNo + " 알림 시행");
+		stockMapper.insertAlarm(membNo, text); // 알람 테이블에 추가
 		String destination = "/stock/alarm/"+membNo;
 		System.out.println(destination);
 		this.template.convertAndSend(destination, text);
 	}
-
+	
+	
 	@Override
 	public void schedulerJob() {
 		// 당일 주가 정보
@@ -296,6 +299,11 @@ public class StockServiceImpl implements StockService {
 	public List<ItemInfoVO> weekMonthChart(String itemNo, String type) {
 		System.out.println("zz"+stockMapper.weekMonthChart(itemNo, type));
 		return stockMapper.weekMonthChart(itemNo, type);
+	}
+	//미확인 알람 리스트
+	@Override
+	public List<AlarmVO> nonCheckedAlarm(String membNo) {
+		return stockMapper.nonCheckedAlarm(membNo);
 	}
 	
 	
