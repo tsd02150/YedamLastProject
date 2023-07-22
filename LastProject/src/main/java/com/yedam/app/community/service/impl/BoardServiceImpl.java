@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.community.mapper.BoardMapper;
+import com.yedam.app.community.service.AttachVO;
 import com.yedam.app.community.service.BoardService;
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.CommentsVO;
@@ -125,6 +126,11 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public boolean insertSubComment(CommentsVO vo) {
 		return boardMapper.insertSubComment(vo)>0;
+	}
+
+	@Override
+	public List<AttachVO> getAttachList(String boardNo) {
+		return boardMapper.getAttachList(boardNo);
 	}
 
 	

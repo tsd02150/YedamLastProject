@@ -87,22 +87,43 @@ public class ChatController {
 	@ResponseBody
 	public ChatRoomVO moveRoom(ChatRoomVO vo,HttpSession session) {
 		System.out.println(vo);
-
+		
 		ChatParticipationVO particiInfo=new ChatParticipationVO();
 		particiInfo.setRoomNo(vo.getRoomNo());
 		String membNo=((UserVO)session.getAttribute("loggedInMember")).getMembNo();
 		particiInfo.setMembNo(membNo);
 		chatService.subtractRoomCnt(membNo);
 		chatService.deletePartici(membNo);
-		chatService.participation(particiInfo);
-
+		
+//		if(vo.getPrevRoomNo()!=null&&!vo.getPrevRoomNo().equals("")) {
+//			String prevRoomNo=vo.getPrevRoomNo();
+//			ChatRoomVO prevRoom=chatService.roomInfo(prevRoomNo);
+//			prevRoom.setParticiList(chatService.selectParticiList(prevRoomNo));
+//			System.out.println("방이동 : "+prevRoom);
+//			template.convertAndSend("/topic/partici/"+prevRoomNo,prevRoom);			
+//		}
+		
+		if(chatService.participation(particiInfo)) {
+			vo=chatService.roomInfo(vo.getRoomNo());
+			
+			vo.setAnonNick(chatService.getParticipationInfo(membNo).getAnonNick());
+			vo.setParticiList(chatService.selectParticiList(vo.getRoomNo()));
+			System.out.println(vo);
+//			template.convertAndSend("/topic/partici/"+vo.getRoomNo(),vo);
+			
+			return vo;			
+		}else {
+			return null;
+		}
+	}
+	
+	@PostMapping("initInfo")
+	@ResponseBody
+	public ChatRoomVO initInfo(ChatRoomVO vo) {
 		vo=chatService.roomInfo(vo.getRoomNo());
-
-		vo.setAnonNick(chatService.getParticipationInfo(membNo).getAnonNick());
 		vo.setParticiList(chatService.selectParticiList(vo.getRoomNo()));
-		System.out.println(vo);
-		template.convertAndSend("/topic/partici/"+vo.getRoomNo(),vo);
 		
 		return vo;
 	}
+
 }

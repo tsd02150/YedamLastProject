@@ -275,24 +275,20 @@
 				.catch(err=>console.log(err));
 			}
 			let chatSubs;
-			let particiSubs;
-			let removeSubs;
+			/* let particiSubs; */
+
 			function moveRoom(roomNo){
 				fetch("/community/moveRoom",{
 					method: "POST",
 					headers: {
 						'Content-Type': 'application/x-www-form-urlencoded'
 					},
-					body:"roomNo="+roomNo
+					body:"roomNo="+roomNo/* +"&prevRoomNo="+chatRoomNo */
 				})
 				.then(response=>response.json())
 				.then(result=>{
 					resetChat();
 					console.log(result);
-
-					particiSubs=stompClient.subscribe('/topic/remove/'+chatRoomNo, (chatMessage) => {
-				    	console.log(JSON.parse(chatMessage.body));
-				    });
 					
 					myAnonNick=result.anonNick;
 					$(".roomCnt").text(result.conn);
@@ -312,9 +308,9 @@
 					chatSubs=stompClient.subscribe('/topic/sendto/'+chatRoomNo, (chatMessage) => {
 				        showChat(JSON.parse(chatMessage.body));
 				    });
-					particiSubs=stompClient.subscribe('/topic/partici/'+chatRoomNo, (chatMessage) => {
+/* 					particiSubs=stompClient.subscribe('/topic/partici/'+chatRoomNo, (chatMessage) => {
 				    	addPartici(JSON.parse(chatMessage.body));
-				    });
+				    }); */
 					
 				})
 				.catch(err=>console.log(err));
@@ -323,23 +319,27 @@
 			function addPartici(roomInfo){
 				console.log(roomInfo);
 				$('#particiList').empty();
+				particiList.innerHTML="";
 				let divTag;
 				for(let particiInfo of roomInfo.particiList){
-					divTag+=`
+					divTag=`
 						<div>
 							<p>${particiInfo.anonNick}</p>
 						</div>
 					`;
-					
+					particiList.innerHTML+=divTag;					
 				}
-				particiList.innerHTML+=divTag;
 				$('.roomCnt').text(roomInfo.conn);
 			}
 			
 			$('.roomListContent').click(function(){
 				if($(event.target).closest('div').data("roomno")!=chatRoomNo){
-					chatSubs.unsubscribe();
-					particiSubs.unsubscribe();
+					if(chatSubs!=null){
+						chatSubs.unsubscribe();						
+					}
+					if(particiSubs!=null){
+						particiSubs.unsubscribe();					
+					}
 					moveRoom($(event.target).closest('div').data("roomno"));
 				}
 			})
@@ -347,7 +347,25 @@
 			function resetChat() {
 			    $("#chatSpace").html("");
 			}
-	
+			
+			setInterval(() => {
+				console.log("!!")
+				if(chatRoomNo!=null&&chatRoomNo!=""){
+					fetch("/community/initInfo",{
+						method:"POST",
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded'
+						},
+						body:"roomNo="+chatRoomNo
+					})
+					.then(response=>response.json())
+					.then(result=>{
+						addPartici(result);
+					})
+					.catch(err=>console.log(err));
+				}
+			}, 2000);
+					
 		</script>
 	</div>
 </body>

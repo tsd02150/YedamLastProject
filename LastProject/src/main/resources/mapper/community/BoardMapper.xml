@@ -176,4 +176,9 @@
 		INSERT INTO COMMENTS(comm_no,board_no,cntn,h_comm_no,memb_no)
 		VALUES(#{commNo},#{boardNo},#{cntn},#{hCommNo},#{membNo})
 	</insert>
+	<select id="getAttachList" resultType="AttachVO">
+		SELECT *
+		FROM ATTACH_FILE
+		WHERE board_no=#{boardNo}
+	</select>
 </mapper>

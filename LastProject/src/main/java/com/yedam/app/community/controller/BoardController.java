@@ -98,6 +98,7 @@ public class BoardController {
 		model.addAttribute("board",vo);
 		model.addAttribute("member",boardService.getMembInfo(vo.getMembNo()));
 		model.addAttribute("comments",boardService.getComments(vo.getBoardNo()));
+		model.addAttribute("attachList",boardService.getAttachList(vo.getBoardNo()));
 		
 		return "community/boardDetail";
 	}
