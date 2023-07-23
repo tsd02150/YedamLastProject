@@ -14,6 +14,7 @@ public class AlarmVO {
 	private String alarmNo;
 	private String membNo;
 	private String cntn;
-	private Date alarm_dt;
+	private Date alarmDt;
 	private String checked;
+	private String aType;
 }

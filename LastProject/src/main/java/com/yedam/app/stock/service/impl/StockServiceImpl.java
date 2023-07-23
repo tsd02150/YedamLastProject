@@ -236,6 +236,7 @@ public class StockServiceImpl implements StockService {
 		taMap.put("error_thr", null);
 		taMap.put("seller", null);
 		taMap.put("buyer", null);
+		taMap.put("itemNm", null);
 		stockMapper.callTaProd(taMap);
 		Integer taResult = (Integer) taMap.get("ta_result");
 		String errorOne = (String) taMap.get("error_one");
@@ -244,6 +245,7 @@ public class StockServiceImpl implements StockService {
 		
 		String seller = (String) taMap.get("seller");
 		String buyer = (String) taMap.get("buyer");
+		String itemNm = (String) taMap.get("itemNm");
 		
 		System.out.println("error_one : " +errorOne);
 		System.out.println("error_two : " +errorTwo);
@@ -253,8 +255,8 @@ public class StockServiceImpl implements StockService {
 			//  실시간 알림
 			System.out.println("매도자 : " + seller + " 매수자 : " + buyer);
 			if(!seller.equals("none")) {
-			sendOrderResult (seller , "매도주문이 체결되었습니다" );
-			sendOrderResult (buyer , "매수주문이 체결되었습니다" );
+			sendOrderResult (seller , itemNm +"의 매도주문이 체결되었습니다" );
+			sendOrderResult (buyer , itemNm + "의 매수주문이 체결되었습니다" );
 			}
 		}else if (taResult == 0) {
 			System.out.println("taResult : 실패 ");
@@ -265,7 +267,7 @@ public class StockServiceImpl implements StockService {
 	// 체결시 실시간 알람전송
 	public void sendOrderResult( String membNo , String text) {
 		System.out.println(membNo + " 알림 시행");
-		stockMapper.insertAlarm(membNo, text); // 알람 테이블에 추가
+		stockMapper.insertStockAlarm(membNo, text); // 알람 테이블에 추가
 		String destination = "/stock/alarm/"+membNo;
 		System.out.println(destination);
 		this.template.convertAndSend(destination, text);
@@ -304,6 +306,14 @@ public class StockServiceImpl implements StockService {
 	@Override
 	public List<AlarmVO> nonCheckedAlarm(String membNo) {
 		return stockMapper.nonCheckedAlarm(membNo);
+	}
+	
+	// 미확인 알람 확인 알람으로 바꾸기
+	@Override
+	public int stockAlmChk(String almNo) {
+		int result = stockMapper.stockAlmChk(almNo);
+		
+		return result;
 	}
 	
 	

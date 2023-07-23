@@ -99,7 +99,7 @@
                     <span class="fa fa-bars"></span>
                   </button>
 
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <div class="collapse navbar-collapse position-relative" id="navbarSupportedContent">
                         <ul class="navbar-nav mr-auto">
                            
                             <li class="nav-item dropdown">
@@ -150,8 +150,8 @@
  
 
                         </ul>
-                        <div class="col-md-12 col-sm-12 col-xs-12 top-nav-social-lists text-lg-right col-lg-4 ml-lg-auto">
-                			<ul class="list-unstyled mt-4 mt-lg-0">
+                        <div id="absoluteUL" class="col-md-12 col-sm-12 col-xs-12 top-nav-social-lists text-lg-right col-lg-4 ml-lg-auto">
+                			<ul class="list-unstyled mt-4 mt-lg-0 text-left">
                    		 		<li th:if="${session.loggedInMember}==null">
                     				<a href="/member/login">
 			                            <span>
@@ -176,11 +176,11 @@
 			                            </span>
 			                        </a>
 			                        
-			                        <a href="#" class="pull-bs-canvas-right text-decoration-none" >
+			                        <a href="#" id="alarmBellBtn" class="realNew pull-bs-canvas-right text-decoration-none" >
 			                            <span class="social-icon">
-			                                <i class="fa fa-bell-o " aria-hidden="true">
-												    <span class="badge badge-danger">New</span>
-			                                </i>
+			                                <i id="alarmBell" class="fa fa-bell-o " aria-hidden="true"></i>
+			                                <span id="newPlace">
+			                                </span>
 			                            </span>
 			                        </a>
 			                        
@@ -192,131 +192,37 @@
 	        <h4 class="d-inline-block text-light mb-0 float-right">Alarm</h4>
 	    </header>
 	    <div class="bs-canvas-content ">
-	    		
-		    	
-		    	
 		    			<ul class="nav nav-tabs mt-3 w-100 text-center">
 							<li class="nav-item">
-									<a class="nav-link active m-0 p-0 bold" data-toggle="tab" href="#qwe">체결 
-										<span class="badge badge-danger">New</span> 
+									<a class="nav-link m-0 p-0 bold" data-toggle="tab" href="#stock-alm">체결 
 			    					</a>
 	    					</li>
 							<li class="nav-item">
-								<a class="nav-link m-0 p-0" data-toggle="tab" href="#asd">주문/배송
-								<span class="badge badge-danger">New</span> 
+								<a class="nav-link m-0 p-0" data-toggle="tab" href="#mall-alm">주문/배송
 								</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link m-0 p-0" data-toggle="tab" href="#zxc">게시판
-								<span class="badge badge-danger">New</span> 
+								<a class="nav-link m-0 p-0" data-toggle="tab" href="#comm-alm">게시판
 								</a>
 							</li>
 						</ul>
 						
-						<div class="tab-content text-left">
+						<div id="alarmTab" class="tab-content text-left">
 							<!-- 체결 -->
-							<div class="tab-pane fade show active" id="qwe">
+							<div class="tab-pane fade show " id="stock-alm">
 								<ul class="list-group m-0 h-100 border">
-									<li>
-							          	<p class="list-group-item list-group-item-action h-100 ">
-							          		<button type="button" class="float-left close" aria-label="Close">
-							          			<span aria-hidden="true" class="text-dark mr-1">&times;</span>
-							          		</button>
-							          		 체결 알림
-							          		<span class="text-muted small">2023.07.23</span>
-							          		<span class="d-block"> 기장종목의 체결이 완료되었습니다</span>
-						          		</p>
-					          		</li>
-					          		<li>
-							          	<p class="list-group-item list-group-item-action h-100 ">
-							          		<button type="button" class="float-left close" aria-label="Close">
-							          			<span aria-hidden="true" class="text-dark mr-1">&times;</span>
-							          		</button>
-							          		 체결 알림
-							          		<span class="text-muted small">2023.07.23</span>
-							          		<span class="d-block"> 기장종목의 체결이 완료되었습니다</span>
-						          		</p>
-					          		</li>
-					          		<li>
-							          	<p class="list-group-item list-group-item-action h-100 ">
-							          		<button type="button" class="float-left close" aria-label="Close">
-							          			<span aria-hidden="true" class="text-dark mr-1">&times;</span>
-							          		</button>
-							          		 체결 알림
-							          		<span class="text-muted small">2023.07.23</span>
-							          		<span class="d-block"> 기장종목의 체결이 완료되었습니다</span>
-						          		</p>
-					          		</li>
 								</ul>
 							</div>
 							<!-- 주문/배송 -->
-							<div class="tab-pane fade" id="asd">
+							<div class="tab-pane fade" id="mall-alm">
 								<ul class="list-group m-0 h-100 border ">
-									<li>
-							          	<p class="list-group-item list-group-item-action h-100 ">
-							          		<button type="button" class="float-left close" aria-label="Close">
-							          			<span aria-hidden="true" class="text-dark mr-1">&times;</span>
-							          		</button>
-							          		 체결 알림
-							          		<span class="text-muted small">2023.07.23</span>
-							          		<span class="d-block"> 기장종목의 체결이 완료되었습니다</span>
-						          		</p>
-					          		</li>
-					          		<li>
-							          	<p class="list-group-item list-group-item-action h-100 ">
-							          		<button type="button" class="float-left close" aria-label="Close">
-							          			<span aria-hidden="true" class="text-dark mr-1">&times;</span>
-							          		</button>
-							          		 체결 알림
-							          		<span class="text-muted small">2023.07.23</span>
-							          		<span class="d-block"> 기장종목의 체결이 완료되었습니다</span>
-						          		</p>
-					          		</li>
-					          		<li>
-							          	<p class="list-group-item list-group-item-action h-100 ">
-							          		<button type="button" class="float-left close" aria-label="Close">
-							          			<span aria-hidden="true" class="text-dark mr-1">&times;</span>
-							          		</button>
-							          		 체결 알림
-							          		<span class="text-muted small">2023.07.23</span>
-							          		<span class="d-block"> 기장종목의 체결이 완료되었습니다</span>
-						          		</p>
-					          		</li>
+									
 								</ul>
 							</div>
 							<!-- 게시판 -->
-							<div class="tab-pane fade" id="zxc">
+							<div class="tab-pane fade" id="comm-alm">
 								<ul class="list-group m-0 h-100 border">
-									<li>
-							          	<p class="list-group-item list-group-item-action h-100 ">
-							          		<button type="button" class="float-left close" aria-label="Close">
-							          			<span aria-hidden="true" class="text-dark mr-1">&times;</span>
-							          		</button>
-							          		 체결 알림
-							          		<span class="text-muted small">2023.07.23</span>
-							          		<span class="d-block"> 기장종목의 체결이 완료되었습니다</span>
-						          		</p>
-					          		</li>
-					          		<li>
-							          	<p class="list-group-item list-group-item-action h-100 ">
-							          		<button type="button" class="float-left close" aria-label="Close">
-							          			<span aria-hidden="true" class="text-dark mr-1">&times;</span>
-							          		</button>
-							          		 체결 알림
-							          		<span class="text-muted small">2023.07.23</span>
-							          		<span class="d-block"> 기장종목의 체결이 완료되었습니다</span>
-						          		</p>
-					          		</li>
-					          		<li>
-							          	<p class="list-group-item list-group-item-action h-100 ">
-							          		<button type="button" class="float-left close" aria-label="Close">
-							          			<span aria-hidden="true" class="text-dark mr-1">&times;</span>
-							          		</button>
-							          		 체결 알림
-							          		<span class="text-muted small">2023.07.23</span>
-							          		<span class="d-block"> 기장종목의 체결이 완료되었습니다</span>
-						          		</p>
-					          		</li>
+									
 								</ul>
 							</div>
 						</div>

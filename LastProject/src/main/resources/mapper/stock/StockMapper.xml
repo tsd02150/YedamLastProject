@@ -393,6 +393,7 @@
 			    				, #{error_thr, mode=OUT, jdbcType=VARCHAR}
 			    				, #{seller, mode=OUT, jdbcType=VARCHAR}
 			    				, #{buyer, mode=OUT, jdbcType=VARCHAR}
+			    				, #{itemNm, mode=OUT, jdbcType=VARCHAR}
 			    				)}
 	</select>
 	
@@ -534,25 +535,36 @@
 	</select>
 	
 	<!-- alarm 데이터 추가 -->
-	<insert id="insertAlarm" >
-		insert alarm (	ALARM_NO,
-						MEMB_NO,
-						CNTN,
-						ALARM_DT,
-						CHECKED)
+	<insert id="insertStockAlarm" >
+		insert into alarm (	ALARM_NO,
+							MEMB_NO,
+							CNTN,
+							ALARM_DT,
+							CHECKED,
+							A_TYPE)
 		values ('alm-'||alarm_seq.nextval ,
 				 #{membNo},
 				 #{cntn},
 				 sysdate,
-				 'n'
+				 'n',
+				 'stock'
 				 )
 	</insert>
 	
-	<!-- 미확인 알람 가져오기 -->
+	<!-- 알람 가져오기 -->
 	<select id="nonCheckedAlarm" resultType="AlarmVO">
 		select *
 		from alarm
-		where checked = 'n'
+		where alarm_dt  between sysdate - 14 and sysdate
 		and memb_no = #{membNo}
+		order by to_number(substr(alarm_no,5)) desc
+		
 	</select>
+	
+	<!-- 미확인 체결 알람 확인됨으로 바꾸기 -->
+	<update id="stockAlmChk">
+		update alarm
+		set checked = 'y'
+		where alarm_no = #{almNo}
+	</update>
 </mapper>

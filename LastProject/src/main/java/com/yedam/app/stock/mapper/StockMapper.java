@@ -72,7 +72,9 @@ public interface StockMapper {
 	// 주간 월간 차트
 	public List<ItemInfoVO> weekMonthChart(@Param("itemNo")String itemNo ,@Param("type") String type);
 	// 알람데이터 추가
-	public int insertAlarm(@Param("membNo")String membNo , @Param("cntn")String cntn);
+	public int insertStockAlarm(@Param("membNo")String membNo , @Param("cntn")String cntn);
 	// 미확인 알람 데이터 가져오기
 	public List<AlarmVO> nonCheckedAlarm(String membNo);
+	// 미확인 알람 확인 알람으로 바꾸기
+	public int stockAlmChk(String almNo);
 }

@@ -23,7 +23,7 @@
 	right: 0;
 	margin-right: -330px;
 }
-#qwe , #asd , #zxc{
+#stock-alm , #mall-alm , #comm-alm{
 	height:500px;
 	overscroll-behavior: contain;
 }
@@ -39,6 +39,14 @@
 	width:33%;
 }
 
-.tab-content li {
+#alarmTab li {
 	height:70px;
+	margin:5px;
+	border-radius: 50%;
 }
+#absoluteUL{
+}
+#absoluteUL ul {
+	width:400px;
+}
+

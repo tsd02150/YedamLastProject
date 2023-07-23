@@ -219,4 +219,11 @@ public class StockController {
 	public List<AlarmVO> getNonChkAlm(String membNo){
 		return stockservice.nonCheckedAlarm(membNo);
 	}
+	
+	// 미확인 알람 확인 알람으로 바꾸기
+	@ResponseBody
+	@GetMapping("changeChk")
+	public int changeChk(String almNo) {
+		return stockservice.stockAlmChk(almNo);
+	}
 }
