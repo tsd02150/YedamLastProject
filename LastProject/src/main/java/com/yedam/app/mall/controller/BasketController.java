@@ -81,10 +81,10 @@ public class BasketController {
 	 * return "redirect:/shop/myPage"; }
 	 */
 
-	// 장바구니 페이지
+	// 장바구니 페이지, 모델에 담아서 넘기기
 	@GetMapping("basketList")
 	public String basketList() {
-	
+		
 		return "mall/basketList";
 	}
 	
