@@ -31,8 +31,8 @@
 				<hr>
 				<div class="d-flex justify-content-end">
 					<div class="dropdown" th:if="${#lists.size(attachList)>0}">
-						<button class="btn btn-light dropdown-toggle" type="button" data-toggle="dropdown">
-							첨부파일
+						<button class="btn btn-light btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+							첨부파일 ([[${#lists.size(attachList)}]])
 						</button>
 						<ul class="dropdown-menu">
 							<li th:each="attach:${attachList}">
