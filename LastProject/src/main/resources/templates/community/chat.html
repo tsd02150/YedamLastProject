@@ -225,6 +225,7 @@
 			let myAnonNick=[[${particiInfo.anonNick}]];
 			let myMembNo=[[${particiInfo.membNo}]];
 			let chatRoomNo="room-1";
+			let chatSubs;
 
 			moveRoom("room-1");
 
@@ -274,21 +275,18 @@
 				})
 				.catch(err=>console.log(err));
 			}
-			let chatSubs;
-			/* let particiSubs; */
-
+			
 			function moveRoom(roomNo){
 				fetch("/community/moveRoom",{
 					method: "POST",
 					headers: {
 						'Content-Type': 'application/x-www-form-urlencoded'
 					},
-					body:"roomNo="+roomNo/* +"&prevRoomNo="+chatRoomNo */
+					body:"roomNo="+roomNo
 				})
 				.then(response=>response.json())
 				.then(result=>{
 					resetChat();
-					console.log(result);
 					
 					myAnonNick=result.anonNick;
 					$(".roomCnt").text(result.conn);
@@ -307,17 +305,12 @@
 					}
 					chatSubs=stompClient.subscribe('/topic/sendto/'+chatRoomNo, (chatMessage) => {
 				        showChat(JSON.parse(chatMessage.body));
-				    });
-/* 					particiSubs=stompClient.subscribe('/topic/partici/'+chatRoomNo, (chatMessage) => {
-				    	addPartici(JSON.parse(chatMessage.body));
-				    }); */
-					
+				    });					
 				})
 				.catch(err=>console.log(err));
 			}
 			
 			function addPartici(roomInfo){
-				console.log(roomInfo);
 				$('#particiList').empty();
 				particiList.innerHTML="";
 				let divTag;
@@ -337,9 +330,6 @@
 					if(chatSubs!=null){
 						chatSubs.unsubscribe();						
 					}
-					if(particiSubs!=null){
-						particiSubs.unsubscribe();					
-					}
 					moveRoom($(event.target).closest('div').data("roomno"));
 				}
 			})
@@ -349,7 +339,6 @@
 			}
 			
 			setInterval(() => {
-				console.log("!!")
 				if(chatRoomNo!=null&&chatRoomNo!=""){
 					fetch("/community/initInfo",{
 						method:"POST",
