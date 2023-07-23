@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yedam.app.mall.mapper.OrderMapper">
+	<select id="getOrderList" resultType="OrderVO">
+		SELECT *
+    FROM (
+        SELECT *
+        FROM BASKET B
+        JOIN PRODUCT P ON B.prdt_no = P.prdt_no
+    ) J
+    JOIN MEMBER M ON J.memb_no = M.memb_no
+    JOIN ORDERS O ON J.memb_no = O.memb_no
+   
+	</select>
+
+
+</mapper>
