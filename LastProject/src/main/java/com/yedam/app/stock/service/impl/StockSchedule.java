@@ -17,9 +17,9 @@ public class StockSchedule {
 		this.stockService = stockService;
 	}
 	
-	@Scheduled(cron = "31 15 * * * ?")
-	public void stockJob() {
-		stockService.schedulerJob();
-	}
+//	/*
+//	 * @Scheduled(cron = "0 0 18 * * ?") public void stockJob() {
+//	 * stockService.schedulerJob(); }
+//	 */
 	
 }

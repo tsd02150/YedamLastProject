@@ -45,6 +45,8 @@ dependencies {
   // OAuth2
   implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.1.7.RELEASE'
   implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+  //implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+  //implementation 'org.springframework.session:spring-session-data-redis'
 }
 
 tasks.named('test') {

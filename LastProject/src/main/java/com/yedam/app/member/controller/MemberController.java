@@ -331,16 +331,6 @@ public class MemberController {
 		return result;
 	}
 	
-	//회원관리
-	/*
-	 * @ResponseBody
-	 * 
-	 * @PostMapping("mypageList") public MembVO mypageList(@RequestParam String
-	 * id,Model model) { model.addAttribute("myinfo",membService.selectOneMemb(id));
-	 * //System.out.println(membService.selectOneMemb(id)); return
-	 * membService.selectOneMemb(id); }
-	 */
-	
 	@GetMapping("mypage")
 	public String myPageForm() {
 		return "member/mypage";
@@ -353,6 +343,7 @@ public class MemberController {
 		List<CouponVO> coupon = membService.mycoupon(mem.getMembNo());
 		model.addAttribute("mypoint",member.getPoint());
 		model.addAttribute("mycoupon",coupon);
+		model.addAttribute("startPage",1);
 		return "member/mypoint";
 	}
 	
@@ -423,13 +414,13 @@ public class MemberController {
 	}
 	
 	//내 보유 주식 리스트
-	@ResponseBody
-	@PostMapping("myStockList")
-	public List<StockVO> myStockList(@RequestParam String membNo) {
-	    List<StockVO> stockList = membService.myStockList(membNo);
-	    System.out.println(stockList);
-	    return stockList;
-	}
+	/*
+	 * @ResponseBody
+	 * 
+	 * @PostMapping("myStockList") public List<StockVO> myStockList(@RequestParam
+	 * String membNo) { List<StockVO> stockList = membService.myStockList(membNo);
+	 * System.out.println(stockList); return stockList; }
+	 */
 	
 	//@ResponseBody
 	@GetMapping("mypageInfo")
@@ -636,26 +627,23 @@ public class MemberController {
 		return membService.dealList(vo);
 	}
 	
+	//거래내역 리스트 개수
+	@ResponseBody
+	@PostMapping("getDealCount")
+	public int getDealCount(DealVO vo, int page) {
+		return membService.getDealCount(vo);
+	}
+	
 	@ResponseBody
 	@PostMapping("myPossStockList")
 	public List<PossVO> myPossStockList(@RequestParam String membNo){
 		List<PossVO> list = membService.myPossStockList(membNo);
-//		System.out.println(list);
 		return list;
 	}
 	
 	@ResponseBody
 	@PostMapping("buysellList")
 	public List<DealVO> buysellList(DealVO vo){
-//		vo.setMembNo(membNo);
-//		vo.setStartDate(startDate);
-//		vo.setEndDate(endDate);
-//		vo.setKind(kind);
-//		System.out.println(membNo);
-//		System.out.println("========================"+startDate);
-//		System.out.println(endDate);
-//		System.out.println(kind);
-		System.out.println("===================="+vo);
 		List<DealVO> list = membService.buysellList(vo);
 		System.out.println("매도/매수 거래내역"+list);
 		return list;
@@ -676,6 +664,20 @@ public class MemberController {
 	@PostMapping("analysisResult")
 	public List<SurveyVO> analysisResult(String membNo){
 		List<SurveyVO> list = membService.analysisResult(membNo);
+		return list;
+	}
+	
+	@ResponseBody
+	@PostMapping("myBuyRaiseList")
+	public List<PossVO> myBuyRaiseList(String membNo){
+		List<PossVO> list = membService.myBuyRaiseList(membNo);
+		return list;
+	}
+	
+	@ResponseBody
+	@PostMapping("mySellRaiseList")
+	public List<PossVO> mySellRaiseList(String membNo){
+		List<PossVO> list = membService.mySellRaiseList(membNo);
 		return list;
 	}
 	

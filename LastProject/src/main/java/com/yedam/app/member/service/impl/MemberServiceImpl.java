@@ -218,13 +218,18 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<DealVO> myBuyRaiseList(String membNo) {
+	public List<PossVO> myBuyRaiseList(String membNo) {
 		return membMapper.myBuyRaiseList(membNo);
 	}
 
 	@Override
-	public List<DealVO> mySellRaiseList(String membNo) {
+	public List<PossVO> mySellRaiseList(String membNo) {
 		return membMapper.mySellRaiseList(membNo);
+	}
+
+	@Override
+	public int getDealCount(DealVO vo) {
+		return membMapper.getDealCount(vo);
 	}
 
 }

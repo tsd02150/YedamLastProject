@@ -136,7 +136,7 @@
 							<h3 class="box-title">채팅방 목록</h3>
 						</div>
 						<div id="roomList" class="box-body">
-							<div th:each="room:${roomList}" th:onclick="moveRoom([[${room.roomNo}]])">
+							<div th:each="room:${roomList}" th:data-roomno="${room.roomNo}" class="roomListContent">
 								<p>[[${room.nm}]]</p>
 							</div>
 						</div>
@@ -224,21 +224,11 @@
 		<script th:inline="javascript">
 			let myAnonNick=[[${particiInfo.anonNick}]];
 			let myMembNo=[[${particiInfo.membNo}]];
-			test();
+			let chatRoomNo="room-1";
+			let chatSubs;
+
 			moveRoom("room-1");
-			function test(){
-				fetch("/community/mySession",{
-					method: "POST",
-					headers: {
-						'Content-Type': 'application/x-www-form-urlencoded'
-					},
-					body:"test=test"
-				})
-				.then(response=>response.text())
-				.then(result=>console.log(result))
-				.catch(err=>console.log(err));				
-			}
-			
+
 			function addRoomBtn(){
 				document.querySelector(".modal").style.display="block";
 			}
@@ -274,7 +264,7 @@
 						toastShow("","이미 존재하는 방 이름입니다.","error");
 					}else{
 						let divTag=`
-							<div onclick="moveRoom('${result.roomNo}')">
+							<div data-roomno="${result.roomNo}" class="roomListContent">
 								<p>${result.nm}</p>
 							</div>
 						`;
@@ -287,7 +277,7 @@
 			}
 			
 			function moveRoom(roomNo){
-				fetch("/community/roomInfo",{
+				fetch("/community/moveRoom",{
 					method: "POST",
 					headers: {
 						'Content-Type': 'application/x-www-form-urlencoded'
@@ -297,11 +287,14 @@
 				.then(response=>response.json())
 				.then(result=>{
 					resetChat();
+					
 					myAnonNick=result.anonNick;
 					$(".roomCnt").text(result.conn);
 					$("#mainRoomName").text(result.nm);
 					$("#mainRoomName").attr("data-roomno",result.roomNo);
+					chatRoomNo=result.roomNo;
 					$('#particiList').empty();
+					
 					for(let partici of result.particiList){
 						let divTag=`
 							<div>
@@ -310,18 +303,59 @@
 						`;
 						particiList.innerHTML+=divTag;
 					}
+					chatSubs=stompClient.subscribe('/topic/sendto/'+chatRoomNo, (chatMessage) => {
+				        showChat(JSON.parse(chatMessage.body));
+				    });					
 				})
 				.catch(err=>console.log(err));
 			}
 			
+			function addPartici(roomInfo){
+				$('#particiList').empty();
+				particiList.innerHTML="";
+				let divTag;
+				for(let particiInfo of roomInfo.particiList){
+					divTag=`
+						<div>
+							<p>${particiInfo.anonNick}</p>
+						</div>
+					`;
+					particiList.innerHTML+=divTag;					
+				}
+				$('.roomCnt').text(roomInfo.conn);
+			}
+			
+			$('.roomListContent').click(function(){
+				if($(event.target).closest('div').data("roomno")!=chatRoomNo){
+					if(chatSubs!=null){
+						chatSubs.unsubscribe();						
+					}
+					moveRoom($(event.target).closest('div').data("roomno"));
+				}
+			})
+			
 			function resetChat() {
 			    $("#chatSpace").html("");
 			}
-	
+			
+			setInterval(() => {
+				if(chatRoomNo!=null&&chatRoomNo!=""){
+					fetch("/community/initInfo",{
+						method:"POST",
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded'
+						},
+						body:"roomNo="+chatRoomNo
+					})
+					.then(response=>response.json())
+					.then(result=>{
+						addPartici(result);
+					})
+					.catch(err=>console.log(err));
+				}
+			}, 2000);
+					
 		</script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
-		
 	</div>
 </body>
 </html>

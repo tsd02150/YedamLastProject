@@ -265,7 +265,7 @@ th {
 	margin: 10% auto;
 	padding: 20px;
 	border: 1px solid #888;
-	width: 40%;
+	width: 700px;
 	height: 800px;
 }
 
@@ -397,7 +397,7 @@ p>img {
 					style="width: 40ox; height: 40px;"
 					src="https://cdn-icons-png.flaticon.com/128/545/545489.png"></li>
 				<li style="font-size: 12px;"
-					th:onclick="|location.href='@{basketList}'|"><a href="#">장바구니</a></li>
+					th:onclick="|location.href='@{basketList}'|"><a href="#"></a></li>
 				<li class="top-btn" style="font-size: 12px; cursor: pointer;"><img
 					style="width: 40px; height: 40px;"
 					src="https://cdn-icons-png.flaticon.com/128/6015/6015743.png"
@@ -418,13 +418,84 @@ p>img {
 			</section>
 
 			<section id="prdt-info" th:each="prdt : ${getFarm}">
+				<div class="content_area">
+					<div class="line"></div>
+					<div class="content_top">
+						<div class="ct_left_area">
+							<div class="image_wrap"
+								data-bookid="${goodsInfo.imageList[0].bookId}"
+								data-path="${goodsInfo.imageList[0].uploadPath}"
+								data-uuid="${goodsInfo.imageList[0].uuid}"
+								data-filename="${goodsInfo.imageList[0].fileName}">
+								<img>
+							</div>
+						</div>
+						<div class="ct_right_area">
+							<div class="title">
+								<h1 th:text="${prdt.nm}">${goodsInfo.bookName}</h1>
+							</div>
+							<div class="line"></div>
+							<div class="author">
+								<span> ${goodsInfo.authorName} 지음 </span> <span>|</span> <span>
+									${goodsInfo.publisher} </span> <span>|</span> <span class="publeyear">
+									${goodsInfo.publeYear} </span>
+							</div>
+							<div class="line"></div>
+							<div class="price" th:text="${prdt.prc}">
+								<div class="sale_price">
+									정가 :
+									<!-- 	<fmt:formatNumber value="${goodsInfo.bookPrice}"
+										pattern="#,### 원" /> -->
+								</div>
+								<div class="discount_price"
+									th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + 'P'">
+									판매가 : <span class="discount_price_number"></span>
+									<!-- <fmt:formatNumber
+											value="${goodsInfo.bookPrice - (goodsInfo.bookPrice*goodsInfo.bookDiscount)}"
+											pattern="#,### 원" /></span> [
+									<fmt:formatNumber value="${goodsInfo.bookDiscount*100}"
+										pattern="###" />
+									%
+									<fmt:formatNumber
+										value="${goodsInfo.bookPrice*goodsInfo.bookDiscount}"
+										pattern="#,### 원" /> -->
+									할인]
+								</div>
+								<div>
+									적립 포인트 : <span class="point_span"></span>원
+								</div>
+							</div>
+							<div class="line"></div>
+							<div class="button">
+								<div class="button_quantity">
+									주문수량 <input type="number" class="quantity_input" value="1">
+									<span>
+										<button class="plus_btn">+</button>
+										<button class="minus_btn">-</button>
+									</span>
+								</div>
+
+								<div class="button_set">
+									<a class="btn_cart" >장바구니 담기</a> <a
+										class="btn_buy" onclick="directOrder()">바로구매</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<!-- 	<section id="prdt-info" th:each="prdt : ${getFarm}">
 
 				<div>
 					<table>
 						<tbody>
 							<tr style="width: 400px;">
 								<th scope="row">상품명</th>
-								<td th:text="${prdt.nm}"></td>
+								<td class="nm" th:text="${prdt.nm}"></td>
+							</tr>
+							<tr>
+								<th>상품번호</th>
+								<td id="prdtNo" th:text="${prdt.prdtNo}"></td>
 							</tr>
 							<tr>
 								<th>판매가격</th>
@@ -437,17 +508,27 @@ p>img {
 									style="text-decoration: line-through;"></td>
 							</tr>
 							<tr>
+								<th>구입수량</th>
+								<td><div class="product-quantity">
+									<div class="product-quantity-slider">
+										<button class="quantity-btn" onclick="adjustQuantity(-1)">-</button>
+										<input type="text" value="0" name="product-quantity"
+											id="product-quantity">
+										<button class="quantity-btn" onclick="adjustQuantity(1)">+</button>
+									</div>
+								</div>
+								</td>
+
+							</tr>
+							<tr>
 								<th>배송비 결제</th>
 								<td>무료배송</td>
 							</tr>
 						</tbody>
 					</table>
 					<div class="product-quantity">
-						<span>Quantity:</span>
-						<div class="product-quantity-slider">
-							<input id="product-quantity" type="text" value="0"
-								name="product-quantity">
-						</div>
+
+						<div class="product-quantity-slider"></div>
 					</div>
 					<b></b>
 					<div>
@@ -456,15 +537,15 @@ p>img {
 								id="total-price">P</strong>
 						</div>
 						<div class="btn-group" style="text-align: center;">
-						<a href="basketList">
+
 							<button th:if="${session.loggedInMember}!=null" type="button"
-								id="addToCart">장바구니 담기</button></a>
+								class="addCart_btn" onclick="addCartFunc()">장바구니 담기</button>
 							<button type="button" onclick="directOrder()">바로 주문하기</button>
 						</div>
 					</div>
 				</div>
 			</section>
-
+ -->
 			<!-- <section id="prdt-info" th:each="prdt : ${getFarm}">
 				<h1 th:text="${prdt.nm}"></h1>
 				<p th:text="${prdt.prc}"></p>
@@ -472,7 +553,7 @@ p>img {
 				<p >배송</p>
 				<p>총 결제금액</p>
 				<div class="">
-					<button type="button" th:onclick="|location.href='@{basketList}'|">장바구니
+					<button type="button" th:onclick="|location.href='@{basketList}'|">
 						담기</button>
 					<button type="button" th:onclick="|location.href='@{cart}'|">바로
 						주문하기</button>
@@ -603,23 +684,25 @@ p>img {
 						<td style="text-align: center;" th:text="${rev.drwupDt}">2023-07-16</td>
 
 					</tr> -->
-					<!-- 추가적인 후기 데이터 -->
 				</tbody>
 			</table>
 		</div>
 
-
 		<!-- 모달 창 -->
 		<div id="reviewModal" class="modal">
-			<div class="modal-content">
+			<div class="modal-content" onClick="closeModal()">
 
 				<span class="close">&times;</span>
 				<h2 style="text-align: center;">상품 후기</h2>
 				<div>&nbsp;</div>
-				<div class="pic" th:each="prdt : ${getFarm}">
+				<div style="display: flex;" class="pic" th:each="prdt : ${getFarm}">
+
 					<img style="width: 200px; height: 200px;"
-						th:src="|/mall/images/main/${prdt.thumb}|">
+						th:src="|/mall/images/main/${prdt.thumb}|"> <span
+						style="margin-left: 10px;" th:text="${prdt.nm}"></span>
+
 				</div>
+
 				<div>&nbsp;</div>
 				<div>&nbsp;</div>
 				<div>&nbsp;</div>
@@ -662,7 +745,6 @@ p>img {
 		<div id="reviewList"></div>
 		<!-- 후기 아이템 반복 출력 -->
 
-
 		<script
 			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
 		<script
@@ -670,6 +752,125 @@ p>img {
 		<script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
 		<script type="text/javascript" th:inline="javascript">
 
+
+	    // 담기 클릭 
+/* 		$('.addCart_btn').on('click', function() {
+    var prdtNo = $('#prdtNo').text();
+    var cnt = $('.cnt input[name="product-quantity"]').val();
+    
+    console.log('test!!!!!!!!!')
+
+    var data = {
+        "prdtNo": prdtNo,
+        "cnt": cnt
+    };
+
+    $.ajax({
+        url: '/mall/addCartItem',
+        method: "POST",
+        data: data,
+        success: function() {
+            alert("카트담기 성공");
+            $(".cnt input[name='product-quantity']").val("1");
+        },
+        error: function() {
+            alert("카트담기 실패");
+        }
+    });
+}); */
+
+		//수량 버튼 조작
+		let quantity = $(".quantity_input").val();
+		$(".plus_btn").on("click", function(){
+			$(".quantity_input").val(++quantity);
+		});
+		$(".minus_btn").on("click", function(){
+			if(quantity > 1){
+				$(".quantity_input").val(--quantity);	
+			}
+		});
+
+	
+		// 서버로 전송할 데이터
+		   const form = {
+				membNo : [[${membNo}]],
+				prdtNo : [[${getFarm.prdtNo}]],
+				prc : [[${getFarm.prc}]],
+				cnt : ''
+		}
+		
+		$(".btn_cart").on("click", function(e){
+			form.cnt = $(".quantity_input").val();
+			console.log(form);
+			$.ajax({
+				url: '/mall/basketList',
+				type: 'POST',
+				data: form,
+				success: function(result){
+					cartAlert(result);
+				    // 장바구니에 상품이 추가되면 장바구니 페이지로 리다이렉트
+		            //window.location.href = '/mall/basketList/' + form.membNo;
+				}
+			})
+		});  
+		
+		
+		function cartAlert(result){
+			if(result == '0'){
+				alert("장바구니에 추가를 하지 못하였습니다.");
+			} else if(result == '1'){
+				alert("장바구니에 추가되었습니다.");
+			} else if(result == '2'){
+				alert("장바구니에 이미 추가되어져 있습니다.");
+			} else if(result == '5'){
+				alert("로그인이 필요합니다.");	
+			}
+		} 
+		 
+		
+		
+
+		 //장바구니 이동
+		/* function addCartFunc(){
+			
+			window.location.href="/mall/basketList?membNo="+[[${basketList}]];
+		} */
+		
+		 /* $('.btn_cart').on('click', function() {
+			 
+			    let ckData = editor.getData();
+			    if (ckData === "" || ckData === null) {
+			        toastShow("There is no content", "내용이 없습니다", "error");
+			        return;
+			    }
+			
+			    let formData = new FormData();
+			    formData.append("cntn", ckData);
+			    formData.append("prdtNo", [[${getFarm.prdtNo}]]);
+			    formData.append("maks", $('input[type=radio]:checked').val());
+			
+			    fetch('/mall/addReview', {
+			        method: 'POST',
+			        body: formData
+			    })
+			    .then(response => response.json())
+			    .then(result => {
+			    	
+			    })
+			    .catch(error => {
+			        toastShow("Insert Fail", "등록 실패", "error");
+			    });
+			}); */
+		 
+		 
+		//주문페이지 이동
+		function directOrder() {
+		  // 바로 주문하기 기능 구현
+		  alert("주문 페이지로 이동합니다!");
+		  window.location.href="/mall/basketList";
+		}
+		
+		
 		let editor;
 		reviewList();
 		
@@ -709,6 +910,7 @@ p>img {
 					
 				})
 				makeStar();
+			
 			})
 			.catch(err=>console.log(err));
 		}
@@ -728,43 +930,65 @@ p>img {
 			console.error(error);
 		});
 		
+		
 		//후기 등록 여부
-		$('#btnSave').on('click', function() {
-			
-			let ckData = editor.getData()
-			if(ckData=="" || ckData==null) {
-				toastShow("There is no content" , "내용이 없습니다" , "error");
-				return;
-			}
-			let formData = $('#myForm').serializeObject()
-			
-			formData.cntn = ckData;
-			formData.prdtNo=[[${getFarm.prdtNo}]];
-			formData.maks=$('input[type=radio]:checked').val();
-			
-			$.ajax({
-				url :'/mall/addReview',
-				method : "POST",
-				data : formData
-			})
-			.done(function(result) {
-					
-			})
-			.fail(function(result){
-				toastShow("Insert Fail" , "등록 실패" , "error");
-			})
-		})
-			
+	$('#btnSave').on('click', function() {
+	    let ckData = editor.getData();
+	    if (ckData === "" || ckData === null) {
+	        toastShow("There is no content", "내용이 없습니다", "error");
+	        return;
+	    }
+	
+	    let formData = new FormData();
+	    formData.append("cntn", ckData);
+	    formData.append("prdtNo", [[${getFarm.prdtNo}]]);
+	    formData.append("maks", $('input[type=radio]:checked').val());
+	
+	    fetch('/mall/addReview', {
+	        method: 'POST',
+	        body: formData
+	    })
+	    .then(response => response.json())
+	    .then(result => {
+	    	
+	    })
+	    .catch(error => {
+	        toastShow("Insert Fail", "등록 실패", "error");
+	    });
+	});
+		
+		/* function addReview() {
+    let ckData = editor.getData();
+    if (ckData === "" || ckData === null) {
+        toastShow("There is no content", "내용이 없습니다", "error");
+        return;
+    }
+
+    let formData = new FormData();
+    formData.append("cntn", ckData);
+    formData.append("prdtNo", [[${getFarm.prdtNo}]]);
+    formData.append("maks", $('input[type=radio]:checked').val());
+
+    fetch('/mall/addReview', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(result => {
+        // 처리 결과에 따른 작업 수행
+        
+        
+    })
+    .catch(error => {
+        toastShow("Insert Fail", "등록 실패", "error");
+    });
+} */
+		
+		
 		
 		  document.addEventListener("DOMContentLoaded", function () {
     var modal = document.getElementById("reviewModal");
     var productList = document.getElementById("productList"); // 해당 상품 리스트를 출력하는 요소의 ID 지정
-
-
-    // 필요할 때 모달을 열기 위한 함수
-    function openModal() {
-      modal.style.display = "block";
-    }
 
 
     // "등록하기" 버튼을 클릭했을 때 상품 리스트에 내용을 추가
@@ -824,6 +1048,7 @@ p>img {
            // var reviewItem = document.getElementById("review-" + revNo);
             if (result=="success") {
                window.location.href="/mall/reviewList"
+            		location.reload();
             }else {
             	toastShow("Fail Delete", "삭제 실패", "error");
             }
@@ -831,30 +1056,37 @@ p>img {
         .catch(err => console.log(err));
     }
 	
-  
-	$('#addToCart').on('click', function(){
-		console.log('test');
-		let formData = $()
-		
-		$.ajax({
-			url: '/mall/addCartItem',
-			method: "POST",
-			data : formData
-			
-		})
-		.done(function (result){
-			
-		})
-		.fail(function(result) {
-			toastShow("Add Fail", "추가 실패", "error");
-		})
-	})
+ 	
 
-			function directOrder() {
-			  // 바로 주문하기 기능 구현
-			  alert("주문 페이지로 이동합니다!");
-			}
-	
+ 
+ /* function addCartItem(prdtNo, cnt) {
+	    const data = {
+	        prdtNo: prdtNo,
+	        cnt: cnt
+	    };
+
+	    fetch("/mall/addCartItem", {
+	        method: "POST",
+	        headers: {
+	            "Content-Type": 'application/x-www-form-urlencoded'
+	        },
+	        body: JSON.stringify(data)
+	    })
+	    .then(response => response.json())
+	    .then(result => {
+	        // 서버로부터 받은 응답에 따라 처리할 로직을 작성합니다.
+	        if (result === "success") {
+	            alert("에 상품이 추가되었습니다.");
+	        } else {
+	            alert("상품 추가에 실패하였습니다.");
+	        }
+	    })
+	    .catch(error => {
+	        console.error("Error:", error);
+	    });
+	}
+  */
+ 
 			
 			//이미지 확대
 			const zoomImageContainer = document.querySelector('.zoom-image-container');
@@ -1064,6 +1296,9 @@ p>img {
 					
 					String referer = (String)request.getHeader("REFERER");
 				 */
+				 
+				//  버튼 클릭
+			
 			</script>
 	</div>
 </body>

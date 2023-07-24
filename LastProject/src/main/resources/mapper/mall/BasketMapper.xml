@@ -5,40 +5,117 @@
 
 <mapper namespace="com.yedam.app.mall.mapper.BasketMapper">
 
+
+<!-- 카트 추가 -->
+	<!-- <insert id="addBasket">
+	
+		insert into basket(memb_no, prdt_no, cnt, bsk_no)
+		values(#{membNo}, #{prdtNo}, #{cnt}, #{bskNo}) 
+	
+	</insert>
+	
+	
+	카트 삭제
+	<delete id="deleteBasket">
+	
+		delete from basket where bsk_no = #{bskNo}
+	
+	</delete>
+	
+	카트 수량 수정
+	<update id="modifyCount">
+	
+		update basket set cnt=#{cnt} where bsk_no = #{bskNo}
+	
+	</update>
+	
+	
+	카트 목록
+	<select id="getBasket" resultType="BasketVO">
+	
+	SELECT *
+		FROM (
+		SELECT *
+		FROM BASKET B JOIN PRODUCT P
+		USING(prdt_no)) J JOIN MEMBER M
+		ON M.memb_no= J.memb_no
+
+		ORDER BY prdt_no DESC
+	
+	</select>
+	
+	카트 확인
+	<select id="checkBasket" resultType="BasketVO">
+	
+		select * from basket 
+		where memb_no = #{membNo} and prdt_no = #{prdtNo}
+	
+	</select> -->
+
+
+<select id="selectCountInBasket" resultType="String" parameterType="BasketVO">
+		<![CDATA[
+			select decode(count(*), 0, 'false', 'true') from basket
+			where prdt_no = #{prdtNo}
+			and memb_no=#{membNo}
+		]]>
+			
+	</select>
+
+
 	<!-- 전체조회 basketVO + productVO + memberVO -->
 	<select id="getBasketList" resultType="BasketVO">
 		SELECT *
 		FROM (
-			SELECT *
-			FROM BASKET B JOIN PRODUCT P
-				USING(prdt_no)) J JOIN MEMBER M
-			ON M.memb_no= J.memb_no
-			
+		SELECT *
+		FROM BASKET B JOIN PRODUCT P
+		USING(prdt_no)) J JOIN MEMBER M
+		ON M.memb_no= J.memb_no
+		WHERE M.memb_no=#{membNo}
 		ORDER BY prdt_no DESC
 	</select>
-	
+
 	<!-- 장바구니 추가 -->
 	<insert id="addCartItem" parameterType="BasketVO">
 	
-		insert into basket ( 
-							memb_no
-							,prdt_no
-							,cntn
-							
-							)
-		values(
-				#{membNo}
-				,#{prdtNo}
-				,#{cnt}
+	<selectKey keyProperty="bskNo" resultType="String"
+			order="BEFORE">
+			SELECT CONCAT('bsk_', NVL(MAX(TO_NUMBER(SUBSTR(bsk_no, 5))), 0)+1)
+			FROM BASKET
+		</selectKey>
+	<![CDATA[
+		insert into basket (
+		memb_no
+		,prdt_no
+		,cnt
+		,bsk_no
 		)
+		values(
+		#{membNo}
+		,#{prdtNo}
+		,#{cnt}
+		,#{bskNo}
+		)
+		]]>
 	</insert>
-	
 
 	<!-- 전체삭제 -->
 	<delete id="deleteAllBasket">
 		DELETE FROM BASKET
 
 	</delete>
+
+	<select id="getIntPrdt" resultType="String">
+		SELECT memb_no
+		FROM BASKET
+		WHERE prdt_no=#{prdtNo}
+	</select>
+	
+	<select id="getMembInfo" resultType="MembVO">
+		SELECT memb_no
+		FROM MEMBER
+		WHERE memb_no=#{membNo}
+	</select>
 
 	<!-- 선택 상품 삭제 -->
 	<delete id="deleteBasket" parameterType="String">

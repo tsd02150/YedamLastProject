@@ -66,7 +66,6 @@ public interface MemberService {
 
 	//보유 쿠폰
 	public List<CouponVO> mycoupon(String id);
-	
 	//포인트 충전
 	public int insertCharge(ChargeVO chargeVO, MembVO membVO);
 	
@@ -86,18 +85,17 @@ public interface MemberService {
 	public int deleteInterest(@Param("membNo")String membNo , @Param("itemNo")String itemNo);
 	//거래내역 조회
 	public List<DealVO> dealList(DealVO vo);
+	//거래내역 개수
+	public int getDealCount(DealVO vo);
 	//보유자산
 	public List<PossVO> myPossStockList(String membNo);
-	
 	//매도 매수 거래내역
 	public List<DealVO> buysellList(DealVO vo);
-	
 	//설문조사 추가
 	public int insertsurvey(SurveyVO vo);
 	//설문조사 결과 조회
 	public List<SurveyVO> analysisResult(String membNo);
-	
 	//하루 총 수익(매수, 매도)
-	public List<DealVO> myBuyRaiseList(String membNo);
-	public List<DealVO> mySellRaiseList(String membNo);
+	public List<PossVO> myBuyRaiseList(String membNo);
+	public List<PossVO> mySellRaiseList(String membNo);
 }
