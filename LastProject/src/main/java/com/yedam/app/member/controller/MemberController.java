@@ -547,7 +547,7 @@ public class MemberController {
 		
 		int sumNowPrc = possstockList.stream().mapToInt(PossVO::getNowPrc).sum();
 	    int sumTradePrc = possstockList.stream().mapToInt(PossVO::getTradePrc).sum();
-	    double raise = (sumTradePrc / sumNowPrc) * 100;
+	    double raise =(double) (sumTradePrc / sumNowPrc) * 100;
 
 	    model.addAttribute("sumNowPrc", sumNowPrc);
 	    model.addAttribute("sumTradePrc", sumTradePrc);

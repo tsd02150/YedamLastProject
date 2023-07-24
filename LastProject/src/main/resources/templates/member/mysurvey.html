@@ -7,23 +7,7 @@
 <title>회원관리</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
-.sidebar.sidebar-left {
-	height: 1000px;
-}
 
-.titleMenu {
-	padding-top: 20px;
-}
-
-.sidebarMenu {
-	padding-top: 40px;
-	padding-bottom: 40px;
-}
-
-#mypageBody, .sidebar {
-	border: 1px solid #DDDDDD;
-	height: auto;
-}
 .faqlist li{
   display: list-item;
   text-align: -webkit-match-parent;
@@ -155,12 +139,13 @@
 	</div>
 	<script>
 	// 해당 페이지 로드시 실행
-		let membNo = "[[${session.loggedInMember != null ? session.loggedInMember.membNo : 'anonymous'}]]";
-		// membNo가 있을 경우
+	let membNo = "[[${session.loggedInMember != null ? session.loggedInMember.membNo : 'anonymous'}]]";
+	analysisResult();
+	// membNo가 있을 경우
 		
-	$(document).ready(function() {
+/* 	$(document).ready(function() {
 		// membNo 값을 가져옴
-		if (membNo) {
+		if (membNo == "anonumous") {
 			// "투자성향 자가측정 확인" 탭에 active 클래스 추가
 			$("#nav-profile-tab").addClass("active");
 			// "투자성향 자가측정" 탭에 active 클래스 제거
@@ -170,7 +155,7 @@
 			// analysisResult 함수 호출
 			analysisResult();
 		}
-	});
+	}); */
 	
 	function doSubmit() {
 			
@@ -279,24 +264,35 @@
 				});
 		}
 	}
-		function analysisResult(){
-			$.ajax({
-				url : "analysisResult",
-				method : "POST",
-				data : {
-					"membNo" : membNo
-				},
-				success : function(data){
-					data.forEach(el=>{
-						console.log(el);
-						//결과 정보 출력하기
-					})
-				},
-				error : function(err){
-					console.log(err);
-				}
-			});
-		}
+	
+	function analysisResult(){
+		$.ajax({
+			url : "analysisResult",
+			method : "POST",
+			data : {
+				"membNo" : membNo
+			},
+			success : function(data){
+				data.forEach(el=>{
+					if(el != null && el.membNo != "anonymous"){
+						$("#nav-profile-tab").addClass("active");
+						// "투자성향 자가측정" 탭에 active 클래스 제거
+						$("#nav-home-tab").removeClass("active");
+						// "surveyDiv" 초기화 (내용 삭제)
+						$("#surveydiv").html("");
+						// analysisResult 함수 호출
+						//analysisResult();
+					}
+					//console.log(el);
+					//invstNo: '1', membNo: 'mem-5', invstTypeNo: 'A'
+					
+				})
+			},
+			error : function(err){
+				console.log(err);
+			}
+		});
+	}
 	</script>
 
 </div>
