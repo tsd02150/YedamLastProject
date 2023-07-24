@@ -40,7 +40,7 @@ class LastProjectApplicationTests {
 		List<Integer> itemNos = new ArrayList<>();
 		boolean[] chk = new boolean[47];
 		for(ItemInfoVO vo : list) {
-			System.out.println(vo.getItemNo().substring(4));
+			System.out.println("체결된것들기록" + vo.getItemNo().substring(4));
 			intList.add(vo.getItemNo().substring(4));
 		}
 		
@@ -56,6 +56,14 @@ class LastProjectApplicationTests {
 		System.out.println(itemNos);
 		
 		List<ItemInfoVO> missingList = stockMapper.nonTaInfo(itemNos);
-		System.out.println(missingList);
+		// 정보가 있는 종목들은 insert
+		for(ItemInfoVO vo : list) {
+			stockMapper.insertItemInfo(vo);
+		}
+		System.out.println("체결안된것들"+missingList);
+		
+		for(ItemInfoVO vo : missingList) {
+			stockMapper.insertItemInfo(vo);
+		}
 	}
 }

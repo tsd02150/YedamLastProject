@@ -35,4 +35,5 @@ public interface StockService {
 	public List<AlarmVO> nonCheckedAlarm(String membNo);
 	public int stockAlmChk(String almNo);
 	public int deleteAlm(String almNo);
+	public ItemInfoVO currentItemInfo(String itemNo);
 }

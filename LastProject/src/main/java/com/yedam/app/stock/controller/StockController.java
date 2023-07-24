@@ -203,7 +203,10 @@ public class StockController {
 	@ResponseBody
 	@GetMapping("dayChart")
 	public List<ItemInfoVO> getDayChart(String itemNo){
-		return stockservice.dayChart(itemNo);
+		List<ItemInfoVO> list = stockservice.dayChart(itemNo);
+		ItemInfoVO vo = stockservice.currentItemInfo(itemNo);
+		list.add(vo);
+		return list;
 	}
 	//주간 , 월간 차트
 	@ResponseBody
