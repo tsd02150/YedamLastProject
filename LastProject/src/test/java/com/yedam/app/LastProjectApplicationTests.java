@@ -1,5 +1,6 @@
 package com.yedam.app;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,9 @@ class LastProjectApplicationTests {
 	@Autowired
 	StockService stockService;
 	
+	@Autowired
+	StockMapper stockMapper;
+	
 	private SimpMessagingTemplate template;
 	
 	@Autowired 
@@ -31,6 +35,27 @@ class LastProjectApplicationTests {
 	
 	@Test
 	public void scheduler() {
-		stockService.schedulerJob();
+		List<ItemInfoVO> list =stockMapper.todayItemInfo();
+		List<String> intList = new ArrayList<>();
+		List<Integer> itemNos = new ArrayList<>();
+		boolean[] chk = new boolean[47];
+		for(ItemInfoVO vo : list) {
+			System.out.println(vo.getItemNo().substring(4));
+			intList.add(vo.getItemNo().substring(4));
+		}
+		
+		for(int i = 0 ; i <intList.size() ; i++) {
+			chk[Integer.parseInt(intList.get(i))] = true;
+		}
+		
+		for(int i = 1 ; i < chk.length ; i++) {
+			if(chk[i] == false) {
+				itemNos.add(i);
+			}
+		}
+		System.out.println(itemNos);
+		
+		List<ItemInfoVO> missingList = stockMapper.nonTaInfo(itemNos);
+		System.out.println(missingList);
 	}
 }
