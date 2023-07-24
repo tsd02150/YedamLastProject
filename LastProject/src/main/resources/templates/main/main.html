@@ -13,44 +13,114 @@
 			<div>
 				<div id="chart" class="flex-block">
 					<section id="chartList" class="list-group">
-						<a href="#" class="list-group-item list-group-item-action active" aria-current="true">..</a>
-						<a href="#" class="list-group-item list-group-item-action">..</a>
-						<a href="#" class="list-group-item list-group-item-action">..</a>
-						<a href="#" class="list-group-item list-group-item-action">..</a>
+						<a class="list-group-item list-group-item-action" th:each="incStock:${increaseStock}" th:data-itemno="${incStock.itemNo}">[[${incStock.nm}]]</a>
 					</section>
 					<section id="chartContent">
+						<div style="position: absolute;float:left;">
+							<ul id="chartBtn" >
+								<li><input class="btn btn-danger" type="button" value="일"></li>
+								<li><input class="btn btn-danger" type="button" value="주"></li>
+								<li><input class="btn btn-danger" type="button" value="월"></li>
+								<li><input class="btn btn-danger" type="button" value="년"></li>
+							</ul>
+						</div>
+						<div id="candleChart" ></div>
 					</section>
 				</div>
 				<div class="flex-block">
 					<section id="ranking">
-						<div class="Space">
-							<div class="row">
-								<div class="highRank">
-									<h5 class="news-title">
-										<span>농산물 랭킹</span>
-									</h5>
-								</div>
-								<div class="lowRank">
-									<h5 class="news-title">
-										<span>수산물 랭킹</span>
-									</h5>
-								</div>
+						<ul class="nav nav-tabs">
+							<li class="nav-item" style="width: 130px;">
+								<a class="nav-link active" data-toggle="tab" href="#farm">농산물 랭킹</a>
+							</li>
+							<li class="nav-item" style="width: 130px;">
+								<a class="nav-link" data-toggle="tab" href="#sea">수산물 랭킹</a>
+							</li>
+						</ul>
+						<div class="tab-content tabSpace">
+							<div class="tab-pane fade show active" id="farm">
+								<table class="table-hover">
+									<thead>
+										<tr>
+											<th>테마</th>
+											<th style="width:40%;">이름</th>
+											<th>현재가</th>
+											<th>등락률</th>
+										</tr>
+									</thead>
+									<tr class="stockDetail" th:each="farm:${farmRank}" th:data-itemno="${farm.itemNo}">
+										<td>[[${farm.theme}]]</td>
+										<td>[[${farm.nm}]]</td>
+										<td>[[${farm.tprc}]]</td>
+										<td th:class="${farm.rate>=0}?redCol:blueCol">[[${farm.rate}]]%</td>
+									</tr>
+								</table>
+							</div>
+							<div class="tab-pane fade" id="sea">
+								<table class="table-hover">
+									<thead>
+										<tr>
+											<th>테마</th>
+											<th style="width:40%;">이름</th>
+											<th>현재가</th>
+											<th>등락률</th>
+										</tr>
+									</thead>
+									<tr class="stockDetail" th:each="sea:${seaRank}" th:data-itemno="${sea.itemNo}">
+										<td>[[${sea.theme}]]</td>
+										<td>[[${sea.nm}]]</td>
+										<td>[[${sea.tprc}]]</td>
+										<td th:class="${sea.rate>=0}?redCol:blueCol">[[${sea.rate}]]%</td>
+									</tr>
+								</table>
 							</div>
 						</div>
 					</section>
 					<section id="updown">
-						<div class="Space">
-							<div class="row">
-								<div class="up">
-									<h5 class="news-title">
-										<span>상승 종목</span>
-									</h5>
-								</div>
-								<div class="down">
-									<h5 class="news-title">
-										<span>하락 종목</span>
-									</h5>
-								</div>
+						<ul class="nav nav-tabs">
+							<li class="nav-item" style="width: 110px;">
+								<a class="nav-link active" data-toggle="tab" href="#incStock">상승 종목</a>
+							</li>
+							<li class="nav-item" style="width: 110px;">
+								<a class="nav-link" data-toggle="tab" href="#decStock">하락 종목</a>
+							</li>
+						</ul>
+						<div class="tab-content tabSpace">
+							<div class="tab-pane fade show active" id="incStock">
+								<table class="table-hover">
+									<thead>
+										<tr>
+											<th>테마</th>
+											<th style="width:40%;">이름</th>
+											<th>현재가</th>
+											<th>등락률</th>
+										</tr>
+									</thead>
+									<tr class="stockDetail" th:each="stock:${increaseStock}" th:data-itemno="${stock.itemNo}">
+										<td>[[${stock.theme}]]</td>
+										<td>[[${stock.nm}]]</td>
+										<td>[[${stock.tprc}]]</td>
+										<td th:class="${stock.rate>=0}?redCol:blueCol">[[${stock.rate}]]%</td>
+									</tr>
+								</table>
+							</div>
+							<div class="tab-pane fade" id="decStock">
+								<table class="table-hover">
+									<thead>
+										<tr>
+											<th>테마</th>
+											<th style="width:40%;">이름</th>
+											<th>현재가</th>
+											<th>등락률</th>
+										</tr>
+									</thead>
+									<tr class="stockDetail" th:each="stock:${decreaseStock}" th:data-itemno="${stock.itemNo}">
+										<td>[[${stock.theme}]]</td>
+										<td>[[${stock.nm}]]</td>
+										<td>[[${stock.tprc}]]</td>
+										<td th:class="${stock.rate>=0}?redCol:blueCol">[[${stock.rate}]]%</td>
+									</tr>
+								</table>
 							</div>
 						</div>
 					</section>
@@ -76,8 +146,8 @@
 							</div>
 							<a href="/member/logout"><button class="btn-primary logout" type="button">LogOut</button></a>
 							<div id="infoBtnBlock">
-								<button class="btn infoBtn" type="button">MyPage</button>
-								<button class="btn infoBtn" type="button">충전</button>
+								<button class="btn infoBtn" type="button" onClick="myPageBtn()">MyPage</button>
+								<button class="btn infoBtn" type="button" onClick="chargeBtn()">충전</button>
 							</div>
 						
 						</div>
@@ -145,6 +215,9 @@
 				</div>
 			</section>
 		</div>
+	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+	<script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+	<script src="../stock/candleChart.js"></script>
 	<script>
 		fetch("getNewsLists")
 		.then(result=>result.json())
@@ -161,6 +234,110 @@
 			
 		})
 		.catch(err=>console.log(err));
+		
+		function myPageBtn(){
+			window.location.href="/member/mypage";
+		}
+		function chargeBtn(){
+			window.location.href="/member/pointChargeForm";
+		}
+		$('.stockDetail').on('click',function(){
+			window.location.href="/stock/chart?itemNo="+$(event.target).closest('tr').attr("data-itemno");
+		})
+		
+		let itemNo='';
+		let index=1;
+		
+		$(document).ready(function(){
+			$('#chartList').children().eq(0).addClass('active');
+			itemNo=$('#chartList').children().eq(0).attr('data-itemno');
+			$('#candleChart').html(''); 
+			$.ajax('/stock/dayChart?itemNo='+itemNo,{
+				async:false
+			}).done(function(chart){
+	  			makeCandleChart(chart)
+	  		})
+	  			
+			setInterval(() => {
+				if($('#chartList').children().eq(index-1).hasClass('hover')===false){
+					$('#chartList').children().eq(index)[0].click();					
+					index++;
+					if(index>4){
+						index=0;
+					}
+				}
+			},5000);
+		});
+		
+		$('#chart').hover(
+			function(){
+				$('#chartList .active').addClass('hover');
+			},function(){
+				$('#chartList .active').removeClass('hover');
+			}
+		);
+		
+		$('#chartList').children().on('click',function(){
+			$('#chartList').children().removeClass('active');
+			$(event.target).addClass('active');
+			
+			itemNo=event.target.dataset.itemno;
+			
+			if(index!=$(event.target).index()){
+				$('#chartList').children().removeClass('hover');
+				$(event.target).addClass('hover');
+				index=$(event.target).index()+1;
+				if(index>4){
+					index=0;
+				}
+			}
+			
+			$('#candleChart').html('');
+			$.ajax('/stock/dayChart?itemNo='+itemNo,{
+				async:false
+			}).done(function(chart){
+	  			makeCandleChart(chart)
+	  		})
+		});
+		
+		// 차트 버튼 기능
+		$('#chartBtn').on('click','input',function(){	
+			$(this).parent().parent().find('.orderActive').removeClass('orderActive');
+			//클릭한 버튼 클래스 추가
+			$(this).toggleClass('orderActive');
+			
+			if($(this).val()=='분'){
+				// 가능하면 추가
+			}else if($(this).val()=='일'){
+				$('#candleChart').html('');
+				$.ajax('/stock/dayChart?itemNo='+itemNo,{
+					async:false
+				}).done(function(chart){
+		  			makeCandleChart(chart)
+		  		})
+			}else if($(this).val()=='주'){
+				$('#candleChart').html('');
+				$.ajax('/stock/weekMonthChart?itemNo='+itemNo+'&type=week',{
+					async:false
+				}).done(function(chart){
+					makeCandleChart(chart)
+				})
+			}else if($(this).val()=='월'){
+				$('#candleChart').html('');
+				$.ajax('/stock/weekMonthChart?itemNo='+itemNo+'&type=month',{
+					async:false
+				}).done(function(chart){
+					makeCandleChart(chart)
+				})
+			}else if($(this).val()=='년'){
+				$('#candleChart').html('');
+				$.ajax('/stock/weekMonthChart?itemNo='+itemNo+'&type=year',{
+					async:false
+				}).done(function(chart){
+					makeCandleChart(chart)
+				})
+			}
+		})
 		
 		
 	</script>

@@ -29,10 +29,14 @@ public class MainController {
 	// 프로젝트 메인페이지
 	@GetMapping("/")
 	public String mainPage(Model model, HttpSession session) {
-		model.addAttribute("freeBoardList",boardService.getFreeBoardTop6());
-		model.addAttribute("stockBoardList",boardService.getStockBoardTop6());
-		model.addAttribute("noticeList",noticeService.getNoticeTop6());
-		model.addAttribute("qnaList",questionService.getQnaTop6());
+		model.addAttribute("freeBoardList",mainService.getFreeBoardTop6());
+		model.addAttribute("stockBoardList",mainService.getStockBoardTop6());
+		model.addAttribute("noticeList",mainService.getNoticeTop6());
+		model.addAttribute("qnaList",mainService.getQnaTop6());
+		model.addAttribute("farmRank",mainService.getFarmRank());
+		model.addAttribute("seaRank",mainService.getSeaRank());
+		model.addAttribute("increaseStock",mainService.getIncreaseStock());
+		model.addAttribute("decreaseStock",mainService.getDecreaseStock());
 
 		return "main/main";
 	}

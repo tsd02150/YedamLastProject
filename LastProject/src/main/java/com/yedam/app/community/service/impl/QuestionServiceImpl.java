@@ -31,11 +31,6 @@ public class QuestionServiceImpl implements QuestionService {
 	}
 
 	@Override
-	public List<QuestionVO> getQnaTop6() {
-		return questionMapper.getQnaTop6();
-	}
-
-	@Override
 	public int getQnaCount(QuestionVO vo) {
 		return questionMapper.getQnaCount(vo);
 	}

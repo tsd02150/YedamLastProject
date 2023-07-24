@@ -9,10 +9,6 @@ public interface BoardService {
 	public String getBoardName(String commonCd);
 	// 게시판 목록 정보
 	public List<BoardVO> getBoardList(BoardVO vo);
-	// 자유게시판 6개 출력
-	public List<BoardVO> getFreeBoardTop6();
-	// 주식게시판 6개 출력
-	public List<BoardVO> getStockBoardTop6();
 	// 게시판 개수
 	public int getBoardCount(BoardVO vo);
 	// 게시물 작성 카테고리 정보

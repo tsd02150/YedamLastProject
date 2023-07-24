@@ -21,19 +21,11 @@ public class StompHandler extends ChannelInterceptorAdapter{
 	@Autowired
 	MemberService memberService;
 	
-//	private final SimpMessagingTemplate template;
-//	
-//	
-//	public StompHandler(SimpMessagingTemplate template) {
-//		this.template = template;
-//	}
-	
     @Override
     public void postSend(Message<?> message, MessageChannel channel, boolean sent) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
 
         String targetMembNo="";
-        
         
         switch (accessor.getCommand()) {
             case CONNECT:
@@ -42,16 +34,11 @@ public class StompHandler extends ChannelInterceptorAdapter{
             case DISCONNECT:
                 // 유저가 Websocket으로 disconnect() 를 한 뒤 호출됨 or 세션이 끊어졌을 때 발생함(페이지 이동~ 브라우저 닫기 등)
             	targetMembNo=memberService.selectOneMemb(accessor.getUser().getName()).getMembNo();
-            	System.out.println(chatService.getParticipationInfo(targetMembNo));
             	ChatParticipationVO particiInfo = chatService.getParticipationInfo(targetMembNo);
-//            	String targetRoomNo = particiInfo.getRoomNo();
+            	
             	if(particiInfo!=null) {
             		chatService.subtractRoomCnt(targetMembNo);
             		chatService.deletePartici(targetMembNo);
-//            		ChatRoomVO vo = chatService.roomInfo(targetRoomNo);
-//            		vo.setParticiList(chatService.selectParticiList(targetRoomNo));
-//            		template.convertAndSend("/topic/partici/"+targetRoomNo,vo);
-            		System.out.println("deletePartici");
             	}
 
             	targetMembNo="";

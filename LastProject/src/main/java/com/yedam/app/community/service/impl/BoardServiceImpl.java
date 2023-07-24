@@ -30,18 +30,6 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.getBoardList(vo);
 	}
 
-	// 자유게시판 6개 출력
-	@Override
-	public List<BoardVO> getFreeBoardTop6() {
-		return boardMapper.getFreeBoardTop6();
-	}
-
-	// 주식게시판 6개 출력
-	@Override
-	public List<BoardVO> getStockBoardTop6() {
-		return boardMapper.getStockBoardTop6();
-	}
-
 	// 게시판 개수
 	@Override
 	public int getBoardCount(BoardVO vo) {
