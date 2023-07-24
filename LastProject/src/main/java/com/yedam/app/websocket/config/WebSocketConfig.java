@@ -24,7 +24,6 @@ public class WebSocketConfig implements  WebSocketMessageBrokerConfigurer{
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		registry.addEndpoint("/socketserver");      //서버 연결 url 
-		registry.addEndpoint("/socketserver").withSockJS();					// 서버연결 url
 	}
 	
 	@Override

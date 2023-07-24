@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface OrderService {
 	
-	public List<OrderVO> getOrderList(OrderVO ordVO);
+	public List<OrderVO> getOrderList(String membNo);
 }

@@ -85,10 +85,10 @@
 				</thead>
 				<tbody>
 				<tr>
-					<td th:text="${sumNowPrc*10}">원</td>
-					<td th:text="${sumTradePrc*10}">원</td>
-					<td th:text="${(sumTradePrc-sumNowPrc)*10}">원</td>
-					<td th:text="${raise}">%</td>
+					<td th:text="|${#numbers.formatInteger(sumNowPrc*10, 0, 'COMMA')}|">원</td>
+					<td th:text="|${#numbers.formatInteger(sumTradePrc*10, 0, 'COMMA')}|">원</td>
+					<td th:text="|${#numbers.formatInteger((sumTradePrc-sumNowPrc)*10, 0, 'COMMA')}|">원</td>
+					<td th:text="|${#numbers.formatDecimal(sumTradePrc/sumNowPrc*100, 3, 2)}|">%</td>
 				</tr>
 				</tbody>
 			</table>
@@ -534,11 +534,11 @@ var options = {
         ranges: [{
           from: -100,
           to: -46,
-          color: '#F15B46'
+          color: '#FEB019'
         }, {
           from: -45,
           to: 0,
-          color: '#FEB019'
+          color: '#F15B46'
         }]
       },
       columnWidth: '80%',

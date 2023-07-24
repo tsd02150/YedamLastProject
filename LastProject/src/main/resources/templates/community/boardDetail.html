@@ -6,6 +6,51 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="../community/css/board.css">
+<style>
+/* 모달 창 */
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 999;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+	background-color: #fefefe;
+	margin: 10% auto;
+	padding: 50px;
+	border: 1px solid #888;
+	width: 800px;
+	height: 600px;
+}
+.modal-content tr{
+	height: 50px;
+}
+.modal-content input{
+	border: solid 1.5px #D3D3D3;
+	border-radius: 5px;
+	font-size: 16px;
+	padding: 10px;
+}
+
+.close {
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.close:hover, .close:focus {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
+}
+</style>
 </head>
 <body>
 	<div layout:fragment="content">
@@ -18,7 +63,7 @@
 					<h3 th:text="${board.ttl}">제목</h3>
 					<div id="boardInfo" class="d-flex">
 						<div>
-							<p th:text="${member.nick}">이름</p>
+							<p class="membInfo" th:text="${member.nick}" th:data-membno="${member.membNo}">이름</p>
 						</div>
 						<div id="boardInfoDetail" class="d-flex">
 							<p th:text="${#dates.format(board.drwupDt,'yyyy-MM-dd')}">날짜</p>
@@ -69,7 +114,7 @@
 							<div th:class="${comment.commNo==comment.hCommNo}?'hComment':'subComment'">
 								<div class="d-flex justify-content-between">
 									<div class="d-flex">
-										<p><b class="commentNick">[[${comment.nick}]]</b></p>
+										<p class="membInfo" th:data-membno="${comment.membNo}"><b class="commentNick">[[${comment.nick}]]</b></p>
 										<p>&nbsp([[${#dates.format(comment.drwupDt,'yyyy-MM-dd')}]])</p>
 									</div>
 									<div class="commentContent">
@@ -119,7 +164,68 @@
 			</div>
 			
 		</div>
-		
+		<!-- 회원 정보 모달 창 -->
+		<div id="membInfoModal" class="modal">
+			<div class="modal-content">
+				<span class="close" onClick="closeModal()">&times;</span>
+				<h2 style="text-align: center;">회원 정보</h2>
+				<br/>
+				<br/>
+				<table>
+					<tr>
+						<th style="width:15%;">닉네임</th>
+						<td style="width:30%;">[[${member.nick}]]</td>
+						<th style="width:15%;" rowspan="2">투자성향</th>
+						<td style="width:40%;" rowspan="2">!!</td>
+					</tr>
+					<tr>
+						<th>ID</th>
+						<td>[[${member.id}]]</td>
+					</tr>
+					<tr>
+						<th>관심종목</th>
+						<td colspan="3">!!!</td>
+					</tr>
+				</table>	
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<div style="text-align: center;">
+					<button type="button" class="btn btn-primary  mt-2 mt-lg-0" onClick="declareForm()">신고</button>
+					<button type="reset" class="btn btn-dark  mt-2 mt-lg-0" onClick="closeModal()">취소하기</button>
+				</div>
+			</div>
+		</div>
+		<!-- 신고 모달 창 -->
+		<div id="declareModal" class="modal">
+			<div class="modal-content">
+				<span class="close" onClick="closeModal()">&times;</span>
+				<h2 style="text-align: center;">신고</h2>
+				<br/>
+				<br/>
+				<form id="declareForm">
+					<div class="d-flex justify-content-between">
+						<label for="decalreNick"><b>닉네임</b></label>
+						<input type="text" id="decalreNick">
+						<label for="myNick"><b>신고자</b></label>
+						<input type="text" id="myNick" th:value="${member.nick}">
+					</div>
+					<label for="reson"><b>사유</b></label>
+					<input type="text" id="reson">					
+					<label for="declareContent"><b>내용</b></label>
+					<textarea id="declareContent" rows="30" cols="10"></textarea>					
+				</form>
+				<br/>
+				<br/>
+				<br/>
+				<br/>
+				<div style="text-align: center;">
+					<button type="button" class="btn btn-primary  mt-2 mt-lg-0" onClick="declare()">신고하기</button>
+					<button type="reset" class="btn btn-dark  mt-2 mt-lg-0" onClick="closeModal()">취소하기</button>
+				</div>
+			</div>
+		</div>
 		
 		<script th:inline="javascript">
 			contentBody.innerHTML=[[${board.cntn}]];
@@ -414,6 +520,46 @@
 				})
 				.catch(err=>console.log(err));
 			}
+			
+			// 유저 정보
+			$('.membInfo').on('click',function(){
+				let membNo=$(event.target).closest('p').data('membno');
+				fetch('/community/getMemberInfo',{
+					method: "POST",
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					body: 'membNo='+membNo
+				})
+				.then(response=>response.json())
+				.then(result=>{
+					console.log(result.membInfo);
+					console.log(result.stockList.length);
+					$('#membInfoModal').css('display', 'block');
+				})
+				.catch(err=>console.log(err));
+				
+			})
+			
+			function closeModal(){
+				$('.modal').css('display', 'none');		
+			}
+
+			// 모달 바깥 영역 클릭 시 모달 닫힘
+			window.addEventListener('click', function(event) {
+				if ($(event.target).hasClass('modal') == true) {
+					$('.modal').css('display', 'none');
+				}
+			});
+			
+			function declareForm(){
+				
+			}
+
+			function declare(){
+				
+			}
+			
 			
 			
 		</script>

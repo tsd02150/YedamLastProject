@@ -1,5 +1,8 @@
 package com.yedam.app.mall.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +35,19 @@ public class OrderController {
 	@GetMapping("orderList")
 	public String orderList(Model model, BasketVO bskVO, MembVO membVO, OrderVO ordVO, HttpSession session) {
 		
-		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		//UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		String membNo = ((UserVO) session.getAttribute("loggedInMember")).getMembNo();
+		
 		model.addAttribute("member", membVO.getMembNo());
+		model.addAttribute("membNo", membNo);
 		
+		List<OrderVO> orderList = new ArrayList<OrderVO>();
+		orderList = orderService.getOrderList(membNo);
+		System.out.println("주문리스트 : " + orderList);
+		model.addAttribute("orderList", orderList);
 		
-		model.addAttribute("orderList", orderService.getOrderList(ordVO));
-		System.out.println(model);
+		//model.addAttribute("orderList", orderService.getOrderList(ordVO));
+		
 		
 		
 		return "mall/orderList";

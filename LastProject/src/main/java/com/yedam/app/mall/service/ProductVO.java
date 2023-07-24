@@ -26,6 +26,8 @@ public class ProductVO {
 	private String ctgr;
 	
 	//구입수량
-	private String cnt;
+	private int cnt;
+	
+	private String membNo;
 
 }

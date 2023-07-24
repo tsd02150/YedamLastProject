@@ -1,5 +1,6 @@
 package com.yedam.app.mall.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -78,6 +79,7 @@ public class BasketController {
 //	
 
 
+
 	// 장바구니 리스트
 //	@GetMapping("allbasketItem")
 //	public Map<String, Object> allbasketItem(Model model, BasketVO bskVO, HttpSession session) throws Exception {
@@ -115,47 +117,58 @@ public class BasketController {
 //		}
 //	}
 
-	// 장바구니 정보 갖고오기
-	@GetMapping("getBasketList")
-	@ResponseBody
-	public List<BasketVO> getBasketList(BasketVO bskVO) {
-		List<BasketVO> basketItem = basketService.getBasketList(bskVO);
 
-		return basketItem;
-	}
+	// 장바구니 정보 갖고오기
+//	@GetMapping("getBasketList")
+//	@ResponseBody
+//	public List<BasketVO> getBasketList(BasketVO bskVO) {
+//		List<BasketVO> basketItem = basketService.getBasketList(bskVO);
+//
+//		return basketItem;
+//	}
 
 
 //	// 장바구니 페이지 이거야!!!!!!!!!!!!!
 	@GetMapping("basketList")
-	public String basketList(Model model, BasketVO bskVO, MembVO membVO, HttpSession session) {
+	public String basketList(Model model, HttpSession session) {
 		// bskVO = basketService.getBasketList(bskVO.getPrdtNo());
 		
 		
-		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		String memNo = ((UserVO) session.getAttribute("loggedInMember")).getMembNo();
+		String prdtNo = ((UserVO) session.getAttribute("loggedInMember")).getPrdtNo();
 		//model.addAttribute("member", membVO.getMembNo());
-
-		model.addAttribute("basketInfo", bskVO);
+		//model.addAttribute("basketList", basketService.getBasketList(memNo));
+		
+		model.addAttribute("membNo", memNo);
+		model.addAttribute("prdtNo", prdtNo);
+		List<BasketVO> list = new ArrayList<BasketVO>();
+		list = basketService.getBasketList(memNo);
+		System.out.println("장바구니 리스트 : "+list);
+		model.addAttribute("basketList", list);
+		
+//		model.addAttribute("basketInfo", bskVO);
 
 		//bskVO.setMembNo(mem.getMembNo());
 		//bskVO.setMembNo(basketService.getIntPrdt(bskVO.getPrdtNo()));
 		
-		model.addAttribute("basketList", basketService.getBasketList(bskVO));
-		model.addAttribute("basket", bskVO);
-		model.addAttribute("member", basketService.getMembInfo(bskVO.getMembNo()));
+//		model.addAttribute("basket", bskVO);
+//		model.addAttribute("member", basketService.getMembInfo(bskVO.getMembNo()));
 		//model.addAttribute("member", basketService.getIntPrdt(bskVO.getMembNo()));
 
-		if (mem != null) {
-			model.addAttribute("interestPrdt", basketService.getIntPrdt(mem.getMembNo()));
-		}
+//		if (mem != null) {
+//			model.addAttribute("interestPrdt", basketService.getIntPrdt(mem.getMembNo()));
+//		}
 
 		return "mall/basketList";
 	}
+	
+	
 
 //	// 장바구니 추가 기능 이거야!!!!!!!!!!!!!
 	@PostMapping("basketList")
 	@ResponseBody
 	public String addCartItem(BasketVO bskVO, HttpSession session) {
-
+		System.out.println("~~~~~~~~~~~"+bskVO);
 		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 
 		if (mem == null) {

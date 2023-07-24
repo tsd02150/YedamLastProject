@@ -6,478 +6,521 @@
 <meta charset="UTF-8">
 <title>orderList.html</title>
 <style>
-
-
-*{
+* {
 	margin: 0;
-	padding:0;
+	padding: 0;
 }
-a{
+
+a {
 	text-decoration: none;
 }
 /* 화면 전체 렙 */
-.wrapper{
+.wrapper {
 	width: 100%;
 }
 /* content 랩 */
-.wrap{
-	width : 1080px;
+.wrap {
+	width: 1080px;
 	margin: auto;
 }
-/* 홈페이지 기능 네비 */ 
-.top_gnb_area{
+/* 홈페이지 기능 네비 */
+.top_gnb_area {
 	width: 100%;
-    height: 50px;
-    background-color: #f0f0f1;
-    position:relative;    
+	height: 50px;
+	background-color: #f0f0f1;
+	position: relative;
 }
-.top_gnb_area .list{
+
+.top_gnb_area .list {
 	position: absolute;
-    top: 0px;
-    right: 0;
-    
+	top: 0px;
+	right: 0;
 }
-.top_gnb_area .list li{
-	list-style: none;	
-    float : left;
-    padding: 13px 15px 0 10px;
-    font-weight: 900;
-    cursor: pointer;
+
+.top_gnb_area .list li {
+	list-style: none;
+	float: left;
+	padding: 13px 15px 0 10px;
+	font-weight: 900;
+	cursor: pointer;
 }
 /* 로고, 검색, 로그인 */
-.top_area{
+.top_area {
 	width: 100%;
-    height: 150px;
-    /* background-color: #f7f0b9; */
+	height: 150px;
+	/* background-color: #f7f0b9; */
 }
 /* 로고 영역 */
-.logo_area{
+.logo_area {
 	width: 25%;
 	height: 100%;
-	float:left;
+	float: left;
 }
-.logo_area img{
+
+.logo_area img {
 	width: 100%;
-    height: 100%;
+	height: 100%;
 }
 
 /* 검색 박스 영역 */
-.search_area{
+.search_area {
 	width: 50%;
 	height: 100%;
-	float:left;	
+	float: left;
 }
-.search_wrap{
+
+.search_wrap {
 	width: 100%;
-    height: 100%;
+	height: 100%;
 }
-#searchForm{
+
+#searchForm {
 	width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
-.search_input{
-    display: flex;
-    height: 30%;
-    width: 80%;	
+
+.search_input {
+	display: flex;
+	height: 30%;
+	width: 80%;
 }
-.search_input select{
+
+.search_input select {
 	width: 20%;
-    text-align: center;
-    font-size: 15px;	
+	text-align: center;
+	font-size: 15px;
 }
-.search_input input{
-    margin-left: 10px;
-    width: 57%;	
-    font-size: 18px;
-    padding-left: 2%;
-}
-.search_btn{
+
+.search_input input {
 	margin-left: 10px;
-    width: 17%;
-    border-radius: 14px;
-    font-size: 17px;
-    font-weight: 600;	
-}	
+	width: 57%;
+	font-size: 18px;
+	padding-left: 2%;
+}
 
-
+.search_btn {
+	margin-left: 10px;
+	width: 17%;
+	border-radius: 14px;
+	font-size: 17px;
+	font-weight: 600;
+}
 
 /* 제품 목록 네비 */
-.navi_bar_area{
+.navi_bar_area {
 	width: 100%;
-    height: 70px;
-    background-color: #7696fd;
+	height: 70px;
+	background-color: #7696fd;
 }
 
 /* 홈페이지 메인 제품 목록  */
-.content_area{
+.content_area {
 	width: 100%;
-    min-height: 1000px;
+	min-height: 1000px;
 }
-	 table{
-	 	border-collapse: collapse;
-	 	width: 100%;
-	 }
-	 .table_text_align_center{
-				text-align: center;
-	 }	
-	 caption{
-	    visibility: hidden;
-	    width: 0;
-	    height: 0;
-	    font-size: 0;
-	    line-height: 0;
-	    overflow: hidden; 
-	 }	  
 
-	 .content_subject{
-		height: 110px;
-	    line-height: 110px;
-	    background-color: #5080bd;
-	    margin-bottom: 60px; 
-	 
-	 }
-		 .content_subject span{ 
-		    padding-left: 30 px;
-		    display: inline-block;
-		    color: white;
-		    font-size: 50px;
-		    font-weight: bolder; 
-		 }
-	 
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.table_text_align_center {
+	text-align: center;
+}
+
+caption {
+	visibility: hidden;
+	width: 0;
+	height: 0;
+	font-size: 0;
+	line-height: 0;
+	overflow: hidden;
+}
+
+.content_subject {
+	height: 110px;
+	line-height: 110px;
+	background-color: #5080bd;
+	margin-bottom: 60px;
+}
+
+.content_subject span {
+	padding-left: 30 px;
+	display: inline-block;
+	color: white;
+	font-size: 50px;
+	font-weight: bolder;
+}
+
 /* content_main */
- .content_main{
-    min-height: 700px;
-    padding-right: 350px;
-    position: relative;
- }
- table{
- 	border-collapse: collapse;
- }
- 
- /* 사용자 정보  */
- .memberInfo_table{
-    width: 100%;
-    border-spacing: 0;
-    border-top: 2px solid #363636;
-    border-bottom: 1px solid #b6b6b6; 
- }
- .member_info_div td{
- 	padding : 12px;
- 	text-align: left;
- }
-
-
- /* 사용자 주소 정보 */
- .addressInfo_div{
- 	margin-top: 30px;
- }
- .addressInfo_input_div_wrap{
- 	border-bottom: 1px solid #f3f3f3;
- 	height: 225px;
- }
-.address_btn {
-    background-color: #555;
-    color: white;
-    float: left;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 14px 16px;
-    font-size: 17px;
-    width: 50%;
+.content_main {
+	min-height: 700px;
+	padding-right: 350px;
+	position: relative;
 }
 
-.address_btn:hover{
+table {
+	border-collapse: collapse;
+}
+
+/* 사용자 정보  */
+.memberInfo_table {
+	width: 100%;
+	border-spacing: 0;
+	border-top: 2px solid #363636;
+	border-bottom: 1px solid #b6b6b6;
+}
+
+.member_info_div td {
+	padding: 12px;
+	text-align: left;
+}
+
+/* 사용자 주소 정보 */
+.addressInfo_div {
+	margin-top: 30px;
+}
+
+.addressInfo_input_div_wrap {
+	border-bottom: 1px solid #f3f3f3;
+	height: 225px;
+}
+
+.address_btn {
+	background-color: #555;
+	color: white;
+	float: left;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	padding: 14px 16px;
+	font-size: 17px;
+	width: 50%;
+}
+
+.address_btn:hover {
 	background-color: #777;
 }
-.addressInfo_button_div::after{
-	content:'';
-	display:block;
-	clear:both;
+
+.addressInfo_button_div::after {
+	content: '';
+	display: block;
+	clear: both;
 }
-		.addressInfo_input_div{
-			padding:12px;
-			text-align: left;
-			display: none;
-			line-height: 40px;
-		}
-		.addressInfo_input_div th{
-			border-color: transparent;
-		    background-color: transparent;		
-		}
-		.addressInfo_input_div th{
-			padding : 12px 5px 12px 20px;
-			vertical-align: top;
-		}
-		.addressInfo_input_div td{
-			padding : 8px 12px;
-		}		
-		.addressInfo_input_div_2 input{
-			padding: 6px 5px;
-		}
-.address_search_btn{
-    vertical-align: middle;
-    display: inline-block;
-    border: 1px solid #aaa;
-    width: 90px;
-    text-align: center;
-    height: 30px;
-    line-height: 30px;
-    color: #555;
-    cursor: pointer;
+
+.addressInfo_input_div {
+	padding: 12px;
+	text-align: left;
+	display: none;
+	line-height: 40px;
+}
+
+.addressInfo_input_div th {
+	border-color: transparent;
+	background-color: transparent;
+}
+
+.addressInfo_input_div th {
+	padding: 12px 5px 12px 20px;
+	vertical-align: top;
+}
+
+.addressInfo_input_div td {
+	padding: 8px 12px;
+}
+
+.addressInfo_input_div_2 input {
+	padding: 6px 5px;
+}
+
+.address_search_btn {
+	vertical-align: middle;
+	display: inline-block;
+	border: 1px solid #aaa;
+	width: 90px;
+	text-align: center;
+	height: 30px;
+	line-height: 30px;
+	color: #555;
+	cursor: pointer;
 }
 /* 주문상품 정보 */
-.orderGoods_div{
-	margin-top:30px;
+.orderGoods_div {
+	margin-top: 30px;
 }
-.goods_kind_div{
+
+.goods_kind_div {
 	font-size: 25px;
-    line-height: 35px;
-    font-weight: bold;
+	line-height: 35px;
+	font-weight: bold;
 }
-.goods_subject_table{
+
+.goods_subject_table {
 	font-size: 14px;
-    line-height: 20px;
-    width: 100%;
-    text-align: center; 
-}
-.goods_subject_table th{
+	line-height: 20px;
+	width: 100%;
 	text-align: center;
-    color: #333;
-    border-bottom: 1px solid #e7e7e7;
-    border-top: 2px solid #3084d9;
-    background: #f4f9fd;
-    padding: 2px 0;	 
 }
-.goods_table{
+
+.goods_subject_table th {
+	text-align: center;
+	color: #333;
+	border-bottom: 1px solid #e7e7e7;
+	border-top: 2px solid #3084d9;
+	background: #f4f9fd;
+	padding: 2px 0;
+}
+
+.goods_table {
 	font-size: 14px;
 	line-height: 20px;
 	border-bottom: 1px solid #e7e7e7;
 }
 
-.goods_table tr{
-height: 110px;
+.goods_table tr {
+	height: 110px;
 }
-.goods_table_price_td{
+
+.goods_table_price_td {
 	text-align: center;
 }
 
-
 /* 포인트 영역 */
-.point_div{
+.point_div {
 	margin-top: 30px;
-	margin-bottom: 50px;	
+	margin-bottom: 50px;
 }
-.point_div_subject{
+
+.point_div_subject {
 	font-size: 25px;
-    line-height: 35px;
-    font-weight: bold;
+	line-height: 35px;
+	font-weight: bold;
 }
-.point_table{
+
+.point_table {
 	border-color: #ddd;
-    border-spacing: 0;
-    border-top: 1px solid #363636;
-    border-bottom: 1px solid #b6b6b6;
+	border-spacing: 0;
+	border-top: 1px solid #363636;
+	border-bottom: 1px solid #b6b6b6;
 }
-.point_table th{
+
+.point_table th {
 	border-color: #ddd;
-    vertical-align: top;
-    text-align: center;
-    color: #333333;
-    background: #fbfbfb;
-    text-indent: 0;
-    padding: 12px 5px 12px 20px;
-    font-size: 15px;
-    line-height: 20px;
+	vertical-align: top;
+	text-align: center;
+	color: #333333;
+	background: #fbfbfb;
+	text-indent: 0;
+	padding: 12px 5px 12px 20px;
+	font-size: 15px;
+	line-height: 20px;
 }
-.point_table_td{
+
+.point_table_td {
 	border-color: #ddd;
-    text-align: left;
-    color: #333333;
-    padding: 8px 15px;
+	text-align: left;
+	color: #333333;
+	padding: 8px 15px;
 }
-.order_point_input_btn{
+
+.order_point_input_btn {
 	vertical-align: middle;
-    display: inline-block;
-    border: 1px solid #aaa;
-    width: 60px;
-    text-align: center;
-    height: 20px;
-    line-height: 20px;
-    color: #555;
-    cursor: pointer;
-    font-size: 12px;
+	display: inline-block;
+	border: 1px solid #aaa;
+	width: 60px;
+	text-align: center;
+	height: 20px;
+	line-height: 20px;
+	color: #555;
+	cursor: pointer;
+	font-size: 12px;
 }
 
 /* 주문 종합 정보 */
-.total_info_div{
-	position:absolute;
+.total_info_div {
+	position: absolute;
 	top: 0;
-	right : 0;
-	width : 300px;
-	border : 1px solid #333;
-	border-top-width:2px;	
-	
+	right: 0;
+	width: 300px;
+	border: 1px solid #333;
+	border-top-width: 2px;
 }
-.total_info_price_div{
+
+.total_info_price_div {
 	width: 90%;
-    margin: auto;
+	margin: auto;
 	position: relative;
 }
-.total_info_div ul{
+
+.total_info_div ul {
 	list-style: none;
 }
-.total_info_div li{
+
+.total_info_div li {
 	text-align: right;
-	margin-top:10px;
+	margin-top: 10px;
 }
-.price_span_label{
+
+.price_span_label {
 	float: left;
 }
-.price_total_li{
+
+.price_total_li {
 	border-top: 1px solid #ddd;
 	padding-top: 20px;
 }
-.strong_red{
+
+.strong_red {
 	color: red;
 }
-.total_price_red{
+
+.total_price_red {
 	font-size: 25px;
 }
-.total_price_label{
+
+.total_price_label {
 	margin-top: 5px;
 }
-.point_li{
-    padding: 15px;
-    border-top: 1px solid #ddd;
-    margin: 10px -15px 0;
-}
-.total_info_btn_div{
+
+.point_li {
+	padding: 15px;
 	border-top: 1px solid #ddd;
-    text-align: center;
-    padding: 15px 20px;
+	margin: 10px -15px 0;
 }
-.order_btn{
-    display: inline-block;
-    font-size: 21px;
-    line-height: 50px;
-    width: 200px;
-    height: 50px;
-    background-color: #365fdd;
-    color: #fff;
-    font-weight: bold;
+
+.total_info_btn_div {
+	border-top: 1px solid #ddd;
+	text-align: center;
+	padding: 15px 20px;
+}
+
+.order_btn {
+	display: inline-block;
+	font-size: 21px;
+	line-height: 50px;
+	width: 200px;
+	height: 50px;
+	background-color: #365fdd;
+	color: #fff;
+	font-weight: bold;
 }
 
 /* 이미지 */
-.image_wrap{
+.image_wrap {
 	width: 100%;
 	height: 100%;
 }
-.image_wrap img{
-    max-width: 85%;
-    height: auto;
-    display: block;		
+
+.image_wrap img {
+	max-width: 85%;
+	height: auto;
+	display: block;
 }
-
-
-
 
 /* 로그인 성공 영역 */
-.login_success_area{
+.login_success_area {
 	height: 62%;
-    width: 80%;
-    border: 2px solid #7474ad;
-    border-radius: 15px;
-    margin: 5% auto;
-    padding-top: 5%;
+	width: 80%;
+	border: 2px solid #7474ad;
+	border-radius: 15px;
+	margin: 5% auto;
+	padding-top: 5%;
 }
-.login_success_area>a{
-    font-size: 15px;
-    font-weight: 900;
-    display: inline-block;
-    margin-top: 5px;
-    background: #e1e5e8;
-    width: 82px;
-    height: 22px;
-    line-height: 22px;
-    border-radius: 25px;
-    color: #606267;    
+
+.login_success_area>a {
+	font-size: 15px;
+	font-weight: 900;
+	display: inline-block;
+	margin-top: 5px;
+	background: #e1e5e8;
+	width: 82px;
+	height: 22px;
+	line-height: 22px;
+	border-radius: 25px;
+	color: #606267;
 }
-.login_success_area>span{
-	display : block;
+
+.login_success_area>span {
+	display: block;
 	text-align: left;
-    margin-left: 10%;
+	margin-left: 10%;
 }
 
 /* 검색결과 없음 */
-.table_empty{
+.table_empty {
 	height: 50px;
-    text-align: center;
-    margin: 200px 0 215px 0px;
-    font-size: 25px;
+	text-align: center;
+	margin: 200px 0 215px 0px;
+	font-size: 25px;
 }
 
 /* 필터정보 */
 .search_filter {
-    width: 85%;
-    margin: auto;
+	width: 85%;
+	margin: auto;
 	margin-top: 30px;
-    margin-bottom: 50px;    
-} 
+	margin-bottom: 50px;
+}
+
 .filter_button_wrap {
-    width: 100%;
+	width: 100%;
 }
 
 .filter_button_wrap button {
-    width: 50%;
-} 
-.filter_button{
+	width: 50%;
+}
+
+.filter_button {
 	background-color: #04AA6D;
 	border: 1px solid green;
 	color: white;
 	padding: 10px 24px;
 	cursor: pointer;
 	float: left;
-} 
-.filter_button_wrap:after {
-    content: "";
-    clear: both;
-    display: table;
-}  	
-.filter_button_wrap button:not(:last-child) {
-    border-right: none;
-} 
-.filter_button:hover {
-    background-color: #3e8e41;
 }
-.filter_active{
+
+.filter_button_wrap:after {
+	content: "";
+	clear: both;
+	display: table;
+}
+
+.filter_button_wrap button:not(:last-child) {
+	border-right: none;
+}
+
+.filter_button:hover {
+	background-color: #3e8e41;
+}
+
+.filter_active {
 	background-color: #045d3c;
 }
-.filter_content{
-	padding:20px 50px 20px 50px;
+
+.filter_content {
+	padding: 20px 50px 20px 50px;
 	border: 1px solid gray;
 }
-.filter_content a:not(:first-child){
+
+.filter_content a:not(:first-child) {
 	margin-left: 10px;
 }
-.filter_a{
+
+.filter_a {
 	display: block;
 }
 
-.filter_b{
+.filter_b {
 	display: none;
 }
 
-
-
 /* float 속성 해제 */
-.clearfix{
+.clearfix {
 	clear: both;
 }
-
 </style>
 
 <script
@@ -485,10 +528,12 @@ height: 110px;
 </head>
 <body>
 	<div layout:fragment="content" class="outer-block">
-	
-	<div class="content_area">
-			
-			<div class="content_subject"><span>장바구니</span></div>
+
+		<div class="content_area">
+
+			<div class="content_subject">
+				<span>장바구니</span>
+			</div>
 
 			<div class="content_main">
 				<!-- 회원 정보 -->
@@ -497,20 +542,25 @@ height: 110px;
 						<tbody>
 							<tr>
 								<th style="width: 25%;">주문자</th>
-								<td style="width: *">${memberInfo.memberName} | ${memberInfo.memberMail}</td>
+								<td style="width: *">${memberInfo.memberName} |
+									${memberInfo.memberMail}</td>
 							</tr>
 						</tbody>
 					</table>
-				</div>				
-				
+				</div>
+
 				<!-- 배송지 정보 -->
 				<div class="addressInfo_div">
 					<div class="addressInfo_button_div">
-						<button class="address_btn address_btn_1" onclick="showAdress('1')" style="background-color: #3c3838;">상용자 정보 주소록</button>
-						<button class="address_btn address_btn_2" onclick="sample6_execDaumPostcode()">직접 입력</button>
+						<button class="address_btn address_btn_1"
+							onclick="showAdress('1')" style="background-color: #3c3838;">상용자
+							정보 주소록</button>
+						<button class="address_btn address_btn_2" id="addrModal"
+							onclick="sample6_execDaumPostcode()">직접 입력</button>
 					</div>
 					<div class="addressInfo_input_div_wrap">
-						<div class="addressInfo_input_div addressInfo_input_div_1" style="display: block">
+						<div class="addressInfo_input_div addressInfo_input_div_1"
+							style="display: block">
 							<table>
 								<colgroup>
 									<col width="25%">
@@ -519,19 +569,13 @@ height: 110px;
 								<tbody th:each="item :${orderList}">
 									<tr>
 										<th>이름</th>
-										<td>
-											[[${item.nm}]]
-										</td>
+										<td>[[${item.nm}]]</td>
 									</tr>
 									<tr>
 										<th>주소</th>
-										<td>
-											[[${item.zip}]]<br>[[${item.addr}]]
-											<input class="selectAddress" value="T" type="hidden">
-											<input class="addressee_input" value="${memberInfo.memberName}" type="hidden">
-											<input class="address1_input" type="hidden" value="${memberInfo.memberAddr1}">
-											<input class="address2_input" type="hidden" value="${memberInfo.memberAddr2}">
-											<input class="address3_input" type="hidden" value="${memberInfo.memberAddr3}">																					
+										<td>[[${item.zip}]]<br>[[${item.addr}]][[${item.detaAddr}]]
+											<input class="selectAddress" value="T" >
+											
 										</td>
 									</tr>
 								</tbody>
@@ -546,29 +590,28 @@ height: 110px;
 								<tbody>
 									<tr>
 										<th>이름</th>
-										<td>
-											<input class="addressee_input">
-										</td>
+										<td><input class="addressee_input"></td>
 									</tr>
 									<tr>
 										<th>주소</th>
-										<td>
-											<input class="selectAddress" value="F" type="hidden">
-											<input class="address1_input" readonly="readonly"> <a class="address_search_btn" onclick="execution_daum_address()">주소 찾기</a><br>
-											<input class="address2_input" readonly="readonly"><br>
-											<input class="address3_input" readonly="readonly">
-										</td>
+										<td><input class="selectAddress" value="F" type="hidden">
+											<input class="address1_input" readonly="readonly"> <a
+											class="address_search_btn" onclick="execution_daum_address()">주소
+												찾기</a><br> <input class="address2_input"
+											readonly="readonly"><br> <input
+											class="address3_input" readonly="readonly"></td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
 					</div>
-				</div>				
+				</div>
 				<!-- 상품 정보 -->
 				<div class="orderGoods_div">
 					<!-- 상품 종류 -->
 					<div class="goods_kind_div">
-						주문상품 <span class="goods_kind_div_kind"></span>종 <span class="goods_kind_div_count"></span>개
+						주문상품 <span class="goods_kind_div_kind"></span>종 <span
+							class="goods_kind_div_count"></span>개
 					</div>
 					<!-- 상품 테이블 -->
 					<table class="goods_subject_table">
@@ -590,35 +633,43 @@ height: 110px;
 							<col width="15%">
 							<col width="45%">
 							<col width="40%">
-						</colgroup>					
-						<tbody >
-							
-								<tr th:each="item :${orderList}">
-									<td>
-										<div class="image_wrap" data-bookid="${ol.imageList[0].bookId}" data-path="${ol.imageList[0].uploadPath}" data-uuid="${ol.imageList[0].uuid}" data-filename="${ol.imageList[0].fileName}">
-											<img th:src="|/mall/images/main/${item.thumb}|">
-										</div>
-									</td>
-									<td th:text="${item.nm}">${ol.bookName}</td>
-									<td class="goods_table_price_td">
-										<fmt:formatNumber value="${ol.salePrice}" pattern="#,### 원" /> | 수량 ${item.cnt}개
-										<br><fmt:formatNumber value="${ol.totalPrice}" pattern="#,### 원" />
-										<br>[<fmt:formatNumber value="${ol.totalPoint}" pattern="#,### 원" />P]
-										<input type="hidden" class="individual_bookPrice_input" value="${ol.bookPrice}">
-										<input type="hidden" class="individual_salePrice_input" value="${ol.salePrice}">
-										<input type="hidden" class="individual_bookCount_input" value="${ol.bookCount}">
-										<input type="hidden" class="individual_totalPrice_input" value="${ol.salePrice * ol.bookCount}">
-										<input type="hidden" class="individual_point_input" value="${ol.point}">
-										<input type="hidden" class="individual_totalPoint_input" value="${ol.totalPoint}">
-										<input type="hidden" class="individual_bookId_input" value="${ol.bookId}">
-									</td>
-								</tr>							
-							
+						</colgroup>
+						<tbody>
+
+							<tr th:each="item :${orderList}">
+								<td>
+									<div class="image_wrap" data-bookid="${ol.imageList[0].bookId}"
+										data-path="${ol.imageList[0].uploadPath}"
+										data-uuid="${ol.imageList[0].uuid}"
+										data-filename="${ol.imageList[0].fileName}">
+										<img th:src="|/mall/images/main/${item.thumb}|">
+									</div>
+								</td>
+								<td th:text="${item.nm}">${ol.bookName}</td>
+								<td class="goods_table_price_td"><fmt:formatNumber
+										value="${ol.salePrice}" pattern="#,### 원" /> | 수량
+									${item.cnt}개 <br>
+								<fmt:formatNumber value="${ol.totalPrice}" pattern="#,### 원" />
+									<br>[<fmt:formatNumber value="${ol.totalPoint}"
+										pattern="#,### 원" />P] <input type="hidden"
+									class="individual_bookPrice_input" value="${ol.bookPrice}">
+									<input type="hidden" class="individual_salePrice_input"
+									value="${ol.salePrice}"> <input type="hidden"
+									class="individual_bookCount_input" value="${ol.bookCount}">
+									<input type="hidden" class="individual_totalPrice_input"
+									value="${ol.salePrice * ol.bookCount}"> <input
+									type="hidden" class="individual_point_input"
+									value="${ol.point}"> <input type="hidden"
+									class="individual_totalPoint_input" value="${ol.totalPoint}">
+									<input type="hidden" class="individual_bookId_input"
+									value="${ol.bookId}"></td>
+							</tr>
+
 
 						</tbody>
 					</table>
-				</div>		
-						
+				</div>
+
 				<!-- 포인트 정보 -->
 				<div class="point_div" th:each="item :${orderList}">
 					<div class="point_div_subject">포인트 사용</div>
@@ -630,75 +681,65 @@ height: 110px;
 						<tbody>
 							<tr>
 								<th>포인트 사용</th>
-								<td>
-									[[${item.point}]] | <input class="order_point_input" value="0">P 
-									<a class="order_point_input_btn order_point_input_btn_N" data-state="N">모두사용</a>
-									<a class="order_point_input_btn order_point_input_btn_Y" data-state="Y" style="display: none;">사용취소</a>
-									
+								<td>[[${item.point}]] | <input class="order_point_input"
+									value="0">P <a
+									class="order_point_input_btn order_point_input_btn_N"
+									data-state="N">모두사용</a> <a
+									class="order_point_input_btn order_point_input_btn_Y"
+									data-state="Y" style="display: none;">사용취소</a>
+
 								</td>
 							</tr>
 						</tbody>
 					</table>
-				</div>				
+				</div>
 				<!-- 주문 종합 정보 -->
 				<div class="total_info_div">
 					<!-- 가격 종합 정보 -->
 					<div class="total_info_price_div">
 						<ul>
-							<li>
-								<span class="price_span_label">상품 금액</span>
-								<span class="totalPrice_span">100000</span>원
-							</li>
-							<li>
-								<span class="price_span_label">배송비</span>
-								<span class="delivery_price_span">100000</span>원
-							</li>
-																					<li>
-								<span class="price_span_label">할인금액</span>
-								<span class="usePoint_span">100000</span>원
-							</li>
-							<li class="price_total_li">
-								<strong class="price_span_label total_price_label">최종 결제 금액</strong>
-								<strong class="strong_red">
-									<span class="total_price_red finalTotalPrice_span">
-										1500000
-									</span>원
-								</strong>
-							</li>
-							<li class="point_li">
-								<span class="price_span_label">적립예정 포인트</span>
-								<span class="totalPoint_span">7960원</span>
-							</li>
+							<li><span class="price_span_label">상품 금액</span> <span
+								class="totalPrice_span">100000</span>원</li>
+							<li><span class="price_span_label">배송비</span> <span
+								class="delivery_price_span">100000</span>원</li>
+							<li><span class="price_span_label">할인금액</span> <span
+								class="usePoint_span">100000</span>원</li>
+							<li class="price_total_li"><strong
+								class="price_span_label total_price_label">최종 결제 금액</strong> <strong
+								class="strong_red"> <span
+									class="total_price_red finalTotalPrice_span"> 1500000 </span>원
+							</strong></li>
+							<li class="point_li"><span class="price_span_label">적립예정
+									포인트</span> <span class="totalPoint_span">7960원</span></li>
 						</ul>
 					</div>
 					<!-- 버튼 영역 -->
 					<div class="total_info_btn_div">
 						<a class="order_btn">결제하기</a>
 					</div>
-				</div>				
-				
-			</div>			
+				</div>
+
+			</div>
 
 			<!-- 주문 요청 form -->
 			<form class="order_form" action="/order" method="post">
 				<!-- 주문자 회원번호 -->
 				<input name="memberId" value="${memberInfo.memberId}" type="hidden">
 				<!-- 주소록 & 받는이-->
-				<input name="addressee" type="hidden">
-				<input name="memberAddr1" type="hidden">
-				<input name="memberAddr2" type="hidden">
-				<input name="memberAddr3" type="hidden">
+				<input name="addressee" type="hidden"> <input
+					name="memberAddr1" type="hidden"> <input name="memberAddr2"
+					type="hidden"> <input name="memberAddr3" type="hidden">
 				<!-- 사용 포인트 -->
 				<input name="usePoint" type="hidden">
 				<!-- 상품 정보 -->
 			</form>
-			
+
 		</div>
-	
-	
-	
-	
-	
+
+
+
+
+
 		<!-- <div style="width: 1100px;">
 			<div class="orderList">
 				<div>&nbsp;</div>
@@ -840,7 +881,7 @@ height: 110px;
 			</div>
 		</div> -->
 
-	<script>
+		<script>
 	$(document).ready(function() {
 		
 		//주문 종합정보 영역 최신화
@@ -993,6 +1034,39 @@ height: 110px;
 				}
 			}
 		});
+		
+		
+		// 주소작성 모달창
+		// 모달 닫기 버튼 클릭 시 모달 닫힘
+		/* document
+			.querySelector('.close')
+			.addEventListener(
+				'click',
+				function() {
+					document.getElementById('reviewModal').style.display = 'none';
+				});
+		*/
+		// 모달 바깥 영역 클릭 시 모달 닫힘
+		/* window.addEventListener('click', function(event) {
+			const modal = document.getElementById('reviewModal');
+			if (event.target === modal) {
+				modal.style.display = 'none';
+			}
+		});
+		
+		// 모달창 ESC 닫힘 
+	
+		document.addEventListener("DOMContentLoaded", function () {
+		var modal = document.getElementById("addrModal");
+		
+		// 'esc' 키를 눌렀을 때 모달 창이 닫히도록 하는 함수
+		function closeModalOnEsc(event) {
+		    if (event.key === "Escape") {
+		        modal.style.display = "none";
+		    }
+		}  */
+
+		
 		
 	</script>
 	</div>

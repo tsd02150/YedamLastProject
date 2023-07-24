@@ -1,6 +1,8 @@
 package com.yedam.app.community.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.yedam.app.community.service.BoardService;
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.CommentsVO;
+import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 
 @Controller
@@ -73,6 +76,7 @@ public class BoardController {
 		model.addAttribute("board",vo);
 		// 게시물 작성자 정보
 		model.addAttribute("member",boardService.getMembInfo(vo.getMembNo()));
+		System.out.println(boardService.getMembInfo(vo.getMembNo()));
 		// 게시물 댓글 정보
 		model.addAttribute("comments",boardService.getComments(vo.getBoardNo()));
 		// 게시물 첨부파일 정보
@@ -225,5 +229,18 @@ public class BoardController {
 			return vo;
 		}
 		return null;
+	}
+	
+	// 회원정보 모달창
+	@PostMapping("getMemberInfo")
+	@ResponseBody
+	public Map<String, Object> getMemberInfo(MembVO vo){
+		vo=boardService.getMembInfo(vo.getMembNo());
+		List<InterestVO> list = boardService.getInerestStockInfo(vo.getMembNo());
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("membInfo", vo);
+		map.put("stockList", list);
+		
+		return map;
 	}
 }

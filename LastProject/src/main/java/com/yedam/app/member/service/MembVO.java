@@ -40,6 +40,9 @@ public class MembVO {
 	private int tprc;
 	private int change;
 	private int rate;
+	
+	//상품번호
+	private String prdtNo;
 
 	
 }

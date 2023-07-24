@@ -28,7 +28,7 @@ public interface BasketService {
 	
 
 //	// 장바구니 리스트
-	public List<BasketVO> getBasketList(BasketVO bskVO);
+	public List<BasketVO> getBasketList(String membNo);
 
 //	// 장바구니 단건삭제
 	public boolean deleteBasket(String prdtNo);

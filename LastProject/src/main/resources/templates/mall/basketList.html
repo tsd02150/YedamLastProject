@@ -148,19 +148,19 @@
 								</td>
 								<td class="td_width_3" th:text="${item.nm}"></td>
 								<td class="td_width_4 price_td">
-									<del>정가 : [[${item.prc}]]</del><br><span class="red_color" pattern="#,### P">
+									<del>정가 : [[${item.prc}]]</del><br><span class="red_color" >
 									판매가 : [[${item.prc - (item.prc * (item.dcRate / 100.0))} + 'P']] </span><br>
 									마일리지 : [[${(item.prc - (item.prc * (item.dcRate / 100.0))) * 0.1} + 'P']]<span class="green_color"></span>
 								</td>
 								<td class="td_width_4 table_text_align_center">
 									<div class="table_text_align_center quantity_div">
-										<input type="text" value="${item.cnt}" class="quantity_input">	
+										<input type="text" class="quantity_input">[[${item.cnt}]]	
 										<button class="quantity_btn plus_btn">+</button>
 										<button class="quantity_btn minus_btn">-</button>
 									</div>
 									<a class="quantity_modify_btn" data-bskNo="${item.bskNo}">변경</a>
 								</td>
-								<td class="td_width_4 table_text_align_center" th:text="${item.prc - (item.prc * (item.dcRate / 100.0)) * item.cnt}" pattern="#,### 원">
+								<td class="td_width_4 table_text_align_center" th:text="${item.prc - (item.prc * (item.dcRate / 100.0)) * item.cnt}" pattern="#,### 원">P
 									
 								</td>
 								<td class="td_width_4 table_text_align_center">
@@ -174,7 +174,7 @@
 				</table>
 			</div>
 			<!-- 가격 종합 -->
-			<div class="content_total_section">
+			<div class="content_total_section" th:each="item :${basketList}">
 				<div class="total_wrap">
 					<table>
 						<tr>
@@ -183,13 +183,13 @@
 									<tr>
 										<td>총 상품 가격</td>
 										<td>
-											<span class="totalPrice_span">70000</span> P
+											<span class="totalPrice_span" th:text="${item.prc - (item.prc * (item.dcRate / 100.0)) * item.cnt}">70000</span> P
 										</td>
 									</tr>
 									<tr>
 										<td>배송비</td>
 										<td>
-											<span class="delivery_price">3000</span>P
+											<span class="delivery_price" >3000</span>P
 										</td>
 									</tr>									
 									<tr>
@@ -234,7 +234,7 @@
 											
 											</td>
 											<td>
-												<span class="totalPoint_span">70000</span> P
+												<span class="totalPoint_span" >70000</span> P
 											</td>
 										</tr>
 									</tbody>
@@ -464,7 +464,7 @@
 	    });
 	});
 	
-	
+
 
 	/* 총 주문 정보 세팅(배송비, 총 가격, 마일리지, 물품 수, 종류) */
 	function setTotalInfo(){
@@ -545,10 +545,10 @@
 		
 		/* 수량 수정 버튼 */
 		$(".quantity_modify_btn").on("click", function(){
-			let cartId = $(this).data("cartid");
-			let bookCount = $(this).parent("td").find("input").val();
-			$(".update_cartId").val(cartId);
-			$(".update_bookCount").val(bookCount);
+			let bskNo = $(this).data("bskNo");
+			let cnt = $(this).parent("td").find("input").val();
+			$(".update_bskNo").val(bskNo);
+			$(".update_cnt").val(cnt);
 			$(".quantity_update_form").submit();
 			
 		});	
@@ -556,14 +556,14 @@
 		/* 장바구니 삭제 버튼 */
 		$(".delete_btn").on("click", function(e){
 			e.preventDefault();
-			const cartId = $(this).data("cartid");
-			$(".delete_cartId").val(cartId);
+			const bskNo = $(this).data("bskNo");
+			$(".delete_bskNo").val(bskNo);
 			$(".quantity_delete_form").submit();
 		});
 		
 		
 		/* 배송비 결정 */
-		if(totalPrice >= 20000){
+		if(totalPrice >= 10000){
 			deliveryPrice = 0;
 		} else if(totalPrice == 0){
 			deliveryPrice = 0;
@@ -599,7 +599,7 @@
 	function directOrder() {
 	  // 바로 주문하기 기능 구현
 	  alert("주문 페이지로 이동합니다!");
-	  window.location.href="/mall/orderList?membNo="+[[${basketList}]];
+	  window.location.href="/mall/orderList";
 	}
 	
 	</script>

@@ -6,6 +6,37 @@
 		padding: 20px;
 		height: 100%;	
 	}
+	.tabSpace{
+		border:1px solid #dddddd;
+		border-top:0px;
+		padding: 20px;
+		height: 82%;
+		text-align: center;
+	}
+	.tabSpace table{
+		width: 100%;
+	    max-width: 100%;
+	    margin-bottom: 1rem;
+	    background-color: transparent;
+	}
+	.tabSpace thead{
+		border-bottom: 1px solid #ddd;
+	}
+	
+	.redCol{
+		color:red;
+	}
+	.blueCol{
+		color:blue;
+	}
+	
+	.nav-link{
+		color:#000;
+	}
+	.nav-tabs .nav-link.active{
+		font-weight: bold;
+		color:#dc3545;
+	}
 	
 	#chart{
 		width:800px;
@@ -18,13 +49,38 @@
 	
 	}
 	#chartList{
-		width:100px;
-		background-color: #DDDDDD;	
+		width:150px;
+		background-color: #DDDDDD;
 	}
+	#chartList a{
+		overflow:hidden;
+		text-overflow: ellipsis;
+		white-space:nowrap;
+		color:black;
+	}
+	
+	#chartList a.active{
+		font-weight: bold;
+		color:white;
+	}
+	
 	#chartContent{
-		width:660px;
+		padding:20px;
+		width:610px;
 		border: 1px solid #DDDDDD;
 	}
+	#chartBtn {
+		position:relative;
+		z-index:5;
+		list-style: none;
+		padding:0;
+		margin:0 0 0 70px;
+	}
+	#chartBtn li {
+		display: inline-block;
+		margin:0 0 10px 10px;
+	}
+	
 	#ranking{
 		width:400px;
 		height:300px;

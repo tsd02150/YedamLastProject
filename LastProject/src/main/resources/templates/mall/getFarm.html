@@ -476,7 +476,7 @@ p>img {
 								</div>
 
 								<div class="button_set">
-									<a class="btn_cart" onclick="addCartFunc()">장바구니 담기</a> <a
+									<a class="btn_cart" >장바구니 담기</a> <a
 										class="btn_buy" onclick="directOrder()">바로구매</a>
 								</div>
 							</div>
@@ -688,7 +688,6 @@ p>img {
 			</table>
 		</div>
 
-
 		<!-- 모달 창 -->
 		<div id="reviewModal" class="modal">
 			<div class="modal-content" onClick="closeModal()">
@@ -791,18 +790,20 @@ p>img {
 			}
 		});
 
+	
 		// 서버로 전송할 데이터
-		/* const form = {
-				membNo : '${bskInfo.membNo}',
-				
+		   const form = {
+				membNo : [[${membNo}]],
+				prdtNo : [[${getFarm.prdtNo}]],
+				prc : [[${getFarm.prc}]],
 				cnt : ''
 		}
 		
-		
 		$(".btn_cart").on("click", function(e){
-			form.bookCount = $(".quantity_input").val();
+			form.cnt = $(".quantity_input").val();
+			console.log(form);
 			$.ajax({
-				url: '/mall/addBasket',
+				url: '/mall/basketList',
 				type: 'POST',
 				data: form,
 				success: function(result){
@@ -811,10 +812,10 @@ p>img {
 		            //window.location.href = '/mall/basketList/' + form.membNo;
 				}
 			})
-		}); */
+		});  
 		
 		
-		/* function cartAlert(result){
+		function cartAlert(result){
 			if(result == '0'){
 				alert("장바구니에 추가를 하지 못하였습니다.");
 			} else if(result == '1'){
@@ -824,22 +825,49 @@ p>img {
 			} else if(result == '5'){
 				alert("로그인이 필요합니다.");	
 			}
-		}
-		 */
+		} 
+		 
 		
 		
 
 		 //장바구니 이동
-		function addCartFunc(){
-	
+		/* function addCartFunc(){
+			
 			window.location.href="/mall/basketList?membNo="+[[${basketList}]];
-		}
+		} */
 		
+		 /* $('.btn_cart').on('click', function() {
+			 
+			    let ckData = editor.getData();
+			    if (ckData === "" || ckData === null) {
+			        toastShow("There is no content", "내용이 없습니다", "error");
+			        return;
+			    }
+			
+			    let formData = new FormData();
+			    formData.append("cntn", ckData);
+			    formData.append("prdtNo", [[${getFarm.prdtNo}]]);
+			    formData.append("maks", $('input[type=radio]:checked').val());
+			
+			    fetch('/mall/addReview', {
+			        method: 'POST',
+			        body: formData
+			    })
+			    .then(response => response.json())
+			    .then(result => {
+			    	
+			    })
+			    .catch(error => {
+			        toastShow("Insert Fail", "등록 실패", "error");
+			    });
+			}); */
+		 
+		 
 		//주문페이지 이동
 		function directOrder() {
 		  // 바로 주문하기 기능 구현
 		  alert("주문 페이지로 이동합니다!");
-		  window.location.href="/mall/orderList?membNo="+[[${basketList}]];
+		  window.location.href="/mall/basketList";
 		}
 		
 		

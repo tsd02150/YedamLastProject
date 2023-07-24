@@ -37,5 +37,8 @@ public class UserVO{
 	private int tprc;
 	private int change;
 	private int rate;
+	
+	private String prdtNo;
+	private String thumb;
 
 }

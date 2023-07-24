@@ -337,16 +337,20 @@ color: #ccc;
 		  });
 		});
 		 */
+		let currentState=[[${prdtCode}]];
+		let items=["ctgr", "prc", "nm", "img"];
 		
-		
-		
-		function getCtgrList() {
+	
+	//초기 프로덕트 리스트
+	getCtgrList();
+	
+	function getCtgrList() {
     fetch("/mall/getCtgrList", {
         method: "POST",
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: 'commonCd=' + currentState + '&order=' + currentOrder
+        body: 'commonCd=' + currentState
     })
     .then(result => result.json())
     .then(data => {
@@ -357,7 +361,7 @@ color: #ccc;
             var productItem = document.createElement("div");
             productItem.className = "col-md-4";
             productItem.addEventListener("click", function() {
-                location.href = "/community/getFarm?prdtNo=" + product.prdtNo;
+                location.href = "/mall/getFarm?prdtNo=" + product.prdtNo;
             });
 
             var productThumb = document.createElement("div");
@@ -439,8 +443,9 @@ color: #ccc;
         });
     })
     .catch(err => console.log(err));
-}
+} 
 
+		 
 	//카테고리 클릭이벤트
 		document.querySelectorAll(".ctgr").forEach(ctgr=>
 			ctgr.addEventListener('click',function(){

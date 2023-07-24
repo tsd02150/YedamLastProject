@@ -2,6 +2,7 @@ package com.yedam.app.community.service;
 
 import java.util.List;
 
+import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 
 public interface BoardService {
@@ -9,10 +10,6 @@ public interface BoardService {
 	public String getBoardName(String commonCd);
 	// 게시판 목록 정보
 	public List<BoardVO> getBoardList(BoardVO vo);
-	// 자유게시판 6개 출력
-	public List<BoardVO> getFreeBoardTop6();
-	// 주식게시판 6개 출력
-	public List<BoardVO> getStockBoardTop6();
 	// 게시판 개수
 	public int getBoardCount(BoardVO vo);
 	// 게시물 작성 카테고리 정보
@@ -51,4 +48,6 @@ public interface BoardService {
 	public boolean insertSubComment(CommentsVO vo);
 	// 첨부파일 가져오기
 	public List<AttachVO> getAttachList(String boardNo);
+	// 해당 멤버 정보, 관심종목, 종목 가격
+	public List<InterestVO> getInerestStockInfo(String membNo);
 }

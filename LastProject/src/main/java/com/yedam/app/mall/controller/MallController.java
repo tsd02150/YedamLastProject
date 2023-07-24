@@ -1,5 +1,6 @@
 package com.yedam.app.mall.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -59,7 +60,7 @@ public class MallController {
 	    model.addAttribute("farmList", farmList);
 	    
 	    //카테고리 분류
-	    model.addAttribute("prdtCode", prdtCode);
+	    model.addAttribute("prdtCode", prdtVO.getCommonCd().substring(0, 2));
 	    System.out.println(prdtCode); // => S1 농산물, prdtVO.getCommonCd() => S10
 	    List<CommonCodeVO> list = mallService.getCategoryName(prdtCode);
 	    model.addAttribute("S", list);
@@ -110,14 +111,17 @@ public class MallController {
 			              HttpSession session) {
 		
 		model.addAttribute("getFarm", mallService.getProductInfo(prdtVO));
-		
+		System.out.println(prdtVO);
 		//model.addAttribute("basketList", basketService.getBasketList(bskVO));
-		model.addAttribute("basket", bskVO);
+
 		//model.addAttribute("member", basketService.getMembInfo(bskVO.getMembNo()));
 		//model.addAttribute("member2", basketService.getIntPrdt(bskVO.getMembNo()));
 		// System.out.println(review);
 		
 		model.addAttribute("reviewInfo", revVO);
+		String membNo = ((UserVO) session.getAttribute("loggedInMember")).getMembNo();
+
+		model.addAttribute("membNo", membNo);
 		
 		return "mall/getFarm";
 	}

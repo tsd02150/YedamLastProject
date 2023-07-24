@@ -10,56 +10,24 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.yedam.app.common.mapper.MainMapper;
 import com.yedam.app.common.service.MainService;
+import com.yedam.app.community.service.BoardVO;
+import com.yedam.app.community.service.NoticeVO;
+import com.yedam.app.community.service.QuestionVO;
+import com.yedam.app.stock.service.StockVO;
 
 @Service
 public class MainServiceImpl implements MainService {
-
-	// 차트정보	
-	@Override
-	public Object getChart() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	// 주식정보
-	@Override
-	public Object getStock() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	// 공지사항 정보
-	@Override
-	public Object getNotice() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	// QnA 정보
-	@Override
-	public Object getQuestion() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	// 자유게시판 정보
-	@Override
-	public Object getFreeBoard() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	// 주식게시판 정보
-	@Override
-	public Object getStockBoard() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
+	@Autowired
+	MainMapper mainMapper;
 
 	// 농수산물 관련 뉴스 정보
 	@Override
@@ -135,7 +103,50 @@ public class MainServiceImpl implements MainService {
             throw new RuntimeException("API 응답을 읽는 데 실패했습니다.", e);
         }
     }
+    
+	// 자유게시판 6개 출력
+	@Override
+	public List<BoardVO> getFreeBoardTop6() {
+		return mainMapper.getFreeBoardTop6();
+	}
 
+	// 주식게시판 6개 출력
+	@Override
+	public List<BoardVO> getStockBoardTop6() {
+		return mainMapper.getStockBoardTop6();
+	}
+
+	// 공지사항 6개
+	@Override
+	public List<NoticeVO> getNoticeTop6() {
+		return mainMapper.getNoticeTop6();
+	}
+	
+	// Qna 6개
+	@Override
+	public List<QuestionVO> getQnaTop6() {
+		return mainMapper.getQnaTop6();
+	}
+
+	@Override
+	public List<StockVO> getFarmRank() {
+		return mainMapper.getFarmRank();
+	}
+
+	@Override
+	public List<StockVO> getSeaRank() {
+		return mainMapper.getSeaRank();
+	}
+
+	@Override
+	public List<StockVO> getIncreaseStock() {
+		return mainMapper.getIncreaseStock();
+	}
+
+	@Override
+	public List<StockVO> getDecreaseStock() {
+		return mainMapper.getDecreaseStock();
+	}
 
 
 }

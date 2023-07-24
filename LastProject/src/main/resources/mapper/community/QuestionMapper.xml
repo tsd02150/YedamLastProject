@@ -52,16 +52,6 @@
 		    )
 	 	WHERE rn > (${page}-1)*10
 	</select> 
-	<select id="getQnaTop6" resultType="QuestionVO">
-		<![CDATA[
-		SELECT *
-		FROM (
-			SELECT qst_no,ttl
-			FROM QUESTION
-			ORDER BY drwup_dt DESC)
-		WHERE rownum<=6
-		]]>
-	</select>
 	<select id="getQnaCount" resultType="int">
 		SELECT COUNT(qst_no)
 		FROM QUESTION
