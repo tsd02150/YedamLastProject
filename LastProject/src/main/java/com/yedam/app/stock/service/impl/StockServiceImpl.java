@@ -279,10 +279,6 @@ public class StockServiceImpl implements StockService {
 		// 당일 주가 정보
 		List<ItemInfoVO> talist = stockMapper.todayItemInfo();
 		
-		// 정보가 있는 종목들은 insert
-		for(ItemInfoVO vo : talist) {
-			stockMapper.insertItemInfo(vo);
-		}
 		
 		// 오늘 체결 정보 없는 종목 찾기
 		List<String> intList = new ArrayList<>();
@@ -302,8 +298,13 @@ public class StockServiceImpl implements StockService {
 				itemNos.add(i);
 			}
 		}
-		
+		// 정보가 없는 종목 먼저 insert
 		List<ItemInfoVO> missingList = stockMapper.nonTaInfo(itemNos);
+		// 정보가 있는 종목들은 insert
+		for(ItemInfoVO vo : talist) {
+			stockMapper.insertItemInfo(vo);
+		}
+				
 		for(ItemInfoVO vo : missingList) {
 			stockMapper.insertItemInfo(vo);
 		}
@@ -344,6 +345,12 @@ public class StockServiceImpl implements StockService {
 	@Override
 	public int deleteAlm(String almNo) {
 		return stockMapper.deleteAlm(almNo);
+	}
+	
+	// 현재 주가정보
+	@Override
+	public ItemInfoVO currentItemInfo(String itemNo) {
+		return stockMapper.currentItemInfo(itemNo);
 	}
 	
 	

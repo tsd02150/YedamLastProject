@@ -627,6 +627,44 @@
 		order by ta_dt
 	</select>
 	
+	<!-- 현재 주가정보 -->
+	<select id="currentItemInfo" resultType="ItemInfoVO">
+		select c.item_no ,
+				sysdate ta_dt,
+                NVL(vol,0) vol ,
+                NVL(op_prc,0) op_prc,
+                DECODE(NVL(prc,0),0,op_prc,prc) cl_prc ,
+                DECODE(NVL(a.l_prc,0),0,c.l_prc,a.l_prc) l_prc ,
+                DECODE(NVL(a.h_prc,0),0,c.h_prc,a.h_prc) h_prc ,
+                NVL(inq,0) inq
+		from (  select item_no,'tah-'||MAX(to_number(substr(ta_no,5))) ta_no, sum(stock_cnt) vol ,min(ta_prc) l_prc,max(ta_prc) h_prc 
+		        from ta_hr 
+		        where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate , 'yyyy-MM-dd')
+		        group by item_no
+		        order by to_number(substr(item_no,5))
+              ) a -- 오늘 거래량 고가, 저가
+		 join ( select distinct(a.item_no) item_no,ta_prc prc,inq
+                from(   SELECT nm,i.item_no, MAX(to_number(substr(ta_no,5))) tano,inq
+                        FROM ta_hr t right join item i 
+                        on i.item_no = t.item_no
+                        where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate,'yyyy-MM-dd')
+                        GROUP BY nm,i.item_no,inq
+                        order by to_number(substr(item_no,5))
+                     ) a 
+                left join ta_hr t
+                on a.item_no= t.item_no and to_number(substr(t.ta_no,5)) = a.tano  
+                order by to_number(substr(item_no,5)) 
+                   ) b -- 오늘 마지막 거래가
+		on b.item_no = a.item_no
+		right join (  select z.item_no, cl_prc op_prc  , l_prc , h_prc 
+                     from item_info z join item x
+                     on z.item_no = x.item_no
+                     where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
+                  ) c -- 전날 종가 (=현재 시가) 와 조회수
+		on b.item_no = c.item_no
+        where c.item_no = #{itemNo}
+		order by to_number(substr(item_no,5))
+	</select>
 	<!-- alarm 데이터 추가 -->
 	<insert id="insertStockAlarm" >
 		insert into alarm (	ALARM_NO,
@@ -666,4 +704,5 @@
 		delete from alarm
 		where alarm_no = #{almNo}
 	</delete>
+	
 </mapper>

@@ -81,4 +81,6 @@ public interface StockMapper {
 	public List<ItemInfoVO> nonTaInfo(List<Integer> itemNos);
 	// 알람 삭제
 	public int deleteAlm(String almNo);
+	// 현재 주가정보
+	public ItemInfoVO currentItemInfo(String itemNo);
 }

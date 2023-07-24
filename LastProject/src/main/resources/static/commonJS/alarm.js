@@ -73,7 +73,8 @@ jQuery(document).ready(function ($) {
 					          			<span aria-hidden="true" class="text-dark mr-1">&times;</span>
 					          		</button>
 					          		 체결 알림
-					          		<span class="text-muted small">${new Date(i.alarmDt).toLocaleDateString()}</span>
+					          		<span class="text-muted small">${makeDay(new Date()) == makeDay(new Date(i.alarmDt)) ? '<span class="badge badge-primary">Today</span>' : ''} 
+					          		${i.checked == 'n' ? '<span class="badge badge-danger">New</span>' : ''} ${new Date(i.alarmDt).toLocaleDateString()}</span>
 					          		<span class="d-block"> ${i.cntn}</span>
 				          		</p>
 			          		</li>`
@@ -117,4 +118,14 @@ jQuery(document).ready(function ($) {
 	})
 });
 
-
+function makeDay(Date){
+	var today = Date;
+	
+	var year = today.getFullYear();
+	var month = ('0' + (today.getMonth() + 1)).slice(-2);
+	var day = ('0' + today.getDate()).slice(-2);
+	
+	var dateString = year + '-' + month  + '-' + day;
+	
+	return dateString;
+}
