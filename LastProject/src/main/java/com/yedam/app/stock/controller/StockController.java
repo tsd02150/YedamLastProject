@@ -226,4 +226,10 @@ public class StockController {
 	public int changeChk(String almNo) {
 		return stockservice.stockAlmChk(almNo);
 	}
+	// 알람삭제
+	@ResponseBody
+	@GetMapping("deleteAlm")
+	public int deleteAlm(String almNo) {
+		return stockservice.deleteAlm(almNo);
+	}
 }

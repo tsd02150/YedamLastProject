@@ -38,7 +38,9 @@
 .nav-tabs li {
 	width:33%;
 }
-
+#alarmTab ul {
+	overscroll-behavior: contain;
+}
 #alarmTab li {
 	height:70px;
 	margin:5px;

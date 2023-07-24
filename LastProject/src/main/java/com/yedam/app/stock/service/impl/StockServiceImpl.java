@@ -340,6 +340,11 @@ public class StockServiceImpl implements StockService {
 		
 		return result;
 	}
+	//알람삭제
+	@Override
+	public int deleteAlm(String almNo) {
+		return stockMapper.deleteAlm(almNo);
+	}
 	
 	
 }

@@ -660,4 +660,10 @@
 		set checked = 'y'
 		where alarm_no = #{almNo}
 	</update>
+	
+	<!-- 알람 삭제 -->
+	<delete id="deleteAlm">
+		delete from alarm
+		where alarm_no = #{almNo}
+	</delete>
 </mapper>

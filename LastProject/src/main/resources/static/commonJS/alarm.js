@@ -69,7 +69,7 @@ jQuery(document).ready(function ($) {
 		  			if(i.checked == 'n') nCnt++;
 		  			html +=`<li data-alno="${i.alarmNo}">
 					          	<p class="list-group-item list-group-item-action h-100 ">
-					          		<button type="button" class="float-left close" aria-label="Close">
+					          		<button type="button" class="float-left close almXBtn" aria-label="Close">
 					          			<span aria-hidden="true" class="text-dark mr-1">&times;</span>
 					          		</button>
 					          		 체결 알림
@@ -102,6 +102,19 @@ jQuery(document).ready(function ($) {
 		}//end of if
 		
 	});// end of 체결 tab 클릭 기능
+	
+	
+	// x 버튼 기능
+	$('#alarmTab').on('click','.almXBtn',function(){
+		console.log('zz')
+		let btn = $(this)
+		let almNo = $(this).parent().parent().attr('data-alno');
+		console.log(almNo)
+		$.ajax('/stock/deleteAlm?almNo='+almNo).done(function(data){
+			if(data > 0) btn.parent().parent().remove();
+		});//end of ajax
+		
+	})
 });
 
 

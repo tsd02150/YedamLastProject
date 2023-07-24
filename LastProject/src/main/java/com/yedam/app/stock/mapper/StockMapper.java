@@ -79,4 +79,6 @@ public interface StockMapper {
 	public int stockAlmChk(String almNo);
 	// 체결이 없는 종목의 전날 정보
 	public List<ItemInfoVO> nonTaInfo(List<Integer> itemNos);
+	// 알람 삭제
+	public int deleteAlm(String almNo);
 }
