@@ -416,7 +416,7 @@
                                                                                       )
                                                     ) t right join item i 
                                             on i.item_no = t.item_no
-                                            where i.item_no = 'ite-15'
+                                            where i.item_no = #{itemNo}
                                             GROUP BY nm,i.item_no
                                             order by to_number(substr(item_no,5))
                                          ) a left join ta_hr t
@@ -432,7 +432,7 @@
                                                    from item_info
                                                   )
 		      ) i on i.item_no = p.item_no
-		where p.memb_no ='mem-2'
+		where p.memb_no =#{membNo}
 		group by p.item_no,prc,point,m.memb_no,i.cl_prc
 	</select>
 	
