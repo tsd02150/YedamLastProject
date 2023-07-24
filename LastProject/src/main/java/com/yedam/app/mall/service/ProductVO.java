@@ -24,5 +24,8 @@ public class ProductVO {
 	private Date drwupDt;
 	private String commonCd;	
 	private String ctgr;
+	
+	//구입수량
+	private String cnt;
 
 }

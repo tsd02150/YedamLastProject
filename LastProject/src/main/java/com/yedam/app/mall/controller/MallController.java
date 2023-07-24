@@ -1,7 +1,6 @@
 package com.yedam.app.mall.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.common.service.CommonCodeVO;
 import com.yedam.app.mall.service.BasketService;
+import com.yedam.app.mall.service.BasketVO;
 import com.yedam.app.mall.service.MallService;
 import com.yedam.app.mall.service.ProductReviewVO;
 import com.yedam.app.mall.service.ProductVO;
@@ -106,10 +106,15 @@ public class MallController {
 	public String getFarm(Model model, 
 			              ProductVO prdtVO, 
 			              ProductReviewVO revVO, 
+			              BasketVO bskVO,
 			              HttpSession session) {
 		
 		model.addAttribute("getFarm", mallService.getProductInfo(prdtVO));
 		
+		//model.addAttribute("basketList", basketService.getBasketList(bskVO));
+		model.addAttribute("basket", bskVO);
+		//model.addAttribute("member", basketService.getMembInfo(bskVO.getMembNo()));
+		//model.addAttribute("member2", basketService.getIntPrdt(bskVO.getMembNo()));
 		// System.out.println(review);
 		
 		model.addAttribute("reviewInfo", revVO);

@@ -5,23 +5,11 @@
 <head>
 <meta charset="UTF-8">
 <title>basketList.html</title>
-<link rel="stylesheet" type="text/css" href="css/farmList.css">
-<link rel="stylesheet"
-	href="mall/source/plugins/themefisher-font/style.css">
-<link rel="stylesheet"
-	href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
-	integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
-	crossorigin="anonymous">
+
 <link rel="stylesheet" href="css/basketList.css" />
 
-<link rel=" shortcut icon" href="/images/bzshopicon.ico">
-<link rel="icon" href="/images/bzshopicon.ico">
-<link
-	href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700'
-	rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="css/elegant-icons.css" type="text/css">
 
-<link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
@@ -57,168 +45,7 @@
 }
 
 
-/* basket */
-body {
-  margin: 0;
-}
 
-* {
-  box-sizing: border-box;
-}
-
-p,
-span {
-  margin: 0;
-}
-
-a {
-  color: black;
-}
-
-img {
-  display: block;
-  width: 80%;
-  height: 80px;
-  margin: auto;
-}
-
-.cart {
-  width: 80%;
-  margin: auto;
-  padding: 30px;
-}
-
-.cart ul {
-  background-color: whitesmoke;
-  padding: 30px;
-  margin-bottom: 50px;
-  border: whitesmoke solid 1px;
-  border-radius: 5px;
-  font-size: 13px;
-  font-weight: 300;
-}
-
-.cart ul :first-child {
-  color: limegreen;
-}
-
-table {
-  border-top: solid 1.5px black;
-  border-collapse: collapse;
-  width: 100%;
-  font-size: 14px;
-}
-
-thead {
-  text-align: center;
-  font-weight: bold;
-}
-
-tbody {
-  font-size: 12px;
-}
-
-td {
-  padding: 15px 0px;
-  border-bottom: 1px solid lightgrey;
-}
-
-.cart__list__detail :nth-child(3) {
-  vertical-align: top;
-}
-
-.cart__list__detail :nth-child(3) a {
-  font-size: 12px;
-}
-
-.cart__list__detail :nth-child(3) p {
-  margin-top: 6px;
-  font-weight: bold;
-}
-
-.cart__list__smartstore {
-  font-size: 12px;
-  color: gray;
-}
-
-.cart__list__option {
-  vertical-align: top;
-  padding: 20px;
-}
-
-.cart__list__option p {
-  margin-bottom: 25px;
-  position: relative;
-}
-
-.cart__list__option p::after {
-  content: "";
-  width: 90%;
-  height: 1px;
-  background-color: lightgrey;
-  left: 0px;
-  top: 25px;
-  position: absolute;
-}
-
-.cart__list__optionbtn {
-  background-color: white;
-  font-size: 10px;
-  border: lightgrey solid 1px;
-  padding: 7px;
-}
-
-.cart__list__detail :nth-child(4),
-.cart__list__detail :nth-child(5),
-.cart__list__detail :nth-child(6) {
-  border-left: 2px solid whitesmoke;
-}
-
-.cart__list__detail :nth-child(5),
-.cart__list__detail :nth-child(6) {
-  text-align: center;
-}
-
-.cart__list__detail :nth-child(5) button {
-  background-color: limegreen;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 4px 8px;
-  font-size: 12px;
-  margin-top: 5px;
-}
-
-.price {
-  font-weight: bold;
-}
-
-.cart__mainbtns {
-  width: 420px;
-  height: 200px;
-  padding-top: 40px;
-  display: block;
-  margin: auto;
-}
-
-.cart__bigorderbtn {
-  width: 200px;
-  height: 50px;
-  font-size: 16px;
-  margin: auto;
-  border-radius: 5px;
-}
-
-.cart__bigorderbtn.left {
-  background-color: white;
-  border: 1px lightgray solid;
-}
-
-.cart__bigorderbtn.right {
-  background-color: limegreen;
-  color: white;
-  border: none;
-}
 </style>
 
 
@@ -267,10 +94,259 @@ td {
 			</ul>
 		</div>
 
-		<form name="orderform" id="orderform" method="post" class="orderform"
-			action="/basketList">
+		<!-- <form name="orderform" id="orderform" method="post" class="orderform"
+			action="/basketList"> -->
+			
+				<div class="content_area">
+			
+			<div class="content_subject"><span>장바구니</span></div>
+			<!-- 장바구니 리스트 -->
+			<div class="content_middle_section"></div>
+			<!-- 장바구니 가격 합계 -->
+			<!-- cartInfo -->
+			<div class="content_totalCount_section">
+				
+				<!-- 체크박스 전체 여부 -->
+				<div class="all_check_input_div">
+					<input type="checkbox" class="all_check_input input_size_20" checked="checked"><span class="all_chcek_span">전체선택</span>
+				</div>				
+				
+				<table class="subject_table">
+					<caption>표 제목 부분</caption>
+					<tbody>
 
-			<section class="cart">
+						<tr>
+							<th class="td_width_1"></th>
+							<th class="td_width_2"></th>
+							<th class="td_width_3">상품명</th>
+							<th class="td_width_4">가격</th>
+							<th class="td_width_4">수량</th>
+							<th class="td_width_4">합계</th>
+							<th class="td_width_4">삭제</th>
+						</tr>
+					</tbody>
+				</table>
+				<table class="cart_table">
+					<caption>표 내용 부분</caption>
+					<tbody>
+						<!-- <c:forEach items="${cartInfo}" var="ci"> -->
+							<tr th:each="item :${basketList}">
+								<td class="td_width_1 cart_info_td">
+									<input type="checkbox" class="individual_cart_checkbox input_size_20" checked="checked">
+									<input type="hidden" class="individual_bookPrice_input" value="${item.prc}">
+									<input type="hidden" class="individual_salePrice_input" value="${item.prc - (item.prc * (item.dcRate / 100.0))}">
+									<input type="hidden" class="individual_bookCount_input" value="${item.cnt}">
+									<input type="hidden" class="individual_totalPrice_input" value="${(item.prc - (item.prc * (item.dcRate / 100.0))) * item.cnt}">
+									<input type="hidden" class="individual_point_input" value="${item.point}">
+									<input type="hidden" class="individual_totalPoint_input" value="${ci.totalPoint}">
+									<input type="hidden" class="individual_bookId_input" value="${item.prdtNo}">								
+								</td>
+								<td class="td_width_2">
+									<div class="image_wrap" data-="${ci.imageList[0].bookId}" data-path="${ci.imageList[0].uploadPath}" data-uuid="${ci.imageList[0].uuid}" data-filename="${ci.imageList[0].fileName}">
+										<img th:src="|/mall/images/main/${item.thumb}|" th:onclick="|location.href='@{getFarm(prdtNo=${item.prdtNo})}'|">
+									</div>								
+								</td>
+								<td class="td_width_3" th:text="${item.nm}"></td>
+								<td class="td_width_4 price_td">
+									<del>정가 : [[${item.prc}]]</del><br><span class="red_color" pattern="#,### P">
+									판매가 : [[${item.prc - (item.prc * (item.dcRate / 100.0))} + 'P']] </span><br>
+									마일리지 : [[${(item.prc - (item.prc * (item.dcRate / 100.0))) * 0.1} + 'P']]<span class="green_color"></span>
+								</td>
+								<td class="td_width_4 table_text_align_center">
+									<div class="table_text_align_center quantity_div">
+										<input type="text" value="${item.cnt}" class="quantity_input">	
+										<button class="quantity_btn plus_btn">+</button>
+										<button class="quantity_btn minus_btn">-</button>
+									</div>
+									<a class="quantity_modify_btn" data-bskNo="${item.bskNo}">변경</a>
+								</td>
+								<td class="td_width_4 table_text_align_center" th:text="${item.prc - (item.prc * (item.dcRate / 100.0)) * item.cnt}" pattern="#,### 원">
+									
+								</td>
+								<td class="td_width_4 table_text_align_center">
+									<button class="delete_btn" data-bskNo="${item.bskNo}">삭제</button>
+								</td>
+							</tr>
+						<!-- </c:forEach> -->
+					</tbody>
+				</table>
+				<table class="list_table">
+				</table>
+			</div>
+			<!-- 가격 종합 -->
+			<div class="content_total_section">
+				<div class="total_wrap">
+					<table>
+						<tr>
+							<td>
+								<table>
+									<tr>
+										<td>총 상품 가격</td>
+										<td>
+											<span class="totalPrice_span">70000</span> P
+										</td>
+									</tr>
+									<tr>
+										<td>배송비</td>
+										<td>
+											<span class="delivery_price">3000</span>P
+										</td>
+									</tr>									
+									<tr>
+										<td>총 주문 상품수</td>
+										<td><span class="totalKind_span"></span>종 <span class="totalCount_span"></span>권</td>
+									</tr>
+								</table>
+							</td>
+							<td>
+								<table>
+									<tr>
+										<td></td>
+										<td></td>
+									</tr>
+								</table>							
+							</td>
+						</tr>
+					</table>
+					<div class="boundary_div">구분선</div>
+					<table>
+						<tr>
+							<td>
+								<table>
+									<tbody>
+										<tr>
+											<td>
+												<strong>총 결제 예상 금액</strong>
+											</td>
+											<td>
+												<span class="finalTotalPrice_span">70000</span> 원
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+							<td>
+								<table>
+									<tbody>
+										<tr>
+											<td>
+												<strong>총 적립 예상 마일리지</strong>
+											
+											</td>
+											<td>
+												<span class="totalPoint_span">70000</span> P
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<!-- 구매 버튼 영역 -->
+			<div class="content_btn_section">
+				<a class="order_btn" onclick="directOrder()">주문하기</a>
+			</div>
+			
+			<!-- 수량 조정 form -->
+			<form action="/cart/update" method="post" class="quantity_update_form">
+				<input type="hidden" name="bskNo" class="update_bskNo">
+				<input type="hidden" name="cnt" class="update_cnt">
+				<input type="hidden" name="membNo" value="${member.membNo}">
+			</form>	
+			
+			<!-- 삭제 form -->
+			<form action="/cart/delete" method="post" class="quantity_delete_form">
+				<input type="hidden" name="bskNo" class="delete_bskNo">
+				<input type="hidden" name="membNo" value="${member.membNo}">
+			</form>		
+			<!-- 주문 form -->
+			<form action="/order/${member.membNo}" method="get" class="order_form">
+
+			</form>				
+						
+			
+		</div>
+			
+			
+			<!-- Breadcrumb Section Begin -->
+   <!--  <section class="breadcrumb-section set-bg" data-setbg="img/breadcrumb.jpg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb__text">
+                        <h2>Shopping Cart</h2>
+                        <div class="breadcrumb__option">
+                            <a href="./index.html">Home</a>
+                            <span>Shopping Cart</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    Breadcrumb Section End
+
+    Shoping Cart Section Begin
+    <section class="shoping-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shoping__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                	<th>회원번호</th>
+                                	<th>상품번호</th>
+                                    <th class="shoping__product">Products</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="item :${basketList}">
+                                <td class="prdtNo" th:text="${item.prdtNo}">
+								<td class="prdtNo" th:text="${item.prdtNo}">
+                                    <td class="shoping__cart__item" th:onclick="|location.href='@{getFarm(prdtNo=${item.prdtNo})}'|">
+                                       <img style="width: 200px; height: 200px;"
+						th:src="|/mall/images/main/${item.thumb}|">
+                                        <h5>Vegetable’s Package</h5>
+                                    </td>
+                                    <td class="shoping__cart__price" th:text="${item.prc}">
+                                        $55.00
+                                    </td>
+                                    <td class="shoping__cart__quantity">
+                                        <div class="quantity">
+                                            <div class="pro-qty">
+                                            <span class="dec qtybtn">-</span>
+                                                <input type="text" value="1">
+                                                <span class="inc qtybtn">+</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="shoping__cart__total" th:text="${item.prc}">
+                                        $110.00
+                                    </td>
+                                    <td class="shoping__cart__item__close">
+                                        <span class="icon_close"></span>
+                                    </td>
+                                </tr>
+                              
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+    </section>
+			 -->
+			
+
+			<!-- <section class="cart">
 				<div class="cart__information">
 					<ul>
 						<li>장바구니 상품은 최대 30일간 저장됩니다.</li>
@@ -290,45 +366,29 @@ td {
 								<td>배송비</td>
 							</tr>
 						</thead>
-						<tbody id="basketList">
-							<!-- <tr class="cart__list__detail">
-								<td><input type="checkbox"></td>
+						<tbody id="basketList" >
+							 <tr class="cart__list__detail" th:each="item :${basketList}">
+							 <td th:text="${item.membNo}"></td>
+								<td class="prdtNo" th:text="${item.prdtNo}"><input type="checkbox"></td>
 								<td><img src="image/keyboard.jpg" alt="magic keyboard"></td>
-								<td><a href="#">애플 공식 브랜드스토어</a><span
-									class="cart__list__smartstore"> 스마트스토어</span>
-									<p>Apple 매직 키보드 - 한국어(MK2A3KH/A)</p> <sapn class="price">116,62원</sapn><span
+								<td th:onclick="|location.href='@{getFarm(prdtNo=${item.prdtNo})}'|">
+									<p class="nm" th:text="${item.nm}"></p> <sapn class="price" th:text="${item.prc}">116,62원</sapn><span
 									style="text-decoration: line-through; color: lightgray;">119,000</span>
 								</td>
 								<td class="cart__list__option">
-									<p>모델명 : 키보드 - 한국어 MK2A3KH/A / 1개</p>
+									<p th:text="수량 + ${item.cnt}">모델명 : 키보드 - 한국어 MK2A3KH/A / 1개</p>
 									<button class="cart__list__optionbtn">주문조건 추가/변경</button>
 								</td>
 								<td><span class="price">116,620원</span><br>
 									<button class="cart__list__orderbtn">주문하기</button></td>
 								<td>무료</td>
 							</tr>
-							<tr class="cart__list__detail">
-								<td style="width: 2%;"><input type="checkbox"></td>
-								<td style="width: 13%;"><img src="image/mouse.jpg"
-									alt="magic mouse"></td>
-								<td style="width: 27%;"><a href="#">컴퓨존</a><span
-									class="cart__list__smartstore"> 스마트스토어</span>
-									<p>[애플] Magic Mouse [MK2E3KH/A]</p> <span class=" price">88,900원</span>
-								</td>
-								<td class="cart__list__option" style="width: 27%;">
-									<p>상품 주문 수량: 1개</p>
-									<button class="cart__list__optionbtn">주문조건 추가/변경</button>
-								</td>
-								<td style="width: 15%;"><span class="price">88,900원</span><br>
-									<button class="cart__list__orderbtn">주문하기</button></td>
-								<td style="width: 15%;">무료</td>
-							</tr> -->
+						
 						</tbody>
 						<tfoot>
 							<tr>
 								<td colspan="3"><input type="checkbox">
 									<button class="cart__list__optionbtn">선택상품 삭제</button>
-									<button class="cart__list__optionbtn">선택상품 찜</button></td>
 								<td></td>
 								<td></td>
 								<td></td>
@@ -338,14 +398,14 @@ td {
 				</table>
 				<div class="cart__mainbtns">
 					<button class="cart__bigorderbtn left">쇼핑 계속하기</button>
-					<button class="cart__bigorderbtn right">주문하기</button>
+					<button class="cart__bigorderbtn right" onclic="orderList">주문하기</button>
 				</div>
-			</section>
-		</form>
+			</section> -->
+	<!-- 	</form> -->
 
 		<!--  -->
 
-		<table style="border: 1px solid;">
+		<!-- <table style="border: 1px solid;">
 			<thead style="text-align: center; border: 1px solid;">
 				<tr>
 					<th style="width: 150px;">상품 합계금액</th>
@@ -379,8 +439,21 @@ td {
 		<div class="right-align basketrowcmd">
 			<a href="javascript:void(0)" class="abutton">선택상품삭제</a> <a
 				href="javascript:void(0)" class="abutton">장바구니비우기</a>
-		</div>
-
+		</div> -->
+ 		
+ 		<!-- 수량 조정 form -->
+			<form action="/cart/update" method="post" class="quantity_update_form">
+				<input type="hidden" name="cartId" class="update_cartId">
+				<input type="hidden" name="bookCount" class="update_bookCount">
+				<input type="hidden" name="memberId" value="${member.memberId}">
+			</form>
+ 		
+ 		<!-- 삭제 form -->
+			<form action="/cart/delete" method="post" class="quantity_delete_form">
+				<input type="hidden" name="cartId" class="delete_cartId">
+				<input type="hidden" name="memberId" value="${member.memberId}">
+			</form>
+ 		
 		<script th:inline="javascript">
 	
 	/* top 버튼 */
@@ -391,317 +464,143 @@ td {
 	    });
 	});
 	
-	//
 	
-	basketList();
-	
-	// 장바구니 리스트 
-	function basketList(){
+
+	/* 총 주문 정보 세팅(배송비, 총 가격, 마일리지, 물품 수, 종류) */
+	function setTotalInfo(){
 		
-		fetch("/mall/getBasketList", {
-			method : "POST",
-			headers : {
-				
-				'Content-type' : 'application/x-www-form-urlencoded'
-			},
-			body : "prdtNo=" 
-		})
-		.then(response=>response.json())
-		.then(result => {
-			result.forEach(item=> {
-				console.log(item);
-				let trTag=`
-					<tr class="cart__list__detail">
-					<td><input type="checkbox"></td>
-					<td><img src="image/keyboard.jpg" alt="magic keyboard"></td>
-					<td><a href="#">애플 공식 브랜드스토어</a><span
-						class="cart__list__smartstore"> 스마트스토어</span>
-						<p>Apple 매직 키보드 - 한국어(MK2A3KH/A)</p> <sapn class="price">${item.prdtNo}</sapn><span
-						style="text-decoration: line-through; color: lightgray;">119,000</span>
-					</td>
-					<td class="cart__list__option">
-						<p>모델명 : 키보드 - 한국어 MK2A3KH/A / 1개</p>
-						<button class="cart__list__optionbtn">주문조건 추가/변경</button>
-					</td>
-					<td><span class="price">116,620원</span><br>
-						<button onClick="" class="cart__list__orderbtn">주문하기</button></td>
-					<td>무료</td>
-				</tr>
+		let totalPrice = 0;				// 총 가격
+		let totalCount = 0;				// 총 갯수
+		let totalKind = 0;				// 총 종류
+		let totalPoint = 0;				// 총 마일리지
+		let deliveryPrice = 0;			// 배송비
+		let finalTotalPrice = 0; 		// 최종 가격(총 가격 + 배송비)
+
+		
+		$(".cart_info_td").each(function(index, element){
 			
-				`;
-				
-				document.querySelector("#basketList").innerHTML+=trTag;
-				
-			})
+			
+			//체크여부
+			if($(element).find(".individual_cart_checkbox").is(":checked") === true){	
+			
+			// 총 가격
+			totalPrice += parseInt($(element).find(".individual_totalPrice_input").val());
+			// 총 갯수
+			totalCount += parseInt($(element).find(".individual_bookCount_input").val());
+			// 총 종류
+			totalKind += 1;
+			// 총 마일리지
+			totalPoint += parseInt($(element).find(".individual_totalPoint_input").val());			
+			
+			}
+		});
 		
-		})
-		.catch(err=>console.log(err));
+		/* 체크박스 전체 선택 */
+		$(".all_check_input").on("click", function(){
+
+			/* 체크박스 체크/해제 */
+			if($(".all_check_input").prop("checked")){
+				$(".individual_cart_checkbox").attr("checked", true);
+			} else{
+				$(".individual_cart_checkbox").attr("checked", false);
+			}
+			
+			/* 총 주문 정보 세팅(배송비, 총 가격, 마일리지, 물품 수, 종류) */
+			setTotalInfo($(".cart_info_td"));	
+			
+		});
 		
+		/* 이미지 삽입 */
+		/* $(".image_wrap").each(function(i, obj){
+		
+			const bobj = $(obj);
+			
+			if(bobj.data("bookid")){
+				const uploadPath = bobj.data("path");
+				const uuid = bobj.data("uuid");
+				const fileName = bobj.data("filename");
+				
+				const fileCallPath = encodeURIComponent(uploadPath + "/s_" + uuid + "_" + fileName);
+				
+				$(this).find("img").attr('src', '/display?fileName=' + fileCallPath);
+			} else {
+				$(this).find("img").attr('src', '/resources/img/goodsNoImage.png');
+			}
+			
+		}); */
+		
+		
+		/* 수량버튼 */
+		$(".plus_btn").on("click", function(){
+			let quantity = $(this).parent("div").find("input").val();
+			$(this).parent("div").find("input").val(++quantity);
+		});
+		$(".minus_btn").on("click", function(){
+			let quantity = $(this).parent("div").find("input").val();
+			if(quantity > 1){
+				$(this).parent("div").find("input").val(--quantity);		
+			}
+		});
+		
+		
+		/* 수량 수정 버튼 */
+		$(".quantity_modify_btn").on("click", function(){
+			let cartId = $(this).data("cartid");
+			let bookCount = $(this).parent("td").find("input").val();
+			$(".update_cartId").val(cartId);
+			$(".update_bookCount").val(bookCount);
+			$(".quantity_update_form").submit();
+			
+		});	
+		
+		/* 장바구니 삭제 버튼 */
+		$(".delete_btn").on("click", function(e){
+			e.preventDefault();
+			const cartId = $(this).data("cartid");
+			$(".delete_cartId").val(cartId);
+			$(".quantity_delete_form").submit();
+		});
+		
+		
+		/* 배송비 결정 */
+		if(totalPrice >= 20000){
+			deliveryPrice = 0;
+		} else if(totalPrice == 0){
+			deliveryPrice = 0;
+		} else {
+			deliveryPrice = 3000;	
+		}
+		
+			finalTotalPrice = totalPrice + deliveryPrice;
+		
+		/* ※ 세자리 컴마 Javscript Number 객체의 toLocaleString() */
+		
+		// 총 가격
+		$(".totalPrice_span").text(totalPrice.toLocaleString());
+		// 총 갯수
+		$(".totalCount_span").text(totalCount);
+		// 총 종류
+		$(".totalKind_span").text(totalKind);
+		// 총 마일리지
+		$(".totalPoint_span").text(totalPoint.toLocaleString());
+		// 배송비
+		$(".delivery_price").text(deliveryPrice);	
+		// 최종 가격(총 가격 + 배송비)
+		$(".finalTotalPrice_span").text(finalTotalPrice.toLocaleString());		
 	}
+
+	/* 체크여부에따른 종합 정보 변화 */
+	$(".individual_cart_checkbox").on("change", function(){
+		/* 총 주문 정보 세팅(배송비, 총 가격, 마일리지, 물품 수, 종류) */
+		setTotalInfo($(".cart_info_td"));
+	});
 	
-	/* let totalCount = 0;
-	let totalPrice = 0;
-
-	function delCheckedItem() {
-	    let checkItem = document.querySelectorAll('.row.data input[type="checkBox"]:checked');
-	    checkItem.forEach(function (item) {
-	        let row = item.closest('.row.data');
-	        let parent = row.parentNode;
-	        parent.removeChild(row);
-	    });
-	    console.log('delCheckedItem');
+	//주문페이지 이동
+	function directOrder() {
+	  // 바로 주문하기 기능 구현
+	  alert("주문 페이지로 이동합니다!");
+	  window.location.href="/mall/orderList?membNo="+[[${basketList}]];
 	}
-
-	function delAllItem() {
-	    let delAllItem = document.querySelectorAll('.row.data');
-	    delAllItem.forEach(function (delAllItem) {
-	        delAllItem.parentNode.removeChild(delAllItem);
-	    });
-	    console.log('delAllItem');
-	}
-
-	function updateUI() {
-	    console.log('updateUI');
-
-	    let cval = event.target.parentNode.parentNode.childNodes[1].value;
-	    event.target.parentNode.parentNode.childNodes[1].value = parseInt(cval) + 1;
-
-	    document.querySelectorAll('.p_num').forEach(function (item) {
-	        let count = parseInt(item.getAttribute('value'));
-	        totalCount += count;
-	    });
-
-	    document.querySelector('#sum_p_num').textContent = '상품개수: ' + totalCount.formatNumber() + '개';
-	    document.querySelector('#sum_p_price').textContent = '합계금액: ' + totalPrice.formatNumber() + '원';
-	}
-
-	function changePNum(pos) {
-	    let target = document.querySelectorAll('div.row.data:nth-of-type(' + pos + ')');
-	    console.log("changePNum");
-
-	    console.log(event);
-	    if (event.target.tagName == 'INPUT') {
-	        console.log('input 클릭');
-	    } else if (event.target.tagName == 'I') {
-	        console.log('icon 클릭');
-
-	        if (event.target.classList.contains('up')) {
-	            console.log('icon 클릭. up');
-	            let cval = event.target.parentNode.parentNode.childNodes[1].value;
-	            event.target.parentNode.parentNode.childNodes[1].value = parseInt(cval) + 1;
-	        } else {
-	            console.log('icon 클릭. down');
-	            let cval = event.target.parentNode.parentNode.childNodes[1].value;
-	            event.target.parentNode.parentNode.childNodes[1].value = parseInt(cval) - 1;
-	        }
-	    }
-	}
-
-	function delItem() {
-	    console.log(event.target.closest('div.row.data').remove());
-	    console.log('delItem');
-	}
-
-	function cartList() {
-	    cartItems.forEach((item, idx) => {
-	        let template = document.querySelector('#template>div.row.data').cloneNode(true);
-	        template.querySelector('.img>img').setAttribute('src', '../img/' + item.image)
-	        template.querySelector('.pname>span').textContent = item.productNm
-	        template.querySelector('.basketprice>input').value = item.price
-	        template.querySelector('.basketprice').childNodes[2].textContent = item.price.formatNumber() + "원"
-	        template.querySelector('.updown>input').value = item.qty
-	        template.querySelector('.updown>input').setAttribute('value', item.qty)
-	        template.querySelector('.updown>input').setAttribute('id', 'p_num' + (idx + 1));
-	        template.querySelector('.sum').textContent = (item.price * item.qty).formatNumber() + "원"
-
-	        document.querySelector('#basket').append(template)
-	    })
-	}
-
-	// 숫자 3자리 콤마찍기
-	Number.prototype.formatNumber = function () {
-	    if (this == 0) return 0;
-	    let regex = /(^[+-]?\d+)(\d{3})/;
-	    let nstr = (this + '');
-	    while (regex.test(nstr)) nstr = nstr.replace(regex, '$1' + ',' + '$2');
-	    return nstr;
-	};
-
-	// 초기화 함수 실행
-	function init() {
-	    // 장바구니 목록 출력
-	    cartList();
-
-	    // 선택상품 삭제 버튼 이벤트 리스너 등록
-	    document.querySelector('.basketrowcmd a:first-child').addEventListener('click', function () {
-	        delCheckedItem();
-	    });
-
-	    // 장바구니 비우기 버튼 이벤트 리스너 등록
-	    document.querySelector('.basketrowcmd a:nth-child(2)').addEventListener('click', function () {
-	        delAllItem();
-	    });
-
-	    // 장바구니 아이템 삭제 버튼 이벤트 리스너 등록
-	    document.querySelectorAll('.basketcmd a').forEach(function (item) {
-	        item.addEventListener('click', function () {
-	            delItem();
-	        });
-	    });
-
-	    // 수량변경 이벤트 리스너 등록
-	    document.querySelectorAll('.updown').forEach(function (item, idx) {
-	        item.querySelector('input').addEventListener('keyup', function () {
-	            changePNum(idx);
-	        });
-	        item.children[1].addEventListener('click', function () {
-	            changePNum(idx);
-	        });
-	        item.children[2].addEventListener('click', function () {
-	            changePNum(idx);
-	        });
-	    });
-
-	    // <a> 태그의 href 속성에 "javascript:void(0)" 설정
-	    document.querySelectorAll('a[href="#"]').forEach(function (item) {
-	        item.setAttribute('href', 'javascript:void(0)');
-	    });
-	}
-
-	// 초기화 함수 실행
-	init();
-
-	
-	
-	// 장바구니 목록을 배열로 정의
-	var cartItems = [{
-	        no: 1,
-	        productNm: '이것이 민트다.',
-	        qty: 2,
-	        price: 12000,
-	        image: 'item1.PNG'
-	    },
-	    {
-	        no: 2,
-	        productNm: '와 아이스크림.',
-	        qty: 1,
-	        price: 22000,
-	        image: 'item2.PNG'
-	    },
-	    {
-	        no: 3,
-	        productNm: '모나카 케익.',
-	        qty: 1,
-	        price: 13600,
-	        image: 'item3.PNG'
-	    }
-	];
-
-	// 숫자 3자리 콤마찍기
-	Number.prototype.formatNumber = function () {
-	    if (this == 0) return 0;
-	    var regex = /(^[+-]?\d+)(\d{3})/;
-	    var nstr = (this + '');
-	    while (regex.test(nstr)) nstr = nstr.replace(regex, '$1' + ',' + '$2');
-	    return nstr;
-	};
-
-	//장바구니 단건 삭제
-	function delItem() {
-	    var row = this.closest('.row.data');
-	    row.parentNode.removeChild(row);
-	    console.log('delItem');
-	}
-
-	//수량변경 
-	function changePNum(pos) {
-	    var target = document.querySelectorAll('div.row.data:nth-of-type(' + pos + ')');
-	    console.log("changePNum");
-
-	    console.log(event);
-	    if (event.target.tagName == 'INPUT') {
-	        console.log('input 클릭');
-	    } else if (event.target.tagName == 'I') {
-	        console.log('icon 클릭');
-
-	        //console.log(event.target.classList);
-	        if (event.target.classList.contains('up')) {
-	            console.log('icon 클릭. up'); //현재값에서 +1
-	            var cval = event.target.parentNode.parentNode.childNodes[1].value;
-	            event.target.parentNode.parentNode.childNodes[1].value = parseInt(cval) + 1;
-	            console.log(event.target.parentNode.parentNode.parentNode.parentNode.childNodes[2].innerText);
-	            //console.log(event.target.parentNode.parentNode.childNode.value);
-	            //target.querySelector('input').value = 50;
-	        } else {
-	            console.log('icon 클릭. down'); //현재값에서 -1
-	            //target.querySelector('input').value = -50;
-	            var cval = event.target.parentNode.parentNode.childNodes[1].value;
-	            event.target.parentNode.parentNode.childNodes[1].value = parseInt(cval) - 1;
-	        }
-	    }
-	}
-
-	// 장바구니 목록을 화면에 출력하는 함수
-	function cartList() {
-	    cartItems.forEach(function (item, idx) {
-	        var template = document.querySelector('#template>div.row.data').cloneNode(true);
-	        template.querySelector('.img>img').setAttribute('src', '../img/' + item.image);
-	        template.querySelector('.pname>span').textContent = item.productNm;
-	        template.querySelector('.basketprice>input').value = item.price;
-	        template.querySelector('.basketprice').childNodes[2].textContent = item.price.formatNumber() + "원";
-	        template.querySelector('.updown>input').value = item.qty;
-	        template.querySelector('.updown>input').setAttribute('value', item.qty);
-	        template.querySelector('.updown>input').setAttribute('id', 'p_num' + (idx + 1));
-	        template.querySelector('.sum').textContent = (item.price * item.qty).formatNumber() + "원";
-	        document.querySelector('#basket').append(template);
-	    });
-	}
-
-	// 초기화 작업 수행
-	function init() {
-	    // 장바구니 목록 출력
-	    cartList();
-
-	    // 선택상품 삭제 버튼 이벤트 리스너 등록
-	    document.querySelector('.basketrowcmd a:first-child').addEventListener('click', function () {
-	        delCheckedItem();
-	    });
-
-	    // 장바구니 비우기 버튼 이벤트 리스너 등록
-	    document.querySelector('.basketrowcmd a:nth-child(2)').addEventListener('click', function () {
-	        delAllItem();
-	    });
-
-	    // 장바구니 아이템 삭제 버튼 이벤트 리스너 등록
-	    document.querySelectorAll('.basketcmd a').forEach(function (item) {
-	        item.addEventListener('click', function () {
-	            delItem();
-	        });
-	    });
-
-	    // 수량변경 이벤트 리스너 등록
-	    document.querySelectorAll('.updown').forEach(function (item, idx) {
-	        item.querySelector('input').addEventListener('keyup', function () {
-	            changePNum(idx);
-	        });
-	        item.children[1].addEventListener('click', function () {
-	            changePNum(idx);
-	        });
-	        item.children[2].addEventListener('click', function () {
-	            changePNum(idx);
-	        });
-	    });
-
-	    // <a> 태그의 href 속성에 "javascript:void(0)" 설정
-	    document.querySelectorAll('a[href="#"]').forEach(function (item) {
-	        item.setAttribute('href', 'javascript:void(0)');
-	    });
-	}
-
-	// 초기화 함수 실행
-	init();
- */
-
 	
 	</script>
 	</div>
