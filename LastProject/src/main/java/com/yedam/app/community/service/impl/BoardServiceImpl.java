@@ -10,6 +10,7 @@ import com.yedam.app.community.service.AttachVO;
 import com.yedam.app.community.service.BoardService;
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.CommentsVO;
+import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 
 @Service
@@ -142,6 +143,11 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public List<AttachVO> getAttachList(String boardNo) {
 		return boardMapper.getAttachList(boardNo);
+	}
+
+	@Override
+	public List<InterestVO> getInerestStockInfo(String membNo) {
+		return boardMapper.getInerestStockInfo(membNo);
 	}
 
 }

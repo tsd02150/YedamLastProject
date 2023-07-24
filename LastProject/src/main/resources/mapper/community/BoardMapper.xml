@@ -95,7 +95,7 @@
 	
 	<!-- 게시물 작성자 정보 -->
 	<select id="getMembInfo" resultType="MembVO">
-		SELECT memb_no, nick
+		SELECT *
 		FROM MEMBER
 		WHERE memb_no=#{membNo}
 	</select>
@@ -189,5 +189,34 @@
 		SELECT *
 		FROM ATTACH_FILE
 		WHERE board_no=#{boardNo}
+	</select>
+	
+	<!-- 해당 멤버의 관심종목 정보 -->
+	<select id="getInerestStockInfo" resultType="InterestVO">
+		SELECT item_no,nm,ta_prc tprc,rate
+		FROM(
+		    SELECT item_no,nm
+		    FROM interest_item
+		    JOIN item
+		    USING(item_no)
+		    WHERE memb_no='mem-4')
+		JOIN (
+		    SELECT item_no,ta_prc,trunc(NVL(DECODE(ta_prc,0,0,ta_prc - cl_prc) / cl_prc, 0)*100) rate
+		    FROM(
+		        SELECT item_no,cl_prc
+		        FROM item_info
+		        WHERE (item_no,ta_dt) IN (
+		            SELECT item_no,MAX(ta_dt)
+		            FROM item_info
+		            GROUP BY item_no))
+		    JOIN (
+		        SELECT item_no,ta_prc
+		        FROM ta_hr
+		        WHERE (item_no,ta_dt) in(
+		            SELECT item_no,MAX(ta_dt)
+		            FROM ta_hr
+		            GROUP BY item_no))
+		    USING(item_no))
+		USING (item_no)
 	</select>
 </mapper>

@@ -262,7 +262,7 @@
 				if($('#chartList').children().eq(index-1).hasClass('hover')===false){
 					$('#chartList').children().eq(index)[0].click();					
 					index++;
-					if(index>4){
+					if(index>$('#chartList').children().length-1){
 						index=0;
 					}
 				}
@@ -287,7 +287,7 @@
 				$('#chartList').children().removeClass('hover');
 				$(event.target).addClass('hover');
 				index=$(event.target).index()+1;
-				if(index>4){
+				if(index>$('#chartList').children().length-1){
 					index=0;
 				}
 			}

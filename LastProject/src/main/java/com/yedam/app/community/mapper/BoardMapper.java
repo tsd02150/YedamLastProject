@@ -5,6 +5,7 @@ import java.util.List;
 import com.yedam.app.community.service.AttachVO;
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.CommentsVO;
+import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 
 public interface BoardMapper {
@@ -50,4 +51,6 @@ public interface BoardMapper {
 	public int insertSubComment(CommentsVO vo);
 	// 첨부파일 가져오기
 	public List<AttachVO> getAttachList(String boardNo);
+	// 해당 멤버 정보, 관심종목, 종목 가격
+	public List<InterestVO> getInerestStockInfo(String membNo);
 }
