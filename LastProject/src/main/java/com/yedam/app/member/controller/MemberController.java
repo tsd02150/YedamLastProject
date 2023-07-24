@@ -624,13 +624,15 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping("dealList")
 	public List<DealVO> dealList(DealVO vo){
+		System.out.println("~~~~~~~~~~~~~~~~~~");
+		System.out.println(membService.dealList(vo));
 		return membService.dealList(vo);
 	}
 	
 	//거래내역 리스트 개수
 	@ResponseBody
 	@PostMapping("getDealCount")
-	public int getDealCount(DealVO vo, int page) {
+	public int getDealCount(DealVO vo) {
 		return membService.getDealCount(vo);
 	}
 	

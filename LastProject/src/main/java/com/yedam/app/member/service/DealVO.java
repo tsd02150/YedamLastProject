@@ -18,11 +18,11 @@ public class DealVO {
 	private String startDate;
 	private String endDate;
 	
-//	TA_NO, STOCK_CNT, TA_PRC, TA_DT, BUY_MEMB_NO AS MEMB_NO, 'B' AS kind, ITEM_NO
 	private String taNo;
 	private int stockCnt;
 	private int taPrc;
 	private String taDt;
 	private String kind;
-	
+	private int page;
+	private int totalCnt;
 }

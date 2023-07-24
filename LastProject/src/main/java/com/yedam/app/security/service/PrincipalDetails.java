@@ -16,6 +16,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         this.userVO = userVO;
         this.attributes = attributes;
     }
+    
     public UserVO getUserVO() {
     	return this.userVO;
     }

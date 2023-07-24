@@ -354,8 +354,8 @@
 		and   buy_no = #{buyNo}
 	</update>
 	
-	<select id="dealList" parameterType="DealVO">
-		SELECT * FROM (
+	<select id="getDealCount" resultType="int" parameterType="DealVO">
+		SELECT COUNT(*) FROM (
     SELECT tablename, order_no, memb_no, order_dt, order_am as point, i.item_no, i.nm
     FROM (
         SELECT '매도' AS tablename, ta_no  AS order_no, buy_memb_no as memb_no,ta_dt AS order_dt, (-1*stock_cnt * ta_prc)  AS order_am, item_no
@@ -401,9 +401,9 @@
     ORDER BY trunc(order_dt) DESC
 </select>
 
-	<select id="getDealCount" resultType="int" parameterType="DealVO">
-		SELECT COUNT(*) FROM (
-    SELECT tablename, order_no, memb_no, order_dt, order_am as point, i.item_no, i.nm
+	<select id="dealList" parameterType="DealVO">
+		SELECT * FROM (
+    SELECT rownum rn, tablename, order_no, memb_no, order_dt, order_am as point, i.item_no, i.nm
     FROM (
         SELECT '매도' AS tablename, ta_no  AS order_no, buy_memb_no as memb_no,ta_dt AS order_dt, (-1*stock_cnt * ta_prc)  AS order_am, item_no
         FROM ta_hr
@@ -417,7 +417,7 @@
         SELECT '포인트몰' AS tablename, o.order_no, o.memb_no, o.order_dt, -(o.order_am) AS order_am, os.prdt_no AS item_no
         FROM orders o
         JOIN order_detail os ON o.order_no = os.order_no
-    ) s LEFT OUTER JOIN item i ON s.item_no = i.item_no ) a
+    ) s LEFT OUTER JOIN item i ON s.item_no = i.item_no 
     WHERE memb_no = #{membNo}
     <choose>
         <when test="tablename == '매도'">
@@ -445,7 +445,12 @@
     <if test="startDate == null and endDate != null">
         AND trunc(order_dt) BETWEEN (SELECT MIN(order_dt) FROM a) AND #{endDate}
     </if>
+    <![CDATA[
+    		and rownum<=(${page}*20)
+    		]]>
     ORDER BY trunc(order_dt) DESC
+    ) a
+    WHERE rn > (${page}-1)*20
 </select>
 
 	<select id="myPossStockList" parameterType="String" resultType="PossVO">
@@ -510,9 +515,9 @@
 		with a as (
 			select item_no, sum(stock_cnt) stock_cnt, sum(trade_prc*stock_cnt) trade_prc --보유주식 총 수량, 총금액
 			from poss_stock 
-			where memb_no = 'mem-2'
+			where memb_no =  #{membNo}
 			group by item_no )
-		select TO_CHAR(ta_dt, 'yyyy-MM-dd') dt, round(sum((a.trade_prc/(i.cl_prc*a.stock_cnt)*100-100))/count(*),2) rate -- 현재 보유자산 / 시장가 / 수익률
+		select TO_CHAR(ta_dt, 'yyyy-MM-dd') dt, round(sum((a.trade_prc/DECODE((i.cl_prc*a.stock_cnt),0,NULL,(i.cl_prc*a.stock_cnt))*100-100))/count(*),2) rate -- 현재 보유자산 / 시장가 / 수익률
 		from a join item_info i on a.item_no = i.item_no
 		join item n on i.item_no = n.item_no
 		GROUP BY TO_CHAR(ta_dt, 'yyyy-MM-dd')

@@ -19,6 +19,9 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
 	@Autowired
 	UserService userService;
+	
+	//private LoginHistervice loginHistService;
+
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
