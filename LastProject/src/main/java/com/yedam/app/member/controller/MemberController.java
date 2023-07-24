@@ -624,8 +624,6 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping("dealList")
 	public List<DealVO> dealList(DealVO vo){
-		System.out.println("~~~~~~~~~~~~~~~~~~");
-		System.out.println(membService.dealList(vo));
 		return membService.dealList(vo);
 	}
 	
@@ -646,9 +644,13 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping("buysellList")
 	public List<DealVO> buysellList(DealVO vo){
-		List<DealVO> list = membService.buysellList(vo);
-		System.out.println("매도/매수 거래내역"+list);
-		return list;
+		return membService.buysellList(vo);
+	}
+	//거래내역 리스트 개수
+	@ResponseBody
+	@PostMapping("buysellCount")
+	public int buysellCount(DealVO vo) {
+		return membService.buysellCount(vo);
 	}
 	
 	@ResponseBody

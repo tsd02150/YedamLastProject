@@ -267,8 +267,8 @@ function dealList() {
 	   function nextPage() {
 		   $("#dealbody").html("");
 	     $('#prevpage').css('visibility', 'visible');
-	     startPage += 10;
-	     endPage += 10;
+	     startPage += 20;
+	     endPage += 20;
 	     if (endPage >= ~~((totalCnt - 1) / 20 + 1)) {
 	       endPage = ~~((totalCnt - 1) / 20 + 1);
 	       $('#nextpage').css('visibility', 'hidden');

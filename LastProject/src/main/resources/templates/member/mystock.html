@@ -121,6 +121,33 @@
 					<tbody id="buysellbody">
 					</tbody>
 				</table>
+				<div>
+					<nav aria-label="Page navigation example" class="d-flex justify-content-center">
+						<ul class="pagination">
+							<li class="page-item">
+								<a class="page-link" id="firstpage" href="javascript:firstPage()" aria-label="Previous">
+									<span aria-hidden="true">&laquo;</span>
+								</a>
+							</li>
+							<li class="page-item">
+								<a class="page-link" id="prevpage" href="javascript:prevPage()" aria-label="Previous">
+									<span aria-hidden="true" style="visibility: hidden;">&lt;</span>
+								</a>
+							</li>
+							<!-- 페이징버튼 들어갈 공간 -->
+							    <li class="page-item">
+									<a class="page-link" id="nextpage" href="javascript:nextPage()" aria-label="Next">
+										<span aria-hidden="true" style="visibility: hidden;">&rt;</span>
+									</a>
+								</li>
+							    <li class="page-item">
+									<a class="page-link" id="lastpage" href="javascript:lastPage()" aria-label="Next">
+										<span aria-hidden="true">&raquo;</span>
+									</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
 			</div>
 			<div class="col-12">
 				<div id="interestDiv" class="col-5">
@@ -142,26 +169,29 @@
 
 		
 	<script>
-	let div1='';
-	let div2='';
  	const memNo = "[[${session.loggedInMember.membNo}]]";
  	const dt = "[[${session.loggedInMember.joinDt}]]";
+	let div1='';
+	let div2='';
  	let kind = "";
  	let startDate = dt;
  	let today = new Date();   
  	let year = today.getFullYear(); // 년도
  	let month = today.getMonth() + 1 <10 ? '0'+(today.getMonth() + 1) : today.getMonth() + 1;  // 월
  	let date = today.getDate() < 10 ? date = '0'+today.getDate() : today.getDate();  // 날짜
-
  	let endDate = year + '/' + month + '/' + date ; 
- 	
- 	console.log(endDate);
  	
  	$("#dstart").val(startDate);
  	$("#dend").val(`${year}-${month}-${date}`);
  	
+ 	let targetPage = 1;
+ 	let startPage=1;
+ 	let endPage=10;
+ 	let totalCnt;
+ 	
  	//매도 매수 거래내역 호출
  	buysell(); 
+ 	pageBtn();
  	
  	$("#buysellsel").on("change",function(){
  		$("#buysellbody").html("");
@@ -169,6 +199,7 @@
     startDate = $("#dstart").val();
     endDate = $("#dend").val();
     buysell();
+	 	pageBtn();
  	})
  	
 //매도 매수 거래내역
@@ -180,7 +211,8 @@
 			"membNo" : memNo,
       "kind": kind,
       "startDate" : $("#dstart").val(),
-      "endDate" : $("#dend").val()
+      "endDate" : $("#dend").val(),
+      "page" : targetPage
 		},
 		success : function(data){
 			let tr='';
@@ -488,17 +520,125 @@ function updateStartDate(period) {
   $("#oneMonthBtn").on("click", function() {
     updateStartDate("oneMonth");
     buysell();
+    pageBtn();
   });
 
   $("#threeMonthsBtn").on("click", function() {
     updateStartDate("threeMonths");
     buysell();
+    pageBtn();
   });
 
   $("#sixMonthsBtn").on("click", function() {
     updateStartDate("sixMonths");
     buysell();
+    pageBtn();
   });
+  
+  function pageBtn() {
+	    $.ajax({
+	        url: "buysellCount",
+	        method: "POST",
+	        data: {
+	        	"membNo" : memNo,
+            "kind": kind,
+            "startDate" : $("#dstart").val(),
+            "endDate" : $("#dend").val()
+	        },
+	        success: function (data) {
+	            $('#nextpage').css('visibility', 'hidden');
+	            $('#prevpage').css('visibility', 'hidden');
+	            totalCnt = data;
+	            endPage=~~((totalCnt-1)/10 + 1);
+	            createPageCntBtn(startPage, endPage);
+	            if(totalCnt>100){
+	            	$('#nextpage').css('visibility', 'hidden');
+		            $('#prevpage').css('visibility', 'hidden');
+							}
+	        },
+	        error: function (err) {
+	            console.log(err);
+	        }
+	       });
+	   }
+	   
+	   //페이지 버튼생성
+	   function createPageCntBtn(start,end){
+	      $('.pagebtn').remove();
+	      
+	      for (let i = start; i <= end; i++) {
+	        let liTag = $('<li></li>').addClass('page-item').addClass('pagebtn');
+	        if (i % 10 === targetPage) {
+	          liTag.addClass('active');
+	        }
+	        let aTag = $('<a></a>').addClass('page-li	nk').attr('href', 'javascript:pageMove(' + i + ');').text(i);
+	        liTag.append(aTag);
+	        $('#nextpage').before(liTag);
+	      }
+	   }
+	   
+	   //페이징 버튼클릭
+	   function pageMove(page) {
+		   $("#dealbody").html("");
+		  $('.pagebtn.active').removeClass('active');
+		  console.log(page);
+		  targetPage = page;
+		  buysell();
+		  $('.pagebtn').each(function () {
+		    if ($(this).children('a').text() == page) {
+		      $(this).addClass('active');
+		       }
+		     });
+	   }
+	      
+	   // 페이징 < 버튼 클릭
+	   function prevPage() {
+		   $("#dealbody").html("");
+	     $('#nextpage').css('visibility', 'visible');
+	     startPage -= 10;
+	     endPage -= 10;
+	     if (startPage === 1) {
+	       $('#prevpage').css('visibility', 'hidden');
+	     }
+	     createPageCntBtn(startPage, endPage);
+	     pageMove(startPage);
+	   }
+	   
+	   // 페이징 > 버튼 클릭
+	   function nextPage() {
+		   $("#dealbody").html("");
+	     $('#prevpage').css('visibility', 'visible');
+	     startPage += 10;
+	     endPage += 10;
+	     if (endPage >= ~~((totalCnt - 1) / 10 + 1)) {
+	       endPage = ~~((totalCnt - 1) / 10 + 1);
+	       $('#nextpage').css('visibility', 'hidden');
+	     }
+	     createPageCntBtn(startPage, endPage);
+	     pageMove(startPage);
+	   }
+	   
+	   function firstPage() {
+		   $("#dealbody").html("");
+	     startPage = 1;
+	     if (endPage > 10) {
+	       endPage = 10;
+	     }
+	     createPageCntBtn(startPage, endPage);
+	     pageMove(startPage);
+	   }
+	   
+	   function lastPage() {
+		   $("#dealbody").html("");
+	     if (endPage > 10) {
+	       endPage = ~~((totalCnt - 1) / 10 + 1);
+	     }
+	     startPage = endPage - endPage % 10 + 1;
+	     //console.log(startPage, endPage);
+	     createPageCntBtn(startPage, endPage);
+	     pageMove(endPage);
+	   }
+
 
 
 	</script>
