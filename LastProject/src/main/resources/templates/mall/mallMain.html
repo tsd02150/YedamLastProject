@@ -14,7 +14,7 @@
 <link
 	href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap"
 	rel="stylesheet">
-<link                                                                                                                           
+<link
 	href="https://fonts.googleapis.com/css?family=Playfair+Display:400,900&display=swap"
 	rel="stylesheet">
 
@@ -73,17 +73,18 @@
 /* Main Image */
 .hero-slider {
 	position: relative;
-	height: 500px;
+	height: 600px;
 	background-color: transparent; /* 배경색 투명으로 설정 */
 }
 
-.main-img {
+/* .main-img {
 	display: none; /* 배경 이미지 요소 숨김 */
 }
+* /
 
 .hero-area video {
 	width: 1100px;
-	height: 500px;
+	height: 600px;
 }
 
 /* Featured Posts */
@@ -206,6 +207,19 @@
 	background-color: #ffffff;
 	color: #333333;
 }
+
+#dotted {
+	border-bottom: 3px dotted #eee;
+}
+
+.shop-banner {
+	position: relative;
+	background-color: #f5f5f5;
+	background-image: url('/images/main/mainImg.jpg');
+	background-size: cover;
+	padding: 110px 0px 115px;
+	background-size: cover;
+}
 </style>
 
 
@@ -257,77 +271,14 @@
 			<div class="hero-slider">
 				<div class="main-img"></div>
 				<div class="slider-item th-fullpage hero-area">
-					<video muted autoplay loop style="width: 1100px; height: 500px;">
+					<video muted autoplay loop style="width: 1100px; height: 600px;">
 						<source src="images/main/frame3.mp4" type="video/mp4">
 					</video>
 				</div>
 			</div>
 		</div>
 
-		<div class="content">
 
-			<div class="container">
-				<div class="d-flex carousel-nav">
-					<a href="#" class="col active">First Tab</a> <a href="#"
-						class="col">Second Tab</a> <a href="#" class="col">Third Tab</a>
-				</div>
-
-				<div class="owl-carousel owl-1">
-
-					<div class="media-29101 d-md-flex w-100">
-						<div class="img">
-							<img src="images/hero_1.jpg" alt="Image" class="img-fluid">
-						</div>
-						<div class="text">
-							<a class="category d-block mb-4" href="#">Travel &mdash;
-								First Tab</a>
-							<h2>
-								<a href="#">Take your mobile photography to the next level</a>
-							</h2>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-								Repudiandae fuga optio dolorem, fugit voluptates sint ducimus
-								praesentium iste!</p>
-						</div>
-					</div>
-					<!-- .item -->
-
-					<div class="media-29101 d-md-flex w-100">
-						<div class="img">
-							<img src="images/hero_2.jpg" alt="Image" class="img-fluid">
-						</div>
-						<div class="text">
-							<a class="category d-block mb-4" href="#">Travel &mdash;
-								Second Tab</a>
-							<h2>
-								<a href="#">Take your mobile photography to the next level</a>
-							</h2>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-								Repudiandae fuga optio dolorem, fugit voluptates sint ducimus
-								praesentium iste!</p>
-						</div>
-					</div>
-					<!-- .item -->
-
-					<div class="media-29101 d-md-flex w-100">
-						<div class="img">
-							<img src="images/hero_3.jpg" alt="Image" class="img-fluid">
-						</div>
-						<div class="text">
-							<a class="category d-block mb-4" href="#">Travel &mdash;
-								Third Tab</a>
-							<h2>
-								<a href="#">Take your mobile photography to the next level</a>
-							</h2>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-								Repudiandae fuga optio dolorem, fugit voluptates sint ducimus
-								praesentium iste!</p>
-						</div>
-					</div>
-					<!-- .item -->
-
-				</div>
-			</div>
-		</div>
 
 		<!-- second image -->
 		<!-- 
@@ -359,42 +310,17 @@
 			</section>
 		</div>
  -->
-		<!-- 정부 바우처 링크 -->
-		<!-- 	<ul class="amount">
-			<li>
-				<div>
-					<div class="contents1">지금까지 해먹은 돈</div>
-					<div class="result">$128,021</div>
-				</div>
-			</li>
-			<li>
-				<div>
-					<div class="contents1">씨를 말린 오징어 마릿수</div>
-					<div class="result">93,234</div>
-				</div>
-			</li>
-			<li>
-				<div>
-					<div class="contents1">최종 목표 마릿수</div>
-					<div class="result">100,000+</div>
-				</div>
-			</li>
-			<li>
-				<div>
-					<div class="contents1">와사비 간장</div>
-					<div class="result">57,221,084</div>
-				</div>
-			</li>
-		</ul> -->
-		<!-- amount end -->
 
 		<!-- 농산물 -->
-
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
 
 		<div class="main_text0">
 			<h1>농산물</h1>
 			<div class="contents1">당신이 찾는 모든 농산물, 신선한 해산물을 우리 집 식탁에서</div>
 
+			<div>&nbsp;</div>
 
 			<div class="row">
 
@@ -412,7 +338,7 @@
 						<div class="product-content">
 							<div th:text="${prdt.nm}" class="contents1_bold"></div>
 							<div th:text="${prdt.desct}" class="contents2"></div>
-							<span th:text="${prdt.prc} + '₩'"></span>
+							<span th:text="${prdt.prc} + 'P'"></span>
 							<div>
 								<div
 									th:onclick="|location.href='@{getFarm(prdtNo=${prdt.prdtNo})}'|">
@@ -422,7 +348,6 @@
 						</div>
 					</div>
 				</div>
-
 
 				<!-- 
 				<ul class="icons">
@@ -449,11 +374,14 @@
 
 		</div>
 
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+
 		<!-- 수산물 -->
 		<div class="main_text0">
 			<h1>수산물</h1>
 			<div class="contents1">당신이 찾는 모든 해산물, 신선한 해산물을 우리 집 식탁에서</div>
-
+			<div>&nbsp;</div>
 			<div class="row">
 
 				<div class="col-md-3 col-sm-6" th:each="prdt, iterStat : ${product}"
@@ -482,9 +410,167 @@
 				</div>
 			</div>
 		</div>
-	</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+		<section class="shop-banner">
+			<div class="container">
+				<h3>
+					December sale is on! <br> with big <span class="orange-text">Discount...</span>
+				</h3>
+				<div class="sale-percent">
+					<span>Sale! <br> Upto
+					</span>50% <span>off</span>
+				</div>
+				<a href="#" class="cart-btn btn-lg">Shop Now</a>
+			</div>
+		</section>
 
-	<div>
+		<!-- 슬라이더  -->
+<div class="section">
+  <input type="radio" name="slide" id="slide01" checked>
+  <input type="radio" name="slide" id="slide02">
+  <input type="radio" name="slide" id="slide03">
+  <input type="radio" name="slide" id="slide04">
+  <input type="radio" name="slide" id="slide05">
+  <div class="slidewrap">
+    <ul class="slidelist">
+      <li>
+        <a>
+          <label for="slide05" class="left"></label>
+          <img src="/mall/images/main/농축산물.png">
+          <label for="slide02" class="right"></label>
+        </a>
+      </li>
+      <li>
+        <a>
+          <label for="slide01" class="left"></label>
+          <img src="/mall/images/main/사이소.png">
+          <label for="slide03" class="right"></label>
+        </a>
+      </li>
+      <li>
+        <a>
+          <label for="slide02" class="left"></label>
+          <img src="/mall/images/main/산청.png">
+          <label for="slide04" class="right"></label>
+        </a>
+      </li>
+      <li>
+        <a>
+          <label for="slide03" class="left"></label>
+           <img src="/mall/images/main/산청엑스포.png">
+          <label for="slide05" class="right"></label>
+        </a>
+      </li>
+      <li>
+        <a>
+          <label for="slide04" class="left"></label>
+           <img src="/mall/images/main/제주농산.png">
+          <label for="slide01" class="right"></label>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+		<!-- 정부 바우처 링크 -->
+		<!-- <ul class="amount">
+			<li>
+				<div>
+					<div class="contents1">지금까지 해먹은 돈</div>
+					<div class="result">$128,021</div>
+				</div>
+			</li>
+			<li>
+				<div>
+					<div class="contents1">씨를 말린 오징어 마릿수</div>
+					<div class="result">93,234</div>
+				</div>
+			</li>
+			<li>
+				<div>
+					<div class="contents1">최종 목표 마릿수</div>
+					<div class="result">100,000+</div>
+				</div>
+			</li>
+			<li>
+				<div>
+					<div class="contents1">와사비 간장</div>
+					<div class="result">57,221,084</div>
+				</div>
+			</li>
+		</ul> -->
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+		<!-- amount end -->
+
+		<!-- <div class="content">
+
+			<div class="container">
+				<div class="d-flex carousel-nav">
+					<a href="#" class="col active">First Tab</a> <a href="#"
+						class="col">Second Tab</a> <a href="#" class="col">Third Tab</a>
+				</div>
+
+				<div class="owl-carousel owl-1">
+
+					<div class="media-29101 d-md-flex w-100">
+						<div class="img">
+							<img src="images/hero_1.jpg" alt="Image" class="img-fluid">
+						</div>
+						<div class="text">
+							<a class="category d-block mb-4" href="#">Travel &mdash;
+								First Tab</a>
+							<h2>
+								<a href="#">Take your mobile photography to the next level</a>
+							</h2>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+								Repudiandae fuga optio dolorem, fugit voluptates sint ducimus
+								praesentium iste!</p>
+						</div>
+					</div>
+					.item
+
+					<div class="media-29101 d-md-flex w-100">
+						<div class="img">
+							<img src="images/hero_2.jpg" alt="Image" class="img-fluid">
+						</div>
+						<div class="text">
+							<a class="category d-block mb-4" href="#">Travel &mdash;
+								Second Tab</a>
+							<h2>
+								<a href="#">Take your mobile photography to the next level</a>
+							</h2>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+								Repudiandae fuga optio dolorem, fugit voluptates sint ducimus
+								praesentium iste!</p>
+						</div>
+					</div>
+					.item
+
+					<div class="media-29101 d-md-flex w-100">
+						<div class="img">
+							<img src="images/hero_3.jpg" alt="Image" class="img-fluid">
+						</div>
+						<div class="text">
+							<a class="category d-block mb-4" href="#">Travel &mdash;
+								Third Tab</a>
+							<h2>
+								<a href="#">Take your mobile photography to the next level</a>
+							</h2>
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+								Repudiandae fuga optio dolorem, fugit voluptates sint ducimus
+								praesentium iste!</p>
+						</div>
+					</div>
+					.item
+
+				</div>
+			</div>
+		</div>
+ -->
 
 		<script th:inline="javascript">
 			/* top 버튼 */
@@ -495,8 +581,39 @@
 							behavior : 'smooth'
 						});
 					});
-
+			
 			/* slider */
+
+	   function autoSlide() {
+      const slides = document.querySelectorAll('.section [name="slide"]');
+      let index = 0;
+      let isForward = true; // 슬라이드 순환 방향을 나타내는 변수
+      const slideInterval = 5000; // 각 슬라이드를 보여주는 시간 (5초)
+
+      function showSlide() {
+        slides[index].checked = true;
+
+        if (isForward) {
+          index++;
+          if (index >= slides.length) {
+            index = slides.length - 2;
+            isForward = false;
+          }
+        } else {
+          index--;
+          if (index < 0) {
+            index = 1;
+            isForward = true;
+          }
+        }
+      }
+
+      // 일정 시간마다 슬라이드 전환을 반복하는 타이머 설정
+      const slideTimer = setInterval(showSlide, slideInterval);
+    }
+
+    // 슬라이드 자동 전환 함수를 호출하여 실행
+    autoSlide();
 		</script>
 
 		<script
