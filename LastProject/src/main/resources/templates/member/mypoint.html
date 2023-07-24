@@ -7,23 +7,6 @@
 <title>회원관리</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
-.sidebar.sidebar-left {
-	height: 1000px;
-}
-
-.titleMenu {
-	padding-top: 20px;
-}
-
-.sidebarMenu {
-	padding-top: 40px;
-	padding-bottom: 40px;
-}
-
-#mypageBody, .sidebar {
-	border: 1px solid #DDDDDD;
-	height: auto;
-}
 #myPointList, #myCouponList{
 	text-align: left;
 	margin-top : 50px;
@@ -92,6 +75,33 @@ margin : auto;
 
     </tbody>
 </table>
+<div>
+<nav aria-label="Page navigation example" class="d-flex justify-content-center">
+	<ul class="pagination">
+		<li class="page-item">
+			<a class="page-link" id="firstpage" href="javascript:firstPage()" aria-label="Previous">
+				<span aria-hidden="true">&laquo;</span>
+			</a>
+		</li>
+		<li class="page-item">
+			<a class="page-link" id="prevpage" href="javascript:prevPage()" aria-label="Previous">
+				<span aria-hidden="true" style="visibility: hidden;">&lt;</span>
+			</a>
+		</li>
+		<!-- 페이징버튼 들어갈 공간 -->
+		    <li class="page-item">
+				<a class="page-link" id="nextpage" href="javascript:nextPage()" aria-label="Next">
+					<span aria-hidden="true" style="visibility: hidden;">&rt;</span>
+				</a>
+			</li>
+		    <li class="page-item">
+				<a class="page-link" id="lastpage" href="javascript:lastPage()" aria-label="Next">
+					<span aria-hidden="true">&raquo;</span>
+				</a>
+			</li>
+		</ul>
+	</nav>
+</div>
 </div>
 </div>
 
@@ -100,9 +110,11 @@ const membNo = "[[${session.loggedInMember.membNo}]]";
 const dt = "[[${session.loggedInMember.joinDt}]]";
 
 let tablename = "";
+let targetPage = 1;
+let startPage=1;
+let endPage=20;
+let totalCnt;
 
-//startDate: 가입날짜 
-//endDate : 오늘 날짜
 let startDate = dt;
 let today = new Date();   
 let year = today.getFullYear(); // 년도
@@ -115,6 +127,7 @@ $("#endDate").val(`${year}-${month}-${date}`);
 
 
 dealList();
+pageBtn();
 
 // 거래내역 호출
 function dealList() {
@@ -125,11 +138,14 @@ function dealList() {
             "membNo": membNo,
             "tablename": tablename,
             "startDate" : startDate,
-            "endDate" : endDate
+            "endDate" : endDate,
+            "page" : targetPage
         },
         success: function (data) {
             let tr = ''; // 각 호출마다 tr을 초기화
+            console.log(data);
             data.forEach(el => {
+            	console.log(el)
             let point = commas(el.point);
             	let orderDt = new Date(el.orderDt);
             	let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
@@ -143,11 +159,18 @@ function dealList() {
                     tr += `<td>${el.nm}</td>`;
                 }
                 tr += `
-                            <td>${point}</td>
+                            <td class="point">${point}</td>
                         </tr>
                 `;
+                
+                 if(el.point >=0){
+                	$(".point").addClass("high");
+                 } else{
+                	 $(".point").addClass("low");
+                 }
+                 
             });
-            $("#dealbody").html(tr);
+            $("#dealbody").append(tr);
         },
         error: function (err) {
             console.log(err);
@@ -161,11 +184,119 @@ function dealList() {
 	    startDate = $("#startDate").val();
 	    endDate = $("#endDate").val();
 	    dealList();
+	    pageBtn();
+
 	});
 	
-	function commas(number) {
+ function pageBtn() {
+	    $.ajax({
+	        url: "getDealCount",
+	        method: "POST",
+	        data: {
+	            "membNo": membNo,
+	            "tablename": tablename,
+	            "startDate": startDate,
+	            "endDate": endDate
+	        },
+	        success: function (data) {
+	            $('#nextpage').css('visibility', 'hidden');
+	            $('#prevpage').css('visibility', 'hidden');
+	            totalCnt = data;
+	            endPage=~~((totalCnt-1)/20 + 1);
+	            createPageCntBtn(startPage, endPage);
+	            if(totalCnt>100){
+	            	$('#nextpage').css('visibility', 'hidden');
+		            $('#prevpage').css('visibility', 'hidden');
+							}
+	        },
+	        error: function (err) {
+	            console.log(err);
+	        }
+	       });
+	   }
+	   
+	   //페이지 버튼생성
+	   function createPageCntBtn(start,end){
+	      $('.pagebtn').remove();
+	      
+	      for (let i = start; i <= end; i++) {
+	        let liTag = $('<li></li>').addClass('page-item').addClass('pagebtn');
+	        if (i % 20 === targetPage) {
+	          liTag.addClass('active');
+	        }
+	        let aTag = $('<a></a>').addClass('page-li	nk').attr('href', 'javascript:pageMove(' + i + ');').text(i);
+	        liTag.append(aTag);
+	        $('#nextpage').before(liTag);
+	      }
+	   }
+	   
+	   //페이징 버튼클릭
+	   function pageMove(page) {
+		   $("#dealbody").html("");
+		  $('.pagebtn.active').removeClass('active');
+		  console.log(page);
+		  targetPage = page;
+		  dealList();
+		  $('.pagebtn').each(function () {
+		    if ($(this).children('a').text() == page) {
+		      $(this).addClass('active');
+		       }
+		     });
+	   }
+	      
+	   // 페이징 < 버튼 클릭
+	   function prevPage() {
+		   $("#dealbody").html("");
+	     $('#nextpage').css('visibility', 'visible');
+	     startPage -= 20;
+	     endPage -= 20;
+	     console.log(startPage)
+	     if (startPage === 1) {
+	       $('#prevpage').css('visibility', 'hidden');
+	     }
+	     createPageCntBtn(startPage, endPage);
+	     pageMove(startPage);
+	   }
+	   
+	   // 페이징 > 버튼 클릭
+	   function nextPage() {
+		   $("#dealbody").html("");
+	     $('#prevpage').css('visibility', 'visible');
+	     startPage += 20;
+	     endPage += 20;
+	     if (endPage >= ~~((totalCnt - 1) / 20 + 1)) {
+	       endPage = ~~((totalCnt - 1) / 20 + 1);
+	       $('#nextpage').css('visibility', 'hidden');
+	     }
+	     createPageCntBtn(startPage, endPage);
+	     pageMove(startPage);
+	   }
+	   
+	   function firstPage() {
+		   $("#dealbody").html("");
+	     startPage = 1;
+	     if (endPage > 20) {
+	       endPage = 20;
+	     }
+	     createPageCntBtn(startPage, endPage);
+	     pageMove(startPage);
+	   }
+	   
+	   function lastPage() {
+		   $("#dealbody").html("");
+	     if (endPage > 20) {
+	       endPage = ~~((totalCnt - 1) / 20 + 1);
+	     }
+	     startPage = endPage - endPage % 20 + 1;
+	     //console.log(startPage, endPage);
+	     createPageCntBtn(startPage, endPage);
+	     pageMove(endPage);
+	   }
+
+	
+	 function commas(number) {
 		  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-		}
+		} 
 </script>
 </div>
 </body>

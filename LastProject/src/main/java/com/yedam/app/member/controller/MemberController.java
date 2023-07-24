@@ -547,7 +547,7 @@ public class MemberController {
 		
 		int sumNowPrc = possstockList.stream().mapToInt(PossVO::getNowPrc).sum();
 	    int sumTradePrc = possstockList.stream().mapToInt(PossVO::getTradePrc).sum();
-	    double raise = (sumTradePrc / sumNowPrc) * 100;
+	    double raise =(double) (sumTradePrc / sumNowPrc) * 100;
 
 	    model.addAttribute("sumNowPrc", sumNowPrc);
 	    model.addAttribute("sumTradePrc", sumTradePrc);
@@ -630,7 +630,7 @@ public class MemberController {
 	//거래내역 리스트 개수
 	@ResponseBody
 	@PostMapping("getDealCount")
-	public int getDealCount(DealVO vo, int page) {
+	public int getDealCount(DealVO vo) {
 		return membService.getDealCount(vo);
 	}
 	
@@ -644,9 +644,13 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping("buysellList")
 	public List<DealVO> buysellList(DealVO vo){
-		List<DealVO> list = membService.buysellList(vo);
-		System.out.println("매도/매수 거래내역"+list);
-		return list;
+		return membService.buysellList(vo);
+	}
+	//거래내역 리스트 개수
+	@ResponseBody
+	@PostMapping("buysellCount")
+	public int buysellCount(DealVO vo) {
+		return membService.buysellCount(vo);
 	}
 	
 	@ResponseBody

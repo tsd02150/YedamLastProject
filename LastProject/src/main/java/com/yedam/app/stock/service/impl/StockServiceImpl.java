@@ -277,9 +277,34 @@ public class StockServiceImpl implements StockService {
 	@Override
 	public void schedulerJob() {
 		// 당일 주가 정보
-		List<ItemInfoVO> list = stockMapper.todayItemInfo();
+		List<ItemInfoVO> talist = stockMapper.todayItemInfo();
+		
 		// 정보가 있는 종목들은 insert
-		for(ItemInfoVO vo : list) {
+		for(ItemInfoVO vo : talist) {
+			stockMapper.insertItemInfo(vo);
+		}
+		
+		// 오늘 체결 정보 없는 종목 찾기
+		List<String> intList = new ArrayList<>();
+		List<Integer> itemNos = new ArrayList<>();
+		boolean[] chk = new boolean[47];
+		
+		for(ItemInfoVO vo : talist) {
+			intList.add(vo.getItemNo().substring(4));
+		}
+		
+		for(int i = 0 ; i <intList.size() ; i++) {
+			chk[Integer.parseInt(intList.get(i))] = true;
+		}
+		
+		for(int i = 1 ; i < chk.length ; i++) {
+			if(chk[i] == false) {
+				itemNos.add(i);
+			}
+		}
+		
+		List<ItemInfoVO> missingList = stockMapper.nonTaInfo(itemNos);
+		for(ItemInfoVO vo : missingList) {
 			stockMapper.insertItemInfo(vo);
 		}
 		// 초기화 ( 조회수초기화 , 수량 남은 주문 반환 )
@@ -314,6 +339,11 @@ public class StockServiceImpl implements StockService {
 		int result = stockMapper.stockAlmChk(almNo);
 		
 		return result;
+	}
+	//알람삭제
+	@Override
+	public int deleteAlm(String almNo) {
+		return stockMapper.deleteAlm(almNo);
 	}
 	
 	

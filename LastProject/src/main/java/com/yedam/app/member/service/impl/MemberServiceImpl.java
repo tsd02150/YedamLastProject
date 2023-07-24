@@ -232,4 +232,9 @@ public class MemberServiceImpl implements MemberService {
 		return membMapper.getDealCount(vo);
 	}
 
+	@Override
+	public int buysellCount(DealVO vo) {
+		return membMapper.buysellCount(vo);
+	}
+
 }

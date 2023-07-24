@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{admin/adminLayout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Insert title here</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div id="grid"></div>
+
+      <script>
+        const grid = new tui.Grid({
+             el: document.getElementById('grid'),
+             data: [
+                	{
+                		name:"김태연",
+                		artist:"dd",
+                		type:"dzz",
+                		genre:"sdsd",
+                		release:"wewe"
+                	},
+                	{
+                		name:"김태연",
+                		artist:"dd",
+                		type:"dzz",
+                		genre:"sdsd",
+                		release:"wewe"
+                	},
+                	{
+                		name:"김태연",
+                		artist:"dd",
+                		type:"dzz",
+                		genre:"sdsd",
+                		release:"wewe"
+                	},
+                	{
+                		name:"김태연",
+                		artist:"dd",
+                		type:"dzz",
+                		genre:"sdsd",
+                		release:"wewe"
+                	},
+                	{
+                		name:"김태연",
+                		artist:"dd",
+                		type:"dzz",
+                		genre:"sdsd",
+                		release:"wewe"
+                	},
+                	{
+                		name:"김태연",
+                		artist:"dd",
+                		type:"dzz",
+                		genre:"sdsd",
+                		release:"wewe"
+                	},
+                	{
+                		name:"김태연",
+                		artist:"dd",
+                		type:"dzz",
+                		genre:"sdsd",
+                		release:"wewe"
+                	},
+                	{
+                		name:"김태연",
+                		artist:"dd",
+                		type:"dzz",
+                		genre:"sdsd",
+                		release:"wewe"
+                	},
+                	{
+                		name:"김태연",
+                		artist:"dd",
+                		type:"dzz",
+                		genre:"sdsd",
+                		release:"wewe"
+                	},
+                	{
+                		name:"김태연",
+                		artist:"dd",
+                		type:"dzz",
+                		genre:"sdsd",
+                		release:"wewe"
+                	},
+                	{
+                		name:"김태연",
+                		artist:"dd",
+                		type:"dzz",
+                		genre:"sdsd",
+                		release:"wewe"
+                	},
+                	{
+                		name:"김태연",
+                		artist:"dd",
+                		type:"dzz",
+                		genre:"sdsd",
+                		release:"wewe"
+                	},
+                	{
+                		name:"김태연",
+                		artist:"dd",
+                		type:"dzz",
+                		genre:"sdsd",
+                		release:"wewe"
+                	},
+                	{
+                		name:"김태연",
+                		artist:"dd",
+                		type:"dzz",
+                		genre:"sdsd",
+                		release:"wewe"
+                	},
+                	{
+                		name:"김태연",
+                		artist:"dd",
+                		type:"dzz",
+                		genre:"sdsd",
+                		release:"wewe"
+                	},
+                	{
+                		name:"김태연",
+                		artist:"dd",
+                		type:"dzz",
+                		genre:"sdsd",
+                		release:"wewe"
+                	},
+                	{
+                		name:"김태연",
+                		artist:"dd",
+                		type:"dzz",
+                		genre:"sdsd",
+                		release:"wewe"
+                	}
+                 ],
+             rowHeaders: ['rowNum'],
+             scrollX: false,
+             scrollY: false,
+             pageOptions: {
+                 perPage: 5
+               },
+             columns: [
+               {
+                 header: 'Name',
+                 name: 'name'
+               },
+               {
+                 header: 'Artist',
+                 name: 'artist'
+               },
+               {
+                 header: 'Type',
+                 name: 'type'
+               },
+               {
+                 header: 'Genre',
+                 name: 'genre'
+               },
+               {
+                 header: 'Release',
+                 name: 'release'
+               }
+             ]
+           });
+
+           grid.on('check', ev => {
+             console.log('check!', ev);
+           });
+
+           grid.on('uncheck', ev => {
+             console.log('uncheck!', ev);
+           });
+
+           grid.on('focusChange', ev => {
+             console.log('change focused cell!', ev);
+           });
+      </script>
+    </div>
+  </body>
+</html>

@@ -1,9 +1,12 @@
 package com.yedam.app.security.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
@@ -16,6 +19,8 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         this.userVO = userVO;
         this.attributes = attributes;
     }
+    
+    
     public UserVO getUserVO() {
     	return this.userVO;
     }
@@ -38,8 +43,16 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+		Collection<SimpleGrantedAuthority> list = new ArrayList<SimpleGrantedAuthority>();
+		if(userVO.getNm().equals("admin")) {
+			list.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+			list.add(new SimpleGrantedAuthority("ROLE_USER"));
+		}else {
+			list.add(new SimpleGrantedAuthority("ROLE_USER"));
+		}
+		return list;
 	}
+		
 
 	@Override
 	public String getPassword() {

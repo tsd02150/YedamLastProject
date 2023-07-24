@@ -77,4 +77,8 @@ public interface StockMapper {
 	public List<AlarmVO> nonCheckedAlarm(String membNo);
 	// 미확인 알람 확인 알람으로 바꾸기
 	public int stockAlmChk(String almNo);
+	// 체결이 없는 종목의 전날 정보
+	public List<ItemInfoVO> nonTaInfo(List<Integer> itemNos);
+	// 알람 삭제
+	public int deleteAlm(String almNo);
 }

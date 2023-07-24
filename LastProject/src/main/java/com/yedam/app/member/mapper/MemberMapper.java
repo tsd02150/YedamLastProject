@@ -113,6 +113,8 @@ public interface MemberMapper {
 	
 	//매도 매수 거래내역
 	public List<DealVO> buysellList(DealVO vo);
+	//매도 매수 거래내역 개수
+	public int buysellCount(DealVO vo);
 	
 	//설문조사 추가
 	public int insertsurvey(SurveyVO vo);

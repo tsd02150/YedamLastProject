@@ -34,4 +34,5 @@ public interface StockService {
 	public List<ItemInfoVO> weekMonthChart(String itemNo , String type);
 	public List<AlarmVO> nonCheckedAlarm(String membNo);
 	public int stockAlmChk(String almNo);
+	public int deleteAlm(String almNo);
 }
