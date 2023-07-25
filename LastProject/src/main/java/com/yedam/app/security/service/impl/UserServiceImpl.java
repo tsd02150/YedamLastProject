@@ -1,5 +1,7 @@
 package com.yedam.app.security.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -38,5 +40,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 	@Override
 	public UserVO loginCheck(String id) {
 		return userMapper.loginCheck(id);
+	}
+
+	@Override
+	public List<UserVO> stopList(String id) {
+		return userMapper.stopList(id);
 	}
 }

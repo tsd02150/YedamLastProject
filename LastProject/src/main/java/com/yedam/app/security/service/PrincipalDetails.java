@@ -1,8 +1,9 @@
 package com.yedam.app.security.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Date;
 import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -43,13 +44,23 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
+		//SimpleDateFormat ddmmyy=new SimpleDateFormat("yyyy-MM-dd");
 		Collection<SimpleGrantedAuthority> list = new ArrayList<SimpleGrantedAuthority>();
+		Date currentDate = new Date();
 		if(userVO.getNm().equals("admin")) {
 			list.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 			list.add(new SimpleGrantedAuthority("ROLE_USER"));
+		}else if(userVO.getEndDt().after(currentDate)){
+			list.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
+			System.out.println("++++++++++++++++++++++++++++");
+			System.out.println(userVO.getEndDt().after(currentDate));
+			System.out.println(userVO.getEndDt());
+			System.out.println(currentDate);
+			System.out.println("++++++++++++++++++++++++++++");
 		}else {
 			list.add(new SimpleGrantedAuthority("ROLE_USER"));
 		}
+		System.out.println("권한"+list);
 		return list;
 	}
 		

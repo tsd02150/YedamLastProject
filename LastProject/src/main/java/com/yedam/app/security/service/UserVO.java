@@ -1,6 +1,8 @@
 package com.yedam.app.security.service;
 
-import java.sql.Date;
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,4 +43,9 @@ public class UserVO{
 	private String prdtNo;
 	private String thumb;
 
+	private String stopNo;
+	private String startDt;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date endDt;
+	private String stopPeriod;
 }
