@@ -576,4 +576,59 @@
 		ORDER BY 1
 	</select>
 	
+	<select id="anoSelectKey" resultType="String">
+		SELECT
+		  CONCAT('ano-', 
+		         CASE 
+		           WHEN MAX(CASE WHEN SUBSTR(memb_no, 1, 3) = 'ano' THEN TO_NUMBER(SUBSTR(memb_no, 5)) ELSE 0 END) > 0 
+		           THEN TO_CHAR(MAX(CASE WHEN SUBSTR(memb_no, 1, 3) = 'ano' THEN TO_NUMBER(SUBSTR(memb_no, 5)) ELSE 0 END) + 1)
+		           ELSE '1'
+		         END
+		        ) AS memb_no
+		FROM analysis_result
+	</select>
+	
+	<select id="recomList" parameterType="String" resultType="PossVO">
+		select distinct bb.item_no, bb.nm, bb.common_cd, bb.prc-bb.cl_prc tprc from(
+			WITH a AS (
+			    SELECT item_no, SUM(stock_cnt) stock_cnt, SUM(trade_prc*stock_cnt) trade_prc -- 보유주식 총 수량, 총금액
+			    FROM poss_stock
+			    WHERE memb_no = #{membNo}
+			    GROUP BY item_no ),
+			b AS (
+			    SELECT i.item_no, n.nm tnm, (SUBSTR(n.common_cd,1,4)) common_cd,
+			        a.stock_cnt, a.trade_prc, i.cl_prc*a.stock_cnt now_prc,
+			        NVL(ROUND(a.trade_prc/DECODE((i.cl_prc*a.stock_cnt),0,NULL,(i.cl_prc*a.stock_cnt))*100-100),0) rate -- 현재 보유자산 / 시장가 / 수익률
+			    FROM a JOIN item_info i ON a.item_no = i.item_no
+			    JOIN item n ON i.item_no = n.item_no
+			    WHERE TO_CHAR(i.ta_dt, 'yyyy-MM-dd') = TO_CHAR(sysdate-1, 'yyyy-MM-dd') 
+			)
+			SELECT common_cd --, COUNT(common_cd) count
+			FROM b
+			GROUP BY common_cd
+			) aa left outer join
+			(
+			SELECT n.item_no, n.nm, n.common_cd, i.cl_prc, b.prc
+			FROM item n
+			JOIN item_info i ON i.item_no = n.item_no AND TO_CHAR(i.ta_dt, 'yyyy-MM-dd') = TO_CHAR(sysdate-1, 'yyyy-MM-dd')
+			LEFT JOIN (
+			    SELECT DISTINCT(a.item_no) item_no, nm, 'tah-'||a.tano ta_no, NVL(ta_prc,0) prc
+			    FROM (
+			        SELECT nm, i.item_no, MAX(to_number(substr(ta_no,5))) tano
+			        FROM (
+			            SELECT * FROM ta_hr WHERE to_char(ta_dt, 'yyyy-MM-dd') = (
+			                SELECT to_char(max(ta_dt), 'yyyy-MM-dd') FROM ta_hr
+			            )
+			        ) t
+			        RIGHT JOIN item i ON i.item_no = t.item_no
+			        GROUP BY nm, i.item_no
+			        ORDER BY to_number(substr(item_no,5))
+			    ) a
+			    LEFT JOIN ta_hr t ON a.item_no = t.item_no AND to_number(substr(t.ta_no,5)) = a.tano
+			    ORDER BY to_number(substr(item_no,5))
+			) b ON n.item_no = b.item_no) bb
+			on aa.common_cd = SUBSTR(bb.common_cd,1,4)
+			order by prc desc
+	</select>
+	
 </mapper>

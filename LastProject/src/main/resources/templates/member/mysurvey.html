@@ -70,16 +70,16 @@ margin-top : 20px;
 						<col width="100%">
 					</colgroup>
 					<tbody><tr>
-						<td>
-							<span class="tit">1. 고객님의 금융상품에 대한 이해 수준은 어느 정도라고 생각 하십니까?</span>
-							<ul class="faqlist">
-								<li><input type="radio" class="radio" title="파생상품을 포함한 대부분의 금융투자상품의 구조 및 위험을 <br>상품설명서 등을 읽고 스스로 이해할 수 있음  선택" name="investKnowLevel" value="8" id="faq01"><label for="faq01">파생상품을 포함한 대부분의 금융투자상품의 구조 및 위험을 상품설명서 등을 읽고 스스로 이해할 수 있음</label></li>
-								<li><input type="radio" class="radio" title="널리알려진 금융투자상품(주식, 채권, 펀드 등)의 구조 및 위험을 이해하고 있음 선택" name="investKnowLevel" value="6" id="faq02"><label for="faq02">널리알려진 금융투자상품(주식, 채권, 펀드 등)의 구조 및 위험을 이해하고 있음</label></li>
-								<li><input type="radio" class="radio" title="널리알려진 금융투자상품(주식, 채권, 펀드 등)의 특징을 일정 부분 이해하고 있으며 설명을 들으면 구조와 위험을 이해할 수 있음 선택" name="investKnowLevel" value="4" id="faq03"><label for="faq03">널리알려진 금융투자상품(주식, 채권, 펀드 등)의 특징을 일정 부분 이해하고 있으며 설명을 들으면 구조와 위험을 이해할 수 있음</label></li>
-								<li><input type="radio" class="radio" title="금융투자상품에 대해 스스로 결정을 해 본 적이 없음 선택" name="investKnowLevel" value="2" id="faq04"><label for="faq04">금융투자상품에 대해 스스로 결정을 해 본 적이 없음</label></li>
-							</ul>
-						</td>
-					</tr>
+					<td>
+						<span class="tit">1. 고객님의 금융상품에 대한 이해 수준은 어느 정도라고 생각 하십니까?</span>
+						<ul class="faqlist">
+							<li><input type="radio" class="radio" title="파생상품을 포함한 대부분의 금융투자상품의 구조 및 위험을 상품설명서 등을 읽고 스스로 이해할 수 있음 선택" name="investKnowLevel" value="8" id="faq01"><label for="faq01">파생상품을 포함한 대부분의 금융투자상품의 구조 및 위험을 상품설명서 등을 읽고 스스로 이해할 수 있음</label></li>
+							<li><input type="radio" class="radio" title="널리알려진 금융투자상품(주식, 채권, 펀드 등)의 구조 및 위험을 이해하고 있음 선택" name="investKnowLevel" value="6" id="faq02"><label for="faq02">널리알려진 금융투자상품(주식, 채권, 펀드 등)의 구조 및 위험을 이해하고 있음</label></li>
+							<li><input type="radio" class="radio" title="널리알려진 금융투자상품(주식, 채권, 펀드 등)의 특징을 일정 부분 이해하고 있으며 설명을 들으면 구조와 위험을 이해할 수 있음 선택" name="investKnowLevel" value="4" id="faq03"><label for="faq03">널리알려진 금융투자상품(주식, 채권, 펀드 등)의 특징을 일정 부분 이해하고 있으며 설명을 들으면 구조와 위험을 이해할 수 있음</label></li>
+							<li><input type="radio" class="radio" title="금융투자상품에 대해 스스로 결정을 해 본 적이 없음 선택" name="investKnowLevel" value="2" id="faq04"><label for="faq04">금융투자상품에 대해 스스로 결정을 해 본 적이 없음</label></li>
+						</ul>
+					</td>
+				</tr>
 					<tr>
 						<td>
 							<span class="tit">2. 고객님께서 투자하신 경험이 있는 금융자산 또는 투자형태는 어떤 것입니까?</span>
@@ -170,65 +170,6 @@ margin-top : 20px;
 			<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/stock/itemListPage}'|">주식 사이트로 이동</button>
 			</div>
 			</div>
-			<!-- <table class="linetype2 mgt10" summary="번호, 질의내용, 고객 응답 내용로 구성된 표 입니다.">
-					<caption>투자자정보 질의/응답 내용</caption>
-					<colgroup>
-						<col width="10%;">
-						<col width="*;">
-						<col width="65%%;">
-					</colgroup>
-					<thead>
-						<tr>
-							<th scope="col">번호</th>
-							<th scope="col">질의내용</th>
-							<th scope="col" class="last"></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr class="first">
-							<td>1</td>
-							<td class="b left">투자지식수준</td>
-							<td class="left last"></td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td class="b left">투자상품 경험</td>
-							<td class="left last"></td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td class="b left">총금융자산 규모</td>
-							<td class="left last"></td>
-						</tr>
-						<tr>
-							<td>4</td>
-							<td class="b left">금융투자상품 투자 비중</td>
-							<td class="left last"></td>
-						</tr>
-						<tr>
-							<td>5</td>
-							<td class="b left">투자경험 기간</td>
-							<td class="left last"></td>
-						</tr>
-						<tr>
-							<td>6</td>
-							<td class="b left">소득수준</td>
-							<td class="left last"></td>
-						</tr>
-						<tr>
-							<td>7</td>
-							<td class="b left">기대수익</td>
-							<td class="left last"></td>
-						</tr>
-						<tr>
-							<td>8</td>
-							<td class="b left">투자예상 기간</td>
-							<td class="left last"></td>
-						</tr>
-						<tr class="bg tc">							
-						</tr>
-					</tbody>
-				</table> -->
 			
 			<div id="typeResult">
 				<img th:src="|/member/images/analysisType.png|" >
@@ -241,24 +182,26 @@ margin-top : 20px;
 	/* for(let i=0; i<10; i++){
 		
 	} */
-	let membNo = "[[${session.loggedInMember != null ? session.loggedInMember.membNo : 'anonymous'}]]";
+	let membNo = ""; // 변수 초기화
+
+	//로그인 되지 않은 사용자일 경우
+	if ("[[${session.loggedInMember.membNo}]]" == null) { 
+	  $.ajax({
+	    url: "anoSelectKey",
+	    success: function (data) {
+	      //console.log(data);
+	      membNo = data; 
+	    },
+	    error: function (err) {
+	      console.log(err);
+	    },
+	  });
+	} else { //로그인 된 사용자라면 세션에 저장된 membNo 저장
+	  membNo = "[[${session.loggedInMember.membNo}]]"; 
+	}
+	
 	analysisResult();
-	// membNo가 있을 경우
-		
-/* 	$(document).ready(function() {
-		// membNo 값을 가져옴
-		if (membNo == "anonumous") {
-			// "투자성향 자가측정 확인" 탭에 active 클래스 추가
-			$("#nav-profile-tab").addClass("active");
-			// "투자성향 자가측정" 탭에 active 클래스 제거
-			$("#nav-home-tab").removeClass("active");
-			// "surveyDiv" 초기화 (내용 삭제)
-			$("#surveydiv").html("");
-			// analysisResult 함수 호출
-			analysisResult();
-		}
-	}); */
-	//console.log($("input[name='investKnowLevel']:checked").next().text());
+	console.log($("input[name='investKnowLevel']:checked").siblings("label").text());
 	function doSubmit() {
 			
 			if($("input:radio[name=investKnowLevel]:checked").length==0) {
@@ -319,11 +262,10 @@ margin-top : 20px;
 			let q8Answer = $("input[name='lossLevel']:checked").val();
 
 			let score = (parseInt(q1Answer)+parseInt(q2Answer)+parseInt(q3Answer)+parseInt(q4Answer)+parseInt(q5Answer)+parseInt(q6Answer)+parseInt(q7Answer)+parseInt(q8Answer))*1.25;
-			console.log(score);
+			//console.log(score);
 			let typeNo = '';
 			
 			//설문조사 추가
-			
 			if(score <= 30) {
 				typeNo = 'A';
 			}else if(score >30 && score <=40){
@@ -338,9 +280,6 @@ margin-top : 20px;
 			
 			
 			 if(score != null && typeNo !=null ){
-				 console.log(typeNo);
-				 console.log(score);
-				 console.log(membNo);
 				 insertFuc();
 			 }
 
@@ -365,43 +304,49 @@ margin-top : 20px;
 		}
 	}
 	
-	function analysisResult(){
-		$.ajax({
-			url : "analysisResult",
-			method : "POST",
-			data : {
-				"membNo" : membNo
-			},
-			success : function(data){
-				if(membNo != "anonymous"){
-					$("#nav-profile-tab").addClass("active");
-					$("#nav-home-tab").removeClass("active");
-					$("#surveydiv").css("display","none");
-					$("#noResult").css("display","none");
-					$("#surveyResult").css("display","block");
-					
-				}
-				if(data && data.length >0){
-					let img='';
-				data.forEach(el=>{
-					img += `
-						<img src="/member/images/${el.typeNm}.png" >
-						`;
-				})
-					$("#membResult").html(img);
-					
-				}else{
-					$("#membResult").css("display","none");
-					$("#stockBtn button").css("display","none");
-					$("#noResult").css("display","block");
-					
-				}
-			},
-			error : function(err){
-				console.log(err);
-			}
-		});
-	}
+	function analysisResult() {
+	    $.ajax({
+	      url: "analysisResult",
+	      method: "POST",
+	      data: {
+	        "membNo": membNo
+	      },
+	      success: function (data) {
+	       /*  if (membNo != "anonymous") {
+	          $("#nav-profile-tab").addClass("active");
+	          $("#nav-home-tab").removeClass("active");
+	          $("#surveydiv").css("display", "none");
+	          $("#noResult").css("display", "none");
+	          $("#surveyResult").css("display", "block");
+	        } */
+	        if (data && data.length > 0) {
+	        	$("#nav-profile-tab").addClass("active");
+	          $("#nav-home-tab").removeClass("active");
+	          $("#surveydiv").css("display", "none");
+	          $("#stockBtn button").css("display", "none");
+	          $("#noResult").css("display", "none");
+	          $("#surveyResult").css("display", "block");
+	          let img = '';
+	          data.forEach(el => {
+	            img += `
+	              <img src="/member/images/${el.typeNm}.png">
+	            `;
+	          });
+	          $("#membResult").html(img); // Update the #typeResult div
+	          $("#membResult").css("display", "block");
+	        } else {
+	        	$("#nav-home-tab").addClass("active");
+	        	$("#nav-profile-tab").removeClass("active");
+	          $("#membResult").css("display", "none");
+	          $("#stockBtn button").css("display", "none");
+	          $("#noResult").css("display", "block");
+	        }
+	      },
+	      error: function (err) {
+	        console.log(err);
+	      }
+	    });
+	  }	
 	
 	$("#nav-home-tab").on("click", function(){
 		$("#nav-home-tab").addClass("active");
@@ -414,6 +359,7 @@ margin-top : 20px;
 		$("#nav-home-tab").removeClass("active");
 		$("#surveydiv").css("display","none");
 		$("#surveyResult").css("display","block");
+		analysisResult();
 	})
 	</script>
 

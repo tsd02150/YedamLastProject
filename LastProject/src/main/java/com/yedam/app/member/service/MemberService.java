@@ -98,7 +98,9 @@ public interface MemberService {
 	//설문조사 결과 조회
 	public List<SurveyVO> analysisResult(String membNo);
 	//하루 총 수익(매수, 매도)
-	public List<PossVO> myBuyRaiseList(String membNo);
-	public List<PossVO> mySellRaiseList(String membNo);
 	public List<PossVO> myRaiseList(String membNo);
+	//익명 memb_no 'ano-'
+	public String anoSelectKey();
+	//추천순위
+	public List<PossVO> recomList(String membNo);
 }

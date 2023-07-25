@@ -218,16 +218,6 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<PossVO> myBuyRaiseList(String membNo) {
-		return membMapper.myBuyRaiseList(membNo);
-	}
-
-	@Override
-	public List<PossVO> mySellRaiseList(String membNo) {
-		return membMapper.mySellRaiseList(membNo);
-	}
-
-	@Override
 	public int getDealCount(DealVO vo) {
 		return membMapper.getDealCount(vo);
 	}
@@ -240,6 +230,16 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<PossVO> myRaiseList(String membNo) {
 		return membMapper.myRaiseList(membNo);
+	}
+
+	@Override
+	public String anoSelectKey() {
+		return membMapper.anoSelectKey();
+	}
+
+	@Override
+	public List<PossVO> recomList(String membNo) {
+		return membMapper.recomList(membNo);
 	}
 
 }

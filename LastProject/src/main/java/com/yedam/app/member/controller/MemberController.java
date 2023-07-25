@@ -713,4 +713,11 @@ public class MemberController {
 	 * return "redirect:/ch05/content"; }
 	 */
 	
+	@ResponseBody
+	@GetMapping("anoSelectKey")
+	public String anoSelectKey() {
+		String ano = membService.anoSelectKey();
+		return ano;
+	}
+	
 }
