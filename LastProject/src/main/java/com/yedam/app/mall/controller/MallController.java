@@ -53,6 +53,10 @@ public class MallController {
 	// 농수산 페이지
 	@GetMapping("productList")
 	public String farmList(Model model, ProductVO prdtVO, HttpSession session) {
+		
+		// 첫 화면 페이징 1
+		model.addAttribute("startPage",1);
+		
 		String prdtCode = prdtVO.getCommonCd();
 		// 목록 전체
 		List<ProductVO> farmList = mallService.getProductList(prdtCode);
@@ -98,19 +102,23 @@ public class MallController {
 	}
 
 
-	/*
-	 * // 상품 게시물 갯수
-	 * 
-	 * @PostMapping("getProductCount")
-	 * 
-	 * @ResponseBody public int getProductCount(ProductVO prdtVO) { return
-	 * mallService.getProductCount(prdtVO); }
-	 */
+	
+	  // 상품 게시물 갯수
+	  
+	  @PostMapping("getProductCount")
+	  @ResponseBody
+	  public int getProductCount(ProductVO prdtVO) {
+		  return mallService.getProductCount(prdtVO); 
+	  }
+	 
 
 	// 농산물 상세 페이지
 	@GetMapping("getFarm")
 	public String getFarm(Model model, ProductVO prdtVO, ProductReviewVO revVO, BasketVO bskVO, HttpSession session) {
-
+		
+		// 첫 화면 페이징 1
+		model.addAttribute("startPage",1);
+		
 		model.addAttribute("getFarm", mallService.getProductInfo(prdtVO));
 		System.out.println(prdtVO);
 		// model.addAttribute("basketList", basketService.getBasketList(bskVO));
