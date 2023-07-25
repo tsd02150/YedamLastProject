@@ -10,6 +10,8 @@ import com.yedam.app.community.service.AttachVO;
 import com.yedam.app.community.service.BoardService;
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.CommentsVO;
+import com.yedam.app.community.service.RcomConfirmVO;
+import com.yedam.app.community.service.ReportVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 
@@ -145,9 +147,38 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.getAttachList(boardNo);
 	}
 
+	// 관심종목 정보
 	@Override
 	public List<InterestVO> getInerestStockInfo(String membNo) {
 		return boardMapper.getInerestStockInfo(membNo);
+	}
+
+	// 신고
+	@Override
+	public boolean report(ReportVO vo) {
+		return boardMapper.report(vo)>0;
+	}
+
+	// 추천 비추천 여부 확인
+	@Override
+	public boolean rcomConfirm(RcomConfirmVO vo) {
+		return boardMapper.rcomConfirm(vo)!=null;
+	}
+
+	// 추천 비추천 여부 테이블 추가
+	@Override
+	public boolean addRcomConfirm(RcomConfirmVO vo) {
+		return boardMapper.addRcomConfirm(vo)>0;
+	}
+
+	@Override
+	public boolean commentRcomConfirm(RcomConfirmVO vo) {
+		return boardMapper.commentRcomConfirm(vo)!=null;
+	}
+
+	@Override
+	public boolean addCommentRcomConfirm(RcomConfirmVO vo) {
+		return boardMapper.addCommentRcomConfirm(vo)>0;
 	}
 
 }

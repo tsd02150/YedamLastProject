@@ -111,10 +111,15 @@ function sendChat() {
 	})			
 }
 
-
+function enterkey() {
+	if (window.event.keyCode == 13) {
+    	sendChat();
+    }
+}
 
 
 $(function () {
     $( "#sendChat" ).click(() => sendChat());
+   
 });
 

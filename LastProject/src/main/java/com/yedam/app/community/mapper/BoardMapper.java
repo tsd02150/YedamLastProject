@@ -5,6 +5,8 @@ import java.util.List;
 import com.yedam.app.community.service.AttachVO;
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.CommentsVO;
+import com.yedam.app.community.service.RcomConfirmVO;
+import com.yedam.app.community.service.ReportVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 
@@ -53,4 +55,14 @@ public interface BoardMapper {
 	public List<AttachVO> getAttachList(String boardNo);
 	// 해당 멤버 정보, 관심종목, 종목 가격
 	public List<InterestVO> getInerestStockInfo(String membNo);
+	// 신고 기능
+	public int report(ReportVO vo);
+	// 추천 비추천 여부 확인
+	public RcomConfirmVO rcomConfirm(RcomConfirmVO vo);
+	// 추천 비추천 여부 테이블 추가
+	public int addRcomConfirm(RcomConfirmVO vo);
+	// 댓글 추천 비추천 여부 확인
+	public RcomConfirmVO commentRcomConfirm(RcomConfirmVO vo);
+	// 댓글 추천 비추천 여부 테이블 추가
+	public int addCommentRcomConfirm(RcomConfirmVO vo);
 }

@@ -13,7 +13,7 @@
 			<div>
 				<div id="chart" class="flex-block">
 					<section id="chartList" class="list-group">
-						<a class="list-group-item list-group-item-action" th:each="incStock:${increaseStock}" th:data-itemno="${incStock.itemNo}">[[${incStock.nm}]]</a>
+						<a class="list-group-item list-group-item-action" th:each="stock:${mainChartList}" th:data-itemno="${stock.itemNo}">[[${stock.nm}]]</a>
 					</section>
 					<section id="chartContent">
 						<div style="position: absolute;float:left;">
@@ -154,7 +154,7 @@
 					</div>
 				</div>			
 				<div id="survey">
-					<img src="main/images/survey.png">
+					<a href="/member/mysurvey"><img src="main/images/survey.png"></a>
 				</div>			
 			</div>
 		</div>

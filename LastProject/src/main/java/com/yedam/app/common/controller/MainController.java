@@ -37,7 +37,7 @@ public class MainController {
 		model.addAttribute("seaRank",mainService.getSeaRank());
 		model.addAttribute("increaseStock",mainService.getIncreaseStock());
 		model.addAttribute("decreaseStock",mainService.getDecreaseStock());
-
+		model.addAttribute("mainChartList",mainService.mainChartList());
 		return "main/main";
 	}
 	

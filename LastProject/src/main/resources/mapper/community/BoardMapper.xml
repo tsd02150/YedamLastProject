@@ -193,30 +193,73 @@
 	
 	<!-- 해당 멤버의 관심종목 정보 -->
 	<select id="getInerestStockInfo" resultType="InterestVO">
-		SELECT item_no,nm,ta_prc tprc,rate
+		SELECT DISTINCT item_no,nm,ta_prc tprc,cl_prc,trunc(NVL(DECODE(ta_prc,0,0,ta_prc - cl_prc) / cl_prc, 0)*100) rate
 		FROM(
 		    SELECT item_no,nm
 		    FROM interest_item
 		    JOIN item
 		    USING(item_no)
-		    WHERE memb_no='mem-4')
-		JOIN (
-		    SELECT item_no,ta_prc,trunc(NVL(DECODE(ta_prc,0,0,ta_prc - cl_prc) / cl_prc, 0)*100) rate
+		    WHERE memb_no=#{membNo})
+		 JOIN (
+		    SELECT item_no,DECODE(ta_prc,null,cl_prc,ta_prc) ta_prc,cl_prc
 		    FROM(
+		    SELECT item_no,ta_prc
+		        FROM (
+		            SELECT item_no,ta_prc,ta_dt,ROW_NUMBER() OVER(PARTITION BY item_no ORDER BY ta_dt DESC) AS rn
+		            FROM ta_hr
+		            WHERE to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate,'yyyy-MM-dd'))
+		        WHERE rn=1)
+		    RIGHT JOIN(
 		        SELECT item_no,cl_prc
 		        FROM item_info
-		        WHERE (item_no,ta_dt) IN (
-		            SELECT item_no,MAX(ta_dt)
+		        WHERE (info_no) IN (
+		            SELECT info_no
 		            FROM item_info
-		            GROUP BY item_no))
-		    JOIN (
-		        SELECT item_no,ta_prc
-		        FROM ta_hr
-		        WHERE (item_no,ta_dt) in(
-		            SELECT item_no,MAX(ta_dt)
-		            FROM ta_hr
-		            GROUP BY item_no))
+		            WHERE to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')))
 		    USING(item_no))
-		USING (item_no)
+		USING(item_no)
 	</select>
+	
+	<!-- 신고기능 -->
+	<insert id="report" parameterType="ReportVO">
+		<selectKey keyProperty="rprtNo" resultType="string" order="BEFORE">
+			SELECT CONCAT('rep-',NVL(MAX(TO_NUMBER(SUBSTR(rprt_no, 5))), 0)+1)
+			FROM REPORT
+		</selectKey>
+		INSERT INTO REPORT(rprt_no,cntn,board_no,accused,plaintiff,category)
+		VALUES(#{rprtNo},#{cntn},#{boardNo},#{accused},#{plaintiff},#{category})
+	</insert>
+	
+	<!-- 추천 비추천 여부 확인 -->
+	<select id="rcomConfirm" resultType="RcomConfirmVO">
+		SELECT *
+		FROM RCOM_CONFIRM
+		WHERE memb_no=#{membNo} AND board_no=#{boardNo}
+	</select>
+	
+	<!-- 추천 비추천 여부 테이블 추가 -->
+	<insert id="addRcomConfirm" parameterType="RcomConfirmVO">
+		<selectKey keyProperty="rcomNo" resultType="string" order="BEFORE">
+			SELECT CONCAT('rco-',NVL(MAX(TO_NUMBER(SUBSTR(rcom_no, 5))), 0)+1)
+			FROM RCOM_CONFIRM
+		</selectKey>
+		INSERT INTO RCOM_CONFIRM(rcom_no,memb_no,board_no)
+		VALUES(#{rcomNo},#{membNo},#{boardNo})
+	</insert>
+	<!-- 댓글 추천 비추천 여부 확인 -->
+	<select id="commentRcomConfirm" resultType="RcomConfirmVO">
+		SELECT *
+		FROM RCOM_CONFIRM
+		WHERE memb_no=#{membNo} AND comm_no=#{commNo}
+	</select>
+	
+	<!-- 댓글 추천 비추천 여부 테이블 추가 -->
+	<insert id="addCommentRcomConfirm" parameterType="RcomConfirmVO">
+		<selectKey keyProperty="rcomNo" resultType="string" order="BEFORE">
+			SELECT CONCAT('rco-',NVL(MAX(TO_NUMBER(SUBSTR(rcom_no, 5))), 0)+1)
+			FROM RCOM_CONFIRM
+		</selectKey>
+		INSERT INTO RCOM_CONFIRM(rcom_no,memb_no,comm_no)
+		VALUES(#{rcomNo},#{membNo},#{commNo})
+	</insert>
 </mapper>

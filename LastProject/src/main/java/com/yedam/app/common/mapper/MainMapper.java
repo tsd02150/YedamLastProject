@@ -24,4 +24,6 @@ public interface MainMapper {
 	public List<StockVO> getIncreaseStock();
 	// 하락 종목
 	public List<StockVO> getDecreaseStock();
+	// 메인 차트용
+	public List<StockVO> mainChartList();
 }

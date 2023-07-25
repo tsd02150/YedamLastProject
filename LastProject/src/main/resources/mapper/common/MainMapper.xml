@@ -55,152 +55,161 @@
 	
 	<select id="getFarmRank" resultType="StockVO">
 	<![CDATA[
-         SELECT *
-         FROM(
-            SELECT item_no,nm,ta_prc tprc,rate,ctgr theme,inq
-            FROM(
-                SELECT item_no,nm,ta_prc,rate,common_cd,inq
-                FROM(
-                    SELECT item_no,nm,ta_prc,inq,common_cd, trunc(NVL(DECODE(ta_prc,0,0,ta_prc - cl_prc) / cl_prc, 0)*100) rate
-                    FROM (
-                        SELECT item_no, cl_prc 
-                        FROM item_info 
-                        WHERE to_char(ta_dt,'yyyy-MM-dd') =(SELECT to_char(MAX(ta_dt),'yyyy-MM-dd')
-                                                           FROM item_info))
-                    JOIN (
-                        SELECT DISTINCT(a.item_no) item_no,nm,NVL(ta_prc,0) ta_prc,common_cd,inq
-                        FROM(SELECT nm,i.item_no,common_cd,inq, MAX(to_number(substr(ta_no,5))) tano
-                                FROM (SELECT * 
-                                      FROM ta_hr
-                                      WHERE to_char(ta_dt,'yyyy-MM-dd') =(SELECT to_char(MAX(ta_dt),'yyyy-MM-dd')
-                                                                           FROM ta_hr)
-                                ) t RIGHT JOIN item i 
-                                ON i.item_no = t.item_no
-                                GROUP BY nm,i.item_no,common_cd,inq
-                                ORDER BY to_number(substr(item_no,5))
-                         ) a 
-                        LEFT JOIN ta_hr t
-                        ON a.item_no= t.item_no and to_number(substr(t.ta_no,5)) = a.tano  
-                        WHERE ta_prc!=0)
-                    USING(item_no)
-                    WHERE common_cd LIKE 'S1%'
-                    )) c
-            JOIN COMMON_CODE b
-            ON b.common_cd= substr(c.common_cd,0,2)
-            ORDER BY ta_prc DESC, inq DESC)
-        WHERE rownum<6
+		SELECT *
+		FROM(
+		    SELECT DISTINCT item_no,h_ctgr theme,nm,ta_prc tprc,cl_prc,trunc(NVL(DECODE(ta_prc,0,0,ta_prc - cl_prc) / cl_prc, 0)*100) rate,vol
+		    FROM(
+		        SELECT item_no,common_cd,h_ctgr,nm
+		        FROM item JOIN common_code
+		        USING(common_cd)
+		        WHERE common_cd LIKE 'S1%')
+		     JOIN (
+		        SELECT item_no,DECODE(ta_prc,null,cl_prc,ta_prc) ta_prc,cl_prc,vol
+		        FROM(
+                    SELECT item_no,ta_prc
+		            FROM (
+		                SELECT item_no,ta_prc,ta_dt,ROW_NUMBER() OVER(PARTITION BY item_no ORDER BY ta_dt DESC) AS rn
+		                FROM ta_hr
+		                WHERE to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate,'yyyy-MM-dd'))
+		            WHERE rn=1)
+		        RIGHT JOIN(
+		            SELECT item_no,cl_prc,vol
+		            FROM item_info
+		            WHERE (info_no) IN (
+		                SELECT info_no
+		                FROM item_info
+		                WHERE to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')))
+		        USING(item_no))
+		    USING(item_no)
+		    ORDER BY ta_prc DESC, vol DESC)
+		WHERE rownum<6
 	]]>	
 	</select>
 	<select id="getSeaRank" resultType="StockVO">
 	<![CDATA[
-         SELECT *
-         FROM(
-            SELECT item_no,nm,ta_prc tprc,rate,ctgr theme,inq
-            FROM(
-                SELECT item_no,nm,ta_prc,rate,common_cd,inq
-                FROM(
-                    SELECT item_no,nm,ta_prc,inq,common_cd, trunc(NVL(DECODE(ta_prc,0,0,ta_prc - cl_prc) / cl_prc, 0)*100) rate
-                    FROM (
-                        SELECT item_no, cl_prc 
-                        FROM item_info 
-                        WHERE to_char(ta_dt,'yyyy-MM-dd') =(SELECT to_char(MAX(ta_dt),'yyyy-MM-dd')
-                                                           FROM item_info))
-                    JOIN (
-                        SELECT DISTINCT(a.item_no) item_no,nm,NVL(ta_prc,0) ta_prc,common_cd,inq
-                        FROM(SELECT nm,i.item_no,common_cd,inq, MAX(to_number(substr(ta_no,5))) tano
-                                FROM (SELECT * 
-                                      FROM ta_hr
-                                      WHERE to_char(ta_dt,'yyyy-MM-dd') =(SELECT to_char(MAX(ta_dt),'yyyy-MM-dd')
-                                                                           FROM ta_hr)
-                                ) t RIGHT JOIN item i 
-                                ON i.item_no = t.item_no
-                                GROUP BY nm,i.item_no,common_cd,inq
-                                ORDER BY to_number(substr(item_no,5))
-                         ) a 
-                        LEFT JOIN ta_hr t
-                        ON a.item_no= t.item_no and to_number(substr(t.ta_no,5)) = a.tano  
-                        WHERE ta_prc!=0)
-                    USING(item_no)
-                    WHERE common_cd LIKE 'S2%'
-                    )) c
-            JOIN COMMON_CODE b
-            ON b.common_cd= substr(c.common_cd,0,2)
-            ORDER BY ta_prc DESC, inq DESC)
-        WHERE rownum<6
+		SELECT *
+		FROM(
+		    SELECT DISTINCT item_no,h_ctgr theme,nm,ta_prc tprc,cl_prc,trunc(NVL(DECODE(ta_prc,0,0,ta_prc - cl_prc) / cl_prc, 0)*100) rate,vol
+		    FROM(
+		        SELECT item_no,common_cd,h_ctgr,nm
+		        FROM item JOIN common_code
+		        USING(common_cd)
+		        WHERE common_cd LIKE 'S2%')
+		     JOIN (
+		        SELECT item_no,DECODE(ta_prc,null,cl_prc,ta_prc) ta_prc,cl_prc,vol
+		        FROM(
+                    SELECT item_no,ta_prc
+		            FROM (
+		                SELECT item_no,ta_prc,ta_dt,ROW_NUMBER() OVER(PARTITION BY item_no ORDER BY ta_dt DESC) AS rn
+		                FROM ta_hr
+		                WHERE to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate,'yyyy-MM-dd'))
+		            WHERE rn=1)
+		        RIGHT JOIN(
+		            SELECT item_no,cl_prc,vol
+		            FROM item_info
+		            WHERE (info_no) IN (
+		                SELECT info_no
+		                FROM item_info
+		                WHERE to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')))
+		        USING(item_no))
+		    USING(item_no)
+		    ORDER BY ta_prc DESC, vol DESC)
+		WHERE rownum<6
 	]]>	
 	</select>
 	<select id="getIncreaseStock" resultType="StockVO">
 	<![CDATA[
-        SELECT *
-        FROM(
-            SELECT item_no,nm,ta_prc tprc,rate,ctgr theme
-            FROM(
-                SELECT item_no,nm,ta_prc,rate,common_cd
-                FROM(
-                    SELECT item_no,nm,ta_prc,common_cd, trunc(NVL(DECODE(ta_prc,0,0,ta_prc - cl_prc) / cl_prc, 0)*100) rate
-                    FROM (
-                        SELECT item_no, cl_prc 
-                        FROM item_info 
-                        WHERE to_char(ta_dt,'yyyy-MM-dd') =(SELECT to_char(MAX(ta_dt),'yyyy-MM-dd')
-                                                           FROM item_info))
-                    JOIN (
-                        SELECT DISTINCT(a.item_no) item_no,nm,NVL(ta_prc,0) ta_prc,common_cd,inq
-                        FROM(SELECT nm,i.item_no,common_cd,inq, MAX(to_number(substr(ta_no,5))) tano
-                                FROM (SELECT * 
-                                      FROM ta_hr
-                                      WHERE to_char(ta_dt,'yyyy-MM-dd') =(SELECT to_char(MAX(ta_dt),'yyyy-MM-dd')
-                                                                           FROM ta_hr)
-                                ) t RIGHT JOIN item i 
-                                ON i.item_no = t.item_no
-                                GROUP BY nm,i.item_no,common_cd,inq
-                                ORDER BY to_number(substr(item_no,5))
-                         ) a 
-                        LEFT JOIN ta_hr t
-                        ON a.item_no= t.item_no and to_number(substr(t.ta_no,5)) = a.tano  
-                        WHERE ta_prc!=0)
-                    USING(item_no)
-                    )) a
-            JOIN common_code b
-            ON b.common_cd= substr(a.common_cd,0,2)
-            ORDER BY rate DESC, ta_prc DESC)
-        WHERE rownum<6
+		SELECT *
+		FROM(
+		    SELECT DISTINCT item_no,h_ctgr theme,nm,ta_prc tprc,cl_prc,trunc(NVL(DECODE(ta_prc,0,0,ta_prc - cl_prc) / cl_prc, 0)*100) rate
+		    FROM(
+		        SELECT item_no,common_cd,h_ctgr,nm
+		        FROM item JOIN common_code
+		        USING(common_cd))
+		     JOIN (
+		        SELECT item_no,DECODE(ta_prc,null,cl_prc,ta_prc) ta_prc,cl_prc
+		        FROM(
+		        SELECT item_no,ta_prc
+		            FROM (
+		                SELECT item_no,ta_prc,ta_dt,ROW_NUMBER() OVER(PARTITION BY item_no ORDER BY ta_dt DESC) AS rn
+		                FROM ta_hr
+		                WHERE to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate,'yyyy-MM-dd'))
+		            WHERE rn=1)
+		        RIGHT JOIN(
+		            SELECT item_no,cl_prc
+		            FROM item_info
+		            WHERE (info_no) IN (
+		                SELECT info_no
+		                FROM item_info
+		                WHERE to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')))
+		        USING(item_no))
+		    USING(item_no)
+		    ORDER BY rate DESC, ta_prc DESC)
+		WHERE rate>0 AND rownum<6
 	]]>	
 	</select>
 	<select id="getDecreaseStock" resultType="StockVO">
 	<![CDATA[
-        SELECT *
-        FROM(
-            SELECT item_no,nm,ta_prc tprc,rate,ctgr theme
-            FROM(
-                SELECT item_no,nm,ta_prc,rate,common_cd
-                FROM(
-                    SELECT item_no,nm,ta_prc,common_cd, trunc(NVL(DECODE(ta_prc,0,0,ta_prc - cl_prc) / cl_prc, 0)*100) rate
-                    FROM (
-                        SELECT item_no, cl_prc 
-                        FROM item_info 
-                        WHERE to_char(ta_dt,'yyyy-MM-dd') =(SELECT to_char(MAX(ta_dt),'yyyy-MM-dd')
-                                                           FROM item_info))
-                    JOIN (
-                        SELECT DISTINCT(a.item_no) item_no,nm,NVL(ta_prc,0) ta_prc,common_cd,inq
-                        FROM(SELECT nm,i.item_no,common_cd,inq, MAX(to_number(substr(ta_no,5))) tano
-                                FROM (SELECT * 
-                                      FROM ta_hr
-                                      WHERE to_char(ta_dt,'yyyy-MM-dd') =(SELECT to_char(MAX(ta_dt),'yyyy-MM-dd')
-                                                                           FROM ta_hr)
-                                ) t RIGHT JOIN item i 
-                                ON i.item_no = t.item_no
-                                GROUP BY nm,i.item_no,common_cd,inq
-                                ORDER BY to_number(substr(item_no,5))
-                         ) a 
-                        LEFT JOIN ta_hr t
-                        ON a.item_no= t.item_no and to_number(substr(t.ta_no,5)) = a.tano  
-                        WHERE ta_prc!=0)
-                    USING(item_no)
-                    )) a
-            JOIN common_code b
-            ON b.common_cd= substr(a.common_cd,0,2)
-            ORDER BY rate ASC, ta_prc DESC)
-        WHERE rownum<6
+		SELECT *
+		FROM(
+		    SELECT DISTINCT item_no,h_ctgr theme,nm,ta_prc tprc,cl_prc,trunc(NVL(DECODE(ta_prc,0,0,ta_prc - cl_prc) / cl_prc, 0)*100) rate
+		    FROM(
+		        SELECT item_no,common_cd,h_ctgr,nm
+		        FROM item JOIN common_code
+		        USING(common_cd))
+		     JOIN (
+		        SELECT item_no,DECODE(ta_prc,null,cl_prc,ta_prc) ta_prc,cl_prc
+		        FROM(
+		        SELECT item_no,ta_prc
+		            FROM (
+		                SELECT item_no,ta_prc,ta_dt,ROW_NUMBER() OVER(PARTITION BY item_no ORDER BY ta_dt DESC) AS rn
+		                FROM ta_hr
+		                WHERE to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate,'yyyy-MM-dd'))
+		            WHERE rn=1)
+		        RIGHT JOIN(
+		            SELECT item_no,cl_prc
+		            FROM item_info
+		            WHERE (info_no) IN (
+		                SELECT info_no
+		                FROM item_info
+		                WHERE to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')))
+		        USING(item_no))
+		    USING(item_no)
+		    ORDER BY rate ASC, ta_prc DESC)
+		WHERE rate<0 AND rownum<6
+	]]>	
+	</select>
+	
+	<!-- 메인 차트용 (거래량) -->
+	<select id="mainChartList" resultType="StockVO">
+	<![CDATA[
+		SELECT *
+		FROM(
+		    SELECT DISTINCT item_no,h_ctgr theme,nm,ta_prc tprc,cl_prc,trunc(NVL(DECODE(ta_prc,0,0,ta_prc - cl_prc) / cl_prc, 0)*100) rate,vol
+		    FROM(
+		        SELECT item_no,common_cd,h_ctgr,nm
+		        FROM item JOIN common_code
+		        USING(common_cd))
+		     JOIN (
+		        SELECT item_no,DECODE(ta_prc,null,cl_prc,ta_prc) ta_prc,cl_prc,vol
+		        FROM(
+                    SELECT item_no,ta_prc
+		            FROM (
+		                SELECT item_no,ta_prc,ta_dt,ROW_NUMBER() OVER(PARTITION BY item_no ORDER BY ta_dt DESC) AS rn
+		                FROM ta_hr
+		                WHERE to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate,'yyyy-MM-dd'))
+		            WHERE rn=1)
+		        RIGHT JOIN(
+		            SELECT item_no,cl_prc,vol
+		            FROM item_info
+		            WHERE (info_no) IN (
+		                SELECT info_no
+		                FROM item_info
+		                WHERE to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')))
+		        USING(item_no))
+		    USING(item_no)
+		    ORDER BY vol DESC)
+		WHERE rownum<8
 	]]>	
 	</select>
 </mapper>

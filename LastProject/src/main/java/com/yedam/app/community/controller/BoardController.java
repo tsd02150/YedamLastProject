@@ -14,11 +14,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.app.community.mapper.BoardMapper;
 import com.yedam.app.community.service.BoardService;
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.CommentsVO;
+import com.yedam.app.community.service.RcomConfirmVO;
+import com.yedam.app.community.service.ReportVO;
 import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
+import com.yedam.app.security.service.UserVO;
 
 @Controller
 @RequestMapping("community")
@@ -130,8 +134,14 @@ public class BoardController {
 	// 게시물 추천버튼 클릭 기능
 	@PostMapping("addRcom")
 	@ResponseBody
-	public String addRcom(BoardVO vo) {
-		if(boardService.addRcom(vo)) {
+	public String addRcom(BoardVO vo,HttpSession session) {
+		RcomConfirmVO confirmVo = new RcomConfirmVO();
+		confirmVo.setMembNo(((UserVO)session.getAttribute("loggedInMember")).getMembNo());
+		confirmVo.setBoardNo(vo.getBoardNo());
+		if(boardService.rcomConfirm(confirmVo)) {
+			return "exist";
+		}
+		if(boardService.addRcom(vo)&&boardService.addRcomConfirm(confirmVo)) {
 			return "success";
 		}else {
 			return "fail";
@@ -141,8 +151,14 @@ public class BoardController {
 	// 게시물 비추천 버튼
 	@PostMapping("addNrcom")
 	@ResponseBody
-	public String addNrcom(BoardVO vo) {
-		if(boardService.addNrcom(vo)) {
+	public String addNrcom(BoardVO vo,HttpSession session) {
+		RcomConfirmVO confirmVo = new RcomConfirmVO();
+		confirmVo.setMembNo(((UserVO)session.getAttribute("loggedInMember")).getMembNo());
+		confirmVo.setBoardNo(vo.getBoardNo());
+		if(boardService.rcomConfirm(confirmVo)) {
+			return "exist";
+		}		
+		if(boardService.addNrcom(vo)&&boardService.addRcomConfirm(confirmVo)) {
 			return "success";
 		}else {
 			return "fail";
@@ -179,8 +195,14 @@ public class BoardController {
 	// 댓글 추천 버튼
 	@PostMapping("addCommentRcom")
 	@ResponseBody
-	public String addCommentRcom(CommentsVO vo) {
-		if(boardService.addCommentRcom(vo)) {
+	public String addCommentRcom(CommentsVO vo,HttpSession session) {
+		RcomConfirmVO confirmVo = new RcomConfirmVO();
+		confirmVo.setMembNo(((UserVO)session.getAttribute("loggedInMember")).getMembNo());
+		confirmVo.setCommNo(vo.getCommNo());
+		if(boardService.commentRcomConfirm(confirmVo)) {
+			return "exist";
+		}	
+		if(boardService.addCommentRcom(vo)&&boardService.addCommentRcomConfirm(confirmVo)) {
 			return "success";
 		}else {
 			return "fail";
@@ -190,8 +212,14 @@ public class BoardController {
 	// 댓글 비추천 버튼
 	@PostMapping("addCommentNrcom")
 	@ResponseBody
-	public String addCommentNrcom(CommentsVO vo) {
-		if(boardService.addCommentNrcom(vo)) {
+	public String addCommentNrcom(CommentsVO vo,HttpSession session) {
+		RcomConfirmVO confirmVo = new RcomConfirmVO();
+		confirmVo.setMembNo(((UserVO)session.getAttribute("loggedInMember")).getMembNo());
+		confirmVo.setCommNo(vo.getCommNo());
+		if(boardService.commentRcomConfirm(confirmVo)) {
+			return "exist";
+		}	
+		if(boardService.addCommentNrcom(vo)&&boardService.addCommentRcomConfirm(confirmVo)) {
 			return "success";
 		}else {
 			return "fail";
@@ -242,5 +270,16 @@ public class BoardController {
 		map.put("stockList", list);
 		
 		return map;
+	}
+	
+	// 신고 기능
+	@PostMapping("report")
+	@ResponseBody
+	public String report(ReportVO vo) {
+		if(boardService.report(vo)) {
+			return "success";			
+		}else {
+			return "fail";
+		}
 	}
 }

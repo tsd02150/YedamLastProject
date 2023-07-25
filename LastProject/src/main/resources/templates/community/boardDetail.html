@@ -7,6 +7,12 @@
 <title>Insert title here</title>
 <link rel="stylesheet" href="../community/css/board.css">
 <style>
+#boardSection button{
+	border: 0;
+}
+.commentText{
+	margin-left: 20px;
+}
 /* 모달 창 */
 .modal {
 	display: none;
@@ -19,14 +25,23 @@
 	overflow: auto;
 	background-color: rgba(0, 0, 0, 0.4);
 }
-
+.modal table{
+	width:100%;
+	text-align: center;
+}
+.modal th{
+	background-color: #ddd;	
+}
+.modal select{
+	width:220px;
+}
 .modal-content {
 	background-color: #fefefe;
 	margin: 10% auto;
 	padding: 50px;
 	border: 1px solid #888;
 	width: 800px;
-	height: 600px;
+	height: 700px;
 }
 .modal-content tr{
 	height: 50px;
@@ -37,7 +52,17 @@
 	font-size: 16px;
 	padding: 10px;
 }
+.interestStock{
+	width:150px;
+	padding:10px;
+	margin: 20px;
+	border: 1px solid #ddd;
+	border-radius: 20px;
+}
 
+.interestStock p{
+	margin-right: 10px;
+}
 .close {
 	float: right;
 	font-size: 28px;
@@ -63,7 +88,22 @@
 					<h3 th:text="${board.ttl}">제목</h3>
 					<div id="boardInfo" class="d-flex">
 						<div>
-							<p class="membInfo" th:text="${member.nick}" th:data-membno="${member.membNo}">이름</p>
+							<div class="dropdown">
+								<button class="btn btn-outline-dark dropdown-toggle" type="button"  th:data-membno="${member.membNo}" data-toggle="dropdown">
+									[[${member.nick}]]
+								</button>
+								<ul class="dropdown-menu">
+									<li>
+										<a class="dropdown-item membInfo">회원정보</a>
+									</li>
+									<li th:if="${myInfo.nick!=null}">
+										<a class="dropdown-item declare">신고하기</a>
+									</li>
+									<li th:unless="${myInfo.nick!=null}">
+										<a class="dropdown-item" onClick="needLogin()">신고하기</a>
+									</li>
+								</ul>
+							</div>
 						</div>
 						<div id="boardInfoDetail" class="d-flex">
 							<p th:text="${#dates.format(board.drwupDt,'yyyy-MM-dd')}">날짜</p>
@@ -83,7 +123,6 @@
 							<li th:each="attach:${attachList}">
 								<a class="dropdown-item" th:href="${attach.atchNm}" th:download="${attach.atchOriginNm}">[[${attach.atchOriginNm}]]</a>
 							</li>
-
 						</ul>
 					</div>
 				</div>
@@ -114,8 +153,23 @@
 							<div th:class="${comment.commNo==comment.hCommNo}?'hComment':'subComment'">
 								<div class="d-flex justify-content-between">
 									<div class="d-flex">
-										<p class="membInfo" th:data-membno="${comment.membNo}"><b class="commentNick">[[${comment.nick}]]</b></p>
-										<p>&nbsp([[${#dates.format(comment.drwupDt,'yyyy-MM-dd')}]])</p>
+										<div class="dropdown">
+											<button class="btn btn-outline-secondary dropdown-toggle" type="button"  th:data-membno="${comment.membNo}" data-toggle="dropdown">
+												[[${comment.nick}]]
+											</button>
+											<ul class="dropdown-menu">
+												<li>
+													<a class="dropdown-item membInfo">회원정보</a>
+												</li>
+												<li th:if="${myInfo.nick!=null}">
+													<a class="dropdown-item declare">신고하기</a>
+												</li>
+												<li th:unless="${myInfo.nick!=null}">
+													<a class="dropdown-item" onClick="needLogin()">신고하기</a>
+												</li>
+											</ul>
+										</div>
+										<p style="margin: 5px 0px;vertical-align: bottom;">&nbsp([[${#dates.format(comment.drwupDt,'yyyy-MM-dd')}]])</p>
 									</div>
 									<div class="commentContent">
 										
@@ -135,7 +189,7 @@
 										</button>
 									</div>
 								</div>
-								<div class="d-flex justify-content-between">
+								<div class="d-flex justify-content-between commentText">
 									<div class="d-flex">
 										<span th:if="${myInfo.membNo}==${comment.membNo}" style="color:red;font-size:20px;" onClick="deleteComment()">&times&nbsp</span>	
 										<p class="commentContent" th:text="${comment.cntn}">내용</p>	
@@ -170,30 +224,25 @@
 				<span class="close" onClick="closeModal()">&times;</span>
 				<h2 style="text-align: center;">회원 정보</h2>
 				<br/>
-				<br/>
 				<table>
 					<tr>
 						<th style="width:15%;">닉네임</th>
-						<td style="width:30%;">[[${member.nick}]]</td>
+						<td style="width:30%;" id="membInfoNick"></td>
 						<th style="width:15%;" rowspan="2">투자성향</th>
-						<td style="width:40%;" rowspan="2">!!</td>
+						<td style="width:40%;" rowspan="2" id="membInfoIncli">!!</td>
 					</tr>
 					<tr>
 						<th>ID</th>
-						<td>[[${member.id}]]</td>
+						<td id="membInfoId"></td>
 					</tr>
 					<tr>
 						<th>관심종목</th>
-						<td colspan="3">!!!</td>
+						<td colspan="3" id="membInfoInterest"></td>
 					</tr>
 				</table>	
 				<br/>
-				<br/>
-				<br/>
-				<br/>
 				<div style="text-align: center;">
-					<button type="button" class="btn btn-primary  mt-2 mt-lg-0" onClick="declareForm()">신고</button>
-					<button type="reset" class="btn btn-dark  mt-2 mt-lg-0" onClick="closeModal()">취소하기</button>
+					<button type="reset" class="btn btn-dark  mt-2 mt-lg-0" onClick="closeModal()">닫기</button>
 				</div>
 			</div>
 		</div>
@@ -205,16 +254,32 @@
 				<br/>
 				<br/>
 				<form id="declareForm">
-					<div class="d-flex justify-content-between">
-						<label for="decalreNick"><b>닉네임</b></label>
-						<input type="text" id="decalreNick">
-						<label for="myNick"><b>신고자</b></label>
-						<input type="text" id="myNick" th:value="${member.nick}">
-					</div>
-					<label for="reson"><b>사유</b></label>
-					<input type="text" id="reson">					
-					<label for="declareContent"><b>내용</b></label>
-					<textarea id="declareContent" rows="30" cols="10"></textarea>					
+					<table>
+						<tr>
+							<th style="width:15%;">닉네임</th>
+							<td style="width:35%;" id="decalreNick"></td>
+							<th style="width:15%;">신고자</th>
+							<td style="width:35%;" id="myNick"></td>
+						</tr>
+						<tr>
+							<th>사유</th>
+							<td id="reson">
+								<select name="category" class="custom-select">
+									<option value="기타">기타</option>
+									<option value="욕설">욕설</option>
+									<option value="비방">비방</option>
+								</select>
+							</td>
+							<td><input style="display: none;" type="text" name="accused" id="accused"/></td>
+							<td><input style="display: none;" type="text" name="plaintiff" id="plaintiff"/></td>
+						</tr>
+						<tr>
+							<th>내용</th>
+							<td colspan="3">
+								<textarea name="cntn" id="declareContent" rows="7" cols="60"></textarea>
+							</td>
+						</tr>
+					</table>	
 				</form>
 				<br/>
 				<br/>
@@ -259,6 +324,10 @@
 					if(result=="success"){
 						boardInfoDetail.children[2].children[0].textContent++;
 						rcomCnt.children[1].textContent++;
+					}else if(result=="exist"){
+						toastShow("Exist recommend" , "이미 추천/비추천 하였습니다." , "warning");
+					}else{
+						toastShow("Fail recommend" , "추천 실패" , "error");
 					}
 				})
 				.catch(err=>console.log(err));				
@@ -277,6 +346,10 @@
 					if(result=="success"){
 						boardInfoDetail.children[3].children[0].textContent++;
 						nrcomCnt.children[1].textContent++;
+					}else if(result=="exist"){
+						toastShow("Exist recommend" , "이미 추천/비추천 하였습니다." , "warning");
+					}else{
+						toastShow("Fail recommend" , "비추천 실패" , "error");
 					}
 				})
 				.catch(err=>console.log(err));
@@ -326,6 +399,10 @@
 				.then(result=>{
 					if(result=="success"){
 						target.children[1].textContent++;
+					}else if(result=="exist"){
+						toastShow("Exist recommend" , "이미 추천/비추천 하였습니다." , "warning");
+					}else{
+						toastShow("Fail recommend" , "추천 실패" , "error");
 					}
 				})
 				.catch(err=>console.log(err)); 
@@ -347,6 +424,10 @@
 				.then(result=>{
 					if(result=="success"){
 						target.children[1].textContent++;
+					}else if(result=="exist"){
+						toastShow("Exist recommend" , "이미 추천/비추천 하였습니다." , "warning");
+					}else{
+						toastShow("Fail recommend" , "비추천 실패" , "error");
 					}
 				})
 				.catch(err=>console.log(err)); 
@@ -373,8 +454,20 @@
 						<div class="hComment">
 							<div class="d-flex justify-content-between">
 								<div class="d-flex">
-									<p><b>`+result.nick+`</b></p>
-									<p>&nbsp(`+result.drwupDt+`)</p>
+									<div class="dropdown">
+										<button class="btn btn-outline-secondary dropdown-toggle" type="button"  data-membno=${result.membNo} data-toggle="dropdown">
+											${result.nick}
+										</button>
+										<ul class="dropdown-menu">
+											<li>
+												<a class="dropdown-item membInfo">회원정보</a>
+											</li>
+											<li>
+												<a class="dropdown-item declare">신고하기</a>
+											</li>
+										</ul>
+									</div>
+									<p style="margin: 5px 0px;vertical-align: bottom;">&nbsp(${result.drwupDt})</p>
 								</div>
 								<div class="commentContent">
 									<button class="btn btn-light mt-2 mt-lg-0 commentRcom" data-commentno=`+result.commNo+` type="button" onClick="commentRcom()">
@@ -393,9 +486,17 @@
 									</button>
 								</div>
 							</div>
-							<div class="d-flex">
-								<span style="color:red;font-size:20px;" onClick="deleteComment()">&times&nbsp</span>
-								<p>`+result.cntn+`</p>			
+							<div class="d-flex justify-content-between commentText">
+								<div class="d-flex">
+									<span style="color:red;font-size:20px;" onClick="deleteComment()">&times&nbsp</span>	
+									<p class="commentContent">${result.cntn}</p>	
+								</div>
+								<button class="btn mt-2 mt-lg-0 commentAddBtn" data-commentno=${result.commNo} type="button" onclick="subCommentAddForm()">
+									댓글 달기
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down" viewBox="0 0 16 16">
+												<path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
+									</svg>
+								</button>
 							</div>
 						</div>
 					`;
@@ -439,14 +540,14 @@
 				}
 
 				let target =$(event.target).closest('section').nextUntil('.hComment').last();
-				let commentNick = "@"+$(event.target).closest('section').find('.commentNick').text()+" ";
+				let commentNick = "@"+$(event.target).closest('section').find('.dropdown button').text().replace(/(\s*)/g, "")+" ";
 				
 				let sectionTag= document.createElement("section");
 				sectionTag.style="margin-bottom:20px;margin-left:40px;"
 				sectionTag.id="subCommentForm";
 				sectionTag.innerHTML=`
-					<div class="d-flex">
-						<textarea id="commentTextArea" cols="100" rows="3">`+commentNick+`</textarea>
+					<div class="d-flex commentText">
+						<textarea id="commentTextArea" cols="98" rows="3">`+commentNick+`</textarea>
 						<button class="btn btn-light mt-2 mt-lg-0" onclick="addSubComment('`+$(event.target).closest('section')[0].dataset.commentno+`')" type="button">댓글 작성</button>
 					</div>
 				`;
@@ -485,8 +586,20 @@
 						<div class="subComment">
 							<div class="d-flex justify-content-between">
 								<div class="d-flex">
-									<p><b>`+result.nick+`</b></p>
-									<p>&nbsp(`+result.drwupDt+`)</p>
+									<div class="dropdown">
+										<button class="btn btn-outline-secondary dropdown-toggle" type="button"  data-membno=${result.membNo} data-toggle="dropdown">
+											${result.nick}
+										</button>
+										<ul class="dropdown-menu">
+											<li>
+												<a class="dropdown-item membInfo">회원정보</a>
+											</li>
+											<li>
+												<a class="dropdown-item declare">신고하기</a>
+											</li>
+										</ul>
+									</div>
+									<p style="margin: 5px 0px;vertical-align: bottom;">&nbsp(${result.drwupDt})</p>
 								</div>
 								<div class="commentContent">
 									<button class="btn btn-light mt-2 mt-lg-0 commentRcom" data-commentno=`+result.commNo+` type="button" onClick="commentRcom()">
@@ -505,9 +618,11 @@
 									</button>
 								</div>
 							</div>
-							<div class="d-flex">
-								<span style="color:red;font-size:20px;" onClick="deleteComment()">&times&nbsp</span>
-								<p><span class="contentHighlight">`+result.cntn.substring(hashTagStart,hashTagEnd)+`</span> `+result.cntn.substring(hashTagEnd+1)+`</p>			
+							<div class="d-flex justify-content-between commentText">
+								<div class="d-flex">
+									<span style="color:red;font-size:20px;" onClick="deleteComment()">&times&nbsp</span>	
+									<p class="commentContent">${result.cntn}</p>	
+								</div>
 							</div>
 						</div>
 					`;
@@ -521,9 +636,68 @@
 				.catch(err=>console.log(err));
 			}
 			
-			// 유저 정보
+			// 유저 정보 모달
 			$('.membInfo').on('click',function(){
-				let membNo=$(event.target).closest('p').data('membno');
+				let membNo=$(event.target).closest('div').find('button').data('membno');
+				fetch('/community/getMemberInfo',{
+					method: "POST",
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					body: 'membNo='+membNo
+				})
+				.then(response=>response.json())
+				.then(result=>{					
+					membInfoNick.innerText=result.membInfo.nick;
+					membInfoId.innerText=result.membInfo.id;
+					
+					$('#membInfoInterest').empty();
+					let divTag = document.createElement('div');
+					let divRow = document.createElement('div');
+					divRow.classList.add('d-flex', 'justify-content-start');
+					let divContent='';
+					let i=0;
+					for(let stock of result.stockList){
+						let color=''
+						if(stock.rate<0){
+							color="blue";
+						}else{
+							color="red";
+						}
+						
+						divContent+=`
+							<div class="interestStock" data-itemno=stock.itemNo>
+								<p><b>${stock.nm}</b></p>
+								<div class="d-flex justify-content-between">
+									<p><b>${stock.tprc}p</b></p>
+									<p><b style="color:${color}">${stock.rate}%</b></p>
+								</div>
+							</div>
+						`;
+						
+						divRow.innerHTML=divContent;
+						if(i%3==2){
+							divTag.append(divRow);
+							divRow = document.createElement('div');
+							divRow.classList.add('d-flex', 'justify-content-start');
+							divContent='';
+						}
+						i++;
+						if(i>5){
+							break;
+						}
+					}
+					divTag.append(divRow);
+					
+					membInfoInterest.append(divTag);
+					$('#membInfoModal').css('display', 'block');
+				})
+				.catch(err=>console.log(err));
+			})
+			
+			// 신고하기 모달
+			$('.declare').on('click',function(){
+				let membNo=$(event.target).closest('div').find('button').data('membno');
 				fetch('/community/getMemberInfo',{
 					method: "POST",
 					headers: {
@@ -533,12 +707,13 @@
 				})
 				.then(response=>response.json())
 				.then(result=>{
-					console.log(result.membInfo);
-					console.log(result.stockList.length);
-					$('#membInfoModal').css('display', 'block');
+					decalreNick.innerText=result.membInfo.nick;
+					accused.value=result.membInfo.membNo;
+					plaintiff.value=[[${member.membNo}]];
+					myNick.innerText=[[${member.nick}]];
+					$('#declareModal').css('display', 'block');
 				})
 				.catch(err=>console.log(err));
-				
 			})
 			
 			function closeModal(){
@@ -551,16 +726,30 @@
 					$('.modal').css('display', 'none');
 				}
 			});
-			
-			function declareForm(){
-				
-			}
+		
 
 			function declare(){
-				
+				let formData =  $('#declareForm').serializeObject();
+				formData.boardNo=[[${board.boardNo}]];
+				console.log(formData);
+				$.ajax({
+					url:'/community/report',
+					method : "POST",
+					data : formData
+				})
+				.done(function(result){
+					if(result=="success"){
+						$('.modal').css('display', 'none');
+						toastShow("Report Success" , "신고 완료" , "success");						
+					}else{
+						toastShow("Report Fail" , "신고 실패" , "error");						
+					}
+				})
+				.fail(function(result){
+					toastShow("Report Fail" , "신고 실패" , "error");
+				})
+			
 			}
-			
-			
 			
 		</script>
 		<script th:replace="community/boardList.html::myScript"></script>

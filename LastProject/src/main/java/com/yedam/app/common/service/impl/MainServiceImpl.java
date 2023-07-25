@@ -148,5 +148,10 @@ public class MainServiceImpl implements MainService {
 		return mainMapper.getDecreaseStock();
 	}
 
+	@Override
+	public List<StockVO> mainChartList() {
+		return mainMapper.mainChartList();
+	}
+
 
 }
