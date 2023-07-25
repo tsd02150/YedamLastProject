@@ -6,11 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.community.service.BoardVO;
+import com.yedam.app.security.service.UserVO;
 import com.yedam.app.stock.mapper.StockMapper;
 import com.yedam.app.stock.service.AlarmVO;
 import com.yedam.app.stock.service.InqVO;
@@ -197,7 +201,7 @@ public class StockServiceImpl implements StockService {
 
 	//주식 주문 프로시저 와 체결
 	@Override
-	public Map<String,Object> callOrderProd(Map<String, Object> params) {
+	public Map<String,Object> callOrderProd(Map<String, Object> params ) {
 		Map<String,Object> map = new HashMap<>(); // return map
 		Map<String ,Object> taMap = new HashMap<>(); // 체결 파라미터 맵
 		
@@ -255,6 +259,7 @@ public class StockServiceImpl implements StockService {
 			//  실시간 알림
 			System.out.println("매도자 : " + seller + " 매수자 : " + buyer);
 			if(!seller.equals("none")) {
+				
 			sendOrderResult (seller , itemNm +"의 매도주문이 체결되었습니다" );
 			sendOrderResult (buyer , itemNm + "의 매수주문이 체결되었습니다" );
 			}
@@ -351,6 +356,11 @@ public class StockServiceImpl implements StockService {
 	@Override
 	public ItemInfoVO currentItemInfo(String itemNo) {
 		return stockMapper.currentItemInfo(itemNo);
+	}
+	// 회원 포인트 가져오기
+	@Override
+	public Integer getPoint(String membNo) {
+		return stockMapper.getPoint(membNo);
 	}
 	
 	

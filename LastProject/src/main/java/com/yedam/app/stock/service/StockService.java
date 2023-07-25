@@ -3,7 +3,8 @@ package com.yedam.app.stock.service;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
+import javax.servlet.http.HttpServletRequest;
+
 
 import com.yedam.app.community.service.BoardVO;
 
@@ -26,7 +27,7 @@ public interface StockService {
 	public List<StockVO> getPrcPercent(String type);
 	public List<Map<String,Object>> orderTable(String type , String itemNo);
 	public PossStockVO getPossStock(String itemNo ,String membNo);
-	public Map<String,Object> callOrderProd(Map<String,Object> params);
+	public Map<String,Object> callOrderProd(Map<String,Object> params );
 	// 스케줄러 작업
 	public void schedulerJob();
 	public void updateInq(String itemNo);
@@ -36,4 +37,5 @@ public interface StockService {
 	public int stockAlmChk(String almNo);
 	public int deleteAlm(String almNo);
 	public ItemInfoVO currentItemInfo(String itemNo);
+	public Integer getPoint(String membNo);
 }

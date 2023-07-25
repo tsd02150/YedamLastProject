@@ -7,176 +7,130 @@
   <head>
     <meta charset="UTF-8" />
     <title>Insert title here</title>
+    <style>
+    	
+    </style>
   </head>
   <body>
+	<div id="select-box" style="width: 200px"></div>
     <div layout:fragment="content">
-      <div id="grid"></div>
-
+      <h3>회원 리스트</h3>
+      <div id="grid">
+	      <div class="m-2">
+		  	<button class="btn btn-primary btn-sm">수정</button>
+		  	<button class="btn btn-danger btn-sm">삭제</button>
+		  </div>
+	  </div>
+	  
       <script>
+     
+      
         const grid = new tui.Grid({
              el: document.getElementById('grid'),
-             data: [
-                	{
-                		name:"김태연",
-                		artist:"dd",
-                		type:"dzz",
-                		genre:"sdsd",
-                		release:"wewe"
-                	},
-                	{
-                		name:"김태연",
-                		artist:"dd",
-                		type:"dzz",
-                		genre:"sdsd",
-                		release:"wewe"
-                	},
-                	{
-                		name:"김태연",
-                		artist:"dd",
-                		type:"dzz",
-                		genre:"sdsd",
-                		release:"wewe"
-                	},
-                	{
-                		name:"김태연",
-                		artist:"dd",
-                		type:"dzz",
-                		genre:"sdsd",
-                		release:"wewe"
-                	},
-                	{
-                		name:"김태연",
-                		artist:"dd",
-                		type:"dzz",
-                		genre:"sdsd",
-                		release:"wewe"
-                	},
-                	{
-                		name:"김태연",
-                		artist:"dd",
-                		type:"dzz",
-                		genre:"sdsd",
-                		release:"wewe"
-                	},
-                	{
-                		name:"김태연",
-                		artist:"dd",
-                		type:"dzz",
-                		genre:"sdsd",
-                		release:"wewe"
-                	},
-                	{
-                		name:"김태연",
-                		artist:"dd",
-                		type:"dzz",
-                		genre:"sdsd",
-                		release:"wewe"
-                	},
-                	{
-                		name:"김태연",
-                		artist:"dd",
-                		type:"dzz",
-                		genre:"sdsd",
-                		release:"wewe"
-                	},
-                	{
-                		name:"김태연",
-                		artist:"dd",
-                		type:"dzz",
-                		genre:"sdsd",
-                		release:"wewe"
-                	},
-                	{
-                		name:"김태연",
-                		artist:"dd",
-                		type:"dzz",
-                		genre:"sdsd",
-                		release:"wewe"
-                	},
-                	{
-                		name:"김태연",
-                		artist:"dd",
-                		type:"dzz",
-                		genre:"sdsd",
-                		release:"wewe"
-                	},
-                	{
-                		name:"김태연",
-                		artist:"dd",
-                		type:"dzz",
-                		genre:"sdsd",
-                		release:"wewe"
-                	},
-                	{
-                		name:"김태연",
-                		artist:"dd",
-                		type:"dzz",
-                		genre:"sdsd",
-                		release:"wewe"
-                	},
-                	{
-                		name:"김태연",
-                		artist:"dd",
-                		type:"dzz",
-                		genre:"sdsd",
-                		release:"wewe"
-                	},
-                	{
-                		name:"김태연",
-                		artist:"dd",
-                		type:"dzz",
-                		genre:"sdsd",
-                		release:"wewe"
-                	},
-                	{
-                		name:"김태연",
-                		artist:"dd",
-                		type:"dzz",
-                		genre:"sdsd",
-                		release:"wewe"
-                	}
-                 ],
-             rowHeaders: ['rowNum'],
+             rowHeaders: ['rowNum','checkbox'],
+             data:{
+       		  api: {
+      		    readData: { url:'/admin/memberList', method:'GET' }
+      		  }
+      		},
              scrollX: false,
              scrollY: false,
-             pageOptions: {
-                 perPage: 5
+   		  	 pageOptions: {
+                 perPage: 5,
                },
              columns: [
+            	 {
+                     header: '멤버번호',
+                     name: 'membNo',
+                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                   },
                {
-                 header: 'Name',
-                 name: 'name'
+                 header: '아이디',
+                 name: 'id',
+                 filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
                },
                {
-                 header: 'Artist',
-                 name: 'artist'
+                 header: '이름',
+                 name: 'nm',
+                 filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
                },
                {
-                 header: 'Type',
-                 name: 'type'
+                 header: '상태',
+                 name: 'state',
+                 filter: {
+                     type: 'text',
+                     operator: 'OR'
+                   },
+                   editor:{
+                  	 type:'select',
+                  	 options:{
+                  		 listItems:[
+                  			 {
+                  				 text:'활동정지' ,
+                  				 value:'활동정지'
+                  			 },
+                  			 {text:'정상' , value:'정상'},
+                  		 ]
+                  	 }
+                   },
+                   onAfterChange(ev) {
+                	   if(ev.value != '정상'){
+                		   
+                	  
+                	   (async () => {
+                		    await Swal.fire({
+                		        title: '회원 활동정지',
+                		        text: '정지 기간을 선택해주세요',
+                		        input: 'select',
+                		        inputOptions: {
+                		            5: '5일정지',
+                		            10: '10일정지',
+                		            15: '15일정지',
+                		            30: '30일정지'
+                		          },
+                		        showCancelButton: true,
+                		        inputPlaceholder: '정지기간선택'
+                		    }).then(result =>{
+                		    	if(result.isConfirmed){
+                		    		console.log(result.value);
+                		    		let period = result.value;
+                		    		let membNo = $('td[data-row-key='+ev.rowKey+'][data-column-name=membNo]').children(0).text();
+                		    		let membNm = $('td[data-row-key='+ev.rowKey+'][data-column-name=nm]').children(0).text();
+                		    		
+                		    		$.ajax('/admin/memberBan?membNo='+membNo+'&period='+period).done(function(data){
+                		    			if(data > 0){
+                		    				Swal.fire(membNm+ ' 회원 '+ result.value+' 일 정지 성공')
+                		    			}else{
+                		    				Swal.fire('실패했습니다.')
+                		    			}
+                		    		});//end of ajax
+                		    		
+                		    		Swal.fire(membNm+ ' 회원 '+ result.value+' 일 정지 성공')
+                		    	}else if(result.isDismissed){
+	                		    	if(ev.value != ev.prevValue){
+		                		    	$('td[data-row-key='+ev.rowKey+'][data-column-name='+ev.columnName+']').children(0).text(ev.prevValue);
+	                		    	}
+                		    	}
+                		    })
+
+                		    
+                		})()
+                	   }
+                     
+                   }
                },
                {
-                 header: 'Genre',
-                 name: 'genre'
-               },
-               {
-                 header: 'Release',
-                 name: 'release'
+                 header: '가입일',
+                 name: 'joinDt',
+                 sortingType: 'asc',
+                 sortable: true
                }
              ]
            });
-
-           grid.on('check', ev => {
-             console.log('check!', ev);
-           });
-
-           grid.on('uncheck', ev => {
-             console.log('uncheck!', ev);
-           });
-
-           grid.on('focusChange', ev => {
-             console.log('change focused cell!', ev);
-           });
+      
+        grid.on('check',(ev) =>{
+        	console.log(ev.instance.store.data.rawData[ev.rowKey].membNo);
+        })
       </script>
     </div>
   </body>

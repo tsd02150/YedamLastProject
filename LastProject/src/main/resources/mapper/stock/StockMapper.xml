@@ -704,5 +704,10 @@
 		delete from alarm
 		where alarm_no = #{almNo}
 	</delete>
-	
+	<!-- 회원포인트 가져오기 -->
+	<select id="getPoint" resultType="int">
+		select point
+		from member
+		where memb_no = #{membNo}
+	</select>
 </mapper>

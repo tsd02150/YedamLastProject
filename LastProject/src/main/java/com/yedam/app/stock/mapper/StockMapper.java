@@ -83,4 +83,6 @@ public interface StockMapper {
 	public int deleteAlm(String almNo);
 	// 현재 주가정보
 	public ItemInfoVO currentItemInfo(String itemNo);
+	// 회원 포인트 가져오기
+	public Integer getPoint(String membNo);
 }

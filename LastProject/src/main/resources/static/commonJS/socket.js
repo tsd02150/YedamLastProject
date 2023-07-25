@@ -22,6 +22,7 @@ $(document).ready(function(){
 	    	console.log(greeting);
 	        toastShow("체결 알림" ,greeting.body , "info"); // 구독된 url 에서 넘어오는 메세지 처리
 	        $('#newPlace').html('<span class="badge badge-danger">New</span>');
+	        $.ajax('/stock/resetPoint');
 	        
 	    });
 	

@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
+import com.yedam.app.admin.mapper.AdminMapper;
+import com.yedam.app.admin.service.AdminService;
+import com.yedam.app.admin.service.MembManageVO;
 import com.yedam.app.stock.mapper.StockMapper;
 import com.yedam.app.stock.service.ItemInfoVO;
 import com.yedam.app.stock.service.StockService;
@@ -21,6 +24,12 @@ class LastProjectApplicationTests {
 	@Autowired
 	StockMapper stockMapper;
 	
+	@Autowired
+	AdminService adminService;
+	
+	@Autowired
+	AdminMapper adminMapper;
+	
 	private SimpMessagingTemplate template;
 	
 	@Autowired 
@@ -33,7 +42,7 @@ class LastProjectApplicationTests {
 		this.template.convertAndSend("/stock/alarm/mem-2","test");
 	}
 	
-	@Test
+	//@Test
 	public void scheduler() {
 		List<ItemInfoVO> list =stockMapper.todayItemInfo();
 		List<String> intList = new ArrayList<>();
@@ -65,5 +74,16 @@ class LastProjectApplicationTests {
 		for(ItemInfoVO vo : missingList) {
 			stockMapper.insertItemInfo(vo);
 		}
+	}
+	
+	
+	@Test
+	public void adminTest() {
+//		List<MembManageVO> list = adminService.getMembList(null, null);
+//		for(MembManageVO vo : list) {
+//			System.out.println(vo.getNm());
+//		}
+		
+		
 	}
 }

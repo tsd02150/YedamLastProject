@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -234,5 +235,14 @@ public class StockController {
 	@GetMapping("deleteAlm")
 	public int deleteAlm(String almNo) {
 		return stockservice.deleteAlm(almNo);
+	}
+	
+	//session 포인트 갱신
+	@ResponseBody
+	@GetMapping("resetPoint")
+	public void resetPoint(HttpSession session) {
+		UserVO vo = (UserVO) session.getAttribute("loggedInMember");
+		vo.setPoint(stockservice.getPoint(vo.getMembNo()));
+		session.setAttribute("loggedInMember", vo);
 	}
 }
