@@ -193,7 +193,7 @@
 			</div>
 		</div>
 
-		<!-- <div>
+		 <div>
 			<nav aria-label="Page navigation example"
 				class="d-flex justify-content-center">
 				<ul class="pagination">
@@ -219,20 +219,20 @@
 							</li>
 						</ul>
 					</nav>
-				</div> -->
+				</div> 
 		
 		
 
 		<script th:inline="javascript">
 		
 	//초기값
-	let targetPage = [[${startPage}]];
+ 	let targetPage = [[${startPage}]];
 	let startPage=1;
 	let endPage=10;
-	let totalPrdtCnt;
+	let totalPrdtCnt; 
 	
 	// 페이징 버튼 생성
-	createPageBtn();
+ 	/* createPageBtn(); */
 	
 	/* top 버튼 */
 	document.querySelector('.top-btn').addEventListener('click',
@@ -350,7 +350,6 @@
 	});
 	
 	function highPrcList() {
-
 	    fetch("/mall/getHighPrc", {
 	        method: "POST",
 	        headers: {

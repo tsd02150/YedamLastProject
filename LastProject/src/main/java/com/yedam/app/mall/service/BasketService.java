@@ -41,4 +41,8 @@ public interface BasketService {
 
 //	// 장바구니 추가
 	public boolean addCartItem(BasketVO bskVO);
+
+	// 장바구니 수량 업데이트
+	public boolean updateBasket(BasketVO bskVO);
+
 }

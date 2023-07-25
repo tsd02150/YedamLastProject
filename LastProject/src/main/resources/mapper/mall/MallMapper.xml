@@ -31,7 +31,7 @@
 
 
 	<!-- 상품게시물 갯수 -->
-	<select id="getProductCount" resultType="int">
+<!-- 	<select id="getProductCount" resultType="int">
 		SELECT *
 		FROM PRODUCT P JOIN COMMON_CODE C
 		USING(common_cd)
@@ -43,7 +43,7 @@
 		ORDER BY prdt_no DESC
 
 	</select>
-
+ -->
 	<!-- 카테고리 리스트 -->
 	<select id="getCategoryName" resultType="CommonCodeVO">
 		SELECT ctgr, common_cd
@@ -91,7 +91,7 @@
 
 	<!-- 낮은 가격순 정렬 -->
 	<select id="getLowPrc" resultType="ProductVO">
-		SELECT prc,nm, prdt_no, common_cd, dc_rate, thumb, prc-prc*NVL(dc_rate,0)/100 ord
+		SELECT prc, nm, prdt_no, common_cd, dc_rate, thumb, prc-prc*NVL(dc_rate,0)/100 ord
 			FROM PRODUCT P JOIN COMMON_CODE C
 			USING(common_cd)
 			WHERE common_cd LIKE #{commonCd}||'%'

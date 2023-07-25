@@ -17,46 +17,6 @@ public class BasketServiceImpl implements BasketService {
 	@Autowired
 	BasketMapper basketMapper;
 
-//	@Override
-//	public int addBasket(BasketVO bskVO) {
-//
-//		// 장바구니 데이터 체크
-//		BasketVO checkBasket = basketMapper.checkBasket(bskVO);
-//
-//		if (checkBasket != null) {
-//			return 2;
-//		}
-//
-//		// 장바구니 등록 & 에러 시 0반환
-//		try {
-//			return basketMapper.addBasket(bskVO);
-//		} catch (Exception e) {
-//			return 0;
-//		}
-//	}
-//
-//	@Override
-//	public int deleteBasket(String bskNo) {
-//		// TODO Auto-generated method stub
-//		return 0;
-//	}
-//
-//	@Override
-//	public int modifyCount(BasketVO bskVO) {
-//		// TODO Auto-generated method stub
-//		return 0;
-//	}
-//
-//	@Override
-//	public List<BasketVO> getBasket(String membNo) {
-//		return basketMapper.getBasket(membNo);
-//	}
-//
-//	@Override
-//	public BasketVO checkBasket(BasketVO bskVO) {
-//
-//		return null;
-//	}
 
 	@Override
 	public List<BasketVO> getBasketList(String membNo) {
@@ -89,6 +49,12 @@ public class BasketServiceImpl implements BasketService {
 	@Override
 	public String getIntPrdt(String prdtNo) {
 		return basketMapper.getIntPrdt(prdtNo);
+	}
+
+	//장바구니 수량 업데이트
+	@Override
+	public boolean updateBasket(BasketVO bskVO) {
+		return basketMapper.updateBasket(bskVO)>0;
 	}
 
 }

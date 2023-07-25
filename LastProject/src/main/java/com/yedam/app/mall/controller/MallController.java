@@ -101,8 +101,6 @@ public class MallController {
 
 	}
 
-
-	
 	  // 상품 게시물 갯수
 	  
 	  @PostMapping("getProductCount")

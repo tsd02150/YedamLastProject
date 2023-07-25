@@ -51,9 +51,6 @@ public class BasketController {
 //
 //		return result + "";
 //	}
-//	
-//	
-//
 //    /* 장바구니 페이지 이동 */
 //    @GetMapping("cartPageGET/{membNo}")
 //    public String cartPageGET(@PathVariable("membNo") String membNo, Model model) {
@@ -76,8 +73,6 @@ public class BasketController {
 //        basketService.deleteBasket(bskVO.getBskNo());
 //        return "redirect:/mall/basketList/" + bskVO.getMembNo();
 //    }
-//	
-
 
 
 	// 장바구니 리스트
@@ -190,6 +185,8 @@ public class BasketController {
 //	@ResponseBody
 //	public String updateBasket(BasketVO bskVO) {
 //		
+//
+//        return  basketService.updateBasket(bskVO);
 //	}
 	
 //	// 장바구니 전체삭제

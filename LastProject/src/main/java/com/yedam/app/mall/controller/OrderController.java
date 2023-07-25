@@ -49,7 +49,6 @@ public class OrderController {
 		//model.addAttribute("orderList", orderService.getOrderList(ordVO));
 		
 		
-		
 		return "mall/orderList";
 		
 	}
@@ -59,6 +58,12 @@ public class OrderController {
 		
 		return "mall/orderCheck";
 		
+	}
+	
+	@GetMapping("orderCancel")
+	public String orderCancel(Model model, OrderVO ordVO) {
+		
+		return "mall/orderCancel";
 	}
 
 }

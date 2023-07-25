@@ -6,155 +6,55 @@
 <meta charset="UTF-8">
 <title>orderCheck.html</title>
 <style>
-.responsive-table {
-	width: 100%;
-	margin-bottom: 1.5em;
+
+#body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-.responsive-table thead {
-	position: absolute;
-	clip: rect(1px, 1px, 1px, 1px);
-	/* IE6, IE7 */
-	clip: rect(1px, 1px, 1px, 1px);
-	padding: 0;
-	border: 0;
-	height: 1px;
-	width: 1px;
-	overflow: hidden;
+.order-complete {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top : -50px;
 }
 
-.responsive-table thead th {
-	background-color: #1d96b2;
-	border: 1px solid #1d96b2;
-	font-weight: normal;
-	text-align: center;
-	color: white;
+h1, h2 {
+  text-align: center;
 }
 
-.responsive-table thead th:first-of-type {
-	text-align: left;
+p {
+  margin: 10px 0;
 }
 
-.responsive-table tbody, .responsive-table tr, .responsive-table th,
-	.responsive-table td {
-	display: block;
-	padding: 0;
-	text-align: left;
-	white-space: normal;
+span {
+  font-weight: bold;
 }
 
-.responsive-table th, .responsive-table td {
-	padding: .5em;
-	vertical-align: middle;
+.payList {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  text-align: left;
 }
 
-.responsive-table caption {
-	margin-bottom: 1em;
-	font-size: 1em;
-	font-weight: bold;
-	text-align: center;
+th, td {
+  padding: 8px;
+  text-align: left;
+  border: 1px solid #ccc;
 }
 
-.responsive-table tfoot {
-	font-size: .8em;
-	font-style: italic;
+hr {
+  border: 2px solid #000; /* 굵기를 더 진하게 설정합니다. */
 }
 
-.responsive-table tbody tr {
-	margin-bottom: 1em;
-	border: 2px solid #1d96b2;
-}
-
-.responsive-table tbody tr:last-of-type {
-	margin-bottom: 0;
-}
-
-.responsive-table tbody th[scope="row"] {
-	background-color: #1d96b2;
-	color: white;
-}
-
-.responsive-table tbody td[data-type=currency] {
-	text-align: right;
-}
-
-.responsive-table tbody td[data-title]:before {
-	content: attr(data-title);
-	float: left;
-	font-size: .8em;
-	color: rgba(94, 93, 82, 0.75);
-}
-
-.responsive-table tbody td {
-	text-align: right;
-	border-bottom: 1px solid #1d96b2;
-}
-
-@media ( min-width : 52em) {
-	.responsive-table {
-		font-size: .9em;
-	}
-	.responsive-table thead {
-		position: relative;
-		clip: auto;
-		height: auto;
-		width: auto;
-		overflow: auto;
-	}
-	.responsive-table tr {
-		display: table-row;
-	}
-	.responsive-table th, .responsive-table td {
-		display: table-cell;
-		padding: .5em;
-	}
-	.responsive-table caption {
-		font-size: 1.5em;
-	}
-	.responsive-table tbody {
-		display: table-row-group;
-	}
-	.responsive-table tbody tr {
-		display: table-row;
-		border-width: 1px;
-	}
-	.responsive-table tbody tr:nth-of-type(even) {
-		background-color: rgba(94, 93, 82, 0.1);
-	}
-	.responsive-table tbody th[scope="row"] {
-		background-color: transparent;
-		color: #5e5d52;
-		text-align: left;
-	}
-	.responsive-table tbody td {
-		text-align: center;
-	}
-	.responsive-table tbody td[data-title]:before {
-		content: none;
-	}
-}
-
-@media ( min-width : 62em) {
-	.responsive-table {
-		font-size: 1em;
-	}
-	.responsive-table th, .responsive-table td {
-		padding: .75em .5em;
-	}
-	.responsive-table tfoot {
-		font-size: .9em;
-	}
-}
-
-@media ( min-width : 75em) {
-	.responsive-table th, .responsive-table td {
-		padding: .75em;
-	}
-}
 </style>
 
 </head>
-<body>
+<body id="body">
 	<div layout:fragment="content" class="outer-block">
 
 
@@ -162,7 +62,47 @@
 			<video muted autoplay loop style="width: 400px; height: 400px;">
 				<source src="images/thanks2.mp4" type="video/mp4">
 			</video>
-			<div>
+			
+			<div class="order-complete">
+    <h1 id="h1">결제 완료되었습니다!</h1>
+    <p>결제고객명: <span id="customer-name">홍길동</span></p>
+    <p>결제 날짜: <span id="payment-date">2023년 7월 24일</span></p>
+    <hr>
+    <p id="ordNo">주문번호: <span id="order-number">123456789</span></p>
+    <hr>
+    <h2 id="h2">주문내역 리스트</h2>
+    <table class="payList">
+      <thead>
+        <tr>
+          <th>상품명</th>
+          <th>수량</th>
+          <th>금액</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>상품 A</td>
+          <td>2개</td>
+          <td>20,000원</td>
+        </tr>
+        <tr>
+          <td>상품 B</td>
+          <td>1개</td>
+          <td>10,000원</td>
+        </tr>
+        <!-- 주문내역 리스트에 해당하는 상품들을 동적으로 생성할 수 있습니다. -->
+      </tbody>
+    </table>
+    <hr>
+    <p>주문 금액: <span id="total-amount">30,000원</span></p>
+    <p>배송비: <span id="shipping-fee">3,000원</span></p>
+    <hr>
+    <p>배송주소: <span id="delivery-address">서울특별시 강남구</span></p>
+    <p>받는 분: <span id="recipient">홍길동</span></p>
+    <p>연락처: <span id="contact">010-1234-5678</span></p>
+  </div>
+		
+			<!-- <div>
 				<h1 style="margin-top: 0px;">결제가 완료되었습니다.</h1>
 				<p>신지은 고객님께서 2023년 07월 19일 결제하신 내역입니다.</p>
 			</div>
@@ -201,7 +141,7 @@
 						<td colspan='3'>QEFD3242414-342</td>
 					</tr>
 				</tbody>
-			</table>
+			</table> -->
 			
 		</div>
 	</div>

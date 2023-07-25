@@ -549,27 +549,30 @@ p>img {
  -->
 			<section id="prdt-info" th:each="prdt : ${getFarm}">
 				<h1 th:text="${prdt.nm}"></h1>
-				<p th:text="${prdt.prc} + 'P'" style="text-decoration: line-through;"></p>
-				<p th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + 'P'" >할인가격</p>
-				<p >배송비</p>
-				
+				<p th:text="${prdt.prc} + 'P'"
+					style="text-decoration: line-through;"></p>
+				<p th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + 'P'">할인가격</p>
+				<p>배송비</p>
+
 				<div class="">
-				<div class="button">
+					<div class="button">
 						<div class="button_quantity">
-							주문수량 <input type="number" class="quantity_input" value="1" th:text="${prdt.cnt}">
-							<span>
+							주문수량 <input type="number" class="quantity_input" value="1"
+								th:text="${prdt.cnt}"> <span>
 								<button class="plus_btn">+</button>
 								<button class="minus_btn">-</button>
 							</span>
 						</div>
-<p>총 결제금액</p><span th:text="${(prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))) * prdt.cnt}"></span>
+						<p>총 결제금액</p>
+						<!-- <span
+							th:text="${(prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))) * prdt.cnt}"></span> -->
 						<div class="button_set">
-							<a class="btn_cart" >장바구니 담기</a> <a
-								class="btn_buy" onclick="directOrder()">바로구매</a>
+							<a class="btn_cart">장바구니 담기</a> <a class="btn_buy"
+								onclick="directOrder()">바로구매</a>
 						</div>
 					</div>
 				</div>
-			</section> 
+			</section>
 		</div>
 		<!-- prdt Info end-->
 
@@ -764,31 +767,6 @@ p>img {
 		<script type="text/javascript" th:inline="javascript">
 
 
-	    // 담기 클릭 
-/* 		$('.addCart_btn').on('click', function() {
-    var prdtNo = $('#prdtNo').text();
-    var cnt = $('.cnt input[name="product-quantity"]').val();
-    
-    console.log('test!!!!!!!!!')
-
-    var data = {
-        "prdtNo": prdtNo,
-        "cnt": cnt
-    };
-
-    $.ajax({
-        url: '/mall/addCartItem',
-        method: "POST",
-        data: data,
-        success: function() {
-            alert("카트담기 성공");
-            $(".cnt input[name='product-quantity']").val("1");
-        },
-        error: function() {
-            alert("카트담기 실패");
-        }
-    });
-}); */
 
 		//수량 버튼 조작
 		let quantity = $(".quantity_input").val();
@@ -801,6 +779,20 @@ p>img {
 			}
 		});
 
+		//수량 변경 시 합계 자동 반영
+		/*   const quantityInput = document.querySelector('.quantity_input');
+		  const totalAmountSpan = document.getElementById('totalAmount');
+		
+		  function updateTotalAmount() {
+		    const price = parseInt(${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))});
+		    const quantity = parseInt(quantityInput.value);
+		
+		    const totalAmount = price * quantity;
+		    totalAmountSpan.textContent = totalAmount + 'P';
+			  }
+		
+		  quantityInput.addEventListener('change', updateTotalAmount);
+				 */
 	
 		// 서버로 전송할 데이터
 		   const form = {
@@ -980,34 +972,7 @@ p>img {
 	    });
 	});
 		
-		/* function addReview() {
-    let ckData = editor.getData();
-    if (ckData === "" || ckData === null) {
-        toastShow("There is no content", "내용이 없습니다", "error");
-        return;
-    }
 
-    let formData = new FormData();
-    formData.append("cntn", ckData);
-    formData.append("prdtNo", [[${getFarm.prdtNo}]]);
-    formData.append("maks", $('input[type=radio]:checked').val());
-
-    fetch('/mall/addReview', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(result => {
-        // 처리 결과에 따른 작업 수행
-        
-        
-    })
-    .catch(error => {
-        toastShow("Insert Fail", "등록 실패", "error");
-    });
-} */
-		
-		
 		
 		  document.addEventListener("DOMContentLoaded", function () {
     var modal = document.getElementById("reviewModal");
@@ -1041,8 +1006,6 @@ p>img {
   });
 		
 		 */
-		
-		
 
         /* // 리뷰 삭제 버튼을 클릭했을 때 deleteReview 함수를 호출하도록 이벤트 리스너를 추가합니다.
         productList.addEventListener("click", function (event) {
