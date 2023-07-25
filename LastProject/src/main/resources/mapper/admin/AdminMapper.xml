@@ -39,4 +39,44 @@
         		sysdate+#{period},
         		#{period})
 	</insert>
+	
+	<!-- 회원삭제 -->
+	<delete id="deleteMember" parameterType="list">
+		delete from member
+		where memb_no in (
+			<foreach collection="list" item="item" separator=",">
+				#{item}
+			</foreach>
+		)
+	</delete>
+	
+	<!-- 회원 상태 정상설정 -->
+	<update id="returnNorm"  >
+		update stop_yn
+		set end_dt = sysdate
+		where memb_no in (
+			<foreach collection="list" item="item" separator=",">
+				#{item}
+			</foreach>
+		)
+	</update>
+	
+	<!-- 정지된 회원 조회 -->
+	<select id="bannedMemb" resultType="String">
+		select memb_no
+		from stop_yn
+		where end_dt > sysdate
+	</select>
+	
+	<!-- 정지기간 추가 -->
+	<update id="addBanPeriod">
+		update stop_yn
+		set end_dt = end_dt + #{period}
+		, period = period + #{period}
+		where memb_no in (
+			<foreach collection="list" item="item" separator=",">
+				#{item}
+			</foreach>
+		)
+	</update>
 </mapper>

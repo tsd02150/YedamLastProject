@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{admin/adminLayout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div layout:fragment="content">
+      <div id="grid"></div>
+      
+      <script>
+      const dataSource = {
+    		  contentType: 'application/json',
+    		  api: {
+    			  readData: {
+    				url:'/admin/memberList',
+    				method:'GET' 
+    			}
+    		  }
+    		};
+      
+        const grid = new tui.Grid({
+             el: document.getElementById('grid'),
+             rowHeaders: ['rowNum','checkbox'],
+             data:dataSource,
+             scrollX: false,
+             scrollY: false,
+   		  	 pageOptions: {
+                 perPage: 5,
+               },
+             columns: [
+            	 {
+                     header: '멤버번호',
+                     name: 'membNo',
+                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                   },
+      </script>
+     </div>
+</body>
+</html>
