@@ -417,7 +417,7 @@ p>img {
 				</div>
 			</section>
 
-			<section id="prdt-info" th:each="prdt : ${getFarm}">
+			<!-- <section id="prdt-info" th:each="prdt : ${getFarm}">
 				<div class="content_area">
 					<div class="line"></div>
 					<div class="content_top">
@@ -443,14 +443,15 @@ p>img {
 							<div class="line"></div>
 							<div class="price" th:text="${prdt.prc}">
 								<div class="sale_price">
-									정가 :
-									<!-- 	<fmt:formatNumber value="${goodsInfo.bookPrice}"
-										pattern="#,### 원" /> -->
+									<span>정가 : </span>
+										<fmt:formatNumber value="${goodsInfo.bookPrice}"
+										pattern="#,### 원" />
 								</div>
+								<div class="line"></div>
 								<div class="discount_price"
 									th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + 'P'">
 									판매가 : <span class="discount_price_number"></span>
-									<!-- <fmt:formatNumber
+									<fmt:formatNumber
 											value="${goodsInfo.bookPrice - (goodsInfo.bookPrice*goodsInfo.bookDiscount)}"
 											pattern="#,### 원" /></span> [
 									<fmt:formatNumber value="${goodsInfo.bookDiscount*100}"
@@ -458,7 +459,7 @@ p>img {
 									%
 									<fmt:formatNumber
 										value="${goodsInfo.bookPrice*goodsInfo.bookDiscount}"
-										pattern="#,### 원" /> -->
+										pattern="#,### 원" />
 									할인]
 								</div>
 								<div>
@@ -483,7 +484,7 @@ p>img {
 						</div>
 					</div>
 				</div>
-			</section>
+			</section> -->
 			<!-- 	<section id="prdt-info" th:each="prdt : ${getFarm}">
 
 				<div>
@@ -546,19 +547,29 @@ p>img {
 				</div>
 			</section>
  -->
-			<!-- <section id="prdt-info" th:each="prdt : ${getFarm}">
+			<section id="prdt-info" th:each="prdt : ${getFarm}">
 				<h1 th:text="${prdt.nm}"></h1>
-				<p th:text="${prdt.prc}"></p>
-				<p th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + '원'" style="text-decoration: line-through;">할인가격</p>
-				<p >배송</p>
-				<p>총 결제금액</p>
+				<p th:text="${prdt.prc} + 'P'" style="text-decoration: line-through;"></p>
+				<p th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + 'P'" >할인가격</p>
+				<p >배송비</p>
+				
 				<div class="">
-					<button type="button" th:onclick="|location.href='@{basketList}'|">
-						담기</button>
-					<button type="button" th:onclick="|location.href='@{cart}'|">바로
-						주문하기</button>
+				<div class="button">
+						<div class="button_quantity">
+							주문수량 <input type="number" class="quantity_input" value="1" th:text="${prdt.cnt}">
+							<span>
+								<button class="plus_btn">+</button>
+								<button class="minus_btn">-</button>
+							</span>
+						</div>
+<p>총 결제금액</p><span th:text="${(prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))) * prdt.cnt}"></span>
+						<div class="button_set">
+							<a class="btn_cart" >장바구니 담기</a> <a
+								class="btn_buy" onclick="directOrder()">바로구매</a>
+						</div>
+					</div>
 				</div>
-			</section> -->
+			</section> 
 		</div>
 		<!-- prdt Info end-->
 
@@ -807,7 +818,19 @@ p>img {
 				type: 'POST',
 				data: form,
 				success: function(result){
-					cartAlert(result);
+					
+					if(result == '0'){
+						alert("장바구니에 추가를 하지 못하였습니다.");
+					} else if(result == '1'){
+						alert("장바구니에 추가되었습니다.");
+					} else if(result == '2'){
+						alert("장바구니에 이미 추가되어져 있습니다.");
+					} else if(result == '5'){
+						alert("로그인이 필요합니다.");	
+					}
+					
+					
+					/* cartAlert(result); */
 				    // 장바구니에 상품이 추가되면 장바구니 페이지로 리다이렉트
 		            //window.location.href = '/mall/basketList/' + form.membNo;
 				}

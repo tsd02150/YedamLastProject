@@ -49,19 +49,18 @@
 	border: none;
 }
 
-.results tr[visible='false'],
-.no-result {
-display : none;
+.results tr[visible='false'], .no-result {
+	display: none;
 }
-.results tr[visible='true']{
-display : table-row;
+
+.results tr[visible='true'] {
+	display: table-row;
 }
+
 .counter {
-padding : 8px;
-color: #ccc;
+	padding: 8px;
+	color: #ccc;
 }
-
-
 </style>
 
 </head>
@@ -119,73 +118,44 @@ color: #ccc;
 
 				<h2 th:data-common-cd="${prdtCode}" th:if="${prdtCode=='S1'}">농산물</h2>
 				<h2 th:data-common-cd="${prdtCode}" th:unless="${prdtCode=='S1'}">수산물</h2>
-				
+
 				<div class="row-2">
 					<div class="category-container">
 						<!-- 농산물 카테고리 -->
 						<th:block th:each="item : ${S}">
-						<div>
-							<button class="ctgr" type="button" data-common-cd="S101">[[${item.ctgr}]]</button>
-						</div>
-						<div>
-							<ul>
-								<li id="item" style="list-style: none;" class="sub_li_1"
-									th:each="prdt : ${item.childList}" th:text="${prdt.ctgr}"><a
-									th:href="#"></a></li>
-							</ul>
-						</div>
+							<div>
+								<button class="ctgr" id="ordBtn" type="button"
+									th:data-commoncd="${item.commonCd}">[[${item.ctgr}]]</button>
+								<!-- 곡류  -->
+							</div>
+							<div>
+								<ul>
+									<!-- 곡류 품목 -->
+									<li id="item" style="list-style: none;" class="sub_li_1"
+										th:each="prdt : ${item.childList}" th:text="${prdt.ctgr}"><a
+										th:href="#"></a></li>
+								</ul>
+							</div>
 
-					</th:block>
-			
+						</th:block>
+
 					</div>
 				</div>
 
-				<!-- <div class="row-2">
-		<div class="category-container">
-			농산물 카테고리
-			<h2 data-common-cd="S1">농산물</h2>
-			<div class="category">
-				<ul>
-					<li class="li_1" data-common-cd="S101"><a href="#">곡류</a>
-						<ul th:each="prdt : ${prdtName}">
-							<li class="sub_li_1" th:text="${prdt.nm}"></li>
-						</ul></li>
-				</ul>
-			</div>
-			<div class="category">
-				<ul>
-					<li class="li_1" data-common-cd="S102"><a href="#">콩류</a>
-						<ul th:each="prdt : ${prdtName}">
-							<li class="sub_li_1" th:text="${prdt.nm}"></li>
-						</ul></li>
-				</ul>
-			</div>
-			<div class="category">
-				<ul>
-					<li class="li_1" data-common-cd="S103"><a href="#">과실류</a>
-						<ul th:each="prdt : ${prdtName}">
-							<li class="sub_li_1" th:text="${prdt.nm}"></li>
-						</ul></li>
-				</ul>
-			</div>
-		</div>
-	</div> -->
-
-
 				<div class="row">
 					<div class="selectBtn">
-						<button class="btn btn-light mt-3 mt-lg-0 ctgr" type="button"
-							id="low">낮은 가격순</button>
-						<button class="btn btn-light mt-3 mt-lg-0 ctgr" type="button"
-							id="high">높은 가격순</button>
-						<button class="btn btn-light mt-3 mt-lg-0 ctgr" type="button"
-							id="sales">판매량</button>
+						<button class="lowBtn btn-light mt-3 mt-lg-0 " type="button"
+							id="ordBtn">낮은 가격순</button>
+						<button class="highBtn btn-light mt-3 mt-lg-0 " type="button"
+							id="ordBtn">높은 가격순</button>
+						<button class="sellBtn btn-light mt-3 mt-lg-0 " type="button"
+							id="ordBtn">판매량</button>
 					</div>
 
 					<!-- 검색 -->
 					<div class="form-group pull-right">
-						<label><input type="text" class="search form-control" id="search"
-							placeholder="What you looking for?"></label>
+						<label><input type="text" class="search form-control"
+							id="search" placeholder="What you looking for?" ></label>
 					</div>
 					<span class="counter pull-right"></span>
 					<table class="table table-hover table-bordered results">
@@ -228,31 +198,21 @@ color: #ccc;
 						</tbody>
 					</table>
 
-
 				</div>
 
-				<div class="row " id="farmList" >
+				<!-- 상품 리스트 -->
+
+				<div class="row" id="productList">
 					<div class="col-md-4 results" th:each="prdt : ${farmList}">
 						<div class="product-item"
 							th:onclick="|location.href='@{getFarm(prdtNo=${prdt.prdtNo})}'|">
 							<div class="product-thumb">
 								<span class="bage">Sale</span> <img
 									th:src="|/mall/images/main/${prdt.thumb}|">
-								<div class="preview-meta">
-									<ul>
-										<li><span data-toggle="modal"
-											data-target="#product-modal"> <i
-												class="tf-ion-ios-search-strong"></i>
-										</span></li>
-										<li><a href="#!"><i class="tf-ion-ios-heart"></i></a></li>
-										<li><a href="#!"><i class="tf-ion-android-cart"></i></a></li>
-									</ul>
-								</div>
 							</div>
 							<div class="product-content">
 								<div class="product-detail">
 
-									<!--  th:onclick="|location.href='@{getFarm(prdtNo=${getFarm.prdtNo})}'|" -->
 									<h4>
 										<span class="nm"><a th:text=${prdt.nm}></a></span>
 									</h4>
@@ -272,8 +232,8 @@ color: #ccc;
 			<!-- list-end -->
 		</div>
 
-
 		<script>
+		
 		/* top 버튼 */
 		document.querySelector('.top-btn').addEventListener('click',
 				function() {
@@ -337,276 +297,203 @@ color: #ccc;
 		  });
 		});
 		 */
-		let currentState=[[${prdtCode}]];
-		let items=["ctgr", "prc", "nm", "img"];
 		
-	
-	//초기 프로덕트 리스트
-	getCtgrList();
-	
-	function getCtgrList() {
-    fetch("/mall/getCtgrList", {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: 'commonCd=' + currentState
-    })
-    .then(result => result.json())
-    .then(data => {
-        var farmListContainer = document.getElementById("farmList");
-        farmListContainer.innerHTML = ""; // 상품 목록 초기화
 
-        data.forEach(product => {
-            var productItem = document.createElement("div");
-            productItem.className = "col-md-4";
-            productItem.addEventListener("click", function() {
-                location.href = "/mall/getFarm?prdtNo=" + product.prdtNo;
-            });
-
-            var productThumb = document.createElement("div");
-            productThumb.className = "product-thumb";
-            productItem.appendChild(productThumb);
-
-            // 이미지 태그 생성 및 설정
-            var image = document.createElement("img");
-            image.src = "../image/main/" + product.thumb;
-            productThumb.appendChild(image);
-
-            // 미리보기 메타 정보 생성
-            var previewMeta = document.createElement("div");
-            previewMeta.className = "preview-meta";
-            productThumb.appendChild(previewMeta);
-
-            // 미리보기 메타 정보 아이콘 생성
-            var iconList = document.createElement("ul");
-            previewMeta.appendChild(iconList);
-
-            var iconListItem1 = document.createElement("li");
-            var iconLink1 = document.createElement("span");
-            iconLink1.setAttribute("data-toggle", "modal");
-            iconLink1.setAttribute("data-target", "product-modal");
-            var icon1 = document.createElement("i");
-            icon1.className = "tf-ion-ios-search-strong";
-            iconLink1.appendChild(icon1);
-            iconListItem1.appendChild(iconLink1);
-            iconList.appendChild(iconListItem1);
-
-            var iconListItem2 = document.createElement("li");
-            var iconLink2 = document.createElement("a");
-            iconLink2.href = "#!";
-            var icon2 = document.createElement("i");
-            icon2.className = "tf-ion-ios-heart";
-            iconLink2.appendChild(icon2);
-            iconListItem2.appendChild(iconLink2);
-            iconList.appendChild(iconListItem2);
-
-            var iconListItem3 = document.createElement("li");
-            var iconLink3 = document.createElement("a");
-            iconLink3.href = "#!";
-            var icon3 = document.createElement("i");
-            icon3.className = "tf-ion-android-cart";
-            iconLink3.appendChild(icon3);
-            iconListItem3.appendChild(iconLink3);
-            iconList.appendChild(iconListItem3);
-
-            var productContent = document.createElement("div");
-            productContent.className = "product-content";
-            productItem.appendChild(productContent);
-
-            var productDetail = document.createElement("div");
-            productDetail.className = "product-detail";
-            productContent.appendChild(productDetail);
-
-            // 상품 이름 생성 및 설정
-            var productName = document.createElement("h4");
-            var productNameLink = document.createElement("a");
-            productNameLink.textContent = product.nm;
-            productName.appendChild(productNameLink);
-            productDetail.appendChild(productName);
-
-            // 가격 정보 생성 및 설정
-            var priceInfo = document.createElement("p");
-            var originalPrice = document.createElement("span");
-            originalPrice.className = "original-price";
-            originalPrice.textContent = product.prc + "원";
-            originalPrice.style.textDecoration = "line-through";
-            priceInfo.appendChild(originalPrice);
-            priceInfo.appendChild(document.createElement("br"));
-            var discountedPrice = document.createElement("span");
-            discountedPrice.className = "discounted-price";
-            discountedPrice.textContent = (product.prc - (product.prc * (product.dcRate / 100.0))) + "원";
-            priceInfo.appendChild(discountedPrice);
-            productDetail.appendChild(priceInfo);
-
-            farmListContainer.appendChild(productItem);
-        });
-    })
-    .catch(err => console.log(err));
-} 
-
+	let items=["prdtNo", "prc", "nm", "thumb"];
+	let currentState='[[${prdtCode}]]';
 		 
-	//카테고리 클릭이벤트
-		document.querySelectorAll(".ctgr").forEach(ctgr=>
-			ctgr.addEventListener('click',function(){
-				sort.children[0].selected=true;
-			
-				currentState = ctgr.getAttribute('data-common-cd');
-				getCtgrList();
-				
-			})
-		)
-		 */
-		
-	/* 	$(document).ready(function() {
-    // 농산물 카테고리 클릭 이벤트
-    $(".ctgr").click(function() {
-        var commonCd = $(this).data("common-cd");
-        loadProductList(commonCd);
-    });
+	//카테고리 별 정렬
+	$('.ctgr').on('click',function(){
+		productList();
+	});
+	
+	function productList() {
+		console.log("!!!");
 
-    // 초기 농산물 카테고리 아이템 로드
-    loadProductList("S101");
+		currentState=event.target.dataset.commoncd;
+	    fetch("/mall/getCtgrList", {
+	        method: "POST",
+	        headers: {
+	            'Content-Type': 'application/x-www-form-urlencoded'
+	        },
+	        body: 'commonCd=' + currentState
+	    })
+	    .then(response => response.json())
+	    .then(result => {
+	    	$('#productList').empty();
+   			result.forEach(items=> {
+     			console.log(items);
+     			let divTag = `
+     				<div class="col-md-4 results">
+					<div class="product-item" onclick="location.href='/mall/getFarm?prdtNo=${items.prdtNo}'">
+						<div class="product-thumb">
+							<span class="bage">Sale</span> <img
+								src="/mall/images/main/${items.thumb}">
+						</div>
+						<div class="product-content">
+							<div class="product-detail">
+								<h4>
+									<span class="nm"><a>${items.nm}</a></span>
+								</h4>
+								<p>
+									<span class="original-price"
+										style="text-decoration: line-through;">${items.prc}p</span> <br> <span
+										class="discounted-price">${items.prc - (items.prc * (items.dcRate / 100.0))}p</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+     			`;
+     			document.querySelector('#productList').innerHTML+=divTag;
+      		})
+	    })
+	    .catch(err => console.log(err));
+	} 
+	 
+	
+	//낮은 가격순
+	$('.lowBtn').on('click',function(){
+		lowPrcList();
+	});
+	
+	function lowPrcList() {
+	    fetch("/mall/getLowPrc", {
+	        method: "POST",
+	        headers: {
+	            'Content-Type': 'application/x-www-form-urlencoded'
+	        },
+	        body: 'commonCd=' + currentState
+	    })
+	    .then(response => response.json())
+	    .then(result => {
+	    	$('#productList').empty();
+   			result.forEach(items=> {
+     			console.log(items);
+     			let divTag = `
+     				<div class="col-md-4 results">
+					<div class="product-item" onclick="location.href='/mall/getFarm?prdtNo=${items.prdtNo}'">
+						<div class="product-thumb">
+							<span class="bage">Sale</span> <img
+								src="/mall/images/main/${items.thumb}">
+						</div>
+						<div class="product-content">
+							<div class="product-detail">
+								<h4>
+									<span class="nm"><a>${items.nm}</a></span>
+								</h4>
+								<p>
+									<span class="original-price"
+										style="text-decoration: line-through;">${items.prc}p</span> <br> <span
+										class="discounted-price">${items.prc - (items.prc * (items.dcRate / 100.0))}p</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+     			`;
+     			document.querySelector('#productList').innerHTML+=divTag;
+      		})
+	    })
+	    .catch(err => console.log(err));
+	} 
+	
+	
+	//높은 가격순
+	$('.highBtn').on('click',function(){
+		highPrcList();
+	});
+	
+	function highPrcList() {
 
-    // 가격 정렬 버튼 클릭 이벤트
-    $("#low").click(function() {
-        sortProductList("low");
-    });
+	    fetch("/mall/getHighPrc", {
+	        method: "POST",
+	        headers: {
+	            'Content-Type': 'application/x-www-form-urlencoded'
+	        },
+	        body: 'commonCd=' + currentState
+	    })
+	    .then(response => response.json())
+	    .then(result => {
+	    	$('#productList').empty();
+   			result.forEach(items=> {
+     			console.log(items);
+     			let divTag = `
+     				<div class="col-md-4 results">
+					<div class="product-item" onclick="location.href='/mall/getFarm?prdtNo=${items.prdtNo}'">
+						<div class="product-thumb">
+							<span class="bage">Sale</span> <img
+								src="/mall/images/main/${items.thumb}">
+						</div>
+						<div class="product-content">
+							<div class="product-detail">
+								<h4>
+									<span class="nm"><a>${items.nm}</a></span>
+								</h4>
+								<p>
+									<span class="original-price"
+										style="text-decoration: line-through;">${items.prc}p</span> <br> <span
+										class="discounted-price">${items.prc - (items.prc * (items.dcRate / 100.0))}p</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+     			`;
+     			document.querySelector('#productList').innerHTML+=divTag;
+      		})
+	    })
+	    .catch(err => console.log(err));
+	} 
+	
 
-    $("#high").click(function() {
-        sortProductList("high");
-    });
+	//검색기능
+	$('.searchPrdt').on('click',function(){
+		searchPrdt();
+	});
+	
+	function searchPrdt() {
 
-    // AJAX를 사용하여 농산물 카테고리의 상품 목록을 가져오는 함수
-    function loadProductList(commonCd) {
-        $.ajax({
-            url: "/mall/farmList", // 실제 요청할 URL
-            type: "GET",
-            data: { commonCd: commonCd },
-            success: function(data) {
-                // 서버에서 받아온 데이터로 상품 목록을 동적으로 생성하여 추가
-                var productList = data.farmList;
-                var $categoryItem = $("#" + commonCd + " ul");
-                $categoryItem.empty();
-                for (var i = 0; i < productList.length; i++) {
-                    var product = productList[i];
-                    var $item = $("<li></li>").text(product.ctgr);
-                    $categoryItem.append($item);
-                }
-            },
-            error: function() {
-                console.log("농산물 카테고리 로드 실패");
-            }
-        });
-    }
-
-    // 가격 정렬 함수
-    function sortProductList(sortType) {
-      var $farmList = $("#farmList");
-      var $products = $farmList.find(".product-item");
-
-      $products.sort(function(a, b) {
-        var priceA = parseInt($(a).find(".discounted-price").text());
-        var priceB = parseInt($(b).find(".discounted-price").text());
-
-        if (sortType === "low") {
-          return priceA - priceB;
-        } else if (sortType === "high") {
-          return priceB - priceA;
-        }
-      });
-
-      // 기존 상품 목록의 크기 유지
-      var originalHeight = $farmList.height();
-      $farmList.empty();
-      $products.appendTo($farmList);
-      $farmList.height(originalHeight);
-    }
-
-  }); */
-
-		
-	/* 	
-		let currentState=[[${prdtCode}]];
-		
-		function getProductList(){
-			fetch("/mall/getFarmList", {
-				method: "POST",
-				headers : {
-					'content-Type' : 'application/json'
-				},
-				body : 'commonCd='+currentState
-			})
-			
-			.then(result => result.json())
-			.then(data => {
-				let tbody = document.getElementById("farmList");
-				while(tbody.firstChild){
-					tbody.firstChild.remove();
-				}
-			data.forEach((product, index)=> {
-				
-			})
-			
-			})
-			.catch(err=>console.log(err));
-		}
-		 */
-		
-		// 카테고리 해당 리스만 출력
-		
-/* // AJAX를 사용하여 농산물 카테고리의 상품 목록을 가져오는 함수
-function loadProductList(commonCd) {
-    $.ajax({
-        url: "/mall/farmList", // 실제 요청할 URL로 수정해야 합니다.
-        type: "GET",
-        data: { commonCd: commonCd },
-        success: function(data) {
-            // 서버에서 받아온 데이터로 템플릿을 활용하여 HTML 문자열 생성
-            var productList = data.farmList;
-            var html = "";
-            for (var i = 0; i < productList.length; i++) {
-                var product = productList[i];
-                html += '<div class="product-item" onclick="location.href=\'@{getFarm(prdtNo=' + product.prdtNo + ')}\'">';
-                html += '<div class="product-thumb">';
-                // 이미지 및 상품 내용 추가
-                // ...
-                html += '</div>';
-                html += '</div>';
-            }
-
-            // 생성된 HTML 문자열을 한 번에 추가
-            $("#" + commonCd + " ul").html(html);
-        },
-        error: function() {
-            console.log("농산물 카테고리 로드 실패");
-        }
-    });
-}
-		 
-		// 낮은 가격순 정렬 버튼 클릭 시
-		 $("#low").on("click", function() {
-		     // 상품 목록을 낮은 가격순으로 정렬
-		     var sortedList = farmList.sort(function(a, b) {
-		         return a.prc - b.prc;
-		     });
-
-		     // 정렬된 상품 목록을 HTML로 생성하여 추가
-		     var html = "";
-		     for (var i = 0; i < sortedList.length; i++) {
-		         var prdt = sortedList[i];
-		         html += '<div class="col-md-4">';
-		         html += '<div class="product-item" onclick="location.href=\'@{getFarm(prdtNo=' + prdt.prdtNo + ')}\'">';
-		         // 상품 이미지 및 내용 추가
-		         // ...
-		         html += '</div>';
-		         html += '</div>';
-		     }
-
-		     // 상품 목록 영역에 새로운 HTML 적용
-		     $("#farmList").html(html);
-		 });
- */
+	    fetch("/mall/getSearchPrdt", {
+	        method: "POST",
+	        headers: {
+	            'Content-Type': 'application/x-www-form-urlencoded'
+	        },
+	        body: 'commonCd=' + currentState
+	    })
+	    .then(response => response.json())
+	    .then(result => {
+	    	$('#productList').empty();
+   			result.forEach(items=> {
+     			console.log(items);
+     			let divTag = `
+     				<div class="col-md-4 results">
+					<div class="product-item" onclick="location.href='/mall/getFarm?prdtNo=${items.prdtNo}'">
+						<div class="product-thumb">
+							<span class="bage">Sale</span> <img
+								src="/mall/images/main/${items.thumb}">
+						</div>
+						<div class="product-content">
+							<div class="product-detail">
+								<h4>
+									<span class="nm"><a>${items.nm}</a></span>
+								</h4>
+								<p>
+									<span class="original-price"
+										style="text-decoration: line-through;">${items.prc}p</span> <br> <span
+										class="discounted-price">${items.prc - (items.prc * (items.dcRate / 100.0))}p</span>
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+     			`;
+     			document.querySelector('#productList').innerHTML+=divTag;
+      		})
+	    })
+	    .catch(err => console.log(err));
+	} 
+	
 
 	</script>
 	</div>

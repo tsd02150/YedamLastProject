@@ -6,21 +6,30 @@
 <meta charset="UTF-8">
 <title>로그인</title>
 <style>
-  .login{padding: 0;}
-  .login-signup section-padding{padding-top: 0;}
-  .py-20 {
-    clear: both;
-    height: 20px;
-  }
-	#ADimg{
-		width: 700px;
-		height: 400px;
-		background-color: pink;
-		display : block;
-	}
-	.container{
+ .login{padding: 0;}
+ .login-signup section-padding{padding-top: 0;}
+ .py-20 {
+   clear: both;
+   height: 20px;
+ }
+#ADimg{
+	width: 700px;
+	height: 400px;
+	background-color: pink;
 	display : block;
-	}
+}
+.container{
+display : block;
+}
+#naver{
+	width: 320px;
+	height: 54px;
+}
+#loginBtn{
+	width: 320px;
+	height: 54px;
+	font-size : large;
+}
 </style>
 </head>
 <body>
@@ -55,9 +64,10 @@
                 </div>
             <div class="col-md-12">
          <span th:if="${membNo == null}">
-					  <button class="btn btn-primary" type="submit">Login</button>
-						  <button type="button" id="kakao" class="simple_login">카카오로그인</button>
-						  <button type="button" id="naver" class="simple_login">네이버로그인</button>
+					  <button class="btn btn-primary" id="loginBtn" type="submit">일반 회원 로그인</button><br>
+						  <!-- <button type="button" id="kakao" class="simple_login">카카오로그인</button> -->
+						  ---------------------------------------------------<br>
+						  <img id="naver" class="simple_login" th:src="|/member/images/naverbutton.png|">
 							  <p class="mt-5 mb-0"><a href="/member/findid" style="padding-right: 20px;">아이디찾기</a><a href="/member/findpwd">비밀번호 찾기</a></p>
 							  <p class="mt-5 mb-0">아직 회원이 아니세요? <a href="signup.html">회원가입</a></p>
 							</span>

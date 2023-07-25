@@ -237,4 +237,9 @@ public class MemberServiceImpl implements MemberService {
 		return membMapper.buysellCount(vo);
 	}
 
+	@Override
+	public List<PossVO> myRaiseList(String membNo) {
+		return membMapper.myRaiseList(membNo);
+	}
+
 }

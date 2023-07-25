@@ -143,6 +143,7 @@ function dealList() {
         },
         success: function (data) {
             let tr = ''; // 각 호출마다 tr을 초기화
+        	if(data && data.length >0){
             console.log(data);
             data.forEach(el => {
             	console.log(el)
@@ -158,18 +159,26 @@ function dealList() {
                 } else {
                     tr += `<td>${el.nm}</td>`;
                 }
-                tr += `
-                            <td class="point">${point}</td>
-                        </tr>
-                `;
-                
                  if(el.point >=0){
-                	$(".point").addClass("high");
+                	 tr += `
+                         <td class="high">${point}</td>
+          		           </tr>
+            			 `;
                  } else{
-                	 $(".point").addClass("low");
+                	 tr += `
+                         <td class="low">${point}</td>
+          		           </tr>
+            			 `;
                  }
                  
             });
+        	}else{
+        		tr += `
+        			<tr>
+                    <td colspan="4"><h3>거래 내역이 없습니다. </h3></td>
+        		`;
+        		$("#myPointTbl").css("height", "200px");
+        	}
             $("#dealbody").append(tr);
         },
         error: function (err) {

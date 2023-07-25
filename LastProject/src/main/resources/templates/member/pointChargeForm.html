@@ -8,7 +8,9 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
  <script src="https://js.tosspayments.com/v1/payment-widget"></script>
 <style>
-
+#mypageBody{
+	height: 1500px;
+}
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -52,6 +54,19 @@ border: 1px solid #DDDDDD;
 	margin : auto;
 	text-align: center;
 }
+#myPointList h2{
+padding-top : 40px;
+margin-bottom : 40px; 
+font-size:40px; 
+padding-left:30px; 
+font-weight:bold; 
+color: green;
+}
+.pointTxt{
+font-size:40px; 
+padding-left:30px; 
+}
+
 
 </style>
 </head>
@@ -59,10 +74,12 @@ border: 1px solid #DDDDDD;
 <div layout:fragment="mypage">
 	<div id="mypageBody">
 	<div id="myPointList">
-		<h2 style="margin-bottom : 40px; font-size:40px; padding-left:30px; font-weight:bold; color: green;">충전</h2>
+		<h2>충전</h2>
 		<span>로고</span>
 		<span style="font-size:40px; color:black;">My 포인트</span>
-		<strong> <span th:text="|${#numbers.formatInteger(mypoint, 0, 'COMMA')}|" style="font-size:40px; padding-left:30px; color:black;"></span></strong>
+		<strong> <span th:text="|${#numbers.formatInteger(mypoint, 0, 'COMMA')}|" 
+									 th:attr="class=${mypoint > 10000 ? 'pointTxt' : 'high pointTxt'}"
+									 th:style="${mypoint > 10000 ? 'color : black' : ''}"></span></strong>
 		<span style="font-size:30px; color:black;"> point</span>
 		
 	</div>

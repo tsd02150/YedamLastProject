@@ -349,7 +349,12 @@ public class MemberController {
 	
 	//주식현황
 	@GetMapping("mystock")
-	public String mystock() {
+	public String mystock(HttpSession session, Model model) {
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		List<BuyOrderVO> buyOrderList = membService.buyOrderList(mem.getMembNo());
+		List<SellOrderVO> sellOrderList = membService.sellOrderList(mem.getMembNo());
+		model.addAttribute("sellOrderList",sellOrderList);
+		model.addAttribute("buyOrderList",buyOrderList);
 		return "member/mystock";
 	}
 	
@@ -427,10 +432,11 @@ public class MemberController {
 	public String mypageInfo(HttpSession session, Model model, MembVO membVO) {
 		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 		String id = mem.getId();
-		List<String> list = membService.membListInfo(id);
+		List<String> list = membService.membListInfo(mem.getMembNo());
 		MembVO member = membService.memberList(id);
-		model.addAttribute("membList",list);
-		model.addAttribute("member",member);
+		model.addAttribute("membList",list); //주소 포함된 멤버 리스트
+		System.out.println(list);
+		model.addAttribute("member",member); //맴버 테이블만 조회
 		return "member/mypageInfo";
 	}
 	
@@ -455,6 +461,7 @@ public class MemberController {
 	@PostMapping("updateMemberInfo")
 	public String updateMemberInfo(@RequestParam String nick, @RequestParam String tel,
 	                               @RequestParam String pwd, @RequestParam String id, @RequestParam String email,
+	                               @RequestParam String zip,@RequestParam String addr,@RequestParam String detaAddr,
 	                               MembVO membVO, Model model, HttpSession session) {
 	    MembVO mem = membService.memberList(id);
 	    membVO.setId(id);
@@ -468,12 +475,18 @@ public class MemberController {
 	    	membVO.setTempPwd("");
 	    }
 	    
+	    //주소 등록
+	    AddrVO addrInfo = new AddrVO();
+	    addrInfo.setZip(zip);
+	    addrInfo.setAddr(addr);
+	    addrInfo.setDetaAddr(detaAddr);
+	    addrInfo.setMembNo(mem.getMembNo());
+	    
 	    membService.updateMemberInfo(membVO);
+	    membService.insertAddr(addrInfo);
 
 	    //수정한 정보 다시 세션에 저장
 	    MembVO list = membService.memberList(id);
-	    System.out.println("++++++++++++++++++++");
-	    System.out.println(list);
 	    UserVO loggedInMember = new UserVO();
 	    loggedInMember.setId(list.getId());
 	    loggedInMember.setNick(list.getNick());
@@ -545,10 +558,9 @@ public class MemberController {
 		List<PossVO> possstockList = membService.myPossStockList(mem.getMembNo());
 		model.addAttribute("possstockList", possstockList);
 		
-		int sumNowPrc = possstockList.stream().mapToInt(PossVO::getNowPrc).sum();
-	    int sumTradePrc = possstockList.stream().mapToInt(PossVO::getTradePrc).sum();
+		double sumNowPrc = possstockList.stream().mapToInt(PossVO::getNowPrc).sum();
+		double sumTradePrc = possstockList.stream().mapToInt(PossVO::getTradePrc).sum();
 	    double raise =(double) (sumTradePrc / sumNowPrc) * 100;
-
 	    model.addAttribute("sumNowPrc", sumNowPrc);
 	    model.addAttribute("sumTradePrc", sumTradePrc);
 	    model.addAttribute("raise", raise);
@@ -576,9 +588,7 @@ public class MemberController {
 	//매도 주문 삭제
 	@ResponseBody
 	@PostMapping("deleteSellOrder")
-	public int deleteSellOrder(@RequestParam String membNo, @RequestParam String sellNo, SellOrderVO soVO) {
-		soVO.setMembNo(membNo);
-		soVO.setSellNo(sellNo);
+	public int deleteSellOrder(SellOrderVO soVO) {
 		int result = membService.deleteSellOrder(soVO);
 		return result;
 	}
@@ -671,18 +681,36 @@ public class MemberController {
 		return list;
 	}
 	
+	/*
+	 * @ResponseBody
+	 * 
+	 * @PostMapping("myBuyRaiseList") public List<PossVO> myBuyRaiseList(String
+	 * membNo){ List<PossVO> list = membService.myBuyRaiseList(membNo); return list;
+	 * }
+	 * 
+	 * @ResponseBody
+	 * 
+	 * @PostMapping("mySellRaiseList") public List<PossVO> mySellRaiseList(String
+	 * membNo){ List<PossVO> list = membService.mySellRaiseList(membNo); return
+	 * list; }
+	 */
+	
 	@ResponseBody
-	@PostMapping("myBuyRaiseList")
-	public List<PossVO> myBuyRaiseList(String membNo){
-		List<PossVO> list = membService.myBuyRaiseList(membNo);
+	@PostMapping("myRaiseList")
+	public List<PossVO> myRaiseList(String membNo){
+		List<PossVO> list = membService.myRaiseList(membNo);
 		return list;
 	}
 	
-	@ResponseBody
-	@PostMapping("mySellRaiseList")
-	public List<PossVO> mySellRaiseList(String membNo){
-		List<PossVO> list = membService.mySellRaiseList(membNo);
-		return list;
-	}
+	//쿠키생성
+	/*
+	 * @RequestMapping("/createCookie") public String
+	 * createCookie(HttpServletResponse response) { logger.info("쿠키 생성"); Cookie
+	 * cookie = new Cookie("useremail","blueskii"); cookie.setDomain("localhost");
+	 * cookie.setPath("/"); // 30초간 저장 cookie.setMaxAge(30*60);
+	 * cookie.setSecure(true); response.addCookie(cookie);
+	 * 
+	 * return "redirect:/ch05/content"; }
+	 */
 	
 }

@@ -17,22 +17,17 @@
 	</select>
 
 	<!-- 단건조회 -->
-	<!--  <select id="getProductInfo">
-		SELECT *
+	<!-- <select id="getProductInfo"> SELECT * FROM product WHERE prdt_no = 
+		#{prdtNo} </select> -->
 
+	<select id="getProductInfo" resultType="ProductVO">
+
+		SELECT *
 		FROM product
 		WHERE prdt_no = #{prdtNo}
-	</select> -->
-	
-	<select id="getProductInfo" resultType="ProductVO">
-	
-	SELECT *
-	    FROM product
-	    WHERE prdt_no = #{prdtNo}
 
-	
-	</select> 
-	
+
+	</select>
 
 
 	<!-- 상품게시물 갯수 -->
@@ -62,13 +57,15 @@
 		SELECT *
 
 		FROM BASKET
-		WHERE prdt_no = #{prdtNo}
+		WHERE
+		prdt_no = #{prdtNo}
 
 	</select>
 
 	<select id="getProductReviewList" resultType="ProductReviewVO">
 		SELECT *
-		FROM PRODUCT_REVIEW
+		FROM
+		PRODUCT_REVIEW
 		WHERE prdt_no = #{prdtNo}
 	</select>
 
@@ -77,18 +74,50 @@
 	<select id="getCtgrList" resultType="ProductVO">
 
 		SELECT *
-		FROM PRODUCT P JOIN COMMON_CODE C
-		USING(common_code))
+		FROM PRODUCT P JOIN
+		COMMON_CODE C
+		USING(common_cd)
 		WHERE common_cd Like #{commonCd}||'%'
 		ORDER BY prdt_no DESC
-		
+
 	</select>
 
+	<!-- 낮은 가격순 정렬 -->
+	<select id="getLowPrc" resultType="ProductVO">
+		SELECT prc,nm, prdt_no, common_cd, dc_rate, thumb, prc-prc*NVL(dc_rate,0)/100 ord
+			FROM PRODUCT P JOIN COMMON_CODE C
+			USING(common_cd)
+			WHERE common_cd LIKE #{commonCd}||'%'
+		ORDER BY ord
+	</select>
+
+
+	<!-- 높은 가격순 정렬 -->
+	<select id="getHighPrc" resultType="ProductVO">
+		SELECT prc, nm, prdt_no, common_cd, dc_rate, thumb, prc-prc*NVL(dc_rate,0)/100 ord
+			FROM PRODUCT P JOIN COMMON_CODE C
+			USING(common_cd)
+			WHERE common_cd LIKE #{commonCd}||'%'
+		ORDER BY ord DESC
+	</select>
+	
+	<!-- 검색 -->
+	<select id="getSearchPrdt" resultType="ProductVO">
+		SELECT *
+		FROM PRODUCT P JOIN COMMON_CODE C
+		USING(common_cd)
+        <if test="nm!=null and(!nm.equals(''))">
+		WHERE common_cd Like #{commonCd}||'%'
+        </if>
+		ORDER BY nm DESC
+	</select>
+	
 	<!-- 등록 -->
 	<insert id="addReview" parameterType="ProductReviewVO">
 		<selectKey keyProperty="revNo" resultType="string"
 			order="BEFORE">
-			SELECT CONCAT('rev_', NVL(MAX(TO_NUMBER(SUBSTR(rev_no, 5))), 0)+1)
+			SELECT CONCAT('rev_', NVL(MAX(TO_NUMBER(SUBSTR(rev_no, 5))),
+			0)+1)
 			FROM PRODUCT_REVIEW
 		</selectKey>
 		insert into product_review ( rev_no
