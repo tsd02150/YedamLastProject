@@ -72,6 +72,21 @@ public class MallServiceImpl implements MallService {
 	public int getProductCount(ProductVO prdtVO) {
 		return mallMapper.getProductCount(prdtVO);
 	}
+
+	@Override
+	public List<ProductVO> getLowPrc(ProductVO prdtVO) {
+		return mallMapper.getLowPrc(prdtVO);
+	}
+
+	@Override
+	public List<ProductVO> getHighPrc(ProductVO prdtVO) {
+		return mallMapper.getHighPrc(prdtVO);
+	}
+
+	@Override
+	public List<ProductVO> getSearchPrdt(ProductVO prdtVO) {
+		return mallMapper.getSearchPrdt(prdtVO);
+	}
 	
 }
 	

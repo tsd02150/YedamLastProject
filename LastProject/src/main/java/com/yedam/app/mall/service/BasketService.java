@@ -23,9 +23,6 @@ public interface BasketService {
 //	/* 카트 확인 */
 //	public BasketVO checkBasket(BasketVO bskVO);
 	
-	
-	
-	
 
 //	// 장바구니 리스트
 	public List<BasketVO> getBasketList(String membNo);

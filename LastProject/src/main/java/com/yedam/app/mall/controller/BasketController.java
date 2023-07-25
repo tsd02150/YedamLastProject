@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.yedam.app.mall.service.BasketService;
 import com.yedam.app.mall.service.BasketVO;
 import com.yedam.app.mall.service.MallService;
-import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
 import com.yedam.app.security.service.UserVO;
 
@@ -133,7 +132,6 @@ public class BasketController {
 	public String basketList(Model model, HttpSession session) {
 		// bskVO = basketService.getBasketList(bskVO.getPrdtNo());
 		
-		
 		String memNo = ((UserVO) session.getAttribute("loggedInMember")).getMembNo();
 		String prdtNo = ((UserVO) session.getAttribute("loggedInMember")).getPrdtNo();
 		//model.addAttribute("member", membVO.getMembNo());
@@ -185,30 +183,36 @@ public class BasketController {
 			return "fail";
 		}
 	}
-//	
-//
+
+	//장바구니 수량 변경
+//	@PostMapping("updateBasket")
+//	@ResponseBody
+//	public String updateBasket(BasketVO bskVO) {
+//		
+//	}
+	
 //	// 장바구니 전체삭제
-//	@PostMapping("deleteAllBasket")
-//	@ResponseBody
-//	public String deleteAllBasket(BasketVO bskVO) {
-//
-//		if (basketService.deleteAllBasket(bskVO)) {
-//			return "success";
-//		} else {
-//			return "fail";
-//		}
-//	}
-//
+	@PostMapping("deleteAllBasket")
+	@ResponseBody
+	public String deleteAllBasket(BasketVO bskVO) {
+
+		if (basketService.deleteAllBasket(bskVO)) {
+			return "success";
+		} else {
+			return "fail";
+		}
+	}
+
 //	// 장바구니 단건삭제
-//	@PostMapping("deleteBasket")
-//	@ResponseBody
-//	public String deleteBasket(BasketVO bskVO) {
-//
-//		if (basketService.deleteBasket(bskVO.getPrdtNo())) {
-//			return "success";
-//		} else {
-//			return "fail";
-//		}
-//	}
+	@PostMapping("deleteBasket")
+	@ResponseBody
+	public String deleteBasket(BasketVO bskVO) {
+
+		if (basketService.deleteBasket(bskVO.getPrdtNo())) {
+			return "success";
+		} else {
+			return "fail";
+		}
+	}
 
 }
