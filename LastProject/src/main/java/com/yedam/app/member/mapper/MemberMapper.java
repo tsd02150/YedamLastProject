@@ -124,5 +124,6 @@ public interface MemberMapper {
 	//하루 총 수익(매수, 매도)
 	public List<PossVO> myBuyRaiseList(String membNo);
 	public List<PossVO> mySellRaiseList(String membNo);
+	public List<PossVO> myRaiseList(String membNo);
 
 }

@@ -81,6 +81,31 @@
 .interestSection{
 height: 200px;
 }
+#thisbox{
+	height: 300px;
+}
+#thisbox button{
+	margin-left : 250px;
+	margin-top : 20px;
+	text-align: center;
+}
+#thisbox2 button{
+	margin-left : 260px;
+	margin-top : 20px;
+	margin-bottom : 50px;
+	text-align: center;
+}
+#orderBox button{
+	margin-left : 250px;
+	margin-top : 20px;
+	text-align: center;
+}
+.nostock{
+	text-align: center;
+	margin-top : 50px;
+	font-size: larger;
+	font-weight: bold;
+}
 </style>
 </head>
 <body>
@@ -90,7 +115,16 @@ height: 200px;
 				<table id="mypagetbl">
 					<tr class="itemhead" style="background-color : bisque">
 						<th>내 프로필</th>
-						<td><a href="mypageIntro"><p class="bi bi-arrow-right-square-fill"></p></a></td>
+						<td>
+						<!-- 일반로그인이면 비밀번호 확인 후 페이지로 이동 -->
+			        <a th:if="${session.loggedInMember.path == null}" th:href="@{/member/mypageIntro}">
+			            <p class="bi bi-arrow-right-square-fill"></p>
+			        </a>
+			        <!-- 소셜로그인이면 바로 회원정보 수정으로 이동 -->
+			        <a th:if="${session.loggedInMember.path != null}" th:href="@{/member/mypageInfo}">
+			            <p class="bi bi-arrow-right-square-fill"></p>
+			        </a>
+				    </td>
 					</tr>
 					<tr>
 						<th>[[${session.loggedInMember.nm}]]</th>
@@ -112,7 +146,7 @@ height: 200px;
 			<table id="intrestTbl">
 					<tr style="background-color : bisque">
 						<th class="intehead">주식현황</th>
-						<td><a  href="mystockInfo" ><p class="bi bi-arrow-right-square-fill"></p></a></td>
+						<td><a href="mystock"><p class="bi bi-arrow-right-square-fill"></p></a></td>
 					</tr>
 					<tr>
 						<th colspan="2" class="itembox">
@@ -132,10 +166,10 @@ height: 200px;
 			<table id="myordertbl">
 			  <tr class="itemhead" style="background-color : bisque">
 			    <th>주문 : 배송</th>
-			    <td><p class="bi bi-arrow-right-square-fill"></p></td>
+			    <td><a href="myorder"><p class="bi bi-arrow-right-square-fill"></p></a></td>
 			  </tr>
 			  <tr>
-			    <th colspan="2" style="padding-bottom: 0px;">결제완료</th>
+			    <th colspan="2" style="padding-bottom: 0px;">결제내역</th>
 	 			</tr>
 			  <tr>
 			    <th id="orderBox" colspan="2" style="padding-top: 0px;"></th>
@@ -167,6 +201,9 @@ $.ajax({
 		"membNo" : membNo
 	},
 	success : function(data){
+		console.log(data)
+		if(data && data.length >0){
+			
 		//보유주식 최대 8개까지만 출력(rate 기준 정렬)  stock/chart?itemNo=ite-1
 		data.slice(0, 8).forEach(el => {
 			//console.log(el);
@@ -181,6 +218,14 @@ $.ajax({
 		 
 		$("#thisbox").html(box);
 		boxClass();
+		}else{
+			let p = `
+				<p class="bi bi-exclamation-circle" style="text-align: center; font-size: 40pt; margin-top:40px;"></p>
+				<p class="nostock">보유한 종목이 없습니다.</p>
+				<a onclick="location.href='/stock/itemListPage'"><button class="btn btn-primary">주식페이지로 이동</button></a>
+			`;
+			$("#thisbox").html(p);
+		}
 	},
 	error : function(err){
 		console.log(err)
@@ -196,9 +241,7 @@ $.ajax({
 		},
 		success : function(data){
 			//보유주식 최대 4개까지만 출력(rate 기준 정렬)
-			if(data != null){
-				
-			
+			if(data && data.length >0){
 			data.slice(0, 4).forEach(el=>{
 				let tprc = commas(el.tprc); 
 				//console.log(el);
@@ -212,7 +255,10 @@ $.ajax({
 			$("#thisbox2").html(box2);
 			boxClass();
 			}else{
-				box2 += `<a href="stock/itemListPage"><button>주식페이지로 이동<button></a>`;
+				
+				box2 += `
+					<p class="nostock">관심 종목이 없습니다.</p>
+				<a onclick="location.href='/stock/itemListPage'"><button class="btn btn-primary">주식페이지로 이동</button></a>`;
 				$("#thisbox2").html(box2);
 			}
 		},
@@ -241,7 +287,7 @@ $.ajax({
 	    "orderSt": "배송완료"
 	  },
 	  success: function(data) {
-	    if (data != null) {
+		  if(data && data.length >0){
 	      data.slice(0, 3).forEach(function(el) { //3개만 출력
 	        //console.log(el);
 	        let orderDt = new Date(el.orderDt); // 날짜 객체 생성
@@ -275,7 +321,11 @@ $.ajax({
 
 	      $("#orderBox").html(prd);
 	    } else {
-	      console.log("주문 내역이 없습니다.");
+	    	let p =`
+		    	<p class="nostock">결제내역이 없습니다.</p>
+					<a onclick="location.href='/mall/mallMain'"><button class="btn btn-primary">포인트몰로 이동</button></a>
+          `;
+	    	 $("#orderBox").html(p);
 	    }
 	  },
 	  error: function(err) {

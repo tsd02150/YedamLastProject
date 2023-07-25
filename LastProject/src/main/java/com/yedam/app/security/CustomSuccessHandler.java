@@ -30,17 +30,17 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 		 System.out.println("success handler 실행");
 	      HttpSession session = request.getSession();
 	      PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-	      System.out.println(principalDetails);
 	      UserVO userVO = principalDetails.getUserVO();
-	      System.out.println("---------------------------------");
-	      System.out.println(userVO);
-    	  System.out.println("임시비밀번호"+userVO.getTempPwd());
+	      
     	  if(userVO.getTempPwd() == null) {
     		  session.setAttribute("loggedInMember", userVO);  
     		  response.sendRedirect("/");
-    	  } else {
+    	  } else if(userVO.getTempPwd() != null){
     		  session.setAttribute("loggedInMember", userVO);  
     		  response.sendRedirect("/member/tempPwdUpdate");
+    	  } else if(userVO.getNm() == "admin") {
+    		  session.setAttribute("loggedInMember", userVO);  
+    		  response.sendRedirect("/admin/memberManage");
     	  }
 	   }
 	}

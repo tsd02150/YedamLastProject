@@ -47,6 +47,15 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+.addDiv{
+	margin-bottom : 20px;
+}
+#insertAddrDiv{
+display : none;
+}
+#insertResetBtn{
+display : none;
+}
 </style>
 </head>
 <body>
@@ -55,7 +64,7 @@ input[type=number] {
 			<div class="col-lg-12">
 				<div class="signup">
 					<h3 class="mt-4">기본 정보</h3>
-					<form id="updateFrm" action="updateMemberInfo" class="signup-form row" method="post" onsubmit="nullCheck()">
+					<form id="updateFrm" action="updateMemberInfo" class="signup-form row" method="post">
 						<div class="col-md-12">
 							<div class="form-group">
 							<h3 class="mt-4">[[${session.loggedInMember.nm}]]</h3>
@@ -79,22 +88,19 @@ input[type=number] {
 									th:value=${member.nick}
 									style="width: 60%; display: inline;" readonly>
 								<div id="ckNick" style="display: inline;"></div>
-								<button type="button" id="changeNick">변경</button>
-								<!-- <button type="button" id="saveNick" style="display:none;">저장</button> -->
-								<button type="reset" id="resetNick" style="display:none;">취소</button><br>
+								<button type="button" id="changeNick" class="btn btn-light">변경</button>
+								<button type="reset" id="resetNick" style="display:none;" class="btn btn-light">취소</button><br>
 								<span id="nickmsg"></span>
 							</div>
 						</div>
-						<div class="col-md-12">
-							<div class="form-group">
-								<label for="pass">비밀번호</label><br> <input type="password"
-									class="form-control" id="pass" name="pwd"
-									placeholder="PASSWORD"
-									style="width: 60%; display: inline;" readonly>
-									<button type="button" id="changePwd">변경</button>
-									<button type="button" id="resetPwd" style="display : none;">취소</button>
-									<br>
-							</div>
+						<div class="col-md-12" th:style="${session.loggedInMember.path != null} ? 'display: none;' : ''">
+					    <div class="form-group">
+				        <label for="pass">비밀번호</label><br>
+				        <input type="password" class="form-control" id="pass" name="pwd" placeholder="PASSWORD" style="width: 60%; display: inline;" readonly>
+				        <button type="button" id="changePwd" class="btn btn-light">변경</button>
+				        <button type="button" id="resetPwd" class="btn btn-light" style="display: none;">취소</button>
+				        <br>
+					    </div>
 						</div>
 						<div class="col-md-12 ckpwddiv" style="display : none;">
 							<div class="form-group">
@@ -111,9 +117,9 @@ input[type=number] {
 									class="form-control" id="email-address" name="email"
 									th:value=${member.email} 
 									style="width: 60%; display: inline;" readonly>
-									<button type="button" id="changeEmail" style="display : inline-block;">변경</button>
-									<button type="button" id="sendemail" style="display : none;">인증번호 발송</button>
-									<button type="reset" id="resetEmail" style="display : none;">취소</button>
+									<button type="button" id="changeEmail" style="display : inline-block;" class="btn btn-light">변경</button>
+									<button type="button" id="sendemail" style="display : none;" class="btn btn-light">인증번호 발송</button>
+									<button type="reset" id="resetEmail" style="display : none;" class="btn btn-light">취소</button>
 									<br>
 							</div>
 						</div>
@@ -130,9 +136,9 @@ input[type=number] {
 								<label for="telInput">연락처</label><br>
 								<input type="text" class="form-control" oninput="autoHyphen(this)"
 									maxlength="13" name="tel" id="telInput" th:value=${member.tel} style="width : 60%; display : inline;" readonly>
-									<button type="button" id="changeTel">변경</button>
-									<button type="button" id="sendsms" style="display : none;">인증번호 발송</button>
-									<button type="reset" id="resetsms" style="display : none;">취소</button>
+									<button type="button" id="changeTel" class="btn btn-light">변경</button>
+									<button type="button" id="sendsms" style="display : none;" class="btn btn-light">인증번호 발송</button>
+									<button type="reset" id="resetsms" style="display : none;" class="btn btn-light">취소</button>
 								<br><span id="telCheck"></span>
 							</div>
 						</div>
@@ -140,14 +146,33 @@ input[type=number] {
 							<div class="form-group">
 								<label for="codeCheckInput"></label>
 								<input type="number" class="form-control" name="confirmcode" id="codeCheckInput" placeholder="인증번호를 입력하세요"style="width : 60%; display : inline;">
-								<button type="button" id="testBtn2">인증번호 확인</button><br>
+								<button type="button" id="testBtn2" class="btn btn-light">인증번호 확인</button><br>
 								<span id="codeCheck"></span>
 							</div>
 						</div>
-						<div class="col-md-12 addDiv"th:if="${#lists.isEmpty(membList)}">
+						<div class="col-md-12 addDiv" th:if="${#lists.isEmpty(membList)}">
 					    <span>등록된 주소가 없습니다.</span>
-					    <button>주소 등록</button>
+					    <button type="button" id="insertAddrBtn" class="btn btn-light">주소 등록</button>
+					    <button type="reset" id="insertResetBtn" class="btn btn-light">취소</button>
 						</div>
+					    <div class="col-md-12" id="insertAddrDiv">
+								<div class="form-group">
+									<label for="insertaddr1">주소</label><br> <input type="text"
+										class="form-control" style="width: 40%; display: inline;"
+										id="insertaddr1" name="zip" placeholder="우편번호 검색" readonly>
+									<button type="button" class="zipbtn btn btn-light">우편번호 찾기</button>
+								</div>
+								<div class="form-group">
+									<label for="insertaddr2"></label> <input type="text"
+										class="form-control" style="top: 5px;" id="insertaddr2" name="addr"
+										placeholder="도로명주소" readonly>
+								</div>
+								<div class="form-group">
+									<label for="insertaddr3"></label> <input type="text"
+										class="form-control" id="insertaddr3" name="detaAddr"
+										placeholder="상세주소를 입력하세요">
+								</div>
+							</div>
 						<div id="addrDiv" th:if="${not #lists.isEmpty(membList)}" class="col-md-12" style=" padding-left: 0px;">
 						</div>
 						<div class="col-md-12">
@@ -220,8 +245,8 @@ $.ajax({
 				<div class="col-md-12">
 					<div class="form-group" style="margin-bottom: 0px;">
 						<label for="addr1" data-no="${el.addrNo}">주소</label>
-						<button type="button" class="changeAddr" onclick="changeAddr(this)">변경</button>
-						<button type="button" class="deleteAddr">삭제</button><br>
+						<button type="button" class="changeAddr btn btn-light"onclick="changeAddr(this)">변경</button>
+						<button type="button" class="deleteAddr btn btn-light">삭제</button><br>
 						<input type="text" class="form-control" style="width: 40%; display: inline;" id="addr1" name="zip" value="${el.zip}" readonly>
 						<br>
 					</div>
@@ -260,7 +285,7 @@ $("#changeNick").on("click", function() {
     $("#changeNick").css("display", "none");
     $("#nickname").removeAttr("readonly");
     $("#nickname").val("");
-    $("#ckNick").html(`<button type="button" id="checkNick">중복확인</button>`);
+    $("#ckNick").html(`<button type="button" id="checkNick" class="btn btn-light">중복확인</button>`);
     $("#resetNick").css("display", "inline-block");
 
     const nickBtn = document.querySelector("#checkNick");
@@ -315,7 +340,7 @@ addrNo = $(target).prev().data('no'); // 클릭한 주소의 addrNo
 let aa = target.nextElementSibling.nextElementSibling.nextElementSibling; // zip input
 
 // 우편번호 찾기 버튼 HTML 생성
-let zipbtnHtml = '<button type="button" class="zipbtn">우편번호 찾기</button>';
+let zipbtnHtml = '<button type="button" class="zipbtn btn btn-light">우편번호 찾기</button>';
 
 // aa 요소 뒤에 우편번호 찾기 버튼 추가
 $(aa).after(zipbtnHtml);
@@ -324,8 +349,8 @@ let changeButton = $(target);
 changeButton.text('저장').removeAttr('onclick').on('click', function() {
  updateMemberAddr(); // 저장 버튼 클릭 시 주소 변경 요청
  $(target).next().remove();
- let addButtonHtml = '<button type="button" class="changeAddr" onclick="changeAddr(this)">변경</button>' +
-                      '<button type="button" class="deleteAddr">삭제</button>';
+ let addButtonHtml = '<button type="button" class="changeAddr btn btn-light" onclick="changeAddr(this)">변경</button>' +
+                      '<button type="button" class="deleteAddr btn btn-light">삭제</button>';
  $(this).after(addButtonHtml);
  $(this).remove();
  $('input[name="detaAddr"]').attr("readonly", "readonly");
@@ -334,7 +359,7 @@ changeButton.text('저장').removeAttr('onclick').on('click', function() {
 let reBtn = $(target).next();
 reBtn.text('취소').attr('type', 'reset').on('click', function() {
  $(this).next().next().next().remove(); // 우편번호 찾기 버튼 제거
- let changeAddrBtnHtml = '<button type="button" class="changeAddr" onclick="changeAddr(this)">변경</button>';
+ let changeAddrBtnHtml = '<button type="button" class="changeAddr btn btn-light" onclick="changeAddr(this)">변경</button>';
  $(".deleteAddr").text("삭제");
  changeButton.after(changeAddrBtnHtml);
  changeButton.remove();
@@ -366,10 +391,6 @@ $(document).on('click', '.zipbtn', function() {
      if (fullRoadAddr !== '') {
        fullRoadAddr += extraRoadAddr;
      }
-
-     // 우편번호와 주소 정보를 해당 필드에 넣는다.
-     console.log(data.zonecode);
-     console.log(fullRoadAddr);
 
      zipInput.val(data.zonecode);
      addrInput.val(fullRoadAddr);
@@ -633,6 +654,61 @@ $("#resetsms").on("click",function(){
     $("#resetsms").css("display", "none");
     $(".smsCkDiv").css("display", "none");
 });
+
+//주소등록 버튼 클릭
+$("#insertAddrBtn").on("click", function(){
+	$("#insertAddrDiv").css("display", "inline-block");
+	$("#insertResetBtn").css("display", "inline-block");
+	
+	//우편번호 찾기 버튼 클릭
+	//주소 찾기 - 다음 주소 api
+	 document.querySelector(".zipbtn").addEventListener('click',function(){
+	    new daum.Postcode({
+	      oncomplete: function (data) {
+	       // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+	       // 도로명 주소의 노출 규칙에 따라 주소를 조합한다.
+	       // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+	       var fullRoadAddr = data.roadAddress; // 도로명 주소 변수
+	       var extraRoadAddr = ''; // 도로명 조합형 주소 변수
+
+	       // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+	       // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+	       if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+	           extraRoadAddr += data.bname;
+	       }
+	       // 건물명이 있고, 공동주택일 경우 추가한다.
+	       if (data.buildingName !== '' && data.apartment === 'Y') {
+	           extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+	       }
+	       // 도로명, 지번 조합형 주소가 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+	       if (extraRoadAddr !== '') {
+	           extraRoadAddr = ' (' + extraRoadAddr + ')';
+	       }
+	       // 도로명, 지번 주소의 유무에 따라 해당 조합형 주소를 추가한다.
+	       if (fullRoadAddr !== '') {
+	           fullRoadAddr += extraRoadAddr;
+	       }
+
+	       $("[name=insertaddr1]").val(data.zonecode);
+	       $("[name=insertaddr2]").val(fullRoadAddr);
+
+	       // 우편번호와 주소 정보를 해당 필드에 넣는다.
+	       document.getElementById('insertaddr1').value = data.zonecode; //5자리 새우편번호 사용
+	       document.getElementById('insertaddr2').value = fullRoadAddr;
+
+	      }
+	    }).open();
+	 });
+	
+})
+
+$("#insertResetBtn").on("click", function(){
+	$("#insertAddrDiv").css("display", "none");
+	$("#insertResetBtn").css("display", "none");
+	
+})
+
 //모달
 function close_pop(flag) {
  $('#myModal').hide();

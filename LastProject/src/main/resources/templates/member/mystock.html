@@ -9,6 +9,7 @@
 #sum {
 	border: 1px solid #DDDDDD;
 	height: auto;
+	height: 150px;
 }
 #ownList {
 	border: 1px solid #DDDDDD;
@@ -45,10 +46,9 @@
 }
 #buysellList{
 	border: 1px solid #DDDDDD;
-	height: 500px;
+	height: 460px;
 	margin-top : 20px;
-	padding : 5px;
-	overflow: auto;
+	padding : 10px;
 }
 #interestDiv, #recomDiv{
 	display : inline-block;
@@ -62,12 +62,42 @@
 	width : 100%;
 	
 }
-#sum{
-	height: 150px;
+#sum table td{
+	font-size : 25px;
+	padding : 20px;
+	padding : 20px;
+	font-weight: bold;
+	text-align : right;
+}
+#sum table th{
+	font-size : 14px;
+	text-align : left;
 }
 #buyselltbl{
 	text-align: center;
 }
+#ownList table{
+	text-align : center;
+}
+#ownList table td{
+	text-align : center;
+	width : 110px;
+	font-size : 20px;
+	padding : 5px;
+	font-weight: bold;
+	padding-top : 20px;
+}
+#noOrderDiv{
+	text-align: center;
+	margin-top : 180px;
+}
+#noOrderTxt{
+ font-weight: bold;
+}
+#intbody tr{ /* :nth-chid(1) */
+	text-align : left;
+}
+
 </style>
 </head>
 <body>
@@ -84,6 +114,10 @@
 					<div id="ownList" class="col-12"></div>
 				</div>
 				<div id="myorderDiv">
+					<div id="noOrderDiv" th:style="${#lists.isEmpty(sellOrderList) && #lists.isEmpty(buyOrderList) ? '' : 'display : none'}">
+						<p id="noOrderTxt">주문 내역이 없습니다.<p>
+						<a onclick="location.href='/stock/itemListPage'"><button class="btn btn-primary">주식페이지로 이동</button></a>
+					</div>
 					<div id="buyOrder"></div>
 					<div id="sellOrder"></div>
 				</div>
@@ -211,6 +245,7 @@
 		success : function(data){
 			let tr='';
 			data.forEach(el=>{
+			let taPrc = commas(el.taPrc);
 				let orderDt = new Date(el.taDt);
         let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
 				console.log(el);
@@ -225,7 +260,7 @@
 				
 				tr += `
 					<td>${el.tnm}</td>
-					<td>${el.taPrc}</td>
+					<td>${taPrc}</td>
 					<td>${el.stockCnt}</td>
 					<td>${(el.stockCnt*el.taPrc)*0.1}</td>
 					<td>${(el.stockCnt*el.taPrc-((el.stockCnt*el.taPrc)*0.1))}</td>
@@ -247,29 +282,38 @@
 			 "membNo" : memNo
 		 },
 		 success : function(data){
+			 if(data && data.length >0){
+				 $("#noOrderDiv").css("dispaly","none");
 			 data.forEach(el=>{
-				 //console.log(el);
 				 let prc = (el.prc).toLocaleString();
-				 div1 +=`
-				 				<div data-no="${el.buyNo}" style="text-align:center; border: 1px solid #DDDDDD;">
-				 					<span style="font-weight : bold;">매수 주문 예약</span><button onclick="delBuyOrder(this)"> X </button>
-				 					<table style="width : 100%;">
-				 						<tr>
-				 							<th>종목명</th>
-				 							<td>${el.nm}</td>
-				 						</tr>
-				 						<tr>
-				 							<th>주문수량</th>
-				 							<td>${el.rmnCnt} 개</td>
-				 						</tr>
-				 						<tr>
-				 							<th>주문가격</th>
-				 							<td>${prc} point </td>
-				 						</tr>
-				 					</table>
-				 				</div>
-				 `; 
+				 if(el.rmnCnt >0){
+					 div1 +=`
+					 				<div data-no="${el.buyNo}" style="text-align:center; border: 1px solid #DDDDDD;">
+					 					<span style="font-weight : bold;">매수 주문 예약</span>
+					 					<span style="color:red;font-size:20px;" onclick="delBuyOrder(this)">&times&nbsp</span>
+					 					<table style="width : 100%;">
+					 						<tr>
+					 							<th>종목명</th>
+					 							<td>${el.nm}</td>
+					 						</tr>
+					 						<tr>
+					 							<th>주문수량</th>
+					 							<td>${el.rmnCnt} 개</td>
+					 						</tr>
+					 						<tr>
+					 							<th>주문가격</th>
+					 							<td>${prc} point </td>
+					 						</tr>
+					 					</table>
+					 				</div>
+					 `; 
+				 }else{
+					 $("#noOrderDiv").css("dispaly","inline-block");
+				 }
 			 })
+			 }else{
+				 $("#noOrderDiv").css("dispaly","block");
+			 }
 			 $("#buyOrder").html(div1);
 		 },
 		 error : function(err){
@@ -285,11 +329,13 @@
 			 "membNo" : memNo
 		 },
 		 success : function(data){
+			 if(data && data.length >0){
 			 data.forEach(el=>{
-				 //console.log(el);
+				 if(el.rmnCnt >0){
 				 div2 +=`
-		 				<div data-no="${el.buyNo}" style="text-align:center; border: 1px solid #DDDDDD;">
-		 					<span style="font-weight : bold;">매도 주문 예약</span><button onclick="delSellOrder(this)"> X </button>
+		 				<div data-no="${el.sellNo}" style="text-align:center; border: 1px solid #DDDDDD;">
+		 					<span style="font-weight : bold;">매도 주문 예약</span>
+		 					<span style="color:red;font-size:20px;" onclick="delSellOrder(this)">&times&nbsp</span>
 		 					<table style="width : 100%;">
 		 						<tr>
 		 							<th>종목명</th>
@@ -306,7 +352,13 @@
 		 					</table>
 		 				</div>
 					 `; 
+				 }else{
+					 
+				 }
 			 })
+			 }else{
+				 $("#noOrderDiv").css("dispaly","block");
+			 }
 			 $("#sellOrder").html(div2);
 		 },
 		 error : function(err){
@@ -329,6 +381,7 @@
 			  console.log(res);
 			  $(target).parent().remove();
 			  toastShow("Delete","매수 주문 예약이 삭제되었습니다.","success");
+			  window.reload();
 		  },
 		  error : function(err){
 			  console.log(err);
@@ -350,6 +403,7 @@
 			  console.log(res);
 			  $(target).parent().remove();
 			  toastShow("Delete","매도 주문 예약이 삭제되었습니다.","success");
+			  window.reload();
 		  },
 		  error : function(err){
 			  console.log(err);
@@ -382,8 +436,8 @@
            <tr data-no="${el.itemNo}">
              <td onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">${el.tnm}</td>
              <td>${formatNumber(el.tprc)}</td>
-             <td class="rate">${el.rate}</td>
-             <td><button onclick="deleteInterest('${el.itemNo}')">X</button></td>
+             <td class="rate">${el.rate}%</td>
+             <td><span style="color:red;font-size:20px;" onclick="deleteInterest('${el.itemNo}')">&times&nbsp</span></td>
            </tr>
          `;
        });
@@ -433,7 +487,7 @@ function deleteInterest(itemNo) {
   });
 }
 
-	
+//보유자산 리스트 출력
 $.ajax({
 	  url: "myPossStockList",
 	  method: "POST",
@@ -448,11 +502,13 @@ $.ajax({
 		  data.forEach(el => {
 			  let formattedRaise = (el.tradePrc - el.nowPrc).toLocaleString();
 		    let tr = `
+		    	<table class="col-12">
 		      <tr data-no="${el.itemNo}">
 		        <td onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">${el.tnm}</td>
 		        <td class="rate">${formattedRaise}</td>
 		        <td class="rate">${el.rate}%</td>
 		      </tr>
+		      </table>
 		    `;
 
 		    asset += el.tradePrc;
@@ -466,7 +522,7 @@ $.ajax({
 		  let formattedInvest = (invest * 10).toLocaleString();
 		  
 		  let tr2 = `
-		    <table>
+		    <table class="col-12">
 		      <tr>
 		        <th>자산(평가금액)</th>
 		        <td>${formattedAsset}원</td>
@@ -632,9 +688,9 @@ function updateStartDate(period) {
 	     createPageCntBtn(startPage, endPage);
 	     pageMove(endPage);
 	   }
-
-
-
+   function commas(number) {
+	   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+	 }
 	</script>
 </div>
 </body>

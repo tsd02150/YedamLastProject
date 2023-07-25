@@ -10,12 +10,9 @@
 		 WHERE id  = #{id}
 	</select>
 
-	<select id="membListInfo" resultType="String">
-		SELECT *
-		  FROM member m
-		  LEFT OUTER JOIN address a
-        ON m.memb_no = a.memb_no
-		 WHERE id  = #{id}
+	<select id="membListInfo" parameterType="String">
+		select * from address
+		where memb_no = #{membNo}
 	</select>
 
 	<!-- 아이디로 단건조회 -->
@@ -457,9 +454,9 @@
 		with a as (
 			select item_no, sum(stock_cnt) stock_cnt, sum(trade_prc*stock_cnt) trade_prc --보유주식 총 수량, 총금액
 			from poss_stock 
-			where memb_no = #{membNo}
+			where memb_no = 'mem-5'
 			group by item_no )
-		select i.item_no, n.nm tnm, n.common_cd, a.stock_cnt, a.trade_prc, i.cl_prc*a.stock_cnt now_prc, round(a.trade_prc/(i.cl_prc*a.stock_cnt)*100-100) rate -- 현재 보유자산 / 시장가 / 수익률
+		select i.item_no, n.nm tnm, n.common_cd, a.stock_cnt, a.trade_prc, i.cl_prc*a.stock_cnt now_prc, NVL(round(a.trade_prc/DECODE((i.cl_prc*a.stock_cnt),0,NULL,(i.cl_prc*a.stock_cnt))*100-100),0) rate -- 현재 보유자산 / 시장가 / 수익률
 		from a join item_info i on a.item_no = i.item_no
 		join item n on i.item_no = n.item_no
 		where TO_CHAR(ta_dt, 'yyyy-MM-dd') = TO_CHAR(sysdate-1, 'yyyy-MM-dd') 
@@ -529,6 +526,7 @@
 				SELECT TO_NUMBER(SUBSTR(ar.INVST_NO, 5)) AS "INVST_NO", ar.MEMB_NO, ar.INVST_TYPE_NO, at.type_nm
 				FROM analysis_result ar
 				JOIN analysis_type at ON ar.INVST_TYPE_NO = at.INVST_TYPE_NO
+				order by 1 desc
 			) A
 			WHERE ROWNUM = 1
 		]]>
@@ -537,6 +535,26 @@
 			</if>
 	</select>
 
+	<select id="myRaiseList" parameterType="String" resultType="PossVO">
+	select distinct a.bdt dt, round((nvl(a.rate,0) + nvl(b.raise,0)/2),2) raise from 
+		(with a as (
+					select item_no, nvl(sum(stock_cnt),0) stock_cnt, nvl(sum(trade_prc*stock_cnt),0)trade_prc from poss_stock
+		      where memb_no = #{membNo}
+		      group by item_no )
+				select TO_CHAR(ta_dt, 'yyyy-MM-dd') bdt, nvl(round(sum((a.trade_prc/DECODE((i.cl_prc*a.stock_cnt),0,NULL,(i.cl_prc*a.stock_cnt))*100-100))/count(*),2),0) rate -- 현재 보유자산 / 시장가 / 수익률
+				from a left outer join item_info i on a.item_no = i.item_no
+				join item n on i.item_no = n.item_no
+				GROUP BY TO_CHAR(ta_dt, 'yyyy-MM-dd')
+		)a full outer join (
+		SELECT TO_CHAR(ta_dt, 'yyyy-MM-dd') AS sdt, ROUND(sum((ta_prc/traded_prc*100))/count(*),2) AS raise
+		FROM TA_HR
+		WHERE SELL_MEMB_NO =  #{membNo}
+		GROUP BY TO_CHAR(ta_dt, 'yyyy-MM-dd')
+		) b
+		on a.bdt = b.sdt
+		order by 1
+	</select>
+	
 	<select id="myBuyRaiseList" parameterType="String" resultType="PossVO">
 		with a as (
 			select item_no, sum(stock_cnt) stock_cnt, sum(trade_prc*stock_cnt) trade_prc --보유주식 총 수량, 총금액
