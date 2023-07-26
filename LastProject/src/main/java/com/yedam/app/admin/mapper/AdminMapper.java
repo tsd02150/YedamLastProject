@@ -7,7 +7,9 @@ import org.apache.ibatis.annotations.Param;
 import com.yedam.app.admin.service.MembManageVO;
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.CommentsVO;
+import com.yedam.app.community.service.FaqVO;
 import com.yedam.app.community.service.NoticeVO;
+import com.yedam.app.community.service.QuestionVO;
 import com.yedam.app.community.service.ReportVO;
 
 public interface AdminMapper {
@@ -45,4 +47,20 @@ public interface AdminMapper {
 	public int noticeTotal();
 	// 공지사항 한건 조회
 	public NoticeVO noticeDetail(String notiNo);
+	// qna 리스트
+	public List<QuestionVO> qnaList(@Param("page")int page , @Param("perPage")int perPage);
+	// qna  전체수
+	public int qnaTotal();
+	// faq 리스트
+	public List<FaqVO> faqList(@Param("page")int page , @Param("perPage")int perPage);
+	// faq 전체수
+	public int faqTotal();
+	// board 리스트
+	public List<BoardVO> boardList(@Param("page")int page , @Param("perPage")int perPage);
+	// board 전체수
+	public int boardTotal();
+	// chat 리스트
+	public List<BoardVO> chatList(@Param("page")int page , @Param("perPage")int perPage);
+	// chat 전체수
+	public int chatTotal();
 }

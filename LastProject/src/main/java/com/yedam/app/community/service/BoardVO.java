@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -18,7 +20,8 @@ public class BoardVO {
 	// 내용
 	private String cntn;
 	// 작성일
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private Date drwupDt;
 	// 조회수
 	private int inq;
@@ -33,6 +36,7 @@ public class BoardVO {
 	//회원 닉네임
 	private String nick;
 	// 공통코드 이름
+	private String hCtgr;
 	private String ctgr;
 	// 정렬
 	private String order;

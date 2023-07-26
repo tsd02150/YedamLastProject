@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{admin/adminLayout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div id="grid"></div>
+		
+		<script>
+		const dataSource = {
+	    		  contentType: 'application/json',
+	    		  api: {
+	    			  readData: {
+	    				url:'/admin/boardList',
+	    				method:'GET' 
+	    			}
+	    		  }
+	    		};
+	      
+        const grid = new tui.Grid({
+             el: document.getElementById('grid'),
+             rowHeaders: ['rowNum','checkbox'],
+             data:dataSource,
+             scrollX: false,
+             scrollY: false,
+   		  	 pageOptions: {
+                 perPage: 10,
+               },
+             columns: [
+            	   {
+                     header: '게시판번호',
+                     name: 'boardNo',
+                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                   },
+                 	{
+                     header: '닉네임',
+                     name: 'nick',
+                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                  	},
+                  	{
+                     header: '제목',
+                     name: 'ttl',
+                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                  	},
+                  	{
+                    header: '추천',
+                    name: 'rcom',
+                    sortingType: 'asc',
+                    sortable: true
+                 	},
+                 	{
+                    header: '비추천',
+                    name: 'nrcom',
+                    sortingType: 'asc',
+                    sortable: true
+                 	},
+                 	{
+                    header: '상위항목',
+                    name: 'hCtgr',
+                    filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                 	},
+                 	{
+                    header: '하위항목',
+                    name: 'ctgr',
+                    filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                 	},
+                 	{
+                    header: '작성일시',
+                    name:'drwupDt',
+                    sortingType: 'asc',
+                    sortable: true
+                   }
+                 ]
+               });
+		</script>
+	</div>
+</body>
+</html>

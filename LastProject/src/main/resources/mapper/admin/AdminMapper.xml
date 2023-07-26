@@ -174,4 +174,88 @@
 		on n.memb_no = m.memb_no
 		where noti_no = #{notiNo}
 	</select>
+	
+	<!-- faq 글 리스트 -->
+	<select id="faqList" resultType="FaqVO">
+		<![CDATA[
+		select b.*
+		from (select rownum rn, a.*
+		      from(
+		              select *
+            		  from faq
+		            ) a
+		      where rownum <= #{page}*#{perPage}) b
+		where rn > (#{page}-1)*#{perPage}
+		]]>
+	</select>
+	<!-- faq 개수 -->
+	<select id="faqTotal">
+		select count(faq_no)
+		from faq
+	</select>
+	
+	<!-- qna 글 리스트 -->
+	<select id="qnaList" resultType="QuestionVO">
+		<![CDATA[
+		select b.*
+		from (select rownum rn, a.*
+		      from(
+		            select qst_no , q.memb_no , ttl , cntn ,drwup_dt , rply , rply_dt , nick
+		            from question q join member m 
+		            on q.memb_no = m.memb_no
+		            order by drwup_dt desc
+		           ) a
+		      where rownum <= #{page}*#{perPage}) b
+		where rn > (#{page}-1)*#{perPage}
+		]]>
+	</select>
+	<!-- qna 개수 -->
+	<select id="qnaTotal">
+		select count(qst_no)
+		from question
+	</select>
+	
+	<!-- board 글 리스트 -->
+	<select id="boardList" resultType="BoardVO">
+		<![CDATA[
+		select b.*
+		from (select rownum rn, a.*
+		      from(
+		             select board_no , b.memb_no , nick , ttl, drwup_dt , rcom , nrcom ,h_ctgr, ctgr
+		             from board b join member m
+		             on b.memb_no = m.memb_no
+		             join common_code c on c.common_cd = b.common_cd
+		             order by drwup_dt desc
+		            ) a
+		      where rownum <= #{page}*#{perPage}) b
+		where rn > (#{page}-1)*#{perPage}
+		]]>
+	</select>
+	<!-- board 개수 -->
+	<select id="boardTotal">
+		select count(board_no)
+        from board
+	</select>
+            
+    <!-- chat 로그 리스트 -->
+	<select id="chatList" resultType="ChatVO">
+		<![CDATA[
+		select b.*
+		from (select rownum rn, a.*
+		      from(
+		            select chat_no ,room_no,anon_nick, cntn ,nick , drwup_dt
+		            from chat c join member m 
+		            on c.memb_no = m.memb_no
+		            order by drwup_dt desc
+		           ) a
+		      where rownum <= #{page}*#{perPage}) b
+		where rn > (#{page}-1)*#{perPage}
+		]]>
+	</select>
+	<!-- chat 로그 개수 -->
+	<select id="chatTotal">
+		select count(chat_no)
+        from chat
+	</select>
+            
 </mapper>

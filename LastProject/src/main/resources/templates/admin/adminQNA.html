@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/adminLayout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<h3>FaQ</h3>
+		<div id="faqGrid"></div>
+		<h3>QnA</h3>
+		<div id="qnaGrid"></div>
+		
+		<script>
+			const faqDataSource = {
+		    		  contentType: 'application/json',
+		    		  api: {
+		    			  readData: {
+		    				url:'/admin/faqList',
+		    				method:'GET' 
+		    			}
+		    		  }
+		    		};
+	      	
+	        const faqGrid = new tui.Grid({
+	             el: document.getElementById('faqGrid'),
+	             rowHeaders: ['rowNum','checkbox'],
+	             data:faqDataSource,
+	             scrollX: false,
+	             scrollY: false,
+	   		  	 pageOptions: {
+	                 perPage: 5,
+	               },
+	             columns: [
+	            	   {
+	                     header: 'faq번호',
+	                     name: 'faqNo',
+	                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+	                   },
+	                  	{
+	                      header: '제목',
+	                      name: 'ttl',
+	                      filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+	                   	},
+	                  	{
+	                      header: '내용',
+	                      name: 'cntn',
+	                      filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+	                    },
+	                  	{
+	                      header: '항목',
+	                      name: 'category',
+	                      filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+	                    }
+	                 ]
+	               });
+		
+	       
+	        const qnaDataSource = {
+		      		  contentType: 'application/json',
+		      		  api: {
+		      			  readData: {
+		      				url:'/admin/qnaList',
+		      				method:'GET' 
+		      			}
+		      		  }
+		      		};
+	          const qnaGrid = new tui.Grid({
+	               el: document.getElementById('qnaGrid'),
+	               rowHeaders: ['rowNum','checkbox'],
+	               data:qnaDataSource,
+	               scrollX: false,
+	               scrollY: false,
+	     		  	 pageOptions: {
+	                   perPage: 5,
+	                 },
+	               columns: [
+	              	   {
+	                       header: 'qna번호',
+	                       name: 'qstNo',
+	                       filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+	                     },
+	                    	{
+	                        header: '닉네임',
+	                        name: 'nick',
+	                        filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+	                     	},
+	                    	{
+	                        header: '제목',
+	                        name: 'ttl',
+	                        filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+	                      },
+	                    	{
+	                        header: '작성일',
+	                        name: 'drwupDt',
+	                        filter: { type: 'text', showApplyBtn: true, showClearBtn: true },
+	                        sortingType: 'asc',
+	                        sortable: true
+	                      }
+	                   ]
+	                 });
+		</script>
+	</div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{admin/adminLayout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<div id="grid"></div>
+		
+		<script>
+		const dataSource = {
+	    		  contentType: 'application/json',
+	    		  api: {
+	    			  readData: {
+	    				url:'/admin/chatList',
+	    				method:'GET' 
+	    			}
+	    		  }
+	    		};
+	      
+        const grid = new tui.Grid({
+             el: document.getElementById('grid'),
+             rowHeaders: ['rowNum','checkbox'],
+             data:dataSource,
+             scrollX: false,
+             scrollY: false,
+   		  	 pageOptions: {
+                 perPage: 10,
+               },
+             columns: [
+            	   {
+                     header: '채팅번호',
+                     name: 'chatNo',
+                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                   },
+                 	{
+                     header: '방번호',
+                     name: 'roomNo',
+                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                  	},
+                   	{
+                     header: '익명닉네임',
+                     name: 'anonNick',
+                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                 	},
+                 	{
+                     header: '닉네임',
+                     name: 'nick',
+                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                  	},
+                  	{
+                     header: '채팅내용',
+                     name: 'cntn',
+                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                  	},
+                  	{
+                      header: '작성일시',
+                      name:'drwupDt',
+                      sortingType: 'asc',
+                      sortable: true
+                    }
+                 ]
+               });
+		</script>
+	</div>
+</body>
+</html>

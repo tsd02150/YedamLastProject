@@ -122,6 +122,38 @@ public class AdminServiceImpl implements AdminService {
 	public NoticeVO noticeDetail(String notiNo) {
 		return adminMapper.noticeDetail(notiNo);
 	}
+	// qna 리스트
+	@Override
+	public Map<String, Object> qnaList(int page, int perPage) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("qnaList", adminMapper.qnaList(page, perPage));
+		map.put("qnaTotal", adminMapper.qnaTotal());
+		return map;
+	}
+	// faq 리스트
+	@Override
+	public Map<String, Object> faqList(int page, int perPage) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("faqList", adminMapper.faqList(page, perPage));
+		map.put("faqTotal", adminMapper.faqTotal());
+		return map;
+	}
+	// board 리스트
+	@Override
+	public Map<String, Object> boardList(int page, int perPage) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("boardList", adminMapper.boardList(page, perPage));
+		map.put("boardTotal", adminMapper.boardTotal());
+		return map;
+	}
+	// chat 리스트
+	@Override
+	public Map<String, Object> chatList(int page, int perPage) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("chatList", adminMapper.chatList(page, perPage));
+		map.put("chatTotal", adminMapper.chatTotal());
+		return map;
+	}
 	
 	
 
