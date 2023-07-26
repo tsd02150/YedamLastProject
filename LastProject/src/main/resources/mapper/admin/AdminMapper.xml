@@ -146,4 +146,32 @@
 			</foreach>
 		)
 	</delete>
+	
+	<!-- 공지사항 조회 -->
+	<select id="noticeList" resultType="NoticeVO">
+	<![CDATA[
+		select b.*
+		from (select rownum rn, a.*
+		      from(
+		            select noti_no , ttl , drwup_dt 
+		            from notice
+		            order by drwup_dt desc
+		            ) a
+		      where rownum <= #{page}*#{perPage}) b
+		where rn > (#{page}-1)*#{perPage}
+		]]>
+	</select>
+	<!-- 공지사항 전체수 -->
+	<select id="noticeTotal">
+		select count(noti_no)
+		from notice
+	</select>
+	
+	<!-- 공지사항 1건 조회 -->
+	<select id="noticeDetail" resultType="NoticeVO">
+		select noti_no , ttl , cntn , drwup_dt , nm nick, n.memb_no
+		from notice n join member m 
+		on n.memb_no = m.memb_no
+		where noti_no = #{notiNo}
+	</select>
 </mapper>

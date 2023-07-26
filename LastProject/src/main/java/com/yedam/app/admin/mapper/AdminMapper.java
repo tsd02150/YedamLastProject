@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.yedam.app.admin.service.MembManageVO;
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.CommentsVO;
+import com.yedam.app.community.service.NoticeVO;
 import com.yedam.app.community.service.ReportVO;
 
 public interface AdminMapper {
@@ -38,4 +39,10 @@ public interface AdminMapper {
 	public int rprtStChange(String rprtNo);
 	// 신고글 삭제
 	public int deleteReport(List<String> list);
+	// 공지사항 리스트
+	public List<NoticeVO> noticeList(@Param("page")int page , @Param("perPage")int perPage);
+	// 공지사항 수
+	public int noticeTotal();
+	// 공지사항 한건 조회
+	public NoticeVO noticeDetail(String notiNo);
 }

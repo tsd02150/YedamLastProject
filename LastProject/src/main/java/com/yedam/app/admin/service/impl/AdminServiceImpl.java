@@ -13,6 +13,7 @@ import com.yedam.app.admin.service.AdminService;
 import com.yedam.app.admin.service.MembManageVO;
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.CommentsVO;
+import com.yedam.app.community.service.NoticeVO;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -105,6 +106,21 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int deleteReport(List<String> list) {
 		return adminMapper.deleteReport(list);
+	}
+	
+	// 공지사항 리스트
+	@Override
+	public Map<String, Object> noticeList(int page, int perPage) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("noticeList", adminMapper.noticeList(page, perPage));
+		map.put("noticeTotal", adminMapper.noticeTotal());
+		return map;
+	}
+
+	// 공지사항 단건조회
+	@Override
+	public NoticeVO noticeDetail(String notiNo) {
+		return adminMapper.noticeDetail(notiNo);
 	}
 	
 	
