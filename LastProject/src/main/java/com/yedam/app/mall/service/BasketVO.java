@@ -31,11 +31,7 @@ public class BasketVO {
 	private String addr;
 	private String detaAddr;
 	
-	@Override
-	   public String toString() {
-	      return "BasketVO [bskNo=" + bskNo + ", membNo=" + membNo + ", prdtNo=" + prdtNo + ", cnt="
-	            + cnt + ", nm=" + nm + ", prc=" + prc + "]";
-	   }
+	
 	
 
 }

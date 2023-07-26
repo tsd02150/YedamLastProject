@@ -112,17 +112,16 @@ public class BasketController {
 //		}
 //	}
 
-
+	
 	// 장바구니 정보 갖고오기
-//	@GetMapping("getBasketList")
-//	@ResponseBody
-//	public List<BasketVO> getBasketList(BasketVO bskVO) {
-//		List<BasketVO> basketItem = basketService.getBasketList(bskVO);
-//
-//		return basketItem;
-//	}
+	@PostMapping("getBasketList")
+	@ResponseBody
+	public List<BasketVO> getBasketList(BasketVO bskVO) {
 
-
+		return basketService.getBasketInfoList(bskVO);
+	}
+	
+	
 //	// 장바구니 페이지 이거야!!!!!!!!!!!!!
 	@GetMapping("basketList")
 	public String basketList(Model model, HttpSession session) {
@@ -130,13 +129,16 @@ public class BasketController {
 		
 		String memNo = ((UserVO) session.getAttribute("loggedInMember")).getMembNo();
 		String prdtNo = ((UserVO) session.getAttribute("loggedInMember")).getPrdtNo();
+		String bskNo = ((UserVO) session.getAttribute("loggedInMember")).getBskNo();
 		//model.addAttribute("member", membVO.getMembNo());
 		//model.addAttribute("basketList", basketService.getBasketList(memNo));
-		
+		model.addAttribute("bskNo", bskNo);
 		model.addAttribute("membNo", memNo);
 		model.addAttribute("prdtNo", prdtNo);
 		List<BasketVO> list = new ArrayList<BasketVO>();
 		list = basketService.getBasketList(memNo);
+		
+		
 		System.out.println("장바구니 리스트 : "+list);
 		model.addAttribute("basketList", list);
 		
@@ -181,19 +183,22 @@ public class BasketController {
 	}
 
 	//장바구니 수량 변경
-//	@PostMapping("updateBasket")
-//	@ResponseBody
-//	public String updateBasket(BasketVO bskVO) {
-//		
-//
-//        return  basketService.updateBasket(bskVO);
-//	}
+	@PostMapping("updateCnt")
+	@ResponseBody
+	public String updateCnt(BasketVO bskVO) {
+		System.out.println("장바구니 수량 확인"+bskVO);
+		if (basketService.updateCnt(bskVO)) {
+			return "success";
+		} else {
+			return "fail";
+		}
+	}
 	
 //	// 장바구니 전체삭제
 	@PostMapping("deleteAllBasket")
 	@ResponseBody
 	public String deleteAllBasket(BasketVO bskVO) {
-
+		System.out.println(bskVO);
 		if (basketService.deleteAllBasket(bskVO)) {
 			return "success";
 		} else {
@@ -205,8 +210,8 @@ public class BasketController {
 	@PostMapping("deleteBasket")
 	@ResponseBody
 	public String deleteBasket(BasketVO bskVO) {
-
-		if (basketService.deleteBasket(bskVO.getPrdtNo())) {
+		System.out.println(bskVO);
+		if (basketService.deleteBasket(bskVO.getBskNo())) {
 			return "success";
 		} else {
 			return "fail";

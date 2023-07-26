@@ -914,8 +914,8 @@ p>img {
 						<td style="text-align: center;" class="maks">${item.maks}</td>
 						<td style="text-align: center;" >${item.membNo}</td>
 						<td style="text-align: center;" >${item.drwupDt}</td>
-						  <td style="text-align: center;">
-					        <button type="button" onClick="deleteReview()" class="delete-review-btn" data-rev-no="${item.revNo}">삭제</button>
+						<td style="text-align: center;">
+					       <button type="button" onclick="deleteReview()" class="delete-review-btn" data-rev-no="${item.revNo}">삭제</button>
 					    </td>
 
 					</tr>
@@ -1021,7 +1021,7 @@ p>img {
        	//console.log("deleteBtn")
        	//console.log($(event.target).closest('tr').children().first().text())
        	
-        fetch("deleteReview", {
+        fetch("/mall/deleteReview", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -1033,8 +1033,8 @@ p>img {
             // 삭제 요청이 성공하면, 해당 리뷰를 리스트 삭제
            // var reviewItem = document.getElementById("review-" + revNo);
             if (result=="success") {
-               window.location.href="/mall/reviewList"
-            		location.reload();
+               //window.location.href="/mall/reviewList"
+            	   location.reload();
             }else {
             	toastShow("Fail Delete", "삭제 실패", "error");
             }
@@ -1242,7 +1242,7 @@ p>img {
 
 				// 폼 제출 시 리뷰 작성 완료 처리
 				
-				document.getElementById("reviewForm").addEventListener("submit", function(event) {
+				/* document.getElementById("reviewForm").addEventListener("submit", function(event) {
 				    event.preventDefault();
 
 				    var reviewContent = document.getElementById("reviewContent").value;
@@ -1272,7 +1272,7 @@ p>img {
 				    // 모달 닫기
 				    document.getElementById("reviewModal").style.display = "none";
 				});
-
+ */
 				
 				/* 이전 페이지 */
 				/* 	var referrer = document.referrer;

@@ -225,14 +225,6 @@
 
 		<script th:inline="javascript">
 		
-	//초기값
- 	let targetPage = [[${startPage}]];
-	let startPage=1;
-	let endPage=10;
-	let totalPrdtCnt; 
-	
-	// 페이징 버튼 생성
- 	/* createPageBtn(); */
 	
 	/* top 버튼 */
 	document.querySelector('.top-btn').addEventListener('click',
@@ -245,15 +237,15 @@
 
 
 	let items=["prdtNo", "prc", "nm", "thumb"];
-	let currentState='[[${prdtCode}]]';
-		 
+	let currentState= [[${prdtCode}]];
+	console.log(currentState);
+	
 	//카테고리 별 정렬
 	$('.ctgr').on('click',function(){
 		productList();
 	});
 	
 	function productList() {
-		console.log("!!!");
 
 		currentState=event.target.dataset.commoncd;
 	    fetch("/mall/getCtgrList", {
@@ -440,25 +432,39 @@
 		}
 	} 
 	
+ 
+	//초기값
+ 	let prdtTargetPage = [[${startPage}]];
+	let prdtStartPage=1;
+	let prdtEndPage=10;
+	let totalPrdtCnt;
+	let nm='';
+	let prc='';
+	let thumb='';
+		
+	// 페이징 버튼 생성
+ 	 createPageBtn(); 
+	 	
 	// 페이징위해 게시물 개수생성 및 페이지생성 호출
-/* 	 function createPageBtn() {
+	 function createPageBtn() {
+		console.log('test');
 		 fetch("/mall/getProductCount", {
 			 method : "POST",
 			 headers : {
 				 'Content-Type' : 'application/x-www-form-urlencoded'
 			 },
-			 body : ''
+			 body : 'commonCd=' + currentState + 'nm=' + nm + '&prc=' + prc + '&thumb=' + thumb
 		 })
 		 .then(result => result.json())
 		 .then(data => {
 			 totalPrdtCnt=data;
-			 if(totalPrdtCnt<=100) {
+			 if(totalPrdtCnt<=50) {
 				 endPage=~~((totalPrdtCnt-1)/10 + 1);
 			 }
-			 if(totalPrdtCnt>100) {
+			 if(totalPrdtCnt>50) {
 				 nextPage.style.visibility="visible";
 			 }
-			 createPageCntBtn(startPage,endPage);
+			 createPageCntBtn(prdtStartPage,prdtEndPage);
 		 })
 	 }
 	 
@@ -472,7 +478,7 @@
 		for(let i=start;i<=end;i++){
 			let liTag = document.createElement('li');
 			liTag.classList.add('page-item','pagebtn');
-			if(i%10==targetPage){
+			if(i%10==prdtTargetPage){
 				liTag.classList.add('active');
 			}
 			let aTag = document.createElement('a');
@@ -486,7 +492,7 @@
 	// 페이징 버튼 클릭
 		function pageMove(page){
 			document.querySelector('.pagebtn.active').classList.remove('active');
-			targetPage=page;
+			prdtTargetPage=page;
 			
 			document.querySelectorAll('.pagebtn').forEach(item=>{
 				if(item.children[0].textContent==page){
@@ -498,47 +504,47 @@
 		// 페이징 < 버튼 클릭
 		function prevPage(){
 			nextpage.style.visibility="visible";
-			startPage-=10;
-			endPage-=10;
-			if(startPage==1){
+			prdtStartPage-=10;
+			prdtEndPage-=10;
+			if(prdtStartPage==1){
 				prevpage.style.visibility="hidden";
 			}
-			createPageCntBtn(startPage,endPage);
-			pageMove(startPage);
+			createPageCntBtn(prdtStartPage, prdtEndPage);
+			pageMove(prdtStartPage);
 		}
 		
 		// 페이징 > 버튼 클릭
 		function nextPage(){
 			prevpage.style.visibility="visible";
-			startPage+=10;
-			endPage+=10;
-			if(endPage>=~~((totalPrdtCnt-1)/10+1)){
-				endPage=~~((totalPrdtCnt-1)/10+1);
+			prdtStartPage+=10;
+			prdtEndPage+=10;
+			if(prdtEndPage>=~~((totalPrdtCnt-1)/10+1)){
+				prdtEndPage=~~((totalPrdtCnt-1)/10+1);
 				nextPage.style.visibility="hidden";
 			}
-			createPageCntBtn(startPage,endPage);
-			pageMove(startPage);
+			createPageCntBtn(prdtStartPage,prdtEndPage);
+			pageMove(prdtStartPage);
 		}
 		
 		function firstPage(){
-			startPage=1;
-			if(endPage>10){
-				endPage=10;
+			prdtStartPage=1;
+			if(prdtEndPage>10){
+				prdtEndPage=10;
 			}
-			createPageCntBtn(startPage,endPage);
-			pageMove(startPage);
+			createPageCntBtn(prdtStartPage,prdtEndPage);
+			pageMove(prdtStartPage);
 		}
 		
 		function lastPage(){
-			if(endPage>10){
-				endPage=~~((totalPrdtCnt-1)/10 + 1);
+			if(prdtEndPage>10){
+				prdtEndPage=~~((totalPrdtCnt-1)/10 + 1);
 			}
-			startPage=endPage-endPage%10+1;
-			console.log(startPage,endPage);
-			createPageCntBtn(startPage,endPage);
-			pageMove(endPage);
+			prdtStartPage=prdtEndPage-prdtEndPage%10+1;
+			console.log(prdtStartPage,prdtEndPage);
+			createPageCntBtn(prdtStartPage,prdtEndPage);
+			pageMove(prdtEndPage);
 		}
-	 */
+	 
 	
 	</script>
 	</div>
