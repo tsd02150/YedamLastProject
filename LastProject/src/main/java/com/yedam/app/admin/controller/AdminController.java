@@ -18,7 +18,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.admin.service.AdminService;
 import com.yedam.app.admin.service.MembManageVO;
+import com.yedam.app.community.service.BoardVO;
+import com.yedam.app.community.service.ChatVO;
+import com.yedam.app.community.service.FaqVO;
 import com.yedam.app.community.service.NoticeVO;
+import com.yedam.app.community.service.QuestionVO;
 import com.yedam.app.community.service.ReportVO;
 //김태연 2023/07/24 admin 페이지
 @Controller
@@ -52,6 +56,21 @@ public class AdminController {
 	@GetMapping("adminProduct")
 	public String adminProduct() {
 		return "admin/adminProduct";
+	}
+	// qna/faq 페이지 이동
+	@GetMapping("adminQNA")
+	public String adminQNA() {
+		return "admin/adminQNA";
+	}
+	// adminBoard 페이지 이동
+	@GetMapping("adminBoard")
+	public String adminBoard() {
+		return "admin/adminBoard";
+	}
+	// adminChat 페이지로 이동
+	@GetMapping("adminChat")
+	public String adminChat() {
+		return "admin/adminChat";
 	}
 	// 회원리스트
 	@SuppressWarnings("unchecked")
@@ -104,6 +123,76 @@ public class AdminController {
 	        dataMap.put("pagination", paginationMap);
 		        paginationMap.put("page", page);
 		        paginationMap.put("totalCount", (Integer)resultMap.get("noticeTotal"));
+        return objectMap;
+	}
+	
+	// qna 리스트
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	@GetMapping("qnaList")
+	public Map<String,Object> qnaList(int page , int perPage){
+		Map<String,Object> objectMap = new HashMap<>();
+		Map<String,Object> dataMap = new HashMap<>();
+		Map<String,Object> paginationMap = new HashMap<>();
+		Map<String,Object> resultMap = adminService.qnaList(page , perPage);
+		objectMap.put("result", true);
+        objectMap.put("data", dataMap);
+	        dataMap.put("contents", (List<QuestionVO>)resultMap.get("qnaList"));
+	        dataMap.put("pagination", paginationMap);
+		        paginationMap.put("page", page);
+		        paginationMap.put("totalCount", (Integer)resultMap.get("qnaTotal"));
+        return objectMap;
+	}
+	
+	// faq 리스트
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	@GetMapping("faqList")
+	public Map<String,Object> faqList(int page , int perPage){
+		Map<String,Object> objectMap = new HashMap<>();
+		Map<String,Object> dataMap = new HashMap<>();
+		Map<String,Object> paginationMap = new HashMap<>();
+		Map<String,Object> resultMap = adminService.faqList(page , perPage);
+		objectMap.put("result", true);
+        objectMap.put("data", dataMap);
+	        dataMap.put("contents", (List<FaqVO>)resultMap.get("faqList"));
+	        dataMap.put("pagination", paginationMap);
+		        paginationMap.put("page", page);
+		        paginationMap.put("totalCount", (Integer)resultMap.get("faqTotal"));
+        return objectMap;
+	}
+	// board 리스트
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	@GetMapping("boardList")
+	public Map<String,Object> boardList(int page , int perPage){
+		Map<String,Object> objectMap = new HashMap<>();
+		Map<String,Object> dataMap = new HashMap<>();
+		Map<String,Object> paginationMap = new HashMap<>();
+		Map<String,Object> resultMap = adminService.boardList(page , perPage);
+		objectMap.put("result", true);
+        objectMap.put("data", dataMap);
+	        dataMap.put("contents", (List<BoardVO>)resultMap.get("boardList"));
+	        dataMap.put("pagination", paginationMap);
+		        paginationMap.put("page", page);
+		        paginationMap.put("totalCount", (Integer)resultMap.get("boardTotal"));
+        return objectMap;
+	}
+	// chat 리스트
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	@GetMapping("chatList")
+	public Map<String,Object> chatList(int page , int perPage){
+		Map<String,Object> objectMap = new HashMap<>();
+		Map<String,Object> dataMap = new HashMap<>();
+		Map<String,Object> paginationMap = new HashMap<>();
+		Map<String,Object> resultMap = adminService.chatList(page , perPage);
+		objectMap.put("result", true);
+        objectMap.put("data", dataMap);
+	        dataMap.put("contents", (List<ChatVO>)resultMap.get("chatList"));
+	        dataMap.put("pagination", paginationMap);
+		        paginationMap.put("page", page);
+		        paginationMap.put("totalCount", (Integer)resultMap.get("chatTotal"));
         return objectMap;
 	}
 	//회원정지
