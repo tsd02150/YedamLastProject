@@ -1,8 +1,11 @@
 package com.yedam.app.admin.controller;
 
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -72,23 +75,53 @@ public class AdminController {
 	//회원정지
 	@ResponseBody
 	@GetMapping("memberBan")
-	public int memberBan(@RequestParam List<String> list	, Integer period) {
-		return adminService.memberBan(list, period);
+	public int memberBan(@RequestParam List<String> list	, Integer period , HttpServletRequest request) {
+		
+		int result = adminService.memberBan(list, period);
+		if(result > 0) {
+			Enumeration<String> attributes = request.getSession().getAttributeNames();
+			while (attributes.hasMoreElements()) {
+			    String attribute = (String) attributes.nextElement();
+			    System.err.println(attribute+" : "+request.getSession().getAttribute(attribute));
+			}
+
+		}
+		return result;
 	}
 	
 	//회원삭제
 	@ResponseBody
 	@PostMapping("deleteMemb")
 	public int deleteMemb(@RequestBody List<String> rowKeys) {
-		int result = adminService.deleteMember(rowKeys);
-		return result;
+		return adminService.deleteMember(rowKeys);
 	}
 	
 	//회원 정지해제
 	@ResponseBody
 	@GetMapping("returnMemb")
 	public int returnMemb(@RequestParam List<String> list) {
-		int result = adminService.returnNorm(list);
-		return result;
+		return adminService.returnNorm(list);
+	}
+	
+	// 신고글 정보
+	@ResponseBody
+	@GetMapping("reportInfo")
+	public Map<String ,Object> reportInfo(String accused , String rprtNo){
+		return adminService.reportInfo(accused,rprtNo);
+	}
+	
+	//신고글처리상태 변경
+	@ResponseBody
+	@GetMapping("rprtStChange")
+	public int rprtStChange(String rprtNo) {
+		System.out.println("cont "+rprtNo);
+		return adminService.rprtStChange(rprtNo);
+	}
+	
+	// 신고글 삭제
+	@ResponseBody
+	@PostMapping("deleteReport")
+	public int deleteReport(@RequestBody List<String> list) {
+		return adminService.deleteReport(list);
 	}
 }

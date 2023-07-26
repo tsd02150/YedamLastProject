@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.yedam.app.admin.service.MembManageVO;
+import com.yedam.app.community.service.BoardVO;
+import com.yedam.app.community.service.CommentsVO;
 import com.yedam.app.community.service.ReportVO;
 
 public interface AdminMapper {
@@ -26,4 +28,14 @@ public interface AdminMapper {
 	public List<ReportVO> reportList(@Param("page")int page , @Param("perPage")int perPage);
 	// 신고글 전체수
 	public int reportCnt();
+	// 피고 정보 (글)
+	public BoardVO getReportBoard(String boardNo);
+	// 피고 정보 (댓글)
+	public List<CommentsVO> getReportComments(@Param("accused")String accused ,@Param("boardNo") String boardNo);
+	// 신고번호로 글번호조회
+	public String rprtNoGetBNo(String rprtNo);
+	// 신고글처리 상태 변경
+	public int rprtStChange(String rprtNo);
+	// 신고글 삭제
+	public int deleteReport(List<String> list);
 }
