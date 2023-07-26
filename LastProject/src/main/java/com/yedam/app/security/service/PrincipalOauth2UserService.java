@@ -37,7 +37,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 		
 		String providerId = oauth2UserInfo.getProviderId();
 		
-		//String uuid = UUID.randomUUID().toString().substring(0, 6);
 		String username = provider; //+ "_" + uuid;
 		String pwd = pwEncord.encode("1234");
 		if(oauth2UserInfo.getNick()!=null) {
@@ -48,6 +47,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 		String email = oauth2UserInfo.getEmail();
 		
 		UserVO userVO = userMapper.loginCheck(email);
+		
+		//로그인 X -> 회원가입 진행
 		if(userVO == null) {
 			userVO = new UserVO();
 			userVO.setEmail(email);

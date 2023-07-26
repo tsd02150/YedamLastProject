@@ -48,4 +48,5 @@ public class UserVO{
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date endDt;
 	private String stopPeriod;
+	
 }

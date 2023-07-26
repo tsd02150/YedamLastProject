@@ -69,38 +69,12 @@ public class MemberController {
 	@Autowired
 	private PasswordEncoder pwEncoder;
 
-	//로그아웃
-	/*
-	 * @GetMapping("logout") public String logout(HttpSession session) {
-	 * session.invalidate(); System.out.println("로그아웃"); return "redirect:/"; }
-	 */
-	
-	//로그인 페이지
-	/*@PostMapping("mainLogin")
-	public String loginPost(@RequestParam String id, @RequestParam String pwd, MembVO membVO, Model model, HttpSession session) {
-		System.out.println(membService.selectOneMemb(id).getPwd());
-		System.out.println(membVO.getPwd());
-		if(pwEncoder.matches(membService.selectOneMemb(id).getPwd(), membVO.getPwd())) {
-			MembVO loggedInMember = membService.mainLoginCheck(membVO);
-			System.out.println(loggedInMember);
-			if (loggedInMember.getTempPwd() == null) {
-				// 로그인 성공한 경우
-				session.setAttribute("loggedInMember", loggedInMember); // 세션에 member 정보 저장
-				System.out.println("로그인성공");
-				return "redirect:/"; // 로그인 후 메인 페이지로 리다이렉트
-			} else{
-				model.addAttribute("id", loggedInMember.getId());
-				session.setAttribute("loggedInMember", loggedInMember); // 세션에 member 정보 저장
-				System.out.println("로그인성공(임시비밀번호)");
-				return "member/tempPwdUpdate";
-			}
-		}else {
-	        // 로그인 실패한 경우
-	    	System.out.println("일반 로그인 실패");
-	    	model.addAttribute("message", "아이디 또는 비밀번호가 틀렸습니다."); // 세션에 member 정보 저장	    	
-	        return "redirect:/"; // 로그인 실패 시 다시 loginForm 호출
-	    }
-	}*/
+	@ResponseBody
+	@PostMapping("removeNoAccess")
+	public String removeNoAccess(HttpSession session) {
+		session.removeAttribute("noAccess");
+		return "success";
+	}
 	
 	//회원가입 Form
 	@GetMapping("join")
@@ -634,6 +608,7 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping("dealList")
 	public List<DealVO> dealList(DealVO vo){
+		System.out.println("거래내역 리스트"+vo);
 		return membService.dealList(vo);
 	}
 	
