@@ -1,21 +1,21 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{admin/adminLayout}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/adminLayout}">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
 	<div layout:fragment="content">
-      <div id="grid"></div>
-      
-      <script>
+		<div id="grid"></div>
+
+		<script>
       const dataSource = {
     		  contentType: 'application/json',
     		  api: {
     			  readData: {
-    				url:'/admin/memberList',
+    				url:'/admin/reportList',
     				method:'GET' 
     			}
     		  }
@@ -31,12 +31,40 @@
                  perPage: 5,
                },
              columns: [
-            	 {
-                     header: '멤버번호',
-                     name: 'membNo',
+            	   {
+                     header: '신고번호',
+                     name: 'rprtNo',
                      filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
                    },
+                  	{
+                      header: '신고처리',
+                      name: 'rprtSt',
+                      filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                   	},
+                  	{
+                      header: '피고',
+                      name: 'accused',
+                      filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                    },
+                  	{
+                      header: '원고',
+                      name: 'plaintiff',
+                      filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                    },
+                  	{
+                      header: '신고종류',
+                      name: 'category',
+                      filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                    },
+                 	{
+                      header: '신고일시',
+                      name: 'drwupDt',
+                      sortingType: 'asc',
+                      sortable: true
+                    }
+                 ]
+               });
       </script>
-     </div>
+	</div>
 </body>
 </html>

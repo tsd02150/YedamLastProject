@@ -79,4 +79,24 @@
 			</foreach>
 		)
 	</update>
+	
+	<!-- 신고된 글 리스트 -->
+	<select id="reportList" resultType="ReportVO">
+		<![CDATA[
+		select b.*
+		from (select rownum rn, a.*
+		      from(
+		              select rprt_no ,rprt_st, accused , plaintiff, category , drwup_dt
+		              from report
+		              order by drwup_dt
+		            ) a
+		      where rownum <= #{page}*#{perPage}) b
+		where rn > (#{page}-1)*#{perPage}
+		]]>
+	</select>
+	<!-- 신고글 개수 -->
+	<select id="reportCnt">
+		select count(rprt_no)
+		from report
+	</select>
 </mapper>

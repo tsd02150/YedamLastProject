@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.yedam.app.admin.mapper.AdminMapper;
 import com.yedam.app.admin.service.AdminService;
 import com.yedam.app.admin.service.MembManageVO;
+import com.yedam.app.community.service.ReportVO;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -72,6 +73,14 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int returnNorm(List<String> list) {
 		return adminMapper.returnNorm(list);
+	}
+	// 신고글 리스트
+	@Override
+	public Map<String,Object> reportList(int page, int perPage) {
+		Map<String,Object> map = new HashMap<>();
+		map.put("reportList", adminMapper.reportList(page, perPage));
+		map.put("reportTotal", adminMapper.reportCnt());
+		return map;
 	}
 
 }

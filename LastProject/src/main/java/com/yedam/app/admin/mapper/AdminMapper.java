@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.yedam.app.admin.service.MembManageVO;
+import com.yedam.app.community.service.ReportVO;
 
 public interface AdminMapper {
 	// 멤버리스트
@@ -21,4 +22,8 @@ public interface AdminMapper {
 	public List<String> bannedMemb();
 	// 정지기간 추가
 	public int addBanPeriod(@Param("list")List<String> list , @Param("period") Integer period);
+	// 신고 리스트
+	public List<ReportVO> reportList(@Param("page")int page , @Param("perPage")int perPage);
+	// 신고글 전체수
+	public int reportCnt();
 }

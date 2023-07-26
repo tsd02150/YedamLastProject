@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.yedam.app.admin.service.AdminService;
 import com.yedam.app.admin.service.MembManageVO;
+import com.yedam.app.community.service.ReportVO;
 //김태연 2023/07/24 admin 페이지
 @Controller
 @RequestMapping("admin")
@@ -23,11 +24,16 @@ public class AdminController {
 	@Autowired
 	AdminService adminService;
 	
+	// 회원관리 페이지 이동
 	@GetMapping("memberManage")
 	public String memberManage() {
 		return "admin/adminMember";
 	}
-	
+	// 신고관리 페이지 이동
+	@GetMapping("reportManage")
+	public String reportManage() {
+		return "admin/adminReport";
+	}
 	// 회원리스트
 	@SuppressWarnings("unchecked")
 	@ResponseBody
@@ -46,6 +52,23 @@ public class AdminController {
         return objectMap;
 	}
 	
+	// 신고글 리스트
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	@GetMapping("reportList")
+	public Map<String,Object> reportList(int page , int perPage){
+		Map<String,Object> objectMap = new HashMap<>();
+		Map<String,Object> dataMap = new HashMap<>();
+		Map<String,Object> paginationMap = new HashMap<>();
+		Map<String,Object> resultMap = adminService.reportList(page , perPage);
+		objectMap.put("result", true);
+        objectMap.put("data", dataMap);
+	        dataMap.put("contents", (List<ReportVO>)resultMap.get("reportList"));
+	        dataMap.put("pagination", paginationMap);
+		        paginationMap.put("page", page);
+		        paginationMap.put("totalCount", (Integer)resultMap.get("reportTotal"));
+        return objectMap;
+	}
 	//회원정지
 	@ResponseBody
 	@GetMapping("memberBan")
