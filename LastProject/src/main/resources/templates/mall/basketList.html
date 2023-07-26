@@ -518,22 +518,42 @@
 		
 		
 	/*  ※ 세자리 컴마 Javscript Number 객체의 toLocaleString()  */
-		let basketInfo = [[${basketList}]]; // 장바구니 리스트 정보
-		console.log(basketInfo);
-		let totalPrice=0;
-		for(let item of basketInfo){
-			console.log(item);
-			totalPrice+=item.prc-item.prc*item.dcRate/100;
-		}
-		console.log(totalPrice)
+let basketInfo = [[${basketList}]]; // 장바구니 리스트 정보
+console.log(basketInfo);
+
+let totalPrice = 0;
+let totalCount = 0;
+
+let shipping = totalPrice >= 20000? 0 : 3000;
+
+
+
+for (let item of basketInfo) {
+  console.log(item);
+  
+  totalPrice += (item.prc - (item.prc * item.dcRate / 100)) * item.cnt;
+  totalCount += item.cnt; // 물품의 개수를 totalCount에 더합니다.
+
+  //shipping += totalPrice >= 20000 ? 0 : 3000; // 물품의 배송비를 shipping에 더합니다. 주문 금액이 20,000 이상인 경우 0, 그렇지 않은 경우 3,000을 추가합니다.
+
+
+	if(totalPrice >= 20000){
+		shipping = 0;
+	} else if(totalPrice == 0){
+		shipping = 0;
+	} else {
+		shipping = 3000;	
+	}
+}
+	
+		
 		// 총 가격
 		 $(".totalPrice_span").text(totalPrice);
 		// 총 갯수
 		$(".totalCount_span").text(totalCount);
 		// 총 종류
 		$(".totalKind_span").text(totalKind);
-		// 총 마일리지
-		$(".totalPoint_span").text(totalPoint.toLocaleString());
+		
 		// 배송비
 		$(".delivery_price").text(deliveryPrice);	
 		// 최종 가격(총 가격 + 배송비)

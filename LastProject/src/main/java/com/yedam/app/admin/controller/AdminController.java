@@ -43,6 +43,16 @@ public class AdminController {
 	public String adminNotice() {
 		return "admin/adminNotice";
 	}
+	//주문처리관리 페이지 이동
+	@GetMapping("adminOrder")
+	public String adminOrder() {
+		return "admin/adminOrder";
+	}
+	//제품관리 페이지 이동
+	@GetMapping("adminProduct")
+	public String adminProduct() {
+		return "admin/adminProduct";
+	}
 	// 회원리스트
 	@SuppressWarnings("unchecked")
 	@ResponseBody

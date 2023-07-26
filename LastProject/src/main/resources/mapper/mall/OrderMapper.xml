@@ -6,15 +6,18 @@
 <mapper namespace="com.yedam.app.mall.mapper.OrderMapper">
 
 	<select id="getOrderList" resultType="OrderVO">
-	SELECT *
+		 SELECT * FROM ( SELECT * FROM BASKET B JOIN PRODUCT P USING(prdt_no)) 
+			J JOIN MEMBER M ON M.memb_no= J.memb_no WHERE M.memb_no=#{membNo} ORDER BY 
+			prdt_no DESC 
+		<!-- SELECT *
 		FROM (
-		SELECT *
-		FROM BASKET B JOIN PRODUCT P
-		USING(prdt_no)) J JOIN MEMBER M
-		ON M.memb_no= J.memb_no
-		WHERE M.memb_no=#{membNo}
-		ORDER BY prdt_no DESC
-   
+			SELECT *
+			FROM BASKET B
+				JOIN PRODUCT P ON B.prdt_no = P.prdt_no ) J
+				JOIN MEMBER M ON J.memb_no = M.memb_no
+				JOIN ADDRESS A ON M.memb_no = A.memb_no
+				WHERE M.memb_no = #{membNo} -->
+
 	</select>
 
 
