@@ -5,18 +5,6 @@
 
 <mapper namespace="com.yedam.app.mall.mapper.BasketMapper">
 
-
-	<!-- 카트 추가 -->
-	<!-- <insert id="addBasket"> insert into basket(memb_no, prdt_no, cnt, bsk_no) 
-		values(#{membNo}, #{prdtNo}, #{cnt}, #{bskNo}) </insert> 카트 삭제 <delete id="deleteBasket"> 
-		delete from basket where bsk_no = #{bskNo} </delete> 카트 수량 수정 <update id="modifyCount"> 
-		update basket set cnt=#{cnt} where bsk_no = #{bskNo} </update> 카트 목록 <select 
-		id="getBasket" resultType="BasketVO"> SELECT * FROM ( SELECT * FROM BASKET 
-		B JOIN PRODUCT P USING(prdt_no)) J JOIN MEMBER M ON M.memb_no= J.memb_no 
-		ORDER BY prdt_no DESC </select> 카트 확인 <select id="checkBasket" resultType="BasketVO"> 
-		select * from basket where memb_no = #{membNo} and prdt_no = #{prdtNo} </select> -->
-
-
 	<select id="selectCountInBasket" resultType="String"
 		parameterType="BasketVO">
 		<![CDATA[
@@ -27,9 +15,20 @@
 
 	</select>
 
-
 	<!-- 전체조회 basketVO + productVO + memberVO -->
 	<select id="getBasketList" resultType="BasketVO">
+		SELECT *
+		FROM (
+		SELECT *
+		FROM BASKET B JOIN PRODUCT P
+		USING(prdt_no)) J JOIN MEMBER M
+		ON
+		M.memb_no= J.memb_no
+		WHERE M.memb_no=#{membNo}
+		ORDER BY prdt_no DESC
+	</select>
+	
+	<select id="getBasketInfoList" resultType="BasketVO">
 		SELECT *
 		FROM (
 		SELECT *
@@ -45,19 +44,13 @@
 	<insert id="addCartItem" parameterType="BasketVO">
 		<selectKey keyProperty="bskNo" resultType="String"
 			order="BEFORE">
-			SELECT CONCAT('bsk_', NVL(MAX(TO_NUMBER(SUBSTR(bsk_no, 5))),
+			SELECT CONCAT('bsk-', NVL(MAX(TO_NUMBER(SUBSTR(bsk_no, 5))),
 			0)+1)
 			FROM BASKET
 		</selectKey>
 		insert into basket(BSK_NO,MEMB_NO,PRDT_NO,CNT)
 		values(#{bskNo},#{membNo},#{prdtNo},#{cnt})
 	</insert>
-
-	<!-- 전체삭제 -->
-	<delete id="deleteAllBasket">
-		DELETE FROM BASKET
-
-	</delete>
 
 	<select id="getIntPrdt" resultType="String">
 		SELECT memb_no
@@ -72,18 +65,22 @@
 	</select>
 
 	<!-- 장바구니 수량 업데이트 -->
-	<update id="updateBasket" parameterType="BasketVO">
+	<update id="updateCnt" parameterType="BasketVO">
 		UPDATE BASKET
 		SET cnt = #{cnt}
-		WHERE prdt_no = #{prdtNo};
+		WHERE bsk_no = #{bskNo}
 	</update>
 
 	<!-- 선택 상품 삭제 -->
 	<delete id="deleteBasket" parameterType="String">
 		DELETE FROM BASKET
-		WHERE
-		prdt_no=#{prdtNo}
+		WHERE bsk_no=#{bskNo}
 	</delete>
-
+	
+	<!-- 장바구니 전체 비우기 -->
+	<delete id="deleteAllBasket" parameterType="BasketVO">
+		DELETE FROM BASKET
+	
+	</delete> 
 
 </mapper>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	  layout:decorate="~{admin/adminLayout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="../community/css/board.css">
+<style>
+	.swal-cls{
+		width:950px !important;
+	}
+	#reportDiv #boardCntn{
+		height:300px;
+		overflow:hidden;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+	}
+	#boardCntn * {
+		text-align: left;
+	}
+	
+</style>
+</head>
+<body>
+	<div layout:fragment="content">
+		<h3>공지사항</h3>
+		<div class="m-2">
+		  	<button id="writeBtn" class="btn btn-success btn-sm">작성</button>
+		  	<button id="deleteBtn" class="btn btn-danger btn-sm">삭제</button>
+		</div>
+		
+		<div id="grid"></div>
+		
+		<script
+			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+		<script
+			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
+		<script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+		<script>
+			const dataSource = {
+	    		  contentType: 'application/json',
+	    		  api: {
+	    			  readData: {
+	    				url:'/admin/noticeList',
+	    				method:'GET' 
+	    			}
+	    		  }
+	    		};
+	      
+	        const grid = new tui.Grid({
+	             el: document.getElementById('grid'),
+	             rowHeaders: ['rowNum','checkbox'],
+	             data:dataSource,
+	             scrollX: false,
+	             scrollY: false,
+	   		  	 pageOptions: {
+	                 perPage: 5,
+	               },
+	             columns: [
+	            	   {
+	                     header: '공지번호',
+	                     name: 'notiNo',
+	                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+	                   },
+	                  	{
+	                      header: '제목',
+	                      name: 'ttl',
+	                      filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+	                   	},
+	                  	{
+	                      header: '작성일시',
+	                      name:'drwupDt',
+	                      sortingType: 'asc',
+	                      sortable: true
+	                    }
+	                 ]
+	               });
+	        
+	        grid.on('dblclick',(ev) => {
+	        	// 공지사항정보
+	        	let notiNo = $('td[data-row-key='+ev.rowKey+'][data-column-name=notiNo]').children(0).text();
+	        	//신고된 글 내용 불러오기
+	        	$.ajax('noticeDetail?notiNo='+notiNo).done(function(data){
+	        		console.log(data);
+	        		
+	        		Swal.fire({
+	            		title:'공지사항',
+	            		html:`
+	            			<div id="reportDiv">
+	            			<table class="table h6">
+								<tr>
+									<th style="width:15%;">작성자</th>
+									<td style="width:35%;">${data.nick}</td>
+									<th style="width:15%;">작성일</th>
+									<td style="width:35%;">${data.drwupDt}</td>
+								</tr>
+								<tr>
+								<th>제목</th>
+									<td colspan="3">
+										<div id="boardTtl">
+											<p style="text-align:left;">${data.ttl}</p>
+										</div>
+									</td>
+								</tr>	
+								<tr>
+									<th>내용</th>
+									<td colspan="3" class="text-left">
+										<div id="boardCntn" >
+											<textarea></textarea>
+										</div>
+									</td>
+								</tr>
+							</table>
+							</div>`,
+						customClass: 'swal-cls',
+						showDenyButton: true,
+						showCancelButton:true,
+						cancelButtonText:'취소',
+		    		    confirmButtonText: '수정',
+		    		    denyButtonText: '글삭제'
+	        		}).then((result) => {	
+	        			
+	        			if(result.isConfirmed){
+	        				// 활동정지
+	        				(async () => {
+	                  		    await Swal.fire({
+	                  		        title: accused + ' 회원 활동정지',
+	                  		        text: '정지 기간을 선택해주세요',
+	                  		        input: 'select',
+	                  		        inputOptions: {
+	                  		            5: '5일정지',
+	                  		            10: '10일정지',
+	                  		            15: '15일정지',
+	                  		            30: '30일정지'
+	                  		          },
+	                  		        showCancelButton: true,
+	                  		        inputPlaceholder: '정지기간선택'
+	                  		    }).then(result =>{
+	                  		    	if(result.isConfirmed){
+	                  		    		console.log(result.value);
+	                  		    		let period = result.value;
+	                  		    		
+	                  		    		$.ajax('/admin/memberBan?list='+[accused]+'&period='+period).done(function(data){
+	                  		    			if(data > 0){
+	                  		    				$.ajax('rprtStChange?rprtNo='+rprtNo).done(function(data){
+	                  		    					if(data >0){
+	                  		    						Swal.fire(accused +' 회원 '+ result.value+' 일 정지 성공');
+	                          		    				$('td[data-row-key='+ev.rowKey+'][data-column-name=rprtSt]').text("Y");
+	                  		    					}else{
+	                  		    						Swal.fire('신고처리실패..')
+	                  		    					}
+	                  		    				});//end of ajax
+	                  		    				
+	                  		    			}else{
+	                  		    				Swal.fire('회원정지실패..')
+	                  		    			}
+	                  		    		});//end of ajax
+	                  		    		
+	                  		    	}else if(result.isDismissed){
+	                  		    		// 취소
+	                      		    	
+	                  		    	};
+	                  		    });
+	                  		})()
+	        			}else if(result.isDenied){
+	        				// 삭제 기능
+	        				Swal.fire({
+							  title: '삭제하시겠습니까?',
+							  showDenyButton: true,
+							  confirmButtonText: '삭제',
+							  denyButtonText: `취소`,
+							}).then((result) => {
+							  /* Read more about isConfirmed, isDenied below */
+							  if (result.isConfirmed) {
+								  // 서버에 삭제 요청을 보냅니다.
+								    $.ajax({
+								      type: 'POST', // 또는 DELETE에 맞는 HTTP 메서드를 사용합니다.
+								      url: '/admin/deleteReport',
+								      contentType:'application/json',
+								      data: JSON.stringify([rprtNo]),
+								      success: function(response) {
+								        // 삭제 요청이 성공한 경우, 그리드에서 선택된 행을 제거합니다.
+								        Swal.fire('삭제완료!')
+								        grid.removeRow(ev.rowKey)
+								      },
+								      error: function(err) {
+								        console.error('행 삭제 오류:', err);
+								      }
+								    });
+							  } else if (result.isDenied) {
+							    Swal.fire('취소됐음')
+							  }
+							})//end of swal
+	        			}//end of else if
+	        		})//end of then
+	            	})// end of done
+	        	});//end of dblclick 기능
+	        	
+	        	
+		</script>
+	</div>
+</body>
+</html>

@@ -31,19 +31,16 @@
 
 
 	<!-- 상품게시물 갯수 -->
-<!-- 	<select id="getProductCount" resultType="int">
+	<select id="getProductCount" resultType="int">
 		SELECT *
 		FROM PRODUCT P JOIN COMMON_CODE C
 		USING(common_cd)
-		<choose>
-			
-		</choose>
-		
+	
 		WHERE common_cd Like #{commonCd}||'%'
 		ORDER BY prdt_no DESC
 
 	</select>
- -->
+
 	<!-- 카테고리 리스트 -->
 	<select id="getCategoryName" resultType="CommonCodeVO">
 		SELECT ctgr, common_cd

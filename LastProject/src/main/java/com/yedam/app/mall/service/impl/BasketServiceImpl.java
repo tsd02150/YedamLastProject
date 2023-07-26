@@ -37,8 +37,8 @@ public class BasketServiceImpl implements BasketService {
 	
 	//단건 삭제
 	@Override
-	public boolean deleteBasket(String prdtNo) {
-		return basketMapper.deleteBasket(prdtNo) >0;
+	public boolean deleteBasket(String bskNo) {
+		return basketMapper.deleteBasket(bskNo) >0;
 	}
 
 	@Override
@@ -53,8 +53,14 @@ public class BasketServiceImpl implements BasketService {
 
 	//장바구니 수량 업데이트
 	@Override
-	public boolean updateBasket(BasketVO bskVO) {
-		return basketMapper.updateBasket(bskVO)>0;
+	public boolean updateCnt(BasketVO bskVO) {
+		return basketMapper.updateCnt(bskVO)>0;
+	}
+
+	//장바구니 정보 리스트
+	@Override
+	public List<BasketVO> getBasketInfoList(BasketVO bskVO) {
+		return basketMapper.getBasketInfoList(bskVO);
 	}
 
 }

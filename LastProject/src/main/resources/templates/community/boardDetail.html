@@ -121,7 +121,7 @@
 						</button>
 						<ul class="dropdown-menu">
 							<li th:each="attach:${attachList}">
-								<a class="dropdown-item" th:href="${attach.atchNm}" th:download="${attach.atchOriginNm}">[[${attach.atchOriginNm}]]</a>
+								<a class="dropdown-item attachList" th:href="|/downloadFile?savename=${attach.atchNm}&originname=${attach.atchOriginNm}|">[[${attach.atchOriginNm}]]</a>
 							</li>
 						</ul>
 					</div>
@@ -294,6 +294,7 @@
 		
 		<script th:inline="javascript">
 			contentBody.innerHTML=[[${board.cntn}]];
+						
  			document.querySelectorAll('section.subComment').forEach(sub=>{
  				let targetText=sub.querySelector('p.commentContent').textContent;
 				let hashTagStart=targetText.indexOf("@");
@@ -709,8 +710,8 @@
 				.then(result=>{
 					decalreNick.innerText=result.membInfo.nick;
 					accused.value=result.membInfo.membNo;
-					plaintiff.value=[[${member.membNo}]];
-					myNick.innerText=[[${member.nick}]];
+					plaintiff.value=[[${myInfo.membNo}]];
+					myNick.innerText=[[${myInfo.nick}]];
 					$('#declareModal').css('display', 'block');
 				})
 				.catch(err=>console.log(err));

@@ -15,6 +15,7 @@ import com.yedam.app.stock.mapper.StockMapper;
 import com.yedam.app.stock.service.ItemInfoVO;
 import com.yedam.app.stock.service.StockService;
 
+
 @SpringBootTest
 class LastProjectApplicationTests {
 
@@ -79,10 +80,31 @@ class LastProjectApplicationTests {
 	
 	@Test
 	public void adminTest() {
-//		List<MembManageVO> list = adminService.getMembList(null, null);
-//		for(MembManageVO vo : list) {
-//			System.out.println(vo.getNm());
-//		}
+		List<String> list = new ArrayList<>();
+		list.add("mem-1");
+		list.add("mem-2");
+		list.add("mem-3");
+		System.out.println("시작");
+		System.out.println("list : " + list);
+		List<String> banList = adminMapper.bannedMemb();
+		System.out.println("banList : " +banList);
+		List<String> nestList = new ArrayList<>();
+		for(String str : list) {
+			int cnt = 0;
+			for(String str2 : banList) {
+				if(str.equals(str2)) {
+					cnt++;
+					System.out.println("nest : "+str);
+					nestList.add(str);
+				}
+			}
+			System.out.println("after for2 cnt : "+ cnt);
+			if(cnt > 0) {
+				continue;
+			}else {
+				System.out.println("result : " + str);
+			}
+		}
 		
 		
 	}

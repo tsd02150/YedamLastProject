@@ -59,6 +59,9 @@
 				#{item}
 			</foreach>
 		)
+		<![CDATA[
+		and end_dt > sysdate
+		]]>
 	</update>
 	
 	<!-- 정지된 회원 조회 -->
@@ -70,13 +73,105 @@
 	
 	<!-- 정지기간 추가 -->
 	<update id="addBanPeriod">
+	
 		update stop_yn
 		set end_dt = end_dt + #{period}
-		, period = period + #{period}
+		, stop_period = stop_period + #{period}
 		where memb_no in (
 			<foreach collection="list" item="item" separator=",">
 				#{item}
 			</foreach>
 		)
+		<![CDATA[
+		and end_dt > sysdate
+		]]>
 	</update>
+	
+	<!-- 신고된 글 리스트 -->
+	<select id="reportList" resultType="ReportVO">
+		<![CDATA[
+		select b.*
+		from (select rownum rn, a.*
+		      from(
+		              select rprt_no ,rprt_st, accused , plaintiff, category , drwup_dt
+		              from report
+		              order by drwup_dt
+		            ) a
+		      where rownum <= #{page}*#{perPage}) b
+		where rn > (#{page}-1)*#{perPage}
+		]]>
+	</select>
+	<!-- 신고글 개수 -->
+	<select id="reportCnt">
+		select count(rprt_no)
+		from report
+	</select>
+	
+	<!-- 피고 글 -->
+	<select id="getReportBoard" >
+		select b.memb_no , m.nm nick, ttl , cntn , drwup_dt  
+		from board b join member m
+		on b.memb_no = m.memb_no
+		where board_no = #{boardNo}
+	</select>
+	<!-- 피고 댓글 -->
+	<select id="getReportComments" resultType="CommentsVO">
+		select cntn , drwup_dt , memb_no 
+		from comments 
+		where memb_no = #{accused}
+		and board_no = #{boardNo}
+		order by drwup_dt
+	</select>
+	
+	<!-- 신고번호로 글번호 조회 -->
+	<select id="rprtNoGetBNo">
+		select board_no 
+		from report
+		where rprt_no = #{rprtNo}
+	</select>
+	
+	<!-- 신고글 처리상태 변경 -->
+	<update id="rprtStChange" >
+		update report
+		set rprt_st = 'Y'
+		where rprt_no = #{rprtNo}
+	</update>
+	
+	<!-- 신고글 삭제 -->
+	<delete id="deleteReport" >
+		delete from report
+		where rprt_no in (
+			<foreach collection="list" item="item" separator=",">
+				#{item}
+			</foreach>
+		)
+	</delete>
+	
+	<!-- 공지사항 조회 -->
+	<select id="noticeList" resultType="NoticeVO">
+	<![CDATA[
+		select b.*
+		from (select rownum rn, a.*
+		      from(
+		            select noti_no , ttl , drwup_dt 
+		            from notice
+		            order by drwup_dt desc
+		            ) a
+		      where rownum <= #{page}*#{perPage}) b
+		where rn > (#{page}-1)*#{perPage}
+		]]>
+	</select>
+	<!-- 공지사항 전체수 -->
+	<select id="noticeTotal">
+		select count(noti_no)
+		from notice
+	</select>
+	
+	<!-- 공지사항 1건 조회 -->
+	<select id="noticeDetail" resultType="NoticeVO">
+		select noti_no , ttl , cntn , drwup_dt , nm nick, n.memb_no
+		from notice n join member m 
+		on n.memb_no = m.memb_no
+		where noti_no = #{notiNo}
+	</select>
 </mapper>
