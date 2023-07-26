@@ -96,7 +96,7 @@
 									<li>
 										<a class="dropdown-item membInfo">회원정보</a>
 									</li>
-									<li th:if="${myInfo.nick!=null}">
+									<li th:if="${myInfo.nick!=null && myInfo.nick!=member.nick}">
 										<a class="dropdown-item declare">신고하기</a>
 									</li>
 									<li th:unless="${myInfo.nick!=null}">
@@ -161,7 +161,7 @@
 												<li>
 													<a class="dropdown-item membInfo">회원정보</a>
 												</li>
-												<li th:if="${myInfo.nick!=null}">
+												<li th:if="${myInfo.nick!=null && myInfo.nick!=comment.nick}">
 													<a class="dropdown-item declare">신고하기</a>
 												</li>
 												<li th:unless="${myInfo.nick!=null}">
@@ -463,9 +463,6 @@
 											<li>
 												<a class="dropdown-item membInfo">회원정보</a>
 											</li>
-											<li>
-												<a class="dropdown-item declare">신고하기</a>
-											</li>
 										</ul>
 									</div>
 									<p style="margin: 5px 0px;vertical-align: bottom;">&nbsp(${result.drwupDt})</p>
@@ -594,9 +591,6 @@
 										<ul class="dropdown-menu">
 											<li>
 												<a class="dropdown-item membInfo">회원정보</a>
-											</li>
-											<li>
-												<a class="dropdown-item declare">신고하기</a>
 											</li>
 										</ul>
 									</div>
