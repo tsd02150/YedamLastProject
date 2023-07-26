@@ -709,8 +709,8 @@
 				.then(result=>{
 					decalreNick.innerText=result.membInfo.nick;
 					accused.value=result.membInfo.membNo;
-					plaintiff.value=[[${member.membNo}]];
-					myNick.innerText=[[${member.nick}]];
+					plaintiff.value=[[${myInfo.membNo}]];
+					myNick.innerText=[[${myInfo.nick}]];
 					$('#declareModal').css('display', 'block');
 				})
 				.catch(err=>console.log(err));
