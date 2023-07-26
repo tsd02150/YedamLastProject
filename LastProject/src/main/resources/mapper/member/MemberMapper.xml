@@ -589,7 +589,7 @@
 	</select>
 	
 	<select id="recomList" parameterType="String" resultType="PossVO">
-		select distinct bb.item_no, bb.nm,bb.common_cd, bb.cl_prc-bb.prc as tprc from(
+		select distinct bb.item_no, bb.nm tnm,bb.common_cd, bb.prc tprc, nvl((bb.cl_prc-bb.prc)/decode(bb.prc,0,null,bb.prc)*100,0) as rate from(
 			WITH a AS (
 			    SELECT item_no, SUM(stock_cnt) stock_cnt, SUM(trade_prc*stock_cnt) trade_prc -- 보유주식 총 수량, 총금액
 			    FROM poss_stock
@@ -626,7 +626,7 @@
 			    ORDER BY to_number(substr(item_no,5))
 			) b ON n.item_no = b.item_no) bb
 			on aa.common_cd = SUBSTR(bb.common_cd,1,4)
-			order by tprc desc
+			order by rate desc, tprc desc
 	</select>
 	
 </mapper>

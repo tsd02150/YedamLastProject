@@ -107,37 +107,26 @@ margin : auto;
 
 <script>
 const membNo = "[[${session.loggedInMember.membNo}]]";
-const dt = "[[${session.loggedInMember.joinDt}]]";
+const dt = "[[${#dates.format(session.loggedInMember.joinDt, 'yyyy/MM/dd')}]]";
+let dtFormat = "[[${#dates.format(session.loggedInMember.joinDt, 'yyyy-MM-dd')}]]";
 
 let tablename = "";
 let targetPage = 1;
 let startPage=1;
 let endPage=20;
 let totalCnt;
-
 let today = new Date();   
 let year = today.getFullYear(); // 년도
 let month = today.getMonth() + 1 <10 ? '0'+(today.getMonth() + 1) : today.getMonth() + 1;  // 월
 let date = today.getDate() < 10 ? date = '0'+today.getDate() : today.getDate();  // 날짜
 let endDate = year + '/' + month + '/' + date; 
+let startDate = dt;
 
-$("#startDate").val(startDate);
+$("#startDate").val(dtFormat);
 $("#endDate").val(`${year}-${month}-${date}`);
 
-let dateObject = new Date(dt);
-console.log(dateObject);
-console.log(dt);
-function formatDateToYYYYMMDD(date) {
-	let years = date.getFullYear();
-	let months = (date.getMonth() + 1).toString().padStart(2, '0');
-	let days = date.getDate().toString().padStart(2, '0');
-
-  return years + '/' + months + '/' + days;
-}
-
-let formattedDate = formatDateToYYYYMMDD(dateObject);
-console.log("++++++++++++++++")
-console.log(formattedDate); 
+console.log(dtFormat)
+console.log(dt)
 
 
 

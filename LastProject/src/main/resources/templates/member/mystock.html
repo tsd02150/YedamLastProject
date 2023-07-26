@@ -53,7 +53,7 @@
 #interestDiv, #recomDiv{
 	display : inline-block;
 	border: 1px solid #DDDDDD;
-	height: 300px;
+	height: 310px;
 	margin-left : 40px;
 	margin-top : 20px;
 	overflow: auto;
@@ -191,14 +191,28 @@
 						<tbody id="intbody"></tbody>
 					</table>
 				</div>
-				<div id="recomDiv" class="col-5"></div>
+				<div id="recomDiv" class="col-5">
+					<table id="recomtbl" class="col-12">
+						<thead>
+							<tr>
+							<th>추천종목</th>
+							<th></th>
+							<th></th>
+							<th></th>
+							</tr>
+						</thead>
+						<tbody id="recombody">
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 
 		
 	<script>
  	const memNo = "[[${session.loggedInMember.membNo}]]";
- 	const dt = "[[${session.loggedInMember.joinDt}]]";
+ 	const dt = "[[${#dates.format(session.loggedInMember.joinDt, 'yyyy/MM/dd')}]]";
+ 	let dtFormat = "[[${#dates.format(session.loggedInMember.joinDt, 'yyyy-MM-dd')}]]";
 	let div1='';
 	let div2='';
  	let kind = "";
@@ -209,7 +223,7 @@
  	let date = today.getDate() < 10 ? date = '0'+today.getDate() : today.getDate();  // 날짜
  	let endDate = year + '/' + month + '/' + date ; 
  	
- 	$("#dstart").val(startDate);
+ 	$("#dstart").val(dtFormat);
  	$("#dend").val(`${year}-${month}-${date}`);
  	
  	let targetPage = 1;
@@ -427,11 +441,11 @@
      "membNo": memNo
    },
    success: function(data) {
-     if (data != null) {
+	   if(data && data.length >0){
 
     	 data.forEach(el => {
          let itemNo = el.itemNo;
-         console.log(el);
+         //console.log(el);
          tr1 += `
            <tr data-no="${el.itemNo}">
              <td onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">${el.tnm}</td>
@@ -442,7 +456,7 @@
          `;
        });
      } else {
-       tr1 += `<a href="stock/itemListPage"><button>주식페이지로 이동<button></a>`;
+    	 tr1 += `<a onclick="location.href='/stock/itemListPage'"><button class="btn btn-primary">주식페이지로 이동</button></a>`;
      }
 
      // 출력된 관심종목 리스트를 HTML에 추가합니다.
@@ -539,6 +553,38 @@ $.ajax({
 	  error: function(err) {
 	    console.log(err);
 	  }
+	});
+	
+	let tr3='';
+	//추천종목 리스트 출력
+	$.ajax({
+		url : "recomList",
+		method : "POST",
+		data : {
+			"membNo" : memNo
+		},
+		success : function(data){
+			if(data && data.length >0){
+				data.slice(0, 10).forEach(el => {
+					console.log(el);
+	         let itemNo = el.itemNo;
+	         tr3 += `
+	           <tr data-no="${el.itemNo}">
+	             <td onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">${el.tnm}</td>
+	             <td>${formatNumber(el.tprc)}</td>
+	             <td class="rate" colspan="2">${el.rate}%</td>
+	           </tr>
+	         `;
+	       });
+			}else{
+				tr3 += `<a href="stock/itemListPage"><button>주식페이지로 이동<button></a>`;
+			}
+			$("#recombody").html(tr3);
+		   boxClass();
+		},
+		error : function(err){
+			console.log(err);
+		}
 	});
 
 //1개월, 3개월, 6개월 클릭

@@ -42,6 +42,7 @@ import com.yedam.app.sms.service.SmsService;
 import com.yedam.app.stock.service.StockVO;
 
 import lombok.RequiredArgsConstructor;
+import oracle.jdbc.proxy.annotation.Post;
 
 //김미향 230707 회원관리 컨트롤러.
 @Controller
@@ -336,6 +337,10 @@ public class MemberController {
 	@GetMapping("mysurvey")
 	public String mysurvey() {
 		return "member/mysurvey";
+	}
+	@GetMapping("mysurvey3")
+	public String mysurvey3() {
+		return "member/mysurvey3";
 	}
 	
 	//주문내역
@@ -656,20 +661,6 @@ public class MemberController {
 		return list;
 	}
 	
-	/*
-	 * @ResponseBody
-	 * 
-	 * @PostMapping("myBuyRaiseList") public List<PossVO> myBuyRaiseList(String
-	 * membNo){ List<PossVO> list = membService.myBuyRaiseList(membNo); return list;
-	 * }
-	 * 
-	 * @ResponseBody
-	 * 
-	 * @PostMapping("mySellRaiseList") public List<PossVO> mySellRaiseList(String
-	 * membNo){ List<PossVO> list = membService.mySellRaiseList(membNo); return
-	 * list; }
-	 */
-	
 	@ResponseBody
 	@PostMapping("myRaiseList")
 	public List<PossVO> myRaiseList(String membNo){
@@ -677,22 +668,18 @@ public class MemberController {
 		return list;
 	}
 	
-	//쿠키생성
-	/*
-	 * @RequestMapping("/createCookie") public String
-	 * createCookie(HttpServletResponse response) { logger.info("쿠키 생성"); Cookie
-	 * cookie = new Cookie("useremail","blueskii"); cookie.setDomain("localhost");
-	 * cookie.setPath("/"); // 30초간 저장 cookie.setMaxAge(30*60);
-	 * cookie.setSecure(true); response.addCookie(cookie);
-	 * 
-	 * return "redirect:/ch05/content"; }
-	 */
-	
 	@ResponseBody
 	@GetMapping("anoSelectKey")
 	public String anoSelectKey() {
 		String ano = membService.anoSelectKey();
 		return ano;
+	}
+	
+	@ResponseBody
+	@PostMapping("recomList")
+	public List<PossVO> recomList(String membNo){
+		List<PossVO> list = membService.recomList(membNo);
+		return list;
 	}
 	
 }
