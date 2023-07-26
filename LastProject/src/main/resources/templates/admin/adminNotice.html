@@ -81,7 +81,8 @@
 	        	// 공지사항정보
 	        	let notiNo = $('td[data-row-key='+ev.rowKey+'][data-column-name=notiNo]').children(0).text();
 	        	//신고된 글 내용 불러오기
-	        	$.ajax('noticeDetail?notiNo='+notiNo).done(function(data){
+	        	$.ajax('noticeDetail?notiNo='+notiNo)
+	        	.done(function(data){
 	        		console.log(data);
 	        		
 	        		Swal.fire({
@@ -107,20 +108,21 @@
 									<th>내용</th>
 									<td colspan="3" class="text-left">
 										<div id="boardCntn" >
-											<textarea></textarea>
+											<textarea id="noticeContent"></textarea>
 										</div>
 									</td>
 								</tr>
 							</table>
-							</div>`,
+							</div>
+							`,
 						customClass: 'swal-cls',
 						showDenyButton: true,
 						showCancelButton:true,
 						cancelButtonText:'취소',
 		    		    confirmButtonText: '수정',
 		    		    denyButtonText: '글삭제'
-	        		}).then((result) => {	
-	        			
+	        		})
+	        		.then((result) => {			
 	        			if(result.isConfirmed){
 	        				// 활동정지
 	        				(async () => {
@@ -194,8 +196,29 @@
 							})//end of swal
 	        			}//end of else if
 	        		})//end of then
-	            	})// end of done
-	        	});//end of dblclick 기능
+
+	        		let editor;
+					
+		    		ClassicEditor.create(document.querySelector('#noticeContent'), {
+	    				language: "ko",
+	    				ckfinder: {
+	    					uploadUrl: '/image/upload'
+	    				}
+	    			})
+	    			.then(newEditor => {
+	    				editor = newEditor;
+	    			})
+	    			.catch(error => {
+	    				console.error(error);
+	    			});
+		    		
+		    		// 태연아 여기!
+	        		
+	            })// end of done
+	            	
+	            
+	        
+	        });//end of dblclick 기능
 	        	
 	        	
 		</script>
