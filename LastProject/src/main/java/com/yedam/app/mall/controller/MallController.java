@@ -118,18 +118,20 @@ public class MallController {
 		model.addAttribute("startPage",1);
 		
 		model.addAttribute("getFarm", mallService.getProductInfo(prdtVO));
-		System.out.println(prdtVO);
+		System.out.println(model);
 		// model.addAttribute("basketList", basketService.getBasketList(bskVO));
 
 		// model.addAttribute("member", basketService.getMembInfo(bskVO.getMembNo()));
 		// model.addAttribute("member2", basketService.getIntPrdt(bskVO.getMembNo()));
 		// System.out.println(review);
-
+		List<ProductVO> list = mallService.getProductList(null);
+		model.addAttribute("info", list);
+		System.out.println("주문정보 : " + list);
 		model.addAttribute("reviewInfo", revVO);
 		String membNo = ((UserVO) session.getAttribute("loggedInMember")).getMembNo();
 
 		model.addAttribute("membNo", membNo);
-
+		System.out.println(membNo);
 		return "mall/getFarm";
 	}
 

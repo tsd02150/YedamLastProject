@@ -561,31 +561,45 @@ table {
 					<div class="addressInfo_input_div_wrap">
 						<div class="addressInfo_input_div addressInfo_input_div_1"
 							style="display: block">
-							<table>
-								<colgroup>
-									<col width="25%">
-									<col width="*">
-								</colgroup>
-								<tbody>
-									<!-- 주소 입력 폼 -->
-									<div class="address_info">
-										<h2>배송 주소 정보</h2>
-										<div>
-											<strong>받는 분 이름:</strong> <span id="recipient_name"></span>
+
+							<colgroup>
+								<col width="25%">
+								<col width="*">
+							</colgroup>
+
+							<!-- 주소 입력 폼 -->
+							<div class="address_info">
+								<h2>배송 주소 정보</h2>
+								<div>
+									<strong>받는 분 이름:</strong> <span id="recipient_name"></span>
+								</div>
+								<div>
+									<strong>연락처:</strong> <span id="recipient_phone">010-1234-5678</span>
+								</div>
+								<div>
+										<div class="col-md-12" id="insertAddrDiv">
+										<div class="form-group">
+											<label for="insertaddr1">주소</label><br> <input
+												type="text" class="form-control"
+												style="width: 40%; display: inline;" id="insertaddr1"
+												name="zip" placeholder="우편번호" readonly>
+											
 										</div>
-										<div>
-											<strong>연락처:</strong> <span id="recipient_phone">010-1234-5678</span>
+										<div class="form-group">
+											<label for="insertaddr2"></label> <input type="text"
+												class="form-control" style="top: 5px;" id="insertaddr2"
+												name="addr" placeholder="도로명주소" readonly>
 										</div>
-										<div>
-											<strong>배송 주소:</strong> <span id="address">서울특별시 강남구</span>
-										</div>
-										<div>
-											<strong>배송 요청사항:</strong> <span id="delivery_memo">부재
-												시 경비실에 맡겨주세요.</span>
+										<div class="form-group">
+											<label for="insertaddr3"></label> <input type="text"
+												class="form-control" id="insertaddr3" name="detaAddr"
+												placeholder="상세주소를 입력하세요">
 										</div>
 									</div>
-								</tbody>
-							</table>
+								</div>
+							</div>
+
+
 						</div>
 						<div class="addressInfo_input_div addressInfo_input_div_2">
 							<table>
@@ -690,15 +704,13 @@ table {
 								class="totalPrice_span">100000</span>원</li>
 							<li><span class="price_span_label">배송비</span> <span
 								class="delivery_price_span">100000</span>원</li>
-							<li><span class="price_span_label">할인금액</span> <span
-								class="usePoint_span">100000</span>원</li>
 							<li class="price_total_li"><strong
 								class="price_span_label total_price_label">최종 결제 금액</strong> <strong
 								class="strong_red"> <span
 									class="total_price_red finalTotalPrice_span"> 1500000 </span>원
 							</strong></li>
-							<li class="point_li"><span class="price_span_label">잔여 포인트</span> 
-							<span class="totalPoint_span">7960원</span></li>
+							<li class="point_li"><span class="price_span_label">잔여
+									포인트</span> <span class="totalPoint_span">7960원</span></li>
 						</ul>
 					</div>
 					<!-- 버튼 영역 -->
@@ -709,18 +721,18 @@ table {
 			</div>
 
 			<!-- 주문 요청 form -->
-			<form class="order_form" action="/order" method="post">
-				<!-- 주문자 회원번호 -->
+			<!-- 	<form class="order_form" action="/order" method="post">
+				주문자 회원번호
 				<input name="memberId" value="${memberInfo.memberId}" type="hidden">
-				<!-- 주소록 & 받는이-->
+				주소록 & 받는이
 				<input name="addressee" type="hidden"> <input
 					name="memberAddr1" type="hidden"> <input name="memberAddr2"
 					type="hidden"> <input name="memberAddr3" type="hidden">
-				<!-- 사용 포인트 -->
+				사용 포인트
 				<input name="usePoint" type="hidden">
-				<!-- 상품 정보 -->
+				상품 정보
 			</form>
-
+ -->
 
 
 			<!-- <div style="width: 1100px;">
@@ -881,35 +893,49 @@ table {
 	
 	 //주문자 정보
 	 //let memInfo = [[${mem}]];
-	console.log([[${membInfo}]]);
+				    let membInfo = [[${membInfo}]];
+				    console.log(membInfo);
+
+				    // 주문자 정보
+				    let memAddr = ""; // 주문자 주소
+				    let email = "";   // 주문자 이메일
+				    let tel = "";     // 주문자 연락처
+				    let addr = "";    // 배송 주소
+				    let orderNm = ''; // 주문자 이름
+
+				    for (let info of membInfo) {
+				        // 주문자 정보를 할당하는 부분 (예시로 주문자 이름만 가져옴)
+				        orderNm += info.nm;
+
+				        // 주문자 주소, 이메일, 연락처, 배송 주소 등을 해당하는 속성에서 가져와서 변수에 할당해주어야 합니다.
 		
-	let memNm = '';
-	let email = '';
-	let tel = '';
-	let totalPoint = 0;
-	let addr = '';
-	
- 	for ( let memb of membInfo) {
- 		
-	 memNm += memb.nm;
- 	}
+				        email += info.email;
+				        tel += info.tel;
+				        addr += info.addr;
+				    }
+
+				    console.log(orderNm);
+				    console.log(email);
+				    console.log(tel);
+				    console.log(addr);
+
+				    $(document).ready(function () {
+				        // 주문자 정보
+				        // 주문자 명
+				        $(".recipient_name").text(orderNm);
+				        // 이메일
+				        $(".recipient_email").text(email);
+				        // 연락처
+				        $(".recipient_phone").text(tel);
+				        // 배송주소
+				        $(".address").text(addr);
+				        // 최종 잔여 포인트
+				        $(".totalPoint").text(totalPoint);
+				    });
 	 
-	// 주문자 정보
-	// 주문자 명
-	 $(".recipient_name").text(memNm);
-	// 이메일
-	 $(".recipient_email").text(email);
-	// 연락처
-	$(".recipient_phone").text(tel);	
-	// 배송주소
-	$(".address").text(addr);
-	// 최종 잔여 포인트
-	$(".totalPoint").text(totalPoint); 
-	 
-	 
-		
+	// 주문 리스트 정보	
 	 let orderInfo = [];
-	 orderInfo=[[${orderList}]]; // 주문 리스트 정보
+	 orderInfo=[[${orderList}]]; 
 	console.log(orderInfo);
 	
 	let totalPrice = 0;

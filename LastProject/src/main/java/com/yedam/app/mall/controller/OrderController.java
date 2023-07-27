@@ -41,7 +41,7 @@ public class OrderController {
 		model.addAttribute("member", membVO.getMembNo());
 		model.addAttribute("membNo", membNo);
 		model.addAttribute("mem", mem);
-		System.out.println("memInfo"+membNo);
+		//System.out.println("memInfo"+membNo);
 		List<OrderVO> orderList = new ArrayList<OrderVO>();
 		List<OrderVO> membInfo = new ArrayList<OrderVO>();
 		orderList = orderService.getOrderList(membNo);
@@ -49,6 +49,7 @@ public class OrderController {
 		System.out.println("주문리스트 : " + orderList);
 		model.addAttribute("orderList", orderList);
 		model.addAttribute("membInfo", membInfo);
+		System.out.println(membInfo);
 		//model.addAttribute("orderList", orderService.getOrderList(ordVO));
 		
 		return "mall/orderList";

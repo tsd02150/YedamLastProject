@@ -61,6 +61,12 @@
 	padding: 8px;
 	color: #ccc;
 }
+#prdImg {
+	display: block;
+	flex-wrap: wrap;
+	margin: 0 -15px;
+}
+
 </style>
 
 </head>
@@ -108,9 +114,13 @@
 		</div>
 		<div>
 			<div id="container">
-				<div class="row">
-					<div class="farmImage"
-						style="background-image: url(images/main/farmMain.jpg);"></div>
+				<div class="row" id="prdImg">
+					<div class="farmImage" th:if="${prdtCode=='S1'}"
+						style="background-image: url(images/main/farmImg.jpg);"></div>
+				</div>
+				<div class="row" id="prdImg">
+					<div class="farmImage" th:unless="${prdtCode=='S1'}"
+						style="background-image: url(images/main/sea.jpg);"></div>
 				</div>
 
 				<!-- 농산물 -->
