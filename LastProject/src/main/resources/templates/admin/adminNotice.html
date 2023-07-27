@@ -41,6 +41,7 @@
 		<script
 			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
 		<script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0/jquery.serialize-object.min.js"></script>
 		<script>
 		let todayz = new Date();   
 
@@ -110,12 +111,18 @@
 	    		    confirmButtonText: '작성',
 	    		    preConfirm: () => {
 	    		          // 입력값 검사
-	    		          const textareaValue = document.getElementById('noticeContent').value;
+	    		          const textareaValue = $('.ck-content').html();
 	    		          const ttlValue = document.getElementById('writeNoticeTtl').value;
-	    		          if (!textareaValue) {
-	    		            return Promise.reject('값을 입력해주세요.');
+	    		          if (!ttlValue) {
+	    		        	  Swal.showValidationMessage(
+	    		        			  '<i class="fa fa-info-circle"></i> 제목을 입력하세요'
+	    		        		      )
+	    		          }else if(!textareaValue){
+	    		        	  Swal.showValidationMessage(
+	    		        			  '<i class="fa fa-info-circle"></i> 내용을 입력하세요'
+	    		        		      )
 	    		          }
-	    		          return textareaValue;
+	    		          
 	    		        }
         		})
         		.then((result) =>{
@@ -180,7 +187,7 @@
     				}
     			})
     			.then(newEditor => {
-    				editorw = newEditor;
+    				editor = newEditor;
     			})
     			.catch(error => {
     				console.error(error);
@@ -257,14 +264,16 @@
 			});
 	        
 	        grid.on('dblclick',(ev) => {
+	        	
 	        	// 공지사항정보
 	        	let notiNo = $('td[data-row-key='+ev.rowKey+'][data-column-name=notiNo]').children(0).text();
-	        	//신고된 글 내용 불러오기
+	        	// 공지사항글 불러오기
 	        	$.ajax('noticeDetail?notiNo='+notiNo)
 	        	.done(function(data){
 	        		Swal.fire({
 	            		title:'공지사항',
 	            		html:`
+	            			<form id="myForm" onsubmit="return false">
 	            			<div id="reportDiv">
 	            			<table class="table h6">
 								<tr>
@@ -277,7 +286,7 @@
 								<th>제목</th>
 									<td colspan="3" id="boardTtl" >
 										<div>
-											<input style="text-align:left;width:758px;" value="${data.ttl}">
+											<input id="writeNoticeTtl" style="text-align:left;width:758px;" value="${data.ttl}" name="ttl">
 										</div>
 									</td>
 								</tr>	
@@ -291,19 +300,112 @@
 								</tr>
 							</table>
 							</div>
-							
+							<table class="table">
+							<tr>
+								<td>
+									<label for="attachfiles" class="col-sm-2 col-form-label ml-3 " style="width:200px">
+										<strong>파일을 선택해주세요</strong>
+									</label>
+									<input name="attachFile" id="attachFile" type="file" multiple class="custom-file-input"> 
+								</td>
+							</tr>
+							<tr>
+								<td style="text-align:left">
+									<div id="fileList" style="margin: 40px;">
+										<strong>첨부파일 : </strong>
+										<div>
+											<ul id=uploadFileList>
+											</ul>
+										</div>
+									</div>
+								</td>
+							</tr>
+							</table>
+							</form>
 							`,
 						customClass: 'swal-cls',
 						showCancelButton:true,
+						showDenyButton:true,
+						denyButtonText:'글삭제',
 		    		    confirmButtonText: '수정',
 						cancelButtonText:'취소',
+		    		    preConfirm: () => {
+		    		          // 입력값 검사
+		    		          const textareaValue = $('.ck-content').html();
+		    		          const ttlValue = document.getElementById('writeNoticeTtl').value;
+		    		          if (!ttlValue) {
+		    		        	  Swal.showValidationMessage(
+		    		        			  '<i class="fa fa-info-circle"></i> 제목을 입력하세요'
+		    		        		      )
+		    		          }else if(!textareaValue){
+		    		        	  Swal.showValidationMessage(
+		    		        			  '<i class="fa fa-info-circle"></i> 내용을 입력하세요'
+		    		        		      )
+		    		          }
+		    		          
+		    		        }
 	        		})
-	        		.then((result) => {			
+	        		.then((result) => {	
+	        			console.log(result);
 	        			if(result.isConfirmed){
 	        				// 수정 기능
-	        				Swal.fire('수정')
+	        				let ckData = editor.getData()
+	        				
+	        				let formData = $('#myForm').serializeObject()
+	        				formData.cntn = ckData
+	        				formData.notiNo= notiNo;
+	        				
+	        				var attachFileList = new FormData(); 
+	        				var inputFile = $("#attachFile");
+
+	        				var files = inputFile[0].files;
+	        				
+	        				for(var i=0;i<files.length;i++){
+	        					console.log(files[i]);
+	        					attachFileList.append("uploadFiles",files[i]); // 키, 값으로 append
+	        				}
+	        				
+	        				
+	        				$.ajax({
+	        					url:'/admin/modifyNotice',
+	        					method : "POST",
+	        					data : formData
+	        				})
+	        				.done(function(data){
+	        					if(result.code == 'success'){
+		        					if(attachFileList.get("uploadFiles")!=null){
+		        						attachFileList.append("notiNo",data);
+		        						$.ajax({
+		        							url:'/attach/upload',
+		        							method:'POST',
+		        							processData:false, // 기본값은 true, ajax통신을 통해 데이터를 전송할 때, 기본적으로 key와 vlaue 값을 Query String 으로 변환해서 보냅니다
+		        							contentType:false, // multipart/form-data타입을 사용하기 위해 false로 지정합니다.
+		        							data:attachFileList,
+		        							success:function(success){
+		        								// 성공
+		        								Swal.fire("수정 성공!");
+		        							},
+		        							error:function(reject){
+		        								Swal.fire("수정 실패 ..");
+		        							}
+		        						})					
+		        					}else{
+		        						//성공
+		        						console.log(result)
+		        						$('td[data-row-key='+ev.rowKey+'][data-column-name=ttl]').children(0).text('수정됨');
+		        						Swal.fire("수정 성공!");
+		        					}
+	        					}else if(result.code == 'fail'){
+	        						
+	        					}
+	        				})
+	        				.fail(function(result){
+	        					toastShow("Insert Fail" , "등록 실패" , "error");
+	        				})
+	        				
+	        				
 	        			}else if(result.isDenied){
-	        				// 삭제 기능
+	        				// 삭제 기능z
 	        				Swal.fire({
 							  title: '삭제하시겠습니까?',
 							  showDenyButton: true,
@@ -330,7 +432,7 @@
 	    				}
 	    			})
 	    			.then(newEditor => {
-	    				editorw = newEditor;
+	    				editor = newEditor;
 	    			})
 	    			.catch(error => {
 	    				console.error(error);

@@ -63,4 +63,8 @@ public interface AdminMapper {
 	public List<BoardVO> chatList(@Param("page")int page , @Param("perPage")int perPage);
 	// chat 전체수
 	public int chatTotal();
+	// 공지사항 추가
+	public void addNotice(NoticeVO vo);
+	// 공지사항 수정
+	public int modifyNotice(NoticeVO vo);
 }

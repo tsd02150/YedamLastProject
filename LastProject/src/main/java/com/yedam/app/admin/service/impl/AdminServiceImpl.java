@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 import com.yedam.app.admin.mapper.AdminMapper;
 import com.yedam.app.admin.service.AdminService;
 import com.yedam.app.admin.service.MembManageVO;
-import com.yedam.app.community.service.BoardVO;
-import com.yedam.app.community.service.CommentsVO;
 import com.yedam.app.community.service.NoticeVO;
 
 @Service
@@ -152,6 +150,37 @@ public class AdminServiceImpl implements AdminService {
 		Map<String, Object> map = new HashMap<>();
 		map.put("chatList", adminMapper.chatList(page, perPage));
 		map.put("chatTotal", adminMapper.chatTotal());
+		return map;
+	}
+
+	// 공지사항 추가
+	@Override
+	public Map<String , Object> addNotice(NoticeVO vo) {
+		adminMapper.addNotice(vo);
+		Map<String , Object> map = new HashMap<String, Object>();
+		if(vo.getNotiNo() != null) {
+			map.put("code", "success");
+			map.put("notiNo", vo.getNotiNo());
+			map.put("notiVO", adminMapper.noticeDetail(vo.getNotiNo()));
+		}else {
+			map.put("code", "fail");
+		}
+		
+		return map;
+	}
+	
+	// 공지사항 수정
+	@Override
+	public Map<String , Object> modifyNotice(NoticeVO vo) {
+		Map<String , Object> map = new HashMap<String, Object>();
+		int result = adminMapper.modifyNotice(vo);
+		if(result > 0) {
+			map.put("code", "success");
+			map.put("notiNo", vo.getMembNo());
+			
+		}else {
+			map.put("code", "fail");
+		}
 		return map;
 	}
 	

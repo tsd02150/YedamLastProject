@@ -201,5 +201,33 @@
 		select count(chat_no)
         from chat
 	</select>
-            
+    
+    <!-- 공지사항 추가 -->
+    <insert id="addNotice">
+    	insert into notice (NOTI_NO,
+							MEMB_NO,
+							TTL,
+							CNTN,
+							DRWUP_DT,
+							INQ)
+		values ('not-'||noti_seq.nextval,
+				#{membNo},
+				#{ttl},
+				#{cntn},
+				sysdate,
+				0)	
+				
+	 <selectKey keyProperty="notiNo" resultType="String" order="AFTER">
+	    SELECT 'not-'||noti_seq.currval AS notiNo FROM DUAL
+	 </selectKey>	
+    	
+    </insert>
+    
+    <!-- 공지사항 수정 -->
+    <update id="modifyNotice" >
+    	update notice
+    	set ttl = #{ttl}
+    		,cntn = #{cntn}
+    	where noti_no = #{notiNo}
+    </update>
 </mapper>

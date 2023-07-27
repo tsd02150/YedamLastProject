@@ -25,4 +25,6 @@ public interface AdminService {
 	public Map<String, Object> faqList(int page, int perPage);
 	public Map<String, Object> boardList(int page, int perPage);
 	public Map<String, Object> chatList(int page, int perPage);
+	public Map<String , Object> addNotice(NoticeVO vo);
+	public Map<String , Object> modifyNotice(NoticeVO vo);
 }

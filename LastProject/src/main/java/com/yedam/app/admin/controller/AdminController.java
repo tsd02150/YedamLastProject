@@ -24,6 +24,7 @@ import com.yedam.app.community.service.FaqVO;
 import com.yedam.app.community.service.NoticeVO;
 import com.yedam.app.community.service.QuestionVO;
 import com.yedam.app.community.service.ReportVO;
+import com.yedam.app.security.service.UserVO;
 //김태연 2023/07/24 admin 페이지
 @Controller
 @RequestMapping("admin")
@@ -253,5 +254,23 @@ public class AdminController {
 	@GetMapping("noticeDetail")
 	public NoticeVO noticeDetail(String notiNo) {
 		return adminService.noticeDetail(notiNo);
+	}
+	
+	//공지사항 추가
+	@ResponseBody
+	@PostMapping("addNotice")
+	public Map<String , Object> addNotice(NoticeVO vo,HttpServletRequest request) {
+		UserVO uvo = (UserVO) request.getSession().getAttribute("loggedInMember");
+		vo.setMembNo(uvo.getMembNo());
+		return adminService.addNotice(vo);
+	}
+	
+	//공지사항 수정
+	@ResponseBody
+	@PostMapping("modifyNotice")
+	public Map<String , Object> modifyNotice(NoticeVO vo,HttpServletRequest request) {
+		UserVO uvo = (UserVO) request.getSession().getAttribute("loggedInMember");
+		vo.setMembNo(uvo.getMembNo());
+		return adminService.modifyNotice(vo);
 	}
 }
