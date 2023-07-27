@@ -8,6 +8,7 @@
 </head>
 <body>
 	<div layout:fragment="content">
+	<h3> 채팅 로그</h3>
 		<div id="grid"></div>
 		
 		<script>
@@ -28,6 +29,7 @@
              scrollX: false,
              scrollY: false,
    		  	 pageOptions: {
+   		  		 useClient:true,
                  perPage: 10,
                },
              columns: [
@@ -39,7 +41,10 @@
                  	{
                      header: '방번호',
                      name: 'roomNo',
-                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                     filter: 'select', // Dropdown Filter로 설정
+                     filterOptions: {
+                       listItems: ['room-1', 'room-2', 'room-3'],
+                     }
                   	},
                    	{
                      header: '익명닉네임',

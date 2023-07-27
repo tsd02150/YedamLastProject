@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="../community/css/board.css">
+
 <style>
 	.swal-cls{
 		width:950px !important;
@@ -19,7 +20,9 @@
 	#boardCntn * {
 		text-align: left;
 	}
-	
+	#boardTtl {
+		text-align: left;
+	}
 </style>
 </head>
 <body>
@@ -38,6 +41,179 @@
 			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
 		<script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
 		<script>
+		let todayz = new Date();   
+
+		let year = todayz.getFullYear(); // 년도
+		let month = todayz.getMonth() + 1 < 10 ? '0' + (todayz.getMonth() + 1) : todayz.getMonth() + 1 ;  // 월
+		let date = todayz.getDate() < 10 ? '0' + todayz.getDate() : todayz.getDate() ;  // 날짜
+
+		let today = year + '-' + month + '-' + date
+		
+			$('#writeBtn').on('click',function(){
+				Swal.fire({
+            		title:'공지사항 작성',
+            		html:`
+            			<form id="myForm" onsubmit="return false">
+            			<div id="reportDiv">
+            			<table class="table h6">
+							<tr>
+								<th style="width:15%;">작성자</th>
+								<td style="width:35%;">admin</td>
+								<th style="width:15%;">작성일</th>
+								<td style="width:35%;">${today}</td>
+							</tr>
+							<tr>
+							<th>제목</th>
+								<td colspan="3" id="boardTtl" >
+									<div>
+										<input id="writeNoticeTtl" style="text-align:left;width:758px" name="ttl">
+									</div>
+								</td>
+							</tr>	
+							<tr>
+								<th>내용</th>
+								<td colspan="3" class="text-left">
+									<div id="boardCntn" >
+										<textarea id="noticeContent"></textarea>
+									</div>
+								</td>
+							</tr>
+						</table>
+						</div>
+						<table class="table">
+						<tr>
+							<td>
+								<label for="attachfiles" class="col-sm-2 col-form-label ml-3 " style="width:200px">
+									<strong>파일을 선택해주세요</strong>
+								</label>
+								<input name="attachFile" id="attachFile" type="file" multiple class="custom-file-input"> 
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align:left">
+								<div id="fileList" style="margin: 40px;">
+									<strong>첨부파일 : </strong>
+									<div>
+										<ul id=uploadFileList>
+										</ul>
+									</div>
+								</div>
+							</td>
+						</tr>
+						</table>
+						</form>
+						`,
+					customClass: 'swal-cls',
+					showCancelButton:true,
+					cancelButtonText:'취소',
+	    		    confirmButtonText: '작성',
+        		})
+        		.then((result) =>{
+        			if(result.isConfirmed){
+        				if($('#writeNoticeTtl').val()==""||$('#writeNoticeTtl').val()==null){
+        					swal.fire('제목입력하세요')
+        					return;
+        				}
+        				
+        				let ckData = editor.getData()
+        				if($('#noticeContent').val()==""||$('#noticeContent').val()==null){
+        					toastShow("There is no content" , "내용이 없습니다" , "error");
+        					return;
+        				}
+        					
+        				let formData = $('#myForm').serializeObject()
+        				formData.cntn = ckData
+        				
+        				
+        				var attachFileList = new FormData(); 
+        				var inputFile = $("#attachFile");
+
+        				var files = inputFile[0].files;
+        				
+        				for(var i=0;i<files.length;i++){
+        					console.log(files[i]);
+        					attachFileList.append("uploadFiles",files[i]); // 키, 값으로 append
+        				}
+        				
+        				
+        				$.ajax({
+        					url:'/admin/addNotice',
+        					method : "POST",
+        					data : formData
+        				})
+        				.done(function(result){
+        					if(attachFileList.get("uploadFiles")!=null){
+        						attachFileList.append("notiNo",result);
+        						$.ajax({
+        							url:'/attach/upload',
+        							method:'POST',
+        							processData:false, // 기본값은 true, ajax통신을 통해 데이터를 전송할 때, 기본적으로 key와 vlaue 값을 Query String 으로 변환해서 보냅니다
+        							contentType:false, // multipart/form-data타입을 사용하기 위해 false로 지정합니다.
+        							data:attachFileList,
+        							success:function(result){
+        								// 성공
+        							},
+        							error:function(reject){
+        								alert('fail attach');
+        							}
+        						})					
+        					}else{
+        						//성공
+        					}
+        				})
+        				.fail(function(result){
+        					toastShow("Insert Fail" , "등록 실패" , "error");
+        				})
+
+        				
+        			}
+        		})
+        		
+        		let editor;
+				
+	    		ClassicEditor.create(document.querySelector('#noticeContent'), {
+    				language: "ko",
+    				ckfinder: {
+    					uploadUrl: '/image/upload'
+    				}
+    			})
+    			.then(newEditor => {
+    				editorw = newEditor;
+    			})
+    			.catch(error => {
+    				console.error(error);
+    			});
+	    		
+	    		$("#attachFile").on('change',function(){
+	    			var inputFile = $("#attachFile");
+	    			// input 태그의 type이 file인것을 찾아서 inputFile이라는 변수로 지정
+	    			
+	    			var files = inputFile[0].files;
+	    			// files: 선택한 모든 파일을 나열하는 FileList 객체
+	    			// multiple 특성을 지정하지 않았다면 두 개 이상의 파일을 포함하지 않습니다.
+	    			for(var i=0;i<files.length;i++){
+	    				let liTag=document.createElement("li");
+	    				let spanTag=document.createElement("span");
+	    				liTag.append(files[i].name);
+	    				spanTag.innerHTML="&times;";
+	    				liTag.append(spanTag);
+	    				uploadFileList.append(liTag);
+	    			}
+	    		})
+	    		$("#uploadFileList").on('click','span',function(){
+	    			var dataTranster = new DataTransfer();
+	    			Array.from($("#attachFile")[0].files)
+	                .filter(file => file.name != $(event.target).parent().text().slice(0,-1))
+	                .forEach(file => {
+	                	dataTranster.items.add(file);
+	             	});
+	    			$("#attachFile")[0].files=dataTranster.files;
+	    			
+	    			$(event.target).parent().remove();
+	    		})
+	    		
+			}); // end of click 이벤트
+			
 			const dataSource = {
 	    		  contentType: 'application/json',
 	    		  api: {
@@ -55,6 +231,7 @@
 	             scrollX: false,
 	             scrollY: false,
 	   		  	 pageOptions: {
+	   		  		 useClient:true,
 	                 perPage: 5,
 	               },
 	             columns: [
@@ -98,9 +275,9 @@
 								</tr>
 								<tr>
 								<th>제목</th>
-									<td colspan="3">
-										<div id="boardTtl">
-											<p style="text-align:left;">${data.ttl}</p>
+									<td colspan="3" id="boardTtl" >
+										<div>
+											<input style="text-align:left;width:758px;" value="${data.ttl}">
 										</div>
 									</td>
 								</tr>	
@@ -108,12 +285,13 @@
 									<th>내용</th>
 									<td colspan="3" class="text-left">
 										<div id="boardCntn" >
-											<textarea id="noticeContent"></textarea>
+											<textarea id="noticeContent">${data.cntn}</textarea>
 										</div>
 									</td>
 								</tr>
 							</table>
 							</div>
+							
 							`,
 						customClass: 'swal-cls',
 						showDenyButton: true,
@@ -124,47 +302,8 @@
 	        		})
 	        		.then((result) => {			
 	        			if(result.isConfirmed){
-	        				// 활동정지
-	        				(async () => {
-	                  		    await Swal.fire({
-	                  		        title: accused + ' 회원 활동정지',
-	                  		        text: '정지 기간을 선택해주세요',
-	                  		        input: 'select',
-	                  		        inputOptions: {
-	                  		            5: '5일정지',
-	                  		            10: '10일정지',
-	                  		            15: '15일정지',
-	                  		            30: '30일정지'
-	                  		          },
-	                  		        showCancelButton: true,
-	                  		        inputPlaceholder: '정지기간선택'
-	                  		    }).then(result =>{
-	                  		    	if(result.isConfirmed){
-	                  		    		console.log(result.value);
-	                  		    		let period = result.value;
-	                  		    		
-	                  		    		$.ajax('/admin/memberBan?list='+[accused]+'&period='+period).done(function(data){
-	                  		    			if(data > 0){
-	                  		    				$.ajax('rprtStChange?rprtNo='+rprtNo).done(function(data){
-	                  		    					if(data >0){
-	                  		    						Swal.fire(accused +' 회원 '+ result.value+' 일 정지 성공');
-	                          		    				$('td[data-row-key='+ev.rowKey+'][data-column-name=rprtSt]').text("Y");
-	                  		    					}else{
-	                  		    						Swal.fire('신고처리실패..')
-	                  		    					}
-	                  		    				});//end of ajax
-	                  		    				
-	                  		    			}else{
-	                  		    				Swal.fire('회원정지실패..')
-	                  		    			}
-	                  		    		});//end of ajax
-	                  		    		
-	                  		    	}else if(result.isDismissed){
-	                  		    		// 취소
-	                      		    	
-	                  		    	};
-	                  		    });
-	                  		})()
+	        				// 글수정
+	        				
 	        			}else if(result.isDenied){
 	        				// 삭제 기능
 	        				Swal.fire({
@@ -176,20 +315,7 @@
 							  /* Read more about isConfirmed, isDenied below */
 							  if (result.isConfirmed) {
 								  // 서버에 삭제 요청을 보냅니다.
-								    $.ajax({
-								      type: 'POST', // 또는 DELETE에 맞는 HTTP 메서드를 사용합니다.
-								      url: '/admin/deleteReport',
-								      contentType:'application/json',
-								      data: JSON.stringify([rprtNo]),
-								      success: function(response) {
-								        // 삭제 요청이 성공한 경우, 그리드에서 선택된 행을 제거합니다.
-								        Swal.fire('삭제완료!')
-								        grid.removeRow(ev.rowKey)
-								      },
-								      error: function(err) {
-								        console.error('행 삭제 오류:', err);
-								      }
-								    });
+								  
 							  } else if (result.isDenied) {
 							    Swal.fire('취소됐음')
 							  }
@@ -206,7 +332,7 @@
 	    				}
 	    			})
 	    			.then(newEditor => {
-	    				editor = newEditor;
+	    				editorw = newEditor;
 	    			})
 	    			.catch(error => {
 	    				console.error(error);
