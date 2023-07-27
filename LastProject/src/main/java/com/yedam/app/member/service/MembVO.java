@@ -42,6 +42,7 @@ public class MembVO {
 	
 	//상품번호
 	private String prdtNo;
+	private String thumb;
 
 	
 }

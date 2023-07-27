@@ -529,199 +529,201 @@ table {
 <body>
 	<div layout:fragment="content" class="outer-block">
 
-<div class="content_area">
+		<div class="content_area">
 
-	<div class="content_subject">
-		<span>주문내역리스트</span>
-	</div>
+			<div class="content_subject">
+				<span>주문내역리스트</span>
+			</div>
 
-	<div class="content_main">
-		<!-- 회원 정보 -->
-	<div class="member_info_div">
-		<table class="table_text_align_center memberInfo_table">
-			<tbody>
-				<tr>
-					<th style="width: 25%;">주문자</th>
-					<td style="width: *">${memberInfo.memberName} |
-						${memberInfo.memberMail}</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
-
-	<!-- 배송지 정보 -->
-	<div class="addressInfo_div">
-		<div class="addressInfo_button_div">
-			<button class="address_btn address_btn_1"
-				onclick="showAdress('1')" style="background-color: #3c3838;">사용자
-				정보 주소록</button>
-			<button class="address_btn address_btn_2" id="addrModal"
-				onclick="sample6_execDaumPostcode()">직접 입력</button>
-		</div>
-		<div class="addressInfo_input_div_wrap">
-			<div class="addressInfo_input_div addressInfo_input_div_1"
-				style="display: block">
-				<table>
-					<colgroup>
-						<col width="25%">
-						<col width="*">
-					</colgroup>
-					<tbody>
-						<!-- 주소 입력 폼 -->
-			 <div class="address_info">
-				  <h2>배송 주소 정보</h2>
-				  <div>
-				    <strong>받는 분 이름:</strong> <span id="recipient_name"></span>
-				  </div>
-				  <div>
-				    <strong>연락처:</strong> <span id="recipient_phone">010-1234-5678</span>
-				  </div>
-				  <div>
-				    <strong>배송 주소:</strong> <span id="address">서울특별시 강남구</span>
-				  </div>
-				  <div>
-				    <strong>배송 요청사항:</strong> <span id="delivery_memo">부재 시 경비실에 맡겨주세요.</span>
-				  </div>
-				</div>
-			</tbody>
+			<div class="content_main">
+				<!-- 회원 정보 -->
+				<div class="member_info_div">
+					<table class="table_text_align_center memberInfo_table">
+						<tbody>
+							<tr>
+								<th style="width: 25%;">주문자</th>
+								<td style="width: *">${memberInfo.memberName} |
+									${memberInfo.memberMail}</td>
+							</tr>
+						</tbody>
 					</table>
 				</div>
-				<div class="addressInfo_input_div addressInfo_input_div_2">
-					<table>
+
+				<!-- 배송지 정보 -->
+				<div class="addressInfo_div">
+					<div class="addressInfo_button_div">
+						<button class="address_btn address_btn_1"
+							onclick="showAdress('1')" style="background-color: #3c3838;">사용자
+							정보 주소록</button>
+						<button class="address_btn address_btn_2" id="addrModal"
+							onclick="sample6_execDaumPostcode()">직접 입력</button>
+					</div>
+					<div class="addressInfo_input_div_wrap">
+						<div class="addressInfo_input_div addressInfo_input_div_1"
+							style="display: block">
+							<table>
+								<colgroup>
+									<col width="25%">
+									<col width="*">
+								</colgroup>
+								<tbody>
+									<!-- 주소 입력 폼 -->
+									<div class="address_info">
+										<h2>배송 주소 정보</h2>
+										<div>
+											<strong>받는 분 이름:</strong> <span id="recipient_name"></span>
+										</div>
+										<div>
+											<strong>연락처:</strong> <span id="recipient_phone">010-1234-5678</span>
+										</div>
+										<div>
+											<strong>배송 주소:</strong> <span id="address">서울특별시 강남구</span>
+										</div>
+										<div>
+											<strong>배송 요청사항:</strong> <span id="delivery_memo">부재
+												시 경비실에 맡겨주세요.</span>
+										</div>
+									</div>
+								</tbody>
+							</table>
+						</div>
+						<div class="addressInfo_input_div addressInfo_input_div_2">
+							<table>
+								<colgroup>
+									<col width="25%">
+									<col width="*">
+								</colgroup>
+								<tbody>
+									<tr>
+										<th>이름</th>
+										<td><input class="addressee_input"></td>
+									</tr>
+									<tr>
+										<th>주소</th>
+										<td><input class="selectAddress" value="F" type="hidden">
+											<input class="address1_input" readonly="readonly"> <a
+											class="address_search_btn" onclick="execution_daum_address()">주소
+												찾기</a><br> <input class="address2_input"
+											readonly="readonly"><br> <input
+											class="address3_input" readonly="readonly"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- 상품 정보 -->
+				<div class="orderGoods_div">
+					<!-- 상품 종류 -->
+					<div class="goods_kind_div">
+						주문상품 <span class="goods_kind_div_kind"></span>종 <span
+							class="goods_kind_div_count"></span>개
+					</div>
+					<!-- 상품 테이블 -->
+					<table class="goods_subject_table">
+						<colgroup>
+							<col width="15%">
+							<col width="35%">
+							<col width="25%">
+							<col width="25%">
+						</colgroup>
+						<tbody>
+							<tr>
+								<th>이미지</th>
+								<th>상품 정보</th>
+								<th>수량</th>
+								<th>판매가</th>
+							</tr>
+						</tbody>
+					</table>
+					<table class="goods_table">
+						<colgroup>
+							<col width="20%">
+							<col width="30%">
+							<col width="25%">
+							<col width="25%">
+						</colgroup>
+						<tbody>
+
+							<tr th:each="item :${orderList}">
+								<td>
+									<div class="image_wrap">
+										<img th:src="|/mall/images/main/${item.thumb}|">
+									</div>
+								</td>
+								<td th:text="${item.nm}"></td>
+								<td class="goods_table_price_td" th:text="${item.cnt}"><span>수량</span>
+									<br></td>
+								<td
+									th:text="${(item.prc - (item.prc * item.dcRate / 100)) * item.cnt}+'P'"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+
+				<!-- 포인트 정보 -->
+				<div class="point_div">
+					<div class="point_div_subject">포인트 사용</div>
+					<table class="point_table">
 						<colgroup>
 							<col width="25%">
 							<col width="*">
 						</colgroup>
 						<tbody>
 							<tr>
-								<th>이름</th>
-								<td><input class="addressee_input"></td>
-							</tr>
-							<tr>
-								<th>주소</th>
-								<td><input class="selectAddress" value="F" type="hidden">
-									<input class="address1_input" readonly="readonly"> <a
-									class="address_search_btn" onclick="execution_daum_address()">주소
-										찾기</a><br> <input class="address2_input"
-									readonly="readonly"><br> <input
-									class="address3_input" readonly="readonly"></td>
+								<th>포인트 사용</th>
+								<td><input class="order_point_input" value="0">P <a
+									class="order_point_input_btn order_point_input_btn_N"
+									data-state="N">모두사용</a> <a
+									class="order_point_input_btn order_point_input_btn_Y"
+									data-state="Y" style="display: none;">사용취소</a></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
+				<!-- 주문 종합 정보 -->
+				<div class="total_info_div">
+					<!-- 가격 종합 정보 -->
+					<div class="total_info_price_div">
+						<ul>
+							<li><span class="price_span_label">상품 금액</span> <span
+								class="totalPrice_span">100000</span>원</li>
+							<li><span class="price_span_label">배송비</span> <span
+								class="delivery_price_span">100000</span>원</li>
+							<li><span class="price_span_label">할인금액</span> <span
+								class="usePoint_span">100000</span>원</li>
+							<li class="price_total_li"><strong
+								class="price_span_label total_price_label">최종 결제 금액</strong> <strong
+								class="strong_red"> <span
+									class="total_price_red finalTotalPrice_span"> 1500000 </span>원
+							</strong></li>
+							<li class="point_li"><span class="price_span_label">잔여 포인트</span> 
+							<span class="totalPoint_span">7960원</span></li>
+						</ul>
+					</div>
+					<!-- 버튼 영역 -->
+					<div class="total_info_btn_div">
+						<a class="order_btn">결제하기</a>
+					</div>
+				</div>
 			</div>
-		</div>
-		<!-- 상품 정보 -->
-		<div class="orderGoods_div">
-			<!-- 상품 종류 -->
-			<div class="goods_kind_div">
-				주문상품 <span class="goods_kind_div_kind"></span>종 <span
-					class="goods_kind_div_count"></span>개
-			</div>
-			<!-- 상품 테이블 -->
-			<table class="goods_subject_table">
-				<colgroup>
-					<col width="15%">
-					<col width="45%">
-					<col width="40%">
-				</colgroup>
-				<tbody>
-					<tr>
-						<th>이미지</th>
-						<th>상품 정보</th>
-						<th>판매가</th>
-					</tr>
-				</tbody>
-			</table>
-			<table class="goods_table">
-				<colgroup>
-					<col width="15%">
-					<col width="45%">
-					<col width="40%">
-				</colgroup>
-				<tbody>
 
-					<tr th:each="item :${orderList}">
-						<td>
-							<div class="image_wrap">
-								<img th:src="|/mall/images/main/${item.thumb}|">
-							</div>
-						</td>
-						<td th:text="${item.nm}"></td>
-						<td class="goods_table_price_td" th:text="${item.cnt}"><span>수량</span>
-							<br></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-
-		<!-- 포인트 정보 -->
-		<div class="point_div">
-			<div class="point_div_subject">포인트 사용</div>
-			<table class="point_table">
-				<colgroup>
-					<col width="25%">
-					<col width="*">
-				</colgroup>
-				<tbody>
-					<tr>
-						<th>포인트 사용</th>
-						<td><input class="order_point_input" value="0">P <a
-							class="order_point_input_btn order_point_input_btn_N"
-							data-state="N">모두사용</a> <a
-							class="order_point_input_btn order_point_input_btn_Y"
-							data-state="Y" style="display: none;">사용취소</a></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<!-- 주문 종합 정보 -->
-		<div class="total_info_div">
-			<!-- 가격 종합 정보 -->
-			<div class="total_info_price_div">
-				<ul>
-					<li><span class="price_span_label">상품 금액</span> <span
-						class="totalPrice_span">100000</span>원</li>
-					<li><span class="price_span_label">배송비</span> <span
-						class="delivery_price_span">100000</span>원</li>
-					<li><span class="price_span_label">할인금액</span> <span
-						class="usePoint_span">100000</span>원</li>
-					<li class="price_total_li"><strong
-						class="price_span_label total_price_label">최종 결제 금액</strong> <strong
-						class="strong_red"> <span
-							class="total_price_red finalTotalPrice_span"> 1500000 </span>원
-					</strong></li>
-					<li class="point_li"><span class="price_span_label">적립예정
-							포인트</span> <span class="totalPoint_span">7960원</span></li>
-				</ul>
-			</div>
-			<!-- 버튼 영역 -->
-			<div class="total_info_btn_div">
-				<a class="order_btn">결제하기</a>
-			</div>
-		</div>
-
-	</div>
-
-	<!-- 주문 요청 form -->
-	<form class="order_form" action="/order" method="post">
-		<!-- 주문자 회원번호 -->
-		<input name="memberId" value="${memberInfo.memberId}" type="hidden">
-		<!-- 주소록 & 받는이-->
-		<input name="addressee" type="hidden"> <input
-			name="memberAddr1" type="hidden"> <input name="memberAddr2"
-			type="hidden"> <input name="memberAddr3" type="hidden">
-		<!-- 사용 포인트 -->
-		<input name="usePoint" type="hidden">
-		<!-- 상품 정보 -->
-	</form>
-
-</div>
+			<!-- 주문 요청 form -->
+			<form class="order_form" action="/order" method="post">
+				<!-- 주문자 회원번호 -->
+				<input name="memberId" value="${memberInfo.memberId}" type="hidden">
+				<!-- 주소록 & 받는이-->
+				<input name="addressee" type="hidden"> <input
+					name="memberAddr1" type="hidden"> <input name="memberAddr2"
+					type="hidden"> <input name="memberAddr3" type="hidden">
+				<!-- 사용 포인트 -->
+				<input name="usePoint" type="hidden">
+				<!-- 상품 정보 -->
+			</form>
 
 
 
-
-		<div style="width: 1100px;">
+			<!-- <div style="width: 1100px;">
 			<div class="orderList">
 				<div>&nbsp;</div>
 				<div>&nbsp;</div>
@@ -860,87 +862,67 @@ table {
 				<button type="reset">취소하기</button>
 				<button type="submit">주문하기</button>
 			</div>
+		</div> -->
+
 		</div>
-
-
-	<script>
-	$(document).ready(function() {
-
-		//주문 종합정보 영역 최신화
-		setTotalInfo();
-
-	})
+		<script>
 	
+	
+	/*   <strong>받는 분 이름:</strong> <span id="recipient_name"></span>
+				  </div>
+				  <div>
+				    <strong>연락처:</strong> <span id="recipient_phone">010-1234-5678</span>
+				  </div>
+				  <div>
+				    <strong>배송 주소:</strong> <span id="address">서울특별시 강남구</span>
+				  </div>
+				  <div>
+				    <strong>배송 요청사항:</strong> <span id="delivery_memo"> */
+	
+	 //주문자 정보
+	 //let memInfo = [[${mem}]];
+		console.log([[${member}]]);
 		
-	let orderInfo = [[${orderList}]]; // 주문 리스트 정보
+	let memNm = '';
+	let email = '';
+	let tel = '';
+	let point = 0;
+	
+				    
+				    
+		
+	 let orderInfo = [];
+	 orderInfo=[[${orderList}]]; // 주문 리스트 정보
 	console.log(orderInfo);
-	// 첫 번째 주문 정보로 데이터 채우기
-	let firstOrder = orderList[0];
-	document.getElementById('name').textContent = firstOrder.nm;
-	document.getElementById('zip').textContent = firstOrder.zip;
-	document.getElementById('addr').textContent = firstOrder.addr;
-	document.getElementById('detaAddr').textContent = firstOrder.detaAddr;
-
-	/* 총 주문 정보 세팅(배송비, 총 가격, 마일리지, 물품 수, 종류) */
-	function setTotalInfo() {
-
-		let totalPrice = 0; // 총 가격
-		let totalCount = 0; // 총 갯수
-		let totalKind = 0; // 총 종류
-		let totalPoint = 0; // 총 마일리지
-		let deliveryPrice = 0; // 배송비
-		let usePoint = 0; // 사용 포인트(할인가격)
-		let finalTotalPrice = 0; // 최종 가격(총 가격 + 배송비)	
-
-		$(".goods_table_price_td").each(
-				function(index, element) {
-					// 총 가격
-					totalPrice += parseInt($(element).find(
-							".individual_totalPrice_input").val());
-					// 총 갯수
-					totalCount += parseInt($(element).find(
-							".individual_bookCount_input").val());
-					// 총 종류
-					totalKind += 1;
-					// 총 마일리지
-					totalPoint += parseInt($(element).find(
-							".individual_totalPoint_input").val());
-				});
-
-		/* 배송비 결정 */
-		if (totalPrice >= 30000) {
-			deliveryPrice = 0;
-		} else if (totalPrice == 0) {
-			deliveryPrice = 0;
-		} else {
-			deliveryPrice = 3000;
+	
+	let totalPrice = 0;
+	let totalCount = 0;
+	let deliveryPrice = 0;
+	let finalTotalPrice = 0;
+	let totalPoint = 0;
+	
+	
+	for(let info of orderInfo) {
+		console.log(info);
+		
+		 totalPrice += (info.prc - (info.prc * info.dcRate / 100)) * info.cnt;
+		 totalCount += info.cnt; // 물품의 개수를 totalCount에 더합니다.
+		 totalPoint += info.point - ((info.prc - (info.prc * info.dcRate / 100)) * info.cnt) - deliveryPrice; 
 		}
-
+	
+		deliveryPrice += totalPrice >= 10000 ? 0 : 3000;
 		finalTotalPrice = totalPrice + deliveryPrice;
-
-		/* 사용 포인트 */
-		usePoint = $(".order_point_input").val();
-
-		finalTotalPrice = totalPrice - usePoint;
-
-		/* 값 삽입 */
+		console.log(totalPrice);
 		// 총 가격
-		$(".totalPrice_span").text(totalPrice.toLocaleString());
+		 $(".totalPrice_span").text(totalPrice);
 		// 총 갯수
-		$(".goods_kind_div_count").text(totalCount);
-		// 총 종류
-		$(".goods_kind_div_kind").text(totalKind);
-		// 총 마일리지
-		$(".totalPoint_span").text(totalPoint.toLocaleString());
+		$(".totalCount_span").text(totalCount);
 		// 배송비
-		$(".delivery_price_span").text(deliveryPrice.toLocaleString());
+		$(".delivery_price_span").text(deliveryPrice);	
 		// 최종 가격(총 가격 + 배송비)
-		$(".finalTotalPrice_span").text(
-				finalTotalPrice.toLocaleString());
-		// 할인가(사용 포인트)
-		$(".usePoint_span").text(usePoint.toLocaleString());
-
-	}
+		$(".finalTotalPrice_span").text(finalTotalPrice.toLocaleString());
+		// 최종 잔여 포인트
+		$(".totalPoint").text(totalPoint);
 
 	//우편번호 모달
 	function sample6_execDaumPostcode() {

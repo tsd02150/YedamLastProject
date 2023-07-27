@@ -37,17 +37,17 @@ public class OrderController {
 		
 		//UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 		String membNo = ((UserVO) session.getAttribute("loggedInMember")).getMembNo();
-		
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 		model.addAttribute("member", membVO.getMembNo());
 		model.addAttribute("membNo", membNo);
-		
+		model.addAttribute("mem", mem);
+		System.out.println("memInfo"+mem);
 		List<OrderVO> orderList = new ArrayList<OrderVO>();
 		orderList = orderService.getOrderList(membNo);
 		System.out.println("주문리스트 : " + orderList);
 		model.addAttribute("orderList", orderList);
 		
 		//model.addAttribute("orderList", orderService.getOrderList(ordVO));
-		
 		
 		return "mall/orderList";
 		

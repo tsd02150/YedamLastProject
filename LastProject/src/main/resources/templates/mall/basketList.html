@@ -155,8 +155,7 @@
 							<td class="td_width_4 price_td"><del>정가 :
 									[[${item.prc}]]</del><br> <span class="red_color">판매가 :
 									[[${item.prc - (item.prc * (item.dcRate / 100.0))} + 'P']] </span><br>
-								마일리지 : [[${(item.prc - (item.prc * (item.dcRate / 100.0))) *
-								0.1} + 'P']]<span class="green_color"></span></td>
+								<span class="green_color"></span></td>
 							<td class="td_width_4 table_text_align_center">
 								<div class="table_text_align_center quantity_div">
 									<input type="text" class="quantity_input"
@@ -306,15 +305,7 @@
 
 		<script th:inline="javascript">
 		
-	
-		
 
-		// 총 갯수
-		/* $(".goods_kind_div_count").text(totalCount);
-		// 총 종류
-		$(".goods_kind_div_kind").text(totalKind); */
-		
-		
 		/* top 버튼 */
 	document.querySelector('.top-btn').addEventListener('click', function() {
 	    window.scrollTo({
@@ -396,7 +387,6 @@
 		 } 
 		  */
 		 
-		 
 		// 장바구니 삭제 버튼을 클릭했을 때 해당 상품을 삭제하는 함수
 	    function deleteBasket() {
 			console.log(event.target.dataset.bskno);
@@ -418,7 +408,6 @@
 	        })
 	        .catch(err => console.log(err));
 	    }
-		
 	 
 		// 장바구니 전체 삭제
 	    function deleteAllBasket() {
@@ -503,62 +492,35 @@
 		    deliveryPrice: deliveryPrice,
 		    finalTotalPrice: finalTotalPrice
 		  };
-
-			  
-		/* 배송비 결정 */
-	/* 	 if(totalPrice >= 10000){
-			deliveryPrice = 0;
-		} else if(totalPrice == 0){
-			deliveryPrice = 0;
-		} else {
-			deliveryPrice = 3000;	
-		}
-		
-		finalTotalPrice = totalPrice + deliveryPrice; 
-		
 		
 	/*  ※ 세자리 컴마 Javscript Number 객체의 toLocaleString()  */
-let basketInfo = [[${basketList}]]; // 장바구니 리스트 정보
-console.log(basketInfo);
-
-let totalPrice = 0;
-let totalCount = 0;
-
-let shipping = totalPrice >= 20000? 0 : 3000;
-
-
-
-for (let item of basketInfo) {
-  console.log(item);
-  
-  totalPrice += (item.prc - (item.prc * item.dcRate / 100)) * item.cnt;
-  totalCount += item.cnt; // 물품의 개수를 totalCount에 더합니다.
-
-  //shipping += totalPrice >= 20000 ? 0 : 3000; // 물품의 배송비를 shipping에 더합니다. 주문 금액이 20,000 이상인 경우 0, 그렇지 않은 경우 3,000을 추가합니다.
-
-
-	if(totalPrice >= 20000){
-		shipping = 0;
-	} else if(totalPrice == 0){
-		shipping = 0;
-	} else {
-		shipping = 3000;	
-	}
-}
-	
+		let basketInfo = [[${basketList}]]; // 장바구니 리스트 정보
+		console.log(basketInfo);
 		
+		let totalPrice = 0;
+		let totalCount = 0;
+		let deliveryPrice = 0;
+		let finalTotalPrice = 0;
+		
+		for (let item of basketInfo) {
+		  console.log(item);
+		  
+		  totalPrice += (item.prc - (item.prc * item.dcRate / 100)) * item.cnt;
+		  totalCount += item.cnt; // 물품의 개수를 totalCount에 더합니다.
+			
+		}
+		 deliveryPrice += totalPrice >= 10000 ? 0 : 3000;
+			finalTotalPrice = totalPrice + deliveryPrice;
+		 
 		// 총 가격
 		 $(".totalPrice_span").text(totalPrice);
 		// 총 갯수
 		$(".totalCount_span").text(totalCount);
-		// 총 종류
-		$(".totalKind_span").text(totalKind);
-		
 		// 배송비
 		$(".delivery_price").text(deliveryPrice);	
 		// 최종 가격(총 가격 + 배송비)
 		$(".finalTotalPrice_span").text(finalTotalPrice.toLocaleString());		
-	
+		
 	
 		/* 체크여부에따른 종합 정보 변화 */
 		$(".individual_cart_checkbox").on("change", function(){
@@ -566,6 +528,18 @@ for (let item of basketInfo) {
 			setTotalInfo($(".cart_info_td"));
 		});
 
+		
+		 // 물품의 배송비를 deliveryPrice에 더합니다. 주문 금액이 20,000 이상인 경우 0, 그렇지 않은 경우 3,000을 추가합니다.
+		 
+		  /* 배송비 결정 */
+		 	/*  if(totalPrice >= 10000){
+				deliveryPrice = 0;
+			} else if(totalPrice == 0){
+				deliveryPrice = 0;
+			} else {
+				deliveryPrice = 3000;	
+			}
+			 */
 		
 	//주문페이지 이동
 	function directOrder() {

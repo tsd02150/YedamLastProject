@@ -18,7 +18,8 @@ public class OrderVO {
 	private String orderAm;
 	private String orderSt;
 	private int payAn;
-
+	
+	private int prc;
 	private String prdt_no;
 	private String id;
 

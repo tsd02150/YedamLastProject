@@ -4,7 +4,7 @@
 	layout:decorate="~{admin/adminLayout}">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>adminOrder.html</title>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
@@ -512,36 +512,27 @@ keyframes checkbox-on { 0% {
 	<div layout:fragment="content">
 	
 	<div class="admin-page">
-  <h1>주문 검색</h1>
+  <h2>주문 검색</h2>
   <div class="search-form">
     <form>
       <label for="keyword">검색어:</label>
-      <input type="text" id="keyword" name="keyword">
+      <input type="text" id="keyword" name="keyword"><br>
 
-      <label for="start_date">시작일:</label>
+      <label for="start_date">기간선택:</label>
       <input type="date" id="start_date" name="start_date">
 
       <label for="end_date">종료일:</label>
-      <input type="date" id="end_date" name="end_date">
+      <input type="date" id="end_date" name="end_date"><br>
 
-      <label for="order_status">주문상태:</label>
+      <label for="order_status">전체 주문 처리단계 선택:</label>
       <select id="order_status" name="order_status">
         <option value="">전체</option>
-        <option value="주문접수">주문접수</option>
-        <option value="배송준비">배송준비</option>
-        <option value="배송중">배송중</option>
-        <option value="배송완료">배송완료</option>
-      </select>
-
-
-      <label for="payment_method">결제수단:</label>
-      <select id="payment_method" name="payment_method">
-        <option value="">전체</option>
-        <option value="신용카드">신용카드</option>
-        <option value="계좌이체">계좌이체</option>
-        <option value="휴대폰결제">휴대폰결제</option>
-        <option value="무통장입금">무통장입금</option>
-      </select>
+        <option value="상품준비중">상품준비중</option>
+        <option value="배송준비">배송중</option>
+        <option value="반송중">반송중</option>
+        <option value="주문취소">주문취소</option>
+        <option value="환불대기">환불대기</option>
+      </select><br>
 
       <button type="submit">검색</button>
     </form>
@@ -682,72 +673,7 @@ keyframes checkbox-on { 0% {
 							</button>
 						</td>
 					</tr>
-					<tr>
-						<td class="text-center">4</td>
-						<td class="text-center">
-							<div class="form-check">
-								<label class="form-check-label"> <input
-									class="form-check-input" type="checkbox" value="" checked="">
-									<span class="form-check-sign"> <span class="check"></span>
-								</span>
-								</label>
-							</div>
-						</td>
-						<td>Mike Monday</td>
-						<td>Marketing</td>
-						<td>2013</td>
-						<td class="text-right">€ 49,990</td>
-						<td class="td-actions text-right">
-							<button type="button" rel="tooltip"
-								class="btn btn-info btn-round btn-just-icon btn-sm"
-								data-original-title="" title="">
-								<i class="material-icons">person</i>
-							</button>
-							<button type="button" rel="tooltip"
-								class="btn btn-success btn-round btn-just-icon btn-sm"
-								data-original-title="" title="">
-								<i class="material-icons">edit</i>
-							</button>
-							<button type="button" rel="tooltip"
-								class="btn btn-danger btn-round btn-just-icon btn-sm"
-								data-original-title="" title="">
-								<i class="material-icons">close</i>
-							</button>
-						</td>
-					</tr>
-					<tr>
-						<td class="text-center">5</td>
-						<td class="text-center">
-							<div class="form-check">
-								<label class="form-check-label"> <input
-									class="form-check-input" type="checkbox" value="" checked="">
-									<span class="form-check-sign"> <span class="check"></span>
-								</span>
-								</label>
-							</div>
-						</td>
-						<td>Paul Dickens</td>
-						<td>Communication</td>
-						<td>2015</td>
-						<td class="text-right">€ 69,201</td>
-						<td class="td-actions text-right">
-							<button type="button" rel="tooltip"
-								class="btn btn-info btn-just-icon btn-sm"
-								data-original-title="" title="">
-								<i class="material-icons">person</i>
-							</button>
-							<button type="button" rel="tooltip"
-								class="btn btn-success btn-just-icon btn-sm"
-								data-original-title="" title="">
-								<i class="material-icons">edit</i>
-							</button>
-							<button type="button" rel="tooltip"
-								class="btn btn-danger btn-just-icon btn-sm"
-								data-original-title="" title="">
-								<i class="material-icons">close</i>
-							</button>
-						</td>
-					</tr>
+					
 				</tbody>
 			</table>
 		</div>
