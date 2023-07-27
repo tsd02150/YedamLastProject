@@ -60,7 +60,7 @@ public class BoardController {
 	public String boardDetail(Model model,BoardVO vo, HttpSession session) {
 		// 상세페이지 진입 시 조회수 1 증가
 		boardService.increaseInquery(vo.getBoardNo());
-		
+		System.out.println("~~~~~~~~~"+session.getAttribute("loggedInMember"));
 		// 로그인 여부 정보
 		if(session.getAttribute("loggedInMember")!=null) {
 			model.addAttribute("myInfo",session.getAttribute("loggedInMember"));
