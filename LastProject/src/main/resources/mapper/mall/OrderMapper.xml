@@ -10,8 +10,14 @@
 			J JOIN MEMBER M ON M.memb_no= J.memb_no WHERE M.memb_no=#{membNo} ORDER BY 
 			prdt_no DESC 
 	
-
 	</select>
-
+	<select id="getMemInfo" resultType="OrderVO">
+	
+		 SELECT *
+		 FROM member M JOIN ADDRESS A
+		 ON m.memb_no = a.memb_no
+		 WHERE m.memb_no = #{membNo}
+		 
+	</select>
 
 </mapper>

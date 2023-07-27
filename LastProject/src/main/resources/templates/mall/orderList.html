@@ -865,7 +865,7 @@ table {
 		</div> -->
 
 		</div>
-		<script>
+		<script th:inline="javascript">
 	
 	
 	/*   <strong>받는 분 이름:</strong> <span id="recipient_name"></span>
@@ -881,15 +881,32 @@ table {
 	
 	 //주문자 정보
 	 //let memInfo = [[${mem}]];
-		console.log([[${member}]]);
+	console.log([[${membInfo}]]);
 		
 	let memNm = '';
 	let email = '';
 	let tel = '';
-	let point = 0;
+	let totalPoint = 0;
+	let addr = '';
 	
-				    
-				    
+ 	for ( let memb of membInfo) {
+ 		
+	 memNm += memb.nm;
+ 	}
+	 
+	// 주문자 정보
+	// 주문자 명
+	 $(".recipient_name").text(memNm);
+	// 이메일
+	 $(".recipient_email").text(email);
+	// 연락처
+	$(".recipient_phone").text(tel);	
+	// 배송주소
+	$(".address").text(addr);
+	// 최종 잔여 포인트
+	$(".totalPoint").text(totalPoint); 
+	 
+	 
 		
 	 let orderInfo = [];
 	 orderInfo=[[${orderList}]]; // 주문 리스트 정보
@@ -909,7 +926,7 @@ table {
 		 totalCount += info.cnt; // 물품의 개수를 totalCount에 더합니다.
 		 totalPoint += info.point - ((info.prc - (info.prc * info.dcRate / 100)) * info.cnt) - deliveryPrice; 
 		}
-	
+		
 		deliveryPrice += totalPrice >= 10000 ? 0 : 3000;
 		finalTotalPrice = totalPrice + deliveryPrice;
 		console.log(totalPrice);
