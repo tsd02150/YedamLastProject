@@ -138,7 +138,8 @@ public class EditorController {
 	@PostMapping("/attach/update")
 	@ResponseBody
 	public void attachUpdate(@RequestPart MultipartFile[] uploadFiles, AttachFileVO vo) throws AmazonServiceException, SdkClientException, IOException {
-
+		//List<AttachFileVO> list = new ArrayList<AttachFileVO>();
+		
 		for (MultipartFile uploadFile : uploadFiles) {
 			// 업로드 파일의 본래 이름
 			String originalName = uploadFile.getOriginalFilename();
@@ -158,8 +159,10 @@ public class EditorController {
 			
 			vo.setAtchNm(saveName);
 			vo.setAtchOriginNm(originalName);
-			attachFileService.addBoardAttachFile(vo);
+			//list.add(vo);
+			//attachFileService.addBoardAttachFile(vo);
 		}
+		//return list;
 	}
 	
 	@GetMapping("downloadFile")
