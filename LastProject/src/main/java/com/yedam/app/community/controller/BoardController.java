@@ -11,9 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.app.common.service.AttachFileService;
+import com.yedam.app.common.service.AttachFileVO;
 import com.yedam.app.community.mapper.BoardMapper;
 import com.yedam.app.community.service.BoardService;
 import com.yedam.app.community.service.BoardVO;
@@ -30,6 +33,9 @@ public class BoardController {
 
 	@Autowired
 	BoardService boardService;
+	
+	@Autowired
+	AttachFileService attachFileService;
 
 	// 게시판 목록 출력
 	@GetMapping("boardList")
@@ -184,13 +190,21 @@ public class BoardController {
 	@ResponseBody
 	public String modifyBoard(BoardVO vo) {
 		vo.setMembNo(boardService.getMembNo(vo.getNick()));
-		boolean result = boardService.modifyBoard(vo);
+		boardService.modifyBoard(vo);
 		
-		if (result) {
-			return vo.getBoardNo();
-		} else {
+		return vo.getBoardNo();
+	}
+	
+	// 파일 디비에서 삭제
+	@PostMapping("deleteAttach")
+	@ResponseBody
+	public String deleteFile(AttachFileVO vo) {
+		if(attachFileService.deleteAttachFile(vo)) {
+			return "success";			
+		}else {
 			return "fail";
 		}
+		
 	}
 	
 	// 댓글 추천 버튼
