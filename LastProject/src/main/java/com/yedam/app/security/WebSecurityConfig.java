@@ -83,7 +83,7 @@ public class WebSecurityConfig{
 	      http
 	      	 .csrf().disable()
 	         .authorizeHttpRequests()
-	         .antMatchers("/", "/member/mysurvey2","/stock/**", "/static/**").permitAll()
+	         .antMatchers("/", "/member/mysurvey3","/stock/**", "/static/**").permitAll()
 	         .antMatchers("/admin/**").hasRole("ADMIN")
 	         .antMatchers("/community/chat").hasAnyRole("ADMIN","USER")
 	         .antMatchers("/member/mypage").authenticated()
@@ -99,9 +99,9 @@ public class WebSecurityConfig{
 	         .permitAll()
 	         .and()
 	         .logout(logout -> logout
-                     .logoutSuccessHandler(logoutSuccessHandler)
-                     .logoutUrl("/member/logout")
-                     .permitAll()
+             .logoutSuccessHandler(logoutSuccessHandler)
+             .logoutUrl("/member/logout")
+             .permitAll()
              )
 
 					/*

@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layout/layout2}">
-
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
 
 .faqlist li{
@@ -19,51 +18,57 @@
   list-style-type: none;
   list-style: none;
 }
-#navtab{
-	margin : auto;
-	margine-top : 10px;
-	margine-bottom : 20px;
+#surveySection{
+	height: 1700px;
+	text-align: center;
 }
+#surveySection table{
+text-align: left;
+}
+#surveySection button{
+ margin-top : 10px;
+ margin-bottom : 10px;
+}
+
 #surveydiv{
-	height: 1000px;
-	overflow: auto;
+	padding : 10px;
 }
-.radio{
-	display : inline-block;
+#surveytbl{
+margin : auto;
+margin-top : 30px;
 }
-#typeResult img{
-	width : 700px;
-	height: 500px;
-	margin-top : 20px;
+#noResult {
+	text-align: center;
+	margin-top : 100px;
+	margin-bottom : 50px;
 }
 #noResult p{
-	text-align: center;
-	margin-top : 50px;
-	font-size: large;
-	font-weight: bold;
+	font-size : 30px;
+	color : black;
+	margin : 30px;
 }
-#stockBtn{
-text-align: center;
-margin-top : 50px;
-margin-bottom : 50px;
+#typeResult{
+	margin-top: 100px;
 }
-#membResult img{
-width : 700px;
-margin-top : 20px;
+#typeResult img{
+	width: 1100px;
 }
 </style>
+
 </head>
 <body>
-<div layout:fragment="mypage">
-	<div id="mypageBody">
-	<div id="navtab">
+	<div layout:fragment="content">
+		<div id="surveySection">
+			<div id="navtab">
 		<nav>
 		  <div class="nav nav-tabs" id="nav-tab" role="tablist">
 		    <button class="nav-link active col-6" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">투자성향 자가측정</button>
 		    <button class="nav-link col-6" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">투자성향 자가측정 확인</button>
 		  </div>
 		</nav>
-	</div>
+	</div> 
+	<!-- nav end -->
+	
 	<div id="surveydiv">
 		<table id="surveytbl" class="linetype none mgt0" summary="로 구성된 표 입니다.">
 					<colgroup>
@@ -158,52 +163,135 @@ margin-top : 20px;
 						</td>
 					</tr>
 				</tbody></table>
-		<button type="button" onclick="doSubmit()">제출하기</button>
+		<button type="button" class="btn btn-primary" onclick="doSubmit()" th:if="${session.loggedInMember}==null">제출하기</button>
+		<button type="button" onclick="doSubmitMemb()" th:if="${session.loggedInMember} != null">제출하기</button>
+		<button type="reset" class="btn btn-dark" onclick="resetBtn()">취소하기</button>
 		</div>
+		
+		<!--  -->
+		
 		<div id="surveyResult">
-			<div id="noResult">
+			<div id="noResult" style="display : none;">
 				<p>투자성향 자가측정 참여 이력이 없습니다.</p>
 				<p>참여 후 확인 바랍니다.</p>
 			</div>
-			<div id="membResult">
+			<div id="membResult" style="display : none;">
 			<div id="stockBtn">
 			<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/stock/itemListPage}'|">주식 사이트로 이동</button>
 			</div>
 			</div>
 			
-			<div id="typeResult">
+			<div id="typeResult" style="display : none;">
+			<h3>투자성향 분류</h3>
 				<img th:src="|/member/images/analysisType.png|" >
 			</div>
 		</div>
-	</div>
-	<script>
-	// 해당 페이지 로드시 실행
-	let ano = '';
-	/* for(let i=0; i<10; i++){
 		
-	} */
-	let membNo = ""; // 변수 초기화
-
-	//로그인 되지 않은 사용자일 경우
-	if ("[[${session.loggedInMember.membNo}]]" == null) { 
-	  $.ajax({
-	    url: "anoSelectKey",
-	    success: function (data) {
-	      //console.log(data);
-	      membNo = data; 
-	    },
-	    error: function (err) {
-	      console.log(err);
-	    },
-	  });
-	} else { //로그인 된 사용자라면 세션에 저장된 membNo 저장
-	  membNo = "[[${session.loggedInMember.membNo}]]"; 
-	}
+		<!--  -->
 	
-	analysisResult();
-	console.log($("input[name='investKnowLevel']:checked").siblings("label").text());
-	function doSubmit() {
-			
+		</div>
+	<script>
+		let membNo = ""; // 변수 초기화
+		let login = "";
+		let typeNo = '';
+		let typeNm = '';
+		let score = 0;
+		
+		//설문조사 탭 클릭
+		$("#nav-home-tab").on("click", function(){
+			if(!$("#nav-home-tab").hasClass("active")){
+				$("#nav-home-tab").addClass("active");
+			}
+			$("#nav-profile-tab").removeClass("active");
+			$("#surveydiv").css("display","block"); // 제출하기 버튼
+			$("#surveytbl").css("display","block"); // 설문조사 질문 table
+			$("#surveydiv button").css("display","block"); // 제출하기 버튼
+			$("#noResult").css("display","none"); //참여결과 없을때 div
+			$("#membResult").css("display","none"); //설문조사 결과 div
+			$("#typeResult").css("display","none"); //타입 종류 div
+		})
+		
+		
+		//설문조사 결과 탭 클릭
+		$("#nav-profile-tab").on("click", function(){
+			if("${session.loggedInMember}" == null){
+				
+			$("#nav-profile-tab").addClass("active");
+			$("#nav-home-tab").removeClass("active");
+			$("#surveytbl").css("display","none"); // 설문조사 질문 table
+			$("#surveydiv button").css("display","none"); // 제출하기 버튼
+			$("#noResult").css("display","none"); //참여결과 없을때 div
+			$("#membResult").css("display","none"); //설문조사 결과 div
+			$("#typeResult").css("display","block"); //타입 종류 div
+			$("#noResult").css("display","block"); //타입 종류 div
+			} else{
+				$("#nav-profile-tab").addClass("active");
+				$("#nav-home-tab").removeClass("active");
+				$("#surveytbl").css("display","none"); // 설문조사 질문 table
+				$("#surveydiv button").css("display","none"); // 제출하기 버튼
+				$("#noResult").css("display","none"); //참여결과 없을때 div
+				$("#membResult").css("display","none"); //설문조사 결과 div
+				$("#typeResult").css("display","block"); //타입 종류 div
+				$("#noResult").css("display","block"); //타입 종류 div
+				analysisResult();
+			}
+		})
+		
+		//회원 설문조사 참여 insert
+		function insertFunc(){
+				$.ajax({
+					url : "insertsurvey",
+					method : "POST",
+					data : {
+						"invstTypeNo" : typeNo
+					},
+					success : function(res){
+						if(res === 1){
+							analysisResult();
+						}
+					},
+					error : function(err){
+						console.log(err);
+					}
+				})
+			}
+		
+		function analysisResult() {
+		    $.ajax({
+		      url: "analysisResult",
+		      method: "POST",
+		      success: function (data) {
+		        if (data && data.length > 0) {
+		        	$("#nav-profile-tab").addClass("active");
+		          $("#nav-home-tab").removeClass("active");
+		          $("#surveydiv").css("display", "none");
+		          $("#stockBtn button").css("display", "none");
+		          $("#noResult").css("display", "none");
+		          $("#surveyResult").css("display", "block");
+		          $("#typeResult").css("display","block"); 
+		          let img = '';
+		          data.forEach(el => {
+		            img += `
+		              <img src="/member/images/${el.typeNm}.png">
+		            `;
+		          });
+		          $("#membResult").html(img); // Update the #typeResult div
+		          $("#membResult").css("display", "block");
+		        } else {
+		        	$("#nav-home-tab").addClass("active");
+		        	$("#nav-profile-tab").removeClass("active");
+		          $("#membResult").css("display", "none");
+		          $("#stockBtn button").css("display", "none");
+		          $("#noResult").css("display", "block");
+		        }
+		      },
+		      error: function (err) {
+		        console.log(err);
+		      }
+		    });
+		  }	
+		//설문조사 제출 - 회원
+		function doSubmitMemb(){
 			if($("input:radio[name=investKnowLevel]:checked").length==0) {
 				alert("1번항목을 선택해 주십시오.");
 				$("input:radio[name=investKnowLevel]")[0].focus();
@@ -261,109 +349,136 @@ margin-top : 20px;
 			let q7Answer = $("input[name='investPurpose']:checked").val();
 			let q8Answer = $("input[name='lossLevel']:checked").val();
 
-			let score = (parseInt(q1Answer)+parseInt(q2Answer)+parseInt(q3Answer)+parseInt(q4Answer)+parseInt(q5Answer)+parseInt(q6Answer)+parseInt(q7Answer)+parseInt(q8Answer))*1.25;
-			//console.log(score);
-			let typeNo = '';
+			score = (parseInt(q1Answer)+parseInt(q2Answer)+parseInt(q3Answer)+parseInt(q4Answer)+parseInt(q5Answer)+parseInt(q6Answer)+parseInt(q7Answer)+parseInt(q8Answer))*1.25;
 			
 			//설문조사 추가
 			if(score <= 30) {
 				typeNo = 'A';
+				typeNm="안정형";
 			}else if(score >30 && score <=40){
 				typeNo = 'B';
+				typeNm="안정추구형";
 			}else if(score >41 && score <=60){
 				typeNo = 'C';
+				typeNm="위험중립형";
 			}else if(score >61 && score <=80){
 				typeNo = 'D';
+				typeNm="성장추구형";
 			}else{
 				typeNo = 'E';
+				typeNm="성장형";
 			}
 			
-			
-			 if(score != null && typeNo !=null ){
-				 insertFuc();
-			 }
-
-		function insertFuc(){
-				$.ajax({
-					url : "insertsurvey",
-					method : "POST",
-					data : {
-						"membNo" : membNo,
-						"invstTypeNo" : typeNo
-					},
-					success : function(res){
-						console.log(res);
-						if(res === 1){
-							analysisResult();
-						}
-					},
-					error : function(err){
-						console.log(err);
-					}
-				});
+			if(score != null && typeNo !=null && login !== null ){
+				insertFunc();
+			}
 		}
-	}
-	
-	function analysisResult() {
-	    $.ajax({
-	      url: "analysisResult",
-	      method: "POST",
-	      data: {
-	        "membNo": membNo
-	      },
-	      success: function (data) {
-	       /*  if (membNo != "anonymous") {
-	          $("#nav-profile-tab").addClass("active");
-	          $("#nav-home-tab").removeClass("active");
-	          $("#surveydiv").css("display", "none");
-	          $("#noResult").css("display", "none");
-	          $("#surveyResult").css("display", "block");
-	        } */
-	        if (data && data.length > 0) {
-	        	$("#nav-profile-tab").addClass("active");
+		
+		
+		//설문조사 제출 -  익명
+		function doSubmit(){
+			if($("input:radio[name=investKnowLevel]:checked").length==0) {
+				alert("1번항목을 선택해 주십시오.");
+				$("input:radio[name=investKnowLevel]")[0].focus();
+				return;
+			}
+
+			if($("input:radio[name=investPracticeSect]:checked").length==0) {
+				alert("2번항목을 선택해 주십시오.");
+				$("input:radio[name=investPracticeSect]")[0].focus();
+				return;
+			}
+
+			if($("input:radio[name=investTerm]:checked").length==0) {
+				alert("3번항목을 선택해 주십시오.");
+				$("input:radio[name=investTerm]")[0].focus();
+				return;
+			}
+
+			if($("input:radio[name=mnthIncomeCompareInvestAsstCd]:checked").length==0) {
+				alert("4번항목을 선택해 주십시오.");
+				$("input:radio[name=mnthIncomeCompareInvestAsstCd]")[0].focus();
+				return;
+			}
+
+			if($("input:radio[name=investAssetWeight]:checked").length==0) {
+				alert("5번항목을 선택해 주십시오.");
+				$("input:radio[name=investAssetWeight]")[0].focus();
+				return;
+			}
+
+			if($("input:radio[name=importOrigin]:checked").length==0) {
+				alert("6번항목을 선택해 주십시오.");
+				$("input:radio[name=importOrigin]")[0].focus();
+				return;
+			}
+
+			if($("input:radio[name=investPurpose]:checked").length==0) {
+				alert("7번항목을 선택해 주십시오.");
+				$("input:radio[name=investPurpose]")[0].focus();
+				return;
+			}
+
+			if($("input:radio[name=lossLevel]:checked").length==0) {
+				alert("8번항목을 선택해 주십시오.");
+				$("input:radio[name=lossLevel]")[0].focus();
+				return;
+			}
+
+			let q1Answer = $("input[name='investKnowLevel']:checked").val();
+			let q2Answer = $("input[name='investPracticeSect']:checked").val();
+			let q3Answer = $("input[name='investTerm']:checked").val();
+			let q4Answer = $("input[name='mnthIncomeCompareInvestAsstCd']:checked").val();
+			let q5Answer = $("input[name='investAssetWeight']:checked").val();
+			let q6Answer = $("input[name='importOrigin']:checked").val();
+			let q7Answer = $("input[name='investPurpose']:checked").val();
+			let q8Answer = $("input[name='lossLevel']:checked").val();
+
+			score = (parseInt(q1Answer)+parseInt(q2Answer)+parseInt(q3Answer)+parseInt(q4Answer)+parseInt(q5Answer)+parseInt(q6Answer)+parseInt(q7Answer)+parseInt(q8Answer))*1.25;
+			
+			//설문조사 추가
+			if(score <= 30) {
+				typeNo = 'A';
+				typeNm="안정형";
+			}else if(score >30 && score <=40){
+				typeNo = 'B';
+				typeNm="안정추구형";
+			}else if(score >41 && score <=60){
+				typeNo = 'C';
+				typeNm="위험중립형";
+			}else if(score >61 && score <=80){
+				typeNo = 'D';
+				typeNm="성장추구형";
+			}else{
+				typeNo = 'E';
+				typeNm="성장형";
+			}
+			
+			 if(score != null && typeNo !=null){
+				 $("#nav-profile-tab").addClass("active");
 	          $("#nav-home-tab").removeClass("active");
 	          $("#surveydiv").css("display", "none");
 	          $("#stockBtn button").css("display", "none");
 	          $("#noResult").css("display", "none");
 	          $("#surveyResult").css("display", "block");
 	          let img = '';
-	          data.forEach(el => {
 	            img += `
-	              <img src="/member/images/${el.typeNm}.png">
+	              <img src="/member/images/${typeNm}.png">
 	            `;
-	          });
-	          $("#membResult").html(img); // Update the #typeResult div
-	          $("#membResult").css("display", "block");
-	        } else {
-	        	$("#nav-home-tab").addClass("active");
-	        	$("#nav-profile-tab").removeClass("active");
-	          $("#membResult").css("display", "none");
-	          $("#stockBtn button").css("display", "none");
-	          $("#noResult").css("display", "block");
-	        }
-	      },
-	      error: function (err) {
-	        console.log(err);
-	      }
-	    });
-	  }	
-	
-	$("#nav-home-tab").on("click", function(){
-		$("#nav-home-tab").addClass("active");
-		$("#nav-profile-tab").removeClass("active");
-		$("#surveyResult").css("display","none");
-		$("#surveydiv").css("display","block");
-	})
-	$("#nav-profile-tab").on("click", function(){
-		$("#nav-profile-tab").addClass("active");
-		$("#nav-home-tab").removeClass("active");
-		$("#surveydiv").css("display","none");
-		$("#surveyResult").css("display","block");
-		analysisResult();
-	})
+	          
+	          $("#membResult").html(img); 
+	          $("#membResult").css("display", "block"); //조사 결과 div
+	          $("#typeResult").css("display","block"); //타입 종류 div
+			 }
+				
+		}
+		
+		function resetBtn(){
+	    window.location.reload();
+	    window.scrollTo(0, 0);
+		}
 	</script>
-
-</div>
+	
+	</div>
 </body>
-
 </html>

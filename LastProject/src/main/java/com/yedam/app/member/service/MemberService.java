@@ -103,4 +103,8 @@ public interface MemberService {
 	public String anoSelectKey();
 	//추천순위
 	public List<PossVO> recomList(String membNo);
+	//회원탈퇴
+	public int deleteMemb(String membNo);
+	//회원 백업
+	public int insertbackup(MembVO membVO);
 }
