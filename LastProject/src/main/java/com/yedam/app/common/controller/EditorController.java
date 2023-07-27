@@ -128,41 +128,11 @@ public class EditorController {
 	        metadata.setContentType(uploadFile.getContentType());
 
 	        amazonS3.putObject(bucket, saveName, uploadFile.getInputStream(), metadata);
-			
+	        System.out.println(vo);
 			vo.setAtchNm(saveName);
 			vo.setAtchOriginNm(originalName);
 			attachFileService.addBoardAttachFile(vo);
 		}
-	}
-	
-	@PostMapping("/attach/update")
-	@ResponseBody
-	public void attachUpdate(@RequestPart MultipartFile[] uploadFiles, AttachFileVO vo) throws AmazonServiceException, SdkClientException, IOException {
-		//List<AttachFileVO> list = new ArrayList<AttachFileVO>();
-		
-		for (MultipartFile uploadFile : uploadFiles) {
-			// 업로드 파일의 본래 이름
-			String originalName = uploadFile.getOriginalFilename();
-			
-			// 날짜 폴더 생성
-			String folderPath = makeS3Folder("attach");
-			// UUID
-			String uuid = UUID.randomUUID().toString();
-			// 저장할 파일 이름 중간에 "_"를 이용하여 구분
-			String saveName = folderPath + "/" + uuid + "_" + originalName;
-			
-			ObjectMetadata metadata = new ObjectMetadata();
-			metadata.setContentLength(uploadFile.getSize());
-			metadata.setContentType(uploadFile.getContentType());
-			
-			amazonS3.putObject(bucket, saveName, uploadFile.getInputStream(), metadata);
-			
-			vo.setAtchNm(saveName);
-			vo.setAtchOriginNm(originalName);
-			//list.add(vo);
-			//attachFileService.addBoardAttachFile(vo);
-		}
-		//return list;
 	}
 	
 	@GetMapping("downloadFile")

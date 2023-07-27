@@ -132,7 +132,7 @@
 	<!-- 게시물 수정 -->
 	<update id="modifyBoard" parameterType="BoardVO">
 		UPDATE BOARD
-		SET ttl=#{ttl}, cntn=#{cntn},drwup_dt=sysdate
+		SET ttl=#{ttl}, cntn=#{cntn}
 		WHERE board_no=#{boardNo}
 	</update>
 	
