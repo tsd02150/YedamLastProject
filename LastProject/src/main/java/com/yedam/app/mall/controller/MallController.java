@@ -135,7 +135,7 @@ public class MallController {
 		return "mall/getFarm";
 	}
 
-
+	
 	// 리뷰 정보 갖고오기
 	@PostMapping("getReviewList")
 	@ResponseBody
