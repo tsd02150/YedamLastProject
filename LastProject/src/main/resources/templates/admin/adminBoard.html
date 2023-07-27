@@ -8,6 +8,10 @@
 </head>
 <body>
 	<div layout:fragment="content">
+	<h3>게시판 관리</h3>
+		<div class="m-2">
+		  	<button id="deleteBtn" class="btn btn-danger btn-sm">삭제</button>
+		</div>
 		<div id="grid"></div>
 		
 		<script>
@@ -28,6 +32,7 @@
              scrollX: false,
              scrollY: false,
    		  	 pageOptions: {
+   		  		 useClient:true,
                  perPage: 10,
                },
              columns: [
