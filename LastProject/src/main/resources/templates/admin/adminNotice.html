@@ -27,10 +27,11 @@
 </head>
 <body>
 	<div layout:fragment="content">
-		<h3>공지사항</h3>
+		<h3><b>공지사항</b></h3>
+		<br/>
 		<div class="m-2">
-		  	<button id="writeBtn" class="btn btn-success btn-sm">작성</button>
-		  	<button id="deleteBtn" class="btn btn-danger btn-sm">삭제</button>
+		  	<button id="deleteBtn" class="btn btn-danger">삭제</button>			
+		  	<button id="writeBtn" class="btn btn-primary">작성</button>
 		</div>
 		
 		<div id="grid"></div>
@@ -216,16 +217,16 @@
 			}); // end of click 이벤트
 			
 			const dataSource = {
-	    		  contentType: 'application/json',
-	    		  api: {
-	    			  readData: {
+				contentType: 'application/json',
+				api: {
+					readData: {
 	    				url:'/admin/noticeList',
 	    				method:'GET' 
-	    			}
-	    		  }
-	    		};
+					}
+				}
+			};
 	      
-	        const grid = new tui.Grid({
+			const grid = new tui.Grid({
 	             el: document.getElementById('grid'),
 	             rowHeaders: ['rowNum','checkbox'],
 	             data:dataSource,
@@ -234,26 +235,26 @@
 	   		  	 pageOptions: {
 	   		  		 useClient:true,
 	                 perPage: 5,
-	               },
+	             },
 	             columns: [
-	            	   {
-	                     header: '공지번호',
-	                     name: 'notiNo',
-	                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
-	                   },
-	                  	{
-	                      header: '제목',
-	                      name: 'ttl',
-	                      filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
-	                   	},
-	                  	{
-	                      header: '작성일시',
-	                      name:'drwupDt',
-	                      sortingType: 'asc',
-	                      sortable: true
-	                    }
-	                 ]
-	               });
+					{
+					     header: '공지번호',
+					     name: 'notiNo',
+					     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+					},
+					{
+					   header: '제목',
+					   name: 'ttl',
+					   filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+						},
+					{
+					   header: '작성일시',
+					   name:'drwupDt',
+					   sortingType: 'asc',
+					   sortable: true
+					 }
+				]
+			});
 	        
 	        grid.on('dblclick',(ev) => {
 	        	// 공지사항정보
@@ -261,8 +262,6 @@
 	        	//신고된 글 내용 불러오기
 	        	$.ajax('noticeDetail?notiNo='+notiNo)
 	        	.done(function(data){
-	        		console.log(data);
-	        		
 	        		Swal.fire({
 	            		title:'공지사항',
 	            		html:`
@@ -295,16 +294,14 @@
 							
 							`,
 						customClass: 'swal-cls',
-						showDenyButton: true,
 						showCancelButton:true,
-						cancelButtonText:'취소',
 		    		    confirmButtonText: '수정',
-		    		    denyButtonText: '글삭제'
+						cancelButtonText:'취소',
 	        		})
 	        		.then((result) => {			
 	        			if(result.isConfirmed){
-	        				// 글수정
-	        				
+	        				// 수정 기능
+	        				Swal.fire('수정')
 	        			}else if(result.isDenied){
 	        				// 삭제 기능
 	        				Swal.fire({
@@ -339,12 +336,9 @@
 	    				console.error(error);
 	    			});
 		    		
-		    		// 태연아 여기!
+		    		
 	        		
 	            })// end of done
-	            	
-	            
-	        
 	        });//end of dblclick 기능
 	        	
 	        	
