@@ -107,20 +107,21 @@
 					showCancelButton:true,
 					cancelButtonText:'취소',
 	    		    confirmButtonText: '작성',
+	    		    preConfirm: () => {
+	    		          // 입력값 검사
+	    		          const textareaValue = document.getElementById('noticeContent').value;
+	    		          const ttlValue = document.getElementById('writeNoticeTtl').value;
+	    		          if (!textareaValue) {
+	    		            return Promise.reject('값을 입력해주세요.');
+	    		          }
+	    		          return textareaValue;
+	    		        }
         		})
         		.then((result) =>{
         			if(result.isConfirmed){
-        				if($('#writeNoticeTtl').val()==""||$('#writeNoticeTtl').val()==null){
-        					swal.fire('제목입력하세요')
-        					return;
-        				}
         				
         				let ckData = editor.getData()
-        				if($('#noticeContent').val()==""||$('#noticeContent').val()==null){
-        					toastShow("There is no content" , "내용이 없습니다" , "error");
-        					return;
-        				}
-        					
+        				
         				let formData = $('#myForm').serializeObject()
         				formData.cntn = ckData
         				
