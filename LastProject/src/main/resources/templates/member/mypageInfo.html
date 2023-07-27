@@ -10,51 +10,71 @@
 <style>
 .section-padding {
 	padding: 20px 0;
-  position: relative;
+	position: relative;
 }
-.addDiv{
-height: 60px;}
-* The Modal (background) */
+
+.addDiv {
+	height: 60px;
+}
+
+* The Modal (background) * /
 .modal {
-  display: none; 
-  position: fixed; 
-  z-index: 1; 
-  left: 0;
-  top: 0;
-  width: 100%; 
-  height: 100%; 
-  overflow: auto; 
-  background-color: rgb(0,0,0); 
-  background-color: rgba(0,0,0,0.4); 
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0, 0, 0);
+	background-color: rgba(0, 0, 0, 0.4);
 }
 
 /* Modal Content/Box */
 .modal-content {
- background-color: #fefefe;
- margin: 15% auto; 
- padding: 20px;
- border: 1px solid #888;
- width: 30%;                      
+	background-color: #fefefe;
+	margin: 15% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 30%;
 }
 /* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
 }
 
 /* Firefox */
 input[type=number] {
-  -moz-appearance: textfield;
+	-moz-appearance: textfield;
 }
-.addDiv{
-	margin-bottom : 20px;
+
+.addDiv {
+	margin-bottom: 20px;
 }
-#insertAddrDiv{
-display : none;
+
+#insertAddrDiv {
+	display: none;
 }
-#insertResetBtn{
-display : none;
+
+#insertResetBtn {
+	display: none;
+}
+
+#btns span {
+	margin-left: 250px;
+	text-decoration: underline;
+	color: gray;
+	cursor: pointer;
+}
+
+.span_bt {
+	font-size: 13pt;
+	cursor: pointer;
+	background-color: #DDDDDD;
+	text-align: center;
+	padding: 10px 30px 10px 30px;
 }
 </style>
 </head>
@@ -175,9 +195,10 @@ display : none;
 							</div>
 						<div id="addrDiv" th:if="${not #lists.isEmpty(membList)}" class="col-md-12" style=" padding-left: 0px;">
 						</div>
-						<div class="col-md-12">
+						<div class="col-md-12" id="btns">
 							<button class="btn btn-primary" type="submit" id="saveBtn">저장</button>
 							<button class="btn btn-dark" type="reset" id="resetBtn">취소</button>
+							<span onclick="deleteMemb()"> 회원탈퇴 </span>
 						</div>
 					</form>
 				</div>
@@ -194,8 +215,21 @@ display : none;
   		<span class="pop_bt" style="font-size: 13pt;">닫기</span>
   	</div>
   </div>
-</div>    
+</div>
 <!-- modal -->
+<div id="delModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+  	 <p class="bi bi-exclamation-circle" style="text-align: center; font-size: 24pt;"></p>
+    <p style="text-align: center; line-height: 1.5;" id="modalTxt"></p>
+    <p><br></p>
+  	<div style="text-align: center;" id="modalBtn">
+  		
+  	</div>
+  </div>
+</div>
+<!-- modal -->
+
  
 <script>
 
@@ -264,7 +298,6 @@ $.ajax({
 					</div>
 				</div>
 			`;
-			
 			
 			$("#addrDiv").html(div);	
 		})
@@ -501,7 +534,7 @@ function sendMailCode() {
             "email": $("#email-address").val()
         },
         success: function (data) {
-            console.log("임시코드: " + data);
+            //console.log("임시코드: " + data);
             mailcode = data;
             $("#mainCheckInput").css("display", "inline");
             $("#testBtn1").css("display", "inline");
@@ -553,59 +586,45 @@ $("#changeTel").on("click", function() {
     $("#telInput").val("");
 });
 
+$("#sendsms").on("click", function() {
+	  telcount1++;
+	  if (!$("#telInput").val()) {
+	    $("#telInput").focus();
+	  } else {
+	    $("#telInput").attr("name", "to");
+	    let toUser = $("#telInput").val().replace(/[^0-9]/g, "").replace(/^(\d{3})(\d{4})(\d{4})$/, "$1$2$3");
+	    testcode = createSmsKey();
+	    //console.log(testcode);
 
-  // sms 인증번호 발송
-  $("#sendsms").on("click", function() {
-    telcount1++;
-   if (!$("#telInput").val()) {
-       $("#telInput").focus();
-   }else{
-		 $("#telInput").attr("name","to")
-	   let toUser = $("#telInput").val().replace(/[^0-9]/g, "").replace(/^(\d{3})(\d{4})(\d{4})$/, "$1$2$3");
-	   testcode = createSmsKey();
-	   console.log(testcode);
-	   //sms 발송
-	   /* 	$.ajax({
-					    url: "sendSms",
-					    method: "POST",
-					    data: {
-					      to: toUser,
-					      content: "[SMS] 인증번호 [" + testcode + "]를 입력해주세요"
-					    },
-					    success: function(response) {
-					      console.log("key: " + testcode);
-					      $("#telCheck").text("인증번호가 발송되었습니다.")
-								    			    .css({
-												           color: "#0D6EFD",
-												           "font-weight": "bold",
-												           "font-size": "14px"
-								}); // 인증번호 확인 끝.
-								$("#telInput").attr("name","tel");
-								}
-								$("#sendsms").addClass("isOk"); //본인인증 실행 여부 체크
-					      
-					    },
-					    error: function(err) {
-					      console.log(err);
-					    }
-					  });// sms 발송 끝 */
-	   
-	   //
-	   
-	   $("#telCheck")
-	       .text("인증번호가 발송되었습니다.")
-	       .css({
-	           color: "#0D6EFD",
-	           "font-weight": "bold",
-	           "font-size": "14px"
-	       }); // 인증번호 확인 끝.
-	   }
-	   $("#sendsms").addClass("isOk"); //본인인증 실행 여부 체크
-	   
-	   if (telcount1 >= 5) {
-	       $("#myModal").show();
-   }
-});
+	    // SMS 발송
+	    $.ajax({
+	      url: "sendSms",
+	      method: "POST",
+	      data: {
+	        to: toUser,
+	        content: "[SMS] 인증번호 [" + testcode + "]를 입력해주세요"
+	      },
+	      success: function(response) {
+	        console.log("key: " + testcode);
+	        $("#telCheck").text("인증번호가 발송되었습니다.")
+	          .css({
+	            color: "#0D6EFD",
+	            "font-weight": "bold",
+	            "font-size": "14px"
+	          }); // 인증번호 확인 끝.
+	        $("#telInput").attr("name", "tel");
+	        $("#sendsms").addClass("isOk"); //본인인증 실행 여부 체크
+	      },
+	      error: function(err) {
+	        console.log(err);
+	      }
+	    }); // SMS 발송 끝
+
+	    if (telcount1 >= 5) {
+	      $("#myModal").show();
+	    }
+	  }
+	});
 
  // sms 인증코드 확인
  $("#testBtn2").on("click", function() {
@@ -622,7 +641,6 @@ $("#changeTel").on("click", function() {
    }
      telcount2++; //버튼 클릭 5회 제한
      
-	   
    if (testcode != $("#codeCheckInput").val()) {
        $("#codeCheck")
            .text("인증번호가 일치하지 않습니다. 다시 입력하세요")
@@ -709,12 +727,82 @@ $("#insertResetBtn").on("click", function(){
 	
 })
 
+//회원 탈퇴
+	let message ='';
+	let spanbtn='';
+function deleteMemb(){
+	let point = parseInt("[[${session.loggedInMember.point}]]");
+	if(point != 0){
+		console.log("[[${#lists.isEmpty(stockList)}]]");
+		if("[[${#lists.isEmpty(stockList)}]]" == false){
+			message='';
+			spanbtn='';
+			message += `현재 보유 포인트 <br>
+							${commas(point)} point<br>
+							${commas(point*10)}원<br>
+							환불 후 탈퇴하시겠습니까?`;
+			spanbtn +=`
+					<span class="pop_bt span_bt" onClick="close_pop();">취소</span>
+		  		<span class="pop_bt span_bt" onclick="delAjax()">탈퇴하기</span>
+			`;
+			$("#modalTxt").html(message);
+			$("#modalBtn").html(spanbtn);
+			$("#delModal").show();
+		}else{
+			message='';
+			spanbtn='';
+			message += `현재 보유 포인트 <br>
+									<strong>${commas(point)} point<br>
+									${commas(point*10)}원</strong><br><br>
+									<strong>보유주식 매도 후 탈퇴 가능합니다.</strong> `;
+			spanbtn +=`
+					<span class="pop_bt span_bt" onClick="close_pop();">취소</span>
+		  		<span class="pop_bt span_bt" onclick="location.href='/stock/itemListPage'">주식시장으로</span>
+			`;
+			$("#modalTxt").html(message);
+			$("#modalBtn").html(spanbtn);
+			$("#delModal").show();
+		}
+	}
+}
+
+//회원탈퇴
+function delAjax(){
+	$.ajax({
+		url : "deleteMemb",
+		method : "POST",
+		data : {
+			"membNo" : membNo
+		},
+		success : function(data){
+			message='';
+			spanbtn='';
+			message += `탈퇴가 성공적으로 이루어졌습니다.`;
+			spanbtn +=`
+					<span class="pop_bt span_bt" onClick="close_del_pop();">닫기</span>
+			`;
+			$("#modalTxt").html(message);
+			$("#modalBtn").html(spanbtn);
+			$("#delModal").show();
+		},
+		error : function(err){
+			console.log(err);
+		}
+	});
+}
+
 //모달
 function close_pop(flag) {
  $('#myModal').hide();
 	 window.location.reload();
 };
-
+function close_del_pop(flag) {
+ $('#myModal').hide();
+	 window.location.href="/";
+};
+function commas(number) {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+} 
 function createSmsKey() {
 	  let key = '';
 	  
@@ -758,7 +846,7 @@ function checkPwdMatch() {
     }
 }
 
-      </script>
+     </script>
   </div>
 </body>
 

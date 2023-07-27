@@ -6,15 +6,10 @@
 	<!-- login 시 회원 정보 조회 -->
 	<select id="loginCheck" parameterType="String" resultType="UserVO">
 		<![CDATA[
-		select * from(
-			select m.*, s.stop_no, s.start_dt, s.end_dt, s.stop_period 
-      from member m
-			left outer join stop_yn s
-			on m.memb_no = s.memb_no
-			where m.id = #{id}
-			order by s.end_dt desc
-			) 
-		WHERE ROWNUM = 1
+		SELECT m.*, s.stop_no, s.start_dt, s.end_dt, s.stop_period
+		FROM member m LEFT JOIN stop_yn s 
+		ON m.memb_no = s.memb_no AND s.end_dt > sysdate
+		WHERE m.id = #{id}
 		]]>
 	</select>
 	

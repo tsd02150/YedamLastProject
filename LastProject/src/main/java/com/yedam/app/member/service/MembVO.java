@@ -15,8 +15,6 @@ public class MembVO {
 	private String tnm;
 	private String id;
 	private String pwd;
-	private String oldpwd;
-	private String newpwd;
 	private String nick;
 	private String email;
 	private String tel;
@@ -27,6 +25,8 @@ public class MembVO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private Date joinDt;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date dropDt;
 
 	private String interestNo;
 	private String itemNo;

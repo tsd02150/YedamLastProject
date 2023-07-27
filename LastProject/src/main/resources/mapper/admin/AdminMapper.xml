@@ -4,21 +4,13 @@
 
 <mapper namespace="com.yedam.app.admin.mapper.AdminMapper">
 	<select id="getMembList" resultType="MembManageVO">
-	<![CDATA[
-	 	select b.*
-		from(select rownum rn , a.*
-		     from(select m.memb_no , nm , id,decode(stop_no,null,'정상','활동중지') state, join_dt
-		         from member m left join ( select *
-		                                  from stop_yn
-		                                  where end_dt > sysdate
-		                                  ) s
-		         on m.memb_no = s.memb_no
-		         order by join_dt
-		         ) a
-		     where rownum <= #{page}*#{perPage}
-		    ) b
-		where rn > (#{page}-1)*#{perPage}
-		]]>
+	 	 select m.memb_no , nm , id,decode(stop_no,null,'정상','활동중지') state, join_dt
+         from member m left join ( select *
+                                  from stop_yn
+                                  where end_dt > sysdate
+                                  ) s
+         on m.memb_no = s.memb_no
+         order by join_dt
 	</select>
 	<!-- 멤버 전체수 -->
 	<select id="membCnt" resultType="int">
@@ -89,17 +81,9 @@
 	
 	<!-- 신고된 글 리스트 -->
 	<select id="reportList" resultType="ReportVO">
-		<![CDATA[
-		select b.*
-		from (select rownum rn, a.*
-		      from(
-		              select rprt_no ,rprt_st, accused , plaintiff, category , drwup_dt
-		              from report
-		              order by drwup_dt
-		            ) a
-		      where rownum <= #{page}*#{perPage}) b
-		where rn > (#{page}-1)*#{perPage}
-		]]>
+		select rprt_no ,rprt_st, accused , plaintiff, category , drwup_dt
+        from report
+        order by drwup_dt
 	</select>
 	<!-- 신고글 개수 -->
 	<select id="reportCnt">
@@ -149,17 +133,9 @@
 	
 	<!-- 공지사항 조회 -->
 	<select id="noticeList" resultType="NoticeVO">
-	<![CDATA[
-		select b.*
-		from (select rownum rn, a.*
-		      from(
-		            select noti_no , ttl , drwup_dt 
-		            from notice
-		            order by drwup_dt desc
-		            ) a
-		      where rownum <= #{page}*#{perPage}) b
-		where rn > (#{page}-1)*#{perPage}
-		]]>
+		select noti_no , ttl , drwup_dt 
+	    from notice
+	    order by drwup_dt desc
 	</select>
 	<!-- 공지사항 전체수 -->
 	<select id="noticeTotal">
@@ -177,16 +153,8 @@
 	
 	<!-- faq 글 리스트 -->
 	<select id="faqList" resultType="FaqVO">
-		<![CDATA[
-		select b.*
-		from (select rownum rn, a.*
-		      from(
-		              select *
-            		  from faq
-		            ) a
-		      where rownum <= #{page}*#{perPage}) b
-		where rn > (#{page}-1)*#{perPage}
-		]]>
+		select *
+	  	from faq
 	</select>
 	<!-- faq 개수 -->
 	<select id="faqTotal">
@@ -196,18 +164,10 @@
 	
 	<!-- qna 글 리스트 -->
 	<select id="qnaList" resultType="QuestionVO">
-		<![CDATA[
-		select b.*
-		from (select rownum rn, a.*
-		      from(
-		            select qst_no , q.memb_no , ttl , cntn ,drwup_dt , rply , rply_dt , nick
-		            from question q join member m 
-		            on q.memb_no = m.memb_no
-		            order by drwup_dt desc
-		           ) a
-		      where rownum <= #{page}*#{perPage}) b
-		where rn > (#{page}-1)*#{perPage}
-		]]>
+		select qst_no , q.memb_no , ttl , cntn ,drwup_dt , rply , rply_dt , nick
+        from question q join member m 
+        on q.memb_no = m.memb_no
+        order by drwup_dt desc
 	</select>
 	<!-- qna 개수 -->
 	<select id="qnaTotal">
@@ -217,19 +177,11 @@
 	
 	<!-- board 글 리스트 -->
 	<select id="boardList" resultType="BoardVO">
-		<![CDATA[
-		select b.*
-		from (select rownum rn, a.*
-		      from(
-		             select board_no , b.memb_no , nick , ttl, drwup_dt , rcom , nrcom ,h_ctgr, ctgr
-		             from board b join member m
-		             on b.memb_no = m.memb_no
-		             join common_code c on c.common_cd = b.common_cd
-		             order by drwup_dt desc
-		            ) a
-		      where rownum <= #{page}*#{perPage}) b
-		where rn > (#{page}-1)*#{perPage}
-		]]>
+		select board_no , b.memb_no , nick , ttl, drwup_dt , rcom , nrcom ,h_ctgr, ctgr
+        from board b join member m
+        on b.memb_no = m.memb_no
+        join common_code c on c.common_cd = b.common_cd
+        order by drwup_dt desc
 	</select>
 	<!-- board 개수 -->
 	<select id="boardTotal">
@@ -239,23 +191,43 @@
             
     <!-- chat 로그 리스트 -->
 	<select id="chatList" resultType="ChatVO">
-		<![CDATA[
-		select b.*
-		from (select rownum rn, a.*
-		      from(
-		            select chat_no ,room_no,anon_nick, cntn ,nick , drwup_dt
-		            from chat c join member m 
-		            on c.memb_no = m.memb_no
-		            order by drwup_dt desc
-		           ) a
-		      where rownum <= #{page}*#{perPage}) b
-		where rn > (#{page}-1)*#{perPage}
-		]]>
+		select chat_no ,room_no,anon_nick, cntn ,nick , drwup_dt
+        from chat c join member m 
+        on c.memb_no = m.memb_no
+        order by drwup_dt desc
 	</select>
 	<!-- chat 로그 개수 -->
 	<select id="chatTotal">
 		select count(chat_no)
         from chat
 	</select>
-            
+    
+    <!-- 공지사항 추가 -->
+    <insert id="addNotice">
+    	insert into notice (NOTI_NO,
+							MEMB_NO,
+							TTL,
+							CNTN,
+							DRWUP_DT,
+							INQ)
+		values ('not-'||noti_seq.nextval,
+				#{membNo},
+				#{ttl},
+				#{cntn},
+				sysdate,
+				0)	
+				
+	 <selectKey keyProperty="notiNo" resultType="String" order="AFTER">
+	    SELECT 'not-'||noti_seq.currval AS notiNo FROM DUAL
+	 </selectKey>	
+    	
+    </insert>
+    
+    <!-- 공지사항 수정 -->
+    <update id="modifyNotice" >
+    	update notice
+    	set ttl = #{ttl}
+    		,cntn = #{cntn}
+    	where noti_no = #{notiNo}
+    </update>
 </mapper>
