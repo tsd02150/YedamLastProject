@@ -46,8 +46,11 @@
 	display : block;
 }
 #buytbl th{
-	width : 144.441px;
 	padding:1px;
+	width: 120px;
+} 
+#buytbl{
+	text-align: center;
 }
 #stordertbl{
 	text-align: center;
@@ -83,7 +86,7 @@ padding-top : 40px;
 					<td th:text="|${#numbers.formatInteger(sumNowPrc*10, 0, 'COMMA')}원|"></td>
 					<td th:text="|${#numbers.formatInteger(sumTradePrc*10, 0, 'COMMA')}원|"></td>
 					<td th:text="|${#numbers.formatInteger((sumTradePrc-sumNowPrc)*10, 0, 'COMMA')}원|"></td>
-					<td th:text="|${#numbers.formatDecimal(sumTradePrc/sumNowPrc*100, 3, 2)}%|"></td>
+					<td th:text="|${#numbers.formatDecimal(raise, 3, 2)}%|"></td>
 				</tr>
 				</tbody>
 			</table>

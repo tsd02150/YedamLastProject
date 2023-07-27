@@ -174,7 +174,6 @@ public class MemberController {
 	@PostMapping("smsConfirm")
 	@ResponseBody
 	String smsConfirm(@RequestParam("email") String email) throws Exception {
-		//String email = membService.selectOneMemb(id).getEmail();
 		System.out.println(email);
 		String code = registerMail.sendSimpleMessage(email);
 		System.out.println("인증코드 : " + code);
@@ -339,7 +338,11 @@ public class MemberController {
 		return "member/mysurvey";
 	}
 	@GetMapping("mysurvey3")
-	public String mysurvey3() {
+	public String mysurvey3( HttpSession session, Model model) {
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		if(mem!= null) {
+			model.addAttribute("memberNo",mem.getMembNo());
+		}
 		return "member/mysurvey3";
 	}
 	
@@ -414,8 +417,8 @@ public class MemberController {
 		List<String> list = membService.membListInfo(mem.getMembNo());
 		MembVO member = membService.memberList(id);
 		model.addAttribute("membList",list); //주소 포함된 멤버 리스트
-		System.out.println(list);
 		model.addAttribute("member",member); //맴버 테이블만 조회
+		model.addAttribute("stockList",membService.myPossStockList(mem.getMembNo()));
 		return "member/mypageInfo";
 	}
 	
@@ -513,6 +516,7 @@ public class MemberController {
 	public List<MembVO> selectOneMembInfo(@RequestParam String id, MembVO membVO,Model model) {
 		membVO.setId(id);
 		model.addAttribute("info", membService.selectOneMemb2(membVO));
+		System.out.println("주소");
 		System.out.println(membService.selectOneMemb2(membVO));
 		return membService.selectOneMemb2(membVO);
 	}
@@ -540,9 +544,14 @@ public class MemberController {
 		double sumNowPrc = possstockList.stream().mapToInt(PossVO::getNowPrc).sum();
 		double sumTradePrc = possstockList.stream().mapToInt(PossVO::getTradePrc).sum();
 	    double raise =(double) (sumTradePrc / sumNowPrc) * 100;
+	    if(sumNowPrc == 0 || sumTradePrc==0 ) {
+	    	raise = 0;
+	    }
+	    System.out.println(raise);
 	    model.addAttribute("sumNowPrc", sumNowPrc);
 	    model.addAttribute("sumTradePrc", sumTradePrc);
 	    model.addAttribute("raise", raise);
+	    
 	    
 		return "member/mystockInfo";
 	}
@@ -645,19 +654,18 @@ public class MemberController {
 	
 	@ResponseBody
 	@PostMapping("insertsurvey")
-	public int insertsurvey(@RequestParam String invstTypeNo, @RequestParam String membNo, SurveyVO vo) {
-		vo.setMembNo(membNo);
-		vo.setInvstTypeNo(invstTypeNo);
-		System.out.println("설문조사 : "+vo);
+	public int insertsurvey(SurveyVO vo,HttpSession session) {
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		vo.setMembNo(mem.getMembNo());
 		int result = membService.insertsurvey(vo);
-		System.out.println(result);
 		return result;
 	}
 	
 	@ResponseBody
 	@PostMapping("analysisResult")
-	public List<SurveyVO> analysisResult(String membNo){
-		List<SurveyVO> list = membService.analysisResult(membNo);
+	public List<SurveyVO> analysisResult(HttpSession session){
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		List<SurveyVO> list = membService.analysisResult(mem.getMembNo());
 		return list;
 	}
 	
@@ -680,6 +688,19 @@ public class MemberController {
 	public List<PossVO> recomList(String membNo){
 		List<PossVO> list = membService.recomList(membNo);
 		return list;
+	}
+	
+	@ResponseBody
+	@PostMapping("deleteMemb")
+	public int deleteMemb(String membNo, MembVO membVO, HttpSession session) {
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		membVO = membService.selectOneMemb(mem.getId());
+		membVO.setMembNo(membNo);
+		membVO.setPoint(0);
+		//회원 백업
+		membService.insertbackup(membVO);
+		session.invalidate();
+		return membService.deleteMemb(membNo);
 	}
 	
 }

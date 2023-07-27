@@ -42,8 +42,4 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 		return userMapper.loginCheck(id);
 	}
 
-	@Override
-	public List<UserVO> stopList(String id) {
-		return userMapper.stopList(id);
-	}
 }

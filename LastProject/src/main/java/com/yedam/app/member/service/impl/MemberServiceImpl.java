@@ -242,4 +242,14 @@ public class MemberServiceImpl implements MemberService {
 		return membMapper.recomList(membNo);
 	}
 
+	@Override
+	public int deleteMemb(String membNo) {
+		return membMapper.deleteMemb(membNo);
+	}
+
+	@Override
+	public int insertbackup(MembVO membVO) {
+		return membMapper.insertbackup(membVO);
+	}
+
 }

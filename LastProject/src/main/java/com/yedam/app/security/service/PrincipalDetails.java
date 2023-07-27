@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,9 @@ import lombok.Getter;
 public class PrincipalDetails implements UserDetails, OAuth2User {
 	private UserVO userVO;
 	private Map<String, Object> attributes;
+	
+	@Autowired
+	UserService userService;
 
 	// 소셜 로그인
 	public PrincipalDetails(UserVO userVO, Map<String, Object> attributes) {
@@ -47,6 +51,7 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Collection<SimpleGrantedAuthority> list = new ArrayList<SimpleGrantedAuthority>();
 		Date currentDate = new Date();
+		
 		if (userVO.getNm().equals("admin")) {
 			list.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 			list.add(new SimpleGrantedAuthority("ROLE_USER"));

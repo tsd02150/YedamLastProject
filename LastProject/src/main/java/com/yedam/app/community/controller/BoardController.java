@@ -60,7 +60,7 @@ public class BoardController {
 	public String boardDetail(Model model,BoardVO vo, HttpSession session) {
 		// 상세페이지 진입 시 조회수 1 증가
 		boardService.increaseInquery(vo.getBoardNo());
-		
+
 		// 로그인 여부 정보
 		if(session.getAttribute("loggedInMember")!=null) {
 			model.addAttribute("myInfo",session.getAttribute("loggedInMember"));
@@ -80,7 +80,7 @@ public class BoardController {
 		model.addAttribute("board",vo);
 		// 게시물 작성자 정보
 		model.addAttribute("member",boardService.getMembInfo(vo.getMembNo()));
-		System.out.println(boardService.getMembInfo(vo.getMembNo()));
+
 		// 게시물 댓글 정보
 		model.addAttribute("comments",boardService.getComments(vo.getBoardNo()));
 		// 게시물 첨부파일 정보
@@ -99,6 +99,7 @@ public class BoardController {
 		// 해당 게시물 정보
 		boardVo=boardService.getBoardDetail(boardVo.getBoardNo());
 		model.addAttribute("myBoard",boardVo);
+		model.addAttribute("attachFileList",boardService.getAttachList(boardVo.getBoardNo()));
 		
 		return "community/modifyBoard";
 	}

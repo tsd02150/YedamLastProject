@@ -62,6 +62,11 @@
 	width : 100%;
 	
 }
+
+#interestDiv button, #recomDiv button{
+ margin-left:30px;
+ margin-top:80px;
+}
 #sum table td{
 	font-size : 25px;
 	padding : 20px;
@@ -395,7 +400,7 @@
 			  console.log(res);
 			  $(target).parent().remove();
 			  toastShow("Delete","매수 주문 예약이 삭제되었습니다.","success");
-			  window.reload();
+			  window.location.reload();
 		  },
 		  error : function(err){
 			  console.log(err);
@@ -417,7 +422,7 @@
 			  console.log(res);
 			  $(target).parent().remove();
 			  toastShow("Delete","매도 주문 예약이 삭제되었습니다.","success");
-			  window.reload();
+			  window.location.reload();
 		  },
 		  error : function(err){
 			  console.log(err);
@@ -577,7 +582,7 @@ $.ajax({
 	         `;
 	       });
 			}else{
-				tr3 += `<a href="stock/itemListPage"><button>주식페이지로 이동<button></a>`;
+				tr3 += `<a onclick="location.href='/stock/itemListPage'"><button class="btn btn-primary">주식페이지로 이동</button></a>`;
 			}
 			$("#recombody").html(tr3);
 		   boxClass();
