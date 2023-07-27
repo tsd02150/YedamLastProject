@@ -25,6 +25,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,6 +44,7 @@ import com.amazonaws.util.IOUtils;
 import com.yedam.app.common.service.AttachFileService;
 import com.yedam.app.common.service.AttachFileVO;
 import com.yedam.app.common.service.DownloadS3;
+import com.yedam.app.community.service.AttachVO;
 import com.yedam.app.community.service.BoardVO;
 
 import lombok.RequiredArgsConstructor;
@@ -131,6 +134,34 @@ public class EditorController {
 			attachFileService.addBoardAttachFile(vo);
 		}
 	}
+	
+	@PostMapping("/attach/update")
+	@ResponseBody
+	public void attachUpdate(@RequestPart MultipartFile[] uploadFiles, AttachFileVO vo) throws AmazonServiceException, SdkClientException, IOException {
+
+		for (MultipartFile uploadFile : uploadFiles) {
+			// 업로드 파일의 본래 이름
+			String originalName = uploadFile.getOriginalFilename();
+			
+			// 날짜 폴더 생성
+			String folderPath = makeS3Folder("attach");
+			// UUID
+			String uuid = UUID.randomUUID().toString();
+			// 저장할 파일 이름 중간에 "_"를 이용하여 구분
+			String saveName = folderPath + "/" + uuid + "_" + originalName;
+			
+			ObjectMetadata metadata = new ObjectMetadata();
+			metadata.setContentLength(uploadFile.getSize());
+			metadata.setContentType(uploadFile.getContentType());
+			
+			amazonS3.putObject(bucket, saveName, uploadFile.getInputStream(), metadata);
+			
+			vo.setAtchNm(saveName);
+			vo.setAtchOriginNm(originalName);
+			attachFileService.addBoardAttachFile(vo);
+		}
+	}
+	
 	@GetMapping("downloadFile")
 	public ResponseEntity<byte[]> downloadImage(String savename,String originname) throws IOException {
 

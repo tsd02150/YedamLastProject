@@ -90,6 +90,10 @@
 						<strong>첨부파일 : </strong>
 						<div>
 							<ul id=uploadFileList>
+								<li th:each="attachFile:${attachFileList}" th:data-atchno=${attachFile.atchNo}>
+									[[${attachFile.atchOriginNm}]]
+									<span>&times;</span>
+								</li>
 							</ul>
 						</div>
 					</div>
@@ -126,6 +130,51 @@
 			.catch(error => {
 				console.error(error);
 			});
+		
+		$("#attachFile").on('change',function(){
+			var inputFile = $("#attachFile");
+			// input 태그의 type이 file인것을 찾아서 inputFile이라는 변수로 지정
+			
+			var files = inputFile[0].files;
+			// files: 선택한 모든 파일을 나열하는 FileList 객체
+			// multiple 특성을 지정하지 않았다면 두 개 이상의 파일을 포함하지 않습니다.
+			for(var i=0;i<files.length;i++){
+				let liTag=document.createElement("li");
+				let spanTag=document.createElement("span");
+				liTag.append(files[i].name);
+				spanTag.innerHTML="&times;";
+				liTag.append(spanTag);
+				uploadFileList.append(liTag);
+			}
+		})
+		$('#attachFile').on('change',function(){
+			var attachFileList = new FormData(); 
+			var inputFile = $("#attachFile");
+
+			var files = inputFile[0].files;
+			
+			for(var i=0;i<files.length;i++){
+				console.log(files[i]);
+				attachFileList.append("uploadFiles",files[i]); // 키, 값으로 append
+			}
+			
+			$.ajax({
+				url:'/attach/update',
+				method:'POST',
+				processData:false, // 기본값은 true, ajax통신을 통해 데이터를 전송할 때, 기본적으로 key와 vlaue 값을 Query String 으로 변환해서 보냅니다
+				contentType:false, // multipart/form-data타입을 사용하기 위해 false로 지정합니다.
+				data:attachFileList,
+				success:function(result){
+					// 알림 띄울 부분;
+					//location.href="/community/boardDetail?page="+1+"&boardNo="+[[${myBoard.boardNo}]]+"&commonCd="+[[${boardInfo.commonCd}]];
+				},
+				error:function(reject){
+					alert('fail attach');
+					// 알림 띄울 부분;
+				}
+			})	
+		})
+			
 
 		//ckEditor 데이터 가져오기
 		$('#btnSave').on('click', function () {
@@ -144,15 +193,6 @@
 			formData.cntn = ckData;
 			formData.boardNo=[[${myBoard.boardNo}]];
 			
-			var attachFileList = new FormData(); 
-			var inputFile = $("#attachFile");
-
-			var files = inputFile[0].files;
-			
-			for(var i=0;i<files.length;i++){
-				console.log(files[i]);
-				attachFileList.append("uploadFiles",files[i]); // 키, 값으로 append
-			}
 			
 			
 			$.ajax({
@@ -164,11 +204,11 @@
 				if(attachFileList.get("uploadFiles")!=null){
 					attachFileList.append("boardNo",result);
 					$.ajax({
-						url:'/attach/upload',
+						url:'/attach/update',
 						method:'POST',
 						processData:false, // 기본값은 true, ajax통신을 통해 데이터를 전송할 때, 기본적으로 key와 vlaue 값을 Query String 으로 변환해서 보냅니다
 						contentType:false, // multipart/form-data타입을 사용하기 위해 false로 지정합니다.
-						data:attachFileList,
+						data:{attachFileList,[[${attachFileList}]]},
 						success:function(result){
 							// 알림 띄울 부분;
 							location.href="/community/boardDetail?page="+1+"&boardNo="+[[${myBoard.boardNo}]]+"&commonCd="+[[${boardInfo.commonCd}]];
@@ -189,22 +229,7 @@
 			
 		})
 		
-		$("#attachFile").on('change',function(){
-			var inputFile = $("#attachFile");
-			// input 태그의 type이 file인것을 찾아서 inputFile이라는 변수로 지정
-			
-			var files = inputFile[0].files;
-			// files: 선택한 모든 파일을 나열하는 FileList 객체
-			// multiple 특성을 지정하지 않았다면 두 개 이상의 파일을 포함하지 않습니다.
-			for(var i=0;i<files.length;i++){
-				let liTag=document.createElement("li");
-				let spanTag=document.createElement("span");
-				liTag.append(files[i].name);
-				spanTag.innerHTML="&times;";
-				liTag.append(spanTag);
-				uploadFileList.append(liTag);
-			}
-		})
+		
 		$("#uploadFileList").on('click','span',function(){
 			var dataTranster = new DataTransfer();
 			Array.from($("#attachFile")[0].files)

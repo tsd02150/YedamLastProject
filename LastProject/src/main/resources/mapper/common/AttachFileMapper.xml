@@ -9,8 +9,17 @@
   			SELECT CONCAT('att-',NVL(MAX(TO_NUMBER(SUBSTR(atch_no, 5))), 0)+1)
 			FROM ATTACH_FILE
   		</selectKey>
-  		INSERT INTO ATTACH_FILE(atch_no,atch_nm,atch_origin_nm,board_no)
-  		VALUES(#{atchNo},#{atchNm},#{atchOriginNm},#{boardNo})
+  		<choose>
+  			<when test="notiNo!=null">
+		  		INSERT INTO ATTACH_FILE(atch_no,atch_nm,atch_origin_nm,noti_no)
+		  		VALUES(#{atchNo},#{atchNm},#{atchOriginNm},#{notiNo})  				
+  			</when>
+  			<when test="boardNo!=null">
+  				INSERT INTO ATTACH_FILE(atch_no,atch_nm,atch_origin_nm,board_no)
+		  		VALUES(#{atchNo},#{atchNm},#{atchOriginNm},#{boardNo})
+  			</when>
+  			<otherwise></otherwise>
+  		</choose>
   	</insert>
   	
   </mapper>
