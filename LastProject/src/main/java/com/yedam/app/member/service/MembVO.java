@@ -44,5 +44,9 @@ public class MembVO {
 	private String prdtNo;
 	private String thumb;
 
-	
+	private String stopNo;
+	private String startDt;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date endDt;
+	private String stopPeriod;
 }
