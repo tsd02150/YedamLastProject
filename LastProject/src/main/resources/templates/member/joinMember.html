@@ -427,7 +427,7 @@ document.querySelector('form').addEventListener('submit', (event) => {
 					testcode = createSmsKey();
 					console.log(testcode);
 				 //sms 발송
-					/*  $.ajax({
+					$.ajax({
 					    url: "sendSms",
 					    method: "POST",
 					    data: {
@@ -440,7 +440,7 @@ document.querySelector('form').addEventListener('submit', (event) => {
 					    error: function(err) {
 					      console.log(err);
 					    }
-					  });*/
+					  });
 					$("#idInput").val(data.id);
 					$("#telCheck").text("인증번호가 발송되었습니다.")
 						.css({
