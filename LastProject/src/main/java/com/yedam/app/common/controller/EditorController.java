@@ -66,12 +66,14 @@ public class EditorController {
 	@Value("${uploadRevieImagePath}") // 프로퍼티 혹은 빈에 있는 값들을 들고올 때 사용 (Spring value로 import)
 	public String uploadRevieImagePath;
 	
+	@Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+	
 	private final AmazonS3 amazonS3;
 
 	private final DownloadS3 downloadS3;
 	
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
+    
 
 	@PostMapping(value = "/image/upload")
 	public ModelAndView image(MultipartHttpServletRequest request) throws AmazonServiceException, SdkClientException, IOException {

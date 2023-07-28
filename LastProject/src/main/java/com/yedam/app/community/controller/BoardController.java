@@ -1,5 +1,6 @@
 package com.yedam.app.community.controller;
 
+import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,8 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.yedam.app.common.service.AttachFileService;
 import com.yedam.app.common.service.AttachFileVO;
+import com.yedam.app.common.service.DownloadS3;
 import com.yedam.app.community.mapper.BoardMapper;
 import com.yedam.app.community.service.BoardService;
 import com.yedam.app.community.service.BoardVO;
@@ -27,8 +32,11 @@ import com.yedam.app.member.service.InterestVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.security.service.UserVO;
 
+import lombok.RequiredArgsConstructor;
+
 @Controller
 @RequestMapping("community")
+@RequiredArgsConstructor
 public class BoardController {
 
 	@Autowired
@@ -36,6 +44,11 @@ public class BoardController {
 	
 	@Autowired
 	AttachFileService attachFileService;
+	
+	@Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+	
+	private final AmazonS3 amazonS3;
 
 	// 게시판 목록 출력
 	@GetMapping("boardList")
@@ -177,6 +190,16 @@ public class BoardController {
 	@ResponseBody
 	public String deleteBoard(BoardVO vo) {
 		if(boardService.deleteBoard(vo)) {
+			AttachFileVO attachVo =new AttachFileVO();
+			attachVo.setBoardNo(vo.getBoardNo());
+			List<AttachFileVO> attachList = attachFileService.getAttachFileList(attachVo);
+			
+			for(AttachFileVO attach : attachList) {
+				if(amazonS3.doesObjectExist(bucket,attach.getAtchNm())) {
+					amazonS3.deleteObject(bucket, attach.getAtchNm());
+				}
+			}
+			
 			return "success";
 		}else {
 			return "fail";
@@ -199,7 +222,13 @@ public class BoardController {
 	@PostMapping("deleteAttach")
 	@ResponseBody
 	public String deleteFile(AttachFileVO vo) {
-		if(attachFileService.deleteAttachFile(vo)) {
+		vo=attachFileService.getAttachFile(vo);
+				
+		if(attachFileService.deleteAttachFile(vo)) {	
+			if(amazonS3.doesObjectExist(bucket,vo.getAtchNm())) {
+				amazonS3.deleteObject(bucket, vo.getAtchNm());
+			}
+			
 			return "success";			
 		}else {
 			return "fail";
