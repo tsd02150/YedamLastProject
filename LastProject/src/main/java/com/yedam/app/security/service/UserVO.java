@@ -47,6 +47,8 @@ public class UserVO{
 	private String prdtNo;
 	private String thumb;
 	private String bskNo;
+	private String prc;
+	private String cnt;
 
 	private String stopNo;
 	private String startDt;

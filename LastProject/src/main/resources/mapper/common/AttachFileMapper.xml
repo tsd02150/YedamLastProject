@@ -22,4 +22,27 @@
   		</choose>
   	</insert>
   	
+  	<delete id="deleteAttachFile" parameterType="AttachFileVO">
+  		DELETE FROM ATTACH_FILE
+  		WHERE atch_no=#{atchNo}
+  	</delete>
+  	
+  	<select id="getAttachFileList" resultType="AttachFileVO">
+  		SELECT *
+  		FROM ATTACH_FILE
+  		<where>
+  			<if test="notiNo!=null">
+  				AND noti_no=#{notiNo}
+  			</if>
+  			<if test="boardNo!=null">
+  				AND board_no=#{boardNo}
+  			</if>
+  		</where>
+  	</select>
+  	
+  	<select id="getAttachFile" resultType="AttachFileVO">
+  		SELECT *
+  		FROM ATTACH_FILE
+  		WHERE atch_no=#{atchNo}
+  	</select>
   </mapper>

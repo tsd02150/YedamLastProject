@@ -135,10 +135,9 @@
 			console.log($("#mname").val());
 			
 			let toUser = telInput.value.replace(/[^0-9]/g, '').replace(/^(\d{3})(\d{4})(\d{4})$/, '$1$2$3');
-			testcode = createSmsKey();
-			console.log(testcode);
 			
-			//let telUrl = "/member/getMemberTel?tel=" + encodeURI($("#telInput").val()) + "&nm=" + encodeURI($("#mname").val());
+			//console.log(testcode);
+			
 			$.ajax({
 				url : "getMemberTel",
 				method: "POST",
@@ -148,7 +147,7 @@
 				},
 				success : function(data){
 					count1++;
-					if(data.tel != $("#telInput").val() && data.nm != $("#mname").val()){
+					if(data != null && data != ""){
 						console.log(data.tel);
 						$("#telCheck").text("가입 정보가 없습니다. 입력정보가 맞는지 다시 확인해주세요.")
 							.css({
@@ -157,6 +156,7 @@
 								"font-size": "14px"
 							});
 					}else {
+						testcode = createSmsKey();
 					  $.ajax({
 						    url: "sendSms",
 						    method: "POST",
@@ -207,8 +207,8 @@
 					$("#mname").focus();
 					return;
 				}
-				console.log("인증번호 비교");
-				console.log(testcode);
+				//console.log("인증번호 비교");
+				//console.log(testcode);
 				
 				if($("#codeCheckInput").val() != testcode){
 					count2++;
@@ -268,7 +268,6 @@
 			
 			// 아이디 찾기 성공 시 페이지 호출
 			
-			//let gerinfoUrl = "/member/getMemberTel?tel=" + encodeURI($("#telInput").val()) + "&nm=" + encodeURI($("#mname").val());
 			$.ajax({
 				url : "getMemberTel",
 				method: "POST",
@@ -287,8 +286,8 @@
 								"nm": $("#mname").val()
 							},
 			        success: function(data) {
-			        	console.log("아이디 페이지 호출 완료");
-			        	console.log(data.id);
+			        	//console.log("아이디 페이지 호출 완료");
+			        	//console.log(data.id);
 			        	
 								// 아이디찾기 완료 페이지 호출
 								document.getElementById('frm').submit();

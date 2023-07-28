@@ -391,7 +391,7 @@ document.querySelector('form').addEventListener('submit', (event) => {
 	let count1 = 0; // 본인인증 횟수 5회 제한 count
 	let count2 = 0; // 인증번호 확인 횟수 5회 제한 count
 	
-	//가입당시 이름+연락처 비교해서 정보 확인
+	//기존회원 이름+연락처 비교해서 정보 확인
 	$("#testBtn1").on("click", function(){
 		if($("#telInput").val() == ""){
 			$("#telInput").focus();
@@ -404,10 +404,7 @@ document.querySelector('form').addEventListener('submit', (event) => {
 		}
 		
 		let toUser = telInput.value.replace(/[^0-9]/g, '').replace(/^(\d{3})(\d{4})(\d{4})$/, '$1$2$3');
-		testcode = createSmsKey();
-		//console.log(testcode);
 		
-		//let telUrl = "/member/getMemberTel?tel=" + encodeURI($("#telInput").val()) + "&nm=" + encodeURI($("#mname").val());
 		$.ajax({
 			url : "getMemberTel",
 			method: "POST",
@@ -417,17 +414,20 @@ document.querySelector('form').addEventListener('submit', (event) => {
 			},
 			success : function(data){
 				count1++;
-				if(data.tel != $("#telInput").val() && data.nm != $("#mname").val()){
+				console.log(data);
+				if(data != null && data != ""){
 					console.log(data.tel);
-					$("#telCheck").text("가입 정보가 없습니다. 입력정보가 맞는지 다시 확인해주세요.")
+					$("#telCheck").text("가입 이력이 있는 회원입니다. 다시 확인해주세요")
 						.css({
 							"color": "#FA3E3E",
 							"font-weight": "bold",
 							"font-size": "14px"
 						});
 				}else {
+					testcode = createSmsKey();
+					console.log(testcode);
 				 //sms 발송
-					/*  $.ajax({
+					$.ajax({
 					    url: "sendSms",
 					    method: "POST",
 					    data: {
@@ -440,7 +440,7 @@ document.querySelector('form').addEventListener('submit', (event) => {
 					    error: function(err) {
 					      console.log(err);
 					    }
-					  });*/
+					  });
 					$("#idInput").val(data.id);
 					$("#telCheck").text("인증번호가 발송되었습니다.")
 						.css({

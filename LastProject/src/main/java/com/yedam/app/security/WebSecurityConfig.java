@@ -103,7 +103,6 @@ public class WebSecurityConfig{
              .logoutUrl("/member/logout")
              .permitAll()
              )
-
 					/*
 					 * .logout((logout) -> logout .logoutSuccessHandler((request, response,
 					 * authentication) -> { String referer = request.getHeader("referer"); if

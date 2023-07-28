@@ -20,5 +20,10 @@ public class OrderServiceImpl implements OrderService {
 		return orderMapper.getOrderList(membNo);
 	}
 
+	@Override
+	public List<OrderVO> getMemInfo(String membNo) {
+		return orderMapper.getMemInfo(membNo);
+	}
+
 	
 }

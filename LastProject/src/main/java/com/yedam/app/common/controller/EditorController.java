@@ -66,12 +66,14 @@ public class EditorController {
 	@Value("${uploadRevieImagePath}") // 프로퍼티 혹은 빈에 있는 값들을 들고올 때 사용 (Spring value로 import)
 	public String uploadRevieImagePath;
 	
+	@Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+	
 	private final AmazonS3 amazonS3;
 
 	private final DownloadS3 downloadS3;
 	
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
+    
 
 	@PostMapping(value = "/image/upload")
 	public ModelAndView image(MultipartHttpServletRequest request) throws AmazonServiceException, SdkClientException, IOException {
@@ -128,34 +130,7 @@ public class EditorController {
 	        metadata.setContentType(uploadFile.getContentType());
 
 	        amazonS3.putObject(bucket, saveName, uploadFile.getInputStream(), metadata);
-			
-			vo.setAtchNm(saveName);
-			vo.setAtchOriginNm(originalName);
-			attachFileService.addBoardAttachFile(vo);
-		}
-	}
-	
-	@PostMapping("/attach/update")
-	@ResponseBody
-	public void attachUpdate(@RequestPart MultipartFile[] uploadFiles, AttachFileVO vo) throws AmazonServiceException, SdkClientException, IOException {
-
-		for (MultipartFile uploadFile : uploadFiles) {
-			// 업로드 파일의 본래 이름
-			String originalName = uploadFile.getOriginalFilename();
-			
-			// 날짜 폴더 생성
-			String folderPath = makeS3Folder("attach");
-			// UUID
-			String uuid = UUID.randomUUID().toString();
-			// 저장할 파일 이름 중간에 "_"를 이용하여 구분
-			String saveName = folderPath + "/" + uuid + "_" + originalName;
-			
-			ObjectMetadata metadata = new ObjectMetadata();
-			metadata.setContentLength(uploadFile.getSize());
-			metadata.setContentType(uploadFile.getContentType());
-			
-			amazonS3.putObject(bucket, saveName, uploadFile.getInputStream(), metadata);
-			
+	        System.out.println(vo);
 			vo.setAtchNm(saveName);
 			vo.setAtchOriginNm(originalName);
 			attachFileService.addBoardAttachFile(vo);

@@ -20,4 +20,19 @@ public class AttachFileServiceImpl implements AttachFileService{
 		return attachFileMapper.addBoardAttachFile(vo)>0;
 	}
 
+	@Override
+	public boolean deleteAttachFile(AttachFileVO vo) {
+		return attachFileMapper.deleteAttachFile(vo)>0;
+	}
+
+	@Override
+	public List<AttachFileVO> getAttachFileList(AttachFileVO vo) {
+		return attachFileMapper.getAttachFileList(vo);
+	}
+
+	@Override
+	public AttachFileVO getAttachFile(AttachFileVO vo) {
+		return attachFileMapper.getAttachFile(vo);
+	}
+
 }

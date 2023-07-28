@@ -6,6 +6,7 @@
 
 .farmImage {
 	position: relative;
+	width: 1100px;
 	height: 200px;
 	background-size: cover;
 	background-position: center;
