@@ -202,7 +202,7 @@
 		      from item_info a join (select i.item_no ,t.nm
 		                            from interest_item i join item t
 		                            on i.item_no = t.item_no
-		                            where memb_no = 'mem-1') b
+		                            where memb_no = #{membNo}) b
 		      on a.item_no = b.item_no
 		      where to_char(ta_dt,'yyyy-MM-dd') = (
 		      									   select to_char(max(ta_dt),'yyyy-MM-dd')

@@ -322,4 +322,10 @@
 			</foreach>
 		)
 	</delete>
+	
+	<!-- 방번호 가져오기 -->
+	<select id="getRoomList" resultType="String">
+		select room_no
+        from chat_room
+	</select>
 </mapper>

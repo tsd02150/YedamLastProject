@@ -87,4 +87,6 @@ public interface AdminMapper {
 	public int deleteBoard(List<String> list);
 	// board 조회
 	public BoardVO boardDetail(String boardNo);
+	// room list 조회
+	
 }
