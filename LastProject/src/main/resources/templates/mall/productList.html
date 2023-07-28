@@ -176,29 +176,7 @@
 				<!-- 상품 리스트 -->
 
 				<div class="row" id="productList">
-					<div class="col-md-4 results" th:each="prdt : ${farmList}">
-						<div class="product-item"
-							th:onclick="|location.href='@{getFarm(prdtNo=${prdt.prdtNo})}'|">
-							<div class="product-thumb">
-								<span class="bage">Sale</span> <img
-									th:src="|/mall/images/main/${prdt.thumb}|">
-							</div>
-							<div class="product-content">
-								<div class="product-detail">
-
-									<h4>
-										<span class="nm"><a th:text=${prdt.nm}></a></span>
-									</h4>
-									<p>
-										<span class="original-price" th:text="${prdt.prc} + 'P'"
-											style="text-decoration: line-through;"></span> <br> <span
-											class="discounted-price"
-											th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + 'P'"></span>
-									</p>
-								</div>
-							</div>
-						</div>
-					</div>
+					
 				</div>
 			</div>
 		</div>
@@ -215,7 +193,7 @@
 						onclick="prevPage()" aria-label="Previous"> <span
 							aria-hidden="true"></span>
 					</a></li>
-					페이징버튼 들어갈 공간
+					<!-- 페이징버튼 들어갈 공간 -->
 					<li><a class="page-link" id="nextpage" onclick="nextPage()"
 						aria-label="Next">
 									<span aria-hidden="true"></span>
@@ -249,15 +227,17 @@
 	let items=["prdtNo", "prc", "nm", "thumb"];
 	let currentState= [[${prdtCode}]];
 	console.log(currentState);
+	productList();
 	
 	//카테고리 별 정렬
 	$('.ctgr').on('click',function(){
+		currentState=event.target.dataset.commoncd;
 		productList();
 	});
 	
 	function productList() {
 
-		currentState=event.target.dataset.commoncd;
+		
 	    fetch("/mall/getCtgrList", {
 	        method: "POST",
 	        headers: {
@@ -267,6 +247,7 @@
 	    })
 	    .then(response => response.json())
 	    .then(result => {
+	    	console.log(result);
 	    	$('#productList').empty();
    			result.forEach(items=> {
      			console.log(items);
@@ -464,7 +445,7 @@
 			 headers : {
 				 'Content-Type' : 'application/x-www-form-urlencoded'
 			 },
-			 body : 'commonCd=' + currentState + 'nm=' + nm + '&prc=' + prc + '&thumb=' + thumb
+			 body : 'commonCd=' + currentState + '&nm=' + nm + '&prc=' + prc + '&thumb=' + thumb
 		 })
 		 .then(result => result.json())
 		 .then(data => {
@@ -473,7 +454,7 @@
 				 endPage=~~((totalPrdtCnt-1)/10 + 1);
 			 }
 			 if(totalPrdtCnt>50) {
-				 nextPage.style.visibility="visible";
+				 nextpage.style.visibility="visible";
 			 }
 			 createPageCntBtn(prdtStartPage,prdtEndPage);
 		 })
@@ -486,7 +467,7 @@
 				item.remove();
 			})
 		}
-		for(let i=start;i<=end;i++){
+		for(let i=start; i<=end; i++){
 			let liTag = document.createElement('li');
 			liTag.classList.add('page-item','pagebtn');
 			if(i%10==prdtTargetPage){

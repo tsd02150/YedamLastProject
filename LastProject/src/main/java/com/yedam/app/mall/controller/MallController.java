@@ -35,7 +35,7 @@ public class MallController {
 	@GetMapping("mallMain")
 	public String mallMain(Model model, ProductVO prdtVO) {
 		List<ProductVO> list = mallService.getProductList(null);
-		model.addAttribute("product", list);
+		model.addAttribute("prdtStartPage", list);
 		/*
 		 * model.addAttribute("getFarm", mallService.getProductInfo(prdtVO));
 		 * model.addAttribute("getSeafood", mallService.getProductInfo(prdtVO));
@@ -115,7 +115,7 @@ public class MallController {
 	public String getFarm(Model model, ProductVO prdtVO, ProductReviewVO revVO, BasketVO bskVO, HttpSession session) {
 		
 		// 첫 화면 페이징 1
-		model.addAttribute("startPage",1);
+		model.addAttribute("prdtStartPage",1);
 		
 		model.addAttribute("getFarm", mallService.getProductInfo(prdtVO));
 		System.out.println(model);

@@ -28,26 +28,26 @@ public class OrderController {
 
 	@Autowired
 	MallService mallService;
-	
+
 	@Autowired
 	BasketService basketService;
-	
+
 	@Autowired
 	OrderService orderService;
-	
+
 	@Autowired
 	MemberService membService;
-	
+
 	@GetMapping("orderList")
 	public String orderList(Model model, BasketVO bskVO, MembVO membVO, OrderVO ordVO, HttpSession session) {
-		
-		//UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+
+		// UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 		String membNo = ((UserVO) session.getAttribute("loggedInMember")).getMembNo();
 		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 		model.addAttribute("member", membVO.getMembNo());
 		model.addAttribute("membNo", membNo);
 		model.addAttribute("mem", mem);
-		//System.out.println("memInfo"+membNo);
+		// System.out.println("memInfo"+membNo);
 		List<OrderVO> orderList = new ArrayList<OrderVO>();
 		List<OrderVO> membInfo = new ArrayList<OrderVO>();
 		orderList = orderService.getOrderList(membNo);
@@ -56,36 +56,36 @@ public class OrderController {
 		model.addAttribute("orderList", orderList);
 		model.addAttribute("membInfo", membInfo);
 		System.out.println(membInfo);
-		//model.addAttribute("orderList", orderService.getOrderList(ordVO));
+		// model.addAttribute("orderList", orderService.getOrderList(ordVO));
 		
 		return "mall/orderList";
-		
+
 	}
-	
-	//결제 성공
+
+	// 결제 성공
 	@GetMapping("orderCheck")
-	public String orderCheck(
-			/* @RequestParam(value="amount") int amount, */ HttpSession session, ChargeVO chargeVO, OrderVO ordVO, Model model, MembVO membVO) {
-		/*
-		 * UserVO mem = (UserVO) session.getAttribute("loggedInMember");
-		 * chargeVO.setMembNo(mem.getMembNo()); //chargeVO.setChagPrc(amount);
-		 * membVO.setId(mem.getId());
-		 * 
-		 * //결제 정보 저장, 등록 //포인트적립 membService.insertCharge(chargeVO, membVO);
-		 * orderService.insertOrder(ordVO, membVO); //수정된 정보 세션에 다시 저장.
-		 * mem.setPoint(membVO.getPoint()); session.setAttribute("loggedInMember", mem);
-		 * model.addAttribute("membList", membVO); //update된 회원 정보
-		 */
+	public String orderCheck(@RequestParam(value = "amount") int amount, HttpSession session, ChargeVO chargeVO,
+			OrderVO ordVO, Model model, MembVO membVO) {
+
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		chargeVO.setMembNo(mem.getMembNo());
+		// chargeVO.setChagPrc(amount);
+		membVO.setId(mem.getId());
+		
+		// 결제 정보 저장, 등록
+		// 포인트적립 membService.insertCharge(chargeVO, membVO);
+		orderService.insertOrder(ordVO, membVO); // 수정된 정보 세션에 다시 저장.
+		mem.setPoint(membVO.getPoint());
+		session.setAttribute("loggedInMember", mem);
+		model.addAttribute("membList", membVO); // update된 회원 정보
+
 		return "mall/orderCheck";
 	}
-	
-	
+
 	// 결제 취소 페이지
 	@GetMapping("orderCancel")
 	public String orderCancel(Model model, OrderVO ordVO) {
-		
-		
-		
+
 		return "mall/orderCancel";
 	}
 

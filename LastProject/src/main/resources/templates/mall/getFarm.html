@@ -781,6 +781,7 @@ p>img {
 			totalPrc = prdtInfo.prc * count;
 			$(".totalPrc").text(totalPrc);
 		});
+		
 		$(".minus_btn").on("click", function(){
 			if(quantity > 1){
 				$(".quantity_input").val(--quantity);	
@@ -809,20 +810,13 @@ p>img {
 				data: form,
 				success: function(result){
 					
-					if(result == '0'){
-						alert("장바구니에 추가를 하지 못하였습니다.");
-					} else if(result == '1'){
-						alert("장바구니에 추가되었습니다.");
-					} else if(result == '2'){
-						alert("장바구니에 이미 추가되어져 있습니다.");
-					} else if(result == '5'){
-						alert("로그인이 필요합니다.");	
+					if(result=="fail"){
+						toastShow("Fail", "담기에 실패했습니다.", "error");
+					}else{
+						toastShow("Fail", "장바구니 !!.", "success");
 					}
-					
-					
-					/* cartAlert(result); */
 				    // 장바구니에 상품이 추가되면 장바구니 페이지로 리다이렉트
-		            //window.location.href = '/mall/basketList/' + form.membNo;
+		           //window.location.href = '/mall/basketList/' + form.membNo;
 				}
 			})
 		});  
@@ -841,40 +835,6 @@ p>img {
 		} 
 		 
 		
-		
-
-		 //장바구니 이동
-		/* function addCartFunc(){
-			
-			window.location.href="/mall/basketList?membNo="+[[${basketList}]];
-		} */
-		
-		 /* $('.btn_cart').on('click', function() {
-			 
-			    let ckData = editor.getData();
-			    if (ckData === "" || ckData === null) {
-			        toastShow("There is no content", "내용이 없습니다", "error");
-			        return;
-			    }
-			
-			    let formData = new FormData();
-			    formData.append("cntn", ckData);
-			    formData.append("prdtNo", [[${getFarm.prdtNo}]]);
-			    formData.append("maks", $('input[type=radio]:checked').val());
-			
-			    fetch('/mall/addReview', {
-			        method: 'POST',
-			        body: formData
-			    })
-			    .then(response => response.json())
-			    .then(result => {
-			    	
-			    })
-			    .catch(error => {
-			        toastShow("Insert Fail", "등록 실패", "error");
-			    });
-			}); */
-		 
 		 
 		//주문페이지 이동
 		function directOrder() {
@@ -920,7 +880,6 @@ p>img {
 					`;
 					document.querySelector("#reviewList").innerHTML+=trTag;
 					
-					
 				})
 				makeStar();
 			
@@ -961,9 +920,9 @@ p>img {
 	        method: 'POST',
 	        body: formData
 	    })
-	    .then(response => response.json())
+	    .then(response => response.text())
 	    .then(result => {
-	    	
+	    	location.reload();
 	    })
 	    .catch(error => {
 	        toastShow("Insert Fail", "등록 실패", "error");
@@ -976,48 +935,10 @@ p>img {
     var modal = document.getElementById("reviewModal");
     var productList = document.getElementById("productList"); // 해당 상품 리스트를 출력하는 요소의 ID 지정
 
-
-    // "등록하기" 버튼을 클릭했을 때 상품 리스트에 내용을 추가
- /*    modal.querySelector("#btnSave").addEventListener("click", function () {
-      var reviewStar = document.querySelector('input[name="reviewStar"]:checked').value; // 
-      var reviewContent = document.getElementById("cntn").value; //
-		console.log(reviewContent);
-      
-      var newReview = document.createElement("div");
-      newReview.innerHTML = `
-        <p>별점: ${reviewStar}</p>
-        <p>리뷰 내용: ${reviewContent}</p>
-        <hr>
-      `;
-
-      // 상품 리스트에 새로운 리뷰를 추가합니다.
-      productList.appendChild(newReview);
-
-      // 모달 창을 닫습니다.
-      modal.style.display = "none";
-    });
-
-    // 필요한 경우 'openModal()' 함수를 호출하여 모달을 열 수 있습니다. (예시: openModal();)
-
-    // 'esc' 키 입력을 감지하기 위해 document에 이벤트 리스너를 추가합니다. (이전과 동일)
-    document.addEventListener("keydown", closeModalOnEsc);
-  });
-		
-		 */
-
-        /* // 리뷰 삭제 버튼을 클릭했을 때 deleteReview 함수를 호출하도록 이벤트 리스너를 추가합니다.
-        productList.addEventListener("click", function (event) {
-            if (event.target.classList.contains("delete-review-btn")) {
-                var revNo = event.target.dataset.revNo;
-                deleteReview(revNo);
-            }
-        }); */
     });
 		
     // 리뷰 삭제 버튼을 클릭했을 때 해당 리뷰를 삭제하는 함수
     function deleteReview() {
-       	//console.log("deleteBtn")
-       	//console.log($(event.target).closest('tr').children().first().text())
        	
         fetch("/mall/deleteReview", {
             method: "POST",
@@ -1026,7 +947,7 @@ p>img {
             },
             body: "revNo=" + $(event.target).closest('tr').children().first().text()
         })
-        .then(response => response.json())
+        .then(response => response.text())
         .then(result => {
             // 삭제 요청이 성공하면, 해당 리뷰를 리스트 삭제
            // var reviewItem = document.getElementById("review-" + revNo);
@@ -1041,37 +962,7 @@ p>img {
     }
 	
  	
-
- 
- /* function addCartItem(prdtNo, cnt) {
-	    const data = {
-	        prdtNo: prdtNo,
-	        cnt: cnt
-	    };
-
-	    fetch("/mall/addCartItem", {
-	        method: "POST",
-	        headers: {
-	            "Content-Type": 'application/x-www-form-urlencoded'
-	        },
-	        body: JSON.stringify(data)
-	    })
-	    .then(response => response.json())
-	    .then(result => {
-	        // 서버로부터 받은 응답에 따라 처리할 로직을 작성합니다.
-	        if (result === "success") {
-	            alert("에 상품이 추가되었습니다.");
-	        } else {
-	            alert("상품 추가에 실패하였습니다.");
-	        }
-	    })
-	    .catch(error => {
-	        console.error("Error:", error);
-	    });
-	}
-  */
- 
-			
+	
 			//이미지 확대
 			const zoomImageContainer = document.querySelector('.zoom-image-container');
 			const zoomOverlay = document.querySelector('.zoom-overlay');
@@ -1191,11 +1082,7 @@ p>img {
             }
         }
 
-        // 필요할 때 모달을 열기 위한 함수 
-        function openModal() {
-            modal.style.display = "block";
-        }
-
+       
         // '×' (닫기) 버튼을 클릭했을 때 모달 창이 닫힘
         modal.querySelector(".close").addEventListener("click", function () {
             modal.style.display = "none";
@@ -1206,82 +1093,13 @@ p>img {
             modal.style.display = "none";
         });
 
-        // 필요한 경우 'openModal()' 함수를 호출하여 모달 오픈
-        // 예시: openModal();
-
-        // 'esc' 키 입력을 감지하기 위해 document에 이벤트 리스너를 추가
-        document.addEventListener("keydown", closeModalOnEsc);
     });
 				
 				
-				// 폼 제출 시 리뷰 작성 완료 처리
-				/* document
-					.getElementById("reviewForm")
-					.addEventListener(
-						"submit",
-						function(event) {
-							event.preventDefault();
-
-							var reviewContent = document
-									.getElementById("reviewContent").value;
-							var reviewRating = document
-									.getElementById("reviewRating").value;
-
-							console.log("리뷰 내용:", reviewContent);
-							console.log("평가:", reviewRating);
-
-							document.getElementById("reviewModal").style.display = "none";
-
-						}); */
-
+			
 				
-				// 상품 후기 리스트 데이터
-				const reviewData = [];
+			
 
-				// 폼 제출 시 리뷰 작성 완료 처리
-				
-				/* document.getElementById("reviewForm").addEventListener("submit", function(event) {
-				    event.preventDefault();
-
-				    var reviewContent = document.getElementById("reviewContent").value;
-				    var reviewRating = document.querySelector('input[name="reviewRating"]:checked').value;
-
-				    console.log("리뷰 내용:", reviewContent);
-				    console.log("평가:", reviewRating);
-
-				    // 리뷰 데이터 추가
-				    reviewData.push({
-				        content: reviewContent,
-				        rating: reviewRating
-				    });
-
-				    // 리뷰 아이템 생성
-				    var reviewItem = document.createElement("div");
-				    reviewItem.classList.add("review-item");
-				    reviewItem.innerHTML = `
-				        <div class="review-content">${reviewContent}</div>
-				        <div class="review-rating">${reviewRating}점</div>
-				    `;
-
-				    // 상품 후기 리스트에 추가
-				    var reviewList = document.getElementById("reviewList");
-				    reviewList.appendChild(reviewItem);
-
-				    // 모달 닫기
-				    document.getElementById("reviewModal").style.display = "none";
-				});
- */
-				
-				/* 이전 페이지 */
-				/* 	var referrer = document.referrer;
-				
-					console("이전 Url: " + preUrl);
-					
-					
-					String referer = (String)request.getHeader("REFERER");
-				 */
-				 
-				//  버튼 클릭
 			
 			</script>
 	</div>
