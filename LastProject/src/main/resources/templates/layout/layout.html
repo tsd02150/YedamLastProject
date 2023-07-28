@@ -306,6 +306,17 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
 <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script> -->
 <script>
+
+	$(window).on('load',function(){
+		let loginInfo='[[${session.loggedInMember}]]';
+		if(loginInfo==''){
+			fetch("/member/returnUrl")
+			.then(result=>result.text())
+			.then(data=>console.log(data))
+			.catch(err=>console.log(err));			
+		}
+	})
+
 	 let msg = "[[${session.noAccess}]]";
 	console.log(msg);
 	if (msg !== null && msg !== "") {

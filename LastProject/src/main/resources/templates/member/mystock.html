@@ -572,7 +572,6 @@ $.ajax({
 			if(data && data.length >0){
 				data.slice(0, 10).forEach(el => {
 					console.log(el);
-	         let itemNo = el.itemNo;
 	         tr3 += `
 	           <tr data-no="${el.itemNo}">
 	             <td onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">${el.tnm}</td>
@@ -581,16 +580,54 @@ $.ajax({
 	           </tr>
 	         `;
 	       });
+				$("#recombody").html(tr3);
+				   boxClass();
 			}else{
-				tr3 += `<a onclick="location.href='/stock/itemListPage'"><button class="btn btn-primary">주식페이지로 이동</button></a>`;
+				console.log("랜덤")
+				$.ajax({
+				    url: "myItemCheck",
+				    success: function (data) {
+			        // 데이터를 랜덤하게 섞음
+			        let randomData = randomArray(data);
+
+			        // 랜덤하게 섞인 데이터에서 처음 25개만 선택
+			        let selectedData = randomData.slice(0, 25);
+
+			        selectedData.slice(0,10).forEach(function (el) {
+			        	console.log(el);
+			        	tr3 += `<tr data-no="${el.itemNo}">
+				             <td onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">${el.nm}</td>
+				             <td>${formatNumber(el.tprc)}</td>
+				             <td class="rate" colspan="2">${el.change}%</td>
+				           </tr>`;
+			        })
+			        $("#recombody").html(tr3);
+					   	boxClass();
+				    }
+				})
 			}
-			$("#recombody").html(tr3);
-		   boxClass();
 		},
 		error : function(err){
 			console.log(err);
 		}
 	});
+	
+	// 배열을 랜덤하게 섞는 함수
+  function randomArray(array) {
+    let currentIndex = array.length;
+    let temporaryValue, randomIndex;
+
+    while (0 !== currentIndex) {
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+    return array;
+  }
+
 
 //1개월, 3개월, 6개월 클릭
 function updateStartDate(period) {

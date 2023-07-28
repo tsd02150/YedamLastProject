@@ -296,7 +296,7 @@ $.ajax({
 	        prd += `
 	          <div class="orderDiv">
 	            <p class="orderDt">${formattedDt}</p>
-	            <p class="prdtimg" data-no="${el.prdtNo}"></p>
+	            <img src="" class="prdtimg" data-no="${el.prdtNo}">
 	            <p class="prdtnm" data-no="${el.prdtNo}"></p>
 	            <p class="orderAm">${orderAm}</p>
 	          </div>`;
@@ -308,9 +308,10 @@ $.ajax({
 	        url: "mypagePrdtList",
 	        success: function(data) {
 	          data.forEach(function(res) {
-	            //console.log(res);
-	            //img += `<img th:src="/mall/images/main/res.img"`;
-	            $(".prdtimg[data-no='" + res.prdtNo + "']").html(res.img);
+	        	  console.log(res);
+	            //<img src="/mall/images/main/농축산물.png">
+	            //<img id="tosimg" th:src="|/member/images/toss.png|" style="width : 400px; height: 100px; margin-left:80px;">
+	            $(".prdtimg[data-no='" + res.prdtNo + "']").attr("src","/mall/images/main/"+res.img);
 	            $(".prdtnm[data-no='" + res.prdtNo + "']").append(res.nm);
 	          });
 	        },

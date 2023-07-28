@@ -6,6 +6,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestClientException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.yedam.app.mall.service.BasketVO;
 import com.yedam.app.mall.service.CouponVO;
+import com.yedam.app.mall.service.OrderService;
 import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.member.service.AddrVO;
@@ -62,6 +65,9 @@ public class MemberController {
 	UserService userService;
 	
 	@Autowired
+	OrderService orderService;
+	
+	@Autowired
 	RegisterMail registerMail;
 
 	@Autowired
@@ -75,6 +81,19 @@ public class MemberController {
 	public String removeNoAccess(HttpSession session) {
 		session.removeAttribute("noAccess");
 		return "success";
+	}
+
+	
+	
+	@GetMapping("returnUrl")
+	@ResponseBody
+	public String returnUrl(HttpServletRequest request,HttpSession session) {
+		if(!((String)request.getHeader("referer")).equals("http://localhost/member/login")) {
+			session.setAttribute("returnUrl", request.getHeader("referer"));
+			String temp = (String) session.getAttribute("returnUrl");
+			return temp;			
+		}
+		return "fail";
 	}
 	
 	//회원가입 Form
@@ -348,7 +367,10 @@ public class MemberController {
 	
 	//주문내역
 	@GetMapping("myorder")
-	public String myorder() {
+	public String myorder(Model model, BasketVO bskVO, MembVO membVO, OrderVO ordVO, HttpSession session) {
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		List<OrderVO> orderList = orderService.getOrderList(mem.getMembNo());
+		model.addAttribute("orderList", orderList);
 		return "member/myorder";
 	}
 	//결제 성공
