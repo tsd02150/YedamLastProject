@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 import com.yedam.app.admin.mapper.AdminMapper;
 import com.yedam.app.admin.service.AdminService;
 import com.yedam.app.admin.service.MembManageVO;
+import com.yedam.app.community.service.BoardVO;
+import com.yedam.app.community.service.FaqVO;
 import com.yedam.app.community.service.NoticeVO;
+import com.yedam.app.community.service.QuestionVO;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -182,6 +185,75 @@ public class AdminServiceImpl implements AdminService {
 			map.put("code", "fail");
 		}
 		return map;
+	}
+	// 공지사항 삭제
+	@Override
+	public int deleteNotice(List<String> list) {
+		return adminMapper.deleteNotice(list);
+	}
+
+	// faq 글 조회
+	@Override
+	public FaqVO faqDetail(String faqNo) {
+		return adminMapper.faqDetail(faqNo);
+	}
+
+	// qna 글 조회
+	@Override
+	public QuestionVO qnaDetail(String qstNo) {
+		return adminMapper.qnaDetail(qstNo);
+	}
+	// faq 수정
+	@Override
+	public Map<String , Object> modifyFaq(FaqVO vo) {
+		Map<String , Object> map = new HashMap<String, Object>();
+		System.out.println("svimpl : " + vo);
+		int result = adminMapper.modifyFaq(vo);
+		if(result > 0) {
+			map.put("code", "success");
+		}else {
+			map.put("code", "fail");
+		}
+		return map;
+	}
+	// qna 수정
+	@Override
+	public Map<String , Object> modifyQna(QuestionVO vo) {
+		Map<String , Object> map = new HashMap<String, Object>();
+		System.out.println("svimpl : " + vo);
+		int result = adminMapper.modifyQna(vo);
+		if(result > 0) {
+			map.put("code", "success");
+		}else {
+			map.put("code", "fail");
+		}
+		return map;
+	}
+	// faq 삭제
+	@Override
+	public int deleteFaq(List<String> list) {
+		return adminMapper.deleteFaq(list);
+	}
+	// qna 삭제
+	@Override
+	public int deleteQna(List<String> list) {
+		return adminMapper.deleteQna(list);
+	}
+	
+	// faq 작성
+	@Override
+	public int addFaq(FaqVO vo) {
+		return adminMapper.addFaq(vo);
+	}
+	// board 삭제
+	@Override
+	public int deleteBoard(List<String> list) {
+		return adminMapper.deleteBoard(list);
+	}
+	// board 조회
+	@Override
+	public BoardVO boardDetail(String boardNo) {
+		return adminMapper.boardDetail(boardNo);
 	}
 	
 	

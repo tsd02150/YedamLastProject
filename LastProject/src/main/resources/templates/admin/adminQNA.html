@@ -5,15 +5,189 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="../community/css/board.css">
+<style>
+.swal-cls{
+		width:950px !important;
+	}
+	#reportDiv #boardCntn{
+		height:300px;
+		overflow:hidden;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+	}
+	#boardCntn * {
+		text-align: left;
+	}
+	#boardTtl {
+		text-align: left;
+	}
+</style>
 </head>
 <body>
 	<div layout:fragment="content">
 		<h3>FaQ</h3>
+		<div class="m-2">
+		  	<button id="faqWriteBtn" class="btn btn-success">작성</button>
+		  	<button id="faqDeleteBtn" class="btn btn-danger">삭제</button>			
+		</div>
 		<div id="faqGrid"></div>
 		<h3>QnA</h3>
+		<div class="m-2">
+		  	<button id="qnaDeleteBtn" class="btn btn-danger">삭제</button>			
+		</div>
 		<div id="qnaGrid"></div>
 		
+		<script
+			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+		<script
+			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
+		<script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0/jquery.serialize-object.min.js"></script>
 		<script>
+		$('#faqWriteBtn').on('click',function(){
+			Swal.fire({
+				title:'faq 작성',
+				html:`
+					<form id="myForm" onsubmit="return false">
+        			<div id="reportDiv">
+        			<table class="table h6">
+						<tr>
+							<th style="width:15%;">제목</th>
+							<td style="width:35%;"><input id="writeFaqTtl" style="width:350px" name="ttl"></td>
+							<th style="width:15%;">항목</th>
+							<td style="width:35%;">
+							<select id="faqCategory" style="width:350px;" name="category">
+								<option>회원관리</option>
+								<option>주식이용</option>
+								<option>포인트몰</option>
+								<option>커뮤니티</option>
+							</select>
+							</td>
+						</tr>
+						<tr>
+							<th>내용</th>
+							<td colspan="3" class="text-left">
+								<div id="boardCntn" >
+									<textarea id="faqContent"></textarea>
+								</div>
+							</td>
+						</tr>
+					</table>
+					</div>
+					</form>
+				`,
+				customClass: 'swal-cls',
+				showCancelButton:true,
+				cancelButtonText:'취소',
+    		    confirmButtonText: '작성',
+    		    didOpen: () => {
+					if (!editor) {
+			    		ClassicEditor.create(document.querySelector('#faqContent'), {
+		    				language: "ko",
+		    				ckfinder: {
+		    					uploadUrl: '/image/upload'
+		    				}
+		    			})
+		    			.then(newEditor => {
+		    				editor = newEditor;
+		    			})
+		    			.catch(error => {
+		    				console.error(error);
+		    			});
+					
+				}
+				},
+				didClose:() =>{
+					if (editor) {
+				          editor.destroy()
+				          editor = null;
+				        }
+				},
+    		    preConfirm: () => {
+    		          // 입력값 검사 z
+    		          const ttlValue = document.getElementById('writeFaqTtl').value;
+    		          if (!ttlValue) {
+    		        	  Swal.showValidationMessage(
+    		        			  '<i class="fa fa-info-circle"></i> 제목을 입력하세요'
+    		        		      )
+    		          }else if($('.ck-content').html() == '<br data-cke-filler="true">'){
+    		        	  Swal.showValidationMessage(
+    		        			  '<i class="fa fa-info-circle"></i> 내용을 입력하세요'
+    		        		      )
+    		          }
+    		          
+    		        }
+    		})
+    		.then((result) =>{
+    			if(result.isConfirmed){
+    				
+    				let ckData = editor.getData()
+    				
+    				let formData = $('#myForm').serializeObject()
+    				formData.cntn = ckData
+    				
+    				
+    				$.ajax({
+    					url:'/admin/addFaq',
+    					method : "POST",
+    					data : formData
+    				})
+    				.done(function(result){
+    					//
+    					
+    					faqGrid.reloadData();
+    				})
+    				.fail(function(result){
+    					toastShow("Insert Fail" , "등록 실패" , "error");
+    				})
+
+    				
+    			}// isConfirmed end
+			});// end of swal
+		});// end of 작성버튼클릭
+		$('#faqDeleteBtn').on('click',function(){
+			
+			  const checkedRows = faqGrid.getCheckedRows();
+	      	    if (checkedRows.length > 0) {
+	  	      // 선택된 행이 존재하는 경우에만 삭제 요청을 보냅니다.
+	  	      const faqs = checkedRows.map(row => row.faqNo);
+	  	      
+	  	    Swal.fire({
+	  		  title: checkedRows.length +' 개의 글을 삭제 하시겠습니까?',
+	  		  showDenyButton: true,
+	  		  confirmButtonText: '삭제',
+	  		  denyButtonText: `취소`,
+	  		}).then((result) => {
+	  		  if (result.isConfirmed) {
+	  			  // 서버에 삭제 요청을 보냅니다.
+	  			    $.ajax({
+	  			      type: 'POST', // 또는 DELETE에 맞는 HTTP 메서드를 사용합니다.
+	  			      url: '/admin/deleteFaq',
+	  			      contentType:'application/json',
+	  			      data: JSON.stringify(faqs),
+	  			      success: function(response) {
+	  			        // 삭제 요청이 성공한 경우, 그리드에서 선택된 행을 제거합니다.
+	  			        Swal.fire(response+ '/' +checkedRows.length + '건 성공했습니다.')
+	  			        faqGrid.removeCheckedRows(true);
+	  			      },
+	  			      error: function(err) {
+	  			        console.error('행 삭제 오류:', err);
+	  			      }
+	  			    });
+	  		  } else if (result.isDenied) {
+	  		    Swal.fire('취소됐음')
+	  		  }
+	  		  
+	  		});
+
+	  	   
+	      	  }else{
+	      		  Swal.fire('삭제할 회원을 선택해주세요')
+	      	  }
+		});
+		
+		 	let editor;
 			const faqDataSource = {
 		    		  contentType: 'application/json',
 		    		  api: {
@@ -46,18 +220,211 @@
 	                      filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
 	                   	},
 	                  	{
-	                      header: '내용',
-	                      name: 'cntn',
-	                      filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
-	                    },
-	                  	{
 	                      header: '항목',
 	                      name: 'category',
-	                      filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+	                      filter: 'select', // Dropdown Filter로 설정
+                       	  filterOptions: {
+	                         listItems: ['회원관리', '주식이용','포인트몰','커뮤니티']
+	                       }
 	                    }
 	                 ]
 	               });
 		
+	        faqGrid.on('dblclick',(ev) => {
+	        	
+	        	// faq 정보
+	        	let faqNo = $('td[data-row-key='+ev.rowKey+'][data-column-name=faqNo]').children(0).text();
+	        	// faq글 불러오기
+	        	$.ajax('faqDetail?faqNo='+faqNo)
+	        	.done(function(data){
+	        		Swal.fire({
+	            		title:'FAQ',
+	            		html:`
+	            			<form id="myForm" onsubmit="return false">
+	            			<div id="reportDiv">
+	            			<table class="table h6">
+								<tr>
+									<th style="width:15%;">제목</th>
+									<td style="width:35%;"><input id="writeFaqTtl" style="width:350px" name="ttl" value="${data.ttl}"></td>
+									<th style="width:15%;">항목</th>
+									<td style="width:35%;">
+									<select id="faqCategory" style="width:350px;" name="category">
+										<option ${data.category == '회원관리' ? 'selected' : ''} >회원관리</option>
+										<option ${data.category == '주식이용' ? 'selected' : ''} >주식이용</option>
+										<option ${data.category == '포인트몰' ? 'selected' : ''} >포인트몰</option>
+										<option ${data.category == '커뮤니티' ? 'selected' : ''} >커뮤니티</option>
+									</select>
+									</td>
+								</tr>
+								<tr>
+									<th>내용</th>
+									<td colspan="3" class="text-left">
+										<div id="boardCntn" >
+											<textarea id="faqContent">${data.cntn}</textarea>
+										</div>
+									</td>
+								</tr>
+							</table>
+							</div>
+							</form>
+							`,
+						customClass: 'swal-cls',
+						showCancelButton:true,
+						showDenyButton:true,
+						denyButtonText:'글삭제',
+		    		    confirmButtonText: '수정',
+						cancelButtonText:'취소',
+						didOpen: () => {
+							if (!editor) {
+					    		ClassicEditor.create(document.querySelector('#faqContent'), {
+				    				language: "ko",
+				    				ckfinder: {
+				    					uploadUrl: '/image/upload'
+				    				}
+				    			})
+				    			.then(newEditor => {
+				    				editor = newEditor;
+				    			})
+				    			.catch(error => {
+				    				console.error(error);
+				    			});
+							
+						}
+						},
+						didClose:() =>{
+							if (editor) {
+						          editor.destroy()
+						          editor = null;
+						        }
+						},
+		    		    preConfirm: (ttldata) => {
+		    		          // 입력값 검사 
+		    		         
+		    		          const ttlValue = document.getElementById('writeFaqTtl').value;
+		    		          if (!ttlValue) {
+		    		        	  Swal.showValidationMessage(
+		    		        			  '<i class="fa fa-info-circle"></i> 제목을 입력하세요'
+		    		        		      )
+		    		          }else if($('.ck-content').html() == '<br data-cke-filler="true">'){
+		    		        	  Swal.showValidationMessage(
+		    		        			  '<i class="fa fa-info-circle"></i> 내용을 입력하세요'
+		    		        		      )
+		    		          }
+		    		          
+		    		          let ckData = editor.getData()
+	        				
+	        				let formData = $('#myForm').serializeObject()
+	        				formData.cntn = ckData
+	        				formData.faqNo= faqNo;
+	        				
+		    		          
+		    		           return $.ajax({
+						        url: '/admin/modifyFaq',
+						        method: 'POST',
+						        data : formData
+						      }).then(response => {
+						    	  if(response.code == 'success'){
+						    	  let inputValue = $('#writeFaqTtl').val();
+						    	  let selectValue = $('#faqCategory').val();
+					    	  $('td[data-row-key='+ev.rowKey+'][data-column-name=ttl]').children(0).text(inputValue);
+					    	  $('td[data-row-key='+ev.rowKey+'][data-column-name=category]').children(0).text(selectValue);
+						        return response;
+						    		  
+						    	  }else if (response.code == 'fail'){
+						    		  Swal.showValidationMessage(
+						    				  '<i class="fa fa-info-circle"></i> 실패'
+									        );
+						    	  }
+						      }).fail(error => {
+						        Swal.showValidationMessage(
+						          `Request failed: ${error.statusText}`
+						        );
+						      });
+		    		          
+		    		        }
+	        		})
+	        		.then((result) => {	
+	        			console.log(result);
+	        			if(result.isConfirmed){
+	        				// 수정 기능
+	        			}else if(result.isDenied){
+	        				// 삭제 기능z
+	        				Swal.fire({
+							  title: '삭제하시겠습니까?',
+							  showDenyButton: true,
+							  confirmButtonText: '삭제',
+							  denyButtonText: `취소`,
+							}).then((result) => {
+							  /* Read more about isConfirmed, isDenied below */
+							  if (result.isConfirmed) {
+								  // 서버에 삭제 요청을 보냅니다.
+								  $.ajax({
+	        		  			      type: 'POST', // 또는 DELETE에 맞는 HTTP 메서드를 사용합니다.
+	        		  			      url: '/admin/deleteFaq',
+	        		  			      contentType:'application/json',
+	        		  			      data: JSON.stringify([faqNo]),
+	        		  			      success: function(response) {
+	        		  			        // 삭제 요청이 성공한 경우, 그리드에서 선택된 행을 제거합니다.
+	        		  			        console.log(response)
+	        		  			        faqGrid.removeRow(ev.rowKey);
+	        		  			       	
+	        		  			      },
+	        		  			      error: function(err) {
+	        		  			        console.error('행 삭제 오류:', err);
+	        		  			      }
+	        		  			    });
+							  } else if (result.isDenied) {
+							    Swal.fire('취소됐음')
+							  }
+							})//end of swal
+	        			}//end of else if
+	        		})//end of then
+
+	        		
+	            })// end of done
+	        })
+	        	 
+	       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	       ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	       $('#qnaDeleteBtn').on('click',function(){
+	    	   const checkedRows = qnaGrid.getCheckedRows();
+	      	    if (checkedRows.length > 0) {
+	  	      // 선택된 행이 존재하는 경우에만 삭제 요청을 보냅니다.
+	  	        const qnas = checkedRows.map(row => row.qstNo);
+	  	      
+		  	    Swal.fire({
+		  		  title: checkedRows.length +' 개의 글을 삭제 하시겠습니까?',
+		  		  showDenyButton: true,
+		  		  confirmButtonText: '삭제',
+		  		  denyButtonText: `취소`,
+		  		}).then((result) => {
+		  		  if (result.isConfirmed) {
+		  			  // 서버에 삭제 요청을 보냅니다.
+		  			    $.ajax({
+		  			      type: 'POST', // 또는 DELETE에 맞는 HTTP 메서드를 사용합니다.
+		  			      url: '/admin/deleteQna',
+		  			      contentType:'application/json',
+		  			      data: JSON.stringify(qnas),
+		  			      success: function(response) {
+		  			        // 삭제 요청이 성공한 경우, 그리드에서 선택된 행을 제거합니다.
+		  			        Swal.fire(response+ '/' +checkedRows.length + '건 성공했습니다.')
+		  			        qnaGrid.removeCheckedRows(true);
+		  			      },
+		  			      error: function(err) {
+		  			        console.error('행 삭제 오류:', err);
+		  			      }
+		  			    });
+		  		  } else if (result.isDenied) {
+		  		    Swal.fire('취소됐음')
+		  		  }
+		  		  
+		  		});
+	
+		  	   
+		      	  }else{
+		      		  Swal.fire('삭제할 회원을 선택해주세요')
+		      	  }
+	       })
 	       
 	        const qnaDataSource = {
 		      		  contentType: 'application/json',
@@ -84,25 +451,156 @@
 	                       name: 'qstNo',
 	                       filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
 	                     },
-	                    	{
-	                        header: '닉네임',
-	                        name: 'nick',
-	                        filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
-	                     	},
-	                    	{
-	                        header: '제목',
-	                        name: 'ttl',
-	                        filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
-	                      },
-	                    	{
-	                        header: '작성일',
-	                        name: 'drwupDt',
-	                        filter: { type: 'text', showApplyBtn: true, showClearBtn: true },
-	                        sortingType: 'asc',
-	                        sortable: true
-	                      }
+                     {
+	                       header: '답변유무',
+	                       name: 'state',
+	                       filter: 'select', // Dropdown Filter로 설정
+	                       filterOptions: {
+	                         listItems: ['Y', 'N']
+	                       }
+	                     },
+                    	{
+                        header: '닉네임',
+                        name: 'nick',
+                        filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                     	},
+                    	{
+                        header: '제목',
+                        name: 'ttl',
+                        filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                      },
+                    	{
+                        header: '작성일',
+                        name: 'drwupDt',
+                        filter: { type: 'text', showApplyBtn: true, showClearBtn: true },
+                        sortingType: 'asc',
+                        sortable: true
+                      }
 	                   ]
 	                 });
+	          
+	          qnaGrid.on('dblclick',(ev) => {
+		        	
+		        	// faq 정보
+		        	let qstNo = $('td[data-row-key='+ev.rowKey+'][data-column-name=qstNo]').children(0).text();
+		        	// faq글 불러오기
+		        	$.ajax('qnaDetail?qstNo='+qstNo)
+		        	.done(function(data){
+		        		console.log(data)
+		        		Swal.fire({
+		            		title:'QnA',
+		            		html:`
+		            			<form id="myForm" onsubmit="return false">
+		            			<div id="reportDiv">
+		            			<table class="table h6">
+									<tr>
+										<th style="width:15%;">제목</th>
+										<td style="width:35%;">${data.ttl}</td>
+										<th style="width:15%;">작성일</th>
+										<td style="width:35%;">${data.drwupDt}</td>
+									</tr>
+									<tr>
+										<th style="width:15%;">작성자</th>
+										<td style="width:35%;">${data.nick}</td>
+										<th style="width:15%;">회원번호</th>
+										<td style="width:35%;">${data.membNo}</td>
+									</tr>
+									<tr>
+										<th>내용</th>
+										<td colspan="3" style="text-align:left">${data.cntn}</td>
+									</tr>
+									<tr>
+										<th>답변</th>
+										<td colspan="3" class="text-left">
+											<div id="boardCntn" >
+												<textarea name="rply" cols="93" rows="15" placeholder="답변 해주세요">${data.rply == null ? '' : data.rply}</textarea>
+											</div>
+										</td>
+									</tr>
+								</table>
+								</div>
+								</form>
+								`,
+							customClass: 'swal-cls',
+							showCancelButton:true,
+							showDenyButton:true,
+							denyButtonText:'글삭제',
+			    		    confirmButtonText: '답변',
+							cancelButtonText:'취소',
+			    		    preConfirm: (ttldata) => {
+			    		          // 입력값 검사 
+			    		         
+			    		          if ($('.ck-content').html() == '<br data-cke-filler="true">') {
+			    		        	  Swal.showValidationMessage(
+			    		        			  '<i class="fa fa-info-circle"></i> 내용을 입력하세요'
+			    		        		      )
+			    		          }
+		        				
+		        				let formData = $('#myForm').serializeObject()
+		        				formData.qstNo= qstNo;
+		        				
+			    		          
+			    		           return $.ajax({
+							        url: '/admin/modifyQna',
+							        method: 'POST',
+							        data : formData
+							      }).then(response => {
+							    	  if(response.code == 'success'){
+						    	  $('td[data-row-key='+ev.rowKey+'][data-column-name=state]').children(0).text("Y");
+							        return response;
+							    		  
+							    	  }else if (response.code == 'fail'){
+							    		  Swal.showValidationMessage(
+							    				  '<i class="fa fa-info-circle"></i> 실패'
+										        );
+							    	  }
+							      }).fail(error => {
+							        Swal.showValidationMessage(
+							          `Request failed: ${error.statusText}`
+							        );
+							      });
+			    		          
+			    		        }
+		        		})
+		        		.then((result) => {	
+		        			console.log(result);
+		        			if(result.isConfirmed){
+		        				// 수정 기능
+		        			}else if(result.isDenied){
+		        				// 삭제 기능z
+		        				Swal.fire({
+								  title: '삭제하시겠습니까?',
+								  showDenyButton: true,
+								  confirmButtonText: '삭제',
+								  denyButtonText: `취소`,
+								}).then((result) => {
+								  /* Read more about isConfirmed, isDenied below */
+								  if (result.isConfirmed) {
+									  // 서버에 삭제 요청을 보냅니다.
+									  $.ajax({
+		        		  			      type: 'POST', // 또는 DELETE에 맞는 HTTP 메서드를 사용합니다.
+		        		  			      url: '/admin/deleteQna',
+		        		  			      contentType:'application/json',
+		        		  			      data: JSON.stringify([qstNo]),
+		        		  			      success: function(response) {
+		        		  			        // 삭제 요청이 성공한 경우, 그리드에서 선택된 행을 제거합니다.
+		        		  			        console.log(response)
+		        		  			        qnaGrid.removeRow(ev.rowKey);
+		        		  			      },
+		        		  			      error: function(err) {
+		        		  			        console.error('행 삭제 오류:', err);
+		        		  			      }
+		        		  			    });
+								  } else if (result.isDenied) {
+								    Swal.fire('취소됐음')
+								  }
+								})//end of swal
+		        			}//end of else if
+		        		})//end of then
+
+		        		
+		            })// end of done
+		        }); // end of dbl
 		</script>
 	</div>
 </body>

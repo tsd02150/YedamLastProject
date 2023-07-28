@@ -22,6 +22,7 @@ public class QuestionVO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private Date rplyDt;
 	private int inq;
+	private String state;
 	
 	private int page;
 	private String nick;

@@ -175,10 +175,10 @@
                {
                  header: '상태',
                  name: 'state',
-                 filter: {
-                     type: 'text',
-                     operator: 'OR'
-                   },
+                 filter: 'select', // Dropdown Filter로 설정
+                 filterOptions: {
+                   listItems: ['활동정지', '정상']
+                 },
                    editor:{
                   	 type:'select',
                   	 options:{

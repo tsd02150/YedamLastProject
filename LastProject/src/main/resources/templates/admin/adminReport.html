@@ -190,7 +190,10 @@
                   	{
                       header: '신고종류',
                       name: 'category',
-                      filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                      filter: 'select', // Dropdown Filter로 설정
+                      filterOptions: {
+                        listItems: ['욕설', '비방','기타']
+                      }
                     },
                  	{
                       header: '신고일시',

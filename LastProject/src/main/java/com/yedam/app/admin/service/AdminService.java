@@ -7,6 +7,7 @@ import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.CommentsVO;
 import com.yedam.app.community.service.FaqVO;
 import com.yedam.app.community.service.NoticeVO;
+import com.yedam.app.community.service.QuestionVO;
 import com.yedam.app.community.service.ReportVO;
 
 
@@ -27,4 +28,14 @@ public interface AdminService {
 	public Map<String, Object> chatList(int page, int perPage);
 	public Map<String , Object> addNotice(NoticeVO vo);
 	public Map<String , Object> modifyNotice(NoticeVO vo);
+	public int deleteNotice(List<String> list);
+	public FaqVO faqDetail(String faqNo);
+	public QuestionVO qnaDetail(String qstNo);
+	public Map<String , Object> modifyFaq(FaqVO vo);
+	public Map<String , Object> modifyQna(QuestionVO vo);
+	public int deleteFaq(List<String> list);
+	public int deleteQna(List<String> list);
+	public int addFaq(FaqVO vo);
+	public int deleteBoard(List<String> list);
+	public BoardVO boardDetail(String boardNo);
 }

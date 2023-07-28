@@ -273,4 +273,72 @@ public class AdminController {
 		vo.setMembNo(uvo.getMembNo());
 		return adminService.modifyNotice(vo);
 	}
+	
+	// 신고글 삭제
+	@ResponseBody
+	@PostMapping("deleteNotice")
+	public int deleteNotice(@RequestBody List<String> list) {
+		return adminService.deleteNotice(list);
+	}
+	
+	// faq 단건조회
+	@ResponseBody
+	@GetMapping("faqDetail")
+	public FaqVO faqDetail(String faqNo) {
+		return adminService.faqDetail(faqNo);
+	}
+	
+	// qna 단건조회
+	@ResponseBody
+	@GetMapping("qnaDetail")
+	public QuestionVO qnaDetail(String qstNo) {
+		return adminService.qnaDetail(qstNo);
+	}
+	
+	//faq 수정
+	@ResponseBody
+	@PostMapping("modifyFaq")
+	public Map<String , Object> modifyFaq(FaqVO vo) {
+		return adminService.modifyFaq(vo);
+	}
+	//qna 수정
+	@ResponseBody
+	@PostMapping("modifyQna")
+	public Map<String , Object> modifyQna(QuestionVO vo) {
+		return adminService.modifyQna(vo);
+	}
+	
+	//faq 삭제
+	@ResponseBody
+	@PostMapping("deleteFaq")
+	public int deleteFaq(@RequestBody List<String> list) {
+		return adminService.deleteFaq(list);
+	}
+	//qna 삭제
+	@ResponseBody
+	@PostMapping("deleteQna")
+	public int deleteQna(@RequestBody List<String> list) {
+		return adminService.deleteQna(list);
+	}
+	
+	//faq 작성
+	@ResponseBody
+	@PostMapping("addFaq")
+	public int addFaq(FaqVO vo) {
+		return adminService.addFaq(vo);
+	}
+	
+	// board 조회
+	@ResponseBody
+	@GetMapping("boardDetail")
+	public BoardVO boardDetail(String boardNo) {
+		return adminService.boardDetail(boardNo);
+	}
+	
+	// board 삭제
+	@ResponseBody
+	@PostMapping("deleteBoard")
+	public int deleteBoard(@RequestBody List<String> list) {
+		return adminService.deleteBoard(list);
+	}
 }

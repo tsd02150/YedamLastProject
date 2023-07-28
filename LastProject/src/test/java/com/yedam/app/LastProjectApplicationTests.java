@@ -43,7 +43,7 @@ class LastProjectApplicationTests {
 		this.template.convertAndSend("/stock/alarm/mem-2","test");
 	}
 	
-	//@Test
+	@Test
 	public void scheduler() {
 		List<ItemInfoVO> list =stockMapper.todayItemInfo();
 		List<String> intList = new ArrayList<>();
@@ -78,7 +78,7 @@ class LastProjectApplicationTests {
 	}
 	
 	
-	@Test
+	//@Test
 	public void adminTest() {
 		List<String> list = new ArrayList<>();
 		list.add("mem-1");

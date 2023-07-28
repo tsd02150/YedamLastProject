@@ -67,4 +67,24 @@ public interface AdminMapper {
 	public void addNotice(NoticeVO vo);
 	// 공지사항 수정
 	public int modifyNotice(NoticeVO vo);
+	// 공지사항 삭제
+	public int deleteNotice(List<String> list);
+	// faq 글 조회
+	public FaqVO faqDetail(String faqNo);
+	// qna 글 조회
+	public QuestionVO qnaDetail(String qstNo);
+	// faq 글 수정
+	public int modifyFaq(FaqVO vo);
+	// qna 글 수정
+	public int modifyQna(QuestionVO vo);
+	// fqa 삭제
+	public int deleteFaq(List<String> list);
+	// qna 삭제
+	public int deleteQna(List<String> list);
+	// faq 작성
+	public int addFaq(FaqVO vo);
+	// board 삭제
+	public int deleteBoard(List<String> list);
+	// board 조회
+	public BoardVO boardDetail(String boardNo);
 }

@@ -155,6 +155,7 @@
 	<select id="faqList" resultType="FaqVO">
 		select *
 	  	from faq
+	  	order by to_number(substr(faq_no,5)) desc
 	</select>
 	<!-- faq 개수 -->
 	<select id="faqTotal">
@@ -164,7 +165,7 @@
 	
 	<!-- qna 글 리스트 -->
 	<select id="qnaList" resultType="QuestionVO">
-		select qst_no , q.memb_no , ttl , cntn ,drwup_dt , rply , rply_dt , nick
+		select qst_no , q.memb_no , ttl , cntn ,drwup_dt , rply , rply_dt , nick , decode(rply , null , 'N' , 'Y' ) state
         from question q join member m 
         on q.memb_no = m.memb_no
         order by drwup_dt desc
@@ -230,4 +231,95 @@
     		,cntn = #{cntn}
     	where noti_no = #{notiNo}
     </update>
+    
+    <!-- 공지사항 삭제 -->
+	<delete id="deleteNotice" >
+		delete from notice
+		where noti_no in (
+			<foreach collection="list" item="item" separator=",">
+				#{item}
+			</foreach>
+		)
+	</delete>
+	
+	<!-- faq 글 조회 -->
+	<select id="faqDetail" resultType="FaqVO">
+		select *
+		from faq
+		where faq_no = #{faqNo}
+	</select>
+	
+	<!-- qna 글 조회 -->
+	<select  id="qnaDetail" resultType="QuestionVO">
+		select qst_no , q.memb_no , ttl , cntn ,drwup_dt , rply , rply_dt , nick
+        from question q join member m 
+        on q.memb_no = m.memb_no
+		where qst_no = #{qstNo}
+	</select>
+	
+	<!-- faq 수정 -->
+	<update id="modifyFaq">
+		update faq
+		set ttl =#{ttl} ,
+		    cntn=#{cntn} ,
+		    category=#{category} 
+		where faq_no = #{faqNo}
+	</update>
+	
+	<!-- qna 수정 -->
+	<update id="modifyQna">
+		update question
+		set rply = #{rply},
+			rply_dt = sysdate
+		where qst_no = #{qstNo}
+	</update>
+	
+	<!-- faq 삭제 -->
+	<delete id="deleteFaq" >
+		delete from faq
+		where faq_no in (
+			<foreach collection="list" item="item" separator=",">
+				#{item}
+			</foreach>
+		)
+	</delete>
+	<!-- qna 삭제 -->
+	<delete id="deleteQna" >
+		delete from question
+		where qst_no in (
+			<foreach collection="list" item="item" separator=",">
+				#{item}
+			</foreach>
+		)
+	</delete>
+	
+	<!-- faq 작성 -->
+	<insert id="addFaq">
+		insert into faq ( faq_no ,
+						  ttl ,
+						  cntn , 
+						  category )
+		values ( 'faq-'||faq_seq.nextval ,
+				 #{ttl},
+				 #{cntn},
+				 #{category})
+	</insert>
+	
+	<!-- board 상세 -->
+	<select id="boardDetail" resultType="BoardVO">
+		select board_no , b.memb_no , nick , ttl, drwup_dt , rcom , nrcom ,h_ctgr, ctgr , cntn
+        from board b join member m
+        on b.memb_no = m.memb_no
+        join common_code c on c.common_cd = b.common_cd
+        where board_no = #{boardNo}
+	</select>
+	<!-- board 삭제 -->
+	<delete id="deleteBoard">
+		delete from board
+		where board_no in (
+			<foreach collection="list" item="item" separator=",">
+				#{item}
+			</foreach>
+		)
+	</delete>
 </mapper>
