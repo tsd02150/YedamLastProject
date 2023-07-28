@@ -2,6 +2,7 @@ package com.yedam.app.security;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,7 @@ public class WebSecurityConfig{
 
 	           String uri = "/";
 
+	           System.out.println(request.getHeader("referer"));
 	           if (request.getHeader("referer") != null && !request.getHeader("referer").isEmpty()) {
 	               uri = request.getHeader("referer");
 	           }
@@ -77,16 +79,16 @@ public class WebSecurityConfig{
 	       };
 	   }
 	   
-	   
 	   @Bean
 	   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 	      http
 	      	 .csrf().disable()
 	         .authorizeHttpRequests()
-	         .antMatchers("/", "/member/mysurvey3","/stock/**", "/static/**").permitAll()
+	         .antMatchers("/", "/member/mysurvey","/stock/**", "/static/**").permitAll()
 	         .antMatchers("/admin/**").hasRole("ADMIN")
 	         .antMatchers("/community/chat").hasAnyRole("ADMIN","USER")
-	         .antMatchers("/member/mypage").authenticated()
+	         .antMatchers("/member/mypage", "/member/mystock","/member/mystockInfo","/member/mypageIntro"
+        		 		 ,"/member/mypageInfo","/member/mypoint","/member/pointChargeForm","/member/myorder").authenticated()
 	         .anyRequest().permitAll()
 	         .and()
  		     .exceptionHandling().accessDeniedHandler(accessDeniedHandler())

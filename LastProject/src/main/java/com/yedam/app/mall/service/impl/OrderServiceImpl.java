@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.yedam.app.mall.mapper.OrderMapper;
 import com.yedam.app.mall.service.OrderService;
 import com.yedam.app.mall.service.OrderVO;
+import com.yedam.app.member.service.MembVO;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -23,6 +24,11 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public List<OrderVO> getMemInfo(String membNo) {
 		return orderMapper.getMemInfo(membNo);
+	}
+
+	@Override
+	public int insertOrder(OrderVO ordVO, MembVO membVO) {
+		return orderMapper.insertOrder(ordVO);
 	}
 
 	

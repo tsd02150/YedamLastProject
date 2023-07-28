@@ -28,6 +28,11 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 	                                    Authentication authentication) throws IOException, ServletException {
 	    System.out.println("success handler 실행");
 	    HttpSession session = request.getSession();
+	    String referer = (String) session.getAttribute("returnUrl");
+	    
+	    System.out.println("++++++++++++++++++++++++++");
+	    System.out.println(referer);
+	    System.out.println("++++++++++++++++++++++++++");
 
 	    if (authentication != null && authentication.getPrincipal() instanceof PrincipalDetails) {
 	        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -36,7 +41,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 	        if (userVO != null) {
 	            if (userVO.getTempPwd() == null && !userVO.getNm().equals("admin")) {
 	                session.setAttribute("loggedInMember", userVO);
-	                response.sendRedirect("/");
+	                response.sendRedirect(referer);
 	            } else if (userVO.getTempPwd() != null && !userVO.getNm().equals("admin")) {
 	                session.setAttribute("loggedInMember", userVO);
 	                response.sendRedirect("/member/tempPwdUpdate");

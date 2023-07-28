@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>orderList.html</title>
+<script src="https://js.tosspayments.com/v1/payment-widget"></script>
 <style>
 * {
 	margin: 0;
@@ -521,6 +522,37 @@ table {
 .clearfix {
 	clear: both;
 }
+
+#chargeInputDiv {
+	margin: auto;
+	margin-top: 80px;
+	margin-left: 100px;
+}
+
+#chargeInput {
+	width: 500px;
+	display: inline-block;
+}
+
+#tosspay {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 1; /* Sit on top */
+	left: 60;
+	top: 0;
+	width: 730px; /* Full width */
+	height: 650px; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0, 0, 0); /* Fallback color */
+	background-color: white; /* Black w/ opacity */
+	margin-top: 200px;
+	border: 1px solid #DDDDDD;
+}
+
+#payBtn {
+	margin: auto;
+	text-align: center;
+}
 </style>
 
 <script
@@ -541,9 +573,8 @@ table {
 					<table class="table_text_align_center memberInfo_table">
 						<tbody>
 							<tr>
-								<th style="width: 25%;">주문자</th>
-								<td style="width: *">${memberInfo.memberName} |
-									${memberInfo.memberMail}</td>
+								<th style="width: 25%;" class="membNm">주문자</th>
+								<td style="width: *"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -577,13 +608,13 @@ table {
 									<strong>연락처:</strong> <span id="recipient_phone">010-1234-5678</span>
 								</div>
 								<div>
-										<div class="col-md-12" id="insertAddrDiv">
+									<div class="col-md-12" id="insertAddrDiv">
 										<div class="form-group">
 											<label for="insertaddr1">주소</label><br> <input
 												type="text" class="form-control"
 												style="width: 40%; display: inline;" id="insertaddr1"
 												name="zip" placeholder="우편번호" readonly>
-											
+
 										</div>
 										<div class="form-group">
 											<label for="insertaddr2"></label> <input type="text"
@@ -630,8 +661,7 @@ table {
 				<div class="orderGoods_div">
 					<!-- 상품 종류 -->
 					<div class="goods_kind_div">
-						주문상품 <span class="goods_kind_div_kind"></span>종 <span
-							class="goods_kind_div_count"></span>개
+						주문상품 <span class="goods_kind_div_kind"></span>
 					</div>
 					<!-- 상품 테이블 -->
 					<table class="goods_subject_table">
@@ -677,7 +707,7 @@ table {
 
 				<!-- 포인트 정보 -->
 				<div class="point_div">
-					<div class="point_div_subject">포인트 사용</div>
+					<div class="point_div_subject">사용 가능 포인트</div>
 					<table class="point_table">
 						<colgroup>
 							<col width="25%">
@@ -686,7 +716,7 @@ table {
 						<tbody>
 							<tr>
 								<th>포인트 사용</th>
-								<td><input class="order_point_input" value="0">P <a
+								<td><input class="order_point_input">P <a
 									class="order_point_input_btn order_point_input_btn_N"
 									data-state="N">모두사용</a> <a
 									class="order_point_input_btn order_point_input_btn_Y"
@@ -709,31 +739,28 @@ table {
 								class="strong_red"> <span
 									class="total_price_red finalTotalPrice_span"> 1500000 </span>원
 							</strong></li>
-							<li class="point_li"><span class="price_span_label">잔여
+							<li class="point_li"><span class="price_span_label">결제 후 잔여
 									포인트</span> <span class="totalPoint_span">7960원</span></li>
 						</ul>
 					</div>
 					<!-- 버튼 영역 -->
 					<div class="total_info_btn_div">
-						<a class="order_btn">결제하기</a>
+						<img id="tosimg" th:src="|/member/images/toss.png|"
+							style="width: 400px; height: 100px;">
 					</div>
 				</div>
+
 			</div>
-
-			<!-- 주문 요청 form -->
-			<!-- 	<form class="order_form" action="/order" method="post">
-				주문자 회원번호
-				<input name="memberId" value="${memberInfo.memberId}" type="hidden">
-				주소록 & 받는이
-				<input name="addressee" type="hidden"> <input
-					name="memberAddr1" type="hidden"> <input name="memberAddr2"
-					type="hidden"> <input name="memberAddr3" type="hidden">
-				사용 포인트
-				<input name="usePoint" type="hidden">
-				상품 정보
-			</form>
- -->
-
+			<div id="tosspay">
+				<!-- 결제위젯, 이용약관 영역 -->
+				<div id="payment-method"></div>
+				<div id="agreement"></div>
+				<!-- 결제하기 버튼 -->
+				<div id="payBtn">
+					<button id="payment-button" onclick="directOrder()" class="btn btn-primary btn-lg">결제하기</button>
+					<button id="resetpay-button" class="btn btn-primary btn-lg">취소하기</button>
+				</div>
+			</div>
 
 			<!-- <div style="width: 1100px;">
 			<div class="orderList">
@@ -879,83 +906,103 @@ table {
 		</div>
 		<script th:inline="javascript">
 	
-	
-	/*   <strong>받는 분 이름:</strong> <span id="recipient_name"></span>
-				  </div>
-				  <div>
-				    <strong>연락처:</strong> <span id="recipient_phone">010-1234-5678</span>
-				  </div>
-				  <div>
-				    <strong>배송 주소:</strong> <span id="address">서울특별시 강남구</span>
-				  </div>
-				  <div>
-				    <strong>배송 요청사항:</strong> <span id="delivery_memo"> */
-	
+
 	 //주문자 정보
 	 //let memInfo = [[${mem}]];
-				    let membInfo = [[${membInfo}]];
-				    console.log(membInfo);
+	    let membInfo = [[${membInfo}]];
+	    console.log(membInfo);
 
-				    // 주문자 정보
-				    let memAddr = ""; // 주문자 주소
-				    let email = "";   // 주문자 이메일
-				    let tel = "";     // 주문자 연락처
-				    let addr = "";    // 배송 주소
-				    let orderNm = ''; // 주문자 이름
+	    // 주문자 정보
+	  
+	    let addr = "";    // 배송 주소
+	    let email = "";   // 주문자 이메일
+	    let tel = "";     // 주문자 연락처
+	    let orderNm = ''; // 받는사람 이름
+	    let orderAm = 0; // 주문 금액
+	    let orderSt = ''; // 주문 상태
+	    let payAn = 0; // 결제 금액
+	   	
+	    
+	   
 
-				    for (let info of membInfo) {
-				        // 주문자 정보를 할당하는 부분 (예시로 주문자 이름만 가져옴)
-				        orderNm += info.nm;
+	    for (let info of membInfo) {
+	        // 주문자 정보를 할당하는 부분 (예시로 주문자 이름만 가져옴)
+	        orderNm += info.nm;
 
-				        // 주문자 주소, 이메일, 연락처, 배송 주소 등을 해당하는 속성에서 가져와서 변수에 할당해주어야 합니다.
-		
-				        email += info.email;
-				        tel += info.tel;
-				        addr += info.addr;
-				    }
+	        // 주문자 주소, 이메일, 연락처, 배송 주소 등을 해당하는 속성에서 가져와서 변수에 할당해주어야 합니다.
 
-				    console.log(orderNm);
-				    console.log(email);
-				    console.log(tel);
-				    console.log(addr);
+	        addr += info.addr;
+	        email += info.email;
+	        tel += info.tel;
+	        orderNm += info.nm;
+	        orderAm += info.orderAm;
+	        orderSt += info.orderSt;
+	        payAn += info.payAn;
+	        
+	        
+	    }
 
-				    $(document).ready(function () {
-				        // 주문자 정보
-				        // 주문자 명
-				        $("#recipient_name").text(orderNm);
-				        // 이메일
-				        $("#recipient_email").text(email);
-				        // 연락처
-				        $("#recipient_phone").text(tel);
-				        // 배송주소
-				        $("#address").text(addr);
-				        // 최종 잔여 포인트
-				        $("#totalPoint").text(totalPoint);
-				    });
+	    console.log(orderNm);
+	    console.log(email);
+	    console.log(tel);
+	    console.log(addr);
+	    console.log(payAn);
+
+	    $(document).ready(function () {
+	        // 주문자 정보
+	        // 주문자 명
+	        $("#recipient_name").text(orderNm);
+	        // 이메일
+	        $("#recipient_email").text(email);
+	        // 연락처
+	        $("#recipient_phone").text(tel);
+	        // 배송주소
+	        $("#insertAddrDiv").text(addr);
+	        // 최종 잔여 포인트
+	        $("#totalPoint").text(totalPoint);
+	    });
 	 
 	// 주문 리스트 정보	
 	 let orderInfo = [];
 	 orderInfo=[[${orderList}]]; 
-	console.log(orderInfo);
+	//console.log(orderInfo);
 	
 	let totalPrice = 0;
 	let totalCount = 0;
 	let deliveryPrice = 0;
 	let finalTotalPrice = 0;
-	let totalPoint = 0;
+	let point = 0;
+	let totalPoint =0;
+	let membNm = '';
+	
+
 	
 	
 	for(let info of orderInfo) {
-		console.log(info);
+		//console.log(info);
 		
 		 totalPrice += (info.prc - (info.prc * info.dcRate / 100)) * info.cnt;
 		 totalCount += info.cnt; // 물품의 개수를 totalCount에 더합니다.
-		 totalPoint += info.point - ((info.prc - (info.prc * info.dcRate / 100)) * info.cnt) - deliveryPrice; 
-		}
+		 
+		// - ((info.prc - (info.prc * info.dcRate / 100)) * info.cnt) - deliveryPrice;
+		// console.log((info.prc - (info.prc * info.dcRate / 100)) * info.cnt);
+		//totalPoint += ((info.prc - (info.prc * info.dcRate / 100)) * info.cnt) - deliveryPrice;
+		//console.log(info.point - (info.prc - (info.prc * info.dcRate / 100)) * info.cnt)
+		//console.log(totalPrice);
+		 point = info.point; // 보유 포인트 50,000
+		membNm = info.nm;
 		
+		 
+		}
+			
+		
+		//console.log(info.point);
 		deliveryPrice += totalPrice >= 10000 ? 0 : 3000;
 		finalTotalPrice = totalPrice + deliveryPrice;
-		console.log(totalPrice);
+		console.log(finalTotalPrice);
+		console.log(totalPoint);
+		totalPoint = point - finalTotalPrice;
+		//console.log(totalPrice);
 		// 총 가격
 		 $(".totalPrice_span").text(totalPrice);
 		// 총 갯수
@@ -965,8 +1012,13 @@ table {
 		// 최종 가격(총 가격 + 배송비)
 		$(".finalTotalPrice_span").text(finalTotalPrice.toLocaleString());
 		// 최종 잔여 포인트
-		$(".totalPoint").text(totalPoint);
+		$(".totalPoint_span").text(totalPoint);
+		// 회원 포인트
+		$(".order_point_input").val(point);
+		
+		
 
+		
 	//우편번호 모달
 	function sample6_execDaumPostcode() {
 		new daum.Postcode({
@@ -1056,9 +1108,68 @@ table {
 	function directOrder() {
 		// 바로 주문하기 기능 구현
 		alert("주문 페이지로 이동합니다!");
-		window.location.href = "/mall/orderList";
-	}
+		window.location.href = "/mall/orderCheck";
+	} 
+	
+	$("#resetpay-button").on("click",function(){
+		 $("#tosspay").css("display", "none");
+	})
+	
+	$("#tosimg").on("click", function(){
+		if($("#chargeInput").val()==""){
+			$("#chargeInput").focus();
+			return;
+		}
+	
+		
+		//주문페이지 이동
+		function directOrder() {
+		  // 바로 주문하기 기능 구현
+		  alert("결제완료 페이지로 이동합니다!");
+		  window.location.href="/mall/orderCheck";
+		}
+		
+	
+	const pattern = /[^(0-9)]/gi;
+	  const clientKey = 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq' // 상점을 특정하는 키
+	  const customerKey = 'C57lz4-jzjw9_VF9insuD' // 결제 고객을 특정하는 키
+	 
+		let chargeInput = Number($(".totalPrice_span").val().replace(/,/g, ""));
+		amount = parseInt(chargeInput)
+		console.log(amount);
 
+		/*결제위젯 영역 렌더링*/
+	  const paymentWidget = PaymentWidget(clientKey, customerKey) // 회원 결제 초기화
+	  paymentWidget.renderPaymentMethods('#payment-method', amount)
+	  
+	  /*약관 영역 렌더링*/
+	  const paymentAgreement = paymentWidget.renderAgreement('#agreement')
+		$("#tosspay").css("display","block");
+		
+	  /*결제요청 함수 정의*/
+		document.querySelector("#payment-button").addEventListener("click",()=>{
+			console.log(amount);
+			
+		    paymentWidget.requestPayment({
+		    	orderId: 'u0XHU8mFoZkItvhSh6972',
+		    	orderName: '포인트몰',
+		    	successUrl: 'http://localhost:80/mall/orderCheck',
+		    	failUrl: 'http://localhost:80/mall/orderCancel',
+		    	customerEmail: 'ihyang00@naver.com', 
+		    	customerName: '김토스'
+		    }).catch(function (error) {
+		    	if (error.code === 'USER_CANCEL') {
+		    	// 결제 고객이 결제창을 닫았을 때 에러 처리
+		    	location.href="orderCancel";
+		    	console.log(error.code);
+		    	} if (error.code === 'INVALID_CARD_COMPANY') {
+          // 유효하지 않은 카드 코드에 대한 에러 처리
+		    	console.log(error.code);
+		    	location.href="orderCancel";
+        			}
+	     		 })  
+			  })
+		})
 	</script>
 	</div>
 </body>

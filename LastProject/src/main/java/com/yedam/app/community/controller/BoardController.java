@@ -189,7 +189,17 @@ public class BoardController {
 	@PostMapping("deleteBoard")
 	@ResponseBody
 	public String deleteBoard(BoardVO vo) {
+		vo=boardService.getBoardDetail(vo.getBoardNo());
+		String imagePath="";
+		if(vo.getCntn().indexOf("<img")>0) {
+			imagePath=vo.getCntn().substring(vo.getCntn().indexOf("amazonaws.com")+12, vo.getCntn().lastIndexOf("\">"));			
+		}
+		
+		
 		if(boardService.deleteBoard(vo)) {
+			if(imagePath.equals("")) {
+				amazonS3.deleteObject(bucket, imagePath);
+			}
 			AttachFileVO attachVo =new AttachFileVO();
 			attachVo.setBoardNo(vo.getBoardNo());
 			List<AttachFileVO> attachList = attachFileService.getAttachFileList(attachVo);
