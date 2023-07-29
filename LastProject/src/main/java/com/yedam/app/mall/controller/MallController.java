@@ -34,8 +34,10 @@ public class MallController {
 	// 포인트몰 메인 페이지
 	@GetMapping("mallMain")
 	public String mallMain(Model model, ProductVO prdtVO) {
-		List<ProductVO> list = mallService.getProductList(null);
-		model.addAttribute("prdtStartPage", list);
+		List<ProductVO> farmList = mallService.getProductList("S1");
+		List<ProductVO> seaList = mallService.getProductList("S2");
+		model.addAttribute("farmProduct", farmList);
+		model.addAttribute("seaProduct", seaList);
 		/*
 		 * model.addAttribute("getFarm", mallService.getProductInfo(prdtVO));
 		 * model.addAttribute("getSeafood", mallService.getProductInfo(prdtVO));

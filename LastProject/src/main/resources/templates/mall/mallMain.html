@@ -324,11 +324,11 @@
 
 			<div class="row">
 
-				<div class="col-md-3 col-sm-6" th:each="prdt, iterStat : ${product}"
+				<div class="col-md-3 col-sm-6" th:each="prdt, iterStat : ${farmProduct}"
 					th:if="${iterStat.index} >= 1 and ${iterStat.index} <= 4 ">
 					<div class="product-grid">
 						<div class="product-image">
-							<a href="#" class="image"> <img class="img"
+							<a th:href="|/mall/getFarm?prdtNo=${prdt.prdtNo}|" class="image"> <img class="img"
 								th:src="|/mall/images/main/${prdt.thumb}|">
 							</a> <span class="product-sale-label">sale</span> <a
 								class="product-like-icon" href="#"><i class="far fa-heart"></i></a>
@@ -384,11 +384,11 @@
 			<div>&nbsp;</div>
 			<div class="row">
 
-				<div class="col-md-3 col-sm-6" th:each="prdt, iterStat : ${product}"
-					th:if="${iterStat.index} >= 28 and ${iterStat.index} <= 31 ">
+				<div class="col-md-3 col-sm-6" th:each="prdt, iterStat : ${seaProduct}"
+					th:if="${iterStat.index}  >= 1 and ${iterStat.index} <= 4 ">
 					<div class="product-grid">
 						<div class="product-image">
-							<a href="#" class="image"> <img class="img"
+							<a th:href="|/mall/getFarm?prdtNo=${prdt.prdtNo}|" class="image"> <img class="img"
 								th:src="|/mall/images/main/${prdt.thumb}|">
 							</a> <span class="product-sale-label">sale</span> <a
 								class="product-like-icon" href="#"><i class="far fa-heart"></i></a>
