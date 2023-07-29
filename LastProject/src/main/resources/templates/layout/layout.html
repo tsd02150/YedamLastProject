@@ -144,8 +144,8 @@
  
 
                         </ul>
-                        <div id="absoluteUL" class="col-md-12 col-sm-12 col-xs-12 top-nav-social-lists text-lg-right col-lg-4 ml-lg-auto">
-                			<ul class="list-unstyled mt-4 mt-lg-0 text-left">
+                        <div class="col-md-12 col-sm-12 col-xs-12 top-nav-social-lists text-lg-right col-lg-4 ml-lg-auto">
+                			<ul class="list-unstyled mt-4 mt-lg-0 text-right">
                    		 		<li th:if="${session.loggedInMember}==null">
                     				<a href="/member/login">
 			                            <span>
@@ -190,50 +190,51 @@
 			                        
 			                    </li>
                 			</ul>
-      <div class="bs-canvas bs-canvas-right position-fixed bg-light h-100">
-		<header class="bs-canvas-header p-3 bg-dark overflow-auto ">
-	    	<button type="button" class="bs-canvas-close float-left close" aria-label="Close"><span aria-hidden="true" class="text-light">&times;</span></button>
-	        <h4 class="d-inline-block text-light mb-0 float-right">Alarm</h4>
-	    </header>
-	    <div class="bs-canvas-content ">
-		    			<ul class="nav nav-tabs mt-3 w-100 text-center">
-							<li class="nav-item">
-									<a class="nav-link m-0 p-0 bold" data-toggle="tab" href="#stock-alm">체결 
-			    					</a>
-	    					</li>
-							<li class="nav-item">
-								<a class="nav-link m-0 p-0" data-toggle="tab" href="#mall-alm">주문/배송
-								</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link m-0 p-0" data-toggle="tab" href="#comm-alm">게시판
-								</a>
-							</li>
-						</ul>
-						
-						<div id="alarmTab" class="tab-content text-left">
-							<!-- 체결 -->
-							<div class="tab-pane fade show " id="stock-alm">
-								<ul class="list-group m-0 h-100 border">
-								</ul>
-							</div>
-							<!-- 주문/배송 -->
-							<div class="tab-pane fade" id="mall-alm">
-								<ul class="list-group m-0 h-100 border ">
+							<div class="bs-canvas bs-canvas-right position-fixed bg-light h-100">
+								<header class="bs-canvas-header p-3 bg-dark overflow-auto ">
+									<button type="button" class="bs-canvas-close float-left close" aria-label="Close">
+										<span aria-hidden="true" class="text-light">&times;</span>
+									</button>
+	        						<h4 class="d-inline-block text-light mb-0 float-right">Alarm</h4>
+									</header>
+									<div class="bs-canvas-content ">
+									<ul class="nav nav-tabs mt-3 w-100 text-center">
+										<li class="nav-item">
+											<a class="nav-link m-0 p-0 bold" data-toggle="tab" href="#stock-alm">체결</a>
+	    								</li>
+										<li class="nav-item">
+											<a class="nav-link m-0 p-0" data-toggle="tab" href="#mall-alm">주문/배송
+											</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link m-0 p-0" data-toggle="tab" href="#comm-alm">게시판
+											</a>
+										</li>
+									</ul>
 									
-								</ul>
-							</div>
-							<!-- 게시판 -->
-							<div class="tab-pane fade" id="comm-alm">
-								<ul class="list-group m-0 h-100 border">
-									
-								</ul>
-							</div>
-						</div>
-		    	<p class="text-muted small text-left ml-2"> 최근 14일 동안의 알림이 보여집니다.</p>
+									<div id="alarmTab" class="tab-content text-left">
+										<!-- 체결 -->
+										<div class="tab-pane fade show " id="stock-alm">
+											<ul class="list-group m-0 h-100 border">
+											</ul>
+										</div>
+										<!-- 주문/배송 -->
+										<div class="tab-pane fade" id="mall-alm">
+											<ul class="list-group m-0 h-100 border ">
+												
+											</ul>
+										</div>
+										<!-- 게시판 -->
+										<div class="tab-pane fade" id="comm-alm">
+											<ul class="list-group m-0 h-100 border">
+												
+											</ul>
+										</div>
+									</div>
+		    						<p class="text-muted small text-left ml-2"> 최근 14일 동안의 알림이 보여집니다.</p>
 		    	
-	    </div>    
-	  </div>
+	    						</div>    
+	  						</div>
             			</div>
                     </div>
                 </nav>
