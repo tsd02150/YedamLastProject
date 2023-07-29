@@ -111,4 +111,6 @@ public interface MemberService {
 	//주문.배송 내역
 	public List<ShippingVO> shipList(ShippingVO vo);
 	public int getShipListCount(ShippingVO vo);
+	//주문상세내역
+	public List<ShippingVO> myorderDetaList(ShippingVO vo);
 }

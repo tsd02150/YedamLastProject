@@ -263,4 +263,9 @@ public class MemberServiceImpl implements MemberService {
 		return membMapper.getShipListCount(vo);
 	}
 
+	@Override
+	public List<ShippingVO> myorderDetaList(ShippingVO vo) {
+		return membMapper.myorderDetaList(vo);
+	}
+
 }
