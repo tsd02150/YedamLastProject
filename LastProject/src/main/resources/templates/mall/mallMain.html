@@ -215,7 +215,7 @@
 .shop-banner {
 	position: relative;
 	background-color: #f5f5f5;
-	background-image: url('/images/main/mainImg.jpg');
+	background-image: url('images/main/mainImg.jpg');
 	background-size: cover;
 	padding: 110px 0px 115px;
 	background-size: cover;
@@ -330,7 +330,7 @@
 						<div class="product-image">
 							<a th:href="|/mall/getFarm?prdtNo=${prdt.prdtNo}|" class="image"> <img class="img"
 								th:src="|/mall/images/main/${prdt.thumb}|">
-							</a> <span class="product-sale-label">sale</span> <a
+							</a> <span th:if="${prdt.dcRate!=0}" class="product-sale-label">sale</span> <a
 								class="product-like-icon" href="#"><i class="far fa-heart"></i></a>
 							<a class="add-to-cart" href="#"><i
 								class="fas fa-shopping-bag"></i> add to cart </a>
@@ -390,7 +390,7 @@
 						<div class="product-image">
 							<a th:href="|/mall/getFarm?prdtNo=${prdt.prdtNo}|" class="image"> <img class="img"
 								th:src="|/mall/images/main/${prdt.thumb}|">
-							</a> <span class="product-sale-label">sale</span> <a
+							</a> <span th:if="${prdt.dcRate!=0}" class="product-sale-label">sale</span> <a
 								class="product-like-icon" href="#"><i class="far fa-heart"></i></a>
 							<a class="add-to-cart" href="#"><i
 								class="fas fa-shopping-bag"></i> add to cart </a>

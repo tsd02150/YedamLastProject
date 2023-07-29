@@ -268,13 +268,14 @@
 	    	console.log(result);
 	    	$('#productList').empty();
    			result.forEach(items=> {
-     			console.log(items);
      			let divTag = `
      				<div class="col-md-4 results">
 					<div class="product-item" onclick="location.href='/mall/getFarm?prdtNo=${items.prdtNo}'">
-						<div class="product-thumb">
-							<span class="bage">Sale</span> <img
-								src="/mall/images/main/${items.thumb}">
+						<div class="product-thumb">`
+				if(items.dcRate!=0){
+					divTag+=`<span class="bage">Sale</span>`;
+				}
+				divTag+=`<img src="/mall/images/main/${items.thumb}">
 						</div>
 						<div class="product-content">
 							<div class="product-detail">
@@ -324,9 +325,11 @@
      			let divTag = `
      				<div class="col-md-4 results">
 					<div class="product-item" onclick="location.href='/mall/getFarm?prdtNo=${items.prdtNo}'">
-						<div class="product-thumb">
-							<span class="bage">Sale</span> <img
-								src="/mall/images/main/${items.thumb}">
+						<div class="product-thumb">`
+				if(items.dcRate!=0){
+					divTag+=`<span class="bage">Sale</span>`;
+				}
+				divTag+=`<img src="/mall/images/main/${items.thumb}">
 						</div>
 						<div class="product-content">
 							<div class="product-detail">
@@ -376,9 +379,11 @@
      			let divTag = `
      				<div class="col-md-4 results">
 					<div class="product-item" onclick="location.href='/mall/getFarm?prdtNo=${items.prdtNo}'">
-						<div class="product-thumb">
-							<span class="bage">Sale</span> <img
-								src="/mall/images/main/${items.thumb}">
+						<div class="product-thumb">`
+				if(items.dcRate!=0){
+					divTag+=`<span class="bage">Sale</span>`;
+				}
+				divTag+=`<img src="/mall/images/main/${items.thumb}">
 						</div>
 						<div class="product-content">
 							<div class="product-detail">
