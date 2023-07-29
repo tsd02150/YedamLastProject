@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.yedam.app.mall.service.CouponVO;
 import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
+import com.yedam.app.mall.service.ShippingVO;
 import com.yedam.app.stock.service.StockVO;
 
 public interface MemberService {
@@ -107,4 +108,6 @@ public interface MemberService {
 	public int deleteMemb(String membNo);
 	//회원 백업
 	public int insertbackup(MembVO membVO);
+	//주문.배송 내역
+	public List<ShippingVO> shipList(ShippingVO vo);
 }

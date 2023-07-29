@@ -70,6 +70,17 @@
 				주문상품 <span class="goods_kind_div_kind"></span>총 <span
 					class="goods_kind_div_count" th:text="${#lists.size(orderList)}"></span>개
 			</div>
+			<div id="myorderDiv">
+					<h4>주문 | 배송 내역</h4>
+					<input type="date" id="startDate">
+					<input type="date" id="endDate">
+					<select id="orderSel">
+			    <option value="">전체거래</option>
+			    <option value="매도">매도</option>
+			    <option value="매수">매수</option>
+			    <option value="충전">충전</option>
+			    <option value="포인트몰">포인트몰</option>
+			</select>
 			<!-- 상품 테이블 -->
 			<table class="goods_subject_table">
 				<colgroup>
@@ -95,7 +106,6 @@
 					<col width="25%">
 				</colgroup>
 				<tbody>
-
 					<tr th:each="item :${orderList}">
 						<td>
 							<div class="image_wrap">
@@ -113,6 +123,51 @@
 		</div>
 		<!-- 상품 정보 end -->
 	</div>
+	
+	<script>
+	const dt = "[[${#dates.format(session.loggedInMember.joinDt, 'yyyy/MM/dd')}]]";
+	let dtFormat = "[[${#dates.format(session.loggedInMember.joinDt, 'yyyy-MM-dd')}]]";
+	
+	let orderSt = '';
+	let shipSt = '';
+	let targetPage = 1;
+	let startPage=1;
+	let endPage=20;
+	let page =1;
+	
+	let today = new Date();   
+	let year = today.getFullYear(); // 년도
+	let month = today.getMonth() + 1 <10 ? '0'+(today.getMonth() + 1) : today.getMonth() + 1;  // 월
+	let date = today.getDate() < 10 ? date = '0'+today.getDate() : today.getDate();  // 날짜
+	let endDate = year + '/' + month + '/' + date; 
+	let startDate = dt;
+
+	$("#startDate").val(dtFormat);
+	$("#endDate").val(`${year}-${month}-${date}`);
+
+	shipList();
+	function shipList(){
+		$.ajax({
+			url : "shipList",
+			method : "POST",
+			data : {
+				"orderSt" : orderSt,
+				"shipSt" : shipSt,
+				"startDate" : startDate,
+				"endDate" : endDate,
+				"page" : page
+			},
+			success : function(data){
+				data.forEace(el=>{
+					console.log(el);
+				})
+			},
+			error : function(err){
+				console.log(err)
+			}
+		});
+	}
+	</script>
 </div>
 </body>
 

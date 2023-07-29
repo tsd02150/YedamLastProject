@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.yedam.app.mall.service.CouponVO;
 import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
+import com.yedam.app.mall.service.ShippingVO;
 import com.yedam.app.member.mapper.MemberMapper;
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.BuyOrderVO;
@@ -250,6 +251,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int insertbackup(MembVO membVO) {
 		return membMapper.insertbackup(membVO);
+	}
+
+	@Override
+	public List<ShippingVO> shipList(ShippingVO vo) {
+		return membMapper.shipList(vo);
 	}
 
 }
