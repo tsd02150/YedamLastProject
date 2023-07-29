@@ -227,7 +227,7 @@ function addInterest() {
 	  		success:function(data){
 	  			let html='';
 			      for (let i = 0; i < data.list.length; i++) {
-			        html += `<p class="border my-1"><input type="button" value="x" data-info="${data.list[i].itemNo}">
+			        html += `<p class="border my-1"><input class="btn btn-danger btn-sm" type="button" value="x" th:attr="data-info=${data.list[i].itemNo}">
 			                ${data.list[i].nm} <span class="${data.list[i].change == 0 ? '_' : (data.list[i].change > 0 ? 'plus' : 'minus')}">
 			                ${data.list[i].change == 0 ? data.list[i].change : (data.list[i].change > 0 ? "+" + data.list[i].change : data.list[i].change) }
 			                (${data.list[i].rate == 0 ? data.list[i].rate : (data.list[i].rate > 0 ? "+"+data.list[i].rate : data.list[i].rate) }%)
@@ -240,6 +240,28 @@ function addInterest() {
 	  			console.log(xhr);
 	  		}
 	  	});
+	  	
+	  	//보유종목 실시간변동
+	  	$.ajax('ajaxUserPoss',{
+	  		method:'post',
+	  		data:{membNo : membinfo},
+	  		success:function(data){
+	  			let html='';
+			      for (let i = 0; i < data.list.length; i++) {
+			        html += `<p class="border my-1"><input class="btn btn-danger btn-sm invisible" type="button" value="x"  disabled="disabled" >
+			                ${data.list[i].nm} <span class="${data.list[i].change == 0 ? '_' : (data.list[i].change > 0 ? 'plus' : 'minus')}">
+			                ${data.list[i].change == 0 ? data.list[i].change : (data.list[i].change > 0 ? "+" + data.list[i].change : data.list[i].change) }
+			                (${data.list[i].rate == 0 ? data.list[i].rate : (data.list[i].rate > 0 ? "+"+data.list[i].rate : data.list[i].rate) }%)
+			                </span>
+			                </p>`;
+			      }
+			      $("#possItem").html(html);
+	  		},
+	  		error:function(xhr){
+	  			console.log(xhr);
+	  		}
+	  	});
+	  	
 	  	
 	  	// 보유주식 수와 수익률 보유포인트 실시간 변동
 	  	$.ajax('possStock',{
@@ -294,6 +316,9 @@ function addInterest() {
   		
   		$.ajax('orderTable?type=sell&itemNo='+itemNo).done(function(data){
   			let html='';
+  			if(data.length == 0){
+	  				$('#price').append($('<p class="m-2" />').html('현재 해당 종목의 주문이 없습니다.'))
+	  			}
   			data.forEach(dt => {
   				html+=`<tr><td class="minus">${dt.CNT}</td><td>${dt.PRC}</td></tr>`
   			})
@@ -310,11 +335,11 @@ function addInterest() {
   		
   		// 차트위에 아이템 정보
   		$.ajax('getItemInfo?itemNo='+itemNo).done(function(data){
-  			let html='';
-  			html = `<p data-in="${data.itemNo}"> 종목 : ${data.nm} <span class="${data.change > 0 ? 'plus' : 'minus'}"> 전일비 : ${data.change > 0? "+ "+data.change : data.change} 변동률 : ${data.rate > 0 ? "+"+data.rate+"%" : data.rate+"%"}</span></p><button id="addInt2">관심종목추가</button>`
+  			let html=''; 																
+  			html = `<p data-in="${data.itemNo}"> 종목 : ${data.nm} <span class="${data.change == 0 ? '_' : (data.change > 0 ? 'plus' : 'minus' )}"> 전일비 : ${data.change > 0? "+ "+data.change : data.change} 변동률 : ${data.rate > 0 ? "+"+data.rate+"%" : data.rate+"%"}</span></p><button class="btn btn-danger btn-sm" id="addInt2">관심종목추가</button>`
   			$('#itemPtag').html(html);
   		})
-  },20000000);
+  },2000);
   
   
   // dom tree 형성후 실행
@@ -350,6 +375,9 @@ function addInterest() {
   		//호가
   		//매도
   		$.ajax('orderTable?type=sell&itemNo='+itemNo).done(function(data){
+	  		if(data.length == 0){
+	  				$('#price').append($('<p class="m-2" />').html('현재 해당 종목의 주문이 없습니다.'))
+	  			}
   			data.forEach(dt => {
   				$('#sell').append($('<tr/>').append($('<td class="minus"/>').text(dt.CNT))
   										.append($('<td/>').text(dt.PRC)))
@@ -372,7 +400,6 @@ function addInterest() {
   				method:'post',
   				data:{membNo: membInfo , itemNo: itemInfo},
   				success:function(data){
-  					console.log(data);
   					let rate = data.rate > 0 ? "+ "+data.rate : data.rate;
   					let rateClass = data.rate == 0 ? '' : (data.rate > 0 ? 'plus' : 'minus');
   					$('#CP2D22 div p:nth-of-type(2) span').text(data.cnt); // 보유주 span

@@ -9,18 +9,18 @@
 	margin: 20px 0;
 }
 
-#favItem {
-	height: 400px;
+#favItem,#possItem {
+	height: 378px;
 	overflow-y: scroll;
 }
 
-#favItem p {
+#favItem p ,#possItem p{
 	padding: 10px;
 	position: relative;
 	font-weight: 700;
 }
 
-#favItem p span {
+#favItem p span,#possItem p span {
 	text-align: right;
 	position: absolute;
 	right: 5px;
@@ -39,16 +39,16 @@ h3 {
 	color: blue;
 }
 
-#CP1D2 ol {
+#CP2D2 ol {
 	margin-top: 10px;
-	height: 295px;
+	height: 170px;
 }
 
-#CP1D2 ol li {
-	padding: 10px;
+#CP2D2 ol li {
+	padding: 5px;
 	position:relative;
 }
-#CP1D2 ol li span {
+#CP2D2 ol li span {
 	position:absolute;
 	right:50px;
 }
@@ -73,22 +73,25 @@ h3 {
 	height:288px;
 	
 }
-#CP2D2 .row{
+#CP1D2{
+	position:relative;
+}
+#CP1D2 .blur{
 	
 	z-index: 1;
 }
-#CP2D2 #forNonlogin{
+#CP1D2 #forNonlogin{
 	position:absolute;
 	z-index:10;
 	top:0;
 	left:0;
 	text-align: center;
 }
-#CP2D2 #forNonlogin h3{
+#CP1D2 #forNonlogin h3{
 	margin:20px;
 }
 #CP2D22 table {
-	margin: 20px;
+	margin: 10px;
 }
 
 #CP2D22 table button {
@@ -116,7 +119,7 @@ thead {
 	border-bottom: 1px solid black;
 }
 #CP3D2 {
-	height:471px;
+	height:290px;
 }
 #CP3D2 table {
 	width: 100%;
@@ -124,7 +127,7 @@ thead {
 }
 
 #CP3D2 h3 {
-	margin: 50px 0;
+	margin: 15px 0;
 }
 
 #sell td:last-of-type {
@@ -260,10 +263,10 @@ to {
 	margin-bottom: 5px;
 	font-size: 14px;
 }
-#favItem p:hover input{
+#favItem p:hover input ,#possItem p:hover input{
 	visibility: visible;
 }
-#favItem p input{
+#favItem p input,#possItem p input{
 	visibility: hidden;
 }
 #boardTable {
@@ -297,9 +300,7 @@ input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-#stockOrderBtn {
-	visibility: hidden;
-}
+
 #candleChart {
 	position:relative;
 	z-index:1;
@@ -322,6 +323,9 @@ input[type="number"]::-webkit-inner-spin-button {
 .pointer{
 	cursor: pointer;
 }
+.stock-tab-content{
+	height:240px;
+}
 </style>
 <title>Insert title here</title>
 </head>
@@ -336,6 +340,26 @@ input[type="number"]::-webkit-inner-spin-button {
 		<div class="cp container">
 			<div class="chartpage row">
 				<div class="p-1 col-md-3 border">
+					<div id="CP1D12" class="mb-1 border">
+						<h3>
+							보유종목
+						</h3>
+						<div id="possItem" class="border m-1">
+							<th:block th:if="${session.loggedInMember}==null">
+								<p>로그인 후 이용할 수 있는 기능입니다.</p>
+							</th:block>
+							<th:block th:unless="${session.loggedInMember}==null"
+								th:each="stock : ${possStock}">
+								<p class="border my-1 pointer" >
+								<input class="btn btn-danger btn-sm invisible" type="button" value="x" th:attr="data-info=${stock.itemNo}" disabled="disabled" >
+									[[${stock.nm}]] <span
+										th:class="${stock.change} == 0 ? '_' : (${stock.change} > 0 ?'plus':'minus')">[[${stock.change
+										== 0 ? stock.change : (stock.change > 0 ? "+"+stock.change :
+										stock.change) }]] ([[${stock.rate == 0 ? stock.rate : (stock.rate > 0 ? "+"+stock.rate : stock.rate) }]]%)</span>
+								</p>
+							</th:block>
+						</div>
+					</div>
 					<div id="CP1D1" class="mb-1 border">
 						<h3>
 							관심종목
@@ -357,7 +381,69 @@ input[type="number"]::-webkit-inner-spin-button {
 							</th:block>
 						</div>
 					</div>
+				</div>
+				<div class="p-1 col-md-6 border">
+					<div id="CP2D1" class="mb-1 border">
+						<div id="itemPtag" style="display:inline-block">
+							<p th:attr="data-in=${itemInfo?.itemNo}">종목 : [[${itemInfo?.nm}]] <span th:class="${itemInfo?.change} == 0 ? '_' : (${itemInfo?.change} > 0 ? 'plus' : 'minus')"> 전일비 : [[${itemInfo?.change &gt; 0 ? "+ "+itemInfo?.change : itemInfo?.change}]] 변동률 : [[${itemInfo?.rate &gt; 0 ? "+"+itemInfo?.rate : itemInfo?.rate }]]%</span></p>
+							<button class="btn btn-danger btn-sm" id="addInt2">관심종목추가</button>
+							<div style="position: absolute;float:left;" id="chartSelect">
+								<ul id="chartBtn" >
+									<li><input class="btn btn-danger" type="button" value="일"></li>
+									<li><input class="btn btn-danger" type="button" value="주"></li>
+									<li><input class="btn btn-danger" type="button" value="월"></li>
+									<li><input class="btn btn-danger" type="button" value="년"></li>
+								</ul>
+							</div>
+						</div>
+						
+						<div id="candleChart" ></div>
+						<div id="stickChart"></div>
+					</div>
 					<div id="CP1D2" class="border">
+						<div class="blur">
+							<ul class="nav nav-tabs" id="orderBtn">
+								<li class="nav-item"><a class="nav-link" data-toggle="tab"
+									href="#sellTab" id="sellOrderTab">매도</a></li>
+								<li class="nav-item"><a class="nav-link" data-toggle="tab"
+									href="#buyTab" id="buyOrderTab">매수</a></li>
+							</ul>
+							<div class="stock-tab-content">
+								<div class="tab-pane fade " id="sellTab"></div>
+								<div class="tab-pane fade" id="buyTab"></div>
+							</div>
+						</div>
+						<div id="forNonlogin" th:if="${session.loggedInMember} == null">
+							<h3>로그인 후 이용할 수 있는 기능입니다.</h3>
+							<button class="btn btn-danger" onclick="location.href='/member/login'">로그인</button> <button class="btn btn-danger" onclick="location.href='/member/join'">회원가입</button>
+						</div>
+					</div>
+					
+				</div>
+				<div class="p-1 col-md-3 border">
+					<div id="CP3D1" class="mb-1 border">
+
+						<div id="CP3D11" class="col-md-12 border">
+							<input class="searchItem move" type="text" placeholder="종목을 검색하세요">
+						</div>
+						<div class="col-md-12">
+							<table id="boardTable" class=table>
+								<thead>
+									<tr>
+										<th>종목 게시판</th>
+									</tr>
+								</thead>
+								<tbody>
+									<th:block th:each="list : ${boardList}">
+										<tr >
+											<td><a th:href="@{/community/boardDetail(page=1 , boardNo=${list.boardNo} , commonCd=C2)}" th:attr="data-boardno=${list.boardNo}" th:text="|[${list.cntn}]   ${list.ttl}|" style="cursor:pointer;text-decoration: none;"></a> </td>
+										</tr>
+									</th:block>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div id="CP2D2" class="border">
 						<h3>주식순위</h3>
 						<ul class="nav nav-tabs">
 							<li class="nav-item"><a class="nav-link active"
@@ -385,95 +471,6 @@ input[type="number"]::-webkit-inner-spin-button {
 									
 								</ol>
 							</div>
-						</div>
-					</div>
-				</div>
-				<div class="p-1 col-md-6 border">
-					<div id="CP2D1" class="mb-1 border">
-						<div id="itemPtag" style="display:inline-block">
-							<p th:attr="data-in=${itemInfo?.itemNo}">종목 : [[${itemInfo?.nm}]] <span th:class="${itemInfo?.change} == 0 ? '_' : (${itemInfo?.change} > 0 ? 'plus' : 'minus')"> 전일비 : [[${itemInfo?.change &gt; 0 ? "+ "+itemInfo?.change : itemInfo?.change}]] 변동률 : [[${itemInfo?.rate &gt; 0 ? "+"+itemInfo?.rate : itemInfo?.rate }]]%</span></p>
-							<button class="btn btn-danger btn-sm" id="addInt2">관심종목추가</button>
-							<div style="position: absolute;float:left;" id="chartSelect">
-								<ul id="chartBtn" >
-									<li><input class="btn btn-danger" type="button" value="일"></li>
-									<li><input class="btn btn-danger" type="button" value="주"></li>
-									<li><input class="btn btn-danger" type="button" value="월"></li>
-									<li><input class="btn btn-danger" type="button" value="년"></li>
-								</ul>
-							</div>
-						</div>
-						
-						<div id="candleChart" ></div>
-						<div id="stickChart"></div>
-					</div>
-					<div id="CP2D2" class="border">
-						<div class="row" >
-							<div id="CP2D21" class="col-6">
-								<div id="orderBtn" >
-									<button class="btn btn-danger btn-sm">매도</button>
-									<button class="btn btn-danger btn-sm">매수</button>
-								</div>
-								<div>
-									<input id="stockPrc" type="number" name="stockPrc" value="0">원<br> 
-									<label><input type="checkbox">시장가 주문</label>
-								</div>
-								<div>
-									<input id="stockCnt" type="number" name="stockCnt" value="0" >주
-									<p class="mb-0">
-										<span id="orderName">구매</span>가능한 주수 <input class="btn btn-danger btn-sm" id="afford" type="button" value="0">주
-									</p>
-									<h5><span></span><span id="totalPrc">0</span> point</h5>
-									<button class="btn btn-danger" id="stockOrderBtn" >주문</button> <span id="orderType" data-order=""></span>
-								</div>
-							</div>
-							<div id="CP2D22" class="col-6">
-								<table>
-									<tr>
-										<td><button class="btn btn-danger btn-sm">10 %</button></td>
-										<td><button class="btn btn-danger btn-sm">50 %</button></td>
-										<td><button class="btn btn-danger btn-sm">100 %</button></td>
-									</tr>
-								</table>
-								<div>
-									<p>종목 : [[${itemInfo?.nm}]]</p>
-									<p>
-										총 보유주 <span>00</span> 주
-									</p>
-									<p>
-										수익률 : <span>00</span>%
-									</p>
-									<p th:if="${session.loggedInMember} != null" th:attr="data-point=${session.loggedInMember.point}">보유 포인트 : <span>[[${session.loggedInMember.point}]]</span></p>
-									<p th:unless="${session.loggedInMember} != null">로그인 해주세요.</p>
-								</div>
-							</div>
-						</div>
-						<div id="forNonlogin" th:if="${session.loggedInMember} == null">
-							<h3>로그인 후 이용할 수 있는 기능입니다.</h3>
-							<button class="btn btn-danger" onclick="location.href='/member/login'">로그인</button> <button class="btn btn-danger" onclick="location.href='/member/join'">회원가입</button>
-						</div>
-					</div>
-				</div>
-				<div class="p-1 col-md-3 border">
-					<div id="CP3D1" class="mb-1 border">
-
-						<div id="CP3D11" class="col-md-12 border">
-							<input class="searchItem move" type="text" placeholder="종목을 검색하세요">
-						</div>
-						<div class="col-md-12">
-							<table id="boardTable" class=table>
-								<thead>
-									<tr>
-										<th>종목 게시판</th>
-									</tr>
-								</thead>
-								<tbody>
-									<th:block th:each="list : ${boardList}">
-										<tr >
-											<td><a th:href="@{/community/boardDetail(page=1 , boardNo=${list.boardNo} , commonCd=C2)}" th:attr="data-boardno=${list.boardNo}" th:text="|[${list.cntn}]   ${list.ttl}|" style="cursor:pointer;text-decoration: none;"></a> </td>
-										</tr>
-									</th:block>
-								</tbody>
-							</table>
 						</div>
 					</div>
 					<div id="CP3D2" class="border">
@@ -531,7 +528,43 @@ input[type="number"]::-webkit-inner-spin-button {
 			</div>
 
 		</div>
-		
+			
+			<div id="orderBox" class="row d-none" >
+				<div id="CP2D21" class="col-6">
+					<div>
+						<input id="stockPrc" type="number" name="stockPrc" value="0">원<br> 
+						<label><input type="checkbox">시장가 주문</label>
+					</div>
+					<div>
+						<input id="stockCnt" type="number" name="stockCnt" value="0" >주
+						<p class="mb-0">
+							<span id="orderName">구매</span>가능한 주수 <input class="btn btn-danger btn-sm" id="afford" type="button" value="0">주
+						</p>
+						<h5><span></span><span id="totalPrc">0</span> point</h5>
+						<button class="btn btn-danger" id="stockOrderBtn" >주문</button> <span id="orderType" data-order=""></span>
+					</div>
+				</div>
+				<div id="CP2D22" class="col-6">
+					<table>
+						<tr>
+							<td><button class="btn btn-danger btn-sm">10 %</button></td>
+							<td><button class="btn btn-danger btn-sm">50 %</button></td>
+							<td><button class="btn btn-danger btn-sm">100 %</button></td>
+						</tr>
+					</table>
+					<div style="margin-top:20px;">
+						<p>종목 : [[${itemInfo?.nm}]]</p>
+						<p>
+							총 보유주 <span>0</span> 주
+						</p>
+						<p>
+							수익률 : <span>0</span>%
+						</p>
+						<p th:if="${session.loggedInMember} != null" th:attr="data-point=${session.loggedInMember.point}">보유 포인트 : <span>[[${session.loggedInMember.point}]]</span></p>
+						<p th:unless="${session.loggedInMember} != null">로그인 해주세요.</p>
+					</div>
+				</div>
+			</div>
 		<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 		<script
@@ -552,9 +585,9 @@ input[type="number"]::-webkit-inner-spin-button {
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 		<script th:inline="javascript" src="../stock/autoComplete.js"></script>
 		<script th:inline="javascript">
-		$('#forNonlogin').css('width',$('#CP2D2').css('width')).css('height',$('#CP2D2').css('height'))
+		$('#forNonlogin').css('width',$('#CP1D2').css('width')).css('height',$('#CP1D2').css('height'))
 		if([[${session.loggedInMember}]] == null){
-			$('#CP2D2 .row').css('filter','blur(5px)');
+			$('#CP1D2 .blur').css('filter','blur(5px)');
 		}
 			// Get the modal
 			var modal = document.getElementById("myModal");
@@ -616,7 +649,7 @@ input[type="number"]::-webkit-inner-spin-button {
 				
 			})
 			//관심종목 클릭시 이동
-			$('#favItem').on("click","p",function(){
+			$('#favItem,#possItem').on("click","p",function(){
 				if(event.target.tagName == 'INPUT') return;
 				let itemInfo = $(this).children('input').data('info');
 				location.href="chart?itemNo="+itemInfo;
@@ -625,22 +658,19 @@ input[type="number"]::-webkit-inner-spin-button {
 			$('.searchItem.interest').css('width',$('#choice').css('width'));
 			
 			// 매도 매수버튼 클릭 이벤트
-			$('#orderBtn').on('click','button',function(){
-				$('#stockOrderBtn').css('visibility','visible');//주문버튼 보이기
-				//주문 종류 선택시 값 입력 가능해짐
-				$('#CP2D21 input').attr('readonly',false);
-				$('#CP2D21 input[type=checkbox]').attr('disabled',false);
+			$('#orderBtn').on('click','a',function(){
 				//주문 종류 변경시 마다 입력칸 값 초기화
-				if(!$(this).hasClass('orderActive')){
+				if(!$(this).hasClass('tabActive')){
 					$('#totalPrc').text('0');
 					$('#afford').val(0);
-					$('#CP2D21 input[type=number]').val(0);
-					$('#CP2D21 input[type=checkbox]').attr('checked',false)
+					$('input[name=stockPrc]').val(0);
+					$('input[name=stockCnt]').val(0);
+					$('input[type=checkbox]').attr('checked',false)
 				}
-				//orderActive 클래스가 존재한다면 삭제
-				$(this).parent().find('.orderActive').removeClass('orderActive');
+				//tabActive 클래스가 존재한다면 삭제
+				$(this).parent().parent().find('.tabActive').removeClass('tabActive');
 				//클릭한 버튼 클래스 추가
-				$(this).toggleClass('orderActive'); 
+				$(this).toggleClass('tabActive'); 
 				
 				//주문 종류에 따라 출력되는 경고메세지 $(this) == button
 				if($(this).is(':contains("매도")')){
@@ -939,8 +969,6 @@ input[type="number"]::-webkit-inner-spin-button {
 					$.ajax('dayChart?itemNo='+itemNo,{
 						async:false
 					}).done(function(chart){
-			  			console.log('일')
-			  			console.log(chart)
 			  			makeChart(chart);
 			  			
 			  		})
@@ -950,8 +978,6 @@ input[type="number"]::-webkit-inner-spin-button {
 					$.ajax('weekMonthChart?itemNo='+itemNo+'&type=week',{
 						async:false
 					}).done(function(chart){
-						console.log('주')
-						console.log(chart)
 						makeChart(chart);
 					})
 				}else if($(this).val()=='월'){
@@ -960,8 +986,6 @@ input[type="number"]::-webkit-inner-spin-button {
 					$.ajax('weekMonthChart?itemNo='+itemNo+'&type=month',{
 						async:false
 					}).done(function(chart){
-						console.log('월')
-						console.log(chart)
 						makeChart(chart);
 					})
 				}else if($(this).val()=='년'){
@@ -970,14 +994,30 @@ input[type="number"]::-webkit-inner-spin-button {
 					$.ajax('weekMonthChart?itemNo='+itemNo+'&type=year',{
 						async:false
 					}).done(function(chart){
-						console.log('년')
-						console.log(chart)
 						makeChart(chart);
 					})
 				}
 			})
 			
-			
+			// stick chart 사이즈 조정
+			window.onresize = function() {
+				$('#stickChart').css('width',Number($('#candleChart').css('width').slice(0,-2))-18 + 'px')
+			}
+			$(function(){
+				document.querySelector('#sellOrderTab').click();
+			})
+			$('#sellOrderTab , #buyOrderTab').on('click',function(){
+				if($(event.target).text() == '매도'){
+					if($('#sellTab').html() == ''){
+						$('#sellTab').append($('#orderBox').removeClass('d-none'));
+					}
+				}else if($(event.target).text() == '매수'){
+					if($('#buyTab').html() == ''){
+						$('#buyTab').append($('#orderBox').removeClass('d-none'));
+					}		
+				}
+				
+			})
 		</script>
 	</div>
 </body>

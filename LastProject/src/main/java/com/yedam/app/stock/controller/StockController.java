@@ -50,6 +50,7 @@ public class StockController {
 		stockservice.updateInq(itemNo);
 		UserVO mem = (UserVO)session.getAttribute("loggedInMember");
 		if(mem != null) {
+			m.addAttribute("possStock",stockservice.getPossList(mem.getMembNo())); // 유저 보유종목 리스트
 			m.addAttribute("interestStock",stockservice.getIntStock(mem.getMembNo())); // 유저관심종목리스트 
 		}
 		m.addAttribute("boardList",stockservice.getScBoardList(itemNo)); // 종목게시판
@@ -137,7 +138,7 @@ public class StockController {
 		return itemNo;
 	}
 	
-	//유저 관심종목
+	//유저 관심종목 변동
 	@ResponseBody
 	@PostMapping("ajaxUsetInt")
 	public Map<String,Object> ajaxUserInt(String membNo ){
@@ -146,7 +147,15 @@ public class StockController {
 		map.put("list", list);
 		return map;
 	}
-	
+	//유저 보유종목 변동
+	@ResponseBody
+	@PostMapping("ajaxUserPoss")
+	public Map<String,Object> ajaxUserPoss(String membNo ){
+		List<StockVO> list = stockservice.getPossList(membNo);
+		Map<String,Object> map = new HashMap<>();
+		map.put("list", list);
+		return map;
+	}
 	//변동률 데이터,거래량 데이터 가져오기
 	@ResponseBody
 	@GetMapping("getPercentage")
