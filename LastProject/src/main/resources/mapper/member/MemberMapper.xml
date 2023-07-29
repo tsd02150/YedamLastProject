@@ -665,7 +665,7 @@
 	<select id="shipList" parameterType="ShippingVO">
 		select * from(
 			select * from(
-			select rownum rn, o.order_no, o.order_dt,s.ship_st, d.cnt ,d.order_deta_no, d.prdt_no, p.nm,p.thumb
+			select rownum rn, o.order_no, o.order_dt,o.order_st,s.ship_st, d.cnt ,d.order_deta_no, d.prdt_no, p.nm,p.thumb
 			from orders o
 			join order_detail d
 			on o.order_no = d.order_no
@@ -680,8 +680,8 @@
 			<if test="shipSt != null and !shipSt.equals('')">
 			and s.ship_st = #{shipSt}
 			</if>
-			<if test="startDate != null and !startDate.equals('') and endDate != null and !endDate.equals('')">
-			and trunc(o.order_dt) between #{startDate} and ${endDate}
+			<if test="startDate != null and endDate != null">
+			and trunc(o.order_dt) between to_date(#{startDate}, 'yyyy/MM/dd') and to_date(#{endDate}, 'yyyy/MM/dd')
 			</if>
 			order by o.order_dt desc
 			)
@@ -690,5 +690,26 @@
 			)
 		]]>
 		where rn >(${page}-1)*10
+	</select>
+	<select id="getShipListCount" resultType="int" parameterType="ShippingVO">
+		select count(*)
+			from orders o
+			join order_detail d
+			on o.order_no = d.order_no
+			join shipping s
+			on d.order_deta_no = s.order_deta_no
+			join product p
+			on d.prdt_no = p.prdt_no
+			where memb_no = #{membNo}
+			<if test="orderSt != null and !orderSt.equals('')">
+			and o.order_st = #{orderSt}
+			</if>
+			<if test="shipSt != null and !shipSt.equals('')">
+			and s.ship_st = #{shipSt}
+			</if>
+			<if test="startDate != null and endDate != null">
+			and trunc(o.order_dt) between to_date(#{startDate}, 'yyyy/MM/dd') and to_date(#{endDate}, 'yyyy/MM/dd')
+			</if>
+			order by o.order_dt desc
 	</select>
 </mapper>
