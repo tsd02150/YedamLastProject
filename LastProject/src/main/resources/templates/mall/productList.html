@@ -144,7 +144,8 @@
 
 
 				<div class="selectBtn d-flex justify-content-between">
-					<div>
+					<div style="border-right:2px solid #ddd;">
+						<button class="ctgr" type="button" th:data-commoncd="${prdtCode}">전체</button>
 						<button th:each="item : ${S}" class="ctgr" type="button" th:data-commoncd="${item.commonCd}">[[${item.ctgr}]]</button>
 					</div>
 					<div class="d-flex justify-content-between">

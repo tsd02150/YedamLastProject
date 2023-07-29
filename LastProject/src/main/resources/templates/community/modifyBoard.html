@@ -116,7 +116,7 @@
 		<script type="text/javascript" th:inline="javascript">
 
 		let editor;
-		
+		let delList=[];
 		ClassicEditor.create(document.querySelector('#cntn'), {
 				language: "ko",
 				ckfinder: {
@@ -165,6 +165,24 @@
 				data : formData
 			})
 			.done(function(result){
+				for(let del of delList){
+					fetch("/community/deleteAttach",{
+						method: "POST",
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded'
+						},
+						body: 'atchNo='+del
+					})
+					.then(result=>result.text())
+					.then(data=>function(){
+						if(data=="fail"){
+							toastShow("Delete Fail" , "삭제 실패" , "error");
+						}
+					})
+					.catch(err=>console.log(err));
+				}
+				
+				
 				if(attachFileList.get("uploadFiles")!=null){
 					attachFileList.append("boardNo",result);
 					$.ajax({
@@ -216,21 +234,7 @@
             	dataTranster.items.add(file);
          	});
 			$("#attachFile")[0].files=dataTranster.files;
-			
-			fetch("/community/deleteAttach",{
-				method: "POST",
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded'
-				},
-				body: 'atchNo='+$(event.target).parent()[0].dataset.atchno
-			})
-			.then(result=>result.text())
-			.then(data=>function(){
-				if(data=="fail"){
-					toastShow("Delete Fail" , "삭제 실패" , "error");
-				}
-			})
-			.catch(err=>console.log(err));
+			delList.push($(event.target).parent()[0].dataset.atchno);
 			
 			$(event.target).parent().remove();
 		})
