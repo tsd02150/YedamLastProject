@@ -28,7 +28,10 @@
 	        dataLabels: {
 	          enabled: false
 	        }
-	        
+	        ,
+        xaxis: {
+           tickAmount: 7,
+        },
 	        };
 	
 	        var chart = new ApexCharts(document.querySelector("#stickChart"), options);

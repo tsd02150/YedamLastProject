@@ -22,25 +22,6 @@ function makeCandleChart(chartData){
           text: '주가차트',
           align: 'left'
         },
-        annotations: {
-          xaxis: [
-            {
-              x: 'Oct 06 14:00',
-              borderColor: '#00E396',
-              label: {
-                borderColor: '#00E396',
-                style: {
-                  fontSize: '12px',
-                  color: '#fff',
-                  background: '#00E396'
-                },
-                orientation: 'horizontal',
-                offsetY: 7,
-                text: 'Annotation Test'
-              }
-            }
-          ]
-        },
         tooltip: {
           enabled: true,
         },
@@ -50,7 +31,8 @@ function makeCandleChart(chartData){
             formatter: function(val) {
               return dayjs(val).format('YY-MM-DD')
             }
-          }
+          },
+           tickAmount: 7,
         },
         yaxis: {
           tooltip: {

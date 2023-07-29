@@ -2,6 +2,10 @@ package com.yedam.app.stock.service;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -14,6 +18,8 @@ public class ItemInfoVO {
 	private Integer lPrc;
 	private Integer hPrc;
 	private Integer inq;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	private Date taDt;
 	
 	public ItemInfoVO() {}
