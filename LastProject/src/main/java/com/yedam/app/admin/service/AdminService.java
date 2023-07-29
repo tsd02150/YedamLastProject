@@ -3,6 +3,7 @@ package com.yedam.app.admin.service;
 import java.util.List;
 import java.util.Map;
 
+import com.yedam.app.community.service.AttachVO;
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.CommentsVO;
 import com.yedam.app.community.service.FaqVO;
@@ -21,7 +22,7 @@ public interface AdminService {
 	public int rprtStChange(String rprtNo);
 	public int deleteReport(List<String> list);
 	public Map<String, Object> noticeList(int page, int perPage);
-	public NoticeVO noticeDetail(String notiNo);
+	public Map<String , Object > noticeDetail(String notiNo);
 	public Map<String, Object> qnaList(int page, int perPage);
 	public Map<String, Object> faqList(int page, int perPage);
 	public Map<String, Object> boardList(int page, int perPage);
@@ -39,4 +40,5 @@ public interface AdminService {
 	public int deleteBoard(List<String> list);
 	public BoardVO boardDetail(String boardNo);
 	public List<String> getRoomList();
+	
 }

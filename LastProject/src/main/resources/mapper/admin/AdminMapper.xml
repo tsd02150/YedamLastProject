@@ -328,4 +328,11 @@
 		select room_no
         from chat_room
 	</select>
+	
+	<!-- 첨부파일 가져오기 -->
+	<select id="getNoticeAttachList" resultType="AttachVO">
+		SELECT *
+		FROM ATTACH_FILE
+        where noti_no = #{notiNo}
+	</select>
 </mapper>

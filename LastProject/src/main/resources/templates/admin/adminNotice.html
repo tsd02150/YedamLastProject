@@ -325,7 +325,10 @@
 	        	let notiNo = $('td[data-row-key='+ev.rowKey+'][data-column-name=notiNo]').children(0).text();
 	        	// 공지사항글 불러오기
 	        	$.ajax('noticeDetail?notiNo='+notiNo)
-	        	.done(function(data){
+	        	.done(function(noticeData){
+	        		let data = noticeData.noticeDetail;
+	        		let attachFileList = noticeData.attachFileList;
+	        		
 	        		Swal.fire({
 	            		title:'공지사항',
 	            		html:`
@@ -371,6 +374,7 @@
 										<strong>첨부파일 : </strong>
 										<div>
 											<ul id=uploadFileList>
+												${attachFileList.map(attachFile => `<li data-atchno=${attachFile.atchNo}>${attachFile.atchOriginNm}<span>&times;</span></li>`).join('')}
 											</ul>
 										</div>
 									</div>
@@ -453,6 +457,8 @@
 						        );
 						      });
 		    		          
+		    		         
+		    		           
 		    		        }
 	        		})
 	        		.then((result) => {	
@@ -491,7 +497,50 @@
 							})//end of swal
 	        			}//end of else if
 	        		})//end of then
-
+	        		  $("#attachFile").on('change',function(){
+	    		   			var inputFile = $("#attachFile");
+	    		   			// input 태그의 type이 file인것을 찾아서 inputFile이라는 변수로 지정
+	    		   			console.log(inputFile)
+	    		   			var files = inputFile[0].files;
+	    		   			// files: 선택한 모든 파일을 나열하는 FileList 객체
+	    		   			// multiple 특성을 지정하지 않았다면 두 개 이상의 파일을 포함하지 않습니다.
+	    		   			for(var i=0;i<files.length;i++){
+	    		   				let liTag=document.createElement("li");
+	    		   				let spanTag=document.createElement("span");
+	    		   				liTag.append(files[i].name);
+	    		   				spanTag.innerHTML="&times;";
+	    		   				liTag.append(spanTag);
+	    		   				uploadFileList.append(liTag);
+	    		   			}
+	    		   		})
+	    		   		
+	    		   		
+	    		   		$("#uploadFileList").on('click','span',function(){
+	    		   			var dataTranster = new DataTransfer();
+	    		   			Array.from($("#attachFile")[0].files)
+	    		               .filter(file => file.name != $(event.target).parent().text().slice(0,-1))
+	    		               .forEach(file => {
+	    		               	dataTranster.items.add(file);
+	    		            	});
+	    		   			$("#attachFile")[0].files=dataTranster.files;
+	    		   			
+	    		   			fetch("/community/deleteAttach",{
+	    		   				method: "POST",
+	    		   				headers: {
+	    		   					'Content-Type': 'application/x-www-form-urlencoded'
+	    		   				},
+	    		   				body: 'atchNo='+$(event.target).parent()[0].dataset.atchno
+	    		   			})
+	    		   			.then(result=>result.text())
+	    		   			.then(data=>function(){
+	    		   				if(data=="fail"){
+	    		   					toastShow("Delete Fail" , "삭제 실패" , "error");
+	    		   				}
+	    		   			})
+	    		   			.catch(err=>console.log(err));
+	    		   			
+	    		   			$(event.target).parent().remove();
+	    		   		})
 	        		
 	            })// end of done
 	        });//end of dblclick 기능
