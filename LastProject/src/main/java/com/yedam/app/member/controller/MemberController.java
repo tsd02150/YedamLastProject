@@ -26,6 +26,7 @@ import com.yedam.app.mall.service.CouponVO;
 import com.yedam.app.mall.service.OrderService;
 import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
+import com.yedam.app.mall.service.ShippingVO;
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.BuyOrderVO;
 import com.yedam.app.member.service.ChargeVO;
@@ -723,6 +724,14 @@ public class MemberController {
 		membService.insertbackup(membVO);
 		session.invalidate();
 		return membService.deleteMemb(membNo);
+	}
+	
+	@ResponseBody
+	@PostMapping("shipList")
+	public List<ShippingVO> shipList(ShippingVO vo, HttpSession session){
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		vo.setMembNo(mem.getMembNo());
+		return membService.shipList(vo);
 	}
 	
 }
