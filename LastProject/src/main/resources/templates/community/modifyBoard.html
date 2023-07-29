@@ -60,13 +60,11 @@
 				</div>
 				<div class="form-group row">
 					<label for="memberId" class="col-sm-2 col-form-label"><strong>작성자</strong></label>
-					<div class="col-sm-10" id="writer">
-						<input type="text" name="nick" class="form-control" id="nick"
-							th:value="${session.loggedInMember.nick}" readonly> <label
-							for="sort" class="col-sm-2 col-form-label"><strong>카테고리</strong></label>
+					<div  class="col-sm-10 d-flex justify-content-between" id="writer">
+						<input type="text" name="nick" class="form-control" id="nick" th:value="${session.loggedInMember.nick}" readonly> 
+						<label for="sort" class="col-sm-2 col-form-label"><strong>테마</strong></label>
 						<select class="form-control dropdown-toggle" id="sort" name="commonCd">
-							<option th:each="item:${category}" th:selected="${item.commonCd}==${myBoard.commonCd}"
-								th:value="${item.commonCd}" th:text="${item.ctgr}">카테고리</option>
+							<option th:each="item:${category}" th:selected="${item.commonCd}==${myBoard.commonCd}" th:value="${item.commonCd}" th:text="${item.ctgr}">카테고리</option>
 						</select>
 					</div>
 				</div>
