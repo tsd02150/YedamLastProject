@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="main/source/css/mainPage.css">
+<script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
 </head>
 <body>
 	<div layout:fragment="content">
@@ -134,8 +135,7 @@
 							<input type="password" id="loginPassword" class="form-control" name="pwd" placeholder="Password" >
 							<button class="btn-primary" type="submit">Login</button>
 							<section>
-								<img src="main/source/images/Naver_logo.png" alt="naver_login" width=50px/>
-								<img src="main/source/images/Kakao_logo.png" alt="kakao_login"  width=50px />
+								<a href="javascript:location.href='/oauth2/authorization/naver'"><img src="main/source/images/Naver_logo.png" alt="naver_login" width=250px height="56px" /></a>
 							</section>
 						</form>
 						<div id="myInfo" th:unless="${session.loggedInMember}==null">
