@@ -1,3 +1,13 @@
+#titlename{
+	font-size: 30px;
+}
+#titlename span{
+	line-height: 46px;
+}
+#titlename span:after{
+	width:120px;
+}
+
 .basketdiv {
 	width: 100%;
 	border-top: 1px solid #e0e0e0;
@@ -181,7 +191,7 @@
 	color: #ffffff;
 	cursor: pointer;
 	letter-spacing: -1px;
-	padding: 3px 5px;
+	padding: 10px 15px;
 	margin: 2px 3px;
 	width: auto;
 	word-break: keep-all;
@@ -550,8 +560,9 @@ td {
 	
 }
 
-/* 홈페이지 메인 제품 목록  */
+/* �솃�럹�씠吏� 硫붿씤 �젣�뭹 紐⑸줉  */
 .content_area {
+	margin-top:50px;
 	width: 100%;
 	min-height: 1000px;
 }
@@ -574,20 +585,6 @@ caption {
 	overflow: hidden;
 }
 
-.content_subject {
-	height: 110px;
-	line-height: 110px;
-	background-color: #5080bd;
-	margin-bottom: 60px;
-}
-
-.content_subject span {
-	padding-left: 30 px;
-	display: inline-block;
-	color: white;
-	font-size: 50px;
-	font-weight: bolder;
-}
 
 .content_totalCount_section {
 	margin-bottom: 12px;
@@ -619,13 +616,17 @@ caption {
 	text-align: center;
 }
 
-th {
+.subject_table th {
 	text-align: center;
+	height:30px;
 	color: #333;
 	border-bottom: 1px solid #e7e7e7;
-	border-top: 1px solid #3084d9;
-	background: #f4f9fd;
+	border-top: 1px solid black;
+	background: #f4f4f4;
 	padding: 2px 0;
+}
+.subject_table td{
+	height: 150px;
 }
 
 .td_width_1 {
@@ -644,14 +645,6 @@ th {
 	width: 15%;
 }
 
-.cart_table {
-	font-size: 14px;
-	line-height: 20px;
-}
-
-.cart_table tr {
-	height: 110px;
-}
 
 .price_td {
 	padding-left: 5px;
@@ -665,20 +658,14 @@ th {
 	color: green;
 }
 
-.cart_table td {
-	border-bottom: 1px solid #e7e7e7;
-}
-
 .quantity_div {
-	position: relative;
-	width: 42px;
+	width: 73px;
 	height: 25px;
 	text-align: left;
 	margin: 5px auto;
 }
 
 .quantity_input {
-	position: absolute;
 	width: 27px;
 	height: 23px;
 	text-align: center;
@@ -691,11 +678,10 @@ th {
 }
 
 .quantity_btn {
-	position: absolute;
 	border: 1px solid #aaa;
 	color: #3a60df;
-	width: 14px;
-	height: 13px;
+	width: 23px;
+	height: 23px;
 	padding: 0px;
 	background-color: #fff;
 	font-weight: bold;
@@ -715,7 +701,7 @@ th {
 }
 
 
-/* 수량 버튼 조절 */
+/* �닔�웾 踰꾪듉 議곗젅 */
 .quantity_modify_btn {
 	border: 1px solid #d0d0d0;
 	height: 30px;
@@ -733,11 +719,21 @@ th {
 }
 
 .delete_btn {
-	width: 50px;
+	border: 1px solid #d0d0d0;
+	height: 30px;
+	line-height: 13px;
+	background-color: #fff;
+	text-align: center;
+	width: 0 auto;
+	display: inline-block;
+	padding: 3px 6px 2px;
+	margin-top: 3px;
 }
 
 .content_total_section {
-	background-color: rgb(227, 237, 247);
+	background-color: #f4f4f4;
+	border-bottom: 1px solid black;
+	margin-bottom: 20px;
 }
 
 .total_wrap {
@@ -782,16 +778,16 @@ th {
 	font-weight: bold;
 }
 
-/* 이미지 */
 .image_wrap {
 	width: 100%;
-	height: 100%;
+	line-height: 150px;
 }
 
 .image_wrap img {
 	max-width: 85%;
 	height: auto;
 	display: block;
+	vertical-align:middle;
 }
 
 .input_size_20 {
