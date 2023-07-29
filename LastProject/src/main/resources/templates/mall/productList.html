@@ -9,7 +9,8 @@
 <link rel="stylesheet" type="text/css" href="css/farmList.css">
 <link rel="stylesheet" href="source/plugins/themefisher-font/style.css">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 <style>
 
@@ -59,27 +60,43 @@
 	padding: 8px;
 	color: #ccc;
 }
+
 #prdImg {
 	display: block;
 	flex-wrap: wrap;
 	margin: 0 -15px;
 }
 
-#productList img{
-	width:300px;
+#productList img {
+	width: 300px;
 	height: 200px;
 	object-fit: cover;
 }
-#titlename{
+
+#titlename {
 	font-size: 30px;
 }
-#titlename span{
+
+#titlename span {
 	line-height: 46px;
 }
-#titlename span:after{
-	width:100px;
+
+#titlename span:after {
+	width: 100px;
+}
+#prevpage{
+	visibility: hidden;
+}
+#nextpage{
+	visibility: hidden;
 }
 
+#prevpage{
+	visibility: hidden;
+}
+#nextpage{
+	visibility: hidden;
+}
 </style>
 
 </head>
@@ -139,64 +156,68 @@
 				<!-- 농산물 -->
 				<br>
 
-				<h1 class="news-title" id="titlename" th:data-common-cd="${prdtCode}" th:if="${prdtCode=='S1'}"><span>농산물</span></h1>
-				<h1 class="news-title" id="titlename" th:data-common-cd="${prdtCode}" th:unless="${prdtCode=='S1'}"><span>수산물</span></h1>
+				<h1 class="news-title" id="titlename"
+					th:data-common-cd="${prdtCode}" th:if="${prdtCode=='S1'}">
+					<span>농산물</span>
+				</h1>
+				<h1 class="news-title" id="titlename"
+					th:data-common-cd="${prdtCode}" th:unless="${prdtCode=='S1'}">
+					<span>수산물</span>
+				</h1>
 
 
 				<div class="selectBtn d-flex justify-content-between">
 					<div>
-						<button th:each="item : ${S}" class="ctgr" type="button" th:data-commoncd="${item.commonCd}">[[${item.ctgr}]]</button>
+						<button th:each="item : ${S}" class="ctgr" type="button"
+							th:data-commoncd="${item.commonCd}">[[${item.ctgr}]]</button>
 					</div>
 					<div class="d-flex justify-content-between">
 						<button class="lowBtn orderBtn" type="button">낮은 가격순</button>
 						<button class="highBtn orderBtn" type="button">높은 가격순</button>
-						<input type="text" class="search form-control" id="searchI" placeholder="What you looking for?">
-						<button class="btn btn-light mt-2 mt-lg-0" type="button" onclick="searchPrdt()">검색</button>
+						<input type="text" class="search form-control" id="searchI"
+							placeholder="What you looking for?">
+						<button class="btn btn-light mt-2 mt-lg-0" type="button"
+							onclick="searchPrdt()">검색</button>
 					</div>
 				</div>
 				<br>
 
 				<!-- 상품 리스트 -->
 
-				<div class="row" id="productList">
-					
-				</div>
+				<div class="row" id="productList"></div>
 			</div>
 		</div>
 
-		 <div>
+		<div>
 			<nav aria-label="Page navigation example"
 				class="d-flex justify-content-center">
 				<ul class="pagination">
 					<li class="page-item"><a class="page-link" id="firstpage"
-						onclick="firstPage()" aria-label="Previous"> <span
-							aria-hidden="true">«</span>
+						href="javascript:firstPage()" aria-label="Previous"> <span
+							aria-hidden="true">&laquo;</span>
 					</a></li>
 					<li class="page-item"><a class="page-link" id="prevpage"
-						onclick="prevPage()" aria-label="Previous"> <span
-							aria-hidden="true"></span>
+						href="javascript:prevPage()" aria-label="Previous"> <span
+							aria-hidden="true" style="visibility: hidden;">&lt;</span>
 					</a></li>
 					<!-- 페이징버튼 들어갈 공간 -->
-					<li><a class="page-link" id="nextpage" onclick="nextPage()"
-						aria-label="Next">
-									<span aria-hidden="true"></span>
-								</a>
-							</li>
-						    <li class="page-item">
-								<a class="page-link" id="lastpage" href="javascript:lastPage()"
-						aria-label="Next">
-									<span aria-hidden="true">»</span>
-								</a>
-							</li>
-						</ul>
-					</nav>
-				</div> 
-		
-		
+					<li class="page-item"><a class="page-link" id="nextpage"
+						href="javascript:nextPage()" aria-label="Next"> <span
+							aria-hidden="true" style="visibility: hidden;">&rt;</span>
+					</a></li>
+					<li class="page-item"><a class="page-link" id="lastpage"
+						href="javascript:lastPage()" aria-label="Next"> <span
+							aria-hidden="true">&raquo;</span>
+					</a></li>
+				</ul>
+			</nav>
+		</div>
+
+
 
 		<script th:inline="javascript">
-		
 	
+
 	/* top 버튼 */
 	document.querySelector('.top-btn').addEventListener('click',
 			function() {
@@ -209,11 +230,26 @@
 
 	let items=["prdtNo", "prc", "nm", "thumb"];
 	let currentState= [[${prdtCode}]];
+	let low=false;
+	let high=false;
+	//초기값
+ 	let prdtTargetPage = 1;
+	let prdtStartPage=1;
+	let prdtEndPage=10;
+	let totalPrdtCnt;
+	let nm='';
+	let prc='';
+	let thumb='';
+	console.log("~~~~~~~~~~~~~~");
 	console.log(currentState);
+	console.log(prdtTargetPage);
 	productList();
 	
 	//카테고리 별 정렬
 	$('.ctgr').on('click',function(){
+		low=false;
+    	high=false;
+    	prdtTargetPage=1;
 		currentState=event.target.dataset.commoncd;
 		productList();
 	});
@@ -226,7 +262,7 @@
 	        headers: {
 	            'Content-Type': 'application/x-www-form-urlencoded'
 	        },
-	        body: 'commonCd=' + currentState
+	        body: "page="+prdtTargetPage+'&commonCd=' + currentState
 	    })
 	    .then(response => response.json())
 	    .then(result => {
@@ -265,6 +301,7 @@
 	
 	//낮은 가격순
 	$('.lowBtn').on('click',function(){
+		prdtTargetPage=1;
 		lowPrcList();
 	});
 	
@@ -274,10 +311,12 @@
 	        headers: {
 	            'Content-Type': 'application/x-www-form-urlencoded'
 	        },
-	        body: 'commonCd=' + currentState
+	        body: 'commonCd=' + currentState+"&page="+prdtTargetPage
 	    })
 	    .then(response => response.json())
 	    .then(result => {
+	    	low=true;
+	    	high=false;
 	    	$('#productList').empty();
    			result.forEach(items=> {
      			console.log(items);
@@ -312,6 +351,7 @@
 	
 	//높은 가격순
 	$('.highBtn').on('click',function(){
+		prdtTargetPage=1;
 		highPrcList();
 	});
 	
@@ -321,10 +361,12 @@
 	        headers: {
 	            'Content-Type': 'application/x-www-form-urlencoded'
 	        },
-	        body: 'commonCd=' + currentState
+	        body: 'commonCd=' + currentState+"&page="+prdtTargetPage
 	    })
 	    .then(response => response.json())
 	    .then(result => {
+	    	low=false;
+	    	high=true;
 	    	$('#productList').empty();
    			result.forEach(items=> {
      			console.log(items);
@@ -408,18 +450,11 @@
 	
  
 	 
-	//초기값
- 	let prdtTargetPage = [[${startPage}]];
-	let prdtStartPage=1;
-	let prdtEndPage=10;
-	let totalPrdtCnt;
-	let nm='';
-	let prc='';
-	let thumb='';
+	
 		
 	// 페이징 버튼 생성
- 	 createPageBtn(); 
-	 	
+ 	createPageBtn(); 
+	 
 	// 페이징위해 게시물 개수생성 및 페이지생성 호출
 	 function createPageBtn() {
 		console.log('test');
@@ -428,15 +463,16 @@
 			 headers : {
 				 'Content-Type' : 'application/x-www-form-urlencoded'
 			 },
-			 body : 'commonCd=' + currentState + '&nm=' + nm + '&prc=' + prc + '&thumb=' + thumb
+			 body : 'commonCd=' + currentState
 		 })
 		 .then(result => result.json())
 		 .then(data => {
 			 totalPrdtCnt=data;
-			 if(totalPrdtCnt<=50) {
-				 endPage=~~((totalPrdtCnt-1)/10 + 1);
+				 console.log(totalPrdtCnt);
+			 if(totalPrdtCnt<=90) {
+				 prdtEndPage=~~((totalPrdtCnt-1)/9 + 1);
 			 }
-			 if(totalPrdtCnt>50) {
+			 if(totalPrdtCnt>90) {
 				 nextpage.style.visibility="visible";
 			 }
 			 createPageCntBtn(prdtStartPage,prdtEndPage);
@@ -469,6 +505,14 @@
 			document.querySelector('.pagebtn.active').classList.remove('active');
 			prdtTargetPage=page;
 			
+			if(low){
+				lowPrcList();
+			}else if(high){
+				highPrcList()
+			}else{
+				productList();
+			}
+			
 			document.querySelectorAll('.pagebtn').forEach(item=>{
 				if(item.children[0].textContent==page){
 					item.classList.add('active');
@@ -493,8 +537,8 @@
 			prevpage.style.visibility="visible";
 			prdtStartPage+=10;
 			prdtEndPage+=10;
-			if(prdtEndPage>=~~((totalPrdtCnt-1)/10+1)){
-				prdtEndPage=~~((totalPrdtCnt-1)/10+1);
+			if(prdtEndPage>=~~((totalPrdtCnt-1)/9+1)){
+				prdtEndPage=~~((totalPrdtCnt-1)/9+1);
 				nextPage.style.visibility="hidden";
 			}
 			createPageCntBtn(prdtStartPage,prdtEndPage);
@@ -512,13 +556,13 @@
 		
 		function lastPage(){
 			if(prdtEndPage>10){
-				prdtEndPage=~~((totalPrdtCnt-1)/10 + 1);
+				prdtEndPage=~~((totalPrdtCnt-1)/9 + 1);
 			}
 			prdtStartPage=prdtEndPage-prdtEndPage%10+1;
 			console.log(prdtStartPage,prdtEndPage);
 			createPageCntBtn(prdtStartPage,prdtEndPage);
 			pageMove(prdtEndPage);
-		}
+		} 
 	 
 	
 	</script>

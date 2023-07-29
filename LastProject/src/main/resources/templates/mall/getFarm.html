@@ -548,13 +548,21 @@ p>img {
 			</section>
  -->
 			<section id="prdt-info" th:each="prdt : ${getFarm}">
-				<h1 th:text="${prdt.nm}"></h1>
-				<p th:text="${prdt.prc} + 'P'"
-					style="text-decoration: line-through;"></p>
-				<p th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + 'P'">할인가격</p>
-				<p>배송비</p>
+				<h1 th:text="${prdt.nm}" style="font-family:inherit;"></h1>
+				<div>
+					<span class="real_price inline-blocked"
+						style="margin-right: 2px; font-size: 18px;"
+						th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + 'P'"></span>
+					<span class="sale_price body_font_color_50"
+						style="text-decoration: line-through; font-style: italic; font-size: 14px;"
+						th:text="${prdt.prc} + 'P'"> </span>
+				</div>
+				<div
+					style=" box-shadow: 0 1px 0 #C8C8C8;">
+					<span>배송비</span> <span>10,000P 이상 결제 시 무료배송</span>
+				</div>
 
-				<div class="">
+				<div class="" >
 					<div class="button">
 						<div class="button_quantity">
 							주문수량 <input type="number" class="quantity_input" value="1"
@@ -565,7 +573,8 @@ p>img {
 							</span>
 						</div>
 						<p>총 결제금액</p>
-						<span class="totalPrc" th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + 'P'"></span>
+						<span class="totalPrc"
+							th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + 'P'"></span>
 						<div class="button_set">
 							<a class="btn_cart">장바구니 담기</a> <a class="btn_buy"
 								onclick="directOrder()">바로구매</a>
@@ -665,7 +674,7 @@ p>img {
 					<!-- 로그인 회원만 리뷰작성 띄움 -->
 					<button th:if="${session.loggedInMember}!=null" id="openModalBtn"
 						type="button">리뷰 작성</button>
-					<button onclick="goBack()">이전 페이지로</button>
+
 				</div>
 			</div>
 			<div>&nbsp;</div>
@@ -779,7 +788,7 @@ p>img {
 			$(".quantity_input").val(++quantity);
 			count = Number($(".quantity_input").val());
 			totalPrc = prdtInfo.prc * count;
-			$(".totalPrc").text(totalPrc);
+			$(".totalPrc").text(totalPrc.toLocaleString());
 		});
 		
 		$(".minus_btn").on("click", function(){
@@ -787,7 +796,7 @@ p>img {
 				$(".quantity_input").val(--quantity);	
 				count = Number($(".quantity_input").val());
 				totalPrc = prdtInfo.prc * count;
-				$(".totalPrc").text(totalPrc);
+				$(".totalPrc").text(totalPrc.toLocaleString());
 			}
 		});
 		
@@ -813,28 +822,15 @@ p>img {
 					if(result=="fail"){
 						toastShow("Fail", "담기에 실패했습니다.", "error");
 					}else{
-						toastShow("Fail", "장바구니 !!.", "success");
+						toastShow("success", "장바구니 담기 성공.", "success");
 					}
-				    // 장바구니에 상품이 추가되면 장바구니 페이지로 리다이렉트
+				    // 장바구니에 상품이 추가되면 장바구니 페이지로 리리리다이렉트
 		           //window.location.href = '/mall/basketList/' + form.membNo;
 				}
 			})
 		});  
 		
-		
-		function cartAlert(result){
-			if(result == '0'){
-				alert("장바구니에 추가를 하지 못하였습니다.");
-			} else if(result == '1'){
-				alert("장바구니에 추가되었습니다.");
-			} else if(result == '2'){
-				alert("장바구니에 이미 추가되어져 있습니다.");
-			} else if(result == '5'){
-				alert("로그인이 필요합니다.");	
-			}
-		} 
-		 
-		
+
 		 
 		//주문페이지 이동
 		function directOrder() {

@@ -25,6 +25,8 @@ public class ProductVO {
 	private String commonCd;	
 	private String ctgr;
 	
+	private int page;
+	
 	//구입수량
 	private int cnt;
 	

@@ -179,6 +179,8 @@
 	</table>
 
 	</div>
+	<!-- 풋터 영억 -->
+	<div class="basketDisplay">
 	<!-- 가격 종합 -->
 	<div class="content_total_section">
 		<div class="total_wrap">
@@ -210,6 +212,7 @@
 		</div>
 	</div>
 
+
 	<!-- 구매 버튼 영역 -->
 	<div class="right-align basketrowcmd">
 		<a href="#" onclick="deleteAllBasket()" class="abutton">장바구니 비우기</a>
@@ -217,7 +220,7 @@
 	</div>
 
 	</div>
-
+	</div>
 
 		<!-- <section class="cart"> -->
 
@@ -386,6 +389,7 @@
 		 .catch(err=>console.log(err));
 	 } 
 	  */
+	
 		 
 	// 장바구니 삭제 버튼을 클릭했을 때 해당 상품을 삭제하는 함수
     function deleteBasket() {
@@ -424,6 +428,7 @@
             if (result=="success") {
                //window.location.href="/mall/basketList"
             		location.reload();
+            		document.getElementById('.basketDisplay').style.display = 'none';
             }else {
             	toastShow("Fail Delete", "삭제 실패", "error");
             }
@@ -476,11 +481,11 @@
 		finalTotalPrice = totalPrice + deliveryPrice;
 	 
 	// 총 가격
-	 $(".totalPrice_span").text(totalPrice);
+	 $(".totalPrice_span").text(totalPrice.toLocaleString());
 	// 총 갯수
 	$(".totalCount_span").text(totalCount);
 	// 배송비
-	$(".delivery_price").text(deliveryPrice);	
+	$(".delivery_price").text(deliveryPrice.toLocaleString());	
 	// 최종 가격(총 가격 + 배송비)
 	$(".finalTotalPrice_span").text(finalTotalPrice.toLocaleString());		
 	
