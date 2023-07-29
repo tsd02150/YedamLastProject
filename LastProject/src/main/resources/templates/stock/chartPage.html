@@ -385,8 +385,8 @@ input[type="number"]::-webkit-inner-spin-button {
 				<div class="p-1 col-md-6 border">
 					<div id="CP2D1" class="mb-1 border">
 						<div id="itemPtag" style="display:inline-block">
-							<p th:attr="data-in=${itemInfo?.itemNo}">종목 : [[${itemInfo?.nm}]] <span th:class="${itemInfo?.change} == 0 ? '_' : (${itemInfo?.change} > 0 ? 'plus' : 'minus')"> 전일비 : [[${itemInfo?.change &gt; 0 ? "+ "+itemInfo?.change : itemInfo?.change}]] 변동률 : [[${itemInfo?.rate &gt; 0 ? "+"+itemInfo?.rate : itemInfo?.rate }]]%</span></p>
-							<button class="btn btn-danger btn-sm" id="addInt2">관심종목추가</button>
+							<div><p th:attr="data-in=${itemInfo?.itemNo}">종목 : [[${itemInfo?.nm}]] <span th:class="${itemInfo?.change} == 0 ? '_' : (${itemInfo?.change} > 0 ? 'plus' : 'minus')"> 전일비 : [[${itemInfo?.change &gt; 0 ? "+ "+itemInfo?.change : itemInfo?.change}]] 변동률 : [[${itemInfo?.rate &gt; 0 ? "+"+itemInfo?.rate : itemInfo?.rate }]]%</span></p>
+							<button class="btn btn-danger btn-sm" id="addInt2">관심종목추가</button></div>
 							<div style="position: absolute;float:left;" id="chartSelect">
 								<ul id="chartBtn" >
 									<li><input class="btn btn-danger" type="button" value="일"></li>
@@ -596,7 +596,7 @@ input[type="number"]::-webkit-inner-spin-button {
 			var btn = document.getElementById("myBtn");
 
 			// Get the <span> element that closes the modal
-			var span = document.getElementsByClassName("close")[0];
+			var span = document.querySelector("#myModal > div > div.modal-header > span");
 
 			// When the user clicks the button, open the modal 
 			/*<![CDATA[*/

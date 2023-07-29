@@ -174,38 +174,50 @@
         					data : formData
         				})
         				.done(function(result){
-        					if(attachFileList.get("uploadFiles")!=null){
-        						attachFileList.append("notiNo",result.notiNo);
-        						$.ajax({
-        							url:'/attach/upload',
-        							method:'POST',
-        							processData:false, // 기본값은 true, ajax통신을 통해 데이터를 전송할 때, 기본적으로 key와 vlaue 값을 Query String 으로 변환해서 보냅니다
-        							contentType:false, // multipart/form-data타입을 사용하기 위해 false로 지정합니다.
-        							data:attachFileList,
-        							success:function(result){
-        								// 성공
-        								grid.reloadData();
-        								toastShow("공지사항 작성", "작성 성공" , "Success");
-        								
-        							},
-        							error:function(reject){
-        								alert('fail attach');
-        							}
-        						})					
-        					}else{
-        						//성공
-        						grid.reloadData(); 
-        						toastShow("공지사항 작성", "작성 성공" , "Success");
-        						
-        					}
-        				})
-        				.fail(function(result){
-        					toastShow("Insert Fail" , "등록 실패" , "error");
-        				})
+				for(let del of delList){
+					fetch("/community/deleteAttach",{
+						method: "POST",
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded'
+						},
+						body: 'atchNo='+del
+					})
+					.then(result=>result.text())
+					.then(data=>function(){
+						if(data=="fail"){
+							toastShow("Delete Fail" , "삭제 실패" , "error");
+						}
+					})
+					.catch(err=>console.log(err));
+				}
+				
+				
+				if(attachFileList.get("uploadFiles")!=null){
+					attachFileList.append("notiNo",result.notiNo);
+					$.ajax({
+						url:'/attach/upload',
+						method:'POST',
+						processData:false, // 기본값은 true, ajax통신을 통해 데이터를 전송할 때, 기본적으로 key와 vlaue 값을 Query String 으로 변환해서 보냅니다
+						contentType:false, // multipart/form-data타입을 사용하기 위해 false로 지정합니다.
+						data:attachFileList,
+						success:function(result){
+							// 알림 띄울 부분;
+						},
+						error:function(reject){
+							toastShow("Attach File Fail" , "첨부 실패" , "error");
+						}
+					});	
+				}else{
+				}
+			})
+			.fail(function(result){
+				toastShow("Insert Fail" , "등록 실패" , "error");
+			})
 
         				
         			}// isConfirmed end
         		})
+        		
         		let delList = [];
         		
 	    		$("#attachFile").on('change',function(){

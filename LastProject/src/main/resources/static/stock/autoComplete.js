@@ -227,7 +227,7 @@ function addInterest() {
 	  		success:function(data){
 	  			let html='';
 			      for (let i = 0; i < data.list.length; i++) {
-			        html += `<p class="border my-1"><input class="btn btn-danger btn-sm" type="button" value="x" th:attr="data-info=${data.list[i].itemNo}">
+			        html += `<p class="border my-1 pointer"><input class="btn btn-danger btn-sm" type="button" value="x" data-info=${data.list[i].itemNo}>
 			                ${data.list[i].nm} <span class="${data.list[i].change == 0 ? '_' : (data.list[i].change > 0 ? 'plus' : 'minus')}">
 			                ${data.list[i].change == 0 ? data.list[i].change : (data.list[i].change > 0 ? "+" + data.list[i].change : data.list[i].change) }
 			                (${data.list[i].rate == 0 ? data.list[i].rate : (data.list[i].rate > 0 ? "+"+data.list[i].rate : data.list[i].rate) }%)
@@ -317,7 +317,7 @@ function addInterest() {
   		$.ajax('orderTable?type=sell&itemNo='+itemNo).done(function(data){
   			let html='';
   			if(data.length == 0){
-	  				$('#price').append($('<p class="m-2" />').html('현재 해당 종목의 주문이 없습니다.'))
+					return;  					
 	  			}
   			data.forEach(dt => {
   				html+=`<tr><td class="minus">${dt.CNT}</td><td>${dt.PRC}</td></tr>`
@@ -337,9 +337,9 @@ function addInterest() {
   		$.ajax('getItemInfo?itemNo='+itemNo).done(function(data){
   			let html=''; 																
   			html = `<p data-in="${data.itemNo}"> 종목 : ${data.nm} <span class="${data.change == 0 ? '_' : (data.change > 0 ? 'plus' : 'minus' )}"> 전일비 : ${data.change > 0? "+ "+data.change : data.change} 변동률 : ${data.rate > 0 ? "+"+data.rate+"%" : data.rate+"%"}</span></p><button class="btn btn-danger btn-sm" id="addInt2">관심종목추가</button>`
-  			$('#itemPtag').html(html);
+  			$('#itemPtag div:first-of-type').html(html);
   		})
-  },2000);
+  },30000);
   
   
   // dom tree 형성후 실행
