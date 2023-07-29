@@ -92,21 +92,21 @@
 			  let pageHtml = "";
 
 			  if (prev > 0) {
-			    pageHtml += "<li><a href='#' id='prev' onclick='return false'> 이전 </a></li>";
+			    pageHtml += "<li class='page-item'><a href='#' id='prev' onclick='return false'> 이전 </a></li>";
 			  }
 
 			 //페이징 번호 표시 
 			  for (var i = first; i <= last; i++) {
 			    if (currentPage == i) {
 			      pageHtml +=
-			        "<li class='on'><a href='#' id='" + i + "' onclick='return false'>" + i + "</a></li>";
+			        "<li class='on page-item'><a href='#' id='" + i + "' onclick='return false'>" + i + "</a></li>";
 			    } else {
-			      pageHtml += "<li><a href='#' id='" + i + "' onclick='return false'>" + i + "</a></li>";
+			      pageHtml += "<li class='page-item'><a href='#' id='" + i + "' onclick='return false'>" + i + "</a></li>";
 			    }
 			  }
 
 			  if (last < totalPage) {
-			    pageHtml += "<li><a href='#' id='next' onclick='return false'> 다음 </a></li>";
+			    pageHtml += "<li class='page-item'><a href='#' id='next' onclick='return false'> 다음 </a></li>";
 			  }
 
 			  $("#pagingul").html(pageHtml);
