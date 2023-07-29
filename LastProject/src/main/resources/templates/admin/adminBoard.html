@@ -97,11 +97,13 @@
               header: "게시판번호",
               name: "boardNo",
               filter: { type: "text", showApplyBtn: true, showClearBtn: true },
+              width:100
             },
             {
               header: "닉네임",
               name: "nick",
               filter: { type: "text", showApplyBtn: true, showClearBtn: true },
+              width:150
             },
             {
               header: "제목",
@@ -113,12 +115,14 @@
               name: "rcom",
               sortingType: "asc",
               sortable: true,
+              width:50
             },
             {
               header: "비추천",
               name: "nrcom",
               sortingType: "asc",
               sortable: true,
+              width:70
             },
             {
               header: "상위항목",
@@ -127,6 +131,7 @@
               filterOptions: {
                 listItems: ["자유게시판", "주식게시판"],
               },
+              width:150
             },
             {
               header: "하위항목",
@@ -135,14 +140,19 @@
               filterOptions: {
                 listItems: ["농산물", "수산물", "드립", "일지", "자료", "질문"],
               },
+              width:100
             },
             {
               header: "작성일시",
               name: "drwupDt",
               sortingType: "asc",
               sortable: true,
-            },
+              width:250
+            }
           ],
+          columnOptions: {
+            resizable: true
+          }
         });
 
         grid.on("dblclick", (ev) => {

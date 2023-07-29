@@ -175,7 +175,10 @@
                   	{
                       header: '신고처리',
                       name: 'rprtSt',
-                      filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                      filter: 'select', // Dropdown Filter로 설정
+                      filterOptions: {
+                        listItems: ['Y', 'N'],
+                      }
                    	},
                   	{
                       header: '피고',

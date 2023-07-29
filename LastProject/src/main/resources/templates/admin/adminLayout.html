@@ -42,7 +42,6 @@
           <img src="../admin/assets/img/logo.png" alt="" />
           <span class="d-none d-lg-block">어제 팔걸</span>
         </a>
-        <i class="bi bi-list toggle-sidebar-btn"></i>
       </div>
       <!-- End Logo -->
 
@@ -137,98 +136,6 @@
           </li>
           <!-- End Notification Nav -->
 
-          <li class="nav-item dropdown">
-            <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-              <i class="bi bi-chat-left-text"></i>
-              <span class="badge bg-success badge-number">3</span> </a
-            ><!-- End Messages Icon -->
-
-            <ul
-              class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages"
-            >
-              <li class="dropdown-header">
-                You have 3 new messages
-                <a href="#"
-                  ><span class="badge rounded-pill bg-primary p-2 ms-2"
-                    >View all</span
-                  ></a
-                >
-              </li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-
-              <li class="message-item">
-                <a href="#">
-                  <img
-                    src="../admin/assets/img/messages-1.jpg"
-                    alt=""
-                    class="rounded-circle"
-                  />
-                  <div>
-                    <h4>Maria Hudson</h4>
-                    <p>
-                      Velit asperiores et ducimus soluta repudiandae labore
-                      officia est ut...
-                    </p>
-                    <p>4 hrs. ago</p>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-
-              <li class="message-item">
-                <a href="#">
-                  <img
-                    src="../admin/assets/img/messages-2.jpg"
-                    alt=""
-                    class="rounded-circle"
-                  />
-                  <div>
-                    <h4>Anna Nelson</h4>
-                    <p>
-                      Velit asperiores et ducimus soluta repudiandae labore
-                      officia est ut...
-                    </p>
-                    <p>6 hrs. ago</p>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-
-              <li class="message-item">
-                <a href="#">
-                  <img
-                    src="../admin/assets/img/messages-3.jpg"
-                    alt=""
-                    class="rounded-circle"
-                  />
-                  <div>
-                    <h4>David Muldon</h4>
-                    <p>
-                      Velit asperiores et ducimus soluta repudiandae labore
-                      officia est ut...
-                    </p>
-                    <p>8 hrs. ago</p>
-                  </div>
-                </a>
-              </li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-
-              <li class="dropdown-footer">
-                <a href="#">Show all messages</a>
-              </li>
-            </ul>
-            <!-- End Messages Dropdown Items -->
-          </li>
-          <!-- End Messages Nav -->
-
           <!-- End Profile Nav -->
         </ul>
       </nav>
@@ -239,6 +146,7 @@
       <ul class="sidebar-nav" id="sidebar-nav">
         <li class="nav-item">
           <a
+          	id="adminMember"
             class="nav-link collapsed"
             data-bs-target="#components-nav"
             data-bs-toggle="collapse"
@@ -253,12 +161,12 @@
             data-bs-parent="#sidebar-nav"
           >
             <li>
-              <a href="/admin/memberManage">
+              <a href="/admin/memberManage?sideNumber=1">
                 <i class="bi bi-circle"></i><span>회원관리</span>
               </a>
             </li>
             <li>
-              <a href="/admin/reportManage">
+              <a href="/admin/reportManage?sideNumber=1">
                 <i class="bi bi-circle"></i><span>신고관리</span>
               </a>
             </li>
@@ -268,6 +176,7 @@
 
         <li class="nav-item">
           <a
+          	id="adminComm"
             class="nav-link collapsed"
             data-bs-target="#forms-nav"
             data-bs-toggle="collapse"
@@ -282,22 +191,22 @@
             data-bs-parent="#sidebar-nav"
           >
             <li>
-              <a href="/admin/adminNotice">
+              <a href="/admin/adminNotice?sideNumber=2">
                 <i class="bi bi-circle"></i><span>공지사항</span>
               </a>
             </li>
             <li>
-              <a href="/admin/adminQNA">
+              <a href="/admin/adminQNA?sideNumber=2">
                 <i class="bi bi-circle"></i><span>FAQ/QnA</span>
               </a>
             </li>
             <li>
-              <a href="/admin/adminBoard">
+              <a href="/admin/adminBoard?sideNumber=2">
                 <i class="bi bi-circle"></i><span>게시판</span>
               </a>
             </li>
             <li>
-              <a href="/admin/adminChat">
+              <a href="/admin/adminChat?sideNumber=2">
                 <i class="bi bi-circle"></i><span>익명 게시판</span>
               </a>
             </li>
@@ -307,6 +216,7 @@
 
         <li class="nav-item">
           <a
+          	id="adminMall"
             class="nav-link collapsed"
             data-bs-target="#tables-nav"
             data-bs-toggle="collapse"
@@ -321,12 +231,12 @@
             data-bs-parent="#sidebar-nav"
           >
             <li>
-              <a href="/admin/adminOrder">
+              <a href="/admin/adminOrder?sideNumber=3">
                 <i class="bi bi-circle"></i><span>주문처리관리</span>
               </a>
             </li>
             <li>
-              <a href="/admin/adminProduct">
+              <a href="/admin/adminProduct?sideNumber=3">
                 <i class="bi bi-circle"></i><span>제품관리</span>
               </a>
             </li>
@@ -336,25 +246,20 @@
 
         <li class="nav-heading">Pages</li>
 
-        <li class="nav-item">
-          <a class="nav-link collapsed" href="users-profile.html">
-            <i class="bi bi-person"></i>
-            <span>Profile</span>
-          </a>
-        </li>
+        
 
         <!-- End F.A.Q Page Nav -->
 
         <li class="nav-item">
-          <a class="nav-link collapsed" href="pages-contact.html">
-            <i class="bi bi-envelope"></i>
-            <span>Contact</span>
+          <a class="nav-link collapsed" href="/">
+            <i class="bi bi-house-heart"></i>
+            <span>home</span>
           </a>
         </li>
         <!-- End Contact Page Nav -->
 
         <li class="nav-item">
-          <a class="nav-link collapsed" href="pages-login.html">
+          <a class="nav-link collapsed" href="/member/logout">
             <i class="bi bi-box-arrow-in-right"></i>
             <span>Login/logout</span>
           </a>
@@ -370,5 +275,15 @@
     <!-- End #main -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="../commonJS/toast.js"></script>
+	<script th:inline="javascript">
+		let sideNumber = [[${sideNumber}]];
+		if(sideNumber == 1){
+			document.querySelector('#adminMember').click();
+		}else if(sideNumber == 2){
+			document.querySelector('#adminComm').click();
+		}else if(sideNumber == 3){
+			document.querySelector('#adminMall').click();
+		}
+	</script>
   </body>
 </html>

@@ -255,6 +255,11 @@ public class AdminServiceImpl implements AdminService {
 	public BoardVO boardDetail(String boardNo) {
 		return adminMapper.boardDetail(boardNo);
 	}
+	// room list 불러오기
+	@Override
+	public List<String> getRoomList() {
+		return adminMapper.getRoomList();
+	}
 	
 	
 

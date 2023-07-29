@@ -88,5 +88,6 @@ public interface AdminMapper {
 	// board 조회
 	public BoardVO boardDetail(String boardNo);
 	// room list 조회
+	public List<String> getRoomList();
 	
 }

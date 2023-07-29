@@ -38,4 +38,5 @@ public interface AdminService {
 	public int addFaq(FaqVO vo);
 	public int deleteBoard(List<String> list);
 	public BoardVO boardDetail(String boardNo);
+	public List<String> getRoomList();
 }

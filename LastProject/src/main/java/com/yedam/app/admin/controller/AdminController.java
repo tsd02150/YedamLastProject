@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,42 +36,52 @@ public class AdminController {
 	
 	// 회원관리 페이지 이동
 	@GetMapping("memberManage")
-	public String memberManage() {
+	public String memberManage(Integer sideNumber ,Model model) {
+		sideNumber = sideNumber == null ? 1 : sideNumber;
+		model.addAttribute("sideNumber",sideNumber);
 		return "admin/adminMember";
 	}
 	// 신고관리 페이지 이동
 	@GetMapping("reportManage")
-	public String reportManage() {
+	public String reportManage(Integer sideNumber ,Model model) {
+		model.addAttribute("sideNumber",sideNumber);
 		return "admin/adminReport";
 	}
 	// 공지사항 페이지 이동
 	@GetMapping("adminNotice")
-	public String adminNotice() {
+	public String adminNotice(Integer sideNumber ,Model model) {
+		model.addAttribute("sideNumber",sideNumber);
 		return "admin/adminNotice";
 	}
 	//주문처리관리 페이지 이동
 	@GetMapping("adminOrder")
-	public String adminOrder() {
+	public String adminOrder(Integer sideNumber ,Model model) {
+		model.addAttribute("sideNumber",sideNumber);
 		return "admin/adminOrder";
 	}
 	//제품관리 페이지 이동
 	@GetMapping("adminProduct")
-	public String adminProduct() {
+	public String adminProduct(Integer sideNumber ,Model model) {
+		model.addAttribute("sideNumber",sideNumber);
 		return "admin/adminProduct";
 	}
 	// qna/faq 페이지 이동
 	@GetMapping("adminQNA")
-	public String adminQNA() {
+	public String adminQNA(Integer sideNumber ,Model model) {
+		model.addAttribute("sideNumber",sideNumber);
 		return "admin/adminQNA";
 	}
 	// adminBoard 페이지 이동
 	@GetMapping("adminBoard")
-	public String adminBoard() {
+	public String adminBoard(Integer sideNumber ,Model model) {
+		model.addAttribute("sideNumber",sideNumber);
 		return "admin/adminBoard";
 	}
 	// adminChat 페이지로 이동
 	@GetMapping("adminChat")
-	public String adminChat() {
+	public String adminChat(Integer sideNumber, Model model) {
+		model.addAttribute("roomList",adminService.getRoomList());
+		model.addAttribute("sideNumber",sideNumber);
 		return "admin/adminChat";
 	}
 	// 회원리스트

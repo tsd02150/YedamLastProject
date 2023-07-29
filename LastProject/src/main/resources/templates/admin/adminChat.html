@@ -11,7 +11,15 @@
 	<h3> 채팅 로그</h3>
 		<div id="grid"></div>
 		
-		<script>
+		<script th:inline="javascript">
+		let roomList = [[${roomList}]]?.length;
+		if(roomList == 'undefined'){
+			roomList = [];
+		}else{
+			roomList = [[${roomList}]]
+		};
+		
+		console.log(roomList)
 		const dataSource = {
 	    		  contentType: 'application/json',
 	    		  api: {
@@ -36,25 +44,29 @@
             	   {
                      header: '채팅번호',
                      name: 'chatNo',
-                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true },
+                     width:100
                    },
                  	{
                      header: '방번호',
                      name: 'roomNo',
                      filter: 'select', // Dropdown Filter로 설정
                      filterOptions: {
-                       listItems: ['room-1', 'room-2', 'room-3'],
-                     }
+                       listItems: roomList,
+                     },
+                     width:100
                   	},
                    	{
                      header: '익명닉네임',
                      name: 'anonNick',
-                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true },
+                     width:150
                  	},
                  	{
                      header: '닉네임',
                      name: 'nick',
-                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true },
+                     width:150
                   	},
                   	{
                      header: '채팅내용',
@@ -65,9 +77,13 @@
                       header: '작성일시',
                       name:'drwupDt',
                       sortingType: 'asc',
-                      sortable: true
+                      sortable: true,
+                      width:150
                     }
-                 ]
+                 ],
+                 columnOptions: {
+                     resizable: true
+                   }
                });
 		</script>
 	</div>
