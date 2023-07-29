@@ -20,7 +20,14 @@
 	<!-- 종목정보 조회 -->
 	<select id="getItemInfo" resultType="ItemVO">
 	
-		select t.item_no, c.sc, c.theme, t.nm,NVL(t.prc,0) tprc, NVL(t.prc - i.cl_prc,0) change ,trunc(NVL((t.prc-i.cl_prc) / DECODE(i.cl_prc, 0, NULL, i.cl_prc), 0)*100) rate, origin,desct
+		select t.item_no, c.sc,
+			   c.theme,
+			   t.nm,
+			   NVL(DECODE(t.prc,0,i.cl_prc,t.prc),0) tprc, 
+			   NVL(DECODE(t.prc,0,0,t.prc - i.cl_prc),0) change ,
+			   trunc(NVL(DECODE(t.prc,0,0,t.prc - i.cl_prc) / i.cl_prc, 0)*100) rate, 
+			   origin,
+			   desct
 		from (select item_no, cl_prc 
 		      from item_info 
 		      where to_char(ta_dt,'yyyy-MM-dd') = (
@@ -360,7 +367,7 @@
 				group by prc
 				) a
 				<![CDATA[
-		where rownum <=5
+		where rownum <=4
 		and cnt <> 0
 		]]>
 		order by prc 
@@ -634,7 +641,7 @@
                 NVL(vol,0) vol ,
                 NVL(op_prc,0) op_prc,
                 DECODE(NVL(prc,0),0,op_prc,prc) cl_prc ,
-                DECODE(NVL(a.l_prc,0),0,c.l_prc,a.l_prc) l_prc ,
+                DECODE(NVL(a.l_prc,0),0,c.op_prc,a.l_prc) l_prc ,
                 DECODE(NVL(a.h_prc,0),0,c.h_prc,a.h_prc) h_prc ,
                 NVL(inq,0) inq
 		from (  select item_no,'tah-'||MAX(to_number(substr(ta_no,5))) ta_no, sum(stock_cnt) vol ,min(ta_prc) l_prc,max(ta_prc) h_prc 
@@ -709,5 +716,38 @@
 		select point
 		from member
 		where memb_no = #{membNo}
+	</select>
+	
+	<!-- 보유종목 리스트 -->
+	<select id="getPossList" resultType="StockVO">
+		select t.item_no, t.nm,DECODE(t.prc,0,i.cl_prc,t.prc) tprc, DECODE(t.prc,0,0,t.prc - i.cl_prc) change ,trunc(NVL(DECODE(t.prc,0,0,t.prc - i.cl_prc) / DECODE(i.cl_prc, 0, NULL, i.cl_prc), 0)*100) rate
+		from (select b.item_no, cl_prc 
+		      from item_info a join (select i.item_no ,t.nm
+		                            from poss_stock i join item t
+		                            on i.item_no = t.item_no
+		                            where memb_no = #{membNo}) b
+		      on a.item_no = b.item_no
+		      where to_char(ta_dt,'yyyy-MM-dd') = (
+		      									   select to_char(max(ta_dt),'yyyy-MM-dd')
+                                                   from item_info
+                                                  )
+		                  ) i --전일주가정보
+		join (   select distinct(a.item_no) item_no,nm,'tah-'||a.tano ta_no,NVL(ta_prc,0) prc
+                    from(   SELECT nm,i.item_no, MAX(to_number(substr(ta_no,5))) tano
+                            FROM (select * 
+                                  from ta_hr
+                                  where to_char(ta_dt,'yyyy-MM-dd') =(
+                                                                       select to_char(max(ta_dt),'yyyy-MM-dd')
+                                                                       from ta_hr
+                                                                      )
+                            ) t right join item i 
+                            on i.item_no = t.item_no
+                            GROUP BY nm,i.item_no
+                            order by to_number(substr(item_no,5))
+                     ) a 
+                    left join ta_hr t
+                    on a.item_no= t.item_no and to_number(substr(t.ta_no,5)) = a.tano  
+                    order by to_number(substr(item_no,5)) ) t  -- 최근 체결가
+		on i.item_no = t.item_no
 	</select>
 </mapper>

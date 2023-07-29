@@ -362,6 +362,11 @@ public class StockServiceImpl implements StockService {
 	public Integer getPoint(String membNo) {
 		return stockMapper.getPoint(membNo);
 	}
+	// 보유주식 리스트 가져오기
+	@Override
+	public List<StockVO> getPossList(String membNo) {
+		return stockMapper.getPossList(membNo);
+	}
 	
 	
 }

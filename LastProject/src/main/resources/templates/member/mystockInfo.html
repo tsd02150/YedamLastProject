@@ -9,16 +9,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
 <style>
-#mypageBody{
-	border: 1px solid #DDDDDD;
-	height: auto;
-}
+
 #chartInfo{
 	margint:auto;
 }
-#mypageBody h3{
-	padding : 10px;
-}
+
 #startDt, #endDt{
 	display : inline-block;
 }
@@ -26,8 +21,11 @@
 	padding : 10px;
 }
 #myowntbl{
+	margin-top:30px;
 	text-align : center;
 	padding-top : 20px;
+	border-top: 2px solid #ddd;
+	border-bottom: 2px solid #ddd;
 }
 #myowntbl th{
 	font-size : large;
@@ -38,23 +36,30 @@
 	font-weight: bold;
 	height: 70px;
 }
+#myposstbl h4{
+	text-align: left;
+	margin-left : 15px;
+}
 #myposstbl{
-	margin-top : 20px;
+	margin-top : 50px;
 	text-align: center;
 }
-#buytbl, #nav-tabContent{
+#nav-tabContent{
 	display : block;
 }
-#buytbl th{
+#buytbl th, #selltbl th{
 	padding:1px;
-	width: 110px;
 } 
-#buytbl{
+#buytbl, #selltbl{
 	text-align: center;
 }
 #stordertbl{
 	text-align: center;
 	height: 300px;
+	margin-top:30px;
+}
+#stordertbl table{
+	margin-top : 10px;
 }
 .noOrder td{
 padding-top : 40px;
@@ -65,7 +70,9 @@ padding-top : 40px;
 <body>
 <div layout:fragment="mypage">
 	<div id="mypageBody">
-			<h3>보유자산</h3>
+		<h3 class="news-title">
+       <span>보유자산</span>
+    </h3>
 		<div id="chartInfo">
 			<h4>기간별 수익률</h4>
 			<div id="chart"></div>
@@ -93,8 +100,9 @@ padding-top : 40px;
 		</div>
 		
 		<div id="myposstbl">
+		<h4>보유종목</h4>
 		  <table class="table-light col-12">
-		    <tr>
+		    <tr style="border-bottom: 1px solid #ddd;">
 		      <th>종목코드</th>
 		      <th>종목명</th>
 		      <th>현재가</th>
@@ -112,9 +120,9 @@ padding-top : 40px;
 		      <td th:text="|${#numbers.formatInteger(stock.tradePrc*10, 0, 'COMMA')}|"></td>
 		      <td th:text="|${#numbers.formatDecimal((stock.tradePrc/sumTradePrc)*100, 1, 2)}%|" th:classappend="${(stock.tradePrc/sumTradePrc)*100 >= 0 ? 'high' : 'low'}"></td>
 		    </tr>
-		    <tr>
+		    <tr style="border-top: 1px solid #ddd; font-weight: bold; font-size:19px;">
 		      <td colspan="5"></td>
-		      <td th:text="|${#numbers.formatInteger(sumTradePrc*10, 0, 'COMMA')}|"></td>
+		      <td th:text="|${#numbers.formatInteger(sumTradePrc*10, 0, 'COMMA')} 원|"></td>
 		      <td>100%</td>
 		    </tr>
 		  </table>
@@ -123,8 +131,8 @@ padding-top : 40px;
 		<div id="stordertbl">
 			<nav>
 			  <div class="nav nav-tabs" id="nav-tab" role="tablist">
-			    <button class="nav-link active col-6" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">매수 주문 예약</button>
-			    <button class="nav-link col-6" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">매도 주문 예약</button>
+			    <button class="nav-link active col-6" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true"><strong>매수 주문 예약</strong></button>
+			    <button class="nav-link col-6" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false"><strong>매도 주문 예약</strong></button>
 			  </div>
 			</nav>
 			<div class="tab-content" id="nav-tabContent">
@@ -205,7 +213,7 @@ padding-top : 40px;
 	      })
 	      }else{
 	    	  tr2 +=`<tr class="noOrder">
-		    		<td colspan="5"><h4>매수 주문 예약이 없습니다.</h4>
+		    		<td colspan="5"><h4>매수 주문 예약이 없습니다.</h4><br>
 		    		<a onclick="location.href='/stock/itemListPage'"><button class="btn btn-primary">주식페이지로 이동</button></a></td>
 		    		</tr>
 		    		`;
@@ -251,7 +259,7 @@ padding-top : 40px;
 	      })
 	    	}else{
 	    		tr1 +=`<tr class="noOrder">
-	    		<td colspan="5"><h4>매수 주문 예약이 없습니다.</h4>
+	    		<td colspan="5"><h4>매수 주문 예약이 없습니다.</h4><br>
 	    		<a onclick="location.href='/stock/itemListPage'"><button class="btn btn-primary">주식페이지로 이동</button></a></td>
 	    		</tr>
 	    		`;

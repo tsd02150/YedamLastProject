@@ -30,5 +30,9 @@ public class ShippingVO {
 	private int page;
 	private String thumb;
 	private String prdtNo;
+	private int payAn;
+	private String name;
+	private String tel;
+	
 	
 }

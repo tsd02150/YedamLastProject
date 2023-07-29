@@ -38,4 +38,5 @@ public interface StockService {
 	public int deleteAlm(String almNo);
 	public ItemInfoVO currentItemInfo(String itemNo);
 	public Integer getPoint(String membNo);
+	public List<StockVO> getPossList(String membNo);
 }

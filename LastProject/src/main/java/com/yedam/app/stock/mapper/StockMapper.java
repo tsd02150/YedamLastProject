@@ -85,4 +85,6 @@ public interface StockMapper {
 	public ItemInfoVO currentItemInfo(String itemNo);
 	// 회원 포인트 가져오기
 	public Integer getPoint(String membNo);
+	// 보유주식 리스트 가져오기
+	public List<StockVO> getPossList(String membNo);
 }

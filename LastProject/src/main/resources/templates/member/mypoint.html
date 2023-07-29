@@ -20,9 +20,12 @@ font-size:40px; padding-left:30px; font-weight:bold;
 color: green;
 }
 #myPointTblDiv{
-border: 1px solid #DDDDDD;
 width: 700px;
 margin : auto;
+margin-top:70px;
+}
+#myPointTblDiv input{
+	text-align: center;
 }
 #myPointTbl{
 	width: 100%;
@@ -52,7 +55,9 @@ margin : auto;
 		<span style="font-size:30px; color:black;"> 개</span>
 	</div>
 	<div id="myPointTblDiv">
-		<h4>포인트 적립 | 사용 내역</h4>
+		<h3 class="news-title">
+      <span>포인트 적립 | 사용 내역</span>
+ 		</h3>
 		<input type="date" id="startDate">
 		<input type="date" id="endDate">
 		<select id="dealSel">
