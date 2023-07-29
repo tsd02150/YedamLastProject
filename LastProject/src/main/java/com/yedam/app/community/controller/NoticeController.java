@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yedam.app.common.service.AttachFileService;
+import com.yedam.app.common.service.AttachFileVO;
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.NoticeService;
 import com.yedam.app.community.service.NoticeVO;
@@ -21,6 +23,9 @@ import com.yedam.app.community.service.NoticeVO;
 public class NoticeController {
 	@Autowired
 	NoticeService noticeService;
+	
+	@Autowired
+	AttachFileService attachFileService;
 	
 	@GetMapping("noticeList")
 	public String noticeList(Model model) {
@@ -44,6 +49,10 @@ public class NoticeController {
 	public String noticeDetail(Model model,NoticeVO vo) {
 		noticeService.increaseInquery(vo.getNotiNo());
 		model.addAttribute("notice",noticeService.getNoticeDetail(vo.getNotiNo()));
+		AttachFileVO attachVo = new AttachFileVO();
+		attachVo.setNotiNo(vo.getNotiNo());
+		// 공지사항 첨부파일 정보
+		model.addAttribute("attachList",attachFileService.getAttachFileList(attachVo));
 		return "community/noticeDetail";
 	}
 }

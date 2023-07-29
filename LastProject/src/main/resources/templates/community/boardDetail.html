@@ -140,9 +140,10 @@
 						<p th:text="${board.nrcom}">0</p>
 					</button>
 				</div>
-				<div th:if="${myInfo.membNo}==${member.membNo}" class="d-flex justify-content-end">
-					<button id="modifyBoard" class="btn btn-light mt-2 mt-lg-0" type="button" onclick="modifyBoardFunc()">수정</button>
-					<button id="deleteBoard" class="btn btn-light mt-2 mt-lg-0" type="button" onclick="deleteBoardFunc()">삭제</button>					
+				<div class="d-flex justify-content-end">
+					<button th:if="${myInfo.membNo}==${member.membNo}" id="modifyBoard" class="btn btn-light mt-2 mt-lg-0" type="button" onclick="modifyBoardFunc()">수정</button>
+					<button th:if="${myInfo.membNo}==${member.membNo}" id="deleteBoard" class="btn btn-light mt-2 mt-lg-0" type="button" onclick="deleteBoardFunc()">삭제</button>					
+					<button class="btn btn-light mt-2 mt-lg-0" type="button" onclick="indexList()">목록으로</button>					
 				</div>
 				<hr>
 				<div id="conmmentSection">
@@ -378,6 +379,11 @@
 					})
 					.catch(err=>console.log(err));
 				}
+			}
+			
+			//목록으로
+			function indexList(){
+				window.location.href="/community/boardList?commonCd="+[[${boardCode}]];
 			}
 			
 			// 수정 버튼

@@ -19,6 +19,9 @@
 	#titlename span:after{
 		width:120px;
 	}
+	hr{
+		margin: 10px 0;
+	}
 </style>
 </head>
 <body>
@@ -36,18 +39,35 @@
 					</div>
 				</div>
 				<hr>
+				<div class="d-flex justify-content-end">
+					<div class="dropdown" th:if="${#lists.size(attachList)>0}">
+						<button class="btn btn-light btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+							첨부파일 ([[${#lists.size(attachList)}]])
+						</button>
+						<ul class="dropdown-menu">
+							<li th:each="attach:${attachList}">
+								<a class="dropdown-item attachList" th:href="|/downloadFile?savename=${attach.atchNm}&originname=${attach.atchOriginNm}|">[[${attach.atchOriginNm}]]</a>
+							</li>
+						</ul>
+					</div>
+				</div>
 				<div id="contentBody">
 					
 				</div>
 				<hr>
 				<div class="d-flex justify-content-end">
-					<button class="btn btn-light mt-3 mt-lg-0" type="button">목록으로</button>
+					<button class="btn btn-light mt-3 mt-lg-0" type="button" onClick="indexList()">목록으로</button>
 				</div>
 			</div>
 		</div>
 		
 		<script th:inline="javascript">
 			contentBody.innerHTML=[[${notice.cntn}]];
+			
+			//목록으로
+			function indexList(){
+				window.location.href="/community/noticeList";
+			}
 		</script>
 	</div>
 </body>
