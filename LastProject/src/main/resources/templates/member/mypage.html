@@ -8,9 +8,10 @@
 	<title></title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
-
+#mypageBody{
+	border:0;
+}
 #mypagetbl, #intrestTbl, #myordertbl{
-	border: 1px solid #DDDDDD;
 	height: auto;
 }
 
@@ -41,8 +42,9 @@
 }
 
 .bi {
-	font-size: 50px;
+	font-size: 35px;
 	margin-top: 15px;
+	margin-left:550px;
 }
 
 .int_item {
@@ -71,7 +73,7 @@
 
 
 .orderDiv {
-	width: 200px;
+	width: 180px;
 	height: 200px;
 	border: 1px solid #dddddd;
 	display: inline-block;
@@ -106,6 +108,10 @@ height: 200px;
 	font-size: larger;
 	font-weight: bold;
 }
+.prdtimg{
+width: 50px;
+height: 50px;
+}
 </style>
 </head>
 <body>
@@ -113,19 +119,17 @@ height: 200px;
 		<!-- 내프로필 -->
 			<div id="mypageBody">
 				<table id="mypagetbl">
-					<tr class="itemhead" style="background-color : bisque">
-						<th>내 프로필</th>
-						<td>
-						<!-- 일반로그인이면 비밀번호 확인 후 페이지로 이동 -->
-			        <a th:if="${session.loggedInMember.path == null}" th:href="@{/member/mypageIntro}">
-			            <p class="bi bi-arrow-right-square-fill"></p>
-			        </a>
-			        <!-- 소셜로그인이면 바로 회원정보 수정으로 이동 -->
-			        <a th:if="${session.loggedInMember.path != null}" th:href="@{/member/mypageInfo}">
-			            <p class="bi bi-arrow-right-square-fill"></p>
-			        </a>
-				    </td>
-					</tr>
+					<h3 class="news-title">
+			        <span>내 프로필 
+				        <a th:if="${session.loggedInMember.path == null}" th:href="@{/member/mypageIntro}">
+				        <i class="bi bi-arrow-right"></i>
+				        </a>
+				        <a th:if="${session.loggedInMember.path != null}" th:href="@{/member/mypageInfo}">
+				        <i class="bi bi-arrow-right"></i>
+				        </a>
+			        </span>
+			    </h3>
+			    
 					<tr>
 						<th>[[${session.loggedInMember.nm}]]</th>
 						<td></td>
@@ -135,7 +139,7 @@ height: 200px;
 						<td></td>
 					</tr>
 					<tr>
-						<th th:text="${#numbers.formatInteger(session.loggedInMember.point, 0, 'COMMA')}"></th>
+						<th th:text="${#numbers.formatInteger(session.loggedInMember.point, 0, 'COMMA')} +' point'"></th>
 						<td><a href="pointChargeForm"><button type="button" class="btn btn-outline-secondary">충전</button></a></td>
 					</tr>
 				</table>
@@ -144,19 +148,27 @@ height: 200px;
 			<!-- interest item -->
 			<div id="intrest">
 			<table id="intrestTbl">
-					<tr style="background-color : bisque">
-						<th class="intehead">주식현황</th>
-						<td><a href="mystock"><p class="bi bi-arrow-right-square-fill"></p></a></td>
-					</tr>
-					<tr>
+				<h3 class="news-title">
+	        <span>주식현황 
+		        <a href="mystock">
+		        <i class="bi bi-arrow-right"></i>
+		        </a>
+	        </span>
+		    </h3>
+ 					<tr>
 						<th colspan="2" class="itembox">
 							<div id="thisbox"></div>
 						</th>
 					</tr>
 				</table>
-				<div class="py-20"></div>
 				<div class="interestSection">
-				<h4 style="padding-left : 25px;">+ 관심종목</h4>
+				<h3 class="news-title">
+	        <span>관심종목
+		        <a th:href="@{/stock/itemListPage}">
+		        <i class="bi bi-arrow-right"></i>
+		        </a>
+	        </span>
+		    </h3>
 				<div id="thisbox2">
 				</div>
 				</div>
@@ -164,10 +176,14 @@ height: 200px;
 			<!-- interest item end -->
 		<!-- order -->
 			<table id="myordertbl">
-			  <tr class="itemhead" style="background-color : bisque">
-			    <th>주문 : 배송</th>
-			    <td><a href="myorder"><p class="bi bi-arrow-right-square-fill"></p></a></td>
-			  </tr>
+			<br>
+			  <h3 class="news-title">
+		        <span>주문 | 배송
+			        <a href="myorder">
+			        <i class="bi bi-arrow-right" style="font-size: 35px; margin-top: 15px; margin-left:535px;"></i>
+			        </a>
+		        </span>
+		    </h3>
 			  <tr>
 			    <th colspan="2" style="padding-bottom: 0px;">결제내역</th>
 	 			</tr>
@@ -279,55 +295,48 @@ $.ajax({
 		}
 	
 	// 결제내역 : 배송완료 주문 리스트 출력
+	const dt = "[[${#dates.format(session.loggedInMember.joinDt, 'yyyy/MM/dd')}]]";
+	let today = new Date();
+	let year = today.getFullYear();
+	let month = today.getMonth() + 1 < 10 ? '0' + (today.getMonth() + 1) : today.getMonth() + 1;
+	let date = today.getDate() < 10 ? '0' + today.getDate() : today.getDate();
+	let endDate = year + '/' + month + '/' + date;
+	let startDate = dt;
+
 	$.ajax({
-	  url: "mypageOrderList",
+	  url: "shipList",
 	  method: "POST",
 	  data: {
-	    "id": id,
-	    "orderSt": "배송완료"
-	  },
+       "orderSt": "",
+       "shipSt": "배송완료",
+       "startDate": startDate,
+       "endDate": endDate,
+       "page": 1
+      },
 	  success: function(data) {
 		  if(data && data.length >0){
 	      data.slice(0, 3).forEach(function(el) { //3개만 출력
-	        //console.log(el);
+	        console.log(el);
 	        let orderDt = new Date(el.orderDt); // 날짜 객체 생성
 	        let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
-	        var orderAm = commas(el.orderAm); 
+	        var orderAm = commas(el.cnt); 
 	        prd += `
 	          <div class="orderDiv">
 	            <p class="orderDt">${formattedDt}</p>
-	            <img src="" class="prdtimg" data-no="${el.prdtNo}">
-	            <p class="prdtnm" data-no="${el.prdtNo}"></p>
+	            <img src="/mall/images/main/${el.thumb}" class="prdtimg" data-no="${el.prdtNo}">
+	            <p class="prdtnm" data-no="${el.prdtNo}">${el.nm}</p>
 	            <p class="orderAm">${orderAm}</p>
 	          </div>`;
 	      });
 
-	      // 상품 리스트 출력(prde_no, 상품명, 이미지)
-	      //<img 	th:src="|/mall/images/main/${prdt.thumb}|">
-	      $.ajax({
-	        url: "mypagePrdtList",
-	        success: function(data) {
-	          data.forEach(function(res) {
-	        	  console.log(res);
-	            //<img src="/mall/images/main/농축산물.png">
-	            //<img id="tosimg" th:src="|/member/images/toss.png|" style="width : 400px; height: 100px; margin-left:80px;">
-	            $(".prdtimg[data-no='" + res.prdtNo + "']").attr("src","/mall/images/main/"+res.img);
-	            $(".prdtnm[data-no='" + res.prdtNo + "']").append(res.nm);
-	          });
-	        },
-	        error: function(err) {
-	          console.log(err);
-	        }
-	      });
-
 	      $("#orderBox").html(prd);
-	    } else {
+	     } else {
 	    	let p =`
 		    	<p class="nostock">결제내역이 없습니다.</p>
 					<a onclick="location.href='/mall/mallMain'"><button class="btn btn-primary">포인트몰로 이동</button></a>
           `;
 	    	 $("#orderBox").html(p);
-	    }
+	    } 
 	  },
 	  error: function(err) {
 	    console.log(err);

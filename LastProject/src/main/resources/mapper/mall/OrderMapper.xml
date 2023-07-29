@@ -23,7 +23,7 @@
 	<insert id="insertOrder" parameterType="OrderVO">
 		<selectKey keyProperty="orderNo" resultType="String" order="BEFORE">
 			SELECT CONCAT('ord-',NVL(MAX(TO_NUMBER(SUBSTR(order_no, 5))), 0)+1)
-		FROM CHARGE
+		FROM ORDERS
 		</selectKey>
 		INSERT INTO ORDERS (order_no, memb_no, order_dt, dc_rate, shpcst, order_am, order_st, pay_an)
 		VALUES(#{orderNo}, #{membNo}, sysdate, #{dcRate}, #{shpcst}, #{orderAm}, #{orderSt}, #{payAn})

@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.yedam.app.common.service.CommonCodeVO;
 import com.yedam.app.mall.service.BasketService;
 import com.yedam.app.mall.service.BasketVO;
+import com.yedam.app.mall.service.CouponVO;
 import com.yedam.app.mall.service.MallService;
 import com.yedam.app.mall.service.ProductReviewVO;
 import com.yedam.app.mall.service.ProductVO;
+import com.yedam.app.member.service.MembVO;
+import com.yedam.app.member.service.MemberService;
 import com.yedam.app.security.service.UserVO;
 
 //신지은 , 포인트 몰 
@@ -30,6 +33,10 @@ public class MallController {
 
 	@Autowired
 	BasketService basketService;
+	
+	@Autowired
+	MemberService membService;
+	
 
 	// 포인트몰 메인 페이지
 	@GetMapping("mallMain")
@@ -49,20 +56,19 @@ public class MallController {
 	@PostMapping("getCtgrList")
 	@ResponseBody
 	public List<ProductVO> getCtgrList(ProductVO prdtVO) {
+		System.out.println(prdtVO);
 		return mallService.getCtgrList(prdtVO);
 	}
 
 	// 농수산 페이지
 	@GetMapping("productList")
-	public String farmList(Model model, ProductVO prdtVO, HttpSession session) {
+	public String farmList(Model model, ProductVO prdtVO, HttpSession session, MembVO membVO) {
 		
-		// 첫 화면 페이징 1
-		model.addAttribute("startPage",1);
+//		// 첫 화면 페이징 1
+//		model.addAttribute("startPage",1);
 		
 		String prdtCode = prdtVO.getCommonCd();
-		// 목록 전체
-		List<ProductVO> farmList = mallService.getProductList(prdtCode);
-		model.addAttribute("farmList", farmList);
+		
 
 		// 카테고리 분류
 		model.addAttribute("prdtCode", prdtVO.getCommonCd().substring(0, 2)); // S1, S2
@@ -73,6 +79,14 @@ public class MallController {
 			String cd = list.get(i).getCommonCd();
 			list.get(i).setChildList(mallService.getCategoryName(list.get(i).getCommonCd())); // 소분류 카테고리
 		}
+		
+		//UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		//MembVO member = membService.memberList(mem.getId());
+		//List<CouponVO> coupon = membService.mycoupon(mem.getMembNo());
+		//model.addAttribute("mypoint",member.getPoint());
+		
+		//model.addAttribute("mycoupon",coupon);
+		//model.addAttribute("startPage",1);
 
 		return "mall/productList";
 	}
@@ -117,7 +131,7 @@ public class MallController {
 	public String getFarm(Model model, ProductVO prdtVO, ProductReviewVO revVO, BasketVO bskVO, HttpSession session) {
 		
 		// 첫 화면 페이징 1
-		model.addAttribute("prdtStartPage",1);
+		model.addAttribute("startPage",1);
 		
 		model.addAttribute("getFarm", mallService.getProductInfo(prdtVO));
 		System.out.println(model);

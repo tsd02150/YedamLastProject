@@ -179,6 +179,8 @@
 	</table>
 
 	</div>
+	<!-- 풋터 영억 -->
+	<div class="basketDisplay">
 	<!-- 가격 종합 -->
 	<div class="content_total_section">
 		<div class="total_wrap">
@@ -199,7 +201,7 @@
 				</tr>
 
 				<tr>
-					<td colspan="2"><div class="boundary_div">구분선</div></td>
+					<td style=" box-shadow: 0 1px 0 #C8C8C8;"></td>
 				</tr>
 				<tr>
 					<td><strong>총 결제 예상 금액</strong></td>
@@ -210,6 +212,7 @@
 		</div>
 	</div>
 
+
 	<!-- 구매 버튼 영역 -->
 	<div class="right-align basketrowcmd">
 		<a href="#" onclick="deleteAllBasket()" class="abutton">장바구니 비우기</a>
@@ -217,91 +220,7 @@
 	</div>
 
 	</div>
-
-
-		<!-- <section class="cart"> -->
-
-		<!-- <table class="cart__list">
-					
-						<thead>
-							<tr>
-								<td><input type="checkbox"></td>
-								<td colspan="2">상품정보</td>
-								<td>옵션</td>
-								<td>상품금액</td>
-								<td>배송비</td>
-							</tr>
-						</thead>
-						<tbody id="basketList" >
-							 <tr class="cart__list__detail" th:each="item :${basketList}">
-							 <td th:text="${item.membNo}"></td>
-								<td class="prdtNo" th:text="${item.prdtNo}"><input type="checkbox"></td>
-								<td><img src="image/keyboard.jpg" alt="magic keyboard"></td>
-								<td th:onclick="|location.href='@{getFarm(prdtNo=${item.prdtNo})}'|">
-									<p class="nm" th:text="${item.nm}"></p> <sapn class="price" th:text="${item.prc}">116,62원</sapn><span
-									style="text-decoration: line-through; color: lightgray;">119,000</span>
-								</td>
-								<td class="cart__list__option">
-									<p th:text="수량 + ${item.cnt}">모델명 : 키보드 - 한국어 MK2A3KH/A / 1개</p>
-									<button class="cart__list__optionbtn">주문조건 추가/변경</button>
-								</td>
-								<td><span class="price">116,620원</span><br>
-									<button class="cart__list__orderbtn">주문하기</button></td>
-								<td>무료</td>
-							</tr>
-						
-						</tbody>
-						<tfoot>
-							<tr>
-								<td colspan="3"><input type="checkbox">
-									<button class="cart__list__optionbtn">선택상품 삭제</button>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-						</tfoot>
-					
-				</table>
-				<div class="cart__mainbtns">
-					<button class="cart__bigorderbtn left">쇼핑 계속하기</button>
-					<button class="cart__bigorderbtn right" onclic="orderList">주문하기</button>
-				</div>
-			</section>  -->
-		<!-- 	</form> 
-		<!--  -->
-
-		<!-- <table style="border: 1px solid;">
-			<thead style="text-align: center; border: 1px solid;">
-				<tr>
-					<th style="width: 150px;">상품 합계금액</th>
-					<th style="width: 150px;"></th>
-					<th style="width: 150px;">총 배송비</th>
-					<th style="width: 150px;">적립금</th>
-					<th style="width: 150px;"></th>
-					<th style="width: 150px;">최종 결제금액</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td style="width: 70px; text-align: center;">40,000원</td>
-					<td>
-						<div class="pic">
-							<img style="width: 80px; height: 80px;">
-						</div>
-					</td>
-					<td style="text-align: center;">0원</td>
-					<td style="text-align: center;">0원</td>
-					<td>
-						<div class="pic">
-							<img style="width: 80px; height: 80px;">
-						</div>
-					</td>
-					<td style="text-align: center;">40,000원</td>
-				</tr>
-			</tbody>
-		</table>
- -->
-
+	</div>
 
 		<script th:inline="javascript">
 		
@@ -386,6 +305,7 @@
 		 .catch(err=>console.log(err));
 	 } 
 	  */
+	
 		 
 	// 장바구니 삭제 버튼을 클릭했을 때 해당 상품을 삭제하는 함수
     function deleteBasket() {
@@ -424,6 +344,7 @@
             if (result=="success") {
                //window.location.href="/mall/basketList"
             		location.reload();
+            		document.getElementById('.basketDisplay').style.display = 'none';
             }else {
             	toastShow("Fail Delete", "삭제 실패", "error");
             }
@@ -476,11 +397,11 @@
 		finalTotalPrice = totalPrice + deliveryPrice;
 	 
 	// 총 가격
-	 $(".totalPrice_span").text(totalPrice);
+	 $(".totalPrice_span").text(totalPrice.toLocaleString());
 	// 총 갯수
 	$(".totalCount_span").text(totalCount);
 	// 배송비
-	$(".delivery_price").text(deliveryPrice);	
+	$(".delivery_price").text(deliveryPrice.toLocaleString());	
 	// 최종 가격(총 가격 + 배송비)
 	$(".finalTotalPrice_span").text(finalTotalPrice.toLocaleString());		
 	
@@ -491,7 +412,6 @@
 		setTotalInfo($(".cart_info_td"));
 	});
 
-	
 		
 	//주문페이지 이동
 	function directOrder() {

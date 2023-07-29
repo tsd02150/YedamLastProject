@@ -750,8 +750,6 @@ public class MemberController {
 	public List<ShippingVO> shipList(ShippingVO vo, HttpSession session){
 		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 		vo.setMembNo(mem.getMembNo());
-		System.out.println("+++++++++++++");
-		System.out.println(membService.shipList(vo));
 		return membService.shipList(vo);
 	}
 	
@@ -763,4 +761,11 @@ public class MemberController {
 		return membService.getShipListCount(vo);
 	}
 	
+	@ResponseBody
+	@PostMapping("myorderDetaList")
+	public List<ShippingVO> myorderDetaList(ShippingVO vo, HttpSession session){
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		vo.setMembNo(mem.getMembNo());
+		return membService.myorderDetaList(vo);
+	}
 }

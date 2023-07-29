@@ -6,14 +6,19 @@
 
 	<!-- 전체조회 -->
 	<select id="getProductList" resultType="ProductVO">
+		
 		SELECT *
-		FROM product
-		<if test="commonCd != null">
-			WHERE common_cd Like #{commonCd}||'%'
-		</if>
-
-		ORDER BY prdt_no DESC
-
+		FROM(
+			SELECT prc, nm, prdt_no, common_cd, dc_rate, thumb,rownum rn
+			FROM product
+			<![CDATA[
+			WHERE rownum <=(1*9)
+			]]>
+			<if test="commonCd != null">
+				AND common_cd Like #{commonCd}||'%'
+			</if>
+		)
+		WHERE rn > (1-1)*9
 	</select>
 
 	<select id="getProductInfo" resultType="ProductVO">
@@ -26,12 +31,10 @@
 
 	<!-- 상품게시물 갯수 -->
 	<select id="getProductCount" resultType="int">
-		SELECT *
-		FROM PRODUCT P JOIN COMMON_CODE C
-		USING(common_cd)
-	
+		SELECT count(*) 
+		FROM PRODUCT
 		WHERE common_cd Like #{commonCd}||'%'
-		ORDER BY prdt_no DESC
+		
 
 	</select>
 
@@ -70,30 +73,52 @@
 	<select id="getCtgrList" resultType="ProductVO">
 
 		SELECT *
-		FROM PRODUCT P JOIN
-		COMMON_CODE C
-		USING(common_cd)
-		WHERE common_cd Like #{commonCd}||'%'
-		ORDER BY prdt_no DESC
+		FROM(
+			SELECT prc, nm, prdt_no, common_cd, dc_rate, thumb,rownum rn
+			FROM product
+			<![CDATA[
+			WHERE rownum <=(${page}*9)
+			]]>
+			<if test="commonCd != null">
+				AND common_cd Like #{commonCd}||'%'
+			</if>
+		)
+		WHERE rn > (${page}-1)*9
 
 	</select>
 
 	<!-- 낮은 가격순 정렬 -->
 	<select id="getLowPrc" resultType="ProductVO">
-		SELECT prc, nm, prdt_no, common_cd, dc_rate, thumb, prc-prc*NVL(dc_rate,0)/100 ord
-			FROM PRODUCT P JOIN COMMON_CODE C
-			USING(common_cd)
-			WHERE common_cd LIKE #{commonCd}||'%'
-		ORDER BY ord
+		<![CDATA[
+		SELECT *
+		FROM(
+			SELECT prc, nm, prdt_no, common_cd, dc_rate, thumb,ord,rownum rn
+			FROM(
+				SELECT prc, nm, prdt_no, common_cd, dc_rate, thumb, prc-prc*NVL(dc_rate,0)/100 ord
+					FROM PRODUCT P JOIN COMMON_CODE C
+					USING(common_cd)
+					WHERE common_cd LIKE #{commonCd}||'%'
+				ORDER BY ord)
+			WHERE rownum<=(${page}*9))
+		WHERE rn >(${page}-1)*9
+		]]>
 	</select>
 
 	<!-- 높은 가격순 정렬 -->
 	<select id="getHighPrc" resultType="ProductVO">
-		SELECT prc, nm, prdt_no, common_cd, dc_rate, thumb, prc-prc*NVL(dc_rate,0)/100 ord
-			FROM PRODUCT P JOIN COMMON_CODE C
-			USING(common_cd)
-			WHERE common_cd LIKE #{commonCd}||'%'
-		ORDER BY ord DESC
+	<![CDATA[
+		SELECT *
+		FROM(
+			SELECT prc, nm, prdt_no, common_cd, dc_rate, thumb,ord,rownum rn
+			FROM(
+				SELECT prc, nm, prdt_no, common_cd, dc_rate, thumb, prc-prc*NVL(dc_rate,0)/100 ord
+					FROM PRODUCT P JOIN COMMON_CODE C
+					USING(common_cd)
+					WHERE common_cd LIKE #{commonCd}||'%'
+				ORDER BY ord DESC)
+			WHERE rownum<=(${page}*9))
+		WHERE rn >(${page}-1)*9
+		]]>
 	</select>
 	
 	<!-- 검색 -->

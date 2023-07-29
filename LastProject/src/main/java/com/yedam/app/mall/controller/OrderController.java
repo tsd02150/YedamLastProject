@@ -64,21 +64,24 @@ public class OrderController {
 
 	// 결제 성공
 	@GetMapping("orderCheck")
-	public String orderCheck(@RequestParam(value = "amount") int amount, HttpSession session, ChargeVO chargeVO,
+	public String orderCheck(@RequestParam(value = "amount") int amount, HttpSession session,
 			OrderVO ordVO, Model model, MembVO membVO) {
 
 		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
-		chargeVO.setMembNo(mem.getMembNo());
-		// chargeVO.setChagPrc(amount);
+		//chargeVO.setMembNo(mem.getMembNo());
+		//chargeVO.setChagPrc(amount);
+		ordVO.setMembNo(mem.getMembNo());
+		ordVO.setPrc(amount);
 		membVO.setId(mem.getId());
 		
 		// 결제 정보 저장, 등록
-		// 포인트적립 membService.insertCharge(chargeVO, membVO);
+		// 포인트적립 
+		//membService.insertCharge(chargeVO, membVO);
 		orderService.insertOrder(ordVO, membVO); // 수정된 정보 세션에 다시 저장.
 		mem.setPoint(membVO.getPoint());
 		session.setAttribute("loggedInMember", mem);
 		model.addAttribute("membList", membVO); // update된 회원 정보
-
+		
 		return "mall/orderCheck";
 	}
 

@@ -553,6 +553,54 @@ table {
 	margin: auto;
 	text-align: center;
 }
+
+.customer__col--1 {
+	width: 160px;
+	border: solid #e4e4e4;
+	border-width: 0 1px 1px 0;
+	padding: 7px 10px 7px 15px;
+	font-weight: 700;
+	text-align: right;
+	background: #f4f4f4;
+}
+
+.customer__col--2 {
+	border-bottom: 1px solid #e4e4e4;
+	padding: 10px 0 10px 16px;
+}
+
+.delivery-address__th {
+	border-right: 1px solid #e4e4e4;
+	border-bottom: 1px solid #e4e4e4;
+	padding: 10px 10px 7px 15px;
+	width: 160px;
+	background-color: #f4f4f4;
+	text-align: right;
+}
+
+.page-pc.page-order button {
+	padding: 4px 8px;
+	border: 1px solid #999;
+	color: #333;
+	border-radius: 2px;
+	box-shadow: 0 -2px 0 rgba(0, 0, 0, .1) inset;
+	font-size: 11px;
+}
+
+.delivery-address__popup-list-button {
+	margin-left: 5px;
+	vertical-align: middle;
+}
+
+.delivery-address__td--name {
+	padding-top: 12.5px;
+	padding-bottom: 12.5px;
+}
+
+.delivery-address__td {
+	border-bottom: 1px solid #e4e4e4;
+	padding: 10px 0 10px 16px;
+}
 </style>
 
 <script
@@ -568,95 +616,75 @@ table {
 			</div>
 
 			<div class="content_main">
-				<!-- 회원 정보 -->
-				<div class="member_info_div">
-					<table class="table_text_align_center memberInfo_table">
-						<tbody>
-							<tr>
-								<th style="width: 25%;" class="membNm">주문자</th>
-								<td style="width: *"></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
 
 				<!-- 배송지 정보 -->
 				<div class="addressInfo_div">
-					<div class="addressInfo_button_div">
-						<button class="address_btn address_btn_1"
-							onclick="showAdress('1')" style="background-color: #3c3838;">사용자
-							정보 주소록</button>
-						<button class="address_btn address_btn_2" id="addrModal"
-							onclick="sample6_execDaumPostcode()">직접 입력</button>
+
+					<!-- 주소 입력 폼 -->
+					<!-- 구매자 정보 -->
+					<div>
+						<h2 class="customer__h2">구매자정보</h2>
+						<table class="customer__table">
+							<tbody>
+								<tr>
+									<td class="customer__col customer__col--1">이름</td>
+									<td class="customer__col customer__col--2" id="recipient_name">신지은</td>
+								</tr>
+								<tr data-component="customer-realname-auth"></tr>
+								<tr>
+									<td class="customer__col customer__col--1">이메일</td>
+									<td class="customer__col customer__col--2" id="recipient_email">
+										sje3656@hanmail.net</td>
+								</tr>
+								<tr>
+									<td class="customer__col customer__col--1">휴대폰 번호</td>
+									<td class="customer__col customer__col--2" id="recipient_phone">010-1111-2222</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
-					<div class="addressInfo_input_div_wrap">
-						<div class="addressInfo_input_div addressInfo_input_div_1"
-							style="display: block">
+					<div>&nbsp;</div>
+					<div>&nbsp;</div>
 
-							<colgroup>
-								<col width="25%">
-								<col width="*">
-							</colgroup>
+					<!-- 받는사람 정보 -->
+					<div>
+						<h2 class="delivery-address__caption-header">
+							받는사람정보
+							<button class="delivery-address__popup-list-button" type="button"
+								data-delivery-address__popup-list-button="" onclick="sample6_execDaumPostcode()">배송지변경</button>
+						</h2>
 
-							<!-- 주소 입력 폼 -->
-							<div class="address_info">
-								<h2>배송 주소 정보</h2>
-								<div>
-									<strong>받는 분 이름:</strong> <span id="recipient_name"></span>
-								</div>
-								<div>
-									<strong>연락처:</strong> <span id="recipient_phone">010-1234-5678</span>
-								</div>
-								<div>
-									<div class="col-md-12" id="insertAddrDiv">
-										<div class="form-group">
-											<label for="insertaddr1">주소</label><br> <input
-												type="text" class="form-control"
-												style="width: 40%; display: inline;" id="insertaddr1"
-												name="zip" placeholder="우편번호" readonly>
-
-										</div>
-										<div class="form-group">
-											<label for="insertaddr2"></label> <input type="text"
-												class="form-control" style="top: 5px;" id="insertaddr2"
-												name="addr" placeholder="도로명주소" readonly>
-										</div>
-										<div class="form-group">
-											<label for="insertaddr3"></label> <input type="text"
-												class="form-control" id="insertaddr3" name="detaAddr"
-												placeholder="상세주소를 입력하세요">
-										</div>
-									</div>
-								</div>
-							</div>
-
-
-						</div>
-						<div class="addressInfo_input_div addressInfo_input_div_2">
-							<table>
-								<colgroup>
-									<col width="25%">
-									<col width="*">
-								</colgroup>
-								<tbody>
-									<tr>
-										<th>이름</th>
-										<td><input class="addressee_input"></td>
-									</tr>
-									<tr>
-										<th>주소</th>
-										<td><input class="selectAddress" value="F" type="hidden">
-											<input class="address1_input" readonly="readonly"> <a
-											class="address_search_btn" onclick="execution_daum_address()">주소
-												찾기</a><br> <input class="address2_input"
-											readonly="readonly"><br> <input
-											class="address3_input" readonly="readonly"></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
+						<table class="delivery-address">
+							<tbody>
+								<tr>
+									<th class="delivery-address__th">이름</th>
+									<td id="recipient_name" 
+										class="delivery-address__td delivery-address__td--name delivery-address__td-rocket-fresh-mvp2">
+										<span class="delivery-address__name"
+										id="delivery-address__name-panel" >신지은</span>
+									</td>
+								</tr>
+								<tr>
+									<th class="delivery-address__th">배송주소</th>
+									<td class="delivery-address__td" id="insertAddrDiv">대구광역시 남구 명덕로14길 145-4
+										&nbsp;
+										<div id="blocked-address-error-message"
+											class="blocked-address-section"
+											data-delivery-address__blocked-message=""></div>
+									</td>
+								</tr>
+								<tr>
+									<th class="delivery-address__th delivery-address__th--no-line">연락처</th>
+									<td class="delivery-address__td delivery-address__td--no-line"
+										id="delivery-address__phone-panel" >010 - 8246 - 8805</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 				</div>
+
+
+
 				<!-- 상품 정보 -->
 				<div class="orderGoods_div">
 					<!-- 상품 종류 -->
@@ -715,10 +743,8 @@ table {
 						</colgroup>
 						<tbody>
 							<tr>
-								<th>포인트 사용</th>
+								<th>포인트</th>
 								<td><input class="order_point_input">P <a
-									class="order_point_input_btn order_point_input_btn_N"
-									data-state="N">모두사용</a> <a
 									class="order_point_input_btn order_point_input_btn_Y"
 									data-state="Y" style="display: none;">사용취소</a></td>
 							</tr>
@@ -731,22 +757,22 @@ table {
 					<div class="total_info_price_div">
 						<ul>
 							<li><span class="price_span_label">상품 금액</span> <span
-								class="totalPrice_span">100000</span>원</li>
+								class="totalPrice_span">100000</span>P</li>
 							<li><span class="price_span_label">배송비</span> <span
-								class="delivery_price_span">100000</span>원</li>
+								class="delivery_price_span">100000</span>P</li>
 							<li class="price_total_li"><strong
 								class="price_span_label total_price_label">최종 결제 금액</strong> <strong
-								class="strong_red"> <span
-									class="total_price_red finalTotalPrice_span"> 1500000 </span>원
+								class="strong_red"><span
+									class="total_price_red finalTotalPrice_span"> 1500000 </span>P
 							</strong></li>
-							<li class="point_li"><span class="price_span_label">결제 후 잔여
-									포인트</span> <span class="totalPoint_span">7960원</span></li>
+							<li class="point_li"><span class="price_span_label">결제
+									후 잔여 포인트</span> <span class="totalPoint_span">7960원</span>P</li>
 						</ul>
 					</div>
 					<!-- 버튼 영역 -->
 					<div class="total_info_btn_div">
 						<img id="tosimg" th:src="|/member/images/toss.png|"
-							style="width: 400px; height: 100px;">
+							style="width: 250px; height: 100px;">
 					</div>
 				</div>
 
@@ -757,152 +783,10 @@ table {
 				<div id="agreement"></div>
 				<!-- 결제하기 버튼 -->
 				<div id="payBtn">
-					<button id="payment-button" onclick="directOrder()" class="btn btn-primary btn-lg">결제하기</button>
+					<button id="payment-button" class="btn btn-primary btn-lg">결제하기</button>
 					<button id="resetpay-button" class="btn btn-primary btn-lg">취소하기</button>
 				</div>
 			</div>
-
-			<!-- <div style="width: 1100px;">
-			<div class="orderList">
-				<div>&nbsp;</div>
-				<div>&nbsp;</div>
-				<h3>주문리스트</h3>
-				<div>&nbsp;</div>
-				<table>
-					<thead style="text-align: center;">
-						<tr style="border: 1px solid;">
-							<th style="width: 60px;">번호</th>
-							<th style="width: 500px;">제품</th>
-							<th style="width: 130px;">수량</th>
-							<th style="width: 180px;">가격</th>
-							<th style="width: 130px;">적립</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr style="border: 1px solid;">
-							<td style="width: 70px; text-align: center;">40</td>
-							<td>
-								<div class="review-item">
-									<div class="pic">
-										<img style="width: 80px; height: 80px;">
-									</div>
-									<div class="info">후기내용</div>
-								</div>
-							</td>
-							<td style="text-align: center;" class="maks">5</td>
-							<td style="text-align: center;">test</td>
-							<td style="text-align: center;">2023-07-16</td>
-
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div>&nbsp;</div>
-			<div>&nbsp;</div>
-			<div class="orderInfo">
-				<h3>주문자 정보</h3>
-				<table>
-					<tr>
-						<th>이름</th>
-						<td>신지은</td>
-					</tr>
-					<tr>
-						<th>이메일</th>
-						<td>sje3656@hanmail.net</td>
-					</tr>
-					<tr>
-						<th>연락처</th>
-						<td>
-							<div>
-								<form>
-									010-1111-2222
-									<button type="submit">수정</button>
-								</form>
-							</div>
-						</td>
-					</tr>
-				</table>
-			</div>
-
-			<div>&nbsp;</div>
-			<div>&nbsp;</div>
-			<div class="shipInfo">
-				<h3>
-					배송지 정보 <input type="button" onclick="sample6_execDaumPostcode()"
-						value="배송지변경"><br>
-				</h3>
-				<table>
-					<tr>
-						<th>이름</th>
-						<td>신지은</td>
-					</tr>
-					<tr>
-						<th>휴대전화</th>
-						<td>010-1111-2222</td>
-					</tr>
-					<tr>
-						<th>배송주소</th>
-						<td>회원 기본주소 디폴트</td>
-					</tr>
-				</table>
-			</div>
-			<div>&nbsp;</div>
-			<div>&nbsp;</div>
-			<div class="dis">
-				<h3>할인 적용</h3>
-				<p>
-					쿠폰 할인<input type="text" placeholder="0">P
-					<button type="button">쿠폰적용</button>
-				<p>보유쿠폰</p>
-
-			</div>
-			<div>&nbsp;</div>
-			<div>&nbsp;</div>
-			<div class="">
-				<h3>결제금액</h3>
-
-				<table style="border: 1px solid;">
-					<thead style="text-align: center; border: 1px solid;">
-						<tr>
-							<th style="width: 150px;">상품 합계금액</th>
-							<th style="width: 150px;"></th>
-							<th style="width: 150px;">총 배송비</th>
-							<th style="width: 150px;">적립금</th>
-							<th style="width: 150px;"></th>
-							<th style="width: 150px;">최종 결제금액</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td style="width: 70px; text-align: center;">40,000원</td>
-							<td>
-								<div class="pic">
-									<img style="width: 80px; height: 80px;">
-								</div>
-							</td>
-							<td style="text-align: center;">0원</td>
-							<td style="text-align: center;">0원</td>
-							<td>
-								<div class="pic">
-									<img style="width: 80px; height: 80px;">
-								</div>
-							</td>
-							<td style="text-align: center;">40,000원</td>
-						</tr>
-					</tbody>
-				</table>
-
-			</div>
-			<div>&nbsp;</div>
-			<div>&nbsp;</div>
-			<p style="text-align: center;">위 주문 내용을 확인 하였으며, 회원 본인은 개인정보 이용 및
-				제공(해외직구의 경우 국외제공) 및 결제에 동의합니다.</p>
-			<div style="text-align: center;">
-				<button type="reset">취소하기</button>
-				<button type="submit">주문하기</button>
-			</div>
-		</div> -->
-
 		</div>
 		<script th:inline="javascript">
 	
@@ -922,8 +806,6 @@ table {
 	    let orderSt = ''; // 주문 상태
 	    let payAn = 0; // 결제 금액
 	   	
-	    
-	   
 
 	    for (let info of membInfo) {
 	        // 주문자 정보를 할당하는 부분 (예시로 주문자 이름만 가져옴)
@@ -934,11 +816,10 @@ table {
 	        addr += info.addr;
 	        email += info.email;
 	        tel += info.tel;
-	        orderNm += info.nm;
+	        orderNm = info.nm;
 	        orderAm += info.orderAm;
 	        orderSt += info.orderSt;
 	        payAn += info.payAn;
-	        
 	        
 	    }
 
@@ -975,9 +856,6 @@ table {
 	let totalPoint =0;
 	let membNm = '';
 	
-
-	
-	
 	for(let info of orderInfo) {
 		//console.log(info);
 		
@@ -991,33 +869,32 @@ table {
 		//console.log(totalPrice);
 		 point = info.point; // 보유 포인트 50,000
 		membNm = info.nm;
-		
 		 
 		}
 			
-		
-		//console.log(info.point);
 		deliveryPrice += totalPrice >= 10000 ? 0 : 3000;
 		finalTotalPrice = totalPrice + deliveryPrice;
-		console.log(finalTotalPrice);
-		console.log(totalPoint);
+
 		totalPoint = point - finalTotalPrice;
-		//console.log(totalPrice);
 		// 총 가격
-		 $(".totalPrice_span").text(totalPrice);
+		 $(".totalPrice_span").text(totalPrice.toLocaleString());
 		// 총 갯수
 		$(".totalCount_span").text(totalCount);
 		// 배송비
-		$(".delivery_price_span").text(deliveryPrice);	
+		$(".delivery_price_span").text(deliveryPrice.toLocaleString());	
 		// 최종 가격(총 가격 + 배송비)
 		$(".finalTotalPrice_span").text(finalTotalPrice.toLocaleString());
 		// 최종 잔여 포인트
-		$(".totalPoint_span").text(totalPoint);
+		$(".totalPoint_span").text(totalPoint.toLocaleString());
 		// 회원 포인트
-		$(".order_point_input").val(point);
+		$(".order_point_input").val(point.toLocaleString());
 		
 		
 
+	//주소 변경
+	
+	
+	
 		
 	//우편번호 모달
 	function sample6_execDaumPostcode() {
@@ -1104,15 +981,26 @@ table {
 		}
 	});
 
-	//결제페이지 이동
-	function directOrder() {
-		// 바로 주문하기 기능 구현
-		alert("주문 페이지로 이동합니다!");
-		window.location.href = "/mall/orderCheck";
-	} 
+
+	//결제 
 	
 	$("#resetpay-button").on("click",function(){
 		 $("#tosspay").css("display", "none");
+	})
+		//콤마
+	function commas(target) {
+	  target.value = target.value.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	  console.log(target.value);
+	  console.log(typeof(target.value));
+	}
+	
+	let amount=0;
+	let name ='' ;
+	$("#button-addon2").on("click", function(){
+		if($("#chargeInput").val()==""){
+			$("#chargeInput").focus();
+			return;
+		}
 	})
 	
 	$("#tosimg").on("click", function(){
@@ -1121,21 +1009,13 @@ table {
 			return;
 		}
 	
-		
-		//주문페이지 이동
-		function directOrder() {
-		  // 바로 주문하기 기능 구현
-		  alert("결제완료 페이지로 이동합니다!");
-		  window.location.href="/mall/orderCheck";
-		}
-		
-	
+
 	const pattern = /[^(0-9)]/gi;
 	  const clientKey = 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq' // 상점을 특정하는 키
 	  const customerKey = 'C57lz4-jzjw9_VF9insuD' // 결제 고객을 특정하는 키
 	 
-		let chargeInput = Number($(".totalPrice_span").val().replace(/,/g, ""));
-		amount = parseInt(chargeInput)
+		let chargeInput = Number($(".finalTotalPrice_span").text());
+		amount = finalTotalPrice
 		console.log(amount);
 
 		/*결제위젯 영역 렌더링*/
