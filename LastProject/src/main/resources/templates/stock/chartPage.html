@@ -319,6 +319,9 @@ input[type="number"]::-webkit-inner-spin-button {
 	margin:0 0 0 22px;
 	width:520px;
 }
+.pointer{
+	cursor: pointer;
+}
 </style>
 <title>Insert title here</title>
 </head>
@@ -344,7 +347,7 @@ input[type="number"]::-webkit-inner-spin-button {
 							</th:block>
 							<th:block th:unless="${session.loggedInMember}==null"
 								th:each="stock : ${interestStock}">
-								<p class="border my-1">
+								<p class="border my-1 pointer" >
 								<input class="btn btn-danger btn-sm" type="button" value="x" th:attr="data-info=${stock.itemNo}">
 									[[${stock.nm}]] <span
 										th:class="${stock.change} == 0 ? '_' : (${stock.change} > 0 ?'plus':'minus')">[[${stock.change
@@ -390,7 +393,7 @@ input[type="number"]::-webkit-inner-spin-button {
 						<div id="itemPtag" style="display:inline-block">
 							<p th:attr="data-in=${itemInfo?.itemNo}">종목 : [[${itemInfo?.nm}]] <span th:class="${itemInfo?.change} == 0 ? '_' : (${itemInfo?.change} > 0 ? 'plus' : 'minus')"> 전일비 : [[${itemInfo?.change &gt; 0 ? "+ "+itemInfo?.change : itemInfo?.change}]] 변동률 : [[${itemInfo?.rate &gt; 0 ? "+"+itemInfo?.rate : itemInfo?.rate }]]%</span></p>
 							<button class="btn btn-danger btn-sm" id="addInt2">관심종목추가</button>
-							<div style="position: absolute;float:left;">
+							<div style="position: absolute;float:left;" id="chartSelect">
 								<ul id="chartBtn" >
 									<li><input class="btn btn-danger" type="button" value="일"></li>
 									<li><input class="btn btn-danger" type="button" value="주"></li>
@@ -465,8 +468,8 @@ input[type="number"]::-webkit-inner-spin-button {
 								</thead>
 								<tbody>
 									<th:block th:each="list : ${boardList}">
-										<tr>
-											<td><p th:attr="data-boardno=${list.boardNo}" th:text="|[${list.cntn}]   ${list.ttl}|"></p> </td>
+										<tr >
+											<td><a th:href="@{/community/boardDetail(page=1 , boardNo=${list.boardNo} , commonCd=C2)}" th:attr="data-boardno=${list.boardNo}" th:text="|[${list.cntn}]   ${list.ttl}|" style="cursor:pointer;text-decoration: none;"></a> </td>
 										</tr>
 									</th:block>
 								</tbody>
@@ -567,6 +570,7 @@ input[type="number"]::-webkit-inner-spin-button {
 			btn.onclick = function() {
 				if([[${session.loggedInMember}]] != null){
 				$(" div.apexcharts-toolbar").css('visibility','hidden');
+				$("#chartSelect").css('visibility','hidden');
 				modal.style.display = "block";
 				}else{
 					toastShow('로그인 후 실행해주세요','회원서비스 입니다','info');
@@ -575,8 +579,8 @@ input[type="number"]::-webkit-inner-spin-button {
 			/*]]>*/
 			// When the user clicks on <span> (x), close the modal
 			span.onclick = function() {
-				console.log($('.apexcharts-toolbars').css('visibility'))
 				$(" div.apexcharts-toolbar").css('visibility','visible');
+				$("#chartSelect").css('visibility','visible');
 				modal.style.display = "none";
 			}
 
@@ -584,6 +588,7 @@ input[type="number"]::-webkit-inner-spin-button {
 			window.onclick = function(event) {
 				if (event.target == modal) {
 					$(" div.apexcharts-toolbar").css('visibility','visible');
+					$("#chartSelect").css('visibility','visible');
 					modal.style.display = "none";
 				}
 			}

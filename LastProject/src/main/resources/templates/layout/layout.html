@@ -159,11 +159,21 @@
 			                        </a>
 			                    </li>
                    		 		<li th:unless="${session.loggedInMember}==null">
+                   		 		 <th:block th:if="${session.loggedInMember.nick} != 'admin'">
                     				<a href="#">
 			                            <span>
 			                                <b>[[${session.loggedInMember.nick}]]</b> 님 환영합니다
-			                            </span>
+		                               </span>
                         			</a>
+                       			 </th:block>
+                       			 <th:block th:unless="${session.loggedInMember.nick} != 'admin'">
+			                                <a href=/admin/memberManage>
+			                                	<span>
+			                                		관리자 페이지로
+			                                	</span>
+			                                </a>
+                                 </th:block>
+			                            
 			                        <a href="/member/logout">
 			                            <span>
 			                                Sign out

@@ -278,7 +278,7 @@
 		                            and common_cd like 'C%'
 		                            ) 
 		        order by drwup_dt desc) a
-		where rownum <= 10
+		where rownum <= 6
 		]]>
 	</select>
 	

@@ -175,7 +175,7 @@
         				})
         				.done(function(result){
         					if(attachFileList.get("uploadFiles")!=null){
-        						attachFileList.append("notiNo",result);
+        						attachFileList.append("notiNo",result.notiNo);
         						$.ajax({
         							url:'/attach/upload',
         							method:'POST',
