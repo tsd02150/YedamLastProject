@@ -743,10 +743,8 @@ table {
 						</colgroup>
 						<tbody>
 							<tr>
-								<th>포인트 사용</th>
+								<th>포인트</th>
 								<td><input class="order_point_input">P <a
-									class="order_point_input_btn order_point_input_btn_N"
-									data-state="N">모두사용</a> <a
 									class="order_point_input_btn order_point_input_btn_Y"
 									data-state="Y" style="display: none;">사용취소</a></td>
 							</tr>
@@ -858,9 +856,6 @@ table {
 	let totalPoint =0;
 	let membNm = '';
 	
-
-	
-	
 	for(let info of orderInfo) {
 		//console.log(info);
 		
@@ -874,18 +869,13 @@ table {
 		//console.log(totalPrice);
 		 point = info.point; // 보유 포인트 50,000
 		membNm = info.nm;
-		
 		 
 		}
 			
-		
-		//console.log(info.point);
 		deliveryPrice += totalPrice >= 10000 ? 0 : 3000;
 		finalTotalPrice = totalPrice + deliveryPrice;
-		console.log(finalTotalPrice);
-		console.log(totalPoint);
+
 		totalPoint = point - finalTotalPrice;
-		//console.log(totalPrice);
 		// 총 가격
 		 $(".totalPrice_span").text(totalPrice.toLocaleString());
 		// 총 갯수
@@ -901,6 +891,10 @@ table {
 		
 		
 
+	//주소 변경
+	
+	
+	
 		
 	//우편번호 모달
 	function sample6_execDaumPostcode() {
@@ -988,6 +982,8 @@ table {
 	});
 
 
+	//결제 
+	
 	$("#resetpay-button").on("click",function(){
 		 $("#tosspay").css("display", "none");
 	})

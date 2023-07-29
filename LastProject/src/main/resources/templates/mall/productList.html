@@ -165,17 +165,10 @@
 					<span>수산물</span>
 				</h1>
 
-
 				<div class="selectBtn d-flex justify-content-between">
-<<<<<<< HEAD
-					<div>
-						<button th:each="item : ${S}" class="ctgr" type="button"
-							th:data-commoncd="${item.commonCd}">[[${item.ctgr}]]</button>
-=======
 					<div style="border-right:2px solid #ddd;">
 						<button class="ctgr" type="button" th:data-commoncd="${prdtCode}">전체</button>
 						<button th:each="item : ${S}" class="ctgr" type="button" th:data-commoncd="${item.commonCd}">[[${item.ctgr}]]</button>
->>>>>>> branch 'main' of https://github.com/tsd02150/YedamLastProject.git
 					</div>
 					<div class="d-flex justify-content-between">
 						<button class="lowBtn orderBtn" type="button">낮은 가격순</button>
@@ -299,6 +292,8 @@
 				</div>
      			`;
      			document.querySelector('#productList').innerHTML+=divTag;
+     		// 페이징 버튼 생성
+     		 	createPageBtn(); 
       		})
 	    })
 	    .catch(err => console.log(err));
@@ -349,6 +344,8 @@
 				</div>
      			`;
      			document.querySelector('#productList').innerHTML+=divTag;
+     		// 페이징 버튼 생성
+     		 	createPageBtn(); 
       		})
 	    })
 	    .catch(err => console.log(err));
@@ -399,6 +396,8 @@
 				</div>
      			`;
      			document.querySelector('#productList').innerHTML+=divTag;
+     		// 페이징 버튼 생성
+     		 	createPageBtn(); 
       		})
 	    })
 	    .catch(err => console.log(err));
@@ -448,6 +447,8 @@
 				</div>
      			`;
      			document.querySelector('#productList').innerHTML+=divTag;
+     		// 페이징 버튼 생성
+     		 	createPageCntBtn(1, 1)
       		})
 	    })
 	    .catch(err => console.log(err));
@@ -458,8 +459,7 @@
 	 
 	
 		
-	// 페이징 버튼 생성
- 	createPageBtn(); 
+	
 	 
 	// 페이징위해 게시물 개수생성 및 페이지생성 호출
 	 function createPageBtn() {
