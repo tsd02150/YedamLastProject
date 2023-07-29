@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,7 +23,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestClientException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yedam.app.mall.service.BasketVO;
 import com.yedam.app.mall.service.CouponVO;
 import com.yedam.app.mall.service.OrderService;
 import com.yedam.app.mall.service.OrderVO;
@@ -46,7 +47,6 @@ import com.yedam.app.sms.service.SmsService;
 import com.yedam.app.stock.service.StockVO;
 
 import lombok.RequiredArgsConstructor;
-import oracle.jdbc.proxy.annotation.Post;
 
 //김미향 230707 회원관리 컨트롤러.
 @Controller
@@ -368,10 +368,29 @@ public class MemberController {
 	
 	//주문내역
 	@GetMapping("myorder")
-	public String myorder(Model model, BasketVO bskVO, MembVO membVO, OrderVO ordVO, HttpSession session) {
-		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
-		List<OrderVO> orderList = orderService.getOrderList(mem.getMembNo());
-		model.addAttribute("orderList", orderList);
+	public String myorder(ShippingVO vo, Model model, HttpSession session) {
+
+		 UserVO mem = (UserVO) session.getAttribute("loggedInMember"); Date date = new
+		 Date(); SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd"); String
+		 joinDt = format.format(mem.getJoinDt()); String endDt = format.format(date);
+		 
+		 vo.setMembNo(mem.getMembNo()); 
+		 vo.setStartDate(joinDt); 
+		 vo.setEndDate(endDt);
+		 vo.setPage(1);
+		 //배송중 List 
+		 vo.setShipSt("배송중");
+		 model.addAttribute("ing",membService.shipList(vo));
+		 
+		 //배송완료 List 
+		 vo.setShipSt("배송완료");
+		 model.addAttribute("complete",membService.shipList(vo));
+		//취소 List 
+		 vo.setShipSt(""); 
+		 vo.setOrderSt("결제취소");
+		 model.addAttribute("refund",membService.shipList(vo));
+	 
+
 		return "member/myorder";
 	}
 	//결제 성공
@@ -731,7 +750,17 @@ public class MemberController {
 	public List<ShippingVO> shipList(ShippingVO vo, HttpSession session){
 		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 		vo.setMembNo(mem.getMembNo());
+		System.out.println("+++++++++++++");
+		System.out.println(membService.shipList(vo));
 		return membService.shipList(vo);
+	}
+	
+	@ResponseBody
+	@PostMapping("getShipListCount")
+	public int getShipListCount(ShippingVO vo, HttpSession session){
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		vo.setMembNo(mem.getMembNo());
+		return membService.getShipListCount(vo);
 	}
 	
 }

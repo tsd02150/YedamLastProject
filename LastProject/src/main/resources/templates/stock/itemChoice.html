@@ -10,32 +10,44 @@
 	margin: 40px 0;
 }
 
-#choice ul {
-	list-style: none;
-}
-
-#choice li {
-	padding: 20px;
-}
-
-#choice table {
-	width: 100%;
-}
-
 #choice {
 	height: 300px;
 	padding: 10px;
+	width:800px;
 }
 
-#choice td:not(:last-of-type) {
-	width: 20%;
-	height: 300px;
-	border-right: grey solid 1px;
+#choice td:nth-of-type(1) {
+	width: 100px;
+	height:300px;
+	border-right: #ddd solid 1px;
+}
+#choice td:nth-of-type(2) {
+	width: 100px;
+	height:300px;
+	border-right: #ddd solid 1px;
+}
+#choice td:nth-of-type(3) {
+	width: 150px;
+	height:300px;
+	border-right: #ddd solid 1px;
 }
 
-#item {
-	height: 300px;
+#item{
+	height:300px;
 	overflow-y: scroll;
+}
+
+#item::-webkit-scrollbar{
+	width:10px;
+	background-color: #ddd;
+	border-radius: 10px;
+    box-shadow: inset 0px 0px 5px white;
+}
+
+#item::-webkit-scrollbar-thumb{
+	background-color: #555;
+	border-radius: 10px;
+    box-shadow: inset 0px 0px 5px white;
 }
 
 #itemInfo {
@@ -118,53 +130,76 @@
 #pagingul li.on a {
 	color: #fff;
 }
+#titlename{
+	margin-top:50px;
+	font-size: 30px;
+}
+#titlename span{
+	line-height: 46px;
+}
+#titlename span:after{
+	width:220px;
+}
+#searchSpace{
+	margin-bottom: 10px;
+}
+#fstDiv{
+	width:800px;
+}
+
 </style>
 <title>Insert title here</title>
 </head>
 <body>
 	<div layout:fragment="content">
 		<div class="container">
+			<h1 class="news-title" id="titlename">
+				<span>종목 조회 및 목록</span>
+			</h1>
+		
 			<div class="item row">
-				<div id="fstDiv" class="col-md-8 m-1">
-					<input id="searchItem" type="text" name="search"
-						placeholder="종목을 검색하세요." />
-					<table id="choice" class="border">
-						<td>
-							<div>
-								<ul id="sc">
-									<li data-cd="S1">농산물</li>
-									<li data-cd="S2">수산물</li>
-								</ul>
-							</div>
-						</td>
-						<td>
-							<div>
-								<ul id="theme"></ul>
-							</div>
-						</td>
-						<td>
-							<div>
-								<ul id="item"></ul>
-							</div>
-						</td>
-						<td>
-							<div id="itemInfo"></div>
-						</td>
-					</table>
-				</div>
-				<div class="col-md-3 m-1">
-					<!-- 인기 검색순위 -->
-					<div id="hot" class="border">
-						<p>인기검색순위</p>
-						<ul>
-							<th:block th:each="inq : ${inqList}">
-								<li><a th:href="@{chart(itemNo = ${inq.itemNo})}">[[${inqStat.index+1}]]
-										[[${inq.nm}]]</a> <span
-									th:class="${inq.change} == 0 ? '_' : (${inq.change} > 0 ? 'plus':'minus')">
-										[[${inq.change > 0 ? "+"+inq.change : inq.change}]]
-										([[${inq.rate > 0 ? "+"+inq.rate : inq.rate}]]%)</span></li>
-							</th:block>
-						</ul>
+				<div class="col-md-12 d-flex justify-content-between">
+					<div id="fstDiv">
+						<div class="d-flex justify-content-between" id=searchSpace>
+							<input id="searchItem" class="search form-control" type="text" name="search" placeholder="종목을 검색하세요." />
+							<button class="btn btn-light mt-2 mt-lg-0" type="button" style="width:100px;">검색</button>
+						</div>
+						<div>
+							<table id="choice" class="border">
+								<td>
+									<div id="sc">
+											<p data-cd="S1">농산물</p>
+											<p data-cd="S2">수산물</p>
+									</div>
+								</td>
+								<td>
+									<div id="theme">	
+									</div>
+								</td>
+								<td>
+									<div id="item">
+									</div>
+								</td>
+								<td>
+									<div id="itemInfo"></div>
+								</td>
+							</table>
+						</div>
+					</div>
+					<div class="col-md-3 m-1">
+						<!-- 인기 검색순위 -->
+						<div id="hot" class="border">
+							<p>인기검색순위</p>
+							<ul>
+								<th:block th:each="inq : ${inqList}">
+									<li><a th:href="@{chart(itemNo = ${inq.itemNo})}">[[${inqStat.index+1}]]
+											[[${inq.nm}]]</a> <span
+										th:class="${inq.change} == 0 ? '_' : (${inq.change} > 0 ? 'plus':'minus')">
+											[[${inq.change > 0 ? "+"+inq.change : inq.change}]]
+											([[${inq.rate > 0 ? "+"+inq.rate : inq.rate}]]%)</span></li>
+								</th:block>
+							</ul>
+						</div>
 					</div>
 				</div>
 
@@ -172,7 +207,7 @@
 					<!-- 종목리스트 -->
 					<div id="itemDiv" class="row">
 						<div class="col-md-12">
-							<table class="table">
+							<table class="table table-hover">
 								<thead>
 									<tr>
 										<th>증권</th>
@@ -198,7 +233,7 @@
 		<script src="../stock/itemChoice.js"></script>
 		<script th:inline="javascript">
 		// 증권 선택시 테마 리스트 출력
-        $("#sc").on("click", "li", themeList);
+        $("#sc").on("click", "p", themeList);
 
         // 테마 리스트 출력
         function themeList(value) {
@@ -220,7 +255,7 @@
             success: function (result) {
               result.forEach((th) => {
                 $("#theme").append(
-                  $("<li/>").text(th.CTGR).attr("data-cd", th.COMMON_CD)
+                  $("<p/>").text(th.CTGR).attr("data-cd", th.COMMON_CD)
                 );
               });
             },
@@ -228,7 +263,7 @@
         }
 
         //테마 클릭시 종목 리스트 출력
-        $("#theme").on("click", "li", itemList);
+        $("#theme").on("click", "p", itemList);
 
         //종목리스트 출력
         function itemList(value) {
@@ -246,7 +281,7 @@
             success: function (result) {
               result.forEach((th) => {
                 $("#item").append(
-                  $("<li/>").text(th.CTGR).attr("data-cd", th.COMMON_CD)
+                  $("<p/>").text(th.CTGR).attr("data-cd", th.COMMON_CD)
                 );
               });
             },
@@ -254,7 +289,7 @@
         }
 
         //종목 클릭시 정보 출력
-        $("#item").on("click", "li", itemInfo);
+        $("#item").on("click", "p", itemInfo);
         //종목 정보 출력
         function itemInfo(value) {
           let ctg;
@@ -380,8 +415,9 @@
           });
         };
         
-		$('#choice').css("width",$('#fstDiv').css("width"));
-        $("#searchItem").css("width", $("#choice").css("width"));
+		
+		$('#hot').css("height",$('#fstDiv').css("height"));
+        $("#searchSpace").css("width", $("#choice").css("width"));
         $('#choice').on('mouseover','li',function(){
         	$(this).css('cursor','pointer')
         })

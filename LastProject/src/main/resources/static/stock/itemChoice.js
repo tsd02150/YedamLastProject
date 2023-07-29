@@ -39,10 +39,10 @@
 		  if(currentPage == lastPage){
 			  for(var i =(currentPage - 1) * dataPerPage ; i < dataList.length ; i++ ){
 				  let plma = dataList[i].change == 0 ? ' ': (dataList[i].change > 0 ? 'plus' : 'minus');
-	    			list += `<tr>
+	    			list += `<tr onClick="javascript:window.location.href='chart?itemNo=${dataList[i].itemNo}'">
 	    				<td>${dataList[i].sc}</td>
 					<td>${dataList[i].theme}</td>
-					<td><a href="chart?itemNo=${dataList[i].itemNo}">${dataList[i].nm}</a></td>
+					<td><b>${dataList[i].nm}</b></td>
 					<td>${dataList[i].tprc}</td>
 					<td><span class="${plma}"> ${dataList[i].change <= 0 ? dataList[i].change : "+"+dataList[i].change } </span></td>
 					<td><span class="${plma}" > (${dataList[i].rate <= 0 ? dataList[i].rate : "+"+dataList[i].rate}%) </span></td>
@@ -53,10 +53,10 @@
 			  
 			  for (var i = (currentPage - 1) * dataPerPage ; i < (currentPage - 1) * dataPerPage + dataPerPage; i++) {
 				  let plma = dataList[i].change == 0 ? ' ': (dataList[i].change > 0 ? 'plus' : 'minus');
-	    			list += `<tr>`;
+	    			list += `<tr onClick="javascript:window.location.href='chart?itemNo=${dataList[i].itemNo}'">`;
 					list +=`<td>${dataList[i].sc}</td>`;
 					list +=`<td>${dataList[i].theme}</td>`;
-					list +=`<td><a href="chart?itemNo=${dataList[i].itemNo}">${dataList[i].nm}</a></td>`;
+					list +=`<td><b>${dataList[i].nm}</b></td>`;
 					list +=`<td>${dataList[i].tprc}</td>`;
 					list +=`<td><span class="${plma}"> ${dataList[i].change <= 0 ? dataList[i].change : "+"+dataList[i].change } </span></td>`;
 					list +=`<td><span class="${plma}" > (${dataList[i].rate <= 0 ? dataList[i].rate : "+"+dataList[i].rate}%) </span></td>`;
@@ -153,10 +153,10 @@
         		  if(globalCurrentPage == lastPage){
         			  for(var i =(globalCurrentPage - 1) * 10 ; i < data.itemList.length ; i++ ){
         				  let plma = data.itemList[i].change == 0 ? ' ': (data.itemList[i].change > 0 ? 'plus' : 'minus');
-        	    			list += `<tr>`;
+        	    			list += `<tr onClick="javascript:window.location.href='chart?itemNo=${data.itemList[i].itemNo}'">`;
         					list +=`<td>${data.itemList[i].sc}</td>`;
         					list +=`<td>${data.itemList[i].theme}</td>`;
-        					list +=`<td><a href="chart?itemNo=${data.itemList[i].itemNo}">${data.itemList[i].nm}</a></td>`;
+        					list +=`<td><b>${data.itemList[i].nm}</b></td>`;
         					list +=`<td>${data.itemList[i].tprc}</td>`;
         					list +=`<td><span class="${plma}"> ${data.itemList[i].change <= 0 ? data.itemList[i].change : "+"+data.itemList[i].change } </span></td>`;
         					list +=`<td><span class="${plma}" > (${data.itemList[i].rate <= 0 ? data.itemList[i].rate : "+"+data.itemList[i].rate}%) </span></td>`;
@@ -167,10 +167,10 @@
         			  
         			  for (var i = (globalCurrentPage - 1) * 10 ; i < (globalCurrentPage - 1) * 10 + 10; i++) {
         				  let plma = data.itemList[i].change == 0 ? ' ': (data.itemList[i].change > 0 ? 'plus' : 'minus');
-        	    			list += `<tr>`;
+        	    			list += `<tr onClick="javascript:window.location.href='chart?itemNo=${data.itemList[i].itemNo}'">`;
         					list +=`<td>${data.itemList[i].sc}</td>`;
         					list +=`<td>${data.itemList[i].theme}</td>`;
-        					list +=`<td><a href="chart?itemNo=${data.itemList[i].itemNo}">${data.itemList[i].nm}</a></td>`;
+        					list +=`<td><b>${data.itemList[i].nm}</b></td>`;
         					list +=`<td>${data.itemList[i].tprc}</td>`;
         					list +=`<td><span class="${plma}"> ${data.itemList[i].change <= 0 ? data.itemList[i].change : "+"+data.itemList[i].change } </span></td>`;
         					list +=`<td><span class="${plma}" > (${data.itemList[i].rate <= 0 ? data.itemList[i].rate : "+"+data.itemList[i].rate}%) </span></td>`;

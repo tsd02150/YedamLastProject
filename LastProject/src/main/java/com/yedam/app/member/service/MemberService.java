@@ -110,4 +110,5 @@ public interface MemberService {
 	public int insertbackup(MembVO membVO);
 	//주문.배송 내역
 	public List<ShippingVO> shipList(ShippingVO vo);
+	public int getShipListCount(ShippingVO vo);
 }

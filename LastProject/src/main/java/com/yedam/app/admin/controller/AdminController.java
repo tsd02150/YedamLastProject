@@ -263,7 +263,7 @@ public class AdminController {
 	// 공지사항 단건조회
 	@ResponseBody
 	@GetMapping("noticeDetail")
-	public NoticeVO noticeDetail(String notiNo) {
+	public Map<String , Object > noticeDetail(String notiNo) {
 		return adminService.noticeDetail(notiNo);
 	}
 	

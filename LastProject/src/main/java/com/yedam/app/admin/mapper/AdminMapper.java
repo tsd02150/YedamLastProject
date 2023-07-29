@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 import com.yedam.app.admin.service.MembManageVO;
+import com.yedam.app.community.service.AttachVO;
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.CommentsVO;
 import com.yedam.app.community.service.FaqVO;
@@ -89,5 +90,6 @@ public interface AdminMapper {
 	public BoardVO boardDetail(String boardNo);
 	// room list 조회
 	public List<String> getRoomList();
-	
+	// notice 첨부파일 조회
+	public List<AttachVO> getNoticeAttachList(String notiNo);
 }

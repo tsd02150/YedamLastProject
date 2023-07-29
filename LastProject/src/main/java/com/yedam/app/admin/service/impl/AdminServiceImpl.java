@@ -120,8 +120,11 @@ public class AdminServiceImpl implements AdminService {
 
 	// 공지사항 단건조회
 	@Override
-	public NoticeVO noticeDetail(String notiNo) {
-		return adminMapper.noticeDetail(notiNo);
+	public Map<String , Object > noticeDetail(String notiNo) {
+		Map<String , Object > map = new HashMap<String, Object>();
+		map.put("noticeDetail", adminMapper.noticeDetail(notiNo));
+		map.put("attachFileList", adminMapper.getNoticeAttachList(notiNo));
+		return map;
 	}
 	// qna 리스트
 	@Override

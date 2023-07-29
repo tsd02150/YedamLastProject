@@ -6,6 +6,9 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
+#mypageBody{
+	border: 0px;
+}
 /* 주문상품 정보 */
 .orderGoods_div {
 	margin-top: 30px;
@@ -46,6 +49,9 @@
 .goods_table_price_td {
 	text-align: center;
 }
+.goods_table_shipSt_td {
+	text-align: center;
+}
 
 /* 이미지 */
 .image_wrap {
@@ -54,35 +60,90 @@
 }
 
 .image_wrap img {
-	max-width: 85%;
-	height: auto;
+	width: 120px;
+	height: 70px;
 	display: block;
+}
+.high{
+	padding-right: 10px;
+	font-size: 16px;
+}	
+#dtTr{
+	padding-top:5px;
+	height: 30px;
+	font-weight: bold;
+}
+#orderbody{
+	font-size : 20px;
+}
+#orderbody td{
+	padding-left:10px;
+}
+#totalCountDiv{
+text-align: center;
+margin-top : 50px;
+margin-bottom : 50px;
+font-size: 20px;
+	border :1px solid;
+	border-width:1px 0 1px 0;
+}
+#totalCountDiv table{
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+#totalCountDiv td{
+padding-top : 10px;
+font-size: 30px;
+}
+.form-select{
+	padding: 0.370rem 2.20rem 0.370rem 0.70rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  margin-bottom : 10px;
+}
+#startDate, #endDate{
+height : 35px;
 }
 </style>
 </head>
 <body>
 <div layout:fragment="mypage">
 	<div id="mypageBody">
+	
 	<!-- 상품 정보 -->
 		<div class="orderGoods_div">
 			<!-- 상품 종류 -->
 			<div class="goods_kind_div">
-				주문상품 <span class="goods_kind_div_kind"></span>총 <span
-					class="goods_kind_div_count" th:text="${#lists.size(orderList)}"></span>개
+				주문 | 배송 내역
 			</div>
+			<div id="totalCountDiv">
+				<table class="col-12">
+					<tr>
+						<th>배송중</th>
+						<th>배송완료</th>
+						<th>취소/반품</th>
+					</tr>
+					<tr>
+						<td th:text="${#lists.size(ing)}"></td>
+						<td th:text="${#lists.size(complete)}"></td>
+						<td th:text="${#lists.size(refund)}"></td>
+					</tr>
+				</table>
+	</div>
 			<div id="myorderDiv">
-					<h4>주문 | 배송 내역</h4>
 					<input type="date" id="startDate">
 					<input type="date" id="endDate">
-					<select id="orderSel">
-			    <option value="">전체거래</option>
-			    <option value="매도">매도</option>
-			    <option value="매수">매수</option>
-			    <option value="충전">충전</option>
-			    <option value="포인트몰">포인트몰</option>
+					
+					<select id="orderSel" class="form-select">
+			    <option value="">선택</option>
+			    <option value="">전체</option>
+			    <option value="배송완료">배송완료</option>
+			    <option value="배송중">배송중</option>
+			    <option value="상품준비중">상품준비중</option>
 			</select>
 			<!-- 상품 테이블 -->
-			<table class="goods_subject_table">
+			<table class="goods_subject_table col-12">
 				<colgroup>
 					<col width="15%">
 					<col width="35%">
@@ -93,81 +154,248 @@
 					<tr>
 						<th>이미지</th>
 						<th>상품 정보</th>
-						<th>수량</th>
-						<th>판매가</th>
+						<th>금액</th>
+						<th>배송현황</th>
 					</tr>
 				</tbody>
 			</table>
-			<table class="goods_table">
+			<table class="goods_table col-12">
 				<colgroup>
 					<col width="20%">
 					<col width="30%">
 					<col width="25%">
 					<col width="25%">
 				</colgroup>
-				<tbody>
-					<tr th:each="item :${orderList}">
-						<td>
-							<div class="image_wrap">
-								<img th:src="|/mall/images/main/${item.thumb}|">
-							</div>
-						</td>
-						<td th:text="${item.nm}"></td>
-						<td class="goods_table_price_td" th:text="${item.cnt}"><span>수량</span>
-							<br></td>
-						<td
-							th:text="${#numbers.formatInteger((item.prc - (item.prc * item.dcRate / 100)) * item.cnt, 0, 'COMMA')}+' P'"></td>
-					</tr>
+				<tbody id="orderbody">
 				</tbody>
 			</table>
 		</div>
 		<!-- 상품 정보 end -->
 	</div>
-	
+	<!-- 페이징 -->
+	<div>
+		<nav aria-label="Page navigation example" class="d-flex justify-content-center">
+			<ul class="pagination">
+				<li class="page-item">
+					<a class="page-link" id="firstpage" href="javascript:firstPage()" aria-label="Previous">
+						<span aria-hidden="true">&laquo;</span>
+					</a>
+				</li>
+				<li class="page-item">
+					<a class="page-link" id="prevpage" href="javascript:prevPage()" aria-label="Previous">
+						<span aria-hidden="true" style="visibility: hidden;">&lt;</span>
+					</a>
+				</li>
+				<!-- 페이징버튼 들어갈 공간 -->
+				    <li class="page-item">
+						<a class="page-link" id="nextpage" href="javascript:nextPage()" aria-label="Next">
+							<span aria-hidden="true" style="visibility: hidden;">&rt;</span>
+						</a>
+					</li>
+				    <li class="page-item">
+						<a class="page-link" id="lastpage" href="javascript:lastPage()" aria-label="Next">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
 	<script>
+	console.log("!!!");
 	const dt = "[[${#dates.format(session.loggedInMember.joinDt, 'yyyy/MM/dd')}]]";
 	let dtFormat = "[[${#dates.format(session.loggedInMember.joinDt, 'yyyy-MM-dd')}]]";
-	
+
 	let orderSt = '';
 	let shipSt = '';
 	let targetPage = 1;
-	let startPage=1;
-	let endPage=20;
-	let page =1;
-	
-	let today = new Date();   
-	let year = today.getFullYear(); // 년도
-	let month = today.getMonth() + 1 <10 ? '0'+(today.getMonth() + 1) : today.getMonth() + 1;  // 월
-	let date = today.getDate() < 10 ? date = '0'+today.getDate() : today.getDate();  // 날짜
-	let endDate = year + '/' + month + '/' + date; 
+	let startPage = 1;
+	let endPage = 10;
+	let page = 1;
+	let totalCnt;
+	let today = new Date();
+	let year = today.getFullYear();
+	let month = today.getMonth() + 1 < 10 ? '0' + (today.getMonth() + 1) : today.getMonth() + 1;
+	let date = today.getDate() < 10 ? '0' + today.getDate() : today.getDate();
+	let endDate = year + '/' + month + '/' + date;
 	let startDate = dt;
 
 	$("#startDate").val(dtFormat);
 	$("#endDate").val(`${year}-${month}-${date}`);
 
+	
 	shipList();
-	function shipList(){
-		$.ajax({
-			url : "shipList",
-			method : "POST",
-			data : {
-				"orderSt" : orderSt,
-				"shipSt" : shipSt,
-				"startDate" : startDate,
-				"endDate" : endDate,
-				"page" : page
-			},
-			success : function(data){
-				data.forEace(el=>{
-					console.log(el);
-				})
-			},
-			error : function(err){
-				console.log(err)
-			}
-		});
+	pageBtn();
+	
+	function shipList() {
+	    $.ajax({
+	        url: "shipList",
+	        method: "POST",
+	        data: {
+            "orderSt": orderSt,
+            "shipSt": shipSt,
+            "startDate": startDate,
+            "endDate": endDate,
+            "page": page
+	        },
+	        success: function (data) {
+	        	let tr = '';
+	        	if(data && data.length >0){
+	            data.forEach(item => {
+	            	console.log(item)
+	            	let cnt = commas(item.cnt);
+	            	let orderDt = new Date(item.orderDt);
+	            	let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
+	           tr+=`
+	           <tr id="dtTr"><td colspan="4">${formattedDt}</td></tr>
+	        	   <tr data-no=${item.prdtNo} onclick="location.href='/mall/getFarm?prdtNo=${item.prdtNo}'">
+									<td>
+										<div class="image_wrap">
+											<img src="/mall/images/main/${item.thumb}">
+										</div>
+									</td>
+									<td><span class="high">${item.orderSt}</span>${item.nm}</td>
+									<td class="goods_table_price_td">${cnt}</td>
+									<td class="goods_table_shipSt_td">${item.shipSt}</td>
+								</tr>
+	           `; 
+	            });
+	            
+	            $("#orderbody").html(tr);
+	        	}else{
+	        		tr+=`
+	        			<tr style="text-align:center"><td colspan="4"><h4>거래내역이 없습니다.</h4></td></tr>
+	        		`;
+	        		 $("#orderbody").html(tr);
+	        	}
+	        },
+	        error: function (err) {
+	            console.log(err);
+	        }
+	    });
+	}
+	
+	$("#orderSel").on("change", function () {
+	    $("#orderbody").html("");
+	    shipSt = $("#orderSel option:selected").val();
+	    startDate = $("#startDate").val();
+	    endDate = $("#endDate").val();
+	    shipList();
+	    pageBtn();
+
+	});
+	
+	function pageBtn() {
+	    $.ajax({
+	        url: "getShipListCount",
+	        method: "POST",
+	        data: {
+	        	"orderSt": orderSt,
+            "shipSt": shipSt,
+            "startDate": startDate,
+            "endDate": endDate,
+            "page": page
+	        },
+	        success: function (data) {
+	            $('#nextpage').css('visibility', 'hidden');
+	            $('#prevpage').css('visibility', 'hidden');
+	            totalCnt = data;
+	            endPage=~~((totalCnt-1)/10 + 1);
+	            createPageCntBtn(startPage, endPage);
+	            if(totalCnt>100){
+	            	$('#nextpage').css('visibility', 'hidden');
+		            $('#prevpage').css('visibility', 'hidden');
+							}
+	        },
+	        error: function (err) {
+	            console.log(err);
+	        }
+	       });
+	   }
+	   
+	   //페이지 버튼생성
+	   function createPageCntBtn(start,end){
+	      $('.pagebtn').remove();
+	      
+	      for (let i = start; i <= end; i++) {
+	        let liTag = $('<li></li>').addClass('page-item').addClass('pagebtn');
+	        if (i % 20 === targetPage) {
+	          liTag.addClass('active');
+	        }
+	        let aTag = $('<a></a>').addClass('page-li	nk').attr('href', 'javascript:pageMove(' + i + ');').text(i);
+	        liTag.append(aTag);
+	        $('#nextpage').before(liTag);
+	      }
+	   }
+	   
+	   //페이징 버튼클릭
+	   function pageMove(page) {
+		   $("#orderbody").html("");
+		  $('.pagebtn.active').removeClass('active');
+		  console.log(page);
+		  targetPage = page;
+		  shipList();
+		  $('.pagebtn').each(function () {
+		    if ($(this).children('a').text() == page) {
+		      $(this).addClass('active');
+		       }
+		     });
+	   }
+	      
+	   // 페이징 < 버튼 클릭
+	   function prevPage() {
+		   $("#orderbody").html("");
+	     $('#nextpage').css('visibility', 'visible');
+	     startPage -= 10;
+	     endPage -= 10;
+	     console.log(startPage)
+	     if (startPage === 1) {
+	       $('#prevpage').css('visibility', 'hidden');
+	     }
+	     createPageCntBtn(startPage, endPage);
+	     pageMove(startPage);
+	   }
+	   
+	   // 페이징 > 버튼 클릭
+	   function nextPage() {
+		   $("#orderbody").html("");
+	     $('#prevpage').css('visibility', 'visible');
+	     startPage += 10;
+	     endPage += 10;
+	     if (endPage >= ~~((totalCnt - 1) / 10 + 1)) {
+	       endPage = ~~((totalCnt - 1) / 10 + 1);
+	       $('#nextpage').css('visibility', 'hidden');
+	     }
+	     createPageCntBtn(startPage, endPage);
+	     pageMove(startPage);
+	   }
+	   
+	   function firstPage() {
+		   $("#orderbody").html("");
+	     startPage = 1;
+	     if (endPage > 10) {
+	       endPage = 10;
+	     }
+	     createPageCntBtn(startPage, endPage);
+	     pageMove(startPage);
+	   }
+	   
+	   function lastPage() {
+		   $("#orderbody").html("");
+	     if (endPage > 10) {
+	       endPage = ~~((totalCnt - 1) / 10 + 1);
+	     }
+	     startPage = endPage - endPage % 10 + 1;
+	     createPageCntBtn(startPage, endPage);
+	     pageMove(endPage);
+	   }
+
+	
+	//천단위 콤마
+	function commas(number) {
+	  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 	}
 	</script>
+</div>
 </div>
 </body>
 

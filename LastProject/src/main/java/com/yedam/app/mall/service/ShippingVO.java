@@ -12,21 +12,23 @@ public class ShippingVO {
 	private String shipNo;
 	private String orderNo;
 	private String membNo;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date shipSt;
+	private String shipSt;
+	private String orderSt;
 	private int billNo;
 	private String rec;
 	private String recTel;
 	private String addr;
 	private String detaAddr;
 	
-	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date orderDt;
+    private String startDate;
+    private String endDate;
 	private int cnt;
 	private String orderDetaNo;
 	private String rodtNo;
 	private String nm;
 	private int page;
 	private String thumb;
+	private String prdtNo;
 	
 }
