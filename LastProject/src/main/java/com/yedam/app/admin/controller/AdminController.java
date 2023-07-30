@@ -207,6 +207,25 @@ public class AdminController {
 		        paginationMap.put("totalCount", (Integer)resultMap.get("chatTotal"));
         return objectMap;
 	}
+	
+	// orders 리스트
+		@SuppressWarnings("unchecked")
+		@ResponseBody
+		@GetMapping("orderList")
+		public Map<String,Object> boardList2(int page , int perPage){
+			Map<String,Object> objectMap = new HashMap<>();
+			Map<String,Object> dataMap = new HashMap<>();
+			Map<String,Object> paginationMap = new HashMap<>();
+			Map<String,Object> resultMap = adminService.boardList(page , perPage);
+			objectMap.put("result", true);
+	        objectMap.put("data", dataMap);
+		        dataMap.put("contents", (List<BoardVO>)resultMap.get("boardList"));
+		        dataMap.put("pagination", paginationMap);
+			        paginationMap.put("page", page);
+			        paginationMap.put("totalCount", (Integer)resultMap.get("boardTotal"));
+	        return objectMap;
+		}
+	
 	//회원정지
 	@ResponseBody
 	@GetMapping("memberBan")

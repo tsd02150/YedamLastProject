@@ -205,8 +205,10 @@ public class BoardController {
 			List<AttachFileVO> attachList = attachFileService.getAttachFileList(attachVo);
 			
 			for(AttachFileVO attach : attachList) {
-				if(amazonS3.doesObjectExist(bucket,attach.getAtchNm())) {
-					amazonS3.deleteObject(bucket, attach.getAtchNm());
+				if(attachFileService.deleteAttachFile(attach)) {
+					if(amazonS3.doesObjectExist(bucket,attach.getAtchNm())) {
+						amazonS3.deleteObject(bucket, attach.getAtchNm());
+					}
 				}
 			}
 			

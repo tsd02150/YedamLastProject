@@ -6,27 +6,107 @@
 <mapper namespace="com.yedam.app.mall.mapper.OrderMapper">
 	<!-- member + product -->
 	<select id="getOrderList" resultType="OrderVO">
-		 SELECT * FROM ( SELECT * FROM BASKET B JOIN PRODUCT P USING(prdt_no)) 
-			J JOIN MEMBER M ON M.memb_no= J.memb_no WHERE M.memb_no=#{membNo} ORDER BY 
-			prdt_no DESC 
-	
+		SELECT * FROM ( SELECT *
+		FROM BASKET B JOIN PRODUCT P USING(prdt_no))
+		J JOIN MEMBER M ON
+		M.memb_no= J.memb_no WHERE M.memb_no=#{membNo} ORDER
+		BY
+		prdt_no DESC
+
 	</select>
 	<select id="getMemInfo" resultType="OrderVO">
-	
-		 SELECT *
-		 FROM member M JOIN ADDRESS A
-		 ON m.memb_no = a.memb_no
-		 WHERE m.memb_no = #{membNo}
-		 
+
+		SELECT *
+		FROM member M LEFT OUTER JOIN
+		ADDRESS A
+		ON m.memb_no = a.memb_no
+		WHERE m.memb_no = #{membNo}
+
 	</select>
 	
+	<select id="membListInfo" parameterType="String">
+		select * from address
+		where memb_no = #{membNo}
+	</select>
+	
+	<select id="selectOneMemb2" resultType="MembVO"
+		parameterType="MembVO">
+		SELECT *
+		FROM member m
+		LEFT OUTER JOIN address a
+		ON m.memb_no = a.memb_no
+		WHERE id = #{id}
+	</select>
+
 	<insert id="insertOrder" parameterType="OrderVO">
-		<selectKey keyProperty="orderNo" resultType="String" order="BEFORE">
-			SELECT CONCAT('ord-',NVL(MAX(TO_NUMBER(SUBSTR(order_no, 5))), 0)+1)
-		FROM ORDERS
+		<selectKey keyProperty="orderNo" resultType="String"
+			order="BEFORE">
+			SELECT CONCAT('ord-',NVL(MAX(TO_NUMBER(SUBSTR(order_no, 5))),
+			0)+1)
+			FROM ORDERS
 		</selectKey>
-		INSERT INTO ORDERS (order_no, memb_no, order_dt, dc_rate, shpcst, order_am, order_st, pay_an)
-		VALUES(#{orderNo}, #{membNo}, sysdate, #{dcRate}, #{shpcst}, #{orderAm}, #{orderSt}, #{payAn})
+		INSERT INTO ORDERS (order_no, memb_no, order_dt, dc_rate, shpcst,
+		order_am, order_st, pay_an)
+		VALUES(#{orderNo}, #{membNo}, sysdate,
+		#{dcRate}, #{shpcst}, #{orderAm}, #{orderSt}, #{payAn})
 	</insert>
+
+	<insert id="insertAddr" parameterType="AddrVO">
+		<selectKey keyProperty="addrNo" resultType="string"
+			order="BEFORE">
+			SELECT concat('adr-',NVL(MAX(TO_NUMBER(SUBSTR(addr_no, 5))),
+			0)+1)
+			FROM address
+		</selectKey>
+		INSERT INTO ADDRESS(ADDR_NO,
+		MEMB_NO,
+		BASE_ADDR_YN,
+		ZIP,
+		ADDR,
+		DETA_ADDR)
+		VALUES(#{addrNo}
+		,#{membNo}
+		,'N'
+		,#{zip}
+		,#{addr}
+		,#{detaAddr})
+	</insert>
+	
+	<update id="updateMemberInfo" parameterType="MembVO">
+			UPDATE member
+			<set>
+				<if test="nick != null and !nick.equals('')">
+					nick = #{nick},
+				</if>
+				<if test="email != null and !email.equals('')">
+					email = #{email},
+				</if>
+				<if test="tel != null and !tel.equals('')">
+					tel = #{tel},
+				</if>
+				<if test="pwd != null and !pwd.equals('')">
+					pwd = #{pwd},
+				</if>
+				<if test="tempPwd != null">
+					temp_pwd = #{tempPwd},
+				</if>
+				<if test="point != null and !point.equals('')">
+					point = #{point}
+				</if>
+			</set>
+			WHERE id = #{id}
+		</update>
+
+	<update id="updateMemberAddr" parameterType="AddrVO">
+		UPDATE address
+		SET
+		zip = #{zip},
+		addr = #{addr},
+		deta_addr = #{detaAddr}
+		WHERE memb_no =
+		#{membNo}
+		AND addr_no = #{addrNo}
+	</update>
+
 
 </mapper>

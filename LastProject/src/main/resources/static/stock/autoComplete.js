@@ -48,8 +48,10 @@ $(".searchItem").autocomplete({
     		location.href='chart?itemNo='+data;
     	})
     }else if($(this).hasClass('interest')){
-    	console.log('여기는 관심종목 추가 하는곳')
-    	itemInfo(ui.item.value);
+	    $.ajax('nmGetNo?nm='+ui.item.value).done(function(data){
+	    		addInterest(data);
+	    })
+    	
     }
   },
 });
@@ -110,53 +112,7 @@ $("#itemInfo").html("");
   });
 }
 
-//종목 클릭시 정보 출력
-$("#item").on("click", "li", itemInfo);
-//종목 정보 출력
-function itemInfo(value) {
-  let ctg;
-  if (typeof value == "object") {
-    ctg = $(event.target).data("cd");
-  } else {
-    ctg = value;
-  }
-  $("#itemInfo").html("");
-  $.ajax({
-    url: "itemInfo?value=" + ctg,
-    success: function (result) {
-      for (let i in result) {
-        if (i == "itemNo") {
-          $("#itemInfo").append(
-            $("<p/>")
-              .css("display", "none")
-              .text(result[i])
-              .attr("data-in", result[i])
-          );
-        } else if (i == "tprc") {
-          $("#itemInfo").append(
-            $("<p/>").text("현재가 : " + result[i] + " 원")
-          );
-        } else if (i == "change") {
-          let plma = result[i] == 0 ? "zero" : result[i] > 0 ? "plus" : "minus";
-          $("#itemInfo").append(
-            $("<p class=" + plma + "/>").text("전일비 : " + result[i] + " ")
-          );
-        } else if (i == "rate") {
-          let plma = result[i] == 0 ? "zero" : result[i] > 0 ? "plus" : "minus";
-          $("#itemInfo").append(
-            $("<p class=" + plma + "/>").text("변동률 : ( " + result[i] + "% )")
-          );
-        } else {
-          $("#itemInfo").append($("<p/>").text(result[i]));
-        }
-      }
 
-      $("#itemInfo").append(
-        $("<button/>").text("관심종목추가").on("click", addInterest)
-      );
-    },
-  });
-}
 
 // 함수 캡쳐링
 $('#itemPtag').on('click','button',function(){
@@ -173,9 +129,9 @@ $('#itemPtag').on('click','button',function(){
 
 
 // 관심종목 추가기능
-function addInterest() {
+function addInterest(itemNumber) {
   
-  let iteminfo = event.target.parentElement.children[0].dataset.in;
+  let iteminfo = itemNumber;
   console.log(this);
   console.log(event.target);
   console.log(iteminfo)
@@ -189,7 +145,7 @@ function addInterest() {
     		  toastShow("관심종목 추가" , data.msg , "success");
     		  let html='';
 		      for (let i = 0; i < data.list.length; i++) {
-		        html += `<p class="border my-1"><input type="button" value="x" data-info="${data.list[i].itemNo}">
+		        html += `<p class="border my-1"><input  class="btn btn-danger btn-sm" type="button" value="x" data-info="${data.list[i].itemNo}">
 		                ${data.list[i].nm} <span class="${data.list[i].change == 0 ? '_' : (data.list[i].change > 0 ? 'plus' : 'minus')}">
 		                ${data.list[i].change == 0 ? data.list[i].change : (data.list[i].change > 0 ? "+" + data.list[i].change : data.list[i].change) }
 		                (${data.list[i].rate == 0 ? data.list[i].rate : (data.list[i].rate > 0 ? "+"+data.list[i].rate : data.list[i].rate) }%)
@@ -248,7 +204,7 @@ function addInterest() {
 	  		success:function(data){
 	  			let html='';
 			      for (let i = 0; i < data.list.length; i++) {
-			        html += `<p class="border my-1"><input class="btn btn-danger btn-sm invisible" type="button" value="x"  disabled="disabled" >
+			        html += `<p class="border my-1 pointer"><input class="btn btn-danger btn-sm invisible" type="button" value="x"  disabled="disabled" data-info=${data.list[i].itemNo}>
 			                ${data.list[i].nm} <span class="${data.list[i].change == 0 ? '_' : (data.list[i].change > 0 ? 'plus' : 'minus')}">
 			                ${data.list[i].change == 0 ? data.list[i].change : (data.list[i].change > 0 ? "+" + data.list[i].change : data.list[i].change) }
 			                (${data.list[i].rate == 0 ? data.list[i].rate : (data.list[i].rate > 0 ? "+"+data.list[i].rate : data.list[i].rate) }%)
@@ -327,6 +283,9 @@ function addInterest() {
   		//매수
   		$.ajax('orderTable?type=buy&itemNo='+itemNo).done(function(data){
   			let html='';
+  			if(data.length == 0){
+					return;  					
+	  			}
   			data.forEach(dt => {
   				html+=`<tr><td>${dt.PRC}</td><td class="plus">${dt.CNT}</td></tr>`
   			})
@@ -344,7 +303,7 @@ function addInterest() {
   
   // dom tree 형성후 실행
   $(document).ready(function(){
-  		
+  		let taBeing=0;
   
   			// 상승률
   		$.ajax('getPercentage?type=plus').done(function(data){
@@ -372,25 +331,42 @@ function addInterest() {
   			})
   		})//end 거래량
   		
-  		//호가
-  		//매도
-  		$.ajax('orderTable?type=sell&itemNo='+itemNo).done(function(data){
-	  		if(data.length == 0){
-	  				$('#price').append($('<p class="m-2" />').html('현재 해당 종목의 주문이 없습니다.'))
-	  			}
-  			data.forEach(dt => {
-  				$('#sell').append($('<tr/>').append($('<td class="minus"/>').text(dt.CNT))
-  										.append($('<td/>').text(dt.PRC)))
-  			})
-  		})//
+  		// 호가
+  		async function getTaBeing() {
+		  let taBeing = 0;
+		
+		  // 매도
+		  const sellPromise = new Promise((resolve, reject) => {
+		    $.ajax('orderTable?type=sell&itemNo=' + itemNo).done(function (data) {
+		      taBeing += data.length;
+		      data.forEach((dt) => {
+		        $('#sell').append($('<tr/>').append($('<td class="minus"/>').text(dt.CNT)).append($('<td/>').text(dt.PRC)));
+		      });
+		      resolve();
+		    });
+		  });
+		
+		  // 매수
+		  const buyPromise = new Promise((resolve, reject) => {
+		    $.ajax('orderTable?type=buy&itemNo=' + itemNo).done(function (data) {
+		      taBeing += data.length;
+		      data.forEach((dt) => {
+		        $('#buy').append($('<tr/>').append($('<td/>').text(dt.PRC)).append($('<td class="plus"/>').text(dt.CNT)));
+		      });
+		      resolve();
+		    });
+		  });
+		
+		  await Promise.all([sellPromise, buyPromise]);
+		 
+		  // 여기에서 .then과 유사한 로직을 수행합니다.
+		  if(taBeing ==0 ) $('#price').append($('<p class="m-2" />').html('현재 해당 종목의 주문이 없습니다.'));
+		  // 모든 AJAX 요청이 완료되었을 때 실행될 코드를 작성할 수 있습니다.
+		  console.log('모든 AJAX 요청이 완료되었습니다.');
+		  // 추가 작업 수행 가능...
+		};
+  		getTaBeing();	
   		
-  		//매수
-  		$.ajax('orderTable?type=buy&itemNo='+itemNo).done(function(data){
-  			data.forEach(dt => {
-  				$('#buy').append($('<tr/>').append($('<td/>').text(dt.PRC))
-  										.append($('<td class="plus"/>').text(dt.CNT)))
-  			})
-  		})//
   		
   		//로그인 되어있으면 보유주식 수량 수익률 가져옴
   		if($('#sessionMembNo').text() != 'nonLoginUser'){
@@ -403,6 +379,7 @@ function addInterest() {
   					let rate = data.rate > 0 ? "+ "+data.rate : data.rate;
   					let rateClass = data.rate == 0 ? '' : (data.rate > 0 ? 'plus' : 'minus');
   					$('#CP2D22 div p:nth-of-type(2) span').text(data.cnt); // 보유주 span
+  					$('#afford').val(data.cnt);
   					$('#CP2D22 div p:nth-of-type(3) span').text(rate).addClass(rateClass); // 수익률 span
   					$('#CP2D22 div p:nth-of-type(4)').attr('data-point',data.point);
   					$('#CP2D22 div p:nth-of-type(4) span').text(data.point);

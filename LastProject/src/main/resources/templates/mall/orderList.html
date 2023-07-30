@@ -7,154 +7,19 @@
 <title>orderList.html</title>
 <script src="https://js.tosspayments.com/v1/payment-widget"></script>
 <style>
-* {
-	margin: 0;
-	padding: 0;
-}
-
-a {
-	text-decoration: none;
-}
-/* 화면 전체 렙 */
-.wrapper {
-	width: 100%;
-}
-/* content 랩 */
-.wrap {
-	width: 1080px;
-	margin: auto;
-}
-/* 홈페이지 기능 네비 */
-.top_gnb_area {
-	width: 100%;
-	height: 50px;
-	background-color: #f0f0f1;
-	position: relative;
-}
-
-.top_gnb_area .list {
-	position: absolute;
-	top: 0px;
-	right: 0;
-}
-
-.top_gnb_area .list li {
-	list-style: none;
-	float: left;
-	padding: 13px 15px 0 10px;
-	font-weight: 900;
-	cursor: pointer;
-}
-/* 로고, 검색, 로그인 */
-.top_area {
-	width: 100%;
-	height: 150px;
-	/* background-color: #f7f0b9; */
-}
-/* 로고 영역 */
-.logo_area {
-	width: 25%;
-	height: 100%;
-	float: left;
-}
-
-.logo_area img {
-	width: 100%;
-	height: 100%;
-}
-
-/* 검색 박스 영역 */
-.search_area {
-	width: 50%;
-	height: 100%;
-	float: left;
-}
-
-.search_wrap {
-	width: 100%;
-	height: 100%;
-}
-
-#searchForm {
-	width: 100%;
-	height: 100%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.search_input {
-	display: flex;
-	height: 30%;
-	width: 80%;
-}
-
-.search_input select {
-	width: 20%;
-	text-align: center;
-	font-size: 15px;
-}
-
-.search_input input {
-	margin-left: 10px;
-	width: 57%;
-	font-size: 18px;
-	padding-left: 2%;
-}
-
-.search_btn {
-	margin-left: 10px;
-	width: 17%;
-	border-radius: 14px;
-	font-size: 17px;
-	font-weight: 600;
-}
-
-/* 제품 목록 네비 */
-.navi_bar_area {
-	width: 100%;
-	height: 70px;
-	background-color: #7696fd;
-}
 
 /* 홈페이지 메인 제품 목록  */
 .content_area {
 	width: 100%;
 	min-height: 1000px;
+	margin-top:50px;
 }
 
-table {
+.content_area table {
 	border-collapse: collapse;
 	width: 100%;
 }
 
-.table_text_align_center {
-	text-align: center;
-}
-
-caption {
-	visibility: hidden;
-	width: 0;
-	height: 0;
-	font-size: 0;
-	line-height: 0;
-	overflow: hidden;
-}
-
-.content_subject {
-	height: 110px;
-	line-height: 110px;
-	background-color: #5080bd;
-	margin-bottom: 60px;
-}
-
-.content_subject span {
-	padding-left: 30 px;
-	display: inline-block;
-	color: white;
-	font-size: 50px;
-	font-weight: bolder;
-}
 
 /* content_main */
 .content_main {
@@ -163,91 +28,11 @@ caption {
 	position: relative;
 }
 
-table {
-	border-collapse: collapse;
-}
-
-/* 사용자 정보  */
-.memberInfo_table {
-	width: 100%;
-	border-spacing: 0;
-	border-top: 2px solid #363636;
-	border-bottom: 1px solid #b6b6b6;
-}
-
-.member_info_div td {
-	padding: 12px;
-	text-align: left;
-}
-
 /* 사용자 주소 정보 */
 .addressInfo_div {
 	margin-top: 30px;
 }
 
-.addressInfo_input_div_wrap {
-	border-bottom: 1px solid #f3f3f3;
-	height: 225px;
-}
-
-.address_btn {
-	background-color: #555;
-	color: white;
-	float: left;
-	border: none;
-	outline: none;
-	cursor: pointer;
-	padding: 14px 16px;
-	font-size: 17px;
-	width: 50%;
-}
-
-.address_btn:hover {
-	background-color: #777;
-}
-
-.addressInfo_button_div::after {
-	content: '';
-	display: block;
-	clear: both;
-}
-
-.addressInfo_input_div {
-	padding: 12px;
-	text-align: left;
-	display: none;
-	line-height: 40px;
-}
-
-.addressInfo_input_div th {
-	border-color: transparent;
-	background-color: transparent;
-}
-
-.addressInfo_input_div th {
-	padding: 12px 5px 12px 20px;
-	vertical-align: top;
-}
-
-.addressInfo_input_div td {
-	padding: 8px 12px;
-}
-
-.addressInfo_input_div_2 input {
-	padding: 6px 5px;
-}
-
-.address_search_btn {
-	vertical-align: middle;
-	display: inline-block;
-	border: 1px solid #aaa;
-	width: 90px;
-	text-align: center;
-	height: 30px;
-	line-height: 30px;
-	color: #555;
-	cursor: pointer;
-}
 /* 주문상품 정보 */
 .orderGoods_div {
 	margin-top: 30px;
@@ -270,8 +55,8 @@ table {
 	text-align: center;
 	color: #333;
 	border-bottom: 1px solid #e7e7e7;
-	border-top: 2px solid #3084d9;
-	background: #f4f9fd;
+	border-top: 2px solid black;
+	background: #e7e7e7;
 	padding: 2px 0;
 }
 
@@ -398,17 +183,6 @@ table {
 	padding: 15px 20px;
 }
 
-.order_btn {
-	display: inline-block;
-	font-size: 21px;
-	line-height: 50px;
-	width: 200px;
-	height: 50px;
-	background-color: #365fdd;
-	color: #fff;
-	font-weight: bold;
-}
-
 /* 이미지 */
 .image_wrap {
 	width: 100%;
@@ -419,114 +193,6 @@ table {
 	max-width: 85%;
 	height: auto;
 	display: block;
-}
-
-/* 로그인 성공 영역 */
-.login_success_area {
-	height: 62%;
-	width: 80%;
-	border: 2px solid #7474ad;
-	border-radius: 15px;
-	margin: 5% auto;
-	padding-top: 5%;
-}
-
-.login_success_area>a {
-	font-size: 15px;
-	font-weight: 900;
-	display: inline-block;
-	margin-top: 5px;
-	background: #e1e5e8;
-	width: 82px;
-	height: 22px;
-	line-height: 22px;
-	border-radius: 25px;
-	color: #606267;
-}
-
-.login_success_area>span {
-	display: block;
-	text-align: left;
-	margin-left: 10%;
-}
-
-/* 검색결과 없음 */
-.table_empty {
-	height: 50px;
-	text-align: center;
-	margin: 200px 0 215px 0px;
-	font-size: 25px;
-}
-
-/* 필터정보 */
-.search_filter {
-	width: 85%;
-	margin: auto;
-	margin-top: 30px;
-	margin-bottom: 50px;
-}
-
-.filter_button_wrap {
-	width: 100%;
-}
-
-.filter_button_wrap button {
-	width: 50%;
-}
-
-.filter_button {
-	background-color: #04AA6D;
-	border: 1px solid green;
-	color: white;
-	padding: 10px 24px;
-	cursor: pointer;
-	float: left;
-}
-
-.filter_button_wrap:after {
-	content: "";
-	clear: both;
-	display: table;
-}
-
-.filter_button_wrap button:not(:last-child) {
-	border-right: none;
-}
-
-.filter_button:hover {
-	background-color: #3e8e41;
-}
-
-.filter_active {
-	background-color: #045d3c;
-}
-
-.filter_content {
-	padding: 20px 50px 20px 50px;
-	border: 1px solid gray;
-}
-
-.filter_content a:not(:first-child) {
-	margin-left: 10px;
-}
-
-.filter_a {
-	display: block;
-}
-
-.filter_b {
-	display: none;
-}
-
-/* float 속성 해제 */
-.clearfix {
-	clear: both;
-}
-
-#chargeInputDiv {
-	margin: auto;
-	margin-top: 80px;
-	margin-left: 100px;
 }
 
 #chargeInput {
@@ -569,37 +235,68 @@ table {
 	padding: 10px 0 10px 16px;
 }
 
-.delivery-address__th {
-	border-right: 1px solid #e4e4e4;
-	border-bottom: 1px solid #e4e4e4;
-	padding: 10px 10px 7px 15px;
-	width: 160px;
-	background-color: #f4f4f4;
-	text-align: right;
+.addDiv {
+	height: 60px;
 }
 
-.page-pc.page-order button {
-	padding: 4px 8px;
-	border: 1px solid #999;
-	color: #333;
-	border-radius: 2px;
-	box-shadow: 0 -2px 0 rgba(0, 0, 0, .1) inset;
-	font-size: 11px;
+
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0, 0, 0);
+	background-color: rgba(0, 0, 0, 0.4);
 }
 
-.delivery-address__popup-list-button {
-	margin-left: 5px;
-	vertical-align: middle;
+/* Modal Content/Box */
+.modal-content {
+	background-color: #fefefe;
+	margin: 15% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 30%;
 }
 
-.delivery-address__td--name {
-	padding-top: 12.5px;
-	padding-bottom: 12.5px;
+
+.addDiv {
+	margin-bottom: 20px;
 }
 
-.delivery-address__td {
-	border-bottom: 1px solid #e4e4e4;
-	padding: 10px 0 10px 16px;
+#insertAddrDiv {
+	display: none;
+}
+
+#insertResetBtn {
+	display: none;
+}
+
+#btns span {
+	margin-left: 250px;
+	text-decoration: underline;
+	color: gray;
+	cursor: pointer;
+}
+
+.span_bt {
+	font-size: 13pt;
+	cursor: pointer;
+	background-color: #DDDDDD;
+	text-align: center;
+	padding: 10px 30px 10px 30px;
+}
+#titlename{
+	font-size: 30px;
+}
+#titlename span{
+	line-height: 46px;
+}
+#titlename span:after{
+	width:210px;
 }
 </style>
 
@@ -610,11 +307,9 @@ table {
 	<div layout:fragment="content" class="outer-block">
 
 		<div class="content_area">
-
-			<div class="content_subject">
+			<h1 class="news-title" id="titlename">
 				<span>주문내역리스트</span>
-			</div>
-
+			</h1>
 			<div class="content_main">
 
 				<!-- 배송지 정보 -->
@@ -647,43 +342,67 @@ table {
 					<div>&nbsp;</div>
 
 					<!-- 받는사람 정보 -->
+			
 					<div>
-						<h2 class="delivery-address__caption-header">
-							받는사람정보
-							<button class="delivery-address__popup-list-button" type="button"
-								data-delivery-address__popup-list-button="" onclick="sample6_execDaumPostcode()">배송지변경</button>
-						</h2>
-
-						<table class="delivery-address">
+						<h2 class="customer__h2">받는 사람 정보</h2>
+						<table class="customer__table">
 							<tbody>
 								<tr>
-									<th class="delivery-address__th">이름</th>
-									<td id="recipient_name" 
-										class="delivery-address__td delivery-address__td--name delivery-address__td-rocket-fresh-mvp2">
-										<span class="delivery-address__name"
-										id="delivery-address__name-panel" >신지은</span>
-									</td>
+									<td class="customer__col customer__col--1">이름</td>
+									<td class="customer__col customer__col--2" id="recipient_nm">신지은</td>
 								</tr>
+								<tr data-component="customer-realname-auth"></tr>
+								
 								<tr>
-									<th class="delivery-address__th">배송주소</th>
-									<td class="delivery-address__td" id="insertAddrDiv">대구광역시 남구 명덕로14길 145-4
-										&nbsp;
-										<div id="blocked-address-error-message"
-											class="blocked-address-section"
-											data-delivery-address__blocked-message=""></div>
-									</td>
-								</tr>
-								<tr>
-									<th class="delivery-address__th delivery-address__th--no-line">연락처</th>
-									<td class="delivery-address__td delivery-address__td--no-line"
-										id="delivery-address__phone-panel" >010 - 8246 - 8805</td>
+									<td class="customer__col customer__col--1">휴대폰 번호</td>
+									<td class="customer__col customer__col--2" id="recipient_tel">010-1111-2222</td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
+						
+						<div>
+						<div class="row align-items-center justify-content-center">
+							<div class="col-lg-12">
+								<div class="signup">
+									<form id="updateFrm" action="updateMemberInfo"
+										class="signup-form row" method="post">
+										<div class="col-md-12 addDiv"
+											th:if="${#lists.isEmpty(membList)}">
+											<span>등록된 주소가 없습니다.</span>
+											<button type="button" id="insertAddrBtn"
+												class="btn btn-light">주소 등록</button>
+											<button type="reset" id="insertResetBtn"
+												class="btn btn-light">취소</button>
+										</div>
+										<div class="col-md-12" id="insertAddrDiv">
+											<div class="form-group">
+												<label for="insertaddr1">주소</label><br> <input
+													type="text" class="form-control"
+													style="width: 40%; display: inline;" id="insertaddr1"
+													name="zip" placeholder="우편번호 검색" readonly>
+												<button type="button" class="zipbtn btn btn-light">우편번호
+													찾기</button>
+											</div>
+											<div class="form-group">
+												<label for="insertaddr2"></label> <input type="text"
+													class="form-control" style="top: 5px;" id="insertaddr2"
+													name="addr" placeholder="도로명주소" readonly>
+											</div>
+											<div class="form-group">
+												<label for="insertaddr3"></label> <input type="text"
+													class="form-control" id="insertaddr3" name="detaAddr"
+													placeholder="상세주소를 입력하세요">
+											</div>
+										</div>
+										<div id="addrDiv" th:if="${not #lists.isEmpty(membList)}" class="col-md-12" style=" padding-left: 0px;">
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-
-
 
 				<!-- 상품 정보 -->
 				<div class="orderGoods_div">
@@ -733,29 +452,13 @@ table {
 					</table>
 				</div>
 
-				<!-- 포인트 정보 -->
-				<div class="point_div">
-					<div class="point_div_subject">사용 가능 포인트</div>
-					<table class="point_table">
-						<colgroup>
-							<col width="25%">
-							<col width="*">
-						</colgroup>
-						<tbody>
-							<tr>
-								<th>포인트</th>
-								<td><input class="order_point_input">P <a
-									class="order_point_input_btn order_point_input_btn_Y"
-									data-state="Y" style="display: none;">사용취소</a></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+				
 				<!-- 주문 종합 정보 -->
 				<div class="total_info_div">
 					<!-- 가격 종합 정보 -->
 					<div class="total_info_price_div">
 						<ul>
+							<li><span class="price_span_label">사용 가능 금액</span><span class="order_point_input"></span>P</li>
 							<li><span class="price_span_label">상품 금액</span> <span
 								class="totalPrice_span">100000</span>P</li>
 							<li><span class="price_span_label">배송비</span> <span
@@ -788,9 +491,27 @@ table {
 				</div>
 			</div>
 		</div>
-		<script th:inline="javascript">
-	
+		
+		
+		<!-- modal -->
 
+	<!-- modal -->
+	<div id="delModal" class="modal">
+	  <!-- Modal content -->
+	  <div class="modal-content">
+	  	 <p class="bi bi-exclamation-circle" style="text-align: center; font-size: 24pt;"></p>
+	    <p style="text-align: center; line-height: 1.5;" id="modalTxt"></p>
+	    <p><br></p>
+	  	<div style="text-align: center;" id="modalBtn">
+	  		
+	  	</div>
+	  </div>
+	</div>
+	<!-- modal -->
+		
+		<script th:inline="javascript">
+		const id = [[${session.loggedInMember.id}]];
+		const membNo = [[${session.loggedInMember.membNo}]];
 	 //주문자 정보
 	 //let memInfo = [[${mem}]];
 	    let membInfo = [[${membInfo}]];
@@ -800,6 +521,7 @@ table {
 	  
 	    let addr = "";    // 배송 주소
 	    let email = "";   // 주문자 이메일
+	   // let id = "";
 	    let tel = "";     // 주문자 연락처
 	    let orderNm = ''; // 받는사람 이름
 	    let orderAm = 0; // 주문 금액
@@ -809,12 +531,13 @@ table {
 
 	    for (let info of membInfo) {
 	        // 주문자 정보를 할당하는 부분 (예시로 주문자 이름만 가져옴)
-	        orderNm += info.nm;
+	        //orderNm += info.nm;
 
 	        // 주문자 주소, 이메일, 연락처, 배송 주소 등을 해당하는 속성에서 가져와서 변수에 할당해주어야 합니다.
 
 	        addr += info.addr;
 	        email += info.email;
+	       // id += info.id;
 	        tel += info.tel;
 	        orderNm = info.nm;
 	        orderAm += info.orderAm;
@@ -833,12 +556,18 @@ table {
 	        // 주문자 정보
 	        // 주문자 명
 	        $("#recipient_name").text(orderNm);
+	        
+	        $("#recipient_nm").text(orderNm);
+	        // 이메일
+	        $("#recipient_em").text(email);
+	     // 연락처
+	        $("#recipient_tel").text(tel);
+	       
 	        // 이메일
 	        $("#recipient_email").text(email);
 	        // 연락처
 	        $("#recipient_phone").text(tel);
-	        // 배송주소
-	        $("#insertAddrDiv").text(addr);
+	   
 	        // 최종 잔여 포인트
 	        $("#totalPoint").text(totalPoint);
 	    });
@@ -887,99 +616,233 @@ table {
 		// 최종 잔여 포인트
 		$(".totalPoint_span").text(totalPoint.toLocaleString());
 		// 회원 포인트
-		$(".order_point_input").val(point.toLocaleString());
+		$(".order_point_input").text(point.toLocaleString());
 		
+
 		
-
-	//주소 변경
-	
-	
-	
-		
-	//우편번호 모달
-	function sample6_execDaumPostcode() {
-		new daum.Postcode({
-		oncomplete : function(data) {
-		// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-		// 각 주소의 노출 규칙에 따라 주소를 조합한다.
-		// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-		var addr = ''; // 주소 변수
-		var extraAddr = ''; // 참고항목 변수
-
-		//사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-		if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-			addr = data.roadAddress;
-		} else { // 사용자가 지번 주소를 선택했을 경우(J)
-			addr = data.jibunAddress;
-		}
-
-		// 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-		if (data.userSelectedType === 'R') {
-			// 법정동명이 있을 경우 추가한다. (법정리는 제외)
-			// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-		if (data.bname !== ''
-				&& /[동|로|가]$/g.test(data.bname)) {
-			extraAddr += data.bname;
-		}
-		// 건물명이 있고, 공동주택일 경우 추가한다.
-		if (data.buildingName !== ''
-				&& data.apartment === 'Y') {
-			extraAddr += (extraAddr !== '' ? ', '
-					+ data.buildingName
-					: data.buildingName);
-		}
-		// 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-		if (extraAddr !== '') {
-			extraAddr = ' (' + extraAddr + ')';
-		}
-		// 조합된 참고항목을 해당 필드에 넣는다.
-		document
-			.getElementById("sample6_extraAddress").value = extraAddr;
-
-		} else {
-			document
-				.getElementById("sample6_extraAddress").value = '';
-		}
-
-		// 우편번호와 주소 정보를 해당 필드에 넣는다.
-		document.getElementById('sample6_postcode').value = data.zonecode;
-		document.getElementById("sample6_address").value = addr;
-		// 커서를 상세주소 필드로 이동한다.
-		document
-				.getElementById("sample6_detailAddress")
-				.focus();
-			}
-		}).open();
+//주소 리스트 출력
+let div = '';
+$.ajax({
+	url: "selectOneMembInfo",
+	method: "POST",
+	data: {
+		"id": id
+	},
+	success: function (data) {
+		data.forEach(el => {
+			console.log(el);
+			div += `
+				<div class="col-md-12">
+					<div class="form-group" style="margin-bottom: 0px;">
+						<label for="addr1" data-no="${el.addrNo}">주소</label>
+						<button type="button" class="changeAddr btn btn-light"onclick="changeAddr(this)">변경</button>
+						<button type="button" class="deleteAddr btn btn-light"></button><br>
+						<input type="text" class="form-control" style="width: 40%; display: inline;" id="addr1" name="zip" value="${el.zip}" readonly>
+						<br>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="form-group" style="margin-bottom: 0px;">
+						<label for="addr2"></label>
+						<input type="text" class="form-control" style="width: 100%;" id="addr2" name="addr" value="${el.addr}" readonly>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="addr3"></label>
+						<input type="text" class="form-control" id="addr3" style="width: 100%" name="detaAddr" value="${el.detaAddr}" readonly>
+					</div>
+				</div>
+			`;
+			
+			$("#addrDiv").html(div);	
+		})
+	},
+	error: function (error) {
+		console.log(error);
 	}
+});
+	
+	
+let addrNo = '';
 
-	// 특정 항목을 클릭한 경우, 해당 정보를 받아서 처리할 콜백 함수를 정의
-	new daum.Postcode({
-		oncomplete : function(data) {
-			//data는 사용자가 선택한 주소 정보를 담고 있는 객체이며, 상세 설명은 아래 목록에서 확인하실 수 있습니다.
-		}
-	});
+//주소 변경
+function changeAddr(target) {
+addrNo = $(target).prev().data('no'); // 클릭한 주소의 addrNo
 
-	// 우편번호 서비스의 화면 크기가 변한 경우, 화면 크기 정보를 받아서 처리할 콜백 함수를 정의
-	new daum.Postcode({
-		onresize : function(size) {
-			//size는 우편번호 찾기 화면의 크기 데이터 객체이며, 상세 설명은 아래 목록에서 확인하실 수 있습니다.
-		}
-	});
+let aa = target.nextElementSibling.nextElementSibling.nextElementSibling; // zip input
 
-	// 검색 결과를 선택하거나, 브라우저의 닫기버튼을 통해 닫았을 때 발생하는 콜백 함수를 정의
-	new daum.Postcode({
-		onclose : function(state) {
-			//state는 우편번호 찾기 화면이 어떻게 닫혔는지에 대한 상태 변수 이며, 상세 설명은 아래 목록에서 확인하실 수 있습니다.
-			if (state === 'FORCE_CLOSE') {
-				//사용자가 브라우저 닫기 버튼을 통해 팝업창을 닫았을 경우, 실행될 코드를 작성하는 부분입니다.
+// 우편번호 찾기 버튼 HTML 생성
+let zipbtnHtml = '<button type="button" class="zipbtn btn btn-light">우편번호 찾기</button>';
 
-			} else if (state === 'COMPLETE_CLOSE') {
-				//사용자가 검색결과를 선택하여 팝업창이 닫혔을 경우, 실행될 코드를 작성하는 부분입니다.
-				//oncomplete 콜백 함수가 실행 완료된 후에 실행됩니다.
-			}
-		}
-	});
+// aa 요소 뒤에 우편번호 찾기 버튼 추가
+$(aa).after(zipbtnHtml);
+
+let changeButton = $(target);
+changeButton.text('저장').removeAttr('onclick').on('click', function() {
+ updateMemberAddr(); // 저장 버튼 클릭 시 주소 변경 요청
+ $(target).next().remove();
+ let addButtonHtml = '<button type="button" class="changeAddr btn btn-light" onclick="changeAddr(this)">변경</button>' +
+                      '<button type="button" class="deleteAddr btn btn-light"></button>';
+ $(this).after(addButtonHtml);
+ $(this).remove();
+ $('input[name="detaAddr"]').attr("readonly", "readonly");
+});
+
+let reBtn = $(target).next();
+reBtn.text('취소').attr('type', 'reset').on('click', function() {
+ $(this).next().next().next().remove(); // 우편번호 찾기 버튼 제거
+ let changeAddrBtnHtml = '<button type="button" class="changeAddr btn btn-light" onclick="changeAddr(this)">변경</button>';
+ changeButton.after(changeAddrBtnHtml);
+ changeButton.remove();
+});
+
+// 우편번호 찾기 버튼 클릭 이벤트 처리
+$(document).on('click', '.zipbtn', function() {
+ let zipInput = $(this).closest('.form-group').find('input[name="zip"]');
+ let addrInput = $(this).closest('.col-md-12').next().find('input[name="addr"]');
+ let detaInput = $(this).closest('.col-md-12').next().next().find('input[name="detaAddr"]');
+ detaInput.val("");
+ detaInput.removeAttr("readonly");
+
+ // 주소 API
+ new daum.Postcode({
+   oncomplete: function(data) {
+     let fullRoadAddr = data.roadAddress;
+     let extraRoadAddr = '';
+
+     if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+       extraRoadAddr += data.bname;
+     }
+     if (data.buildingName !== '' && data.apartment === 'Y') {
+       extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+     }
+     if (extraRoadAddr !== '') {
+       extraRoadAddr = ' (' + extraRoadAddr + ')';
+     }
+     if (fullRoadAddr !== '') {
+       fullRoadAddr += extraRoadAddr;
+     }
+
+     zipInput.val(data.zonecode);
+     addrInput.val(fullRoadAddr);
+   }
+ }).open();
+});
+}
+
+//주소 변경 요청
+function updateMemberAddr() {
+let zipInput = $('input[name="zip"]');
+let addrInput = $('input[name="addr"]');
+let detaInput = $('input[name="detaAddr"]');
+console.log(detaInput.val());
+
+$.ajax({
+ url: "updateMemberAddr",
+ method: "POST",
+ data: {
+   "addrNo": addrNo,
+   "zip": addr1.value,
+   "addr": addr2.value,
+   "detaAddr": addr3.value,
+   "membNo": membNo
+ },
+ success: function(result) {
+ 	console.log(result);
+ },
+ error: function(err) {
+   console.log(err);
+ }
+});
+}
+
+
+$("#saveBtn").on("click",function(){
+	if($("#addr3").val() == ''){
+		$("#addr3").focus();
+		return;
+	}
+	
+})
+	
+	
+	
+//주소등록 버튼 클릭
+$("#insertAddrBtn").on("click", function(){
+	$("#insertAddrDiv").css("display", "inline-block");
+	$("#insertResetBtn").css("display", "inline-block");
+	
+	//우편번호 찾기 버튼 클릭
+	//주소 찾기 - 다음 주소 api
+	 document.querySelector(".zipbtn").addEventListener('click',function(){
+	    new daum.Postcode({
+	      oncomplete: function (data) {
+	       // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+	       // 도로명 주소의 노출 규칙에 따라 주소를 조합한다.
+	       // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+	       var fullRoadAddr = data.roadAddress; // 도로명 주소 변수
+	       var extraRoadAddr = ''; // 도로명 조합형 주소 변수
+
+	       // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+	       // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+	       if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+	           extraRoadAddr += data.bname;
+	       }
+	       // 건물명이 있고, 공동주택일 경우 추가한다.
+	       if (data.buildingName !== '' && data.apartment === 'Y') {
+	           extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+	       }
+	       // 도로명, 지번 조합형 주소가 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+	       if (extraRoadAddr !== '') {
+	           extraRoadAddr = ' (' + extraRoadAddr + ')';
+	       }
+	       // 도로명, 지번 주소의 유무에 따라 해당 조합형 주소를 추가한다.
+	       if (fullRoadAddr !== '') {
+	           fullRoadAddr += extraRoadAddr;
+	       }
+
+	       $("[name=insertaddr1]").val(data.zonecode);
+	       $("[name=insertaddr2]").val(fullRoadAddr);
+
+	       // 우편번호와 주소 정보를 해당 필드에 넣는다.
+	       document.getElementById('insertaddr1').value = data.zonecode; //5자리 새우편번호 사용
+	       document.getElementById('insertaddr2').value = fullRoadAddr;
+
+	      }
+	    }).open();
+	 });
+	
+})
+
+$("#insertResetBtn").on("click", function(){
+	$("#insertAddrDiv").css("display", "none");
+	$("#insertResetBtn").css("display", "none");
+	
+})
+	
+	//모달
+function close_pop(flag) {
+ $('#myModal').hide();
+	 window.location.reload();
+};
+function close_del_pop(flag) {
+ $('#myModal').hide();
+	 window.location.href="/";
+};
+function commas(number) {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+} 
+function createSmsKey() {
+	  let key = '';
+	  
+	  for (let i = 0; i < 5; i++) { 
+	    key += Math.floor(Math.random() * 10);
+	  }
+	  return key;
+	}
+	
 
 
 	//결제 

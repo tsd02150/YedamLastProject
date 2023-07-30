@@ -28,7 +28,10 @@
 }
 
 .titleMenu {
-	padding-top: 30px;
+	padding-top: 50px;
+	padding-bottom: 40px;
+	margin: 0 10px 40px 10px;
+	border-bottom: 2px solid #ddd;
 }
 
 .sidebarMenu {
@@ -50,7 +53,7 @@
 	margin-top: 15px;
 }
 
-.sidebarMenu a.items-center {
+.sidebarMenu a {
 	color: black;
 }
 
@@ -59,6 +62,7 @@
 	height: auto;
 }
 .sidebar {
+	text-align: center;
 	border: 1px solid #DDDDDD;
 	height: auto;
 }
@@ -89,6 +93,10 @@ color : black;
 ::after, ::before {
    box-sizing: border-box;
 }
+
+#mypageContent{
+	margin-top:40px;
+}
 </style>
 
 </head>
@@ -106,11 +114,11 @@ color : black;
 							<h2 class="titleTxt">[[${session.loggedInMember.nick}]]</h2>
 							<p class="titleTxt">[[${session.loggedInMember.id}]]</p>
 						</div>
-						<hr>
+						
 						<div class="sidebarMenu">
 							<h3>
 								<a class="flex items-center w-full px-3 mt-3"
-									href="mypage"> <span class="ml-5 font-bold"
+									href="mypage"> <span class="font-bold"
 									>내 프로필</span>
 								</a>
 							</h3>
@@ -118,28 +126,28 @@ color : black;
 						<div class="sidebarMenu">
 							<h3>
 								<a class="flex items-center w-full px-3 mt-3" href="mypoint"> <span
-									class="ml-5 font-bold" >포인트 | 쿠폰</span>
+									class="font-bold" >포인트 | 쿠폰</span>
 								</a>
 							</h3>
 						</div>
 						<div class="sidebarMenu">
 							<h3>
 								<a class="flex items-center w-full px-3 mt-3" href="mystock"> <span
-									class="ml-5 font-bold" >주식현황</span>
+									class="font-bold" >주식현황</span>
 								</a>
 							</h3>
 						</div>
 						<div class="sidebarMenu">
 							<h3>
 								<a class="flex items-center w-full px-3 mt-3" href="mysurvey"> <span
-									class="ml-5 font-bold" >투자 성향 분석</span>
+									class="font-bold" >투자 성향 분석</span>
 								</a>
 							</h3>
 						</div>
 						<div class="sidebarMenu">
 							<h3>
 								<a class="flex items-center w-full px-3 mt-3" href="myorder"> <span
-									class="ml-5 font-bold" >주문 | 배송</span>
+									class="font-bold" >주문 | 배송</span>
 								</a>
 							</h3>
 						</div>
@@ -149,7 +157,7 @@ color : black;
 			</div>
 		</div>
 		</th:block>
-		<div layout:fragment="mypage" th:class="${session.loggedInMember!=null?'col-8':'col-12'}"></div>
+		<div layout:fragment="mypage" th:class="${session.loggedInMember!=null?'col-8':'col-12'}" id="mypageContent"></div>
 	</div>
 </body>
 </html>
