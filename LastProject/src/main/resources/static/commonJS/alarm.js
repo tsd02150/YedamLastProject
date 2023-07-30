@@ -57,7 +57,8 @@ jQuery(document).ready(function ($) {
 		  			 	stockAlm.push(i);
 		  			 }else if ( i.atype == 'mall'){
 		  			 	mallAlm.push(i);
-		  			 }else if ( i.atype == 'comm') {
+		  			 }else if ( i.atype.indexOf('boa')>=0) {
+		  			 console.log(i);
 		  			 	commAlm.push(i);
 		  			 }
 		  			
@@ -77,18 +78,42 @@ jQuery(document).ready(function ($) {
 					          		${i.checked == 'n' ? '<span class="badge badge-danger">New</span>' : ''} ${new Date(i.alarmDt).toLocaleDateString()}</span>
 					          		<span class="d-block"> ${i.cntn}</span>
 				          		</p>
-			          		</li>`
-		  			
-		  			
+			          		</li>`	
 		  		}
-		  		$('#stock-alm ul').html(html)
+		  		$('#stock-alm ul').html(html);
+		  		
+		  		let commLiTag='';
+		  		for(let i of commAlm){
+		  			if(i.checked='n') 
+		  				nCnt++;
+		  			commLiTag+=`<li class="commLi" data-alno="${i.alarmNo}" data-boardno="${i.atype}">
+					          	<p class="list-group-item list-group-item-action h-100 ">
+					          		<button type="button" class="float-left close almXBtn" aria-label="Close">
+					          			<span aria-hidden="true" class="text-dark mr-1">&times;</span>
+					          		</button>
+					          		 게시물 알림
+					          		<span class="text-muted small">${makeDay(new Date()) == makeDay(new Date(i.alarmDt)) ? '<span class="badge badge-primary">Today</span>' : ''} 
+					          		${i.checked == 'n' ? '<span class="badge badge-danger">New</span>' : ''} ${new Date(i.alarmDt).toLocaleDateString()}</span>
+					          		<span class="alarm-cntn d-block"> ${i.cntn}</span>
+				          		</p>
+			          		</li>`;
+		  		}
+		  		console.log(commLiTag);
+		  		$('#comm-alm ul').html(commLiTag);
+		  		
 		  		if(nCnt > 0 ) {
 		  		
 		  		$('a[href="#stock-alm"]').html('체결<span class="badge badge-danger">New</span>')
 		  								 .attr('data-chk','ok');
 		  		};
+		  		$('.commLi').on('click',function(){
+		  			let subdata=$(event.target).closest('li').attr('data-boardno');
+					window.location.href="/community/boardDetail?page=1&boardNo="+subdata.substring(0,subdata.length-2)+"&commonCd="+subdata.substring(subdata.length-2);
+				})
 		  });//end of ajax
 });//end of 알람벨 누를시 기능
+
+
 
 	// 체결 tab 클릭 기능
 	$('a[href="#stock-alm"]').on('click',function(){
