@@ -671,7 +671,6 @@ input[type="number"]::-webkit-inner-spin-button {
 				let buyPrc = $('#sell tr:last-of-type td:last-of-type').text();	//매수주문의 시장가
 				let ckbox = $(this);
 				let point = $('p[data-point]').attr('data-point');//유저의 보유 포인트
-				let stockPrc = $('#stockPrc').val(); // 거래가격
 				let stockCnt = $('#stockCnt').val(); // 거래수량
 				
 				// 매수매도버튼을 클릭하지 않았을시 함수
@@ -684,8 +683,13 @@ input[type="number"]::-webkit-inner-spin-button {
 				if(orderType == 'sell'){
 					// 호가 매수 테이블의 가장 높은 가격이 가격입력칸에 출력
 					if(tof){
-						$('#stockPrc').val(sellPrc);
-						$('#totalPrc').text((sellPrc * stockCnt).toLocaleString('ko-KR'));
+						if($('#buy tr').length == 0){
+							$('#stockPrc').val(0);
+							$('#totalPrc').text(0);
+						}else{
+							$('#stockPrc').val(sellPrc);
+							$('#totalPrc').text((sellPrc * stockCnt).toLocaleString('ko-KR'));
+						}
 					}else{
 						$('#stockPrc').val(0);
 						$('#totalPrc').text(0);
@@ -695,13 +699,20 @@ input[type="number"]::-webkit-inner-spin-button {
 				}else if(orderType == 'buy'){
 					// 호가 매도 테이블의 가장 낮은 가격이 가격입력칸에 출력
 					if(tof){
-						$('#stockCnt').val(0);
-						$('#stockPrc').val(buyPrc);
+						if($('#sell tr').length == 0){
+							$('#stockPrc').val(0);
+							$('#stockCnt').val(0);
+						}else{
+							$('#stockCnt').val(0);
+							$('#stockPrc').val(buyPrc);
+						}
 						// 구매가능한 주수 버튼에 값 입력
 						let affordStockCnt = Math.floor(point/$('#stockPrc').val());
+						if (!isFinite(affordStockCnt)) { // 무한대 값인 경우 0으로 대체
+							  affordStockCnt = 0;
+							}
 						$('#afford').val(affordStockCnt);
 					}else{
-						$('#stockPrc').val(0);
 					}
 				}
 			})
@@ -739,7 +750,7 @@ input[type="number"]::-webkit-inner-spin-button {
 					// 유효범위
 					if( $(this).val() > Number(point)){
 						alert('보유한 포인트보다 많게 주문할 수 없습니다.')
-						$('#afford').val('0');
+						$('#afford').val(1);
 						$(this).val($('p[data-point]').attr('data-point'));//보유포인트
 						return;
 					}else if( $(this).val() == '' || $(this).val() <= 0){
@@ -845,6 +856,9 @@ input[type="number"]::-webkit-inner-spin-button {
 				let stockCnt =$('#stockCnt').val();
 				let stockPrc = $('#stockPrc').val();
 				let total = stockCnt * stockPrc;
+				if(stockPrc == 0){
+					$('#afford').val(0);
+				}
 				$('#totalPrc').text(total);
 			})
 			
@@ -859,12 +873,18 @@ input[type="number"]::-webkit-inner-spin-button {
 				let iteminfo = $('p[data-in]').attr('data-in'); // itemNo
 				let membinfo = $('#sessionMembNo').text(); // membNo
 				let totalPrc = $('#totalPrc').text();
+				
+				// 개수나 가격이 0인 주문\
+				if(stockPrc == 0 || stockCnt == 0){
+					toastShow("주문 불가","개수나 가격이 0인 주문을 불가합니다","warning");
+					return;
+				}
 				//매수시 보유 포인트가 총 금액보다 적을시 return
 				if(orderType == 'buy' && Number(totalPrc) > Number($('p[data-point]').attr('data-point'))){
 					if(Number($('p[data-point]').attr('data-point')) == 0){
 						toastShow('자산이 없습니다','주문 불가','warning');
+						return;
 					}
-					console.log(totalPrc + ' 와 ' +$('p[data-point]').attr('data-point'));
 					toastShow('보유한 자산이 주문 금액보다 적습니다.','주문 불가','warning');
 					return;
 				}
