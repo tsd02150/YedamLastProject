@@ -95,6 +95,7 @@ color : black;
 <body>
 	<div layout:fragment="content" class="d-flex">
 		<!-- article1 -->
+		<th:block th:if="${session.loggedInMember!=null}">
 		<div class="col-4">
 			<div class="sidebar sidebar-left">
 				<div>
@@ -147,7 +148,8 @@ color : black;
 				</div>
 			</div>
 		</div>
-		<div layout:fragment="mypage" class="col-8"></div>
+		</th:block>
+		<div layout:fragment="mypage" th:class="${session.loggedInMember!=null?'col-8':'col-12'}"></div>
 	</div>
 </body>
 </html>
