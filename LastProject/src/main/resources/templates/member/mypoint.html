@@ -30,6 +30,15 @@ margin-top:70px;
 #myPointTbl{
 	width: 100%;
 	text-align : center;
+	margin-top : 20px;
+}
+#myPointTbl th{
+	font-size: 20px;
+	padding : 10px;
+}
+#myPointTbl td{
+	font-size: 18px;
+	padding : 5px;
 }
 
 #dealSel{
@@ -162,20 +171,16 @@ function dealList() {
                 tr += `
                         <tr>
                             <td>${formattedDt}</td>
-                            <td>${el.tablename}</td>`;
-                if (el.nm == null) {
-                    tr += `<td>적립</td>`;
-                } else {
-                    tr += `<td>${el.nm}</td>`;
-                }
+                            <td>${el.tablename}</td>
+                						<td>${el.nm}</td>`;
                  if(el.point >=0){
                 	 tr += `
-                         <td class="high">${point}</td>
+                         <td class="high">${point} P</td>
           		           </tr>
             			 `;
                  } else{
                 	 tr += `
-                         <td class="low">${point}</td>
+                         <td class="low">${point} P</td>
           		           </tr>
             			 `;
                  }

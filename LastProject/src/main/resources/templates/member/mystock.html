@@ -22,6 +22,16 @@
 	padding-right: 0px;
   padding-left: 0px;
 }
+#ownList th{
+	padding : 5px;
+}
+#ownList td{
+	padding : 5px 5px 8px 5px;
+	text-align : center;
+	width : 110px;
+	font-size : 19px;
+	font-weight: bold;
+}
 #gotoInfo{
 	height: 80px;
 	background-color: bisque;
@@ -79,30 +89,27 @@
  margin-left:30px;
  margin-top:80px;
 }
-#sum table td{
+#sum table td:nth-child(2){
 	font-size : 25px;
-	padding : 20px;
-	padding : 20px;
+	padding : 20px 20px 0 20px;
 	font-weight: bold;
+	text-align : right;
+}
+#sum table td:nth-child(1){
+	font-size : 16px;
+	padding-right : 20px;
 	text-align : right;
 }
 #sum table th{
 	font-size : 14px;
 	text-align : left;
+  padding: 20px 20px 0 20px;
 }
 #buyselltbl{
 	text-align: center;
 }
 #ownList table{
 	text-align : center;
-}
-#ownList table td{
-	text-align : center;
-	width : 110px;
-	font-size : 19px;
-	padding : 5px;
-	font-weight: bold;
-	padding-top : 20px;
 }
 #noOrderDiv{
 	text-align: center;
@@ -152,7 +159,19 @@
 				<div id="mystockDiv" class="col-7">
 					<div id="sum" class="col-12">
 					</div>
-					<div id="ownList" class="col-12"></div>
+					<div id="ownList" class="col-12">
+						<table class="col-12">
+							<thead>
+								<tr>
+									<th>종목</th>
+									<th>평가손익</th>
+									<th>수익률</th>
+								</tr>
+							</thead>
+							<tbody id="ownbody">
+							</tbody>
+						</table>
+					</div>
 				</div>
 				<div id="myorderDiv">
 					<div id="noOrderDiv" th:style="${#lists.isEmpty(sellOrderList) && #lists.isEmpty(buyOrderList) ? '' : 'display : none'}">
@@ -183,7 +202,7 @@
 							<th style="width:140px;">체결날짜</th>
 							<th>구분</th>
 							<th>종목</th>
-							<th>가격(P)</th>
+							<th>가격</th>
 							<th>수량</th>
 							<th>수수료</th>
 							<th>합계</th>
@@ -550,34 +569,41 @@ $.ajax({
 		  data.forEach(el => {
 			  let formattedRaise = (el.tradePrc - el.nowPrc).toLocaleString();
 		    let tr = `
-		    	<table class="col-12">
+		    	
 		      <tr data-no="${el.itemNo}">
 		        <td onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">${el.tnm}</td>
 		        <td class="rate">${formattedRaise}<span style="color:#666;"> P</span></td>
 		        <td class="rate">${el.rate}%</td>
 		      </tr>
-		      </table>
 		    `;
 
 		    asset += el.tradePrc;
 		    invest += el.nowPrc;
 		    
-		    $("#ownList").append(tr);
+		    $("#ownbody").append(tr);
 		    boxClass();
 		  });
 		  
 		  let formattedAsset = (asset * 10).toLocaleString();
 		  let formattedInvest = (invest * 10).toLocaleString();
+		  let formattedAssetP = (asset).toLocaleString();
+		  let formattedInvestP = (invest).toLocaleString();
 		  
 		  let tr2 = `
 		    <table class="col-12">
 		      <tr>
 		        <th>자산(평가금액)</th>
-		        <td>${formattedAsset}원</td>
+		        <td>${formattedAssetP} P</td>
+		      </tr>
+		      <tr>
+		        <td colspan="2">${formattedAsset}원</td>
 		      </tr>
 		      <tr>
 		        <th>투자금액</th>
-		        <td>${formattedInvest}원</td>
+		        <td>${formattedInvestP} P</td>
+		      </tr>
+		      <tr>
+		        <td colspan="2">${formattedInvest}원</td>
 		      </tr>
 		    </table>
 		  `;

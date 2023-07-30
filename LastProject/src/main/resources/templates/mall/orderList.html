@@ -569,7 +569,7 @@ table {
 	padding: 10px 0 10px 16px;
 }
 
-.delivery-address__th {
+/* .delivery-address__th {
 	border-right: 1px solid #e4e4e4;
 	border-bottom: 1px solid #e4e4e4;
 	padding: 10px 10px 7px 15px;
@@ -600,6 +600,75 @@ table {
 .delivery-address__td {
 	border-bottom: 1px solid #e4e4e4;
 	padding: 10px 0 10px 16px;
+} */
+
+.section-padding {
+	padding: 20px 0;
+	position: relative;
+}
+
+.addDiv {
+	height: 60px;
+}
+
+* The Modal (background) * /
+.modal {
+	display: none;
+	position: fixed;
+	z-index: 1;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+	background-color: rgb(0, 0, 0);
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* Modal Content/Box */
+.modal-content {
+	background-color: #fefefe;
+	margin: 15% auto;
+	padding: 20px;
+	border: 1px solid #888;
+	width: 30%;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+	-moz-appearance: textfield;
+}
+
+.addDiv {
+	margin-bottom: 20px;
+}
+
+#insertAddrDiv {
+	display: none;
+}
+
+#insertResetBtn {
+	display: none;
+}
+
+#btns span {
+	margin-left: 250px;
+	text-decoration: underline;
+	color: gray;
+	cursor: pointer;
+}
+
+.span_bt {
+	font-size: 13pt;
+	cursor: pointer;
+	background-color: #DDDDDD;
+	text-align: center;
+	padding: 10px 30px 10px 30px;
 }
 </style>
 
@@ -647,7 +716,69 @@ table {
 					<div>&nbsp;</div>
 
 					<!-- 받는사람 정보 -->
+			
 					<div>
+						<h2 class="customer__h2">받는 사람 정보</h2>
+						<table class="customer__table">
+							<tbody>
+								<tr>
+									<td class="customer__col customer__col--1">이름</td>
+									<td class="customer__col customer__col--2" id="recipient_nm">신지은</td>
+								</tr>
+								<tr data-component="customer-realname-auth"></tr>
+								
+								<tr>
+									<td class="customer__col customer__col--1">휴대폰 번호</td>
+									<td class="customer__col customer__col--2" id="recipient_tel">010-1111-2222</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+						
+						<div>
+						<div class="row align-items-center justify-content-center">
+							<div class="col-lg-12">
+								<div class="signup">
+									<form id="updateFrm" action="updateMemberInfo"
+										class="signup-form row" method="post">
+										<div class="col-md-12 addDiv"
+											th:if="${#lists.isEmpty(membList)}">
+											<span>등록된 주소가 없습니다.</span>
+											<button type="button" id="insertAddrBtn"
+												class="btn btn-light">주소 등록</button>
+											<button type="reset" id="insertResetBtn"
+												class="btn btn-light">취소</button>
+										</div>
+										<div class="col-md-12" id="insertAddrDiv">
+											<div class="form-group">
+												<label for="insertaddr1">주소</label><br> <input
+													type="text" class="form-control"
+													style="width: 40%; display: inline;" id="insertaddr1"
+													name="zip" placeholder="우편번호 검색" readonly>
+												<button type="button" class="zipbtn btn btn-light">우편번호
+													찾기</button>
+											</div>
+											<div class="form-group">
+												<label for="insertaddr2"></label> <input type="text"
+													class="form-control" style="top: 5px;" id="insertaddr2"
+													name="addr" placeholder="도로명주소" readonly>
+											</div>
+											<div class="form-group">
+												<label for="insertaddr3"></label> <input type="text"
+													class="form-control" id="insertaddr3" name="detaAddr"
+													placeholder="상세주소를 입력하세요">
+											</div>
+										</div>
+										<div id="addrDiv" th:if="${not #lists.isEmpty(membList)}" class="col-md-12" style=" padding-left: 0px;">
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- 	<div>
 						<h2 class="delivery-address__caption-header">
 							받는사람정보
 							<button class="delivery-address__popup-list-button" type="button"
@@ -682,7 +813,7 @@ table {
 						</table>
 					</div>
 				</div>
-
+ -->
 
 
 				<!-- 상품 정보 -->
@@ -788,9 +919,27 @@ table {
 				</div>
 			</div>
 		</div>
-		<script th:inline="javascript">
-	
+		
+		
+		<!-- modal -->
 
+	<!-- modal -->
+	<div id="delModal" class="modal">
+	  <!-- Modal content -->
+	  <div class="modal-content">
+	  	 <p class="bi bi-exclamation-circle" style="text-align: center; font-size: 24pt;"></p>
+	    <p style="text-align: center; line-height: 1.5;" id="modalTxt"></p>
+	    <p><br></p>
+	  	<div style="text-align: center;" id="modalBtn">
+	  		
+	  	</div>
+	  </div>
+	</div>
+	<!-- modal -->
+		
+		<script th:inline="javascript">
+		const id = [[${session.loggedInMember.id}]];
+		const membNo = [[${session.loggedInMember.membNo}]];
 	 //주문자 정보
 	 //let memInfo = [[${mem}]];
 	    let membInfo = [[${membInfo}]];
@@ -800,6 +949,7 @@ table {
 	  
 	    let addr = "";    // 배송 주소
 	    let email = "";   // 주문자 이메일
+	   // let id = "";
 	    let tel = "";     // 주문자 연락처
 	    let orderNm = ''; // 받는사람 이름
 	    let orderAm = 0; // 주문 금액
@@ -809,12 +959,13 @@ table {
 
 	    for (let info of membInfo) {
 	        // 주문자 정보를 할당하는 부분 (예시로 주문자 이름만 가져옴)
-	        orderNm += info.nm;
+	        //orderNm += info.nm;
 
 	        // 주문자 주소, 이메일, 연락처, 배송 주소 등을 해당하는 속성에서 가져와서 변수에 할당해주어야 합니다.
 
 	        addr += info.addr;
 	        email += info.email;
+	       // id += info.id;
 	        tel += info.tel;
 	        orderNm = info.nm;
 	        orderAm += info.orderAm;
@@ -833,12 +984,18 @@ table {
 	        // 주문자 정보
 	        // 주문자 명
 	        $("#recipient_name").text(orderNm);
+	        
+	        $("#recipient_nm").text(orderNm);
+	        // 이메일
+	        $("#recipient_em").text(email);
+	     // 연락처
+	        $("#recipient_tel").text(tel);
+	       
 	        // 이메일
 	        $("#recipient_email").text(email);
 	        // 연락처
 	        $("#recipient_phone").text(tel);
-	        // 배송주소
-	        $("#insertAddrDiv").text(addr);
+	   
 	        // 최종 잔여 포인트
 	        $("#totalPoint").text(totalPoint);
 	    });
@@ -889,97 +1046,231 @@ table {
 		// 회원 포인트
 		$(".order_point_input").val(point.toLocaleString());
 		
+
 		
-
-	//주소 변경
-	
-	
-	
-		
-	//우편번호 모달
-	function sample6_execDaumPostcode() {
-		new daum.Postcode({
-		oncomplete : function(data) {
-		// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
-
-		// 각 주소의 노출 규칙에 따라 주소를 조합한다.
-		// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
-		var addr = ''; // 주소 변수
-		var extraAddr = ''; // 참고항목 변수
-
-		//사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
-		if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
-			addr = data.roadAddress;
-		} else { // 사용자가 지번 주소를 선택했을 경우(J)
-			addr = data.jibunAddress;
-		}
-
-		// 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
-		if (data.userSelectedType === 'R') {
-			// 법정동명이 있을 경우 추가한다. (법정리는 제외)
-			// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
-		if (data.bname !== ''
-				&& /[동|로|가]$/g.test(data.bname)) {
-			extraAddr += data.bname;
-		}
-		// 건물명이 있고, 공동주택일 경우 추가한다.
-		if (data.buildingName !== ''
-				&& data.apartment === 'Y') {
-			extraAddr += (extraAddr !== '' ? ', '
-					+ data.buildingName
-					: data.buildingName);
-		}
-		// 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
-		if (extraAddr !== '') {
-			extraAddr = ' (' + extraAddr + ')';
-		}
-		// 조합된 참고항목을 해당 필드에 넣는다.
-		document
-			.getElementById("sample6_extraAddress").value = extraAddr;
-
-		} else {
-			document
-				.getElementById("sample6_extraAddress").value = '';
-		}
-
-		// 우편번호와 주소 정보를 해당 필드에 넣는다.
-		document.getElementById('sample6_postcode').value = data.zonecode;
-		document.getElementById("sample6_address").value = addr;
-		// 커서를 상세주소 필드로 이동한다.
-		document
-				.getElementById("sample6_detailAddress")
-				.focus();
-			}
-		}).open();
+//주소 리스트 출력
+let div = '';
+$.ajax({
+	url: "selectOneMembInfo",
+	method: "POST",
+	data: {
+		"id": id
+	},
+	success: function (data) {
+		data.forEach(el => {
+			console.log(el);
+			div += `
+				<div class="col-md-12">
+					<div class="form-group" style="margin-bottom: 0px;">
+						<label for="addr1" data-no="${el.addrNo}">주소</label>
+						<button type="button" class="changeAddr btn btn-light"onclick="changeAddr(this)">변경</button>
+						<button type="button" class="deleteAddr btn btn-light"></button><br>
+						<input type="text" class="form-control" style="width: 40%; display: inline;" id="addr1" name="zip" value="${el.zip}" readonly>
+						<br>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="form-group" style="margin-bottom: 0px;">
+						<label for="addr2"></label>
+						<input type="text" class="form-control" style="width: 100%;" id="addr2" name="addr" value="${el.addr}" readonly>
+					</div>
+				</div>
+				<div class="col-md-12">
+					<div class="form-group">
+						<label for="addr3"></label>
+						<input type="text" class="form-control" id="addr3" style="width: 100%" name="detaAddr" value="${el.detaAddr}" readonly>
+					</div>
+				</div>
+			`;
+			
+			$("#addrDiv").html(div);	
+		})
+	},
+	error: function (error) {
+		console.log(error);
 	}
+});
+	
+	
+let addrNo = '';
 
-	// 특정 항목을 클릭한 경우, 해당 정보를 받아서 처리할 콜백 함수를 정의
-	new daum.Postcode({
-		oncomplete : function(data) {
-			//data는 사용자가 선택한 주소 정보를 담고 있는 객체이며, 상세 설명은 아래 목록에서 확인하실 수 있습니다.
-		}
-	});
+//주소 변경
+function changeAddr(target) {
+addrNo = $(target).prev().data('no'); // 클릭한 주소의 addrNo
 
-	// 우편번호 서비스의 화면 크기가 변한 경우, 화면 크기 정보를 받아서 처리할 콜백 함수를 정의
-	new daum.Postcode({
-		onresize : function(size) {
-			//size는 우편번호 찾기 화면의 크기 데이터 객체이며, 상세 설명은 아래 목록에서 확인하실 수 있습니다.
-		}
-	});
+let aa = target.nextElementSibling.nextElementSibling.nextElementSibling; // zip input
 
-	// 검색 결과를 선택하거나, 브라우저의 닫기버튼을 통해 닫았을 때 발생하는 콜백 함수를 정의
-	new daum.Postcode({
-		onclose : function(state) {
-			//state는 우편번호 찾기 화면이 어떻게 닫혔는지에 대한 상태 변수 이며, 상세 설명은 아래 목록에서 확인하실 수 있습니다.
-			if (state === 'FORCE_CLOSE') {
-				//사용자가 브라우저 닫기 버튼을 통해 팝업창을 닫았을 경우, 실행될 코드를 작성하는 부분입니다.
+// 우편번호 찾기 버튼 HTML 생성
+let zipbtnHtml = '<button type="button" class="zipbtn btn btn-light">우편번호 찾기</button>';
 
-			} else if (state === 'COMPLETE_CLOSE') {
-				//사용자가 검색결과를 선택하여 팝업창이 닫혔을 경우, 실행될 코드를 작성하는 부분입니다.
-				//oncomplete 콜백 함수가 실행 완료된 후에 실행됩니다.
-			}
-		}
-	});
+// aa 요소 뒤에 우편번호 찾기 버튼 추가
+$(aa).after(zipbtnHtml);
+
+let changeButton = $(target);
+changeButton.text('저장').removeAttr('onclick').on('click', function() {
+ updateMemberAddr(); // 저장 버튼 클릭 시 주소 변경 요청
+ $(target).next().remove();
+ let addButtonHtml = '<button type="button" class="changeAddr btn btn-light" onclick="changeAddr(this)">변경</button>' +
+                      '<button type="button" class="deleteAddr btn btn-light"></button>';
+ $(this).after(addButtonHtml);
+ $(this).remove();
+ $('input[name="detaAddr"]').attr("readonly", "readonly");
+});
+
+let reBtn = $(target).next();
+reBtn.text('취소').attr('type', 'reset').on('click', function() {
+ $(this).next().next().next().remove(); // 우편번호 찾기 버튼 제거
+ let changeAddrBtnHtml = '<button type="button" class="changeAddr btn btn-light" onclick="changeAddr(this)">변경</button>';
+ changeButton.after(changeAddrBtnHtml);
+ changeButton.remove();
+});
+
+// 우편번호 찾기 버튼 클릭 이벤트 처리
+$(document).on('click', '.zipbtn', function() {
+ let zipInput = $(this).closest('.form-group').find('input[name="zip"]');
+ let addrInput = $(this).closest('.col-md-12').next().find('input[name="addr"]');
+ let detaInput = $(this).closest('.col-md-12').next().next().find('input[name="detaAddr"]');
+ detaInput.val("");
+ detaInput.removeAttr("readonly");
+
+ // 주소 API
+ new daum.Postcode({
+   oncomplete: function(data) {
+     let fullRoadAddr = data.roadAddress;
+     let extraRoadAddr = '';
+
+     if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+       extraRoadAddr += data.bname;
+     }
+     if (data.buildingName !== '' && data.apartment === 'Y') {
+       extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+     }
+     if (extraRoadAddr !== '') {
+       extraRoadAddr = ' (' + extraRoadAddr + ')';
+     }
+     if (fullRoadAddr !== '') {
+       fullRoadAddr += extraRoadAddr;
+     }
+
+     zipInput.val(data.zonecode);
+     addrInput.val(fullRoadAddr);
+   }
+ }).open();
+});
+}
+
+//주소 변경 요청
+function updateMemberAddr() {
+let zipInput = $('input[name="zip"]');
+let addrInput = $('input[name="addr"]');
+let detaInput = $('input[name="detaAddr"]');
+console.log(detaInput.val());
+
+$.ajax({
+ url: "updateMemberAddr",
+ method: "POST",
+ data: {
+   "addrNo": addrNo,
+   "zip": addr1.value,
+   "addr": addr2.value,
+   "detaAddr": addr3.value,
+   "membNo": membNo
+ },
+ success: function(result) {
+ 	console.log(result);
+ },
+ error: function(err) {
+   console.log(err);
+ }
+});
+}
+
+
+$("#saveBtn").on("click",function(){
+	if($("#addr3").val() == ''){
+		$("#addr3").focus();
+		return;
+	}
+	
+})
+	
+	
+	
+//주소등록 버튼 클릭
+$("#insertAddrBtn").on("click", function(){
+	$("#insertAddrDiv").css("display", "inline-block");
+	$("#insertResetBtn").css("display", "inline-block");
+	
+	//우편번호 찾기 버튼 클릭
+	//주소 찾기 - 다음 주소 api
+	 document.querySelector(".zipbtn").addEventListener('click',function(){
+	    new daum.Postcode({
+	      oncomplete: function (data) {
+	       // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+	       // 도로명 주소의 노출 규칙에 따라 주소를 조합한다.
+	       // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+	       var fullRoadAddr = data.roadAddress; // 도로명 주소 변수
+	       var extraRoadAddr = ''; // 도로명 조합형 주소 변수
+
+	       // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+	       // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+	       if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+	           extraRoadAddr += data.bname;
+	       }
+	       // 건물명이 있고, 공동주택일 경우 추가한다.
+	       if (data.buildingName !== '' && data.apartment === 'Y') {
+	           extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+	       }
+	       // 도로명, 지번 조합형 주소가 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+	       if (extraRoadAddr !== '') {
+	           extraRoadAddr = ' (' + extraRoadAddr + ')';
+	       }
+	       // 도로명, 지번 주소의 유무에 따라 해당 조합형 주소를 추가한다.
+	       if (fullRoadAddr !== '') {
+	           fullRoadAddr += extraRoadAddr;
+	       }
+
+	       $("[name=insertaddr1]").val(data.zonecode);
+	       $("[name=insertaddr2]").val(fullRoadAddr);
+
+	       // 우편번호와 주소 정보를 해당 필드에 넣는다.
+	       document.getElementById('insertaddr1').value = data.zonecode; //5자리 새우편번호 사용
+	       document.getElementById('insertaddr2').value = fullRoadAddr;
+
+	      }
+	    }).open();
+	 });
+	
+})
+
+$("#insertResetBtn").on("click", function(){
+	$("#insertAddrDiv").css("display", "none");
+	$("#insertResetBtn").css("display", "none");
+	
+})
+	
+	//모달
+function close_pop(flag) {
+ $('#myModal').hide();
+	 window.location.reload();
+};
+function close_del_pop(flag) {
+ $('#myModal').hide();
+	 window.location.href="/";
+};
+function commas(number) {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+} 
+function createSmsKey() {
+	  let key = '';
+	  
+	  for (let i = 0; i < 5; i++) { 
+	    key += Math.floor(Math.random() * 10);
+	  }
+	  return key;
+	}
+	
 
 
 	//결제 

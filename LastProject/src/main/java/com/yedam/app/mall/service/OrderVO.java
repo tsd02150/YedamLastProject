@@ -29,7 +29,7 @@ public class OrderVO {
 	private String nm;
 	private int point;
 	private String thumb;
-	
+	private String email;
 	// 주문 필요정보
 	private String tel;
 	private String mobile;
