@@ -287,6 +287,7 @@ public class BoardController {
 	@ResponseBody
 	public CommentsVO insertComment(CommentsVO vo) {
 		if(boardService.insertComment(vo)) {
+			boardService.insertCommentAlarm(vo);
 			vo=boardService.getComment(vo.getCommNo());
 			return vo;
 		}

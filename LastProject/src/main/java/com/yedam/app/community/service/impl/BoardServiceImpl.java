@@ -123,6 +123,11 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.insertComment(vo)>0;
 	}
 	
+	@Override
+	public boolean insertCommentAlarm(CommentsVO vo) {
+		return boardMapper.insertCommentAlarm(vo)>0;
+	}
+
 	// 댓글 단건조회
 	@Override
 	public CommentsVO getComment(String commNo) {

@@ -40,6 +40,8 @@ public interface BoardService {
 	public boolean addCommentNrcom(CommentsVO vo);
 	// 댓글 등록
 	public boolean insertComment(CommentsVO vo);
+	// 댓글 등록 알람 추가
+	public boolean insertCommentAlarm(CommentsVO vo);
 	// 댓글 단건조회
 	public CommentsVO getComment(String commNo);
 	// 댓글 삭제

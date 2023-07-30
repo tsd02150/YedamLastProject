@@ -63,6 +63,12 @@ margin-top : 30px;
 .tit{
 	font-weight: bold;
 }
+.faqlist, .faqlist2{
+	padding-left:10px;
+}
+#faq01{
+	display : inline-block;
+}
 </style>
 
 </head>
@@ -88,9 +94,12 @@ margin-top : 30px;
 					<td>
 						<span class="tit">1. 고객님의 금융상품에 대한 이해 수준은 어느 정도라고 생각 하십니까?</span>
 						<ul class="faqlist">
-							<li><input type="radio" class="radio" title="파생상품을 포함한 대부분의 금융투자상품의 구조 및 위험을 상품설명서 등을 읽고 스스로 이해할 수 있음 선택" name="investKnowLevel" value="8" id="faq01"><label for="faq01">파생상품을 포함한 대부분의 금융투자상품의 구조 및 위험을 상품설명서 등을 읽고 스스로 이해할 수 있음</label></li>
+							<li><input type="radio" class="radio" title="파생상품을 포함한 대부분의 금융투자상품의 구조 및 위험을 상품설명서 등을 읽고 스스로 이해할 수 있음 선택" name="investKnowLevel" value="8" id="faq01" style="display : inline-block;">파생상품을 포함한 대부분의 금융투자상품의 구조 및 위험을 상품설명서 등을 읽고 <br>&nbsp;&nbsp; 스스로 이해할 수 있음
+							<label for="faq01" style="display : inline-block;"></label></li>
 							<li><input type="radio" class="radio" title="널리알려진 금융투자상품(주식, 채권, 펀드 등)의 구조 및 위험을 이해하고 있음 선택" name="investKnowLevel" value="6" id="faq02"><label for="faq02">널리알려진 금융투자상품(주식, 채권, 펀드 등)의 구조 및 위험을 이해하고 있음</label></li>
-							<li><input type="radio" class="radio" title="널리알려진 금융투자상품(주식, 채권, 펀드 등)의 특징을 일정 부분 이해하고 있으며 설명을 들으면 구조와 위험을 이해할 수 있음 선택" name="investKnowLevel" value="4" id="faq03"><label for="faq03">널리알려진 금융투자상품(주식, 채권, 펀드 등)의 특징을 일정 부분 이해하고 있으며 설명을 들으면 구조와 위험을 이해할 수 있음</label></li>
+							<li><input type="radio" class="radio" title="널리알려진 금융투자상품(주식, 채권, 펀드 등)의 특징을 일정 부분 이해하고 있으며 설명을 들으면 구조와 위험을 이해할 수 있음 선택" name="investKnowLevel" value="4" id="faq03">
+							널리알려진 금융투자상품(주식, 채권, 펀드 등)의 특징을 일정 부분 이해하고 있으며 <br>&nbsp;&nbsp;설명을 들으면 구조와 위험을 이해할 수 있음
+							<label for="faq03"></label></li>
 							<li><input type="radio" class="radio" title="금융투자상품에 대해 스스로 결정을 해 본 적이 없음 선택" name="investKnowLevel" value="2" id="faq04"><label for="faq04">금융투자상품에 대해 스스로 결정을 해 본 적이 없음</label></li>
 						</ul>
 					</td>
@@ -145,8 +154,12 @@ margin-top : 30px;
 						<td>
 							<span class="tit">6. 고객님과 고객님의 가족을 포함하여 현재와 미래의 소득수준을 가장 잘 표현한 것은 어느 것입니까?</span>
 							<ul class="faqlist">
-								<li><input type="radio" class="radio" title="현재 안정적인 소득(급여, 금융소득 등)이 발생하고 있으며, 향후 현재의 소득수준의 유지 혹은 증가 예상 선택" name="importOrigin" value="10" id="faq23"><label for="faq23">현재 안정적인 소득(급여, 금융소득 등)이 발생하고 있으며, 향후 현재의 소득수준의 유지 혹은 증가 예상</label></li>
-								<li><input type="radio" class="radio" title="현재 안정적인 소득(급여, 금융소득 등)이 발생하고 있으며, 향후 현재의 소득수준의 감소 예상 선택" name="importOrigin" value="6" id="faq24"><label for="faq24">현재 안정적인 소득(급여, 금융소득 등)이 발생하고 있으며, 향후 현재의 소득수준의 감소 예상</label></li>
+								<li><input type="radio" class="radio" title="현재 안정적인 소득(급여, 금융소득 등)이 발생하고 있으며, 향후 현재의 소득수준의 유지 혹은 증가 예상 선택" name="importOrigin" value="10" id="faq23">
+								현재 안정적인 소득(급여, 금융소득 등)이 발생하고 있으며, 향후 현재의 소득수준의 <br>&nbsp;&nbsp;유지 혹은 증가 예상
+								<label for="faq23"></label></li>
+								<li><input type="radio" class="radio" title="현재 안정적인 소득(급여, 금융소득 등)이 발생하고 있으며, 향후 현재의 소득수준의 감소 예상 선택" name="importOrigin" value="6" id="faq24">
+								현재 안정적인 소득(급여, 금융소득 등)이 발생하고 있으며, 향후 현재의 소득수준의 <br>&nbsp;&nbsp;감소 예상
+								<label for="faq24"></label></li>
 								<li><input type="radio" class="radio" title="현재나 미래에 일정한 소득(급여, 금융소득)을 통한 여유자금의 마련이 어려울 것으로 예상 선택" name="importOrigin" value="2" id="faq25"><label for="faq25">현재나 미래에 일정한 소득(급여, 금융소득)을 통한 여유자금의 마련이 어려울 것으로 예상</label></li>
 							</ul>
 						</td>
@@ -155,7 +168,9 @@ margin-top : 30px;
 						<td>
 							<span class="tit">7. 고객님께서 금융상품 투자를 통해 기대하는 수익과 감수할 수 있는 손실을 가장 잘 표현한 것은 어느 것입니까?</span>
 							<ul class="faqlist">
-								<li><input type="radio" class="radio" title="원금 초과 손실까지 감수하며 적극적인 투자를 통하여 시장수익률(예:주가지수)을 초과하는 높은 수익을 추구 선택" name="investPurpose" value="8" id="faq27"><label for="faq27">원금 초과 손실까지 감수하며 적극적인 투자를 통하여 시장수익률(예:주가지수)을 초과하는 높은 수익을 추구</label></li>
+								<li><input type="radio" class="radio" title="원금 초과 손실까지 감수하며 적극적인 투자를 통하여 시장수익률(예:주가지수)을 초과하는 높은 수익을 추구 선택" name="investPurpose" value="8" id="faq27">
+								원금 초과 손실까지 감수하며 적극적인 투자를 통하여 시장수익률(예:주가지수)을 초과하는 <br>&nbsp;&nbsp;높은 수익을 추구
+								<label for="faq27"></label></li>
 								<li><input type="radio" class="radio" title="원금손실을 감수하며 시장수익률과 비슷한 수준의 수익을 기대 선택" name="investPurpose" value="6" id="faq28"><label for="faq28">원금손실을 감수하며 시장수익률과 비슷한 수준의 수익을 기대</label></li>
 								<li><input type="radio" class="radio" title="원금의 일부 손실을 감수하며 시중금리보다 다소 높은 수준의 수익을 기대 선택" name="investPurpose" value="4" id="faq29"><label for="faq29">원금의 일부 손실을 감수하며 시중금리보다 다소 높은 수준의 수익을 기대</label></li>
 								<li><input type="radio" class="radio" title="제한적인 손실을 감수하며 시중금리 수준의 수익을 기대" name="investPurpose" value="2" id="faq30"><label for="faq30">제한적인 손실을 감수하며 시중금리 수준의 수익을 기대</label></li>

@@ -35,6 +35,7 @@ input[type=number] {
 #chargeInput{
 	width : 500px;
 	display : inline-block;
+	font-size:20px;
 }
 #tosspay{
 display: none; /* Hidden by default */
@@ -60,16 +61,15 @@ margin-bottom : 40px;
 font-size:40px; 
 padding-left:30px; 
 font-weight:bold; 
-color: green;
+color: #FF3066;
 }
 .pointTxt{
 font-size:40px; 
 padding-left:30px; 
 }
 #tosimg{
-width : 500px;
-background-color: blue;
-font-size : 30px;
+width : 550px;
+margin-top : 10px;
 }
 #payment-button{
 width : 140px;
@@ -78,12 +78,17 @@ width : 140px;
 	height: 53px;
 	width:53px;
 	font-size: large;
+	margin-top:0;
+	color : red;
 }
 .btn-outline-secondary{
 	margin-top:5px;
 	width : 125px;
 	font-size : 18px;
 	font-weight: bold;
+}
+#pointimg{
+	margin-bottom : 50px;
 }
 
 </style>
@@ -92,8 +97,8 @@ width : 140px;
 <div layout:fragment="mypage">
 	<div id="mypageBody">
 	<div id="myPointList">
-		<h2>충전</h2>
-		<span></span>
+		<!-- <h2>포인트 충전</h2> -->
+		<img th:src="|/member/images/point.png|" id="pointimg"><br>
 		<span style="font-size:40px; color:black;">My 포인트</span>
 		<strong> <span th:text="|${#numbers.formatInteger(mypoint, 0, 'COMMA')}|" 
 									 th:attr="class=${mypoint > 10000 ? 'pointTxt' : 'high pointTxt'}"
@@ -123,7 +128,7 @@ width : 140px;
 			  </li>
 			</ul>
 			</div>
-			<button id="tosimg" class="btn btn-primary">결제하기</button>
+			<img th:src="|/member/images/toss.png|" id="tosimg">
 		</div>
 		<div id="tosspay">
 	 	<!-- 결제위젯, 이용약관 영역 -->
