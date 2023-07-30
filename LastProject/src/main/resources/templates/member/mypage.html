@@ -52,7 +52,7 @@
 	height: 120px;
 	border: 1px solid #dddddd;
 	display: inline-block;
-	padding: 15px;
+	padding: 15px 10px 15px 10px;
 	margin: 15px;
 }
 
@@ -69,6 +69,7 @@
 
 .tnm {
 	font-size: 20px;
+	font-weight: bold;
 }
 
 
@@ -230,7 +231,7 @@ $.ajax({
 		let rate = commas(el.rate); 
 		  box += `<div class="int_item">
 		            <a onclick="location.href='/stock/chart?itemNo=${el.itemNo}'"><p class="tnm">${el.tnm}</p></a>
-		            <span class="rate">${rate}</span><br>
+		            <span class="rate">${rate}%</span><br>
 								<span class="tprc">${tprc} P</span>
 		          </div>`;
 		});
@@ -266,7 +267,7 @@ $.ajax({
 				//console.log(el);
 				box2 += `<div class="int_item">
 									<p onclick="location.href='/stock/chart?itemNo=${el.itemNo}'" class="tnm">${el.tnm}</p>
-									<span class="rate">${el.rate}</span><br>
+									<span class="rate">${el.rate}%</span><br>
 									<span class="tprc">${tprc} P</span>
 				 					</div>`;
 			})

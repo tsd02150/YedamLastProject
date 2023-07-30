@@ -211,6 +211,8 @@
 	                    on a.item_no= t.item_no and to_number(substr(t.ta_no,5)) = a.tano  
 	                    order by to_number(substr(item_no,5)) ) t  -- 최근 체결가
 			on i.item_no = t.item_no
+			order by rate desc
+			
 		</select>
 		
 		<select id="myStockList" resultType="MembVO">

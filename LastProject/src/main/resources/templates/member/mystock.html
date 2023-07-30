@@ -69,14 +69,14 @@
 }
 #interestDiv{
 	display : inline-block;
-	height: 360px;
+	height: 385px;
 	margin-top : 20px;
 	margin-right : 90px;
 	overflow: auto;
 }
 #recomDiv{
 	display : inline-block;
-	height: 360px;
+	height: 3805x;
 	margin-top : 20px;
 	overflow: auto;
 }
@@ -248,7 +248,15 @@
 	       <span>관심종목</span>
 	   		</h3>
 					<table id="interesttbl">
-						<tbody id="intbody"></tbody>
+						<thead>
+							<tr>
+								<th>종목</th>
+								<th>현재가</th>
+								<th>상승률</th>
+							</tr>	
+						</thead>
+						<tbody id="intbody">
+						</tbody>
 					</table>
 				</div>
 				<div id="recomDiv" class="col-5">
@@ -256,6 +264,13 @@
 	       <span>추천종목</span>
 	   		</h3>
 					<table id="recomtbl" class="col-12">
+						<thead>
+							<tr>
+								<th>종목</th>
+								<th>현재가</th>
+								<th>상승률</th>
+							</tr>	
+						</thead>
 						<tbody id="recombody">
 						</tbody>
 					</table>
