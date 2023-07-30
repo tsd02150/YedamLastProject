@@ -1,6 +1,7 @@
 package com.yedam.app.admin.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -12,6 +13,8 @@ import com.yedam.app.community.service.FaqVO;
 import com.yedam.app.community.service.NoticeVO;
 import com.yedam.app.community.service.QuestionVO;
 import com.yedam.app.community.service.ReportVO;
+import com.yedam.app.mall.service.OrderVO;
+import com.yedam.app.mall.service.ProductVO;
 
 public interface AdminMapper {
 	// 멤버리스트
@@ -92,4 +95,27 @@ public interface AdminMapper {
 	public List<String> getRoomList();
 	// notice 첨부파일 조회
 	public List<AttachVO> getNoticeAttachList(String notiNo);
+	
+	// order 리스트
+	public List<OrderVO> orderList(@Param("page")int page , @Param("perPage")int perPage);
+	// order 수정
+	public int modifyOrder(OrderVO ordVO);
+	// product 리스트
+	public List<ProductVO> productList(@Param("page")int page , @Param("perPage")int perPage);
+	// 상품 삭제
+	public int deleteProduct(List<String> list);
+	// 상품 등록
+	public void addProduct(ProductVO prdtVO);
+	// 상품 수정
+	public int modifyProduct(ProductVO prdtVO);
+	// order 수
+	public int orderTotal();
+	// product 수
+	public int productTotal();
+	// product 단건조회
+	public ProductVO productDetail(String prdtNo);
+	
+	
+	
+	
 }

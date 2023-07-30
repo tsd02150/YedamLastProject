@@ -17,4 +17,8 @@ public class CommentsVO {
 	private String membNo;
 	
 	private String nick;
+	private String writerMembNo;
+	private String ttl;
+	private String alarmNo;
+	private String commonCd;
 }

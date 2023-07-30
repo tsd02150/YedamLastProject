@@ -144,7 +144,7 @@
    		  contentType: 'application/json',
    		  api: {
    			  readData: {
-   				url:'/admin/memberList',
+   				url:'/admin/orderList',
    				method:'GET' 
    			}
    		  }
@@ -277,7 +277,7 @@
               },
               {
                 header: '주문일시',
-                name: 'joinDt',
+                name: 'orderDt',
                 sortingType: 'asc',
                 sortable: true
               }
@@ -285,7 +285,7 @@
           });
      
        grid.on('check',(ev) =>{
-       	console.log(ev.instance.store.data.rawData[ev.rowKey].membNo);
+       	console.log(ev.instance.store.data.rawData[ev.rowKey].orderNo);
        })
        
 

@@ -1,16 +1,591 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  layout:decorate="~{admin/adminLayout}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{admin/adminLayout}">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="../community/css/board.css">
+
+<style>
+.swal-cls {
+	width: 950px !important;
+}
+
+#reportDiv #productCntn {
+	height: 300px;
+	overflow: hidden;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+}
+
+#productCntn * {
+	text-align: left;
+}
+
+#productNm {
+	text-align: left;
+}
+</style>
 </head>
 <body>
 	<div layout:fragment="content">
-		
-		
-		
+		<h3>
+			<b>상품관리</b>
+		</h3>
+		<br />
+		<div class="m-2">
+			<button id="writeBtn" class="btn btn-success">등록</button>
+			<button id="updateBtn" class="btn btn-primary">수정</button>
+			<button id="deleteBtn" class="btn btn-danger">삭제</button>
+		</div>
+
+		<div id="grid"></div>
+
+		<script
+			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+		<script
+			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/translations/ko.js"></script>
+		<script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0/jquery.serialize-object.min.js"></script>
+		<script>
+		let editor;
+		let todayz = new Date();   
+
+		let year = todayz.getFullYear(); // 년도
+		let month = todayz.getMonth() + 1 < 10 ? '0' + (todayz.getMonth() + 1) : todayz.getMonth() + 1 ;  // 월
+		let date = todayz.getDate() < 10 ? '0' + todayz.getDate() : todayz.getDate() ;  // 날짜
+
+		let today = year + '-' + month + '-' + date
+			
+			$('#writeBtn').on('click',function(){
+				Swal.fire({
+            		title:'상품 등록',
+            		html:`
+            			<form id="myForm" onsubmit="return false">
+            			<div id="reportDiv">
+            			<table class="table h6">
+							<tr>
+								<th style="width:15%;">작성자</th>
+								<td style="width:35%;">admin</td>
+								<th style="width:15%;">작성일</th>
+								<td style="width:35%;">${today}</td>
+							</tr>
+							<tr>
+							<th>상품명</th>
+								<td colspan="3" id="productNm" >
+									<div>
+										<input id="writeProductTtl" style="text-align:left;width:758px" name="ttl">
+									</div>
+								</td>
+							</tr>	
+							<tr>
+							<th>상품가격</th>
+								<td colspan="3" id="productNm" >
+									<div>
+										<input id="writeProductTtl" style="text-align:left;width:758px" name="ttl">
+									</div>
+								</td>
+							</tr>	
+							<tr>
+								<th>상품 썸네일 등록</th>
+								<td colspan="3" class="text-left">
+									<div id="thumbCntn" >
+										<textarea id="productContent"></textarea>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th>상품 상세내용</th>
+								<td colspan="3" class="text-left">
+									<div id="productCntn" >
+										<textarea id="productContent"></textarea>
+									</div>
+								</td>
+						</tr>
+							
+						</table>
+						</div>
+						
+						</form>
+						`,
+					customClass: 'swal-cls',
+					showCancelButton:true,
+					cancelButtonText:'취소',
+	    		    confirmButtonText: '작성',
+	    		    didOpen: () => {
+						if (!editor) {
+				    		ClassicEditor.create(document.querySelector('#productContent'), {
+			    				language: "ko",
+			    				ckfinder: {
+			    					uploadUrl: '/image/upload'
+			    				}
+			    			})
+			    			.then(newEditor => {
+			    				editor = newEditor;
+			    			})
+			    			.catch(error => {
+			    				console.error(error);
+			    			});
+						
+					}
+					},
+					didClose:() =>{
+						if (editor) {
+					          editor.destroy()
+					          editor = null;
+					        }
+					},
+	    		    preConfirm: () => {
+	    		          // 입력값 검사 z
+	    		          const ttlValue = document.getElementById('writeProductTtl').value;
+	    		          if (!ttlValue) {
+	    		        	  Swal.showValidationMessage(
+	    		        			  '<i class="fa fa-info-circle"></i> 제목을 입력하세요'
+	    		        		      )
+	    		          }else if($('.ck-content p').html() == '<br data-cke-filler="true">'){
+	    		        	  Swal.showValidationMessage(
+	    		        			  '<i class="fa fa-info-circle"></i> 내용을 입력하세요'
+	    		        		      )
+	    		          }
+	    		          
+	    		        }
+        		})
+        		.then((result) =>{
+        			if(result.isConfirmed){
+        				
+        				let ckData = editor.getData()
+        				
+        				let formData = $('#myForm').serializeObject()
+        				formData.cntn = ckData
+        				
+        				
+        				var attachFileList = new FormData(); 
+        				var inputFile = $("#attachFile");
+
+        				var files = inputFile[0].files;
+        				
+        				for(var i=0;i<files.length;i++){
+        					console.log(files[i]);
+        					attachFileList.append("uploadFiles",files[i]); // 키, 값으로 append
+        				}
+        				
+        				
+        				$.ajax({
+        					url:'/admin/addProduct',
+        					method : "POST",
+        					data : formData
+        				})
+        				.done(function(result){
+				for(let del of delList){
+					fetch("/community/deleteAttach",{
+						method: "POST",
+						headers: {
+							'Content-Type': 'application/x-www-form-urlencoded'
+						},
+						body: 'atchNo='+del
+					})
+					.then(result=>result.text())
+					.then(data=>function(){
+						if(data=="fail"){
+							toastShow("Delete Fail" , "삭제 실패" , "error");
+						}
+					})
+					.catch(err=>console.log(err));
+				}
+				
+				
+				if(attachFileList.get("uploadFiles")!=null){
+					attachFileList.append("prdtNo",result.prdtNo);
+					$.ajax({
+						url:'/attach/upload',
+						method:'POST',
+						processData:false, // 기본값은 true, ajax통신을 통해 데이터를 전송할 때, 기본적으로 key와 vlaue 값을 Query String 으로 변환해서 보냅니다
+						contentType:false, // multipart/form-data타입을 사용하기 위해 false로 지정합니다.
+						data:attachFileList,
+						success:function(result){
+							// 알림 띄울 부분;
+						},
+						error:function(reject){
+							toastShow("Attach File Fail" , "첨부 실패" , "error");
+						}
+					});	
+				}else{
+				}
+			})
+			.fail(function(result){
+				toastShow("Insert Fail" , "등록 실패" , "error");
+			})
+
+        				
+        			}// isConfirmed end
+        		})
+        		
+        		let delList = [];
+        		
+	    		$("#attachFile").on('change',function(){
+	    			var inputFile = $("#attachFile");
+	    			// input 태그의 type이 file인것을 찾아서 inputFile이라는 변수로 지정
+	    			
+	    			var files = inputFile[0].files;
+	    			// files: 선택한 모든 파일을 나열하는 FileList 객체
+	    			// multiple 특성을 지정하지 않았다면 두 개 이상의 파일을 포함하지 않습니다.
+	    			for(var i=0;i<files.length;i++){
+	    				let liTag=document.createElement("li");
+	    				let spanTag=document.createElement("span");
+	    				liTag.append(files[i].name);
+	    				spanTag.innerHTML="&times;";
+	    				liTag.append(spanTag);
+	    				uploadFileList.append(liTag);
+	    			}
+	    		})
+	    		$("#uploadFileList").on('click','span',function(){
+	    			var dataTranster = new DataTransfer();
+	    			Array.from($("#attachFile")[0].files)
+	                .filter(file => file.name != $(event.target).parent().text().slice(0,-1))
+	                .forEach(file => {
+	                	dataTranster.items.add(file);
+	             	});
+	    			$("#attachFile")[0].files=dataTranster.files;
+	    			
+	    			$(event.target).parent().remove();
+	    		})
+	    		
+			}); // end of 작성click 이벤트
+			$('#deleteBtn').on('click',function(){
+				
+			 const checkedRows = grid.getCheckedRows();
+	  		  console.log(checkedRows)
+	      	    if (checkedRows.length > 0) {
+	  	      // 선택된 행이 존재하는 경우에만 삭제 요청을 보냅니다.
+	  	      const products = checkedRows.map(row => row.prdtNo);
+	  	      
+	  	    Swal.fire({
+	  		  title: checkedRows.length +' 개의 상품을 삭제 하시겠습니까?',
+	  		  showDenyButton: true,
+	  		  confirmButtonText: '삭제',
+	  		  denyButtonText: `취소`,
+	  		}).then((result) => {
+	  		  if (result.isConfirmed) {
+	  			  // 서버에 삭제 요청을 보냅니다.
+	  			    $.ajax({
+	  			      type: 'POST', // 또는 DELETE에 맞는 HTTP 메서드를 사용합니다.
+	  			      url: '/admin/deleteProduct',
+	  			      contentType:'application/json',
+	  			      data: JSON.stringify(products),
+	  			      success: function(response) {
+	  			        // 삭제 요청이 성공한 경우, 그리드에서 선택된 행을 제거합니다.
+	  			        console.log(response)
+	  			        grid.removeCheckedRows(true);
+	  			      },
+	  			      error: function(err) {
+	  			        console.error('행 삭제 오류:', err);
+	  			      }
+	  			    });
+	  		  } else if (result.isDenied) {
+	  		    Swal.fire('취소됐음')
+	  		  }
+	  		});
+
+	  	   
+	      	  }else{
+	      		  Swal.fire('삭제할 상품을 선택해주세요')
+	      	  }
+	  	      
+	      	    });
+			
+			const dataSource = {
+				contentType: 'application/json',
+				api: {
+					readData: {
+	    				url:'/admin/productList',
+	    				method:'GET' 
+					}
+				}
+			};
+	      
+			const grid = new tui.Grid({
+	             el: document.getElementById('grid'),
+	             rowHeaders: ['rowNum','checkbox'],
+	             data:dataSource,
+	             scrollX: false,
+	             scrollY: false,
+	   		  	 pageOptions: {
+	   		  		 useClient:true,
+	                 perPage: 5,
+	             },
+	             columns: [
+					{
+					     header: '상품번호',
+					     name: 'prdtNo',
+					     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+					},
+					{
+					   header: '상품썸네일',
+					   name: 'thumb',
+					   filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+						},
+					{
+					   header: '상품내용이미지',
+					   name: 'img',
+					   filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+						},
+					{
+					   header: '상품명',
+					   name: 'nm',
+					   filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+						},
+					{
+					   header: '판매가격',
+					   name: 'prc',
+					   filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+						},
+					{
+					   header: '작성일시',
+					   name:'drwupDt',
+					   sortingType: 'asc',
+					   sortable: true
+					 }
+				]
+			});
+	        
+	        grid.on('dblclick',(ev) => {
+	        	
+	        	// product 정보
+	        	let prdtNo = $('td[data-row-key='+ev.rowKey+'][data-column-name=prdtNo]').children(0).text();
+	        	// product 불러오기
+	        	$.ajax('productDetail?prdtNo='+prdtNo)
+	        	.done(function(prdtData){
+	        		let data = productData.productDetail;
+	        		let attachFileList = productData.attachFileList;
+	        		
+	        		Swal.fire({
+	            		title:'상품등록',
+	            		html:`
+	            			<form id="myForm" onsubmit="return false">
+	            			<div id="reportDiv">
+	            			<table class="table h6">
+								<tr>
+									<th style="width:15%;">작성자</th>
+									<td style="width:35%;">${data.nick}</td>
+									<th style="width:15%;">작성일</th>
+									<td style="width:35%;">${data.drwupDt}</td>
+								</tr>
+								<tr>
+								<th>상품명</th>
+									<td colspan="3" id="productNm" >
+										<div>
+											<input id="writeProductNm" style="text-align:left;width:758px;" value="${data.ttl}" name="ttl">
+										</div>
+									</td>
+								</tr>	
+								<tr>
+								<th>상품가격</th>
+									<td colspan="3" id="productTtl" >
+										<div>
+											<input id="writeProductTtl" style="text-align:left;width:758px;" value="${data.ttl}" name="ttl">
+										</div>
+									</td>
+								</tr>	
+								<tr>
+									<th>내용</th>
+									<td colspan="3" class="text-left">
+										<div id="productCntn" >
+											<textarea id="productContent">${data.cntn}</textarea>
+										</div>
+									</td>
+								</tr>
+							</table>
+							</div>
+							<table class="table">
+							<tr>
+								<td>
+									<label for="attachfiles" class="col-sm-2 col-form-label ml-3 " style="width:200px">
+										<strong>파일을 선택해주세요</strong>
+									</label>
+									<input name="attachFile" id="attachFile" type="file" multiple class="custom-file-input"> 
+								</td>
+							</tr>
+							<tr>
+								<td style="text-align:left">
+									<div id="fileList" style="margin: 40px;">
+										<strong>첨부파일 : </strong>
+										<div>
+											<ul id=uploadFileList>
+												${attachFileList.map(attachFile => `<li data-atchno=${attachFile.atchNo}>${attachFile.atchOriginNm}<span>&times;</span></li>`).join('')}
+											</ul>
+										</div>
+									</div>
+								</td>
+							</tr>
+							</table>
+							</form>
+							`,
+						customClass: 'swal-cls',
+						showCancelButton:true,
+						showDenyButton:true,
+						denyButtonText:'상품삭제',
+		    		    confirmButtonText: '수정',
+						cancelButtonText:'취소',
+						didOpen: () => {
+							if (!editor) {
+					    		ClassicEditor.create(document.querySelector('#productContent'), {
+				    				language: "ko",
+				    				ckfinder: {
+				    					uploadUrl: '/image/upload'
+				    				}
+				    			})
+				    			.then(newEditor => {
+				    				editor = newEditor;
+				    			})
+				    			.catch(error => {
+				    				console.error(error);
+				    			});
+							
+						}
+						},
+						didClose:() =>{
+							if (editor) {
+						          editor.destroy()
+						          editor = null;
+						        }
+						},
+		    		    preConfirm: (ttldata) => {
+		    		          // 입력값 검사
+		    		          const textareaValue = $('.ck-content').html();
+		    		          const ttlValue = document.getElementById('writeProductTtl').value;
+		    		          if (!ttlValue) {
+		    		        	  Swal.showValidationMessage(
+		    		        			  '<i class="fa fa-info-circle"></i> 제목을 입력하세요'
+		    		        		      )
+		    		          }else if(!textareaValue){
+		    		        	  Swal.showValidationMessage(
+		    		        			  '<i class="fa fa-info-circle"></i> 내용을 입력하세요'
+		    		        		      )
+		    		          }
+		    		          
+		    		          let ckData = editor.getData()
+	        				
+	        				let formData = $('#myForm').serializeObject()
+	        				formData.cntn = ckData
+	        				formData.prdtNo= prdtNo;
+	        				
+	        				var attachFileList = new FormData(); 
+	        				var inputFile = $("#attachFile");
+
+	        				var files = inputFile[0].files;
+	        				
+	        				for(var i=0;i<files.length;i++){
+	        					console.log(files[i]);
+	        					attachFileList.append("uploadFiles",files[i]); // 키, 값으로 append
+	        				}
+	        				
+		    		          
+		    		           return $.ajax({
+						        url: '/admin/modifyProduct',
+						        method: 'POST',
+						        data : formData
+						      }).then(response => {
+						    	  const inputValue = $('#writeProductTtl').val();
+					    	  $('td[data-row-key='+ev.rowKey+'][data-column-name=ttl]').children(0).text(inputValue);
+						        return response;
+						      }).fail(error => {
+						        Swal.showValidationMessage(
+						          `Request failed: ${error.statusText}`
+						        );
+						      });
+		    		          
+		    		         
+		    		           
+		    		        }
+	        		})
+	        		.then((result) => {	
+	        			console.log(result);
+	        			if(result.isConfirmed){
+	        				// 수정 기능
+	        			}else if(result.isDenied){
+	        				// 삭제 기능z
+	        				Swal.fire({
+							  title: '삭제하시겠습니까?',
+							  showDenyButton: true,
+							  confirmButtonText: '삭제',
+							  denyButtonText: `취소`,
+							}).then((result) => {
+							  /* Read more about isConfirmed, isDenied below */
+							  if (result.isConfirmed) {
+								  // 서버에 삭제 요청을 보냅니다.
+								  $.ajax({
+	        		  			      type: 'POST', // 또는 DELETE에 맞는 HTTP 메서드를 사용합니다.
+	        		  			      url: '/admin/deleteProduct',
+	        		  			      contentType:'application/json',
+	        		  			      data: JSON.stringify([prdtNo]),
+	        		  			      success: function(response) {
+	        		  			        // 삭제 요청이 성공한 경우, 그리드에서 선택된 행을 제거합니다.
+	        		  			        console.log(response)
+	        		  			        grid.removeRow(ev.rowKey);
+	        		  			       	
+	        		  			      },
+	        		  			      error: function(err) {
+	        		  			        console.error('행 삭제 오류:', err);
+	        		  			      }
+	        		  			    });
+							  } else if (result.isDenied) {
+							    Swal.fire('취소됐음')
+							  }
+							})//end of swal
+	        			}//end of else if
+	        		})//end of then
+	        		  $("#attachFile").on('change',function(){
+	    		   			var inputFile = $("#attachFile");
+	    		   			// input 태그의 type이 file인것을 찾아서 inputFile이라는 변수로 지정
+	    		   			console.log(inputFile)
+	    		   			var files = inputFile[0].files;
+	    		   			// files: 선택한 모든 파일을 나열하는 FileList 객체
+	    		   			// multiple 특성을 지정하지 않았다면 두 개 이상의 파일을 포함하지 않습니다.
+	    		   			for(var i=0;i<files.length;i++){
+	    		   				let liTag=document.createElement("li");
+	    		   				let spanTag=document.createElement("span");
+	    		   				liTag.append(files[i].name);
+	    		   				spanTag.innerHTML="&times;";
+	    		   				liTag.append(spanTag);
+	    		   				uploadFileList.append(liTag);
+	    		   			}
+	    		   		})
+	    		   		
+	    		   		
+	    		   		$("#uploadFileList").on('click','span',function(){
+	    		   			var dataTranster = new DataTransfer();
+	    		   			Array.from($("#attachFile")[0].files)
+	    		               .filter(file => file.name != $(event.target).parent().text().slice(0,-1))
+	    		               .forEach(file => {
+	    		               	dataTranster.items.add(file);
+	    		            	});
+	    		   			$("#attachFile")[0].files=dataTranster.files;
+	    		   			
+	    		   			fetch("/community/deleteAttach",{
+	    		   				method: "POST",
+	    		   				headers: {
+	    		   					'Content-Type': 'application/x-www-form-urlencoded'
+	    		   				},
+	    		   				body: 'atchNo='+$(event.target).parent()[0].dataset.atchno
+	    		   			})
+	    		   			.then(result=>result.text())
+	    		   			.then(data=>function(){
+	    		   				if(data=="fail"){
+	    		   					toastShow("Delete Fail" , "삭제 실패" , "error");
+	    		   				}
+	    		   			})
+	    		   			.catch(err=>console.log(err));
+	    		   			
+	    		   			$(event.target).parent().remove();
+	    		   		})
+	        		
+	            })// end of done
+	        });//end of dblclick 기능
+	        	
+	        	
+		</script>
 	</div>
 </body>
 </html>

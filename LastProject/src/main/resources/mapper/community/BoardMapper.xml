@@ -160,6 +160,16 @@
 		VALUES(#{commNo},#{boardNo},#{cntn},#{commNo},#{membNo})
 	</insert>
 	
+	<!-- 댓글 알람 등록 -->
+	<insert id="insertCommentAlarm" parameterType="CommentsVO">
+		<selectKey keyProperty="alarmNo" resultType="string" order="BEFORE">
+			SELECT CONCAT('alm-',NVL(MAX(TO_NUMBER(SUBSTR(alarm_no, 5))), 0)+1)
+			FROM ALARM
+		</selectKey>
+		INSERT INTO ALARM(alarm_no,memb_no,cntn,a_type)
+		VALUES(#{alarmNo},#{writerMembNo},'['||#{ttl}||']글에 댓글이 추가 되었습니다.',#{boardNo})
+	</insert>
+	
 	<!-- 댓글 단건조회 -->
 	<select id="getComment" resultType="CommentsVO">
 		SELECT comm_no,board_no,cntn,drwup_dt,rcom,nrcom,h_comm_no,memb_no,nick

@@ -17,7 +17,11 @@
 }
 #chargeBtn{
 font-size:40px; padding-left:30px; font-weight:bold;
-color: green;
+color: #FF3066;
+}
+#chargeBtn img{
+	width : 120px;
+	padding-bottom: 30px;
 }
 #myPointTblDiv{
 width: 700px;
@@ -44,6 +48,9 @@ margin-top:70px;
 #dealSel{
 	float : right;
 	margin-right : 20px;
+	width: 140px;
+	height: 32px;
+	padding : 5px;
 }
 #titlename span:after{
 	width:250px;
@@ -57,7 +64,7 @@ margin-top:70px;
 		<span style="font-size:40px; color:black;">My 포인트</span>
 		<strong> <span th:text="|${#numbers.formatInteger(mypoint, 0, 'COMMA')}|" style="font-size:40px; padding-left:30px; color:black;"></span></strong>
 		<span style="font-size:30px; color:black;"> point</span>
-		<a href="pointChargeForm" id="chargeBtn" >충전</a><br>
+		<a href="pointChargeForm" id="chargeBtn"><img th:src="|/member/images/charge.png|" ></a><br>
 	</div>
 	<div id="myCouponList">
 		<span style="font-size:40px; color:black;">My 쿠폰</span>
@@ -82,7 +89,7 @@ margin-top:70px;
         <tr>
             <th>날짜</th>
             <th>구분</th>
-            <th>종목or제품이름</th>
+            <th>종목/제품이름</th>
             <th>이용내역</th>
         </tr>
     </thead>

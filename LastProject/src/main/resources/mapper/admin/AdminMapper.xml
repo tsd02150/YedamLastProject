@@ -335,4 +335,106 @@
 		FROM ATTACH_FILE
         where noti_no = #{notiNo}
 	</select>
+	
+	<!-- order 글 리스트 -->
+	<select id="orderList" resultType="OrderVO">
+		select o.order_no , o.memb_no , p.nm , o.pay_an, o.order_st , o.order_dt
+        from order_detail d join product p
+        on d.prdt_no = p.prdt_no
+        join orders o
+        on d.order_no = o.order_no
+        order by o.order_dt desc
+        
+	</select>
+	
+	<!-- order 개수 -->
+	<select id="orderTotal">
+		select count(order_no)
+        from orders
+	</select>
+	
+	<!-- 주문 상태 설정 -->
+	<!-- <update id="returnNorm"  >
+		update stop_yn
+		set end_dt = sysdate
+		where memb_no in (
+			<foreach collection="list" item="item" separator=",">
+				#{item}
+			</foreach>
+		)
+		<![CDATA[
+		and end_dt > sysdate
+		]]>
+	</update> -->
+	
+	<!-- product 글 리스트 -->
+	<select id="productList" resultType="productVO">
+		select *
+        from product
+       
+	</select> 
+	
+	<!-- product 개수 -->
+	<select id="productTotal">
+		select count(prdt_no)
+        from product
+	</select>
+	
+	  <!-- 상품 등록 -->
+    <insert id="addProduct">
+    	insert into product (PRDT_NO,
+							NM,
+							PRC,
+							DC_RATE,
+							DESCT,
+							THUMB,
+							IMG,
+							STC_CNT,
+							DRWUP_DT,
+							COMMON_CD)
+		values (#{prdtNo},
+				#{nm},
+				#{prc},
+				#{dcRate},
+				#{desct},
+				#{thumb},
+				#{img},
+				#{stcCnt},
+				sysdate,
+				#{commonCd})
+				
+	 <selectKey keyProperty="ProductVO" resultType="String" order="AFTER">
+	   	SELECT CONCAT('prd-',NVL(MAX(TO_NUMBER(SUBSTR(prdt_no, 5))),
+			0)+1)
+			FROM PRODUCT
+	 </selectKey>	
+    </insert>
+    
+    <!-- product 상세 -->
+	<select id="productDetail" resultType="ProductVO">
+		select *
+     	form product
+        where prdt_no = #{prdtNo}
+	</select>
+	
+	  <!-- 상품 삭제 -->
+	<delete id="deleteProduct" >
+		delete from product
+		where prdt_no in (
+			<foreach collection="list" item="item" separator=",">
+				#{item}
+			</foreach>
+		)
+	</delete>
+	
+	   <!-- 상품 수정 -->
+    <update id="modifyProduct" >
+    	update product
+    	set prc = #{prc}
+    		,nm = #{nm}
+    		,thumb = #{thumb}
+    	where prdt_no = #{prdtNo}
+    </update>
+    
+	
 </mapper>

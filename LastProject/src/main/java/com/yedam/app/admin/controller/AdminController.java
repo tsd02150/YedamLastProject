@@ -25,6 +25,7 @@ import com.yedam.app.community.service.FaqVO;
 import com.yedam.app.community.service.NoticeVO;
 import com.yedam.app.community.service.QuestionVO;
 import com.yedam.app.community.service.ReportVO;
+import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.security.service.UserVO;
 //김태연 2023/07/24 admin 페이지
 @Controller
@@ -209,22 +210,22 @@ public class AdminController {
 	}
 	
 	// orders 리스트
-		@SuppressWarnings("unchecked")
-		@ResponseBody
-		@GetMapping("orderList")
-		public Map<String,Object> boardList2(int page , int perPage){
-			Map<String,Object> objectMap = new HashMap<>();
-			Map<String,Object> dataMap = new HashMap<>();
-			Map<String,Object> paginationMap = new HashMap<>();
-			Map<String,Object> resultMap = adminService.boardList(page , perPage);
-			objectMap.put("result", true);
-	        objectMap.put("data", dataMap);
-		        dataMap.put("contents", (List<BoardVO>)resultMap.get("boardList"));
-		        dataMap.put("pagination", paginationMap);
-			        paginationMap.put("page", page);
-			        paginationMap.put("totalCount", (Integer)resultMap.get("boardTotal"));
-	        return objectMap;
-		}
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	@GetMapping("orderList")
+	public Map<String,Object> orderList(int page , int perPage){
+		Map<String,Object> objectMap = new HashMap<>();
+		Map<String,Object> dataMap = new HashMap<>();
+		Map<String,Object> paginationMap = new HashMap<>();
+		Map<String,Object> resultMap = adminService.orderList(page , perPage);
+		objectMap.put("result", true);
+        objectMap.put("data", dataMap);
+	        dataMap.put("contents", (List<BoardVO>)resultMap.get("orderList"));
+	        dataMap.put("pagination", paginationMap);
+		        paginationMap.put("page", page);
+		        paginationMap.put("totalCount", (Integer)resultMap.get("orderTotal"));
+        return objectMap;
+	}
 	
 	//회원정지
 	@ResponseBody
@@ -371,4 +372,56 @@ public class AdminController {
 	public int deleteBoard(@RequestBody List<String> list) {
 		return adminService.deleteBoard(list);
 	}
+
+		
+	// product 리스트
+	@SuppressWarnings("unchecked")
+	@ResponseBody
+	@GetMapping("productList")
+	public Map<String,Object> productList(int page , int perPage){
+		Map<String,Object> objectMap = new HashMap<>();
+		Map<String,Object> dataMap = new HashMap<>();
+		Map<String,Object> paginationMap = new HashMap<>();
+		Map<String,Object> resultMap = adminService.productList(page , perPage);
+		objectMap.put("result", true);
+        objectMap.put("data", dataMap);
+	        dataMap.put("contents", (List<ProductVO>)resultMap.get("productList"));
+	        dataMap.put("pagination", paginationMap);
+		        paginationMap.put("page", page);
+		        paginationMap.put("totalCount", (Integer)resultMap.get("productTotal"));
+        return objectMap;
+	}
+	
+	//상품 등록
+	@ResponseBody
+	@PostMapping("addProduct")
+	public Map<String , Object> addProduct(ProductVO prdtVO ,HttpServletRequest request) {
+		UserVO uvo = (UserVO) request.getSession().getAttribute("loggedInMember");
+		prdtVO.setMembNo(uvo.getMembNo());
+		return adminService.addProduct(prdtVO);
+	}
+	
+	// 상품 단건조회
+	@ResponseBody
+	@GetMapping("productDetail")
+	public Map<String , Object > productDetail(String prdtNo) {
+		return adminService.productDetail(prdtNo);
+	}
+	
+	//상품 수정
+	@ResponseBody
+	@PostMapping("modifyProduct")
+	public Map<String , Object> modifyProduct(ProductVO prdtVO, HttpServletRequest request) {
+		UserVO uvo = (UserVO) request.getSession().getAttribute("loggedInMember");
+		prdtVO.setMembNo(uvo.getMembNo());
+		return adminService.modifyProduct(prdtVO);
+	}
+	
+	// 상품 삭제
+	@ResponseBody
+	@PostMapping("deleteProduct")
+	public int deleteProduct(@RequestBody List<String> list) {
+		return adminService.deleteProduct(list);
+	}
+
 }

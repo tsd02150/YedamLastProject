@@ -456,7 +456,7 @@
 					headers:{
 						'Content-Type':'application/x-www-form-urlencoded'
 					},
-					body: 'cntn='+commentCntn.value+"&boardNo="+[[${board.boardNo}]]+"&membNo="+[[${myInfo.membNo}]]
+					body: 'cntn='+commentCntn.value+"&boardNo="+[[${board.boardNo}]]+"&membNo="+[[${myInfo.membNo}]]+"&ttl="+[[${board.ttl}]]+"&writerMembNo="+[[${member.membNo}]]+"&commonCd="+[[${boardCode}]]
 				})
 				.then(response=>response.json())
 				.then(result=>{
