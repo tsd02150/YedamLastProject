@@ -167,7 +167,7 @@
 			FROM ALARM
 		</selectKey>
 		INSERT INTO ALARM(alarm_no,memb_no,cntn,a_type)
-		VALUES(#{alarmNo},#{writerMembNo},'['||#{ttl}||']글에 댓글이 추가 되었습니다.',#{boardNo})
+		VALUES(#{alarmNo},#{writerMembNo},'['||#{ttl}||']글에 댓글이 추가 되었습니다.',#{boardNo}||#{commonCd})
 	</insert>
 	
 	<!-- 댓글 단건조회 -->
