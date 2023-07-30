@@ -45,26 +45,27 @@ margin-top:70px;
 	float : right;
 	margin-right : 20px;
 }
+#titlename span:after{
+	width:250px;
+}
 </style>
 </head>
 <body>
 <div layout:fragment="mypage">
 	<div id="mypageBody">
 	<div id="myPointList">
-		<span>로고</span>
 		<span style="font-size:40px; color:black;">My 포인트</span>
 		<strong> <span th:text="|${#numbers.formatInteger(mypoint, 0, 'COMMA')}|" style="font-size:40px; padding-left:30px; color:black;"></span></strong>
 		<span style="font-size:30px; color:black;"> point</span>
 		<a href="pointChargeForm" id="chargeBtn" >충전</a><br>
 	</div>
 	<div id="myCouponList">
-		<span>로고</span>
 		<span style="font-size:40px; color:black;">My 쿠폰</span>
 		<strong> <span th:text="${#lists.size(mycoupon)}" style="font-size:40px; padding-left:70px; color:black;"></span></strong>
 		<span style="font-size:30px; color:black;"> 개</span>
 	</div>
 	<div id="myPointTblDiv">
-		<h3 class="news-title">
+		<h3 class="news-title" id="titlename">
       <span>포인트 적립 | 사용 내역</span>
  		</h3>
 		<input type="date" id="startDate">

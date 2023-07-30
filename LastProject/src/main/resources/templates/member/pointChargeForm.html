@@ -66,7 +66,25 @@ color: green;
 font-size:40px; 
 padding-left:30px; 
 }
-
+#tosimg{
+width : 500px;
+background-color: blue;
+font-size : 30px;
+}
+#payment-button{
+width : 140px;
+}
+#button-addon2{
+	height: 53px;
+	width:53px;
+	font-size: large;
+}
+.btn-outline-secondary{
+	margin-top:5px;
+	width : 125px;
+	font-size : 18px;
+	font-weight: bold;
+}
 
 </style>
 </head>
@@ -75,7 +93,7 @@ padding-left:30px;
 	<div id="mypageBody">
 	<div id="myPointList">
 		<h2>충전</h2>
-		<span>로고</span>
+		<span></span>
 		<span style="font-size:40px; color:black;">My 포인트</span>
 		<strong> <span th:text="|${#numbers.formatInteger(mypoint, 0, 'COMMA')}|" 
 									 th:attr="class=${mypoint > 10000 ? 'pointTxt' : 'high pointTxt'}"
@@ -92,20 +110,20 @@ padding-left:30px;
 			<div>
 			<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
 			  <li class="nav-item" role="presentation">
-			    <button class="nav-link" id="pills-home-tab" data-price="1,000" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">1천원</button>
+			    <button class="nav-link btn btn-outline-secondary" id="pills-home-tab" data-price="1,000" data-bs-toggle="pill" data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home" aria-selected="true">1천원</button>
 			  </li>
 			  <li class="nav-item" role="presentation">
-			    <button class="nav-link" id="pills-profile-tab" data-price="5,000" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">5천원</button>
+			    <button class="nav-link btn btn-outline-secondary" id="pills-profile-tab" data-price="5,000" data-bs-toggle="pill" data-bs-target="#pills-profile" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">5천원</button>
 			  </li>
 			  <li class="nav-item" role="presentation">
-			    <button class="nav-link" id="pills-contact-tab" data-price="10,000" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">1만원</button>
+			    <button class="nav-link btn btn-outline-secondary" id="pills-contact-tab" data-price="10,000" data-bs-toggle="pill" data-bs-target="#pills-contact" type="button" role="tab" aria-controls="pills-contact" aria-selected="false">1만원</button>
 			  </li>
 			  <li class="nav-item" role="presentation">	
-			    <button class="nav-link" id="pills-disabled-tab"data-price="30,000"  data-bs-toggle="pill" data-bs-target="#pills-disabled" type="button" role="tab" aria-controls="pills-disabled" aria-selected="false">3만원</button>
+			    <button class="nav-link btn btn-outline-secondary" id="pills-disabled-tab"data-price="30,000"  data-bs-toggle="pill" data-bs-target="#pills-disabled" type="button" role="tab" aria-controls="pills-disabled" aria-selected="false">3만원</button>
 			  </li>
 			</ul>
 			</div>
-			<img id="tosimg" th:src="|/member/images/toss.png|" style="width : 400px; height: 100px; margin-left:80px;">
+			<button id="tosimg" class="btn btn-primary">결제하기</button>
 		</div>
 		<div id="tosspay">
 	 	<!-- 결제위젯, 이용약관 영역 -->
@@ -113,8 +131,8 @@ padding-left:30px;
   	<div id="agreement"></div>
 	 	<!-- 결제하기 버튼 -->
   	<div id="payBtn">
-  		<button id="payment-button" class="btn btn-primary btn-lg">결제하기</button>
-  		<button id="resetpay-button" class="btn btn-primary btn-lg">취소하기</button>
+  		<button id="payment-button" class="btn btn-primary btn-lg">다음</button>
+  		<button id="resetpay-button" class="btn btn-dark btn-lg">취소하기</button>
   	</div>
 	</div>
 	</div>

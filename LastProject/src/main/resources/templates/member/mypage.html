@@ -112,6 +112,9 @@ height: 200px;
 width: 50px;
 height: 50px;
 }
+#titlename span:after{
+	width:110px;
+}
 </style>
 </head>
 <body>
@@ -119,7 +122,7 @@ height: 50px;
 		<!-- 내프로필 -->
 			<div id="mypageBody">
 				<table id="mypagetbl">
-					<h3 class="news-title">
+					<h3 class="news-title" id="titlename">
 			        <span>내 프로필 
 				        <a th:if="${session.loggedInMember.path == null}" th:href="@{/member/mypageIntro}">
 				        <i class="bi bi-arrow-right"></i>
@@ -148,7 +151,7 @@ height: 50px;
 			<!-- interest item -->
 			<div id="intrest">
 			<table id="intrestTbl">
-				<h3 class="news-title">
+				<h3 class="news-title" id="titlename">
 	        <span>주식현황 
 		        <a href="mystock">
 		        <i class="bi bi-arrow-right"></i>
@@ -162,7 +165,7 @@ height: 50px;
 					</tr>
 				</table>
 				<div class="interestSection">
-				<h3 class="news-title">
+				<h3 class="news-title" id="titlename">
 	        <span>관심종목
 		        <a th:href="@{/stock/itemListPage}">
 		        <i class="bi bi-arrow-right"></i>
@@ -177,7 +180,7 @@ height: 50px;
 		<!-- order -->
 			<table id="myordertbl">
 			<br>
-			  <h3 class="news-title">
+			  <h3 class="news-title" id="titlename">
 		        <span>주문 | 배송
 			        <a href="myorder">
 			        <i class="bi bi-arrow-right" style="font-size: 35px; margin-top: 15px; margin-left:535px;"></i>

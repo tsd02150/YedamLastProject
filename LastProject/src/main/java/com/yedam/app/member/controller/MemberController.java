@@ -718,12 +718,12 @@ public class MemberController {
 		return list;
 	}
 	
-	@ResponseBody
-	@GetMapping("anoSelectKey")
-	public String anoSelectKey() {
-		String ano = membService.anoSelectKey();
-		return ano;
-	}
+	/*
+	 * @ResponseBody
+	 * 
+	 * @GetMapping("anoSelectKey") public String anoSelectKey() { String ano =
+	 * membService.anoSelectKey(); return ano; }
+	 */
 	
 	@ResponseBody
 	@PostMapping("recomList")
@@ -768,4 +768,39 @@ public class MemberController {
 		vo.setMembNo(mem.getMembNo());
 		return membService.myorderDetaList(vo);
 	}
+	
+	@ResponseBody
+	@PostMapping("deleteOrder")
+	public int deleteOrder(OrderVO vo, HttpSession session) {
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		String membNo = mem.getMembNo();
+		MembVO membVO = new MembVO();
+		
+		//주문금액
+		int orderAm = Integer.parseInt(membService.selectOrderOne(vo));
+		int point = mem.getPoint()-orderAm;
+		
+		//주문취소 변경
+		vo.setMembNo(membNo);
+		int result = membService.deleteOrder(vo);
+		
+		//회원정보 변경
+		membVO.setId(mem.getId());
+		membVO.setPoint(point);
+		membService.updateMemberInfo(membVO);
+		
+		//session 정보 업데이트
+		mem.setPoint(point);
+		
+		return result;
+	}
+
+	@ResponseBody
+	@PostMapping("updateShip")
+	public int updateShip(ShippingVO vo, HttpSession session ) {
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		int result = membService.updateShip(vo);
+		return result;
+	}
+	
 }

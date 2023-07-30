@@ -742,4 +742,21 @@
 		where m.memb_no = #{membNo}
 		and s.ship_no = #{shipNo}
 	</select>
+	
+	<update id="deleteOrder" parameterType="OrderVO">
+		update orders
+		set order_st = '결제취소'
+		where memb_no = #{membNo}
+		and pay_an = #{payAn}
+	</update>
+	<update id="updateShip" parameterType="ShippingVO">
+		update shipping
+		set ship_st = '주문취소'
+		where ship_no = #{shipNo}
+	</update>
+	
+	<select id="selectOrderOne" parameterType="OrderVO" resultType="String">
+		select order_am from orders
+		where pay_an = #{payAn}
+	</select>
 </mapper>
