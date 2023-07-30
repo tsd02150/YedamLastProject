@@ -20,6 +20,8 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
         	// 로그인이 필요한 페이지에서 로그아웃 할 경우 메인페이지로 이동
         	if(referer.equals("http://localhost/member/mypage") ||
     			referer.equals("http://localhost/community/chat") ||
+    			referer.equals("http://localhost/mall/orderList") ||
+    			referer.equals("http://localhost/mall/basketList") ||
     			referer.equals("http://localhost/member/mystock") ||
     			referer.equals("http://localhost/member/mystockInfo") ||
     			referer.equals("http://localhost/member/mypageIntro") ||

@@ -20,9 +20,6 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 	@Autowired
 	UserService userService;
 	
-	//private LoginHistervice loginHistService;
-
-	
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 	                                    Authentication authentication) throws IOException, ServletException {
@@ -30,9 +27,6 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 	    HttpSession session = request.getSession();
 	    String referer = (String) session.getAttribute("returnUrl");
 	    
-	    System.out.println("++++++++++++++++++++++++++");
-	    System.out.println(referer);
-	    System.out.println("++++++++++++++++++++++++++");
 
 	    if (authentication != null && authentication.getPrincipal() instanceof PrincipalDetails) {
 	        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -56,25 +50,4 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 	        response.sendRedirect("/login?error=authentication");
 	    }
 	}
-
-
-	/*
-	 * @Override public void onAuthenticationSuccess(HttpServletRequest request,
-	 * HttpServletResponse response, Authentication authentication) throws
-	 * IOException, ServletException {
-	 * 
-	 * System.out.println("success handler 실행"); HttpSession session =
-	 * request.getSession(); PrincipalDetails principalDetails = (PrincipalDetails)
-	 * authentication.getPrincipal(); UserVO userVO = principalDetails.getUserVO();
-	 * 
-	 * 
-	 * if(userVO.getTempPwd() == null && !userVO.getNm().equals("admin")) {
-	 * session.setAttribute("loggedInMember", userVO);
-	 * response.sendRedirect(request.getHeader("referer")); } else
-	 * if(userVO.getTempPwd() != null && !userVO.getNm().equals("admin")){
-	 * session.setAttribute("loggedInMember", userVO);
-	 * response.sendRedirect("/member/tempPwdUpdate"); } else
-	 * if(userVO.getNm().equals("admin")) { session.setAttribute("loggedInMember",
-	 * userVO); response.sendRedirect("/admin/memberManage"); } }
-	 */
-	}
+}

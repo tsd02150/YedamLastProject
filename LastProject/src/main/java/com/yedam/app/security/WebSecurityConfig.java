@@ -88,7 +88,8 @@ public class WebSecurityConfig{
 	         .antMatchers("/admin/**").hasRole("ADMIN")
 	         .antMatchers("/community/chat").hasAnyRole("ADMIN","USER")
 	         .antMatchers("/member/mypage", "/member/mystock","/member/mystockInfo","/member/mypageIntro"
-        		 		 ,"/member/mypageInfo","/member/mypoint","/member/pointChargeForm","/member/myorder").authenticated()
+        		 		 ,"/member/mypageInfo","/member/mypoint","/member/pointChargeForm","/member/myorder"
+        		 		 ,"/mall/orderList","/mall/basketList").authenticated()
 	         .anyRequest().permitAll()
 	         .and()
  		     .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
