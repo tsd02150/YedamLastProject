@@ -15,6 +15,7 @@ import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.FaqVO;
 import com.yedam.app.community.service.NoticeVO;
 import com.yedam.app.community.service.QuestionVO;
+import com.yedam.app.mall.service.ProductVO;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -262,6 +263,30 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<String> getRoomList() {
 		return adminMapper.getRoomList();
+	}
+
+	@Override
+	public Map<String, Object> orderList(int page, int perPage) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<String, Object> productList(int page, int perPage) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int deleteProduct(List<String> list) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int addProduct(ProductVO prdtVO) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 	
