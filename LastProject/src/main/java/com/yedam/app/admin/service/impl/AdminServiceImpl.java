@@ -183,7 +183,7 @@ public class AdminServiceImpl implements AdminService {
 		int result = adminMapper.modifyNotice(vo);
 		if(result > 0) {
 			map.put("code", "success");
-			map.put("notiNo", vo.getMembNo());
+			map.put("notiNo", vo.getNotiNo());
 			
 		}else {
 			map.put("code", "fail");

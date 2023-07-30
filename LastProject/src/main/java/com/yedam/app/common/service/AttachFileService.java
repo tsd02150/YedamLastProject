@@ -11,4 +11,6 @@ public interface AttachFileService {
 	public List<AttachFileVO> getAttachFileList(AttachFileVO vo);
 	// 특정 첨부파일 찾기
 	public AttachFileVO getAttachFile(AttachFileVO vo);
+	// 공지사항 번호 딸린 파일삭제
+	public int notiNoDelFile(List<String> list);
 }

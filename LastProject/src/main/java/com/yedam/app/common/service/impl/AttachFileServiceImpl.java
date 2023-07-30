@@ -34,5 +34,11 @@ public class AttachFileServiceImpl implements AttachFileService{
 	public AttachFileVO getAttachFile(AttachFileVO vo) {
 		return attachFileMapper.getAttachFile(vo);
 	}
+	
+	//공지사항 번호 딸린 파일 삭제
+	@Override
+	public int notiNoDelFile( List<String> list) {
+		return attachFileMapper.notiNoDelFile(list);
+	}
 
 }
