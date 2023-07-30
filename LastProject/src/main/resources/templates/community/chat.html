@@ -154,7 +154,7 @@
 							</div>
 						</div>
 						<div id="particiCnt">
-							<h5>참여인원 : <span class="roomCnt">[[${roomInfo.conn}]]</span> 명</h5>
+							<h5>참여인원 : <span class="roomCnt">0</span> 명</h5>
 						</div>
 					</div>
 					<button type="button" id="resetBtn" class="btn-dark" onClick="resetChat()">채팅 초기화</button>
@@ -163,11 +163,11 @@
 				<!-- DIRECT CHAT DANGER -->
 				<div class="box box-danger direct-chat direct-chat-danger">
 					<div class="box-header with-border">
-						<h3 id="mainRoomName" class="box-title" th:data-roomno="${roomInfo.roomNo}" th:text="${roomInfo.nm}">전체 채팅방</h3>
+						<h3 id="mainRoomName" class="box-title">전체 채팅방</h3>
 
 						<div class="box-tools pull-right">
 							<span data-toggle="tooltip" title="3 New Messages"
-								class="badge bg-red roomCnt" th:text="${roomInfo.conn}">1</span>
+								class="badge bg-red roomCnt">0</span>
 							<button type="button" class="btn btn-box-tool">
 								<i class="fa fa-comments"></i>
 							</button>
@@ -226,8 +226,8 @@
 			let myMembNo=[[${particiInfo.membNo}]];
 			let chatRoomNo="room-1";
 			let chatSubs;
-
-			moveRoom("room-1");
+			$(document).ready(moveRoom("room-1"));
+			
 
 			function addRoomBtn(){
 				document.querySelector(".modal").style.display="block";

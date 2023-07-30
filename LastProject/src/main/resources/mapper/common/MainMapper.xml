@@ -208,7 +208,7 @@
 		                WHERE to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')))
 		        USING(item_no))
 		    USING(item_no)
-		    ORDER BY vol DESC)
+		    ORDER BY rate DESC, vol DESC)
 		WHERE rownum<8
 	]]>	
 	</select>

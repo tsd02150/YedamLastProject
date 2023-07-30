@@ -56,7 +56,6 @@ public class ChatController {
 		model.addAttribute("particiInfo",vo);
 		model.addAttribute("particiList",chatService.selectParticiList("room-1"));
 		
-		model.addAttribute("roomInfo",chatService.roomInfo("room-1"));
 		model.addAttribute("roomList",chatService.selectRoomList());
 		
 		return "community/chat";
