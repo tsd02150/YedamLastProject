@@ -15,6 +15,7 @@ import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.FaqVO;
 import com.yedam.app.community.service.NoticeVO;
 import com.yedam.app.community.service.QuestionVO;
+import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
 
 @Service
@@ -265,30 +266,75 @@ public class AdminServiceImpl implements AdminService {
 		return adminMapper.getRoomList();
 	}
 
+	// order 리스트
 	@Override
 	public Map<String, Object> orderList(int page, int perPage) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String,Object> map = new HashMap<>();
+		map.put("orderList", adminMapper.orderList(page, perPage));
+		map.put("orderTotal", adminMapper.orderTotal());
+		
+		return map;
+		
 	}
-
+	
+	// product 리스트
 	@Override
 	public Map<String, Object> productList(int page, int perPage) {
-		// TODO Auto-generated method stub
-		return null;
+		Map<String,Object> map = new HashMap<>();
+		map.put("productList", adminMapper.productList(page, perPage));
+		map.put("productTotal", adminMapper.productTotal());
+		
+		return map;
 	}
-
+	
+	// 상품 삭제
 	@Override
 	public int deleteProduct(List<String> list) {
-		// TODO Auto-generated method stub
-		return 0;
+		return adminMapper.deleteProduct(list);
 	}
-
+	
+	//상품 등록
 	@Override
-	public int addProduct(ProductVO prdtVO) {
-		// TODO Auto-generated method stub
-		return 0;
+	public Map<String , Object> addProduct(ProductVO prdtVO) {
+		adminMapper.addProduct(prdtVO);
+		Map<String , Object> map = new HashMap<String, Object>();
+		if(prdtVO.getPrdtNo() != null) {
+			map.put("code", "success");
+			map.put("prdtNo", prdtVO.getPrdtNo());
+			//map.put("notiVO", adminMapper.noticeDetail(prdtVO.getNotiNo()));
+		}else {
+			map.put("code", "fail");
+		}
+		
+		return map;
 	}
 	
+	// 주문 수정
+	@Override
+	public Map<String, Object> modifyOrder(OrderVO ordVO) {
+		Map<String , Object> map = new HashMap<String, Object>();
+		System.out.println("svimpl : " + ordVO);
+		int result = adminMapper.modifyOrder(ordVO);
+		if(result > 0) {
+			map.put("code", "success");
+		}else {
+			map.put("code", "fail");
+		}
+		return map;
+	}
 	
-
+	// 상품 수정
+	@Override
+	public Map<String, Object> modifyProduct(ProductVO prdtVO) {
+		Map<String , Object> map = new HashMap<String, Object>();
+		System.out.println("svimpl : " + prdtVO);
+		int result = adminMapper.modifyProduct(prdtVO);
+		if(result > 0) {
+			map.put("code", "success");
+		}else {
+			map.put("code", "fail");
+		}
+		return map;
+	}
+	
 }
