@@ -3,13 +3,11 @@ package com.yedam.app.admin.service;
 import java.util.List;
 import java.util.Map;
 
-import com.yedam.app.community.service.AttachVO;
 import com.yedam.app.community.service.BoardVO;
-import com.yedam.app.community.service.CommentsVO;
 import com.yedam.app.community.service.FaqVO;
 import com.yedam.app.community.service.NoticeVO;
 import com.yedam.app.community.service.QuestionVO;
-import com.yedam.app.community.service.ReportVO;
+import com.yedam.app.mall.service.ProductVO;
 
 
 public interface AdminService {
@@ -40,5 +38,11 @@ public interface AdminService {
 	public int deleteBoard(List<String> list);
 	public BoardVO boardDetail(String boardNo);
 	public List<String> getRoomList();
+	
+	public Map<String, Object> orderList(int page, int perPage);
+	public Map<String, Object> productList(int page, int perPage);
+	public int deleteProduct(List<String> list);
+	public int addProduct(ProductVO prdtVO);
+	
 	
 }
