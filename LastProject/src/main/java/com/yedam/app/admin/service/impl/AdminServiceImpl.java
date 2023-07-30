@@ -336,5 +336,13 @@ public class AdminServiceImpl implements AdminService {
 		}
 		return map;
 	}
+
+	@Override
+	public Map<String, Object> productDetail(String prdtNo) {
+		Map<String , Object > map = new HashMap<String, Object>();
+		map.put("productDetail", adminMapper.productDetail(prdtNo));
+		//map.put("attachFileList", adminMapper.getNoticeAttachList(notiNo));
+		return map;
+	}
 	
 }

@@ -401,6 +401,13 @@ public class AdminController {
 		return adminService.addProduct(prdtVO);
 	}
 	
+	// 상품 단건조회
+	@ResponseBody
+	@GetMapping("productDetail")
+	public Map<String , Object > productDetail(String prdtNo) {
+		return adminService.productDetail(prdtNo);
+	}
+	
 	//상품 수정
 	@ResponseBody
 	@PostMapping("modifyProduct")

@@ -112,6 +112,9 @@ public interface AdminMapper {
 	public int orderTotal();
 	// product 수
 	public int productTotal();
+	// product 단건조회
+	public ProductVO productDetail(String prdtNo);
+	
 	
 	
 	

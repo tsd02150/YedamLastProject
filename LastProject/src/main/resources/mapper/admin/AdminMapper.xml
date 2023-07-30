@@ -343,14 +343,14 @@
         on d.prdt_no = p.prdt_no
         join orders o
         on d.order_no = o.order_no
-        order by order_dt desc
+        order by o.order_dt desc
         
 	</select>
 	
 	<!-- order 개수 -->
 	<select id="orderTotal">
 		select count(order_no)
-        from order
+        from orders
 	</select>
 	
 	<!-- 주문 상태 설정 -->
@@ -392,7 +392,7 @@
 							STC_CNT,
 							DRWUP_DT,
 							COMMON_CD)
-		values ('prd-'||noti_seq.nextval,
+		values (#{prdtNo},
 				#{nm},
 				#{prc},
 				#{dcRate},
@@ -409,6 +409,13 @@
 			FROM PRODUCT
 	 </selectKey>	
     </insert>
+    
+    <!-- product 상세 -->
+	<select id="productDetail" resultType="ProductVO">
+		select *
+     	form product
+        where prdt_no = #{prdtNo}
+	</select>
 	
 	  <!-- 상품 삭제 -->
 	<delete id="deleteProduct" >

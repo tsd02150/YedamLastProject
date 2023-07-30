@@ -46,6 +46,7 @@ public interface AdminService {
 	public int deleteProduct(List<String> list);
 	public Map<String, Object> addProduct(ProductVO prdtVO);
 	public Map<String , Object> modifyProduct(ProductVO prdtVO);
+	public Map<String , Object > productDetail(String prdtNo);
 	
 	
 }
