@@ -113,4 +113,8 @@ public interface MemberService {
 	public int getShipListCount(ShippingVO vo);
 	//주문상세내역
 	public List<ShippingVO> myorderDetaList(ShippingVO vo);
+	//주문취소
+	public int deleteOrder(OrderVO vo);
+	public int updateShip(ShippingVO vo);
+	public String selectOrderOne(OrderVO vo);
 }

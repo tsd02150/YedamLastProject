@@ -26,6 +26,15 @@
   		DELETE FROM ATTACH_FILE
   		WHERE atch_no=#{atchNo}
   	</delete>
+  	<!-- 공지사항 번호에 딸린 파일 제거 -->
+  	<delete id="notiNoDelFile">
+  		delete from attach_file
+  		where noti_no in (
+  			<foreach collection="list" item="item" separator=",">
+  				#{item}
+  			</foreach>
+  		)
+  	</delete>
   	
   	<select id="getAttachFileList" resultType="AttachFileVO">
   		SELECT *

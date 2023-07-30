@@ -69,20 +69,19 @@
 }
 #interestDiv{
 	display : inline-block;
-	height: 360px;
+	height: 385px;
 	margin-top : 20px;
 	margin-right : 90px;
 	overflow: auto;
 }
 #recomDiv{
 	display : inline-block;
-	height: 360px;
+	height: 3805x;
 	margin-top : 20px;
 	overflow: auto;
 }
 #interesttbl{
 	width : 100%;
-	
 }
 
 #interestDiv button, #recomDiv button{
@@ -143,12 +142,15 @@
 #itemDiv{
 	margin-top:70px;
 }
+#titlename span:after{
+	width:110px;
+}
 </style>
 </head>
 <body>
 <div layout:fragment="mypage">
 		<div id="mypageBody" class="z-flex">
-		<h3 class="news-title">
+		<h3 class="news-title" id="titlename">
        <span>주식현황 
         <a href="mystockInfo">
         <i class="bi bi-arrow-right"></i>
@@ -183,7 +185,7 @@
 				</div>
 			</div>
 			<div id="buysellList" class="col-12">
-			<h3 class="news-title">
+			<h3 class="news-title" id="titlename">
        <span>거래내역</span>
    		</h3>
 			<input type="date" id="dstart"> ~ 
@@ -242,18 +244,33 @@
 			
 			<div id="itemDiv" class="col-12">
 				<div id="interestDiv" class="col-5">
-				<h3 class="news-title" style="margin-top: 10px;">
+				<h3 class="news-title" id="titlename" style="margin-top: 10px;">
 	       <span>관심종목</span>
 	   		</h3>
 					<table id="interesttbl">
-						<tbody id="intbody"></tbody>
+						<thead>
+							<tr>
+								<th>종목</th>
+								<th>현재가</th>
+								<th>상승률</th>
+							</tr>	
+						</thead>
+						<tbody id="intbody">
+						</tbody>
 					</table>
 				</div>
 				<div id="recomDiv" class="col-5">
-				<h3 class="news-title" style="margin-top: 10px;">
+				<h3 class="news-title" id="titlename" style="margin-top: 10px;">
 	       <span>추천종목</span>
 	   		</h3>
 					<table id="recomtbl" class="col-12">
+						<thead>
+							<tr>
+								<th>종목</th>
+								<th>현재가</th>
+								<th>상승률</th>
+							</tr>	
+						</thead>
 						<tbody id="recombody">
 						</tbody>
 					</table>

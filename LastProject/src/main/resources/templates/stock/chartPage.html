@@ -110,6 +110,9 @@ h3 {
 #CP3D11 input {
 	margin: 10px;
 }
+#CP3D1{
+	height:280px;
+}
 
 #CP3D1 table {
 	width: 100%;
@@ -326,6 +329,10 @@ input[type="number"]::-webkit-inner-spin-button {
 .stock-tab-content{
 	height:240px;
 }
+.searchItem.interest{
+	height:47.5px;
+	width:85%;
+}
 </style>
 <title>Insert title here</title>
 </head>
@@ -361,10 +368,12 @@ input[type="number"]::-webkit-inner-spin-button {
 						</div>
 					</div>
 					<div id="CP1D1" class="mb-1 border">
-						<h3>
-							관심종목
-							<button class="btn btn-danger" id="myBtn">+</button>
-						</h3>
+						<div id="changeInput">
+							<h3>
+								관심종목
+								<button class="btn btn-danger" id="myBtn">+</button>
+							</h3>
+						</div>
 						<div id="favItem" class="border m-1">
 							<th:block th:if="${session.loggedInMember}==null">
 								<p>로그인 후 이용할 수 있는 기능입니다.</p>
@@ -434,9 +443,16 @@ input[type="number"]::-webkit-inner-spin-button {
 									</tr>
 								</thead>
 								<tbody>
-									<th:block th:each="list : ${boardList}">
-										<tr >
-											<td><a th:href="@{/community/boardDetail(page=1 , boardNo=${list.boardNo} , commonCd=C2)}" th:attr="data-boardno=${list.boardNo}" th:text="|[${list.cntn}]   ${list.ttl}|" style="cursor:pointer;text-decoration: none;"></a> </td>
+									<th:block th:if="${boardList.size()} != 0">
+										<th:block th:each="list : ${boardList}">
+											<tr >
+												<td><a th:href="@{/community/boardDetail(page=1 , boardNo=${list.boardNo} , commonCd=C2)}" th:attr="data-boardno=${list.boardNo}" th:text="|[${list.cntn}]   ${list.ttl}|" style="cursor:pointer;text-decoration: none;"></a> </td>
+											</tr>
+										</th:block>
+									</th:block>
+									<th:block th:unless="${boardList.size()} != 0">
+										<tr>
+											<td>게시판 정보가 없습니다.</td>
 										</tr>
 									</th:block>
 								</tbody>
@@ -476,57 +492,17 @@ input[type="number"]::-webkit-inner-spin-button {
 					<div id="CP3D2" class="border">
 						<h3>호가</h3>
 						<div id="price">
-							<table id="sell">
-							</table>
-							<table id="buy">
-							</table>
+							<table id="sell"></table>
+							<table id="buy"></table>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div id="myModal" class="modal">
-
-			<!-- Modal content -->
-			<div class="modal-content" style="z-index: 100">
-				<div class="modal-header">
-					<span class="close">&times;</span>
-					<h2>관심종목 추가</h2>
-				</div>
-				<div class="modal-body">
-					<div id="fstDiv" class="col-md-12">
-						<input class="searchItem interest" type="text" name="search"
-							placeholder="종목을 검색하세요." />
-						<table id="choice" class="border">
-							<td>
-								<div>
-									<ul id="sc">
-										<li data-cd="S1">농산물</li>
-										<li data-cd="S2">수산물</li>
-									</ul>
-								</div>
-							</td>
-							<td>
-								<div>
-									<ul id="theme"></ul>
-								</div>
-							</td>
-							<td>
-								<div>
-									<ul id="item"></ul>
-								</div>
-							</td>
-							<td>
-								<div id="itemInfo"></div>
-							</td>
-						</table>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<h3>팔기 전 까지는 손실이 아니다.</h3>
-				</div>
-			</div>
-
+		
+		<div id="interestInput" class="d-none">
+			<input class="searchItem interest" type="text" name="search" placeholder="종목을 검색하세요." />
+			<button id="returnBtn" class="btn btn-danger">&times</button>
 		</div>
 			
 			<div id="orderBox" class="row d-none" >
@@ -555,7 +531,7 @@ input[type="number"]::-webkit-inner-spin-button {
 					<div style="margin-top:20px;">
 						<p>종목 : [[${itemInfo?.nm}]]</p>
 						<p>
-							총 보유주 <span>0</span> 주
+							총 보유주 <span id="possStockCnt">0</span> 주
 						</p>
 						<p>
 							수익률 : <span>0</span>%
@@ -585,46 +561,34 @@ input[type="number"]::-webkit-inner-spin-button {
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 		<script th:inline="javascript" src="../stock/autoComplete.js"></script>
 		<script th:inline="javascript">
+		console.log([[${boardList}]].length)
 		$('#forNonlogin').css('width',$('#CP1D2').css('width')).css('height',$('#CP1D2').css('height'))
 		if([[${session.loggedInMember}]] == null){
 			$('#CP1D2 .blur').css('filter','blur(5px)');
 		}
-			// Get the modal
-			var modal = document.getElementById("myModal");
+			
 
 			// Get the button that opens the modal
-			var btn = document.getElementById("myBtn");
-
-			// Get the <span> element that closes the modal
-			var span = document.querySelector("#myModal > div > div.modal-header > span");
-
-			// When the user clicks the button, open the modal 
 			/*<![CDATA[*/
-			btn.onclick = function() {
+			$('#changeInput').on('click','#myBtn',function() {
 				if([[${session.loggedInMember}]] != null){
-				$(" div.apexcharts-toolbar").css('visibility','hidden');
-				$("#chartSelect").css('visibility','hidden');
-				modal.style.display = "block";
+					// 관심종목 위치에 input 오게하기
+					$('#changeInput').html('').append($('#interestInput').removeClass('d-none'));
 				}else{
 					toastShow('로그인 후 실행해주세요','회원서비스 입니다','info');
 				}
-			}
+			});
 			/*]]>*/
-			// When the user clicks on <span> (x), close the modal
-			span.onclick = function() {
-				$(" div.apexcharts-toolbar").css('visibility','visible');
-				$("#chartSelect").css('visibility','visible');
-				modal.style.display = "none";
-			}
 
-			// When the user clicks anywhere outside of the modal, close it
-			window.onclick = function(event) {
-				if (event.target == modal) {
-					$(" div.apexcharts-toolbar").css('visibility','visible');
-					$("#chartSelect").css('visibility','visible');
-					modal.style.display = "none";
-				}
-			}
+			$('#changeInput').on('click','#returnBtn',function(){
+				$('section').append($('#interestInput').toggleClass('d-none'));
+				let html = `<h3>
+								관심종목
+								<button class="btn btn-danger" id="myBtn">+</button>
+							</h3>`;
+				$('#changeInput').html(html);
+			})
+			
 			// 관심종목 제거 기능
 			$('#favItem').on('click','input[type=button]',function(){
 				let membInfo = $('#sessionMembNo').text(); 
@@ -680,7 +644,7 @@ input[type="number"]::-webkit-inner-spin-button {
 					$('#orderName').text('판매');
 					$('#totalPrc').parent().children('span:eq(0)').text('체결시 얻는 수익 : ');
 					// 판매가능한 주수 보유주수량으로 출력	
-					$('#afford').val($('#CP2D22 div p:nth-of-type(2) span').text());
+					$('#afford').val($('#possStockCnt').text());
 				}else{
 					
 					$('#orderType').attr('data-order','buy').text('매수주문입니다');
@@ -855,17 +819,14 @@ input[type="number"]::-webkit-inner-spin-button {
 				
 				let affordStockCnt = $('#afford').val();
 				if($(this).text() =='10 %'){
-					console.log('10')
 					let pointTen = Math.floor(affordStockCnt * 0.1);
 					$('#stockCnt').val(pointTen);
 					totalForm(stockPrc)
 				}else if($(this).text() == '50 %'){
-					console.log('50')
 					let pointFive = Math.floor(affordStockCnt * 0.5);
 					$('#stockCnt').val(pointFive);
 					totalForm(stockPrc)
 				}else{
-					console.log('100')
 					let hundred = affordStockCnt;
 					$('#stockCnt').val(hundred);
 					totalForm(stockPrc)

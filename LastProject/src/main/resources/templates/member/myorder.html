@@ -123,7 +123,7 @@ background-color : rgba(0,0,0,0.5);
     -ms-flex-direction: column;
     flex-direction: column;
     width: 800px;
-    height: 670px;
+    height: 690px;
     pointer-events: auto;
     background-color: #fff;
     background-clip: padding-box;
@@ -144,6 +144,15 @@ padding : 20px;
 .prdtTr{
 border-bottom: 1px solid #e7e7e7;
 }
+.del-order-btn{
+	width : 90px;
+	height: 38px;
+	padding : 6px 12px 6px 12px;
+	margin-top : 20px;
+}
+#titlename span:after{
+	width:168px;
+}
 </style>
 </head>
 <body>
@@ -153,7 +162,7 @@ border-bottom: 1px solid #e7e7e7;
 	<!-- 상품 정보 -->
 		<div class="orderGoods_div">
 			<!-- 상품 종류 -->
-			<h3 class="news-title">
+			<h3 class="news-title" id="titlename">
        <span>주문 | 배송 내역</span>
    		</h3>
 			<div id="totalCountDiv">
@@ -365,14 +374,14 @@ border-bottom: 1px solid #e7e7e7;
 		    	let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
 					div+= `
 						<div class="modatcnt">
-						<h4>주문번호 : ${el.payAn}</h4>
+						<h4 class="payNo">주문번호 : <span>${el.payAn}</span></h4>
 						<p>결제 날짜 : ${formattedDt}</p>
 						<table>
 						<tbody onclick="location.href='/mall/getFarm?prdtNo=${el.prdtNo}'">
 						<tr>
 						<th><img src="/mall/images/main/${el.thumb}"></th>
 						<td>
-						<p class="high">${el.shipSt}</p> <button class="del-order-btn"></button>
+						<p class="high">${el.shipSt}</p> 
 						<strong>${el.nm}</strong><br>
 						${commas(el.cnt)}원
 						<br>
@@ -387,8 +396,11 @@ border-bottom: 1px solid #e7e7e7;
 						<h4>주문자 정보</h4>
 						<span>주문자&nbsp;&nbsp;</span><span><strong>${el.name}</strong></span><br>
 						<span>연락처&nbsp;&nbsp;</span><span><strong>${el.tel}</strong></span>
-						</div>
-					`;
+						<br>`;
+						if(el.shipSt != "배송완료" || el.shipSt != "주문취소"){
+							div+= `<button class="del-order-btn btn btn-dark" onclick="delOrder(this)">주문취소</button>`;
+						}
+						div+= `</div>`;
 				})
 				$(".modal-body").html(div);
 				//주문상세내역 
@@ -398,10 +410,48 @@ border-bottom: 1px solid #e7e7e7;
 				console.log(err);
 			}
 		});
-		
-		
 	}
 	
+	
+	function delOrder(target){
+		console.log($(".payNo span").text());
+		console.log(typeof(parseInt($(".payNo span").text())));
+		$.ajax({
+			url : "deleteOrder",
+			method : "POST",
+			data : {
+				"payAn" : parseInt($(".payNo span").text())
+			},
+			success : function(data){
+				if(data >0 ){
+					updateShip();
+					$('#myModal').hide();
+					shipList();
+			    pageBtn();
+			    toastShow("Delete","주문취소 완료","success");
+				}
+			},
+			error : function(err){
+				console.log(err);
+			}
+		});
+	}
+	
+	function updateShip(){
+		$.ajax({
+			url : "updateShip",
+			method : "POST",
+			data : {
+				"shipNo" : $(".prdtTr").data("shipno")
+			},
+			success : function(data){
+				console.log("성공");
+				console.log(data);
+			},error : function(err){
+				console.log(err);
+			}
+		});
+	}
 	
 	$(".close-btn").on("click",function(){
 		$('#myModal').hide();
@@ -438,7 +488,6 @@ border-bottom: 1px solid #e7e7e7;
 	   //페이지 버튼생성
 	   function createPageCntBtn(start,end){
 	      $('.pagebtn').remove();
-	      
 	      for (let i = start; i <= end; i++) {
 	        let liTag = $('<li></li>').addClass('page-item').addClass('pagebtn');
 	        if (i % 20 === targetPage) {

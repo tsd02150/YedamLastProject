@@ -15,7 +15,7 @@ public class OrderVO {
 	private Date orderDt;
 	private int dcRate;
 	private String shpcst;
-	private String orderAm;
+	private int orderAm;
 	private String orderSt;
 	private int payAn;
 	

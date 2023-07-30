@@ -202,12 +202,16 @@
 						data:attachFileList,
 						success:function(result){
 							// 알림 띄울 부분;
+							grid.reloadData();
+							toastShow("Attach File Fail" , "첨부 성공" , "success");
 						},
 						error:function(reject){
 							toastShow("Attach File Fail" , "첨부 실패" , "error");
 						}
 					});	
 				}else{
+					grid.reloadData();
+					toastShow("add Notice" , "등록 성공" , "success");
 				}
 			})
 			.fail(function(result){
@@ -274,6 +278,21 @@
 	  			        // 삭제 요청이 성공한 경우, 그리드에서 선택된 행을 제거합니다.
 	  			        console.log(response)
 	  			        grid.removeCheckedRows(true);
+	  			        
+	  			      	$.ajax({
+	  			      		type:'POST',
+	  			      		url:'/notiNoDelFile',
+	  			      		contentType:'application/json',
+	  			      		data:JSON.stringify(notices),
+	  			      		success:function(data){
+	  			      			if(data > 0){
+	  			      				console.log('파일삭제성공')
+	  			      			}
+	  			      		},
+	  			      		error:function(err){
+	  			      			console.log(err)
+	  			      		}
+	  			      	})
 	  			      },
 	  			      error: function(err) {
 	  			        console.error('행 삭제 오류:', err);
@@ -460,6 +479,43 @@
 						        method: 'POST',
 						        data : formData
 						      }).then(response => {
+						    	  for(let del of delList){
+										fetch("/community/deleteAttach",{
+											method: "POST",
+											headers: {
+												'Content-Type': 'application/x-www-form-urlencoded'
+											},
+											body: 'atchNo='+del
+										})
+										.then(result=>result.text())
+										.then(data=>function(){
+											if(data=="fail"){
+												toastShow("Delete Fail" , "삭제 실패" , "error");
+											}
+										})
+										.catch(err=>console.log(err));
+									}
+						    	  
+						    	  if(attachFileList.get("uploadFiles")!=null){
+										attachFileList.append("notiNo",response.notiNo);
+										$.ajax({
+											url:'/attach/upload',
+											method:'POST',
+											processData:false, // 기본값은 true, ajax통신을 통해 데이터를 전송할 때, 기본적으로 key와 vlaue 값을 Query String 으로 변환해서 보냅니다
+											contentType:false, // multipart/form-data타입을 사용하기 위해 false로 지정합니다.
+											data:attachFileList,
+											success:function(result){
+												// 알림 띄울 부분;
+												alert('파일등록 성공')
+											},
+											error:function(reject){
+												toastShow("Attach File Fail" , "첨부 실패" , "error");
+											}
+										});	
+									}else{
+										//
+										alert('수정성공')
+									}
 						    	  const inputValue = $('#writeNoticeTtl').val();
 					    	  $('td[data-row-key='+ev.rowKey+'][data-column-name=ttl]').children(0).text(inputValue);
 						        return response;
@@ -497,6 +553,21 @@
 	        		  			        // 삭제 요청이 성공한 경우, 그리드에서 선택된 행을 제거합니다.
 	        		  			        console.log(response)
 	        		  			        grid.removeRow(ev.rowKey);
+	        		  			        
+	        		  			      $.ajax({
+	        		  			      		type:'POST',
+	        		  			      		url:'/notiNoDelFile',
+	        		  			      		contentType:'application/json',
+	        		  			      		data:JSON.stringify([notiNo]),
+	        		  			      		success:function(data){
+	        		  			      			if(data > 0){
+	        		  			      				console.log('파일삭제성공')
+	        		  			      			}
+	        		  			      		},
+	        		  			      		error:function(err){
+	        		  			      			console.log(err)
+	        		  			      		}
+	        		  			      	})
 	        		  			       	
 	        		  			      },
 	        		  			      error: function(err) {
@@ -509,6 +580,8 @@
 							})//end of swal
 	        			}//end of else if
 	        		})//end of then
+	        			let delList=[];
+	        		
 	        		  $("#attachFile").on('change',function(){
 	    		   			var inputFile = $("#attachFile");
 	    		   			// input 태그의 type이 file인것을 찾아서 inputFile이라는 변수로 지정
