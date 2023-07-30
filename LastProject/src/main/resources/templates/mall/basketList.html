@@ -375,21 +375,20 @@
 		 
 	// 장바구니 수량 변경 기능
 	 function updateCnt(){
-		console.log($(event.target).prev().children()[0].value);
+		console.log($(event.target).prev().find('input').val());
 		console.log(event.target.dataset.bskno);
 		fetch("/mall/updateCnt", {
 			method: "POST",
 			headers: {
 				 'Content-Type': 'application/x-www-form-urlencoded'
 			},
-			body: 'cnt=' + $(event.target).prev().children()[0].value + '&bskNo=' + event.target.dataset.bskno
+			body: 'cnt=' + $(event.target).prev().find('input').val() + '&bskNo=' + event.target.dataset.bskno
 		})
 		.then(response=> response.text())
 		.then(result => {
 			
-			  if (result=="success") {
-               //window.location.href="/mall/basketList"
-            		location.reload();
+			 if (result=="success") {
+               
             }else {
             	toastShow("Fail update", "변경 실패", "error");
             }
