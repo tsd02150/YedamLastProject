@@ -53,8 +53,8 @@
 				<div class="row mt-3">
 					<div class="col-auto mr-auto"></div>
 					<div class="col-auto">
-						<button id="btnSave" class="btn btn-primary">저장</button>
-						<button id="btnCancel" class="btn btn-light">취소</button>
+						<button id="btnSave" class="btn btn-danger">저장</button>
+						<button id="btnCancel" class="btn btn-secondary">취소</button>
 					</div>
 				</div>
 			</form>
@@ -109,6 +109,11 @@
 				toastShow("Insert Fail" , "등록 실패" , "error");
 			});
 		});
+		
+		btnCancel.addEventListener('click',function(){
+			if(confirm("글 작성을 취소 하시겠습니까?"))
+				window.location.href="/community/questionList";
+		})
 		</script>
 	</div>
 </body>
