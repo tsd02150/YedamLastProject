@@ -268,4 +268,19 @@ public class MemberServiceImpl implements MemberService {
 		return membMapper.myorderDetaList(vo);
 	}
 
+	@Override
+	public int deleteOrder(OrderVO vo) {
+		return membMapper.deleteOrder(vo);
+	}
+
+	@Override
+	public int updateShip(ShippingVO vo) {
+		return membMapper.updateShip(vo);
+	}
+
+	@Override
+	public String selectOrderOne(OrderVO vo) {
+		return membMapper.selectOrderOne(vo);
+	}
+
 }
