@@ -439,7 +439,7 @@
 								<th>상품가격</th>
 									<td colspan="3" id="productNm" >
 										<div>
-											<input id="writeProductTtl" style="text-align:left;width:758px" name="prc" value="${data.prc}">
+											<input id="writeProductPrc" style="text-align:left;width:758px" name="prc" value="${data.prc}">
 										</div>
 									</td>
 								</tr>	
@@ -447,7 +447,7 @@
 								<th>상품할인률</th>
 									<td colspan="3" id="productNm" >
 										<div>
-											<input id="writeProductTtl" style="text-align:left;width:758px" name="dcRate" value="${data.dcRate}">
+											<input id="writeProductDc" style="text-align:left;width:758px" name="dcRate" value="${data.dcRate}">
 										</div>
 									</td>
 								</tr>	
@@ -541,8 +541,9 @@
 		        				let formData = $('#myForm').serializeObject()
 		        				formData.thumb = thumb;
 		        				formData.img=img;
+		        				formData.prdtNo=prdtNo;
 	        				
-	        				var attachFileList = new FormData(); 
+	        				/* var attachFileList = new FormData(); 
 	        				var inputFile = $("#attachFile");
 
 	        				var files = inputFile[0].files;
@@ -550,16 +551,19 @@
 	        				for(var i=0;i<files.length;i++){
 	        					console.log(files[i]);
 	        					attachFileList.append("uploadFiles",files[i]); // 키, 값으로 append
-	        				}
+	        				} */
 	        				
 		    		          
 		    		           return $.ajax({
 						        url: '/admin/modifyProduct',
 						        method: 'POST',
 						        data : formData
-						      }).then(response => {
-						    	  const inputValue = $('#writeProductTtl').val();
-					    	  $('td[data-row-key='+ev.rowKey+'][data-column-name=prdtNo]').children(0).text(inputValue);
+						      }).done(response => {
+						    	 console.log('test');
+						    	 const inputValue = $('#writeProductPrc').val();
+						    	 console.log(inputValue);
+						    	 console.log(response);
+					    	  $('td[data-row-key='+ev.rowKey+'][data-column-name=prc]').children(0).text(inputValue);
 						        return response;
 						      }).fail(error => {
 						        Swal.showValidationMessage(
