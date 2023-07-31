@@ -555,21 +555,26 @@
 	<select id="myRaiseList" parameterType="String" resultType="PossVO">
 	select distinct a.bdt dt, round((nvl(a.rate,0) + nvl(b.raise,0)/2),2) raise from 
 		(with a as (
-					select item_no, nvl(sum(stock_cnt),0) stock_cnt, nvl(sum(trade_prc*stock_cnt),0)trade_prc from poss_stock
-		      where memb_no = #{membNo}
-		      group by item_no )
-				select TO_CHAR(ta_dt, 'yyyy-MM-dd') bdt, nvl(round(sum((((DECODE((i.cl_prc*a.stock_cnt),0,NULL,(i.cl_prc*a.stock_cnt)))/a.trade_prc)*100-100))/count(*),2),0) rate
-				from a left outer join item_info i on a.item_no = i.item_no
-				join item n on i.item_no = n.item_no
-				GROUP BY TO_CHAR(ta_dt, 'yyyy-MM-dd')
-		)a full outer join (
-		SELECT TO_CHAR(ta_dt, 'yyyy-MM-dd') AS sdt, ROUND(sum((ta_prc/traded_prc*100))/count(*),2) AS raise
-		FROM TA_HR
-		WHERE SELL_MEMB_NO =  #{membNo}
-		GROUP BY TO_CHAR(ta_dt, 'yyyy-MM-dd')
+        select item_no, nvl(sum(stock_cnt),0) stock_cnt, nvl(sum(trade_prc*stock_cnt),0)trade_prc from poss_stock
+        where memb_no = #{membNo}
+        group by item_no )
+      select TO_CHAR(ta_dt, 'yyyy-MM-dd') bdt, nvl(round(sum((((DECODE((i.cl_prc*a.stock_cnt),0,NULL,(i.cl_prc*a.stock_cnt)))/a.trade_prc)*100-100))/count(*),2),0) rate
+      from a left outer join item_info i on a.item_no = i.item_no
+      join item n on i.item_no = n.item_no
+      GROUP BY TO_CHAR(ta_dt, 'yyyy-MM-dd')
+      order by bdt desc
+		)a left outer join (
+		SELECT round(sum(diff)/sum(ta_prc)*100*(sum(stock_cnt)),2) raise ,ta_dt sdt--sum(diff)
+    from (
+        select sell_memb_no, stock_cnt, ta_prc-traded_prc diff, ta_prc, to_char(ta_dt,'yyyy-MM-dd') ta_dt
+        from ta_hr
+    )
+    where sell_memb_no=#{membNo}
+    group by ta_dt
+    order by ta_dt desc
 		) b
 		on a.bdt = b.sdt
-		order by 1
+		order by 1 desc
 	</select>
 	
 	<select id="myBuyRaiseList" parameterType="String" resultType="PossVO">
