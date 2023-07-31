@@ -413,7 +413,7 @@
     <!-- product 상세 -->
 	<select id="productDetail" resultType="ProductVO">
 		select *
-     	form product
+     	from product
         where prdt_no = #{prdtNo}
 	</select>
 	
