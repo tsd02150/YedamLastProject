@@ -139,7 +139,7 @@ input[type=number] {
 									style="width: 60%; display: inline;" readonly>
 									<button type="button" id="changeEmail" style="display : inline-block;" class="btn btn-light">변경</button>
 									<button type="button" id="sendemail" style="display : none;" class="btn btn-light">인증번호 발송</button>
-									<button type="reset" id="resetEmail" style="display : none;" class="btn btn-light">취소</button>
+									<button type="button" id="resetEmail" style="display : none;" class="btn btn-light">취소</button>
 									<br>
 							</div>
 						</div>
@@ -158,7 +158,7 @@ input[type=number] {
 									maxlength="13" name="tel" id="telInput" th:value=${member.tel} style="width : 60%; display : inline;" readonly>
 									<button type="button" id="changeTel" class="btn btn-light">변경</button>
 									<button type="button" id="sendsms" style="display : none;" class="btn btn-light">인증번호 발송</button>
-									<button type="reset" id="resetsms" style="display : none;" class="btn btn-light">취소</button>
+									<button type="button" id="resetsms" style="display : none;" class="btn btn-light">취소</button>
 								<br><span id="telCheck"></span>
 							</div>
 						</div>
@@ -358,9 +358,11 @@ $("#changeNick").on("click", function() {
 
     // 취소 버튼 누를 때
     $("#resetNick").on("click", function() {
+	    	$("#nickname").attr("readonly", "readonly");
 	    	$("#changeNick").css("display", "inline-block");
         $("#resetNick").css("display", "none");
         $("#checkNick").css("display", "none");
+        $("#nickmsg").text("");
     });
 });
 
@@ -671,6 +673,7 @@ $("#resetsms").on("click",function(){
     $("#sendsms").css("display", "none");
     $("#resetsms").css("display", "none");
     $(".smsCkDiv").css("display", "none");
+    $("#telInput").val("[[${session.loggedInMember.tel}]]")
 });
 
 //주소등록 버튼 클릭

@@ -369,9 +369,10 @@
 			let tr='';
 			data.forEach(el=>{
 			let taPrc = commas(el.taPrc);
+			let fee = commas(~~(el.stockCnt*el.taPrc*0.1));
 				let orderDt = new Date(el.taDt);
         let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
-				console.log(el);
+				//console.log(el);
 				tr += `
 					<tr>
 					<td>${formattedDt}</td>`;
@@ -385,7 +386,7 @@
 					<td>${el.tnm}</td>
 					<td>${taPrc}</td>
 					<td>${el.stockCnt}</td>
-					<td>${(el.stockCnt*el.taPrc)*0.1}</td>
+					<td>${fee}</td>
 					<td>${(el.stockCnt*el.taPrc-((el.stockCnt*el.taPrc)*0.1))}</td>
 				</tr>
 				`;
@@ -682,7 +683,7 @@ $.ajax({
 		success : function(data){
 			if(data && data.length >0){
 				data.slice(0, 10).forEach(el => {
-					console.log(el);
+					//console.log(el);
 	         tr3 += `
 	           <tr data-no="${el.itemNo}">
 	             <td onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">${el.tnm}</td>
@@ -761,8 +762,7 @@ function updateStartDate(period) {
 
     let startYear = startDate.getFullYear();
     let startMonth = startDate.getMonth() + 1 < 10 ? "0" + (startDate.getMonth() + 1) : startDate.getMonth() + 1;
-    let startDateStr = startYear + "-" + startMonth + "-" + startDate.getDate();
-    
+    let startDateStr = startYear + "-" + startMonth + "-" + startDate.getDate().toString().padStart(2, '0');
     $("#dstart").val(startDateStr);
   }
 
@@ -795,10 +795,15 @@ function updateStartDate(period) {
             "endDate" : $("#dend").val()
 	        },
 	        success: function (data) {
+	        	console.log(data);
 	            $('#nextpage').css('visibility', 'hidden');
 	            $('#prevpage').css('visibility', 'hidden');
 	            totalCnt = data;
-	            endPage=~~((totalCnt-1)/10 + 1);
+	            if(totalCnt >100){
+	            	endPage = 10;
+	            }else{
+		            endPage=~~((totalCnt-1)/10 + 1);
+	            }
 	            createPageCntBtn(startPage, endPage);
 	            if(totalCnt>100){
 	            	$('#nextpage').css('visibility', 'hidden');
@@ -830,8 +835,8 @@ function updateStartDate(period) {
 	   function pageMove(page) {
 		   $("#dealbody").html("");
 		  $('.pagebtn.active').removeClass('active');
-		  console.log(page);
 		  targetPage = page;
+		  console.log(page);
 		  buysell();
 		  $('.pagebtn').each(function () {
 		    if ($(this).children('a').text() == page) {
@@ -874,16 +879,16 @@ function updateStartDate(period) {
 	       endPage = 10;
 	     }
 	     createPageCntBtn(startPage, endPage);
+	     console.log(startPage, endPage);
 	     pageMove(startPage);
 	   }
 	   
 	   function lastPage() {
 		   $("#dealbody").html("");
-	     if (endPage > 10) {
-	       endPage = ~~((totalCnt - 1) / 10 + 1);
-	     }
+		   console.log(endPage)
+       endPage = ~~((totalCnt - 1) / 10 + 1);
 	     startPage = endPage - endPage % 10 + 1;
-	     //console.log(startPage, endPage);
+	     console.log(startPage, endPage);
 	     createPageCntBtn(startPage, endPage);
 	     pageMove(endPage);
 	   }
