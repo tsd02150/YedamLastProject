@@ -508,10 +508,11 @@ input[type="number"]::-webkit-inner-spin-button {
 			<div id="orderBox" class="row d-none" >
 				<div id="CP2D21" class="col-6">
 					<div>
-						<input id="stockPrc" type="number" name="stockPrc" value="0">원<br> 
-						<label><input type="checkbox">시장가 주문</label>
+						<p class="m-0">상한가 : <span class="upLimit"></span> 하한가 : <span class="downLimit"></span></p>
+						<input id="stockPrc" type="number" name="stockPrc" value="0">원<br>
+						<label style="margin:0"><input type="checkbox">시장가 주문</label>
 					</div>
-					<div>
+					<div class="py-0">
 						<input id="stockCnt" type="number" name="stockCnt" value="0" >주
 						<p class="mb-0">
 							<span id="orderName">구매</span>가능한 주수 <input class="btn btn-danger btn-sm" id="afford" type="button" value="0">주
@@ -561,7 +562,13 @@ input[type="number"]::-webkit-inner-spin-button {
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 		<script th:inline="javascript" src="../stock/autoComplete.js"></script>
 		<script th:inline="javascript">
-		console.log([[${boardList}]].length)
+		// 상한가 하한가 조절
+		let itemClPrc = [[${clPrc}]];
+		let upLimit = itemClPrc*1.3;
+		let downLimit = itemClPrc*0.7;
+		$(".upLimit").text(upLimit.toLocaleString('ko-KR'));
+		$(".downLimit").text(downLimit.toLocaleString('ko-KR'));
+		
 		$('#forNonlogin').css('width',$('#CP1D2').css('width')).css('height',$('#CP1D2').css('height'))
 		if([[${session.loggedInMember}]] == null){
 			$('#CP1D2 .blur').css('filter','blur(5px)');
@@ -712,6 +719,7 @@ input[type="number"]::-webkit-inner-spin-button {
 							  affordStockCnt = 0;
 							}
 						$('#afford').val(affordStockCnt);
+						$('#totalPrc').text(($('#stockPrc').val()*$('#stockCnt').val()).toLocaleString('ko-KR'));
 					}else{
 					}
 				}
@@ -746,9 +754,9 @@ input[type="number"]::-webkit-inner-spin-button {
 				
 				// 매수 기능 일때
 				if(orderType == 'buy'){
-					
+					console.log($(this).val())
 					// 유효범위
-					if( $(this).val() > Number(point)){
+					if( $(this).val() > Number(point)  ){
 						alert('보유한 포인트보다 많게 주문할 수 없습니다.')
 						$('#afford').val(1);
 						$(this).val($('p[data-point]').attr('data-point'));//보유포인트
@@ -879,6 +887,13 @@ input[type="number"]::-webkit-inner-spin-button {
 					toastShow("주문 불가","개수나 가격이 0인 주문을 불가합니다","warning");
 					return;
 				}
+				
+				// 상한가 하한가 범위를 벗어나는 주문의 경우
+				if(stockPrc > upLimit || stockPrc < downLimit){
+					toastShow("주문 불가","주문가격은 상한가 하한가 범위를 벗어날 수 없습니다","warning");
+					return;
+					
+				}
 				//매수시 보유 포인트가 총 금액보다 적을시 return
 				if(orderType == 'buy' && Number(totalPrc) > Number($('p[data-point]').attr('data-point'))){
 					if(Number($('p[data-point]').attr('data-point')) == 0){
@@ -899,7 +914,7 @@ input[type="number"]::-webkit-inner-spin-button {
 							order_rmn_cnt : stockCnt
 						},
 						success:function(data){
-							if(data.code =='success'){
+							if(data.code =='success'){	
 								if(orderType == 'buy'){
 									toastShow('주문 완료',data.message ,'success');
 									let rate = data.possStock.rate > 0 ? "+ "+data.possStock.rate : data.possStock.rate;

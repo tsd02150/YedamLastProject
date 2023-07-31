@@ -53,6 +53,7 @@ public class StockController {
 			m.addAttribute("possStock",stockservice.getPossList(mem.getMembNo())); // 유저 보유종목 리스트
 			m.addAttribute("interestStock",stockservice.getIntStock(mem.getMembNo())); // 유저관심종목리스트 
 		}
+		m.addAttribute("clPrc",stockservice.getClPrc(itemNo));
 		m.addAttribute("boardList",stockservice.getScBoardList(itemNo)); // 종목게시판
 		m.addAttribute("itemInfo",stockservice.itemNoGetInfo(itemNo));
 		m.addAttribute("itemNo",itemNo);

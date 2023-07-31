@@ -367,6 +367,11 @@ public class StockServiceImpl implements StockService {
 	public List<StockVO> getPossList(String membNo) {
 		return stockMapper.getPossList(membNo);
 	}
+	// 종목의 전날 종가 ( 상한가 하한가 설정 위함)
+	@Override
+	public int getClPrc(String itemNo) {
+		return stockMapper.getClPrc(itemNo);
+	}
 	
 	
 }

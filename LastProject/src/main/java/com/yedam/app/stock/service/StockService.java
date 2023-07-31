@@ -39,4 +39,5 @@ public interface StockService {
 	public ItemInfoVO currentItemInfo(String itemNo);
 	public Integer getPoint(String membNo);
 	public List<StockVO> getPossList(String membNo);
+	public int getClPrc(String itemNo);
 }

@@ -750,4 +750,12 @@
                     order by to_number(substr(item_no,5)) ) t  -- 최근 체결가
 		on i.item_no = t.item_no
 	</select>
+	
+	<!-- 전날 종가 -->
+	<select id="getClPrc">
+		select cl_prc 
+        from item_info
+        where to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
+        and item_no = #{itemNo}
+	</select>
 </mapper>

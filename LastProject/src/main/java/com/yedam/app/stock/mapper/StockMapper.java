@@ -87,4 +87,6 @@ public interface StockMapper {
 	public Integer getPoint(String membNo);
 	// 보유주식 리스트 가져오기
 	public List<StockVO> getPossList(String membNo);
+	// 전날 종가 가져오기 ( 상한가 하한가 설정 위함 )
+	public int getClPrc(String itemNo);
 }
