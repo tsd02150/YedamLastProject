@@ -380,6 +380,7 @@
         from product
 	</select>
 	
+	
 	  <!-- 상품 등록 -->
     <insert id="addProduct">
     	insert into product (PRDT_NO,
@@ -392,7 +393,7 @@
 							STC_CNT,
 							DRWUP_DT,
 							COMMON_CD)
-		values (#{prdtNo},
+		values ('prd-'||prdt_seq.nextval,
 				#{nm},
 				#{prc},
 				#{dcRate},
@@ -403,10 +404,8 @@
 				sysdate,
 				#{commonCd})
 				
-	 <selectKey keyProperty="ProductVO" resultType="String" order="AFTER">
-	   	SELECT CONCAT('prd-',NVL(MAX(TO_NUMBER(SUBSTR(prdt_no, 5))),
-			0)+1)
-			FROM PRODUCT
+	 <selectKey keyProperty="prdtNo" resultType="String" order="AFTER">
+	 	 SELECT 'prd-'||prdt_seq.currval AS prdtNo FROM DUAL
 	 </selectKey>	
     </insert>
     

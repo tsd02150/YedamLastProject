@@ -48,5 +48,4 @@ public interface AdminService {
 	public Map<String , Object> modifyProduct(ProductVO prdtVO);
 	public Map<String , Object > productDetail(String prdtNo);
 	
-	
 }
