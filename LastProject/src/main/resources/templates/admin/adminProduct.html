@@ -66,12 +66,7 @@
             			<form id="myForm" onsubmit="return false">
             			<div id="reportDiv">
             			<table class="table h6">
-							<tr>
-								<th style="width:15%;">작성자</th>
-								<td style="width:35%;">admin</td>
-								<th style="width:15%;">작성일</th>
-								<td style="width:35%;">${today}</td>
-							</tr>
+							
 							<tr>
 							<th>상품명</th>
 								<td colspan="3" id="productNm" >
@@ -82,6 +77,14 @@
 							</tr>	
 							<tr>
 							<th>상품가격</th>
+								<td colspan="3" id="productNm" >
+									<div>
+										<input id="writeProductTtl" style="text-align:left;width:758px" name="ttl">
+									</div>
+								</td>
+							</tr>	
+							<tr>
+							<th>상품할인가격</th>
 								<td colspan="3" id="productNm" >
 									<div>
 										<input id="writeProductTtl" style="text-align:left;width:758px" name="ttl">
@@ -356,9 +359,9 @@
 	        	let prdtNo = $('td[data-row-key='+ev.rowKey+'][data-column-name=prdtNo]').children(0).text();
 	        	// product 불러오기
 	        	$.ajax('productDetail?prdtNo='+prdtNo)
-	        	.done(function(prdtData){
+	        	.done(function(productData){
 	        		let data = productData.productDetail;
-	        		let attachFileList = productData.attachFileList;
+	        		//let attachFileList = productData.attachFileList;
 	        		
 	        		Swal.fire({
 	            		title:'상품등록',
@@ -366,12 +369,7 @@
 	            			<form id="myForm" onsubmit="return false">
 	            			<div id="reportDiv">
 	            			<table class="table h6">
-								<tr>
-									<th style="width:15%;">작성자</th>
-									<td style="width:35%;">${data.nick}</td>
-									<th style="width:15%;">작성일</th>
-									<td style="width:35%;">${data.drwupDt}</td>
-								</tr>
+								
 								<tr>
 								<th>상품명</th>
 									<td colspan="3" id="productNm" >

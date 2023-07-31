@@ -119,7 +119,7 @@ $('#itemPtag').on('click','button',function(){
 	
 				if($('#sessionMembNo').text() != 'nonLoginUser'){
 					console.log('zz')
-					addInterest();
+					addInterest(itemNo);
 				}else{
 					toastShow('로그인 후 실행해주세요','회원서비스 입니다','info');
 				}
