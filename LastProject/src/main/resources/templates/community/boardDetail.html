@@ -35,14 +35,25 @@
 .modal select{
 	width:220px;
 }
-.modal-content {
+
+#membInfoModal .modal-content {
 	background-color: #fefefe;
-	margin: 10% auto;
+	margin: 5% auto;
+	padding: 50px;
+	border: 1px solid #888;
+	width: 800px;
+	height: 800px;
+}
+
+#declareModal .modal-content {
+	background-color: #fefefe;
+	margin: 7% auto;
 	padding: 50px;
 	border: 1px solid #888;
 	width: 800px;
 	height: 700px;
 }
+
 .modal-content tr{
 	height: 50px;
 }
@@ -229,12 +240,14 @@
 					<tr>
 						<th style="width:15%;">닉네임</th>
 						<td style="width:30%;" id="membInfoNick"></td>
-						<th style="width:15%;" rowspan="2">투자성향</th>
-						<td style="width:40%;" rowspan="2" id="membInfoIncli">!!</td>
 					</tr>
 					<tr>
 						<th>ID</th>
 						<td id="membInfoId"></td>
+					</tr>
+					<tr>
+						<th style="width:15%;">투자성향</th>
+						<td id="membInfoIncli"></td>
 					</tr>
 					<tr>
 						<th>관심종목</th>
@@ -655,7 +668,12 @@
 				.then(result=>{					
 					membInfoNick.innerText=result.membInfo.nick;
 					membInfoId.innerText=result.membInfo.id;
-					
+					let imgTag=`<p>아직 투자성향분석을 진행하지 않았습니다.</p>`;
+					if(result.incliInfo!=null){
+						imgTag=`<img style="width:500px;" src="/member/images/${result.incliInfo}.png">`;
+					}
+					console.log(imgTag);
+					membInfoIncli.innerHTML=imgTag;
 					$('#membInfoInterest').empty();
 					let divTag = document.createElement('div');
 					let divRow = document.createElement('div');

@@ -165,6 +165,13 @@ public class BoardServiceImpl implements BoardService {
 	public List<InterestVO> getInerestStockInfo(String membNo) {
 		return boardMapper.getInerestStockInfo(membNo);
 	}
+	
+	// 설문조사 정보
+	@Override
+	public String getSurveyInfo(String membNo) {
+		// TODO Auto-generated method stub
+		return boardMapper.getSurveyInfo(membNo);
+	}
 
 	// 신고
 	@Override
