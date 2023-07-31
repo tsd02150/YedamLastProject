@@ -25,6 +25,7 @@ import com.yedam.app.community.service.FaqVO;
 import com.yedam.app.community.service.NoticeVO;
 import com.yedam.app.community.service.QuestionVO;
 import com.yedam.app.community.service.ReportVO;
+import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.security.service.UserVO;
 //김태연 2023/07/24 admin 페이지
@@ -220,11 +221,12 @@ public class AdminController {
 		Map<String,Object> resultMap = adminService.orderList(page , perPage);
 		objectMap.put("result", true);
         objectMap.put("data", dataMap);
-	        dataMap.put("contents", (List<BoardVO>)resultMap.get("orderList"));
+	        dataMap.put("contents", (List<OrderVO>)resultMap.get("orderList"));
 	        dataMap.put("pagination", paginationMap);
 		        paginationMap.put("page", page);
 		        paginationMap.put("totalCount", (Integer)resultMap.get("orderTotal"));
         return objectMap;
+        
 	}
 	
 	//회원정지

@@ -10,6 +10,7 @@
 <style>
 .swal-cls {
 	width: 950px !important;
+
 }
 
 #reportDiv #productCntn {
@@ -26,6 +27,14 @@
 #productNm {
 	text-align: left;
 }
+#grid img{
+	width:200px;
+	height:100px;
+}
+#grid td div{
+	text-align: center;
+	font-size: 13px;
+}
 </style>
 </head>
 <body>
@@ -36,11 +45,10 @@
 		<br />
 		<div class="m-2">
 			<button id="writeBtn" class="btn btn-success">등록</button>
-			<button id="updateBtn" class="btn btn-primary">수정</button>
 			<button id="deleteBtn" class="btn btn-danger">삭제</button>
 		</div>
 
-		<div id="grid"></div>
+		<div id="grid" style="height:1000px;"></div>
 
 		<script
 			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
@@ -51,6 +59,7 @@
 			src="https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0/jquery.serialize-object.min.js"></script>
 		<script>
 		let editor;
+		let editorImg;
 		let todayz = new Date();   
 
 		let year = todayz.getFullYear(); // 년도
@@ -66,12 +75,23 @@
             			<form id="myForm" onsubmit="return false">
             			<div id="reportDiv">
             			<table class="table h6">
+	            			<tr>
+							<th>상품 카테고리</th>
+								<td colspan="3" id="productNm" >
+									<div>
+									 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S1">농산물
+									 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S2">수산물 
+										
+									</div>
+								</td>
+							</tr>	
+						
 							
 							<tr>
 							<th>상품명</th>
 								<td colspan="3" id="productNm" >
 									<div>
-										<input id="writeProductTtl" style="text-align:left;width:758px" name="ttl">
+										<input id="writeProductTtl" style="text-align:left;width:758px" name="nm">
 									</div>
 								</td>
 							</tr>	
@@ -79,20 +99,20 @@
 							<th>상품가격</th>
 								<td colspan="3" id="productNm" >
 									<div>
-										<input id="writeProductTtl" style="text-align:left;width:758px" name="ttl">
+										<input id="writeProductTtl" style="text-align:left;width:758px" name="prc">
 									</div>
 								</td>
 							</tr>	
 							<tr>
-							<th>상품할인가격</th>
+							<th>상품할인률</th>
 								<td colspan="3" id="productNm" >
 									<div>
-										<input id="writeProductTtl" style="text-align:left;width:758px" name="ttl">
+										<input id="writeProductTtl" style="text-align:left;width:758px" name="dcRate">
 									</div>
 								</td>
 							</tr>	
 							<tr>
-								<th>상품 썸네일 등록</th>
+								<th>상품 썸네일</th>
 								<td colspan="3" class="text-left">
 									<div id="thumbCntn" >
 										<textarea id="productContent"></textarea>
@@ -100,10 +120,10 @@
 								</td>
 							</tr>
 							<tr>
-								<th>상품 상세내용</th>
+								<th>상품 이미지</th>
 								<td colspan="3" class="text-left">
 									<div id="productCntn" >
-										<textarea id="productContent"></textarea>
+										<textarea id="productContentImg" name="desct"></textarea>
 									</div>
 								</td>
 						</tr>
@@ -122,7 +142,7 @@
 				    		ClassicEditor.create(document.querySelector('#productContent'), {
 			    				language: "ko",
 			    				ckfinder: {
-			    					uploadUrl: '/image/upload'
+			    					uploadUrl: '/thumb/upload'
 			    				}
 			    			})
 			    			.then(newEditor => {
@@ -132,12 +152,31 @@
 			    				console.error(error);
 			    			});
 						
-					}
+						}
+						if (!editorImg) {
+				    		ClassicEditor.create(document.querySelector('#productContentImg'), {
+			    				language: "ko",
+			    				ckfinder: {
+			    					uploadUrl: '/product/upload'
+			    				}
+			    			})
+			    			.then(newEditor => {
+			    				editorImg = newEditor;
+			    			})
+			    			.catch(error => {
+			    				console.error(error);
+			    			});
+						
+						}
 					},
 					didClose:() =>{
 						if (editor) {
 					          editor.destroy()
 					          editor = null;
+					        }
+						if (editorImg) {
+					          editorImg.destroy()
+					          editorImg = null;
 					        }
 					},
 	    		    preConfirm: () => {
@@ -158,21 +197,14 @@
         		.then((result) =>{
         			if(result.isConfirmed){
         				
-        				let ckData = editor.getData()
+        				let thumb = editor.getData();
+        				let img=editorImg.getData();
         				
         				let formData = $('#myForm').serializeObject()
-        				formData.cntn = ckData
+        				formData.thumb = thumb;
+        				formData.img=img;
         				
-        				
-        				var attachFileList = new FormData(); 
-        				var inputFile = $("#attachFile");
-
-        				var files = inputFile[0].files;
-        				
-        				for(var i=0;i<files.length;i++){
-        					console.log(files[i]);
-        					attachFileList.append("uploadFiles",files[i]); // 키, 값으로 append
-        				}
+        			
         				
         				
         				$.ajax({
@@ -311,6 +343,7 @@
 			const grid = new tui.Grid({
 	             el: document.getElementById('grid'),
 	             rowHeaders: ['rowNum','checkbox'],
+	             rowHeight:120,
 	             data:dataSource,
 	             scrollX: false,
 	             scrollY: false,
@@ -320,9 +353,9 @@
 	             },
 	             columns: [
 					{
-					     header: '상품번호',
-					     name: 'prdtNo',
-					     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+				     header: '상품번호',
+				     name: 'prdtNo',
+				     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
 					},
 					{
 					   header: '상품썸네일',
@@ -345,6 +378,11 @@
 					   filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
 						},
 					{
+					   header: '할인률',
+					   name: 'dcRate',
+					   filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+						},
+					{
 					   header: '작성일시',
 					   name:'drwupDt',
 					   sortingType: 'asc',
@@ -364,60 +402,65 @@
 	        		//let attachFileList = productData.attachFileList;
 	        		
 	        		Swal.fire({
-	            		title:'상품등록',
+	            		title:'상품수정',
 	            		html:`
 	            			<form id="myForm" onsubmit="return false">
 	            			<div id="reportDiv">
 	            			<table class="table h6">
-								
-								<tr>
-								<th>상품명</th>
-									<td colspan="3" id="productNm" >
-										<div>
-											<input id="writeProductNm" style="text-align:left;width:758px;" value="${data.ttl}" name="ttl">
-										</div>
-									</td>
-								</tr>	
-								<tr>
-								<th>상품가격</th>
-									<td colspan="3" id="productTtl" >
-										<div>
-											<input id="writeProductTtl" style="text-align:left;width:758px;" value="${data.ttl}" name="ttl">
-										</div>
-									</td>
-								</tr>	
-								<tr>
-									<th>내용</th>
-									<td colspan="3" class="text-left">
-										<div id="productCntn" >
-											<textarea id="productContent">${data.cntn}</textarea>
-										</div>
-									</td>
-								</tr>
-							</table>
-							</div>
-							<table class="table">
+	            			<tr>
+							<th>상품 카테고리</th>
+								<td colspan="3" id="productNm" >
+									<div>
+									 <input type="radio" style="text-align:left;" id="writeProductTtl"  name="commonCd">농산물
+									 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd">수산물 
+										
+									</div>
+								</td>
+							</tr>	
+							
 							<tr>
-								<td>
-									<label for="attachfiles" class="col-sm-2 col-form-label ml-3 " style="width:200px">
-										<strong>파일을 선택해주세요</strong>
-									</label>
-									<input name="attachFile" id="attachFile" type="file" multiple class="custom-file-input"> 
+							<th>상품명</th>
+								<td colspan="3" id="productNm" >
+									<div>
+										<input id="writeProductTtl" style="text-align:left;width:758px" name="nm">
+									</div>
+								</td>
+							</tr>	
+							<tr>
+							<th>상품가격</th>
+								<td colspan="3" id="productNm" >
+									<div>
+										<input id="writeProductTtl" style="text-align:left;width:758px" name="prc">
+									</div>
+								</td>
+							</tr>	
+							<tr>
+							<th>상품할인률</th>
+								<td colspan="3" id="productNm" >
+									<div>
+										<input id="writeProductTtl" style="text-align:left;width:758px" name="dcRate">
+									</div>
+								</td>
+							</tr>	
+							<tr>
+								<th>상품 썸네일</th>
+								<td colspan="3" class="text-left">
+									<div id="thumbCntn" >
+										<textarea id="productContent"></textarea>
+									</div>
 								</td>
 							</tr>
 							<tr>
-								<td style="text-align:left">
-									<div id="fileList" style="margin: 40px;">
-										<strong>첨부파일 : </strong>
-										<div>
-											<ul id=uploadFileList>
-												${attachFileList.map(attachFile => `<li data-atchno=${attachFile.atchNo}>${attachFile.atchOriginNm}<span>&times;</span></li>`).join('')}
-											</ul>
-										</div>
+								<th>상품 이미지</th>
+								<td colspan="3" class="text-left">
+									<div id="productCntn" >
+										<textarea id="productContentImg" name="desct"></textarea>
 									</div>
 								</td>
 							</tr>
 							</table>
+							</div>
+							
 							</form>
 							`,
 						customClass: 'swal-cls',
@@ -431,7 +474,7 @@
 					    		ClassicEditor.create(document.querySelector('#productContent'), {
 				    				language: "ko",
 				    				ckfinder: {
-				    					uploadUrl: '/image/upload'
+				    					uploadUrl: '/thumb/upload'
 				    				}
 				    			})
 				    			.then(newEditor => {
@@ -441,12 +484,31 @@
 				    				console.error(error);
 				    			});
 							
-						}
+							}
+							if (!editorImg) {
+					    		ClassicEditor.create(document.querySelector('#productContentImg'), {
+				    				language: "ko",
+				    				ckfinder: {
+				    					uploadUrl: '/product/upload'
+				    				}
+				    			})
+				    			.then(newEditor => {
+				    				editorImg = newEditor;
+				    			})
+				    			.catch(error => {
+				    				console.error(error);
+				    			});
+							
+							}
 						},
 						didClose:() =>{
 							if (editor) {
 						          editor.destroy()
 						          editor = null;
+						        }
+							if (editorImg) {
+						          editorImg.destroy()
+						          editorImg = null;
 						        }
 						},
 		    		    preConfirm: (ttldata) => {
@@ -463,11 +525,12 @@
 		    		        		      )
 		    		          }
 		    		          
-		    		          let ckData = editor.getData()
-	        				
-	        				let formData = $('#myForm').serializeObject()
-	        				formData.cntn = ckData
-	        				formData.prdtNo= prdtNo;
+		    		          	let thumb = editor.getData();
+		        				let img=editorImg.getData();
+		        				
+		        				let formData = $('#myForm').serializeObject()
+		        				formData.thumb = thumb;
+		        				formData.img=img;
 	        				
 	        				var attachFileList = new FormData(); 
 	        				var inputFile = $("#attachFile");
