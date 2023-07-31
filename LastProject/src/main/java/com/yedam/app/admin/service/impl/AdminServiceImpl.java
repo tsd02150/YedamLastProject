@@ -344,5 +344,11 @@ public class AdminServiceImpl implements AdminService {
 		//map.put("attachFileList", adminMapper.getNoticeAttachList(notiNo));
 		return map;
 	}
+
+	// 응답안한 신고 개수
+	@Override
+	public int nonChkRptCnt() {
+		return adminMapper.nonChkRptCnt();
+	}
 	
 }

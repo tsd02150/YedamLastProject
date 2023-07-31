@@ -435,5 +435,10 @@
     	where prdt_no = #{prdtNo}
     </update>
     
-	
+	<!-- report 개수 -->
+	<select id="nonChkRptCnt">
+		select count(rprt_no) 
+        from report 
+        where rprt_st = 'N'
+	</select>
 </mapper>

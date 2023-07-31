@@ -114,7 +114,8 @@ public interface AdminMapper {
 	public int productTotal();
 	// product 단건조회
 	public ProductVO productDetail(String prdtNo);
-	
+	// 응답안한 신고 개수
+	public int nonChkRptCnt();
 	
 	
 	

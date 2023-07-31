@@ -59,14 +59,14 @@
           <li class="nav-item dropdown">
             <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
               <i class="bi bi-bell"></i>
-              <span id="reportCnt" class="badge bg-primary badge-number">4</span> </a
+              <span id="reportCnt" class="badge bg-primary badge-number"></span> </a
             ><!-- End Notification Icon -->
 
             <ul
               class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications"
             >
               <li class="dropdown-header">
-                You have 4 new notifications
+                
               </li>
              
               <li>
@@ -74,7 +74,7 @@
               </li>
 
               <li class="dropdown-footer">
-                <a href="/admin/reportManage?sideNumber=1">Show all notifications</a>
+                <a href="/admin/reportManage?sideNumber=1">신고 처리 페이지 이동하기</a>
               </li>
             </ul>
             <!-- End Notification Dropdown Items -->
@@ -231,6 +231,15 @@
 		}else if(sideNumber == 3){
 			document.querySelector('#adminMall').click();
 		}
+		
+		$.ajax('nonChkRptCnt').done(function(data){
+			if(data == 0 ){
+				$('#reportCnt').toggleClass('d-none');
+			}
+        	$('#reportCnt').text(data);
+        	$('.dropdown-header').text(`처리되지 않은 신고가 ${data} 건 있습니다.`);
+        });
+		
 	</script>
   </body>
 </html>

@@ -13,6 +13,11 @@ $(document).ready(function(){
 	    //알람 - empController 에서 보낸 알람
 	    stompClient.subscribe("/admin/alarm", (greeting) => {
 	    	console.log('신고알람성공');
+	    	 $.ajax('/admin/nonChkRptCnt').done(function(data){
+				if($('#reportCnt').hasClass('d-none')) $('#reportCnt').removeClass('d-none');
+		    	$('#reportCnt').text(data);
+		    	$('.dropdown-header').text(`처리되지 않은 신고가 ${data} 건 있습니다.`);
+       	 	});
 	        toastShow("NEW" ,greeting.body , "info"); // 구독된 url 에서 넘어오는 메세지 처리
 	        
 	    });
