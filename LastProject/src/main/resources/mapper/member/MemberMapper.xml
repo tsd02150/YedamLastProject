@@ -473,7 +473,7 @@
 			from poss_stock 
 			where memb_no = #{membNo}
 			group by item_no )
-		select i.item_no, n.nm tnm, n.common_cd, a.stock_cnt, a.trade_prc, i.cl_prc*a.stock_cnt now_prc, NVL(round(a.trade_prc/DECODE((i.cl_prc*a.stock_cnt),0,NULL,(i.cl_prc*a.stock_cnt))*100-100),0) rate -- 현재 보유자산 / 시장가 / 수익률
+		select i.item_no, n.nm tnm, n.common_cd, a.stock_cnt, a.trade_prc, i.cl_prc*a.stock_cnt now_prc, NVL(round((DECODE((i.cl_prc*a.stock_cnt),0,NULL,(i.cl_prc*a.stock_cnt))/a.trade_prc)*100-100),0) rate
 		from a join item_info i on a.item_no = i.item_no
 		join item n on i.item_no = n.item_no
 		where TO_CHAR(ta_dt, 'yyyy-MM-dd') = TO_CHAR(sysdate-1, 'yyyy-MM-dd') 
@@ -558,7 +558,7 @@
 					select item_no, nvl(sum(stock_cnt),0) stock_cnt, nvl(sum(trade_prc*stock_cnt),0)trade_prc from poss_stock
 		      where memb_no = #{membNo}
 		      group by item_no )
-				select TO_CHAR(ta_dt, 'yyyy-MM-dd') bdt, nvl(round(sum((a.trade_prc/DECODE((i.cl_prc*a.stock_cnt),0,NULL,(i.cl_prc*a.stock_cnt))*100-100))/count(*),2),0) rate -- 현재 보유자산 / 시장가 / 수익률
+				select TO_CHAR(ta_dt, 'yyyy-MM-dd') bdt, nvl(round(sum((((DECODE((i.cl_prc*a.stock_cnt),0,NULL,(i.cl_prc*a.stock_cnt)))/a.trade_prc)*100-100))/count(*),2),0) rate
 				from a left outer join item_info i on a.item_no = i.item_no
 				join item n on i.item_no = n.item_no
 				GROUP BY TO_CHAR(ta_dt, 'yyyy-MM-dd')
