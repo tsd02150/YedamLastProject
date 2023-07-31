@@ -79,8 +79,12 @@
 							<th>상품 카테고리</th>
 								<td colspan="3" id="productNm" >
 									<div>
-									 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S1">농산물
-									 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S2">수산물 
+									 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S101">곡류
+									 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S102">콩류 
+									 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S103">과실류
+									 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S201">어류 
+									 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S202">해조류
+									 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S203">갑각류 
 										
 									</div>
 								</td>
@@ -123,7 +127,7 @@
 								<th>상품 이미지</th>
 								<td colspan="3" class="text-left">
 									<div id="productCntn" >
-										<textarea id="productContentImg" name="desct"></textarea>
+										<textarea id="productContentImg"></textarea>
 									</div>
 								</td>
 						</tr>
@@ -373,12 +377,12 @@
 					   filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
 						},
 					{
-					   header: '판매가격',
+					   header: '판매가격(P)',
 					   name: 'prc',
 					   filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
 						},
 					{
-					   header: '할인률',
+					   header: '할인률(%)',
 					   name: 'dcRate',
 					   filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
 						},
@@ -400,64 +404,70 @@
 	        	.done(function(productData){
 	        		let data = productData.productDetail;
 	        		//let attachFileList = productData.attachFileList;
-	        		
+	        		console.log(data)
 	        		Swal.fire({
 	            		title:'상품수정',
 	            		html:`
 	            			<form id="myForm" onsubmit="return false">
 	            			<div id="reportDiv">
 	            			<table class="table h6">
-	            			<tr>
-							<th>상품 카테고리</th>
-								<td colspan="3" id="productNm" >
-									<div>
-									 <input type="radio" style="text-align:left;" id="writeProductTtl"  name="commonCd">농산물
-									 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd">수산물 
-										
-									</div>
-								</td>
-							</tr>	
+		            			<tr>
+								<th>상품 카테고리</th>
+									<td colspan="3" id="productNm" >
+										<div>
+										 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S101" ${data.commonCd.indexOf('S101')>=0?'checked':''}>곡류
+										 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S102" ${data.commonCd.indexOf('S102')>=0?'checked':''}>콩류
+										 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S103" ${data.commonCd.indexOf('S103')>=0?'checked':''}>과실류
+										 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S201" ${data.commonCd.indexOf('S201')>=0?'checked':''}>어류
+										 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S202" ${data.commonCd.indexOf('S202')>=0?'checked':''}>해조류
+										 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S203" ${data.commonCd.indexOf('S203')>=0?'checked':''}>갑각류
+										 
+										</div>
+									</td>
+								</tr>	
 							
-							<tr>
-							<th>상품명</th>
-								<td colspan="3" id="productNm" >
-									<div>
-										<input id="writeProductTtl" style="text-align:left;width:758px" name="nm">
-									</div>
-								</td>
-							</tr>	
-							<tr>
-							<th>상품가격</th>
-								<td colspan="3" id="productNm" >
-									<div>
-										<input id="writeProductTtl" style="text-align:left;width:758px" name="prc">
-									</div>
-								</td>
-							</tr>	
-							<tr>
-							<th>상품할인률</th>
-								<td colspan="3" id="productNm" >
-									<div>
-										<input id="writeProductTtl" style="text-align:left;width:758px" name="dcRate">
-									</div>
-								</td>
-							</tr>	
-							<tr>
-								<th>상품 썸네일</th>
-								<td colspan="3" class="text-left">
-									<div id="thumbCntn" >
-										<textarea id="productContent"></textarea>
-									</div>
-								</td>
+								
+								<tr>
+								<th>상품명</th>
+									<td colspan="3" id="productNm" >
+										<div>
+											<input id="writeProductTtl" style="text-align:left;width:758px" name="nm" value="${data.nm}">
+										</div>
+									</td>
+								</tr>	
+								<tr>
+								<th>상품가격</th>
+									<td colspan="3" id="productNm" >
+										<div>
+											<input id="writeProductTtl" style="text-align:left;width:758px" name="prc" value="${data.prc}">
+										</div>
+									</td>
+								</tr>	
+								<tr>
+								<th>상품할인률</th>
+									<td colspan="3" id="productNm" >
+										<div>
+											<input id="writeProductTtl" style="text-align:left;width:758px" name="dcRate" value="${data.dcRate}">
+										</div>
+									</td>
+								</tr>	
+								<tr>
+									<th>상품 썸네일</th>
+									<td colspan="3" class="text-left">
+										<div id="thumbCntn" >
+											<textarea id="productContent">${data.thumb}</textarea>
+										</div>
+									</td>
+								</tr>
+								<tr>
+									<th>상품 이미지</th>
+									<td colspan="3" class="text-left">
+										<div id="productCntn" >
+											<textarea id="productContentImg" name="desct" >${data.img}</textarea>
+										</div>
+									</td>
 							</tr>
-							<tr>
-								<th>상품 이미지</th>
-								<td colspan="3" class="text-left">
-									<div id="productCntn" >
-										<textarea id="productContentImg" name="desct"></textarea>
-									</div>
-								</td>
-							</tr>
+								
 							</table>
 							</div>
 							
@@ -549,7 +559,7 @@
 						        data : formData
 						      }).then(response => {
 						    	  const inputValue = $('#writeProductTtl').val();
-					    	  $('td[data-row-key='+ev.rowKey+'][data-column-name=ttl]').children(0).text(inputValue);
+					    	  $('td[data-row-key='+ev.rowKey+'][data-column-name=prdtNo]').children(0).text(inputValue);
 						        return response;
 						      }).fail(error => {
 						        Swal.showValidationMessage(

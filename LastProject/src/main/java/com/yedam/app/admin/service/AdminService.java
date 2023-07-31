@@ -7,6 +7,7 @@ import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.FaqVO;
 import com.yedam.app.community.service.NoticeVO;
 import com.yedam.app.community.service.QuestionVO;
+import com.yedam.app.mall.service.CommonCdVO;
 import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
 
@@ -47,5 +48,6 @@ public interface AdminService {
 	public Map<String, Object> addProduct(ProductVO prdtVO);
 	public Map<String , Object> modifyProduct(ProductVO prdtVO);
 	public Map<String , Object > productDetail(String prdtNo);
+	public void addCommonCd(ProductVO prdtVO);
 	
 }

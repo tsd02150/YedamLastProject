@@ -15,6 +15,7 @@ import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.FaqVO;
 import com.yedam.app.community.service.NoticeVO;
 import com.yedam.app.community.service.QuestionVO;
+import com.yedam.app.mall.service.CommonCdVO;
 import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
 
@@ -23,6 +24,7 @@ public class AdminServiceImpl implements AdminService {
 
 	@Autowired
 	AdminMapper adminMapper;
+	
 	
 	// 회원 리스트
 	@Override
@@ -343,6 +345,12 @@ public class AdminServiceImpl implements AdminService {
 		map.put("productDetail", adminMapper.productDetail(prdtNo));
 		//map.put("attachFileList", adminMapper.getNoticeAttachList(notiNo));
 		return map;
+	}
+
+	//공통코드 등록
+	@Override
+	public void addCommonCd(ProductVO prdtVO) {
+		adminMapper.addCommonCd(prdtVO);
 	}
 	
 }

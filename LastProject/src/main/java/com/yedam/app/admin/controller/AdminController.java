@@ -25,6 +25,7 @@ import com.yedam.app.community.service.FaqVO;
 import com.yedam.app.community.service.NoticeVO;
 import com.yedam.app.community.service.QuestionVO;
 import com.yedam.app.community.service.ReportVO;
+import com.yedam.app.mall.service.CommonCdVO;
 import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
 import com.yedam.app.security.service.UserVO;
@@ -399,9 +400,11 @@ public class AdminController {
 	@PostMapping("addProduct")
 	public Map<String , Object> addProduct(ProductVO prdtVO ,HttpServletRequest request) {
 		UserVO uvo = (UserVO) request.getSession().getAttribute("loggedInMember");
+		adminService.addCommonCd(prdtVO);
 		prdtVO.setMembNo(uvo.getMembNo());
 		return adminService.addProduct(prdtVO);
 	}
+
 	
 	// 상품 단건조회
 	@ResponseBody

@@ -380,6 +380,26 @@
         from product
 	</select>
 	
+	<!-- 공통코드 등록 -->
+	<insert id="addCommonCd" parameterType="ProductVO">
+		INSERT INTO COMMON_CODE
+		VALUES(
+		    (select 'S'||to_char(MAX(SUBSTR(common_cd,2))+1)
+		    from common_code
+		    where common_cd like 'S101%')
+		    ,#{nm}
+		    ,#{commonCd}
+		    ,(SELECT ctgr
+		    from common_code
+		    where common_cd=#{commonCd}
+		    )
+		)
+	<selectKey keyProperty="commonCd" resultType="String" order="AFTER">
+	    select 'S'||to_char(MAX(SUBSTR(common_cd,2))+1)
+	    from common_code
+	    where common_cd like #{commonCd}||'%'
+    </selectKey>
+	</insert>	
 	
 	  <!-- 상품 등록 -->
     <insert id="addProduct">

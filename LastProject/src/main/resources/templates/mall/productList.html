@@ -254,7 +254,6 @@
 	});
 	
 	function productList() {
-
 		
 	    fetch("/mall/getCtgrList", {
 	        method: "POST",
@@ -275,7 +274,7 @@
 				if(items.dcRate!=0){
 					divTag+=`<span class="bage">Sale</span>`;
 				}
-				divTag+=`<img src="/mall/images/main/${items.thumb}">
+				divTag+=`${items.thumb}
 						</div>
 						<div class="product-content">
 							<div class="product-detail">

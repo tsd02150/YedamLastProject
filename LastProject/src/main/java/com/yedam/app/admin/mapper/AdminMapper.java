@@ -1,7 +1,6 @@
 package com.yedam.app.admin.mapper;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -13,6 +12,7 @@ import com.yedam.app.community.service.FaqVO;
 import com.yedam.app.community.service.NoticeVO;
 import com.yedam.app.community.service.QuestionVO;
 import com.yedam.app.community.service.ReportVO;
+import com.yedam.app.mall.service.CommonCdVO;
 import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
 
@@ -114,7 +114,8 @@ public interface AdminMapper {
 	public int productTotal();
 	// product 단건조회
 	public ProductVO productDetail(String prdtNo);
-	
+	//공통코드 등록
+	public void addCommonCd(ProductVO prdtVO);
 	
 	
 	
