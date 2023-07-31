@@ -169,7 +169,6 @@
 			    			.catch(error => {
 			    				console.error(error);
 			    			});
-						
 						}
 					},
 					didClose:() =>{
@@ -203,13 +202,11 @@
         				let thumb = editor.getData();
         				let img=editorImg.getData();
         				
+        				
         				let formData = $('#myForm').serializeObject()
         				formData.thumb = thumb;
         				formData.img=img;
-        				formData.prc=prc;
-        				
         			
-        				
         				
         				$.ajax({
         					url:'/admin/addProduct',
@@ -542,6 +539,7 @@
 		        				formData.thumb = thumb;
 		        				formData.img=img;
 		        				formData.prdtNo=prdtNo;
+		        			
 	        				
 	        				/* var attachFileList = new FormData(); 
 	        				var inputFile = $("#attachFile");
