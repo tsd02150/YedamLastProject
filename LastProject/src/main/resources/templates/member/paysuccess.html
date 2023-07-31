@@ -7,13 +7,9 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
 
-#mypageBody{
-	border: 1px solid #DDDDDD;
-	height: 1000px;
-}
 #myPointList{
 	text-align: center;
-	margin-top : 200px;
+	margin-top : 100px;
 	margin-bottom : 100px;
 }
 #gotoBtn{
@@ -22,11 +18,10 @@
 }
 #imgDiv{
 	margin:auto;
-	margin-top : 60px;
+	margin-top : 90px;
+	margin-bottom : 30px;
 	text-align: center;
-	width : 600px;
-	height: 200px;
-	background-color: gray;
+
 }
 .btn-primary{
 	width : 190px;
@@ -36,8 +31,8 @@
 <body>
 <div layout:fragment="mypage">
 	<div id="mypageBody">
+			<div id="imgDiv"><img src="/main/images/title.png" alt=""></div>
 		<div id="myPointList">
-			<span>로고</span>
 			<span style="font-size:40px; color:black;">My 포인트</span>
 			<strong> <span th:text="|${#numbers.formatInteger(membList.point, 0, 'COMMA')}|" style="font-size:40px; padding-left:30px; color:black;"> </span></strong>
 			<span style="font-size:30px; color:black;">point</span>
@@ -48,7 +43,6 @@
 		<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/stock/itemListPage}'|">주식 사이트로 이동</button>
 		<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/mall/mallMain}'|">포인트몰로 이동</button>
 		</div>
-	<div id="imgDiv">이미지??</div>
 	</div>
 	<script>
 	</script>

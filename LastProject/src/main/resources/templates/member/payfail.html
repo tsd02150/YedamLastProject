@@ -6,14 +6,11 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
-#mypageBody{
-	border: 1px solid #DDDDDD;
-	height: 1000px;
-}
+
 #failDiv{
-	margin: auto;
 	text-align: center;
-	margin-top : 200px;
+	margin-top : 100px;
+	margin-bottom : 100px;
 }
 #gotoBtn{
 	margin:auto;
@@ -21,11 +18,9 @@
 }
 #imgDiv{
 	margin:auto;
-	margin-top : 60px;
+	margin-top : 90px;
+	margin-bottom : 30px;
 	text-align: center;
-	width : 600px;
-	height: 200px;
-	background-color: gray;
 }
 .btn-primary{
 	width : 190px;
@@ -35,6 +30,7 @@
 <body>
 <div layout:fragment="mypage">
 	<div id="mypageBody">
+	<div id="imgDiv"><img src="/main/images/title.png" alt=""></div>
 	<div id="failDiv">
 		<h2>결제가 취소되었습니다.</h2>
 		<div class="py-30"></div>
@@ -45,7 +41,6 @@
 		<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/member/pointChargeForm}'|">포인트 충전</button>
 		<button type="button" class="btn btn-primary" th:onclick="|location.href='@{/member/mypoint}'|">My 포인트로 이동</button>
 		</div>
-	<div id="imgDiv">이미지??</div>
 	</div>
 </div>
 </body>

@@ -59,77 +59,22 @@
           <li class="nav-item dropdown">
             <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
               <i class="bi bi-bell"></i>
-              <span class="badge bg-primary badge-number">4</span> </a
+              <span id="reportCnt" class="badge bg-primary badge-number"></span> </a
             ><!-- End Notification Icon -->
 
             <ul
               class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications"
             >
               <li class="dropdown-header">
-                You have 4 new notifications
-                <a href="#"
-                  ><span class="badge rounded-pill bg-primary p-2 ms-2"
-                    >View all</span
-                  ></a
-                >
+                
               </li>
+             
               <li>
                 <hr class="dropdown-divider" />
               </li>
 
-              <li class="notification-item">
-                <i class="bi bi-exclamation-circle text-warning"></i>
-                <div>
-                  <h4>Lorem Ipsum</h4>
-                  <p>Quae dolorem earum veritatis oditseno</p>
-                  <p>30 min. ago</p>
-                </div>
-              </li>
-
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-
-              <li class="notification-item">
-                <i class="bi bi-x-circle text-danger"></i>
-                <div>
-                  <h4>Atque rerum nesciunt</h4>
-                  <p>Quae dolorem earum veritatis oditseno</p>
-                  <p>1 hr. ago</p>
-                </div>
-              </li>
-
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-
-              <li class="notification-item">
-                <i class="bi bi-check-circle text-success"></i>
-                <div>
-                  <h4>Sit rerum fuga</h4>
-                  <p>Quae dolorem earum veritatis oditseno</p>
-                  <p>2 hrs. ago</p>
-                </div>
-              </li>
-
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-
-              <li class="notification-item">
-                <i class="bi bi-info-circle text-primary"></i>
-                <div>
-                  <h4>Dicta reprehenderit</h4>
-                  <p>Quae dolorem earum veritatis oditseno</p>
-                  <p>4 hrs. ago</p>
-                </div>
-              </li>
-
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
               <li class="dropdown-footer">
-                <a href="#">Show all notifications</a>
+                <a href="/admin/reportManage?sideNumber=1">신고 처리 페이지 이동하기</a>
               </li>
             </ul>
             <!-- End Notification Dropdown Items -->
@@ -275,6 +220,8 @@
     <!-- End #main -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<script src="../commonJS/toast.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+	<script src="../admin/adminSocket/adminSocket.js"></script>
 	<script th:inline="javascript">
 		let sideNumber = [[${sideNumber}]];
 		if(sideNumber == 1){
@@ -284,6 +231,15 @@
 		}else if(sideNumber == 3){
 			document.querySelector('#adminMall').click();
 		}
+		
+		$.ajax('nonChkRptCnt').done(function(data){
+			if(data == 0 ){
+				$('#reportCnt').toggleClass('d-none');
+			}
+        	$('#reportCnt').text(data);
+        	$('.dropdown-header').text(`처리되지 않은 신고가 ${data} 건 있습니다.`);
+        });
+		
 	</script>
   </body>
 </html>

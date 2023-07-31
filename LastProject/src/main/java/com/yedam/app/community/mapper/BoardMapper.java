@@ -57,6 +57,8 @@ public interface BoardMapper {
 	public List<AttachVO> getAttachList(String boardNo);
 	// 해당 멤버 정보, 관심종목, 종목 가격
 	public List<InterestVO> getInerestStockInfo(String membNo);
+	// 설문조사 결과 가져오기
+	public String getSurveyInfo(String membNo);
 	// 신고 기능
 	public int report(ReportVO vo);
 	// 추천 비추천 여부 확인

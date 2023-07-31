@@ -116,6 +116,10 @@ height: 50px;
 #titlename span:after{
 	width:110px;
 }
+.mark{
+	margin-left:0;
+	background-color: white;
+}
 </style>
 </head>
 <body>
@@ -240,7 +244,7 @@ $.ajax({
 		boxClass();
 		}else{
 			let p = `
-				<p class="bi bi-exclamation-circle" style="text-align: center; font-size: 40pt; margin-top:40px;"></p>
+				<p class="bi bi-exclamation-circle mark" style="text-align: center; font-size: 40pt; margin-top:40px;"></p>
 				<p class="nostock">보유한 종목이 없습니다.</p>
 				<a onclick="location.href='/stock/itemListPage'"><button class="btn btn-primary">주식페이지로 이동</button></a>
 			`;

@@ -230,6 +230,19 @@
 		USING(item_no)
 	</select>
 	
+	<!-- 해당멤버의 설문조사 정보 -->
+	<select id="getSurveyInfo" resultType="String">
+		SELECT type_nm
+        FROM analysis_type JOIN(
+            SELECT invst_type_no
+            FROM analysis_result
+            WHERE invst_no=(
+                SELECT max(invst_no)
+                FROM analysis_result
+                WHERE memb_no=#{membNo}))
+        USING(invst_type_no)
+	</select>
+	
 	<!-- 신고기능 -->
 	<insert id="report" parameterType="ReportVO">
 		<selectKey keyProperty="rprtNo" resultType="string" order="BEFORE">

@@ -352,5 +352,10 @@ public class AdminServiceImpl implements AdminService {
 	public void addCommonCd(ProductVO prdtVO) {
 		adminMapper.addCommonCd(prdtVO);
 	}
+	// 응답안한 신고 개수
+	@Override
+	public int nonChkRptCnt() {
+		return adminMapper.nonChkRptCnt();
+	}
 	
 }

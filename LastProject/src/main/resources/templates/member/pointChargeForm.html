@@ -110,7 +110,7 @@ width : 140px;
 			<h3 style="text-align : left;">충전금액</h3>
 			<label for="chargeInput"></label>
 			<input type="text" id="chargeInput" placeholder="1천원 → 10,000 point" class="form-control" aria-describedby="button-addon2" oninput="commas(this)">
-			<button type="reset" id="button-addon2" class="btn btn-outline-secondary">  X  </button><br>
+			<button type="reset" id="button-addon2" class="btn btn-outline-secondary resetBtn">  X  </button><br>
 			
 			<div>
 			<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -167,7 +167,9 @@ width : 140px;
 			$("#chargeInput").focus();
 			return;
 		}
+		$("#chargeInput").val("");
 	})
+	
 	$("#tosimg").on("click", function(){
 		if($("#chargeInput").val()==""){
 			$("#chargeInput").focus();

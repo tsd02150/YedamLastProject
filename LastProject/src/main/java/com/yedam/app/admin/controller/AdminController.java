@@ -429,4 +429,10 @@ public class AdminController {
 		return adminService.deleteProduct(list);
 	}
 
+	// 응답안한 신고글 개수
+	@ResponseBody
+	@GetMapping("nonChkRptCnt")
+	public int nonChkRptCnt() {
+		return adminService.nonChkRptCnt();
+	}
 }

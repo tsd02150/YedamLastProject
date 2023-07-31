@@ -83,7 +83,7 @@
 	<select id="reportList" resultType="ReportVO">
 		select rprt_no ,rprt_st, accused , plaintiff, category , drwup_dt
         from report
-        order by drwup_dt
+        order by rprt_st , drwup_dt desc
 	</select>
 	<!-- 신고글 개수 -->
 	<select id="reportCnt">
@@ -455,5 +455,10 @@
     	where prdt_no = #{prdtNo}
     </update>
     
-	
+	<!-- report 개수 -->
+	<select id="nonChkRptCnt">
+		select count(rprt_no) 
+        from report 
+        where rprt_st = 'N'
+	</select>
 </mapper>

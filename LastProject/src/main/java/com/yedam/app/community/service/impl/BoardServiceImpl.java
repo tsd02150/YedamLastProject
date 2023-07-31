@@ -3,6 +3,7 @@ package com.yedam.app.community.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.community.mapper.BoardMapper;
@@ -20,6 +21,13 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Autowired
 	BoardMapper boardMapper;
+	
+	private SimpMessagingTemplate template;
+	
+	@Autowired 
+	public BoardServiceImpl(SimpMessagingTemplate template) {
+		this.template = template;
+	}
 
 	// 해당 게시판 이름
 	@Override
@@ -157,11 +165,30 @@ public class BoardServiceImpl implements BoardService {
 	public List<InterestVO> getInerestStockInfo(String membNo) {
 		return boardMapper.getInerestStockInfo(membNo);
 	}
+	
+	// 설문조사 정보
+	@Override
+	public String getSurveyInfo(String membNo) {
+		// TODO Auto-generated method stub
+		return boardMapper.getSurveyInfo(membNo);
+	}
 
 	// 신고
 	@Override
 	public boolean report(ReportVO vo) {
-		return boardMapper.report(vo)>0;
+		// 신고시 알람가게하기
+		boolean check = boardMapper.report(vo)>0;
+		if(check) {
+			sendReport();
+		}
+		return check;
+	}
+	
+	// 신고시 실시간 알람전송
+	public void sendReport() {
+		System.out.println("신고알람시행@@@@@@@@@@");
+		String destination = "/admin/alarm";
+		this.template.convertAndSend(destination, "신고가 발생하였습니다");
 	}
 
 	// 추천 비추천 여부 확인

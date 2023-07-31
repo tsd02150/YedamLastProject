@@ -322,9 +322,11 @@ public class BoardController {
 	public Map<String, Object> getMemberInfo(MembVO vo){
 		vo=boardService.getMembInfo(vo.getMembNo());
 		List<InterestVO> list = boardService.getInerestStockInfo(vo.getMembNo());
+		String incliInfo = boardService.getSurveyInfo(vo.getMembNo());
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("membInfo", vo);
 		map.put("stockList", list);
+		map.put("incliInfo", incliInfo);
 		
 		return map;
 	}

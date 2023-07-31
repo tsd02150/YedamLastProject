@@ -40,6 +40,7 @@ public interface AdminService {
 	public int deleteBoard(List<String> list);
 	public BoardVO boardDetail(String boardNo);
 	public List<String> getRoomList();
+	public int nonChkRptCnt();
 	
 	public Map<String, Object> orderList(int page, int perPage);
 	public Map<String , Object> modifyOrder(OrderVO ordVO);

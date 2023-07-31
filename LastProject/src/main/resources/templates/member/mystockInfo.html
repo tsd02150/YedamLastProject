@@ -67,6 +67,12 @@ padding-top : 40px;
 #titlename span:after{
 	width:110px;
 }
+.btn-outline-secondary{
+	padding : 6px 10px 6px 10px;
+}
+.numinput{
+	text-align: center;
+}
 </style>
 </head>
 <body>
@@ -208,8 +214,8 @@ padding-top : 40px;
 	         }   
            tr2 += `<td>${el.prc}</td>
 	            <td>${formattedSellDt}</td>
-	            <td><button onclick="updateSellOrder(this)" style="display: inline-block;">수정</button></td>
-	            <td><button onclick="delSellOrder(this)">삭제</button></td>
+	            <td><button class="btn btn-outline-secondary" onclick="updateSellOrder(this)" style="display: inline-block;">수정</button></td>
+	            <td><button class="btn btn-outline-secondary" onclick="delSellOrder(this)">삭제</button></td>
 	          </tr>
 	        `;
 	      })
@@ -254,8 +260,8 @@ padding-top : 40px;
 	            <td>${el.rmnCnt}</td>
 	            <td>${commas(el.prc)}</td>
 	            <td>${formattedBuyDt}</td>
-	            <td><button onclick="updateBuyOrder(this)" style="display : inline-block;">수정</button></td>
-	            <td><button onclick="delBuyOrder(this)">삭제</button></td>
+	            <td><button class="btn btn-outline-secondary" onclick="updateBuyOrder(this)" style="display : inline-block;">수정</button></td>
+	            <td><button class="btn btn-outline-secondary" onclick="delBuyOrder(this)">삭제</button></td>
 	          </tr>
 	        `;
 	      })
@@ -284,15 +290,14 @@ padding-top : 40px;
 	  let rmnCntValue = rmnCntCell.text().trim();
 	  let prcValue = prcCell.text().trim();
 	
-	  let rmnCntInput = $('<input type="number">').val(rmnCntValue).css('width', '60px');
-	  let prcInput = $('<input type="number">').val(prcValue).css('width', '70px');
-	
+	  let rmnCntInput = $('<input type="number">').val(rmnCntValue).css('width', '60px').addClass("numinput");
+	  let prcInput = $('<input type="number">').val(prcValue).css('width', '70px').addClass("numinput");
 	  rmnCntCell.empty().append(rmnCntInput);
 	  prcCell.empty().append(prcInput);
 	
 	  $(target).hide();
 	  
-	  let saveBtn = $('<button class="saveBtn">저장</button>').css('display', 'inline-block');
+	  let saveBtn = $('<button class="saveBtn btn btn-outline-secondary">저장</button>').css('display', 'inline-block');
 	  $(target).parent().append(saveBtn);
 	  
 	  saveBtn.on("click", function() {
@@ -340,15 +345,15 @@ padding-top : 40px;
 	  let rmnCntValue = rmnCntCell.text().trim();
 	  let prcValue = prcCell.text().trim();
 
-	  let rmnCntInput = $('<input type="number">').val(rmnCntValue).css('width', '60px');
-	  let prcInput = $('<input type="number">').val(prcValue).css('width', '70px');
-
+	  let rmnCntInput = $('<input type="number">').val(rmnCntValue).css('width', '60px').addClass("numinput");
+	  let prcInput = $('<input type="number">').val(prcValue).css('width', '70px').addClass("numinput");
+		
 	  rmnCntCell.empty().append(rmnCntInput);
 	  prcCell.empty().append(prcInput);
 
 	  $(target).hide();
 
-	  let saveBtn = $('<button class="saveBtn">저장</button>').css('display', 'inline-block');
+	  let saveBtn = $('<button class="saveBtn btn btn-outline-secondary">저장</button>').css('display', 'inline-block');
 	  $(target).parent().append(saveBtn);
 
 	  saveBtn.on("click", function () {
@@ -464,13 +469,13 @@ function myRaiseList(){
 		      bar: {
 		        colors: {
 		          ranges: [{
-		            from: -100,
-		            to: -46,
-		            color: '#FEB019'
+		            from: 0,
+		            to: 100,
+		            color: '#FF3066'
 		          }, {
-		            from: -45,
+		            from: -100,
 		            to: 0,
-		            color: '#F15B46'
+		            color: '#FEB019'
 		          }]
 		        },
 		        columnWidth: '80%',
