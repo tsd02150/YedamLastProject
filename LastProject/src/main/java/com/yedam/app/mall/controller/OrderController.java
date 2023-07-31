@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.yedam.app.mall.service.BasketService;
 import com.yedam.app.mall.service.BasketVO;
 import com.yedam.app.mall.service.MallService;
+import com.yedam.app.mall.service.OrderDetailVO;
 import com.yedam.app.mall.service.OrderService;
 import com.yedam.app.mall.service.OrderVO;
+import com.yedam.app.mall.service.ShippingVO;
 import com.yedam.app.member.service.AddrVO;
-import com.yedam.app.member.service.ChargeVO;
 import com.yedam.app.member.service.MembVO;
 import com.yedam.app.member.service.MemberService;
 import com.yedam.app.security.service.UserVO;
@@ -141,30 +142,34 @@ public class OrderController {
 	// 결제 성공
 	@GetMapping("orderCheck")
 	public String orderCheck(@RequestParam(value = "amount") int amount, HttpSession session, OrderVO ordVO,
-			Model model, MembVO membVO) {
+			Model model, MembVO membVO, ShippingVO shipVO, OrderDetailVO oddVO) {
 
 		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 		// chargeVO.setMembNo(mem.getMembNo());
 		// chargeVO.setChagPrc(amount);
 		ordVO.setMembNo(mem.getMembNo());
-		ordVO.setPrc(amount);
+		ordVO.setPayAn(amount);
+		
 		membVO.setId(mem.getId());
 
 		// 결제 정보 저장, 등록
 		// 포인트적립
 		// membService.insertCharge(chargeVO, membVO);
 		orderService.insertOrder(ordVO, membVO); // 수정된 정보 세션에 다시 저장.
+		orderService.insertOrderDetail(oddVO, membVO);
+		orderService.insertShipping(shipVO, membVO);
+		
 		mem.setPoint(membVO.getPoint());
 		session.setAttribute("loggedInMember", mem);
 		model.addAttribute("membList", membVO); // update된 회원 정보
-
+		
 		return "mall/orderCheck";
 	}
 
 	// 결제 취소 페이지
 	@GetMapping("orderCancel")
-	public String orderCancel(Model model, OrderVO ordVO) {
-
+	public String orderCancel(Model model, OrderVO ordVO, HttpSession session) {
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 		return "mall/orderCancel";
 	}
 

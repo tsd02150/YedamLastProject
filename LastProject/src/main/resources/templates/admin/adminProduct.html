@@ -89,8 +89,7 @@
 									</div>
 								</td>
 							</tr>	
-						
-							
+							 
 							<tr>
 							<th>상품명</th>
 								<td colspan="3" id="productNm" >
@@ -101,7 +100,7 @@
 							</tr>	
 							<tr>
 							<th>상품가격</th>
-								<td colspan="3" id="productNm" >
+								<td colspan="3" id="productPrc" >
 									<div>
 										<input id="writeProductTtl" style="text-align:left;width:758px" name="prc">
 									</div>
@@ -109,7 +108,7 @@
 							</tr>	
 							<tr>
 							<th>상품할인률</th>
-								<td colspan="3" id="productNm" >
+								<td colspan="3" id="productDc" >
 									<div>
 										<input id="writeProductTtl" style="text-align:left;width:758px" name="dcRate">
 									</div>
@@ -207,6 +206,7 @@
         				let formData = $('#myForm').serializeObject()
         				formData.thumb = thumb;
         				formData.img=img;
+        				formData.prc=prc;
         				
         			
         				
@@ -570,9 +570,6 @@
 						          `Request failed: ${error.statusText}`
 						        );
 						      });
-		    		          
-		    		         
-		    		           
 		    		        }
 	        		})
 	        		.then((result) => {	

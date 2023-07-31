@@ -65,6 +65,8 @@ hr {
 			
 			<div class="order-complete">
     <h1 id="h1">결제 완료되었습니다!</h1>
+    <strong> <span th:text="|${#numbers.formatInteger(membList.point, 0, 'COMMA')}|"
+     style="font-size:40px; padding-left:30px; color:black;"> </span></strong>
     <p>결제고객명: <span id="customer-name" >홍길동</span></p>
     <p>결제 날짜: <span id="recipient_orderDt">2023년 7월 24일</span></p>
     <hr>

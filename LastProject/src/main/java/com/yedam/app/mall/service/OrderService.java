@@ -10,8 +10,15 @@ public interface OrderService {
 	public List<OrderVO> getOrderList(String membNo);
 
 	public List<OrderVO> getMemInfo(String membNo);
-
+	
+	//주문 등록
 	public int insertOrder(OrderVO ordVO, MembVO membVO);
+	
+	// 배송 등록
+	public int insertShipping(ShippingVO shipVO, MembVO membVO);
+	
+	//주문 상세 등록
+	public int insertOrderDetail(OrderDetailVO oddVO, MembVO membVO);
 
 	// 주소 등록
 	public int insertAddr(AddrVO addrVO);
