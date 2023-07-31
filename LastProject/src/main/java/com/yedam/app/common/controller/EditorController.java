@@ -181,6 +181,43 @@ public class EditorController {
 
 		return map;
 	}
+	@PostMapping(value = "/thumb/upload")
+	@ResponseBody
+	public Map<String, Object> thumbUpload(MultipartHttpServletRequest request) throws AmazonServiceException, SdkClientException, IOException {
+		// modelandview를 사용하여 json 형식으로 보내기위해 모델앤뷰 생성자 매개변수로 jsonView 라고 써줌
+		// jsonView 라고 쓴다고 무조건 json 형식으로 가는건 아니고 @Configuration 어노테이션을 단
+		// WebConfig 파일에 MappingJackson2JsonView 객체를 리턴하는 jsonView 매서드를 만들어서 bean으로
+		// 등록해야함
+		
+		// ckeditor 에서 파일을 보낼 때 upload : [파일] 형식으로 해서 넘어오기 때문에 upload라는 키의 밸류를 받아서
+		// uploadFile에 저장함
+		MultipartFile uploadFile = request.getFile("upload");
+		
+		// 업로드 파일의 본래 이름
+		String originalName = uploadFile.getOriginalFilename();
+		
+		// 날짜 폴더 생성
+		String folderPath = makeS3Folder("thumb");
+		// UUID
+		String uuid = UUID.randomUUID().toString();
+		// 저장할 파일 이름 중간에 "_"를 이용하여 구분
+		String saveName = folderPath + "/" + uuid + "_" + originalName;
+		
+		ObjectMetadata metadata = new ObjectMetadata();
+		metadata.setContentLength(uploadFile.getSize());
+		metadata.setContentType(uploadFile.getContentType());
+		
+		amazonS3.putObject(bucket, saveName, uploadFile.getInputStream(), metadata);
+		
+		
+		Map<String, Object> map = new HashMap<>();
+		// ckeditor는 이미지 업로드 후 이미지 표시하기 위해 uploaded 와 url을 json 형식으로 받아야 함
+		// uploaded, url 값을 map를 통해 보냄
+		map.put("uploaded", true); // 업로드 완료
+		map.put("url", amazonS3.getUrl(bucket, saveName).toString()); // 업로드 파일의 경로
+		
+		return map;
+	}
 	@PostMapping(value = "/product/upload")
 	@ResponseBody
 	public Map<String, Object> productUpload(MultipartHttpServletRequest request) throws AmazonServiceException, SdkClientException, IOException {
