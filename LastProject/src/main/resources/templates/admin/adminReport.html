@@ -32,6 +32,14 @@
 		</div>
 		<div id="grid"></div>
 		<script>
+		function getReportAlarm(){
+			$.ajax('/admin/nonChkRptCnt').done(function(data){
+				if($('#reportCnt').hasClass('d-none')) $('#reportCnt').removeClass('d-none');
+		    	$('#reportCnt').text(data);
+		    	$('.dropdown-header').text(`처리되지 않은 신고가 ${data} 건 있습니다.`);
+       	 	});
+		};
+		
 		$('#updateBtn').on('click',function(){
 	    	  const checkedRows = grid.getCheckedRows();
 	  		  console.log(checkedRows)
@@ -67,6 +75,7 @@
 	          		    		
 	          		    		$.ajax('/admin/memberBan?list='+accused+'&period='+period).done(function(data){
 	          		    			if(data > 0){
+	          		    				getReportAlarm();
 	          		    				let rowKeys = checkedRows.map(row => row.rowKey);
 	          	    		    		for(let i of rowKeys){
 	          	    		    			$('td[data-row-key='+i+'][data-column-name=rprtSt]').children(0).text('Y');
@@ -85,21 +94,8 @@
 
 	          		    
 	          		})() 
-	    		  } else if (result.isDenied) {
-	    		    // 정지 해제
-	    		    $.ajax('returnMemb?list='+members).done(function(data){
-	    		    	console.log(data)
-	    		    	if(data > 0){
-	    		    		Swal.fire('정지가 해제되었습니다');
-	    		    		let rowKeys = checkedRows.map(row => row.rowKey);
-	    		    		for(let i of rowKeys){
-	    		    			$('td[data-row-key='+i+'][data-column-name=state]').children(0).text('정상');
-	    		    		}
-	    		    	}else{
-	    		    		Swal.fire('정지 해제 실패');
-	    		    	}
-	    		    });// end of ajax
-	    		  }//else if
+	    		  }
+	    			
 	    		})//then 의 end
 	      }
 	      })// updateBtn 클릭 기능 의  end
@@ -128,6 +124,7 @@
 				      data: JSON.stringify(rowKeys),
 				      success: function(response) {
 				        // 삭제 요청이 성공한 경우, 그리드에서 선택된 행을 제거합니다.
+				        getReportAlarm();
 				        console.log(response)
 				        grid.removeCheckedRows(true);
 				      },
@@ -298,6 +295,7 @@
                   		    			if(data > 0){
                   		    				$.ajax('rprtStChange?rprtNo='+rprtNo).done(function(data){
                   		    					if(data >0){
+                  		    						getReportAlarm();
                   		    						Swal.fire(accused +' 회원 '+ result.value+' 일 정지 성공');
                           		    				$('td[data-row-key='+ev.rowKey+'][data-column-name=rprtSt]').text("Y");
                   		    					}else{
@@ -334,6 +332,7 @@
 							      data: JSON.stringify([rprtNo]),
 							      success: function(response) {
 							        // 삭제 요청이 성공한 경우, 그리드에서 선택된 행을 제거합니다.
+							        getReportAlarm();
 							        Swal.fire('삭제완료!')
 							        grid.removeRow(ev.rowKey)
 							      },
