@@ -283,4 +283,9 @@ public class MemberServiceImpl implements MemberService {
 		return membMapper.selectOrderOne(vo);
 	}
 
+	@Override
+	public int updatePoss(PossVO vo) {
+		return membMapper.updatePoss(vo);
+	}
+
 }

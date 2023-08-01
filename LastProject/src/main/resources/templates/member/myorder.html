@@ -77,6 +77,7 @@
 }
 #dtTr td{
 padding-top:10px;
+font-size:16px;
 }
 #orderbody{
 	font-size : 20px;
@@ -148,6 +149,7 @@ padding : 20px;
 }
 .prdtTr{
 border-bottom: 1px solid #e7e7e7;
+cursor: pointer;
 }
 .prdtTr td{
 	font-weight: bold;
@@ -163,6 +165,9 @@ border-bottom: 1px solid #e7e7e7;
 }
 #myorderDiv input{
 	padding:5px;
+}
+.modal-footer{
+	padding-top : 0;
 }
 </style>
 </head>
@@ -318,7 +323,7 @@ border-bottom: 1px solid #e7e7e7;
             "shipSt": shipSt,
             "startDate": startDate,
             "endDate": endDate,
-            "page": page
+            "page": targetPage
 	        },
 	        success: function (data) {
 	        	let tr = '';
@@ -333,7 +338,7 @@ border-bottom: 1px solid #e7e7e7;
         	   <tr class="prdtTr" data-no=${item.prdtNo} data-shipno="${item.shipNo}" onclick="modatShow(this)">
 								<td>
 									<div class="image_wrap">
-										<img src="/mall/images/main/${item.thumb}">
+									${item.thumb}
 									</div>
 								</td>
 								<td><span class="high">${item.orderSt}</span>${item.nm}</td>
@@ -362,6 +367,7 @@ border-bottom: 1px solid #e7e7e7;
 	    shipSt = $("#orderSel option:selected").val();
 	    startDate = $("#startDate").val();
 	    endDate = $("#endDate").val();
+	    targetPage=1;
 	    shipList();
 	    pageBtn();
 
@@ -380,7 +386,7 @@ border-bottom: 1px solid #e7e7e7;
 			},
 			success : function(data){
 				data.forEach(el=>{
-					console.log(el);
+					//console.log(el);
 					let orderDt = new Date(el.orderDt);
 		    	let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
 					div+= `
@@ -390,7 +396,7 @@ border-bottom: 1px solid #e7e7e7;
 						<table>
 						<tbody onclick="location.href='/mall/getFarm?prdtNo=${el.prdtNo}'">
 						<tr>
-						<th><img src="/mall/images/main/${el.thumb}"></th>
+						<th>${el.thumb}</th>
 						<td>
 						<p class="high">${el.shipSt}</p> 
 						<strong>${el.nm}</strong><br>
@@ -408,7 +414,8 @@ border-bottom: 1px solid #e7e7e7;
 						<span>주문자&nbsp;&nbsp;</span><span><strong>${el.name}</strong></span><br>
 						<span>연락처&nbsp;&nbsp;</span><span><strong>${el.tel}</strong></span>
 						<br>`;
-						if(el.shipSt != "배송완료" || el.shipSt != "주문취소"){
+						console.log(el.shipSt);
+						if(el.shipSt !== '배송완료' && el.shipSt !== '주문취소'){
 							div+= `<button class="del-order-btn btn btn-dark" onclick="delOrder(this)">주문취소</button>`;
 						}
 						div+= `</div>`;
@@ -425,8 +432,8 @@ border-bottom: 1px solid #e7e7e7;
 	
 	
 	function delOrder(target){
-		console.log($(".payNo span").text());
-		console.log(typeof(parseInt($(".payNo span").text())));
+		//console.log($(".payNo span").text());
+		//console.log(typeof(parseInt($(".payNo span").text())));
 		$.ajax({
 			url : "deleteOrder",
 			method : "POST",
@@ -438,7 +445,7 @@ border-bottom: 1px solid #e7e7e7;
 					updateShip();
 					$('#myModal').hide();
 					shipList();
-			    pageBtn();
+					pageBtn();
 			    toastShow("Delete","주문취소 완료","success");
 				}
 			},
@@ -477,13 +484,18 @@ border-bottom: 1px solid #e7e7e7;
             "shipSt": shipSt,
             "startDate": startDate,
             "endDate": endDate,
-            "page": page
+            "page": targetPage
 	        },
 	        success: function (data) {
+	        	//console.log(data)
 	            $('#nextpage').css('visibility', 'hidden');
 	            $('#prevpage').css('visibility', 'hidden');
 	            totalCnt = data;
-	            endPage=~~((totalCnt-1)/10 + 1);
+	            if(totalCnt >100){
+	            	endPage = 10;
+	            }else{
+		            endPage=~~((totalCnt-1)/10 + 1);
+	            }
 	            createPageCntBtn(startPage, endPage);
 	            if(totalCnt>100){
 	            	$('#nextpage').css('visibility', 'hidden');
@@ -514,7 +526,6 @@ border-bottom: 1px solid #e7e7e7;
 	   function pageMove(page) {
 		   $("#orderbody").html("");
 		  $('.pagebtn.active').removeClass('active');
-		  console.log(page);
 		  targetPage = page;
 		  shipList();
 		  $('.pagebtn').each(function () {
@@ -522,6 +533,7 @@ border-bottom: 1px solid #e7e7e7;
 		      $(this).addClass('active');
 		       }
 		     });
+		  window.scrollTo(0, 200);
 	   }
 	      
 	   // 페이징 < 버튼 클릭
@@ -530,12 +542,12 @@ border-bottom: 1px solid #e7e7e7;
 	     $('#nextpage').css('visibility', 'visible');
 	     startPage -= 10;
 	     endPage -= 10;
-	     console.log(startPage)
 	     if (startPage === 1) {
 	       $('#prevpage').css('visibility', 'hidden');
 	     }
 	     createPageCntBtn(startPage, endPage);
 	     pageMove(startPage);
+	     window.scrollTo(0, 0);
 	   }
 	   
 	   // 페이징 > 버튼 클릭
@@ -550,6 +562,7 @@ border-bottom: 1px solid #e7e7e7;
 	     }
 	     createPageCntBtn(startPage, endPage);
 	     pageMove(startPage);
+	     window.scrollTo(0, 0);
 	   }
 	   
 	   function firstPage() {

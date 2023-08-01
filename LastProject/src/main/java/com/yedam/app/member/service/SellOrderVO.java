@@ -25,6 +25,6 @@ public class SellOrderVO {
 	private int rmnCnt;
 	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
 	private Date sellDt;
-	private int tradedPrx;
+	private int tradedPrc;
 	private String commonCd;
 }

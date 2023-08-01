@@ -5,7 +5,6 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title></title>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
 #mypageBody{
@@ -109,8 +108,8 @@ height: 200px;
 	font-size: larger;
 	font-weight: bold;
 }
-.prdtimg{
-width: 50px;
+.image img{
+width: 70px;
 height: 50px;
 }
 #titlename span:after{
@@ -269,8 +268,8 @@ $.ajax({
 			data.slice(0, 4).forEach(el=>{
 				let tprc = commas(el.tprc); 
 				//console.log(el);
-				box2 += `<div class="int_item">
-									<p onclick="location.href='/stock/chart?itemNo=${el.itemNo}'" class="tnm">${el.tnm}</p>
+				box2 += `<div class="int_item" onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">
+									<p class="tnm">${el.tnm}</p>
 									<span class="rate">${el.rate}%</span><br>
 									<span class="tprc">${tprc} P</span>
 				 					</div>`;
@@ -327,13 +326,13 @@ $.ajax({
 	        console.log(el);
 	        let orderDt = new Date(el.orderDt); // 날짜 객체 생성
 	        let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
-	        var orderAm = commas(el.cnt); 
+	        var orderAm = commas(el.orderAm); 
 	        prd += `
 	          <div class="orderDiv">
 	            <p class="orderDt">${formattedDt}</p>
-	            <img src="/mall/images/main/${el.thumb}" class="prdtimg" data-no="${el.prdtNo}">
+	            <p class="prdtimg" data-no="${el.prdtNo}">${el.thumb}</p> 
 	            <p class="prdtnm" data-no="${el.prdtNo}">${el.nm}</p>
-	            <p class="orderAm">${orderAm}</p>
+	            <p class="orderAm">${orderAm} P</p>
 	          </div>`;
 	      });
 

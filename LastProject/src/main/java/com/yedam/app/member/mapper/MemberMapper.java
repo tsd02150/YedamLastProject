@@ -95,8 +95,10 @@ public interface MemberMapper {
 	public int deleteSellOrder(SellOrderVO soVO);
 	//매수 주문 현황 삭제
 	public int deleteBuyOrder(BuyOrderVO boVO);
-	//매도 주문 현황 삭제
+	//매도 주문 현황 수정
 	public int updateSellOrder(SellOrderVO soVO);
+	//매도 주문 수정 후 보유주식 수정
+	public int updatePoss(PossVO vo);
 	//매수 주문 현황 수정
 	public int updateBuyOrder(BuyOrderVO boVO);
 	

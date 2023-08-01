@@ -90,7 +90,7 @@
 
 #recomDiv {
 	display: inline-block;
-	height: 3805x;
+	height: 380px;
 	margin-top: 20px;
 	overflow: auto;
 }
@@ -168,17 +168,14 @@
 	color: black;
 }
 
-#itemDiv {
-	margin-top: 70px;
-}
-
 #titlename span:after {
 	width: 110px;
 }
-#buyOrder table{
-	border-top: 2px solid #FF3066;
+#buyOrder table, #sellOrder table{
+	border-top: 1px solid #FF3066;
+	border-bottom: 1px solid #FF3066;
 }
-#buyOrder th, #buyOrder td{
+#buyOrder th, #buyOrder td, #sellOrder th, #sellOrder td{
 	border: 1px solid #DDDDDD;
 	border-bottom: 0;
 	font-weight: bold;
@@ -278,7 +275,6 @@
 							</a></li>
 						</ul>
 					</nav>
-				</div>
 			</div>
 
 			<div id="itemDiv" class="col-12">
@@ -317,8 +313,7 @@
 			</div>
 		</div>
 
-
-		<script>
+<script>
  	const memNo = "[[${session.loggedInMember.membNo}]]";
  	const dt = "[[${#dates.format(session.loggedInMember.joinDt, 'yyyy/MM/dd')}]]";
  	let dtFormat = "[[${#dates.format(session.loggedInMember.joinDt, 'yyyy-MM-dd')}]]";
@@ -329,7 +324,7 @@
  	let today = new Date();   
  	let year = today.getFullYear(); // 년도
  	let month = today.getMonth() + 1 <10 ? '0'+(today.getMonth() + 1) : today.getMonth() + 1;  // 월
- 	let date = today.getDate() < 10 ? date = '0'+today.getDate() : today.getDate();  // 날짜
+ 	let date = today.getDate().toString().padStart(2, '0');  // 날짜
  	let endDate = year + '/' + month + '/' + date ; 
  	
  	$("#dstart").val(dtFormat);
@@ -349,6 +344,7 @@
  		kind = $("#buysellsel option:selected").val();
     startDate = $("#dstart").val();
     endDate = $("#dend").val();
+    targetPage=1;
     buysell();
 	 	pageBtn();
  	})
@@ -836,7 +832,6 @@ function updateStartDate(period) {
 		   $("#dealbody").html("");
 		  $('.pagebtn.active').removeClass('active');
 		  targetPage = page;
-		  console.log(page);
 		  buysell();
 		  $('.pagebtn').each(function () {
 		    if ($(this).children('a').text() == page) {
@@ -885,11 +880,8 @@ function updateStartDate(period) {
 	   
 	   function lastPage() {
 		   $("#dealbody").html("");
-		   console.log(endPage)
        endPage = ~~((totalCnt - 1) / 10 + 1);
 	     startPage = endPage - endPage % 10 + 1;
-	     console.log(startPage, endPage);
-	     createPageCntBtn(startPage, endPage);
 	     pageMove(endPage);
 	   }
    function commas(number) {

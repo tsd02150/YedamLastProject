@@ -127,30 +127,11 @@ public class MemberController {
 		model.addAttribute("joinInfoNo", membVO.getMembNo());
 		return "member/myItemCheckForm";			
 	}
-	
-	//카카오 로그인 -
-	@ResponseBody
-	@RequestMapping("kakao")
-	public String kakaoLogin(MembVO membVO, @RequestParam String code, @RequestParam String id, HttpSession session) {
-		
-		if(membVO.getId()==null) { //처음 로그인하면 
-			membVO.setMembNo(membService.selectMembNO());
-			//membVO.setNick(nick);
-			membVO.setId(id);
-			session.setAttribute("loggedInMember", membVO);
-		}else {
-			session.setAttribute("id", membVO.getId());
-			session.setAttribute("nick", membVO.getNick());
-			session.setAttribute("membNo", membVO.getMembNo());			
-		}
-		return "redirect:/";
-	}
-	
-	@ResponseBody
-	@RequestMapping("naver")
-	public String naverLogin() {
-		return null;
-	}
+	/*
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping("naver") public String naverLogin() { return null; }
+	 */
 	
 	//닉네임 중복확인
 	@ResponseBody
@@ -640,6 +621,7 @@ public class MemberController {
 		return result;
 	}
 	
+	//매도 주문 수정
 	@ResponseBody
 	@PostMapping("updateSellOrder")
 	public int updateSellOrder(@RequestParam String membNo, @RequestParam String sellNo,@RequestParam int prc ,@RequestParam int rmnCnt, SellOrderVO soVO) {
@@ -650,6 +632,17 @@ public class MemberController {
 		int result = membService.updateSellOrder(soVO);
 		return result;
 	}
+	
+	//매도주문 수정 후 보유주식 현황 수정
+	@ResponseBody
+	@PostMapping("updatePoss")
+	public int updatePoss(PossVO vo, HttpSession session) {
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		vo.setMembNo(mem.getMembNo());
+		int result = membService.updatePoss(vo);
+		return result;
+	}
+	
 	@ResponseBody
 	@PostMapping("updateBuyOrder")
 	public int updateBuyOrder(@RequestParam String membNo, @RequestParam String buyNo,@RequestParam int prc ,@RequestParam int rmnCnt, BuyOrderVO boVO) {
