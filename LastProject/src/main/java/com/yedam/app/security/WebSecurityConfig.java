@@ -106,13 +106,6 @@ public class WebSecurityConfig{
              .logoutUrl("/member/logout")
              .permitAll()
              )
-					/*
-					 * .logout((logout) -> logout .logoutSuccessHandler((request, response,
-					 * authentication) -> { String referer = request.getHeader("referer"); if
-					 * (referer != null && !referer.isEmpty()) { response.sendRedirect(referer); }
-					 * else { response.sendRedirect("/"); } }) .logoutUrl("/member/logout")
-					 * .permitAll() )
-					 */
 	         .exceptionHandling()
              .accessDeniedHandler(accessDeniedHandler())
              .and()

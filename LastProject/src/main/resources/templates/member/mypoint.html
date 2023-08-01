@@ -4,7 +4,6 @@
 
 <head>
 <meta charset="UTF-8">
-<title>회원관리</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
 #myPointList, #myCouponList{
@@ -25,6 +24,7 @@ color: #FF3066;
 }
 #myPointTblDiv{
 width: 700px;
+height : 520px;
 margin : auto;
 margin-top:70px;
 }
@@ -55,6 +55,24 @@ margin-top:70px;
 #titlename span:after{
 	width:250px;
 }
+#titlename2 span:after{
+	width:110px;
+}
+.cDiv{
+	display: inline-block;
+	border: 1px solid #ddd;
+	width: 150px;
+	padding : 10px;
+	font-size : 20px;
+	margin-left: 10px;
+}
+.cDiv p{
+	margin-top:10px;
+	margin-bottom:10px;
+}
+#coupon-div{
+	padding : 20px;
+}
 </style>
 </head>
 <body>
@@ -63,7 +81,7 @@ margin-top:70px;
 	<div id="myPointList">
 		<span style="font-size:40px; color:black;">My 포인트</span>
 		<strong> <span th:text="|${#numbers.formatInteger(mypoint, 0, 'COMMA')}|" style="font-size:40px; padding-left:30px; color:black;"></span></strong>
-		<span style="font-size:30px; color:black;"> point</span>
+		<span style="font-size:30px; color:black;"> P</span>
 		<a href="pointChargeForm" id="chargeBtn"><img th:src="|/member/images/charge.png|" ></a><br>
 	</div>
 	<div id="myCouponList">
@@ -94,9 +112,9 @@ margin-top:70px;
         </tr>
     </thead>
     <tbody id="dealbody">
-
     </tbody>
-</table>
+	</table>
+</div>
 <div>
 <nav aria-label="Page navigation example" class="d-flex justify-content-center">
 	<ul class="pagination">
@@ -124,6 +142,17 @@ margin-top:70px;
 		</ul>
 	</nav>
 </div>
+<!-- coupon -->
+<h3 class="news-title" id="titlename2">
+   <span>쿠폰 내역</span>
+</h3>
+<div th:if="${#lists.isEmpty(mycoupon)}">
+</div>
+<div id="coupon-div" th:if="${not #lists.isEmpty(mycoupon)}">
+	<div class="cDiv" th:each="list : ${mycoupon}">
+		<strong><span th:text="${list.dcRate}+' %'"></span></strong>
+		<p>[[${#dates.format(list.endDt, 'yyyy-MM-dd')}]]까지</p>
+	</div>
 </div>
 </div>
 
@@ -135,21 +164,17 @@ let dtFormat = "[[${#dates.format(session.loggedInMember.joinDt, 'yyyy-MM-dd')}]
 let tablename = "";
 let targetPage = 1;
 let startPage=1;
-let endPage=20;
+let endPage=10;
 let totalCnt;
 let today = new Date();   
 let year = today.getFullYear(); // 년도
 let month = today.getMonth() + 1 <10 ? '0'+(today.getMonth() + 1) : today.getMonth() + 1;  // 월
-let date = today.getDate() < 10 ? date = '0'+today.getDate() : today.getDate();  // 날짜
+let date = today.getDate().toString().padStart(2, '0'); // 날짜
 let endDate = year + '/' + month + '/' + date; 
 let startDate = dt;
 
 $("#startDate").val(dtFormat);
 $("#endDate").val(`${year}-${month}-${date}`);
-
-console.log(dtFormat)
-console.log(dt)
-
 
 
 dealList();
@@ -170,9 +195,9 @@ function dealList() {
         success: function (data) {
             let tr = ''; // 각 호출마다 tr을 초기화
         	if(data && data.length >0){
-            console.log(data);
+            //console.log(data);
             data.forEach(el => {
-            	console.log(el)
+            	//console.log(el)
             let point = commas(el.point);
             	let orderDt = new Date(el.orderDt);
             	let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
@@ -213,8 +238,10 @@ function dealList() {
 	$("#dealSel").on("change", function () {
 	    $("#dealbody").html(""); // select가 변경되면 이전에 출력한 내용 초기화
 	    tablename = $("#dealSel option:selected").val();
+	    //console.log(tablename)
 	    startDate = $("#startDate").val();
 	    endDate = $("#endDate").val();
+	    targetPage=1;
 	    dealList();
 	    pageBtn();
 
@@ -234,7 +261,11 @@ function dealList() {
 	            $('#nextpage').css('visibility', 'hidden');
 	            $('#prevpage').css('visibility', 'hidden');
 	            totalCnt = data;
-	            endPage=~~((totalCnt-1)/20 + 1);
+	            if(totalCnt >100){
+	            	endPage = 10;
+	            }else{
+		            endPage=~~((totalCnt-1)/10 + 1);
+	            }
 	            createPageCntBtn(startPage, endPage);
 	            if(totalCnt>100){
 	            	$('#nextpage').css('visibility', 'hidden');
@@ -253,7 +284,7 @@ function dealList() {
 	      
 	      for (let i = start; i <= end; i++) {
 	        let liTag = $('<li></li>').addClass('page-item').addClass('pagebtn');
-	        if (i % 20 === targetPage) {
+	        if (i % 10 === targetPage) {
 	          liTag.addClass('active');
 	        }
 	        let aTag = $('<a></a>').addClass('page-li	nk').attr('href', 'javascript:pageMove(' + i + ');').text(i);
@@ -266,7 +297,6 @@ function dealList() {
 	   function pageMove(page) {
 		   $("#dealbody").html("");
 		  $('.pagebtn.active').removeClass('active');
-		  console.log(page);
 		  targetPage = page;
 		  dealList();
 		  $('.pagebtn').each(function () {
@@ -274,15 +304,16 @@ function dealList() {
 		      $(this).addClass('active');
 		       }
 		     });
+		  
+		  window.scrollTo(0, 200);
 	   }
 	      
 	   // 페이징 < 버튼 클릭
 	   function prevPage() {
 		   $("#dealbody").html("");
 	     $('#nextpage').css('visibility', 'visible');
-	     startPage -= 20;
-	     endPage -= 20;
-	     console.log(startPage)
+	     startPage -= 10;
+	     endPage -= 10;
 	     if (startPage === 1) {
 	       $('#prevpage').css('visibility', 'hidden');
 	     }
@@ -294,10 +325,10 @@ function dealList() {
 	   function nextPage() {
 		   $("#dealbody").html("");
 	     $('#prevpage').css('visibility', 'visible');
-	     startPage += 20;
-	     endPage += 20;
-	     if (endPage >= ~~((totalCnt - 1) / 20 + 1)) {
-	       endPage = ~~((totalCnt - 1) / 20 + 1);
+	     startPage += 10;
+	     endPage += 10;
+	     if (endPage >= ~~((totalCnt - 1) / 10 + 1)) {
+	       endPage = ~~((totalCnt - 1) / 10 + 1);
 	       $('#nextpage').css('visibility', 'hidden');
 	     }
 	     createPageCntBtn(startPage, endPage);
@@ -307,8 +338,8 @@ function dealList() {
 	   function firstPage() {
 		   $("#dealbody").html("");
 	     startPage = 1;
-	     if (endPage > 20) {
-	       endPage = 20;
+	     if (endPage > 10) {
+	       endPage = 10;
 	     }
 	     createPageCntBtn(startPage, endPage);
 	     pageMove(startPage);
@@ -316,11 +347,8 @@ function dealList() {
 	   
 	   function lastPage() {
 		   $("#dealbody").html("");
-	     if (endPage > 20) {
-	       endPage = ~~((totalCnt - 1) / 20 + 1);
-	     }
-	     startPage = endPage - endPage % 20 + 1;
-	     //console.log(startPage, endPage);
+       endPage = ~~((totalCnt - 1) / 10 + 1);
+	     startPage = endPage - endPage % 10 + 1;
 	     createPageCntBtn(startPage, endPage);
 	     pageMove(endPage);
 	   }

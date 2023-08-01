@@ -15,6 +15,7 @@ public class ShippingVO {
 	private String shipSt;
 	private String orderSt;
 	private int billNo;
+	private int orderAm;
 	private String rec;
 	private String recTel;
 	private String addr;

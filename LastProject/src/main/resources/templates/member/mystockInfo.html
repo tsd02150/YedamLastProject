@@ -187,6 +187,8 @@ padding-top : 40px;
 	let tr2 = '';
 	let date = '';
 	let membNo = "[[${session.loggedInMember.membNo}]]";
+	let rmnCntValue='';
+	let tradedPrc=0;
 	buyOrder();
 
 	$("#nav-profile-tab").on("click", function () {
@@ -201,18 +203,20 @@ padding-top : 40px;
 	      "membNo": membNo
 	    },
 	    success: function (data) {
-	      tr2 = ''; // Reset the variable before appending new rows
+	      tr2 = ''; 
 	      if(data && data.length >0){
 	      data.forEach(el => {
+	    	  console.log("~!!!")
+	    	  console.log(el);
 	        let formattedSellDt = moment(el.sellDt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format("YYYY-MM-DD HH:mm:ss");
 	        tr2 += `
-	          <tr data-no="${el.sellNo}">
+	          <tr data-no="${el.sellNo}" data-ite="${el.itemNo}">
 	            <td>${el.commonCd}</td>
-	            <td>${el.nm}</td>`;
+	            <td onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">${el.nm}</td>`;
 	         if(el.rmnCnt>0){
-	        	 tr2+= `<td>${el.rmnCnt}</td>`;
+	        	 tr2+= `<td data-cnt="${el.rmnCnt}">${el.rmnCnt}</td>`;
 	         }   
-           tr2 += `<td>${el.prc}</td>
+           tr2 += `<td data-trade="${el.tradedPrc}">${el.prc}</td>
 	            <td>${formattedSellDt}</td>
 	            <td><button class="btn btn-outline-secondary" onclick="updateSellOrder(this)" style="display: inline-block;">수정</button></td>
 	            <td><button class="btn btn-outline-secondary" onclick="delSellOrder(this)">삭제</button></td>
@@ -289,12 +293,12 @@ padding-top : 40px;
 	
 	  let rmnCntValue = rmnCntCell.text().trim();
 	  let prcValue = prcCell.text().trim();
-	
+	  
 	  let rmnCntInput = $('<input type="number">').val(rmnCntValue).css('width', '60px').addClass("numinput");
 	  let prcInput = $('<input type="number">').val(prcValue).css('width', '70px').addClass("numinput");
 	  rmnCntCell.empty().append(rmnCntInput);
 	  prcCell.empty().append(prcInput);
-	
+		
 	  $(target).hide();
 	  
 	  let saveBtn = $('<button class="saveBtn btn btn-outline-secondary">저장</button>').css('display', 'inline-block');
@@ -303,9 +307,6 @@ padding-top : 40px;
 	  saveBtn.on("click", function() {
 	    let updatedRmnCnt = rmnCntInput.val();
 	    let updatedPrc = prcInput.val();
-	    
-	    console.log(updatedRmnCnt);
-	    console.log(updatedPrc);
 	    
 	    //매수 주문 수정 아작스 
 			$.ajax({
@@ -335,22 +336,25 @@ padding-top : 40px;
   });
 }
 	
+	
 	// 매도 주문 변경
 	function updateSellOrder(target) {
 	  let tr = $(target).closest("tr");
 	  let sellNo = tr.attr("data-no");
+	  let itemNo = tr.attr("data-ite");
 	  let rmnCntCell = $(target).parent().prev().prev().prev();
 	  let prcCell = $(target).parent().prev().prev();
-
-	  let rmnCntValue = rmnCntCell.text().trim();
+	  
+	  rmnCntValue = Number(rmnCntCell.text().trim());
 	  let prcValue = prcCell.text().trim();
-
+	  
+	  tradedPrc = Number($(target).parent().prev().prev().data("trade"));
+		//console.log(rmnCntValue);
 	  let rmnCntInput = $('<input type="number">').val(rmnCntValue).css('width', '60px').addClass("numinput");
 	  let prcInput = $('<input type="number">').val(prcValue).css('width', '70px').addClass("numinput");
 		
 	  rmnCntCell.empty().append(rmnCntInput);
 	  prcCell.empty().append(prcInput);
-
 	  $(target).hide();
 
 	  let saveBtn = $('<button class="saveBtn btn btn-outline-secondary">저장</button>').css('display', 'inline-block');
@@ -359,9 +363,12 @@ padding-top : 40px;
 	  saveBtn.on("click", function () {
 	    let updatedRmnCnt = rmnCntInput.val();
 	    let updatedPrc = prcInput.val();
-
-	    console.log(updatedRmnCnt);
-	    console.log(updatedPrc);
+	    
+	    if(rmnCntValue > Number(updatedRmnCnt)){
+	    	rmnCntValue = rmnCntValue-Number(updatedRmnCnt);
+	    }else{
+	    	rmnCntValue = rmnCntValue-Number(updatedRmnCnt);
+	    }
 
 	    // 매도 주문 수정 아작스
 	    $.ajax({
@@ -388,9 +395,28 @@ padding-top : 40px;
 	        console.log(err);
 	      }
 	    })
+	    
+	    //보유주식 수정
+     $.ajax({
+	    	url : "updatePoss",
+	    	method : "POST",
+	    	data : {
+	    		"stockCnt" : rmnCntValue,
+	    		"tradePrc" : tradedPrc,
+	    		"itemNo" : itemNo
+	    	},
+	    	success : function(data){
+	    		console.log("성공");
+	    		window.location.reload();
+	    	},
+	    	error : function(err){
+	    		console.log(err);
+	    	}
+	    }); 
+	    
 	  });
 	}
-
+	
 	// 매수 주문 예약 삭제
 	function delBuyOrder(target) {
 		 let dataNo = $(target).closest("tr").attr('data-no');
@@ -404,7 +430,7 @@ padding-top : 40px;
 	    },
 	    success: function (res) {
 	      if (res == 1) {
-	        $(target).closest("tr").remove(); // Remove the closest <tr> element
+	        $(target).closest("tr").remove(); 
 	        toastShow("Delete", "매수 주문 예약이 삭제되었습니다.", "success");
 	      }
 	    },
@@ -417,7 +443,7 @@ padding-top : 40px;
 	
 		//매도 주문 예약 삭제
 	 function delSellOrder(target) {
-		  let dataNo = target.parentNode.getAttribute('data-no');
+		 let dataNo = $(target).closest("tr").attr('data-no');
 		  //console.log(dataNo);
 		  $.ajax({
 			  url : "deleteSellOrder",
@@ -427,8 +453,7 @@ padding-top : 40px;
 				  "sellNo" : dataNo
 			  },
 			  success : function(res){
-				  console.log(res);
-				  $(target).parent().remove();
+				  $(target).closest("tr").remove(); 
 				  toastShow("Delete","매도 주문 예약이 삭제되었습니다.","success");
 			  },
 			  error : function(err){
@@ -458,7 +483,7 @@ function myRaiseList(){
 			chart
 				var options = {
 		      series: [{
-		      name: 'Cash Flow',
+		      name: '수익률',
 		      data: chartArr2
 		    }],
 		      chart: {
@@ -471,14 +496,14 @@ function myRaiseList(){
 		          ranges: [{
 		            from: 0,
 		            to: 100,
-		            color: '#FF3066'
+		            color: '#E00B1E'
 		          }, {
 		            from: -100,
 		            to: 0,
-		            color: '#FEB019'
+		            color: '#2D3FE5'
 		          }]
 		        },
-		        columnWidth: '80%',
+		        columnWidth: '50%',
 		      }
 		    },
 		    dataLabels: {
