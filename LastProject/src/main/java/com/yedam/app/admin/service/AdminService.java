@@ -51,4 +51,8 @@ public interface AdminService {
 	public Map<String , Object > productDetail(String prdtNo);
 	public void addCommonCd(ProductVO prdtVO);
 	
+	public int orderStUpdate(List<String> list);
+	public int deleteOrder(List<String> list);
+	
+	
 }

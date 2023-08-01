@@ -40,5 +40,9 @@ public class OrderVO {
 
 	// 정렬
 	private String order;
+	
+	private String shipNo;
+	private String rec;
+	private String recTel;
 
 }

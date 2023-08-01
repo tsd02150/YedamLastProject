@@ -75,7 +75,6 @@ public class OrderController {
 		MembVO mem = membService.memberList(id);
 		membVO.setId(id);
 
-
 		// 주소 등록
 		AddrVO addrInfo = new AddrVO();
 		addrInfo.setZip(zip);
@@ -128,7 +127,40 @@ public class OrderController {
 		System.out.println(orderService.insertAddr(addrVO));
 		return addrVO;
 	}
+	
+	// 주문 정보 추가
+	@ResponseBody
+	@PostMapping("insertOrder")
+	public OrderVO insertOrderInfo(OrderVO ordVO, HttpSession session) {
+		
+		if(orderService.insertOrderInfo(ordVO)) {
+			
+			UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+			mem.setPoint(mem.getPoint()-ordVO.getOrderAm());
+			session.setAttribute("loggedInMember", mem);
+			
+			String orderNo=ordVO.getOrderNo();
+			
+			List<OrderVO> orderList = orderService.getOrderList(ordVO.getMembNo());
+			for(OrderVO temp : orderList) {
+				temp.setOrderNo(orderNo);
+				orderService.insertOrderDetaInfo(temp);
+				temp.setRec(ordVO.getRec());
+				temp.setRecTel(ordVO.getRecTel());
+				temp.setAddr(ordVO.getAddr());
+				temp.setDetaAddr(ordVO.getDetaAddr());
+				orderService.insertShipping(temp);
+			}
+			
+			//결제 후 basket 리스트 지우기
+						
+		}
+		//System.out.println(orderService.insertAddr(addrVO));
+		return ordVO;
+	}
 
+	
+	
 	@ResponseBody
 	@PostMapping("selectOneMembInfo")
 	public List<MembVO> selectOneMembInfo(@RequestParam String id, MembVO membVO, Model model) {
@@ -141,27 +173,9 @@ public class OrderController {
 
 	// 결제 성공
 	@GetMapping("orderCheck")
-	public String orderCheck(@RequestParam(value = "amount") int amount, HttpSession session, OrderVO ordVO,
-			Model model, MembVO membVO, ShippingVO shipVO, OrderDetailVO oddVO) {
+	public String orderCheck(@RequestParam(value = "amount") int amount) {
 
-		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
-		// chargeVO.setMembNo(mem.getMembNo());
-		// chargeVO.setChagPrc(amount);
-		ordVO.setMembNo(mem.getMembNo());
-		ordVO.setPayAn(amount);
-		
-		membVO.setId(mem.getId());
 
-		// 결제 정보 저장, 등록
-		// 포인트적립
-		// membService.insertCharge(chargeVO, membVO);
-		orderService.insertOrder(ordVO, membVO); // 수정된 정보 세션에 다시 저장.
-		orderService.insertOrderDetail(oddVO, membVO);
-		orderService.insertShipping(shipVO, membVO);
-		
-		mem.setPoint(membVO.getPoint());
-		session.setAttribute("loggedInMember", mem);
-		model.addAttribute("membList", membVO); // update된 회원 정보
 		
 		return "mall/orderCheck";
 	}

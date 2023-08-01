@@ -358,4 +358,16 @@ public class AdminServiceImpl implements AdminService {
 		return adminMapper.nonChkRptCnt();
 	}
 	
+	// 주문 상태 수정
+	@Override
+	public int orderStUpdate(List<String> list) {
+		return adminMapper.orderStUpdate(list);
+	}
+	
+	// 주문 상태 수정
+	@Override
+	public int deleteOrder(List<String> list) {
+		return adminMapper.deleteOrder(list);
+	}
+
 }

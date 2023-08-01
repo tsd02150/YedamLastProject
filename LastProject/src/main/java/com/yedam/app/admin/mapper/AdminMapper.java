@@ -104,6 +104,11 @@ public interface AdminMapper {
 	public List<ProductVO> productList(@Param("page")int page , @Param("perPage")int perPage);
 	// 상품 삭제
 	public int deleteProduct(List<String> list);
+	
+	// 주문상태 수정
+	public int orderStUpdate(List<String> list);
+	// 주문 삭제
+	public int deleteOrder(List<String> list);
 	// 상품 등록
 	public void addProduct(ProductVO prdtVO);
 	// 상품 수정

@@ -19,15 +19,19 @@ public interface OrderMapper {
 	public List<String> membListInfo(String id);
 	public MembVO selectOneMemb(String id);
 	public List<MembVO> selectOneMemb2(MembVO membVO);
+	// 주문번호
+	public String getOrderNo();
+	// 주문 상세번호
+	public String getOrderDetaNo();
+	// 주문 정보 추가
+	public int insertOrderInfo(OrderVO ordVO);
+	// 주문 상세 정보 추가
+	public int insertOrderDetaInfo(OrderVO oddVO);
 	// 회원 정보변경
 	public int updateMemberInfo(MembVO membVO);
 	// 주소 변경
 	public int updateMemberAddr(AddrVO addrVO);
-	//주문 추가
-	public int insertOrder(OrderVO ordVO);
-	//주문 상세 추가
-	public int insertOrderDetail(OrderDetailVO oddVO);
 	//배송 추가
-	public int insertShipping(ShippingVO shipVO);
+	public int insertShipping(OrderVO ordVO);
 	
 }

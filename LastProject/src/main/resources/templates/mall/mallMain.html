@@ -217,7 +217,7 @@
 	background-color: #f5f5f5;
 	background-image: url('images/main/mainImg.jpg');
 	background-size: cover;
-	padding: 110px 0px 115px;
+	padding: 200px 0px 130px;
 	background-size: cover;
 }
 </style>
@@ -328,8 +328,7 @@
 					th:if="${iterStat.index} >= 1 and ${iterStat.index} <= 4 ">
 					<div class="product-grid">
 						<div class="product-image">
-							<a th:href="|/mall/getFarm?prdtNo=${prdt.prdtNo}|" class="image"> <img class="img"
-								th:src="|/mall/images/main/${prdt.thumb}|">
+							<a th:href="|/mall/getFarm?prdtNo=${prdt.prdtNo}|" class="image" th:utext="${prdt.thumb}">
 							</a> <span th:if="${prdt.dcRate!=0}" class="product-sale-label">sale</span> <a
 								class="product-like-icon" href="#"><i class="far fa-heart"></i></a>
 							<a class="add-to-cart" href="#"><i
@@ -349,27 +348,6 @@
 					</div>
 				</div>
 
-				<!-- 
-				<ul class="icons">
-					center 클래스 추가
-
-					<li class="slider-div" th:each="prdt, iterStat : ${product}"
-						th:if="${iterStat.index} >= 1 and ${iterStat.index} <= 3 ">
-						<div class="icon_img">
-							<img class="img" th:src="|/mall/images/main/${prdt.thumb}|">
-						</div>
-						<div th:text="${prdt.nm}" class="contents1_bold"></div>
-						<div th:text="${prdt.desct}" class="contents2"></div> <span
-						th:text="${prdt.prc} + '₩'"></span>
-						<div>
-							<div
-								th:onclick="|location.href='@{getFarm(prdtNo=${prdt.prdtNo})}'|">
-								<a class="btn btn-outline-light">read more</a>
-							</div>
-						</div>
-					</li>
-
-				</ul> -->
 			</div>
 
 		</div>
@@ -388,8 +366,7 @@
 					th:if="${iterStat.index}  >= 1 and ${iterStat.index} <= 4 ">
 					<div class="product-grid">
 						<div class="product-image">
-							<a th:href="|/mall/getFarm?prdtNo=${prdt.prdtNo}|" class="image"> <img class="img"
-								th:src="|/mall/images/main/${prdt.thumb}|">
+							<a th:href="|/mall/getFarm?prdtNo=${prdt.prdtNo}|" class="image" th:utext="${prdt.thumb}">
 							</a> <span th:if="${prdt.dcRate!=0}" class="product-sale-label">sale</span> <a
 								class="product-like-icon" href="#"><i class="far fa-heart"></i></a>
 							<a class="add-to-cart" href="#"><i
@@ -415,14 +392,11 @@
 		<div>&nbsp;</div>
 		<section class="shop-banner">
 			<div class="container">
-				<h3>
-					December sale is on! <br> with big <span class="orange-text">Discount...</span>
-				</h3>
+				
 				<div class="sale-percent">
-					<span>Sale! <br> Upto
-					</span>50% <span>off</span>
+					
 				</div>
-				<a href="#" class="cart-btn btn-lg">Shop Now</a>
+				
 			</div>
 		</section>
 
@@ -474,103 +448,9 @@
   </div>
 </div>
 
-		<!-- 정부 바우처 링크 -->
-		<!-- <ul class="amount">
-			<li>
-				<div>
-					<div class="contents1">지금까지 해먹은 돈</div>
-					<div class="result">$128,021</div>
-				</div>
-			</li>
-			<li>
-				<div>
-					<div class="contents1">씨를 말린 오징어 마릿수</div>
-					<div class="result">93,234</div>
-				</div>
-			</li>
-			<li>
-				<div>
-					<div class="contents1">최종 목표 마릿수</div>
-					<div class="result">100,000+</div>
-				</div>
-			</li>
-			<li>
-				<div>
-					<div class="contents1">와사비 간장</div>
-					<div class="result">57,221,084</div>
-				</div>
-			</li>
-		</ul> -->
 		<div>&nbsp;</div>
 		<div>&nbsp;</div>
 		<div>&nbsp;</div>
-		<!-- amount end -->
-
-		<!-- <div class="content">
-
-			<div class="container">
-				<div class="d-flex carousel-nav">
-					<a href="#" class="col active">First Tab</a> <a href="#"
-						class="col">Second Tab</a> <a href="#" class="col">Third Tab</a>
-				</div>
-
-				<div class="owl-carousel owl-1">
-
-					<div class="media-29101 d-md-flex w-100">
-						<div class="img">
-							<img src="images/hero_1.jpg" alt="Image" class="img-fluid">
-						</div>
-						<div class="text">
-							<a class="category d-block mb-4" href="#">Travel &mdash;
-								First Tab</a>
-							<h2>
-								<a href="#">Take your mobile photography to the next level</a>
-							</h2>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-								Repudiandae fuga optio dolorem, fugit voluptates sint ducimus
-								praesentium iste!</p>
-						</div>
-					</div>
-					.item
-
-					<div class="media-29101 d-md-flex w-100">
-						<div class="img">
-							<img src="images/hero_2.jpg" alt="Image" class="img-fluid">
-						</div>
-						<div class="text">
-							<a class="category d-block mb-4" href="#">Travel &mdash;
-								Second Tab</a>
-							<h2>
-								<a href="#">Take your mobile photography to the next level</a>
-							</h2>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-								Repudiandae fuga optio dolorem, fugit voluptates sint ducimus
-								praesentium iste!</p>
-						</div>
-					</div>
-					.item
-
-					<div class="media-29101 d-md-flex w-100">
-						<div class="img">
-							<img src="images/hero_3.jpg" alt="Image" class="img-fluid">
-						</div>
-						<div class="text">
-							<a class="category d-block mb-4" href="#">Travel &mdash;
-								Third Tab</a>
-							<h2>
-								<a href="#">Take your mobile photography to the next level</a>
-							</h2>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-								Repudiandae fuga optio dolorem, fugit voluptates sint ducimus
-								praesentium iste!</p>
-						</div>
-					</div>
-					.item
-
-				</div>
-			</div>
-		</div>
- -->
 
 		<script th:inline="javascript">
 			/* top 버튼 */
@@ -614,6 +494,30 @@
 
     // 슬라이드 자동 전환 함수를 호출하여 실행
     autoSlide();
+    
+    
+	
+	/* $(".add-to-cart").on("click", function(e){
+		form = $(".product-grid").text();
+		console.log(form);
+		$.ajax({
+			url: '/mall/basketList',
+			type: 'POST',
+			data: form,
+			success: function(result){
+				
+				if(result=="fail"){
+					toastShow("Fail", "담기에 실패했습니다.", "error");
+				}else{
+					toastShow("success", "장바구니 담기 성공.", "success");
+				}
+			    // 장바구니에 상품이 추가되면 장바구니 페이지로 리리리다이렉트
+	           //window.location.href = '/mall/basketList/' + form.membNo;
+			}
+		})
+	});   */
+	
+    
 		</script>
 
 		<script

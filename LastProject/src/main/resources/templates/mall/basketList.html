@@ -144,8 +144,7 @@
 					value="${item.prdtNo}"></td>
 				<td class="td_width_4">
 					<div class="image_wrap">
-						<img th:src="|/mall/images/main/${item.thumb}|"
-							th:onclick="|location.href='@{getFarm(prdtNo=${item.prdtNo})}'|">
+						<img th:onclick="|location.href='@{getFarm(prdtNo=${item.prdtNo})}'|"><div th:utext="${item.thumb}"></div>
 					</div>
 				</td>
 				<td class="td_width_4" th:text="${item.nm}"></td>
@@ -435,10 +434,24 @@
 		
 	//주문페이지 이동
 	function directOrder() {
-	  // 바로 주문하기 기능 구현
-	  alert("주문 페이지로 이동합니다!");
-	  window.location.href="/mall/orderList";
-	}
+  // 바로 주문하기 기능 구현
+  alert("주문 페이지로 이동합니다!");
+  window.location.href = "/mall/orderList";
+  // 주문이 처리되면 장바구니를 비우는 AJAX 요청 보내기
+ /*  $.ajax({
+    url: "/mall/deleteAllBasket", // 장바구니 전체 삭제하는 URL로 변경해주세요.
+    method: "POST",
+    success: function (data) {
+      console.log("장바구니가 비워졌습니다.");
+
+      // 주문 페이지로 이동 (현재는 임의로 URL을 지정하였습니다. 실제 주문 페이지 URL로 바꿔주세요.)
+      
+    },
+    error: function (error) {
+      console.error("장바구니 비우기 실패:", error);
+    },
+  }); */
+}
 	
 	</script>
 	</div>

@@ -438,8 +438,8 @@
 
 							<tr th:each="item :${orderList}">
 								<td>
-									<div class="image_wrap">
-										<img th:src="|/mall/images/main/${item.thumb}|">
+									<div class="image_wrap" th:utext="${item.thumb}">
+										
 									</div>
 								</td>
 								<td th:text="${item.nm}"></td>
@@ -893,24 +893,49 @@ function createSmsKey() {
 		document.querySelector("#payment-button").addEventListener("click",()=>{
 			console.log(amount);
 			
-		    paymentWidget.requestPayment({
-		    	orderId: 'u0XHU8mFoZkItvhSh6972',
-		    	orderName: '포인트몰',
-		    	successUrl: 'http://localhost:80/mall/orderCheck',
-		    	failUrl: 'http://localhost:80/mall/orderCancel',
-		    	customerEmail: 'ihyang00@naver.com', 
-		    	customerName: '김토스'
-		    }).catch(function (error) {
-		    	if (error.code === 'USER_CANCEL') {
-		    	// 결제 고객이 결제창을 닫았을 때 에러 처리
-		    	location.href="orderCancel";
-		    	console.log(error.code);
-		    	} if (error.code === 'INVALID_CARD_COMPANY') {
-          // 유효하지 않은 카드 코드에 대한 에러 처리
-		    	console.log(error.code);
-		    	location.href="orderCancel";
-        			}
-	     		 })  
+				let rec = '';
+				let recTel ='';
+				let addr ='';
+				let detaAddr = '';
+				
+			$.ajax({
+				 url: "insertOrder",
+				 method: "POST",
+				 data: {
+				   "membNo": membNo,
+				   "payAn": amount,
+				   "orderAm":amount,
+				   "rec" : $('#recipient_nm').text(),
+				   "recTel" : $('#recipient_tel').text(),
+				   "addr" : $('#addr2').val(),
+				   "detaAddr" : $('#addr3').val()
+				 },
+				 
+				 success: function(result) {
+					 console.log(result);
+					 paymentWidget.requestPayment({
+					    	orderId: 'u0XHU8mFoZkItvhSh6972',
+					    	orderName: '포인트몰',
+					    	successUrl: 'http://localhost:80/mall/orderCheck',
+					    	failUrl: 'http://localhost:80/mall/orderCancel',
+					    	customerEmail: 'ihyang00@naver.com', 
+					    	customerName: '김토스'
+					    }).catch(function (error) {
+					    	if (error.code === 'USER_CANCEL') {
+					    	// 결제 고객이 결제창을 닫았을 때 에러 처리
+					    	location.href="orderCancel";
+					    	console.log(error.code);
+					    	} if (error.code === 'INVALID_CARD_COMPANY') {
+			          // 유효하지 않은 카드 코드에 대한 에러 처리
+					    	console.log(error.code);
+					    	location.href="orderCancel";
+			        			}
+				     		 }) 
+				 }
+			})
+		
+			
+		    
 			  })
 		})
 	</script>

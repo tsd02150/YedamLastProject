@@ -6,51 +6,48 @@
 <meta charset="UTF-8">
 <title>orderCheck.html</title>
 <style>
-
 #body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
+	font-family: Arial, sans-serif;
+	margin: 0;
+	padding: 0;
 }
 
 .order-complete {
-  max-width: 800px;
-  margin: 50px auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-top : -50px;
+	max-width: 800px;
+	margin: 50px auto;
+	padding: 20px;
+
+	margin-top: -50px;
 }
 
 h1, h2 {
-  text-align: center;
+	text-align: center;
 }
 
 p {
-  margin: 10px 0;
+	margin: 10px 0;
 }
 
 span {
-  font-weight: bold;
+	font-weight: bold;
 }
 
 .payList {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  text-align: left;
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 20px;
+	text-align: left;
 }
 
 th, td {
-  padding: 8px;
-  text-align: left;
-  border: 1px solid #ccc;
+	padding: 8px;
+	text-align: left;
+	border: 1px solid #ccc;
 }
 
 hr {
-  border: 2px solid #000; /* 굵기를 더 진하게 설정합니다. */
+	border: 2px solid #000; /* 굵기를 더 진하게 설정합니다. */
 }
-
 </style>
 
 </head>
@@ -62,203 +59,24 @@ hr {
 			<video muted autoplay loop style="width: 400px; height: 400px;">
 				<source src="images/thanks2.mp4" type="video/mp4">
 			</video>
-			
+
 			<div class="order-complete">
-    <h1 id="h1">결제 완료되었습니다!</h1>
-    <strong> <span th:text="|${#numbers.formatInteger(membList.point, 0, 'COMMA')}|"
-     style="font-size:40px; padding-left:30px; color:black;"> </span></strong>
-    <p>결제고객명: <span id="customer-name" >홍길동</span></p>
-    <p>결제 날짜: <span id="recipient_orderDt">2023년 7월 24일</span></p>
-    <hr>
-    <p id="ordNo">주문번호: <span id="order-number">123456789</span></p>
-    <hr>
-    <h2 id="h2">주문내역 리스트</h2>
-    <table class="payList">
-      <thead>
-        <tr>
-          <th>상품명</th>
-          <th>수량</th>
-          <th>금액</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>상품 A</td>
-          <td>2개</td>
-          <td>20,000원</td>
-        </tr>
-        <tr>
-          <td>상품 B</td>
-          <td>1개</td>
-          <td>10,000원</td>
-        </tr>
-        <!-- 주문내역 리스트에 해당하는 상품들을 동적으로 생성할 수 있습니다. -->
-      </tbody>
-    </table>
-    <hr>
-    <p>주문 금액: <span id="total-amount">30,000원</span></p>
-    <p>배송비: <span id="delivery_price_span">3,000원</span></p>
-    <hr>
-    <p>배송주소: <span id="delivery-address">서울특별시 강남구</span></p>
-    <p>받는 분: <span id="recipient">홍길동</span></p>
-    <p>연락처: <span id="contact">010-1234-5678</span></p>
-  </div>
-		
-			<!-- <div>
-				<h1 style="margin-top: 0px;">결제가 완료되었습니다.</h1>
-				<p>신지은 고객님께서 2023년 07월 19일 결제하신 내역입니다.</p>
+				<h1 id="h1">결제 완료되었습니다!</h1>
+
+<button onclick="myorder()">주문|배송내역 이동</button> <button onclick="myPoint()">MY 포인트로 이동</button>
 			</div>
-			<hr>
-			<table class="responsive-table">
-				<caption>결제가 완료되었습니다.</caption>
-				<thead>
-					<tr>
-						<th scope="col">주문번호</th>
-						<th colspan='3'>QEFD3242414-342</th>
-						
-					
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<th scope="row">강낭콩</th>
-						<td data-title="Released">1개</td>
-						<td data-title="Studio">25,000 P</td>
-					</tr>
-					<tr>
-						<th scope="row">옥수수</th>
-						<td data-title="Released">2개</td>
-						<td data-title="Studio">10,000 P</td>
-					</tr>
-					<tr>
-						<th scope="row">옥수수</th>
-						<td data-title="Released">2개</td>
-						<td data-title="Studio">10,000 P</td>
-					</tr>
-					
-					<tr>
-						<th colspan='3'>배송상태</th>
-						<td colspan='3'>QEFD3242414-342</td>
-						<td colspan='3'>QEFD3242414-342</td>
-						<td colspan='3'>QEFD3242414-342</td>
-					</tr>
-				</tbody>
-			</table> -->
-			
 		</div>
-		
 		<script>
 		
-		 //주문자 정보
-		 //let memInfo = [[${mem}]];
-		    let membInfo = [[${membInfo}]];
-		    console.log(membInfo);
-
-		    // 주문자 정보
-		  
-		    let addr = "";    // 배송 주소
-		    let email = "";   // 주문자 이메일
-		    let tel = "";     // 주문자 연락처
-		    let orderNm = ''; // 받는사람 이름
-		    let orderAm = 0; // 주문 금액
-		    let orderSt = ''; // 주문 상태
-		    let payAn = 0; // 결제 금액
-		    let orderDt =''; // 결제 날짜
-
-		    for (let info of membInfo) {
-		        // 주문자 정보를 할당하는 부분 (예시로 주문자 이름만 가져옴)
-		        orderNm += info.nm;
-
-		        // 주문자 주소, 이메일, 연락처, 배송 주소 등을 해당하는 속성에서 가져와서 변수에 할당해주어야 합니다.
-
-		        addr += info.addr;
-		        email += info.email;
-		        tel += info.tel;
-		        orderNm += info.nm;
-		        orderAm += info.orderAm;
-		        orderSt += info.orderSt;
-		        payAn += info.payAn;
-		        
-		    }
-
-		    console.log(orderNm);
-		    console.log(email);
-		    console.log(tel);
-		    console.log(addr);
-		    console.log(payAn);
-
-		    $(document).ready(function () {
-		        // 주문자 정보
-		        // 주문자 이름
-		        $("#customer-name").text(orderNm);
-		        // 결제날짜
-		        $("#recipient_orderDt").text(orderDt);
-		        
-		        // 받는 사람 이름
-		         $("#customer-name").text(orderNm);
-		        // 연락처
-		        $("#recipient_phone").text(tel);
-		        // 배송주소
-		        $("#insertAddrDiv").text(addr);
-		       
-		    });
-		 
-		    
-		// 주문 리스트 정보	
-		 let orderInfo = [];
-		 orderInfo=[[${orderList}]]; 
-		//console.log(orderInfo);
+		function myorder (){
+			
+			location.href="/member/myorder";
+		}
 		
-		let totalPrice = 0; // 총 주문금액
-		let totalCount = 0; // 총 주문수량
-		let deliveryPrice = 0; // 배송비
-		let finalTotalPrice = 0; // 최종 결제금액
-		let point = 0; // 보유 포인트
-		let totalPoint =0; // 총 포인트
-		let membNm = ''; // 주문자 이름
-		let orderNo = 0; //주문 번호
-
+		function myPoint() {
+			location.href="/member/mypoint";
+		}
 		
-		for(let info of orderInfo) {
-			//console.log(info);
-			
-			 totalPrice += (info.prc - (info.prc * info.dcRate / 100)) * info.cnt;
-			 totalCount += info.cnt; // 물품의 개수를 totalCount에 더합니다.
-			 
-			// - ((info.prc - (info.prc * info.dcRate / 100)) * info.cnt) - deliveryPrice;
-			// console.log((info.prc - (info.prc * info.dcRate / 100)) * info.cnt);
-			totalPoint += ((info.prc - (info.prc * info.dcRate / 100)) * info.cnt) - deliveryPrice;
-			
-			
-			//console.log(info.point - (info.prc - (info.prc * info.dcRate / 100)) * info.cnt)
-			console.log(totalPoint);
-			 point = info.point;
-			membNm = info.nm;
-			 
-			}
-			
-			//console.log(info.point);
-			
-			deliveryPrice += totalPrice >= 10000 ? 0 : 3000;
-			finalTotalPrice = totalPrice + deliveryPrice;
-			totalPoint = totalPoint - finalTotalPrice;
-			//console.log(totalPrice);
-			// 총 가격
-			 $(".totalPrice_span").text(totalPrice);
-			// 총 갯수
-			$(".totalCount_span").text(totalCount);
-			// 배송비
-			$(".delivery_price_span").text(deliveryPrice);	
-			// 최종 가격(총 가격 + 배송비)
-			$(".finalTotalPrice_span").text(finalTotalPrice.toLocaleString());
-			// 최종 잔여 포인트
-			$(".totalPoint_span").text(totalPoint);
-			// 회원 포인트
-			$(".order_point_input").val(point);
-			// 주문 번호
-			$("#order-number").text(orderNo);
-			
-			
 			
 		</script>
 	</div>

@@ -38,8 +38,22 @@
 		WHERE id = #{id}
 	</select>
 	
-	<!-- 주문추가  -->
-	<insert id="insertOrder" parameterType="OrderVO">
+	<select id="getOrderNo" resultType="String">
+		
+				SELECT order_no
+						FROM (
+						    SELECT order_no
+						    FROM orders
+						    ORDER BY order_no DESC
+						)
+				WHERE ROWNUM = 1
+	</select>
+	
+	
+
+	
+	<!-- 주문정보 추가 -->
+	<insert id="insertOrderInfo" parameterType="OrderVO">
 		<selectKey keyProperty="orderNo" resultType="String"
 			order="BEFORE">
 			SELECT CONCAT('ord-',NVL(MAX(TO_NUMBER(SUBSTR(order_no, 5))),
@@ -49,33 +63,49 @@
 		INSERT INTO ORDERS (order_no, memb_no, order_dt, dc_rate, shpcst,
 		order_am, order_st, pay_an)
 		VALUES(#{orderNo}, #{membNo}, sysdate,
-		#{dcRate}, #{shpcst}, #{orderAm}, #{orderSt}, #{payAn})
+		0, 0, #{orderAm}, '결제완료', #{payAn})
 	</insert>
 	
-	<!-- 주문상세 추가 -->
-	<insert id="insertOrderDetail" parameterType="OrderDetailVO">
+	<!-- 주문상세정보 추가  -->
+	<insert id="insertOrderDetaInfo" parameterType="OrderVO">
 		<selectKey keyProperty="orderDetaNo" resultType="String"
 			order="BEFORE">
 			SELECT CONCAT('odd-',NVL(MAX(TO_NUMBER(SUBSTR(order_deta_no, 5))),
 			0)+1)
 			FROM ORDER_DETAIL
-		</selectKey>
-		INSERT INTO ORDER_DETAIL (order_no, prdt_no, cnt, order_deta_no)
-		VALUES(#{orderNo}, #{prdtNo}, #{cnt}, #{orderDetaNo})
+		</selectKey>	
+		INSERT INTO ORDER_DETAIL (order_no, prdt_no,cnt,order_deta_no)
+		VALUES(#{orderNo},#{prdtNo},#{cnt},#{orderDetaNo})
 	</insert>
+	
+	
+	
+	<select id="getOrderDetaNo" resultType="String">
+		<![CDATA[
+				SELECT order_deta_no
+						FROM (
+						    SELECT order_deta_no
+						    FROM order_detail
+						    ORDER BY order_deta_no DESC
+						)
+				WHERE ROWNUM = 1
+				]]>
+	</select>
+	
+
 
 	
 	<!-- 배송 추가 -->
-	<insert id="insertShipping" parameterType="ShippingVO">
+	<insert id="insertShipping" parameterType="OrderVO">
 		<selectKey keyProperty="shipNo" resultType="String"
 			order="BEFORE">
-			SELECT CONCAT('shi-',NVL(MAX(TO_NUMBER(SUBSTR(ship_no, 4))),
+			SELECT CONCAT('shp-',NVL(MAX(TO_NUMBER(SUBSTR(ship_no, 5))),
 			0)+1)
 			FROM SHIPPING
 		</selectKey>
-		INSERT INTO SHIPPING (ship_no, order_no, ship_st, bill_no, rec,
+		INSERT INTO SHIPPING (ship_no, order_no, ship_st,  rec,
 		rec_tel, addr, deta_addr, order_deta_no)
-		VALUES(#{shipNo}, #{orderNo}, #{shipSt}, #{billNo}, #{rec}, 
+		VALUES(#{shipNo}, #{orderNo}, '상품준비중', #{rec}, 
 		#{recTel}, #{addr}, #{detaAddr}, #{orderDetaNo})
 	</insert>
 
