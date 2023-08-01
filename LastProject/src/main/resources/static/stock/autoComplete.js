@@ -229,7 +229,7 @@ function addInterest(itemNumber) {
 	  					$('#CP2D22 div p:nth-of-type(2) span').text(data.cnt);
 	  					$('#CP2D22 div p:nth-of-type(3) span').text(rate).addClass(rateClass);
 	  					$('#CP2D22 div p:nth-of-type(4)').attr('data-point',data.point);
-	  					$('#CP2D22 div p:nth-of-type(4) span').text(data.point);
+	  					$('#CP2D22 div p:nth-of-type(4) span').text(data.point.toLocaleString('ko-KR')+' point');
 	  				},
 	  				error:function(xhr){
 	  					console.log(xhr)
@@ -382,7 +382,7 @@ function addInterest(itemNumber) {
   					$('#afford').val(data.cnt);
   					$('#CP2D22 div p:nth-of-type(3) span').text(rate).addClass(rateClass); // 수익률 span
   					$('#CP2D22 div p:nth-of-type(4)').attr('data-point',data.point);
-  					$('#CP2D22 div p:nth-of-type(4) span').text(data.point);
+  					$('#CP2D22 div p:nth-of-type(4) span').text(data.point.toLocaleString('ko-KR')+' point');
   				},
   				error:function(xhr){
   					console.log(xhr)
