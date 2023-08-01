@@ -98,7 +98,6 @@ jQuery(document).ready(function ($) {
 				          		</p>
 			          		</li>`;
 		  		}
-		  		console.log(commLiTag);
 		  		$('#comm-alm ul').html(commLiTag);
 		  		
 		  		if(nCnt > 0 ) {
@@ -107,6 +106,9 @@ jQuery(document).ready(function ($) {
 		  								 .attr('data-chk','ok');
 		  		};
 		  		$('.commLi').on('click',function(){
+		  			if($(event.target).hasClass("mr-1")){
+		  				return;
+		  			}
 		  			let subdata=$(event.target).closest('li').attr('data-boardno');
 					window.location.href="/community/boardDetail?page=1&boardNo="+subdata.substring(0,subdata.length-2)+"&commonCd="+subdata.substring(subdata.length-2);
 				})

@@ -37,7 +37,8 @@
 		ON m.memb_no = a.memb_no
 		WHERE id = #{id}
 	</select>
-
+	
+	<!-- 주문추가  -->
 	<insert id="insertOrder" parameterType="OrderVO">
 		<selectKey keyProperty="orderNo" resultType="String"
 			order="BEFORE">
@@ -49,6 +50,33 @@
 		order_am, order_st, pay_an)
 		VALUES(#{orderNo}, #{membNo}, sysdate,
 		#{dcRate}, #{shpcst}, #{orderAm}, #{orderSt}, #{payAn})
+	</insert>
+	
+	<!-- 주문상세 추가 -->
+	<insert id="insertOrderDetail" parameterType="OrderDetailVO">
+		<selectKey keyProperty="orderDetaNo" resultType="String"
+			order="BEFORE">
+			SELECT CONCAT('odd-',NVL(MAX(TO_NUMBER(SUBSTR(order_deta_no, 5))),
+			0)+1)
+			FROM ORDER_DETAIL
+		</selectKey>
+		INSERT INTO ORDER_DETAIL (order_no, prdt_no, cnt, order_deta_no)
+		VALUES(#{orderNo}, #{prdtNo}, #{cnt}, #{orderDetaNo})
+	</insert>
+
+	
+	<!-- 배송 추가 -->
+	<insert id="insertShipping" parameterType="ShippingVO">
+		<selectKey keyProperty="shipNo" resultType="String"
+			order="BEFORE">
+			SELECT CONCAT('shi-',NVL(MAX(TO_NUMBER(SUBSTR(ship_no, 4))),
+			0)+1)
+			FROM SHIPPING
+		</selectKey>
+		INSERT INTO SHIPPING (ship_no, order_no, ship_st, bill_no, rec,
+		rec_tel, addr, deta_addr, order_deta_no)
+		VALUES(#{shipNo}, #{orderNo}, #{shipSt}, #{billNo}, #{rec}, 
+		#{recTel}, #{addr}, #{detaAddr}, #{orderDetaNo})
 	</insert>
 
 	<insert id="insertAddr" parameterType="AddrVO">
@@ -108,5 +136,22 @@
 		AND addr_no = #{addrNo}
 	</update>
 
+
+	<update id="deleteOrder" parameterType="OrderVO">
+		update orders
+		set order_st = '결제취소'
+		where memb_no = #{membNo}
+		and pay_an = #{payAn}
+	</update>
+	<update id="updateShip" parameterType="ShippingVO">
+		update shipping
+		set ship_st = '주문취소'
+		where ship_no = #{shipNo}
+	</update>
+	
+	<select id="selectOrderOne" parameterType="OrderVO" resultType="String">
+		select order_am from orders
+		where pay_an = #{payAn}
+	</select>
 
 </mapper>

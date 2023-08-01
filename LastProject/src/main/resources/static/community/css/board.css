@@ -2,11 +2,28 @@
 	padding-top: 50px;
 	padding-bottom:50px;
 }
+
+#boardSection thead{
+	background-color: #292931;
+	color:white;
+	font-weight: bold;
+}
+#boardDiv hr{
+	background-color: #292931;
+}
 #category{
 	display: flex;
 	justify-content:space-between;
-
+	margin-bottom: 10px;
 }
+.categoryBtn{
+	position : relative;
+}
+.categoryBtn div{
+	position : absolute;
+	bottom:0;
+}
+
 .active{
 	color:white;	
 }
@@ -36,8 +53,8 @@
 }
 #sort{
 	position: absolute;
- 	top: 0;
 	right: 0;
+	bottom:0;
 }
 #boardContent{
 	width:96%;

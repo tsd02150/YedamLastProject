@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.yedam.app.mall.mapper.OrderMapper;
+import com.yedam.app.mall.service.OrderDetailVO;
 import com.yedam.app.mall.service.OrderService;
 import com.yedam.app.mall.service.OrderVO;
+import com.yedam.app.mall.service.ShippingVO;
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.MembVO;
 
@@ -25,11 +27,6 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public List<OrderVO> getMemInfo(String membNo) {
 		return orderMapper.getMemInfo(membNo);
-	}
-
-	@Override
-	public int insertOrder(OrderVO ordVO, MembVO membVO) {
-		return orderMapper.insertOrder(ordVO);
 	}
 
 	@Override
@@ -65,6 +62,21 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public int updateMemberInfo(MembVO membVO) {
 		return orderMapper.updateMemberInfo(membVO);
+	}
+
+	@Override
+	public int insertOrder(OrderVO ordVO, MembVO membVO) {
+		return orderMapper.insertOrder(ordVO);
+	}
+
+	@Override
+	public int insertShipping(ShippingVO shipVO, MembVO membVO) {
+		return orderMapper.insertShipping(shipVO);
+	}
+
+	@Override
+	public int insertOrderDetail(OrderDetailVO oddVO, MembVO membVO) {
+		return orderMapper.insertOrderDetail(oddVO);
 	}
 
 	
