@@ -237,7 +237,7 @@ public class AdminController {
 		return adminService.orderStUpdate(rowKeys);
 	}
 	
-	// 주문처리상태 변경
+	// 주문내역 삭제
 	@ResponseBody
 	@PostMapping("deleteOrder")
 	public int deleteOrder(@RequestBody List<String> rowKeys) {

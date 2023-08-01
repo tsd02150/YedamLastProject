@@ -357,7 +357,7 @@
 	<!-- 주문 상태 설정 -->
 	 <update id="orderStUpdate"  >
 		update orders
-		set order_st = {orderSt}
+		set order_st = #{orderSt}
 		where order_no in (
 			<foreach collection="list" item="item" separator=",">
 				#{item}
