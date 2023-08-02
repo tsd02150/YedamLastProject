@@ -76,9 +76,7 @@
 												,#{tel}
 												,0
 												,sysdate
-												<if test="path != null and !path.equals('')">
 												,#{path}
-												</if>
 												)
 	</insert>
 	
@@ -135,35 +133,49 @@
 		
 		<!-- 관심종목 선택시 List 조회 -->
 		<select id="myItemCheck" resultType="InterestVO">
-			SELECT t.item_no, c.common_cd, t.nm,t.prc tprc, t.prc - i.cl_prc change ,TRUNC(((t.prc-i.cl_prc)/i.cl_prc)*100) rate
-        FROM (
-        			SELECT 	item_no, cl_prc 
-              FROM 		item_info 
-              WHERE 	to_char(ta_dt,'yyyy-MM-dd') = to_char(sysdate-1,'yyyy-MM-dd')
-              ) i 		--전일주가정보
-        JOIN ( 
-        			select distinct(a.item_no),nm,dt,ta_prc prc
-                     from(   SELECT nm,i.item_no, MAX(ta_dt) dt
-                           FROM ta_hr t join item i 
-                           on i.item_no = t.item_no
-                           GROUP BY nm,i.item_no
-                           order by item_no) a join ta_hr t
-                     on a.item_no= t.item_no and a.dt=t.ta_dt
-                     order by 1) t  		-- 최근 체결가
-        ON 		i.item_no = t.item_no
-        JOIN ( 
-        			SELECT 	CASE SUBSTR(common_cd,1,2) 
-		        					WHEN 'S1' THEN '농산물'
-		                  WHEN 'S2' THEN '수산물'
-		                  END sc
-		               			 	,h_ctgr theme
-		                			,ctgr item
-		                  		,common_cd
-              FROM 		common_code
-              WHERE 	length(common_cd) =6
-              ORDER 	by common_cd ) c 
-         ON c.item=t.nm
-         ORDER by common_cd
+			select common_cd,
+				 t.item_no, 
+			   c.sc, 
+			   c.theme, 
+			   t.nm,
+			   NVL(DECODE(t.prc,0,i.cl_prc,t.prc),0) tprc, 
+			   NVL(DECODE(t.prc,0,0,t.prc - i.cl_prc),0) change ,
+			   trunc(NVL(DECODE(t.prc,0,0,t.prc - i.cl_prc) / i.cl_prc, 0)*100) rate
+        from (select item_no, cl_prc 
+                  from item_info 
+                  where to_char(ta_dt,'yyyy-MM-dd') =(
+			      									   select to_char(max(ta_dt),'yyyy-MM-dd')
+	                                                   from item_info
+	                                                  )
+                  ) i -- 전날 주가정보
+        left join (  select distinct(a.item_no) item_no,nm,'tah-'||a.tano ta_no,NVL(ta_prc,0) prc
+                    from(   SELECT nm,i.item_no, MAX(to_number(substr(ta_no,5))) tano
+                            FROM (select * 
+                                  from ta_hr
+                                  where to_char(ta_dt,'yyyy-MM-dd') =(
+                                                                       select to_char(max(ta_dt),'yyyy-MM-dd')
+                                                                       from ta_hr
+                                                                      )
+                            ) t right join item i 
+                            on i.item_no = t.item_no
+                            GROUP BY nm,i.item_no
+                            order by to_number(substr(item_no,5))
+                     ) a 
+                    left join ta_hr t
+                    on a.item_no= t.item_no and to_number(substr(t.ta_no,5)) = a.tano  
+                    order by to_number(substr(item_no,5)) 
+             ) t -- 최근체결가
+        on i.item_no = t.item_no
+        join ( select case substr(common_cd,1,2) when 'S1' then '농산물'
+                                              when 'S2' then '수산물'
+                                              end sc
+                                              ,h_ctgr theme
+                                              , ctgr item
+                                              ,common_cd
+                    from common_code
+                    where length(common_cd) =6
+                    order by common_cd ) c on c.item=t.nm
+            order by rate desc, change desc
 		</select>
 		
 		<select id="findIdSelect" parameterType="String">

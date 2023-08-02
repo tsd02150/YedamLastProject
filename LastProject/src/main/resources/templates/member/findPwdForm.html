@@ -127,7 +127,7 @@ input[type=number] {
 
 		let count1 = 0; // 본인인증 횟수 5회 제한 count
 		let count2 = 0; // 인증번호 확인 횟수 5회 제한 count
-
+		let toUser =''; 
 		// 가입당시 이름+연락처 비교해서 정보 확인
 		$("#testBtn1").on("click", function () {
 		  if ($("#telInput").val() == "") {
@@ -143,13 +143,10 @@ input[type=number] {
 		  console.log($("#telInput").val());
 		  console.log($("#mname").val());
 
-		  let toUser = $("#telInput")
+		  toUser = $("#telInput")
 		    .val()
 		    .replace(/[^0-9]/g, "")
 		    .replace(/^(\d{3})(\d{4})(\d{4})$/, "$1$2$3");
-
-		  testcode = createSmsKey();
-		  console.log(testcode);
 
 		  // 연락처+이름 비교
 		  $.ajax({
@@ -161,7 +158,7 @@ input[type=number] {
 		    },
 		    success: function (data) {
 		      count1++;
-		      if (data.tel != $("#telInput").val() || data.nm != $("#mname").val()) {
+		      if(data == null && data == ""){
 		        console.log(data.tel);
 		        $("#telCheck")
 		          .text("가입 정보가 없습니다. 입력정보가 맞는지 다시 확인해주세요.")
@@ -171,21 +168,11 @@ input[type=number] {
 		            "font-size": "14px",
 		          });
 		      } else {
-		         $.ajax({
-		          url: "sendSms",
-		          method: "POST",
-		          data: {
-		            to: toUser,
-		            content: "[SMS] 인증번호 [" + testcode + "]를 입력해주세요",
-		          },
-		          success: function (response) {
-		            console.log("key: " + testcode);
-		          },
-		          error: function (err) {
-		            console.log(err);
-		          },
-		        }); // sms 발송 끝/
-		     
+		    	  testcode = createSmsKey();
+				  	console.log(testcode);
+				  	sendFunc();
+		        /*   // sms 발송 끝/ */
+		     		
 		        $("#idInput").val(data.id);
 		        $("#telCheck")
 		          .text("인증번호가 발송되었습니다.")
@@ -209,6 +196,22 @@ input[type=number] {
    		 window.location.reload();
      };
 			        
+     function sendFunc(){
+    	 $.ajax({
+	          url: "sendSms",
+	          method: "POST",
+	          data: {
+	            to: toUser,
+	            content: "[SMS] 인증번호 [" + testcode + "]를 입력해주세요",
+	          },
+	          success: function (response) {
+	            console.log("key: " + testcode);
+	          },
+	          error: function (err) {
+	            console.log(err);
+	          },
+	        });
+     }
 			//인증번호 비교
 			$("#testBtn2").on("click", function(){
 				if($("#telInput").val() == ""){
