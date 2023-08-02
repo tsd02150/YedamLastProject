@@ -358,6 +358,10 @@ p>img {
 	width: 100px;
 	height: 100px;
 }
+#modal-img {
+	width : 80px;
+	height: 80px;
+}
 </style>
 
 </head>
@@ -588,11 +592,10 @@ p>img {
 				<h2 style="text-align: center;">상품 후기</h2>
 				<div>&nbsp;</div>
 				<div style="display: flex;" class="pic" th:each="prdt : ${getFarm}">
-
-					<img style="width: 200px; height: 200px;"
-						th:src="|/mall/images/main/${prdt.thumb}|"> <span
+					<div id="modal-img" style="width: 80px; height: 80px;" th:utext="${prdt.thumb}">
+					<span
 						style="margin-left: 10px;" th:text="${prdt.nm}"></span>
-
+					</div>
 				</div>
 
 				<div>&nbsp;</div>
@@ -731,7 +734,9 @@ p>img {
 						<td style="width: 70px; text-align: center;" >${item.revNo}</td>
 						<td>
 							<div class="review-item">
+								<div >
 								${item.cntn}
+								</div>
 							</div>
 						</td>
 						<td style="text-align: center;" class="maks">${item.maks}</td>
@@ -959,14 +964,8 @@ p>img {
         });
 
     });
-				
-				
-			
-				
-			
 
-			
-			</script>
+		</script>
 	</div>
 </body>
 </html>

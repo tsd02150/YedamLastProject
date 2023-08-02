@@ -12,6 +12,7 @@ import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ShippingVO;
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.MembVO;
+import com.yedam.app.security.service.UserVO;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -89,6 +90,12 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public boolean insertOrderDetaInfo(OrderVO oddVO) {
 		return orderMapper.insertOrderDetaInfo(oddVO)>0;
+	}
+
+	@Override
+	public void updateMemberPoint(UserVO vo) {
+		orderMapper.updateMemberPoint(vo);
+		
 	}
 
 	

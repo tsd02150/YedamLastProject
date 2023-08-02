@@ -40,56 +40,46 @@ public class BasketController {
 		return basketService.getBasketInfoList(bskVO);
 	}
 
-//	// 장바구니 페이지 이거야!!!!!!!!!!!!!
 	@GetMapping("basketList")
 	public String basketList(Model model, HttpSession session) {
-		// bskVO = basketService.getBasketList(bskVO.getPrdtNo());
 
 		String memNo = ((UserVO) session.getAttribute("loggedInMember")).getMembNo();
 		String prdtNo = ((UserVO) session.getAttribute("loggedInMember")).getPrdtNo();
 		String bskNo = ((UserVO) session.getAttribute("loggedInMember")).getBskNo();
-		// model.addAttribute("member", membVO.getMembNo());
-		// model.addAttribute("basketList", basketService.getBasketList(memNo));
 		model.addAttribute("bskNo", bskNo);
 		model.addAttribute("membNo", memNo);
 		model.addAttribute("prdtNo", prdtNo);
 		List<BasketVO> list = new ArrayList<BasketVO>();
 		list = basketService.getBasketList(memNo);
 
-		System.out.println("장바구니 리스트 : " + list);
 		model.addAttribute("basketList", list);
-
-//		model.addAttribute("basketInfo", bskVO);
-
-		// bskVO.setMembNo(mem.getMembNo());
-		// bskVO.setMembNo(basketService.getIntPrdt(bskVO.getPrdtNo()));
-
-//		model.addAttribute("basket", bskVO);
-//		model.addAttribute("member", basketService.getMembInfo(bskVO.getMembNo()));
-		// model.addAttribute("member", basketService.getIntPrdt(bskVO.getMembNo()));
-
-//		if (mem != null) {
-//			model.addAttribute("interestPrdt", basketService.getIntPrdt(mem.getMembNo()));
-//		}
 
 		return "mall/basketList";
 	}
 
-//	// 장바구니 추가 기능 이거야!!!!!!!!!!!!!
 	@PostMapping("basketList")
 	@ResponseBody
 	public String addCartItem(BasketVO bskVO, HttpSession session) {
-		System.out.println("~~~~~~~~~~~" + bskVO);
 		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 
 		if (mem == null) {
 			return "fail"; // 로그인되지 않은 경우 처리
 		}
-
+		
 		bskVO.setMembNo(mem.getMembNo());
-
-		boolean result = basketService.addCartItem(bskVO);
-
+		basketService.baskekCheck(bskVO);
+		boolean result;
+		
+		if(basketService.baskekCheck(bskVO) == null) {
+			
+				result = basketService.addCartItem(bskVO);
+			
+		}else {
+				basketService.basketUpdate(bskVO);
+		}
+		
+		result = true;
+		
 		if (result) {
 			return bskVO.getPrdtNo(); // 상품 번호 반환
 		} else {
@@ -109,7 +99,7 @@ public class BasketController {
 		}
 	}
 
-//	// 장바구니 전체삭제
+	// 장바구니 전체삭제
 	@PostMapping("deleteAllBasket")
 	@ResponseBody
 	public String deleteAllBasket(BasketVO bskVO) {
@@ -121,7 +111,7 @@ public class BasketController {
 		}
 	}
 
-//	// 장바구니 단건삭제
+	// 장바구니 단건삭제
 	@PostMapping("deleteBasket")
 	@ResponseBody
 	public String deleteBasket(BasketVO bskVO) {

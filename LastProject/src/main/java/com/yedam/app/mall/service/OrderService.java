@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.MembVO;
+import com.yedam.app.security.service.UserVO;
 
 public interface OrderService {
 
@@ -36,6 +37,8 @@ public interface OrderService {
 	public int updateMemberInfo(MembVO membVO);
 	// 주소 변경
 	public int updateMemberAddr(AddrVO addrVO);
-
+	
+	//멤버 point update
+	public void updateMemberPoint(UserVO vo);
 
 }

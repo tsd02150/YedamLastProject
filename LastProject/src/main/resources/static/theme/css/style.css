@@ -78,7 +78,7 @@
 ================================================== */
 @import url("https://fonts.googleapis.com/css?family=Barlow:300,400,700|Libre+Franklin:400,600,700|Poppins:400,600,700,800");
 body, p {
-  font-family: "Libre Franklin", sans-serif;
+  /* font-family: "Libre Franklin", sans-serif; */
   line-height: 26px;
   font-size: 16px;
   text-rendering: optimizeLegibility;

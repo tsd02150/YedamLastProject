@@ -183,5 +183,12 @@
 		select order_am from orders
 		where pay_an = #{payAn}
 	</select>
+	
+	<update id="updateMemberPoint" parameterType="UserVO">
+		update member
+		set point = #{point}
+		where memb_no = #{membNo}
+	</update>
+	
 
 </mapper>

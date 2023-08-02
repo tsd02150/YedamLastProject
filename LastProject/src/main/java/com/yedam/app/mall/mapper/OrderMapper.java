@@ -7,6 +7,7 @@ import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ShippingVO;
 import com.yedam.app.member.service.AddrVO;
 import com.yedam.app.member.service.MembVO;
+import com.yedam.app.security.service.UserVO;
 
 public interface OrderMapper {
 
@@ -33,5 +34,7 @@ public interface OrderMapper {
 	public int updateMemberAddr(AddrVO addrVO);
 	//배송 추가
 	public int insertShipping(OrderVO ordVO);
+	//멤버 point update
+	public void updateMemberPoint(UserVO vo);
 	
 }

@@ -62,5 +62,18 @@ public class BasketServiceImpl implements BasketService {
 	public List<BasketVO> getBasketInfoList(BasketVO bskVO) {
 		return basketMapper.getBasketInfoList(bskVO);
 	}
+	
+	//장바구니 중복 
+	@Override
+	public BasketVO baskekCheck(BasketVO bskVO) {
+		return basketMapper.baskekCheck(bskVO);
+	}
+
+	// 장바구니 담기 업데이트
+	@Override
+	public boolean basketUpdate(BasketVO bskVO) {
+		return basketMapper.basketUpdate(bskVO)>0;
+	}
+
 
 }

@@ -84,17 +84,20 @@
 #titlename span:after {
 	width: 100px;
 }
-#prevpage{
-	visibility: hidden;
-}
-#nextpage{
+
+#prevpage {
 	visibility: hidden;
 }
 
-#prevpage{
+#nextpage {
 	visibility: hidden;
 }
-#nextpage{
+
+#prevpage {
+	visibility: hidden;
+}
+
+#nextpage {
 	visibility: hidden;
 }
 </style>
@@ -166,9 +169,10 @@
 				</h1>
 
 				<div class="selectBtn d-flex justify-content-between">
-					<div style="border-right:2px solid #ddd;">
+					<div style="border-right: 2px solid #ddd;">
 						<button class="ctgr" type="button" th:data-commoncd="${prdtCode}">전체</button>
-						<button th:each="item : ${S}" class="ctgr" type="button" th:data-commoncd="${item.commonCd}">[[${item.ctgr}]]</button>
+						<button th:each="item : ${S}" class="ctgr" type="button"
+							th:data-commoncd="${item.commonCd}">[[${item.ctgr}]]</button>
 					</div>
 					<div class="d-flex justify-content-between">
 						<button class="lowBtn orderBtn" type="button">낮은 가격순</button>
@@ -186,6 +190,8 @@
 				<div class="row" id="productList"></div>
 			</div>
 		</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
 
 		<div>
 			<nav aria-label="Page navigation example"
@@ -211,7 +217,8 @@
 				</ul>
 			</nav>
 		</div>
-
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
 
 
 		<script th:inline="javascript">
@@ -336,9 +343,9 @@
 									<span class="nm"><a>${items.nm}</a></span>
 								</h4>
 								<p>
-									<span class="original-price"
-										style="text-decoration: line-through;">${items.prc}p</span> <br> <span
-										class="discounted-price">${items.prc - (items.prc * (items.dcRate / 100.0))}p</span>
+									<span class="original-price" style="text-decoration: line-through;">${items.prc}p</span> <br> 
+									<span class="discounted-price">${items.prc - (items.prc * (items.dcRate / 100.0))}p</span>
+									
 								</p>
 							</div>
 						</div>
@@ -568,6 +575,9 @@
 			pageMove(prdtEndPage);
 		} 
 	 
+		
+		
+		
 	
 	</script>
 	</div>

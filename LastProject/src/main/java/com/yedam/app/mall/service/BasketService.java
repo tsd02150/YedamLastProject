@@ -30,5 +30,11 @@ public interface BasketService {
 
 	// 장바구니 수량 업데이트
 	public boolean updateCnt(BasketVO bskVO);
+	
+	// 장바구니 중복비교
+	public BasketVO baskekCheck(BasketVO bskVO);
+	
+	// 장바구니 담기 업데이트
+	public boolean basketUpdate(BasketVO bskVO);
 
 }

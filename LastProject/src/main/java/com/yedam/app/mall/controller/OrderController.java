@@ -137,6 +137,9 @@ public class OrderController {
 			
 			UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 			mem.setPoint(mem.getPoint()-ordVO.getOrderAm());
+			
+			orderService.updateMemberPoint(mem);
+			System.out.println("!!!!!!!!!!!!!!!!!!!"+mem.getPoint());
 			session.setAttribute("loggedInMember", mem);
 			
 			String orderNo=ordVO.getOrderNo();
@@ -157,6 +160,8 @@ public class OrderController {
 			bskVO.setMembNo(mem.getMembNo());
 			
 			basketService.deleteAllBasket(bskVO);
+			
+			
 			
 			
 						

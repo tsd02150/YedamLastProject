@@ -82,5 +82,17 @@
 		DELETE FROM BASKET
 		WHERE memb_no=#{membNo}
 	</delete> 
-
+	
+	<select id="baskekCheck" resultType="BasketVO">
+		select *
+		from basket
+		where prdt_no = #{prdtNo} and memb_no= #{membNo}
+	</select>
+	
+	<update id="basketUpdate" parameterType="BasketVO">
+		update basket
+		set cnt = cnt + #{cnt}
+		where memb_no = #{membNo} and prdt_no = #{prdtNo}
+	
+	</update>
 </mapper>

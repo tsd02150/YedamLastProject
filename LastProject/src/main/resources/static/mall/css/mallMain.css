@@ -259,96 +259,6 @@ Copy code
     animation: slideAnimation 30s infinite; /* 전환 주기를 30초로 설정합니다. */
 }
 
-/* video {
-	max-width: 80%;
-	display: block;
-	margin: 20px auto;
-}
- */
-/* 	 */
-/* .hero-slider .slider-item .container {
-	width: 1100px;
-	height: 600px;
-	margin-left: 0px;
-	margin-right: 0px;
-}
-
-.hero-slider .slider-item .container .row {
-	width: 1100px;
-	height: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.hero-slider .slider-item:focus {
-	width: 1100px;
-	outline: 0;
-}
-
-.hero-slider .btn {
-	font-size: 15px;
-	font-weight: 400;
-	color: rgb(255, 255, 255);
-	letter-spacing: 1px;
-	font-family: "Roboto Condensed";
-	border-color: rgb(255, 255, 255);
-	border-style: solid;
-	border-width: 2px;
-	outline: none;
-	box-shadow: rgb(153, 153, 153) 0px 0px 0px 0px;
-	box-sizing: border-box;
-	padding: 12px 26px;
-	opacity: 1;
-	transform: matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-	transform-origin: 50% 50% 0px;
-	border-radius: 0;
-	transition: 0.3s;
-}
-
-.hero-slider .btn:hover {
-	color: black;
-	background-color: #fff;
-}
-
-.hero-slider h1 {
-	white-space: normal;
-	font-size: 49px;
-	line-height: 49px;
-	font-weight: 400;
-	color: rgb(255, 255, 255);
-	letter-spacing: -2px;
-	font-family: "Playfair Display";
-	margin-bottom: 35px;
-}
-
-.heroSliderArrow {
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	height: 50px;
-	width: 50px;
-	border-radius: 50%;
-	border: 0;
-	background-color: #fff;
-	font-size: 16px;
-	transition: 0.3s;
-	z-index: 999;
-}
-
-.heroSliderArrow:focus, .heroSliderArrow:hover {
-	background-color: #000;
-	color: #fff;
-	outline: 0;
-}
-
-.heroSliderArrow.prevArrow {
-	left: 20px;
-}
-
-.heroSliderArrow.nextArrow {
-	right: 20px;
-} */
 
 .container, .container-fluid {
 	width: 100%;
@@ -556,4 +466,133 @@ h1 {
 
 .main_text2>ul>li>div, .main_text2>ul>li>div>h1 {
 	color: #fff;
+}
+
+
+.slide {
+  /* layout */
+  display: flex;
+  flex-wrap: nowrap;
+  /* 컨테이너의 내용물이 컨테이너 크기(width, height)를 넘어설 때 보이지 않도록 하기 위해 hidden을 준다. */
+  overflow: hidden;
+
+  /* position */
+  /* slide_button의 position absolute가 컨테이너 안쪽에서 top, left, right offset이 적용될 수 있도록 relative를 준다. (기본값이 static인데, static인 경우 그 상위 컨테이너로 나가면서 현재 코드에선 html을 기준으로 offset을 적용시키기 때문) */
+  position: relative;
+
+  /* size */
+  width: 100%;
+
+  /* slide drag를 위해 DOM요소가 드래그로 선택되는것을 방지 */
+  user-select: none;
+}
+.slide_item {
+  /* layout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* position - 버튼 클릭시 left offset값을 적용시키기 위해 */
+  position: relative;
+  left: 0px;
+
+  /* size */
+  width: 100%;
+  height: 300px;
+  /* flex item의 flex-shrink는 기본값이 1이므로 컨테이너 크기에 맞게 줄어드는데, 슬라이드를 구현할 것이므로 줄어들지 않도록 0을 준다. */
+  flex-shrink: 0;
+
+  /* transition */
+  transition: left 0.15s;
+}
+.slide_button {
+  /* layout */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* position */
+  position: absolute;
+  /* 버튼이 중앙에 위치하게 하기위해 계산 */
+  top: calc(50% - 16px);
+
+  /* size */
+  width: 32px;
+  height: 32px;
+
+  /* style */
+  border-radius: 100%;
+  background-color: #cccc;
+  cursor: pointer;
+}
+
+.slide_prev_button {
+  left: 10px;
+}
+.slide_next_button {
+  right: 10px;
+}
+
+/* 각 슬라이드가 변경되는 것을 시각적으로 확인하기 쉽도록 각 슬라이드별 색상 적용 */
+.slide_item.item1 {
+  background-image: url("/mall/images/main/농축산물.png");
+  background-size: contain; 
+}
+.slide_item.item2 {
+  background-image: url("/mall/images/main/사이소.png");
+  background-size: contain; 
+}
+.slide_item.item3 {
+  background-image: url("/mall/images/main/산청.png");
+  background-size: contain; 
+}
+.slide_item.item4 {
+  background-image: url("/mall/images/main/산청엑스포.png");
+  background-size: contain; 
+}
+.slide_item.item5 {
+  background-image: url("/mall/images/main/제주농산.png");
+  background-size: contain; 
+}
+
+/* 페이지네이션 스타일 */
+ul,
+li {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+.slide_pagination {
+  /* layout */
+  display: flex;
+  gap: 5px;
+
+  /* position */
+  position: absolute;
+  bottom: 0;
+  /* left:50%, translateX(-50%)를 하면 가로 가운데로 위치시킬 수 있다. */
+  left: 50%;
+  transform: translateX(-50%);
+}
+.slide_pagination > li {
+  /* 현재 슬라이드가 아닌 것은 투명도 부여 */
+  color: #7fb5ff88;
+  cursor: pointer;
+  font-size: 25px;
+}
+.slide_pagination > li.active {
+  /* 현재 슬라이드 색상은 투명도 없이 */
+  color: #7fb5ff;
+}
+
+.slide_item_duplicate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  left: 0px;
+  width: 100%;
+  height: 300px;
+  flex-shrink: 0;
+  transition: left 0.15s;
 }
