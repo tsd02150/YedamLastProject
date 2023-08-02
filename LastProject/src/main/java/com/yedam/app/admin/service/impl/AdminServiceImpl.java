@@ -360,7 +360,7 @@ public class AdminServiceImpl implements AdminService {
 	
 	// 주문 상태 수정
 	@Override
-	public int orderStUpdate(List<String> list) {
+	public int orderStUpdate(OrderVO list) {
 		return adminMapper.orderStUpdate(list);
 	}
 	
@@ -368,6 +368,12 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int deleteOrder(List<String> list) {
 		return adminMapper.deleteOrder(list);
+	}
+	
+	//공통코드 삭제
+	@Override
+	public int deleteCommonCd(List<String> list) {
+		return adminMapper.deleteCommonCd(list);
 	}
 
 }

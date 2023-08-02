@@ -80,7 +80,7 @@
 	<!-- 장바구니 전체 비우기 -->
 	<delete id="deleteAllBasket" parameterType="BasketVO">
 		DELETE FROM BASKET
-	
+		WHERE memb_no=#{membNo}
 	</delete> 
 
 </mapper>

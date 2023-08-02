@@ -233,7 +233,8 @@ public class AdminController {
 	// 주문처리상태 변경
 	@ResponseBody
 	@PostMapping("orderStUpdate")
-	public int orderStUpdate(@RequestBody List<String> rowKeys) {
+	public int orderStUpdate(@RequestBody OrderVO rowKeys) {
+		System.out.println(rowKeys);
 		return adminService.orderStUpdate(rowKeys);
 	}
 	
@@ -441,9 +442,12 @@ public class AdminController {
 	@ResponseBody
 	@PostMapping("deleteProduct")
 	public int deleteProduct(@RequestBody List<String> list) {
+		
+		adminService.deleteCommonCd(list);
 		return adminService.deleteProduct(list);
 	}
 
+	
 	// 응답안한 신고글 개수
 	@ResponseBody
 	@GetMapping("nonChkRptCnt")

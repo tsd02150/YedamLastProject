@@ -153,6 +153,12 @@ public class OrderController {
 			}
 			
 			//결제 후 basket 리스트 지우기
+			BasketVO bskVO = new BasketVO();
+			bskVO.setMembNo(mem.getMembNo());
+			
+			basketService.deleteAllBasket(bskVO);
+			
+			
 						
 		}
 		//System.out.println(orderService.insertAddr(addrVO));

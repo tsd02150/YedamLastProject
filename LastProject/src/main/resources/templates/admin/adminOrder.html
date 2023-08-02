@@ -59,8 +59,8 @@
 		          method: 'POST',
 		          contentType: 'application/json',
 		          data: JSON.stringify({
-		            orders: orders,
-		            status: [selectedStatus]
+		        	orderNoList: orders,
+		            orderSt: selectedStatus
 		          }),
 		          success: function (data) {
 		            console.log('Order status updated successfully:', data);

@@ -79,12 +79,12 @@
 							<th>상품 카테고리</th>
 								<td colspan="3" id="productNm" >
 									<div>
-									 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S101">곡류
-									 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S102">콩류 
-									 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S103">과실류
-									 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S201">어류 
-									 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S202">해조류
-									 <input type="radio" style="text-align:left;" id="writeProductTtl" name="commonCd" value="S203">갑각류 
+									 <input type="radio" style="text-align:left;" class="writeProductTtl" name="commonCd" value="S101">곡류
+									 <input type="radio" style="text-align:left;" class="writeProductTtl" name="commonCd" value="S102">콩류 
+									 <input type="radio" style="text-align:left;" class="writeProductTtl" name="commonCd" value="S103">과실류
+									 <input type="radio" style="text-align:left;" class="writeProductTtl" name="commonCd" value="S201">어류 
+									 <input type="radio" style="text-align:left;" class="writeProductTtl" name="commonCd" value="S202">해조류
+									 <input type="radio" style="text-align:left;" class="writeProductTtl" name="commonCd" value="S203">갑각류 
 										
 									</div>
 								</td>
@@ -197,6 +197,7 @@
 	    		        }
         		})
         		.then((result) =>{
+        			
         			if(result.isConfirmed){
         				
         				let thumb = editor.getData();
@@ -204,9 +205,11 @@
         				
         				
         				let formData = $('#myForm').serializeObject()
+        				formData.commonCd=$('.writeProductTtl:checked').val();
         				formData.thumb = thumb;
         				formData.img=img;
         			
+        				
         				
         				$.ajax({
         					url:'/admin/addProduct',

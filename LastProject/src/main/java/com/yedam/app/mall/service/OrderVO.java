@@ -1,6 +1,7 @@
 package com.yedam.app.mall.service;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -45,4 +46,5 @@ public class OrderVO {
 	private String rec;
 	private String recTel;
 
+	private List<String> orderNoList;
 }

@@ -338,13 +338,16 @@
 	
 	<!-- order 글 리스트 -->
 	<select id="orderList" resultType="OrderVO">
-		select o.order_no , o.memb_no , p.nm , o.pay_an, o.order_st , o.order_dt
-        from order_detail d join product p
-        on d.prdt_no = p.prdt_no
-        join orders o
-        on d.order_no = o.order_no
-        order by o.order_dt desc
-        
+		SELECT order_no,memb_no,nm,pay_an,order_st,order_dt
+			FROM(
+			select o.order_no , o.memb_no ,decode(COUNT(p.nm) OVER(PARTITION BY o.order_no),1,p.nm, p.nm ||' 외 '||((COUNT(p.nm) OVER(PARTITION BY o.order_no))-1)||'개' )nm, o.pay_an, o.order_st , o.order_dt,ROW_NUMBER() OVER(PARTITION BY o.order_no ORDER BY o.order_dt DESC) AS rn
+			from order_detail d 
+			join product p
+			on d.prdt_no = p.prdt_no
+			join orders o
+			on d.order_no = o.order_no
+			order by o.order_dt desc)
+			WHERE rn=1
 	</select>
 	
 	<!-- order 개수 -->
@@ -359,7 +362,7 @@
 		update orders
 		set order_st = #{orderSt}
 		where order_no in (
-			<foreach collection="list" item="item" separator=",">
+			<foreach collection="orderNoList" item="item" separator=",">
 				#{item}
 			</foreach>
 		)
@@ -395,7 +398,7 @@
 		VALUES(
 		    (select 'S'||to_char(MAX(SUBSTR(common_cd,2))+1)
 		    from common_code
-		    where common_cd like 'S101%')
+		    where common_cd like #{commonCd}||'%')
 		    ,#{nm}
 		    ,#{commonCd}
 		    ,(SELECT ctgr
@@ -455,6 +458,14 @@
 		)
 	</delete>
 	
+	<delete id="deleteCommonCd">
+		delete from common_code
+			where common_cd in (
+			<foreach collection="list" item="item" separator=",">
+				#{item}
+			</foreach>
+		)
+	</delete>
 	   <!-- 상품 수정 -->
     <update id="modifyProduct" >
     	update product

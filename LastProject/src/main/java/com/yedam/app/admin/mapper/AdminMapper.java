@@ -106,7 +106,7 @@ public interface AdminMapper {
 	public int deleteProduct(List<String> list);
 	
 	// 주문상태 수정
-	public int orderStUpdate(List<String> list);
+	public int orderStUpdate(OrderVO list);
 	// 주문 삭제
 	public int deleteOrder(List<String> list);
 	// 상품 등록
@@ -122,6 +122,9 @@ public interface AdminMapper {
 
 	//공통코드 등록
 	public void addCommonCd(ProductVO prdtVO);
+	//공통코드 삭제
+	public int deleteCommonCd(List<String> list);
+	
 
 	// 응답안한 신고 개수
 	public int nonChkRptCnt();
