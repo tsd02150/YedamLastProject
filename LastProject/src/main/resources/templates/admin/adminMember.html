@@ -208,7 +208,8 @@
                 		            15: '15일정지',
                 		            30: '30일정지'
                 		          },
-                		        showCancelButton: true,
+                		        showDenyButton: true,
+                		        denyButtonText: '취소',
                 		        inputPlaceholder: '정지기간선택'
                 		    }).then(result =>{
                 		    	if(result.isConfirmed){
@@ -225,10 +226,9 @@
                 		    			}
                 		    		});//end of ajax
                 		    		
-                		    	}else if(result.isDismissed){
-	                		    	if(ev.value != ev.prevValue){
-		                		    	$('td[data-row-key='+ev.rowKey+'][data-column-name='+ev.columnName+']').children(0).text(ev.prevValue);
-	                		    	}
+                		    	}else if(result.isDenied){
+                		    		console.log(ev)
+                		    		 grid.setValue(ev.rowKey, ev.columnName, ev.prevValue);
                 		    	}
                 		    })
 
@@ -242,7 +242,7 @@
                 			   if(data > 0){
                 				   Swal.fire(membNm +' 회원의 정지상태가 해제되었습니다.');
                 			   }else{
-                				   Swal.fire('정지해제 실패..')
+                				   
                 			   }
                 		   })
                 	   }
