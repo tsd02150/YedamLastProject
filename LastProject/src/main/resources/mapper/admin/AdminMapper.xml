@@ -383,7 +383,7 @@
 	<select id="productList" resultType="productVO">
 		select *
         from product
-       
+       	order by drwup_dt
 	</select> 
 	
 	<!-- product 개수 -->

@@ -193,6 +193,15 @@ th {
 	align-items: center;
 }
 
+.review-item p{
+	font-size : 18px;
+}
+
+.review-item img{
+	width : 150px;
+	height : 150px;
+}
+
 .pic {
 	width: 80px;
 	height: 80px;
@@ -260,6 +269,10 @@ th {
 	background-color: rgba(0, 0, 0, 0.4);
 }
 
+.modal img {
+	width: 200px;
+	height: 200px;
+}
 .modal-content {
 	background-color: #fefefe;
 	margin: 10% auto;
@@ -358,10 +371,7 @@ p>img {
 	width: 100px;
 	height: 100px;
 }
-#modal-img {
-	width : 80px;
-	height: 80px;
-}
+
 </style>
 
 </head>
@@ -488,9 +498,8 @@ p>img {
 		<div class="details" th:each="prdt : ${getFarm}">
 			<a name="detail"></a>
 
-			<div class="content">
-				<img th:src="|/mall/images/main/${prdt.img}|"
-					style="text-align: center;">
+			<div class="content" style="text-align: center;" th:utext="${prdt.img}">
+				
 			</div>
 			<button class="toggle-button" th:onclick="toggleDetails()">상세정보
 				접기</button>
@@ -591,11 +600,11 @@ p>img {
 				<span class="close">&times;</span>
 				<h2 style="text-align: center;">상품 후기</h2>
 				<div>&nbsp;</div>
-				<div style="display: flex;" class="pic" th:each="prdt : ${getFarm}">
-					<div id="modal-img" style="width: 80px; height: 80px;" th:utext="${prdt.thumb}">
+				<div style="display: flex;"	 class="pic" th:each="prdt : ${getFarm}">
+					<img id="modal-img" th:utext="${prdt.thumb}">
 					<span
-						style="margin-left: 10px;" th:text="${prdt.nm}"></span>
-					</div>
+						style="margin-left: 10px; display:flex;" th:text="${prdt.nm}"></span>
+					
 				</div>
 
 				<div>&nbsp;</div>
@@ -717,7 +726,6 @@ p>img {
 		
 		//리뷰 리스트 출력
 		function reviewList(){
-			console.log('aaa');
 			fetch("/mall/getReviewList",{
 				method:"POST",
 				headers: {
@@ -734,7 +742,8 @@ p>img {
 						<td style="width: 70px; text-align: center;" >${item.revNo}</td>
 						<td>
 							<div class="review-item">
-								<div >
+								<div>
+								
 								${item.cntn}
 								</div>
 							</div>

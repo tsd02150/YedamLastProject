@@ -32,7 +32,7 @@ public interface BasketMapper {
 	public int addCartItem(BasketVO bskVO);
 
 //	// 장바구니 중복체크
-	public String itemCheck(@Param("membNo") String membNo, @Param("prdtNo") String prdtNo);
+	//public String itemCheck(@Param("membNo") String membNo, @Param("prdtNo") String prdtNo);
 
 	// 장바구니 수량 업데이트
 	public int updateCnt(BasketVO bskVO);

@@ -785,10 +785,11 @@ caption {
 
 .image_wrap img {
 	max-width: 85%;
-	height: auto;
+	height: auto; 
 	display: block;
 	vertical-align:middle;
 }
+
 
 .input_size_20 {
 	width: 20px;

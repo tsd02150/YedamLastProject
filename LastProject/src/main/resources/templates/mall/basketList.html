@@ -144,7 +144,7 @@
 					value="${item.prdtNo}"></td>
 				<td class="td_width_4">
 					<div class="image_wrap">
-						<img th:onclick="|location.href='@{getFarm(prdtNo=${item.prdtNo})}'|"><div th:utext="${item.thumb}"></div>
+						<img th:onclick="|location.href='@{getFarm(prdtNo=${item.prdtNo})}'|"><div class="bsk-img" th:utext="${item.thumb}"></div>
 					</div>
 				</td>
 				<td class="td_width_4" th:text="${item.nm}"></td>
@@ -232,18 +232,6 @@
 	});
 	
 	
-		/* 체크박스 전체 선택 */
-		$(".all_check_input").on("click", function() {
-		  // 전체 체크박스 상태 확인
-		  const isChecked = $(this).prop("checked");
-
-		  // 각 개별 체크박스의 상태 변경
-		  $(".individual_cart_checkbox").prop("checked", isChecked);
-
-		  // 총 주문 정보 세팅(배송비, 총 가격, 마일리지, 물품 수, 종류)
-		  setTotalInfo($(".cart_info_td"));
-		});
-		
 		
 		/* 수량버튼 */
 		$(".plus_btn").on("click", function(){
@@ -439,6 +427,18 @@
   window.location.href = "/mall/orderList";
 
 }
+	/* 체크박스 전체 선택 */
+	$(".all_check_input").on("click", function() {
+	  // 전체 체크박스 상태 확인
+	  const isChecked = $(this).prop("checked");
+
+	  // 각 개별 체크박스의 상태 변경
+	  $(".individual_cart_checkbox").prop("checked", isChecked);
+
+	  // 총 주문 정보 세팅(배송비, 총 가격, 마일리지, 물품 수, 종류)
+	  setTotalInfo($(".cart_info_td"));
+	});
+	
 	
 	</script>
 	</div>
