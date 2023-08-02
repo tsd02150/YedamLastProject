@@ -18,7 +18,7 @@ public class OrderServiceImpl implements OrderService {
 	
 	@Autowired
 	OrderMapper orderMapper;
-	
+
 	@Override
 	public List<OrderVO> getOrderList(String membNo) {
 		return orderMapper.getOrderList(membNo);
@@ -64,19 +64,31 @@ public class OrderServiceImpl implements OrderService {
 		return orderMapper.updateMemberInfo(membVO);
 	}
 
+
 	@Override
-	public int insertOrder(OrderVO ordVO, MembVO membVO) {
-		return orderMapper.insertOrder(ordVO);
+	public int insertShipping(OrderVO ordVO) {
+		return orderMapper.insertShipping(ordVO);
+	}
+
+
+	@Override
+	public String getOrderNo() {
+		return orderMapper.getOrderNo();
 	}
 
 	@Override
-	public int insertShipping(ShippingVO shipVO, MembVO membVO) {
-		return orderMapper.insertShipping(shipVO);
+	public String getOrderDetaNo() {
+		return orderMapper.getOrderDetaNo();
 	}
 
 	@Override
-	public int insertOrderDetail(OrderDetailVO oddVO, MembVO membVO) {
-		return orderMapper.insertOrderDetail(oddVO);
+	public boolean insertOrderInfo(OrderVO ordVO) {
+		return orderMapper.insertOrderInfo(ordVO)>0;
+	}
+
+	@Override
+	public boolean insertOrderDetaInfo(OrderVO oddVO) {
+		return orderMapper.insertOrderDetaInfo(oddVO)>0;
 	}
 
 	

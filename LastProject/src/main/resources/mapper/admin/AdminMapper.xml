@@ -353,19 +353,28 @@
         from orders
 	</select>
 	
+	
 	<!-- 주문 상태 설정 -->
-	<!-- <update id="returnNorm"  >
-		update stop_yn
-		set end_dt = sysdate
-		where memb_no in (
+	 <update id="orderStUpdate"  >
+		update orders
+		set order_st = #{orderSt}
+		where order_no in (
 			<foreach collection="list" item="item" separator=",">
 				#{item}
 			</foreach>
 		)
-		<![CDATA[
-		and end_dt > sysdate
-		]]>
-	</update> -->
+	</update>
+	
+	<!-- 주문 삭제 -->
+	<delete id="deleteOrder" >
+		delete from orders
+		where order_no in (
+			<foreach collection="list" item="item" separator=",">
+				#{item}
+			</foreach>
+		)
+	</delete>
+	
 	
 	<!-- product 글 리스트 -->
 	<select id="productList" resultType="productVO">

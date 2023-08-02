@@ -328,7 +328,7 @@
 				if(items.dcRate!=0){
 					divTag+=`<span class="bage">Sale</span>`;
 				}
-				divTag+=`<img src="/mall/images/main/${items.thumb}">
+				divTag+=`${items.thumb}
 						</div>
 						<div class="product-content">
 							<div class="product-detail">
@@ -382,7 +382,7 @@
 				if(items.dcRate!=0){
 					divTag+=`<span class="bage">Sale</span>`;
 				}
-				divTag+=`<img src="/mall/images/main/${items.thumb}">
+				divTag+=`${items.thumb}
 						</div>
 						<div class="product-content">
 							<div class="product-detail">
@@ -432,8 +432,7 @@
      				<div class="col-md-4 results">
 					<div class="product-item" onclick="location.href='/mall/getFarm?prdtNo=${items.prdtNo}'">
 						<div class="product-thumb">
-							<span class="bage">Sale</span> <img
-								src="/mall/images/main/${items.thumb}">
+							<span class="bage">Sale</span> ${items.thumb}
 						</div>
 						<div class="product-content">
 							<div class="product-detail">
@@ -458,11 +457,6 @@
 	    .catch(err => console.log(err));
 		}
 	} 
-	
- 
-	 
-	
-		
 	
 	 
 	// 페이징위해 게시물 개수생성 및 페이지생성 호출

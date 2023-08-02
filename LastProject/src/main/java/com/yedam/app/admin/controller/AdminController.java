@@ -230,6 +230,21 @@ public class AdminController {
         
 	}
 	
+	// 주문처리상태 변경
+	@ResponseBody
+	@PostMapping("orderStUpdate")
+	public int orderStUpdate(@RequestBody List<String> rowKeys) {
+		return adminService.orderStUpdate(rowKeys);
+	}
+	
+	// 주문내역 삭제
+	@ResponseBody
+	@PostMapping("deleteOrder")
+	public int deleteOrder(@RequestBody List<String> rowKeys) {
+		return adminService.deleteOrder(rowKeys);
+	}
+		
+	
 	//회원정지
 	@ResponseBody
 	@GetMapping("memberBan")

@@ -397,7 +397,7 @@ p>img {
 					style="width: 40ox; height: 40px;"
 					src="https://cdn-icons-png.flaticon.com/128/545/545489.png"></li>
 				<li style="font-size: 12px;"
-					th:onclick="|location.href='@{basketList}'|"><a href="#"></a></li>
+					th:onclick="|location.href='@{basketList}'|"><a href="#">장바구니</a></li>
 				<li class="top-btn" style="font-size: 12px; cursor: pointer;"><img
 					style="width: 40px; height: 40px;"
 					src="https://cdn-icons-png.flaticon.com/128/6015/6015743.png"
@@ -411,9 +411,8 @@ p>img {
 			<section id="detail-img" class="news-style-one"
 				th:each="prdt : ${getFarm}">
 				<div class="zoom-image-container">
-					<div class="zoom-overlay"></div>
-					<img class="zoom-image" id="prdt-img"
-						th:src="|/mall/images/main/${prdt.thumb}|">
+					<div class="zoom-overlay" ></div>
+					<div class="zoom-image" id="prdt-img" th:utext="${prdt.thumb}"></div>
 				</div>
 			</section>
 
