@@ -114,6 +114,9 @@ public class MemberController {
         
 		//회원가입 처리
 		membVO.setPwd(pwEncoder.encode(membVO.getPwd()));//비밀번호 암호화
+		if(membVO.getPath()==null) {
+			membVO.setPath(null);
+		}
 		membService.signUpMemb(membVO);
 		
 		//// 주소 입력했을 경우
@@ -289,7 +292,7 @@ public class MemberController {
 	}
 	
 	
-	@ResponseBody
+	//@ResponseBody
 	@PostMapping("findIdSuccess")
 	public String findIdSuccessPage(@RequestParam String id, Model model) {
 		model.addAttribute("id", id);

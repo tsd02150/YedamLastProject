@@ -77,8 +77,18 @@
 /* 1.1. Typography
 ================================================== */
 @import url("https://fonts.googleapis.com/css?family=Barlow:300,400,700|Libre+Franklin:400,600,700|Poppins:400,600,700,800");
+@font-face {
+    font-family: 'SUITE-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+}
 body, p {
   /* font-family: "Libre Franklin", sans-serif; */
+<<<<<<< HEAD
+=======
+  font-family: 'SUITE-Regular';
+>>>>>>> branch 'main' of https://github.com/tsd02150/YedamLastProject.git
   line-height: 26px;
   font-size: 16px;
   text-rendering: optimizeLegibility;
@@ -89,7 +99,7 @@ body, p {
 h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
   color: #1c1c1c;
   font-weight: 700;
-  font-family: "Poppins", sans-serif;
+  font-family: 'SUITE-Regular';
   letter-spacing: -0.03em;
 }
 
@@ -313,14 +323,14 @@ blockquote {
   margin: 50px 0 40px;
   font-size: 22px;
   line-height: 34px;
-  font-family: Arimo, sans-serif;
+  font-family: 'SUITE-Regular';
   font-weight: 400;
   text-align: center;
 }
 blockquote:before {
   position: absolute;
   content: "\f10e";
-  font-family: FontAwesome;
+  font-family: 'SUITE-Regular';
   font-size: 24px;
   padding: 8px 15px;
   top: -30px;
@@ -393,7 +403,7 @@ blockquote.pull-left {
   line-height: 28px;
 }
 .list-round li:before {
-  font-family: FontAwesome;
+  font-family: 'SUITE-Regular';
   content: "\f138";
   margin-right: 10px;
   color: #dc3545;
@@ -405,14 +415,14 @@ blockquote.pull-left {
 }
 
 ul.list-arrow li:before {
-  font-family: FontAwesome;
+  font-family: 'SUITE-Regular';
   content: "\f105";
   margin-right: 10px;
   color: #dc3545;
   font-size: 16px;
 }
 ul.list-check li:before {
-  font-family: FontAwesome;
+  font-family:'SUITE-Regular';
   content: "\f00c";
   margin-right: 10px;
   color: #dc3545;
@@ -491,7 +501,7 @@ a[href^=tel] {
 }
 .breadcrumb > li + li:before {
   content: "\f105";
-  font-family: FontAwesome;
+  font-family: 'SUITE-Regular';
   padding: 0 8px;
   color: #777;
 }
@@ -611,7 +621,7 @@ a[href^=tel] {
   padding: 8px 15px;
   border-bottom: 1px solid #e5e5e5;
   color: #1c1c1c;
-  font-family: "Poppins", sans-serif;
+  font-family: 'SUITE-Regular';
   transition: all 0.3s ease;
 }
 .main-navbar .dropdown-menu .dropdown-item:last-child {
@@ -644,7 +654,7 @@ a[href^=tel] {
   background-color: #fff;
   color: #dc3545;
   font-size: 17px;
-  font-family: "Poppins", sans-serif;
+  font-family:'SUITE-Regular';
 }
 .site-search input:focus {
   outline: 0;
@@ -756,7 +766,7 @@ a[href^=tel] {
 	font-weight: 400;
 	color: rgb(255, 255, 255);
 	letter-spacing: 1px;
-	font-family: "Roboto Condensed";
+	font-family: 'SUITE-Regular';
 	border-color: rgb(255, 255, 255);
 	border-style: solid;
 	border-width: 2px;
@@ -783,7 +793,7 @@ a[href^=tel] {
 	font-weight: 400;
 	color: rgb(255, 255, 255);
 	letter-spacing: -2px;
-	font-family: "Playfair Display";
+	font-family: 'SUITE-Regular';
 	margin-bottom: 35px;
 }
 
@@ -973,7 +983,7 @@ a[href^=tel] {
 }
 
 .trending-news-slider .slick-prev:before, .trending-news-slider .slick-next:before {
-  font-family: FontAwesome;
+  font-family: 'SUITE-Regular';
   font-size: 13px;
   color: #fff;
   opacity: 1;
@@ -1069,7 +1079,7 @@ a.post-category.absolute {
   font-size: 14px;
 }
 .post-meta span {
-  font-family: "Poppins", sans-serif;
+  font-family: 'SUITE-Regular';
   margin-right: 8px;
   display: inline-block;
   color: #999;
@@ -1244,7 +1254,7 @@ a.post-category.absolute {
   padding: 0 15px 0px 0px;
 }
 .news-style-one-slide .slick-prev:before, .news-style-one-slide .slick-next:before {
-  font-family: FontAwesome;
+  font-family: 'SUITE-Regular';
   font-size: 13px;
   color: #999;
   opacity: 1;
@@ -1285,7 +1295,7 @@ a.post-category.absolute {
 }
 
 .post-slide .slick-prev:before, .post-slide .slick-next:before {
-  font-family: FontAwesome;
+  font-family: 'SUITE-Regular';
   font-size: 13px;
   color: #fff;
   opacity: 1;
@@ -1659,7 +1669,7 @@ a.post-category.absolute {
   background: #292931;
   color: #fff;
   font-size: 12px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'SUITE-Regular';
   padding: 5px 10px;
   border-radius: 2px;
 }
@@ -1969,7 +1979,7 @@ a.post-category.absolute {
 
 .newsletter-text {
   font-size: 16px;
-  font-family: "Poppins", sans-serif;
+  : "Poppins", sans-serif;
 }
 
 .newsletter-form button {
@@ -2038,7 +2048,7 @@ a.post-category.absolute {
   color: #292931;
 }
 .top-author .info li {
-  font-family: "Poppins", sans-serif;
+  font-family:'SUITE-Regular';
 }
 
 .job-item p {

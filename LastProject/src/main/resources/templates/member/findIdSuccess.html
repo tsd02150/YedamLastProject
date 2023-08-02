@@ -2,9 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout}">
-
 <head>
 <meta charset="UTF-8">
+<title>ToTheMooN - 아이디 찾기</title>
 <style>
 .login {
 	padding: 0;
@@ -61,11 +61,11 @@
 		$("#spanTxt").text(emailFormat);
 		
 		$("#subBtn").on("click",function(){
-			window.location.href = "/member/findpwd";
+			window.location.href = "/member/login";
 		})
 		
 		$("#findPwdBtn").on("click", function(){
-			window.location.href = "/member/login";
+			window.location.href = "/member/findpwd";
 		})
 	</script>
 	</section>
