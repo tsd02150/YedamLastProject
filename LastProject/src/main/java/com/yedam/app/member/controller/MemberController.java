@@ -83,13 +83,11 @@ public class MemberController {
 		session.removeAttribute("noAccess");
 		return "success";
 	}
-
-	
 	
 	@GetMapping("returnUrl")
 	@ResponseBody
 	public String returnUrl(HttpServletRequest request,HttpSession session) {
-		if(!((String)request.getHeader("referer")).equals("http://localhost/member/login")) {
+		if(!((String)request.getHeader("referer")).equals("http://43.202.20.221:83/member/login")) {
 			session.setAttribute("returnUrl", request.getHeader("referer"));
 			String temp = (String) session.getAttribute("returnUrl");
 			return temp;			

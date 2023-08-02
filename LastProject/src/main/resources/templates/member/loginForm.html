@@ -69,12 +69,12 @@ display : block;
 						  ---------------------------------------------------<br>
 						  <img id="naver" class="simple_login" th:src="|/member/images/naverbutton.png|">
 							  <p class="mt-5 mb-0"><a href="/member/findid" style="padding-right: 20px;">아이디찾기</a><a href="/member/findpwd">비밀번호 찾기</a></p>
-							  <p class="mt-5 mb-0">아직 회원이 아니세요? <a href="signup.html">회원가입</a></p>
+							  <p class="mt-5 mb-0">아직 회원이 아니세요? <a href="/member/join">회원가입</a></p>
 							</span>
 						</div>
 						<div class="col-md-12">
 							  <span th:if="${membNo != null}">
-						    <button class="btn btn-primary" type="submit">logout</button>
+						    <a href="/member/logout"><button class="btn btn-primary" type="submit">logout</button></a>
 						  </span>
                 </div>
 						</form>
