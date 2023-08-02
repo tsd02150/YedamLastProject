@@ -5,6 +5,7 @@
 
 <head>
 <meta charset="UTF-8">
+<title>ToTheMooN - 주식현황</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
@@ -498,7 +499,7 @@
 			  "buyNo" : dataNo
 		  },
 		  success : function(res){
-			  console.log(res);
+			  //console.log(res);
 			  $(target).parent().remove();
 			  toastShow("Delete","매수 주문 예약이 삭제되었습니다.","success");
 			  window.location.reload();
@@ -691,7 +692,7 @@ $.ajax({
 				$("#recombody").html(tr3);
 				   boxClass();
 			}else{
-				console.log("랜덤")
+				//console.log("랜덤")
 				$.ajax({
 				    url: "myItemCheck",
 				    success: function (data) {
@@ -702,7 +703,7 @@ $.ajax({
 			        let selectedData = randomData.slice(0, 25);
 
 			        selectedData.slice(0,10).forEach(function (el) {
-			        	console.log(el);
+			        	//console.log(el);
 			        	tr3 += `<tr data-no="${el.itemNo}">
 				             <td onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">${el.nm}</td>
 				             <td>${formatNumber(el.tprc)}</td>
@@ -791,7 +792,7 @@ function updateStartDate(period) {
             "endDate" : $("#dend").val()
 	        },
 	        success: function (data) {
-	        	console.log(data);
+	        	//console.log(data);
 	            $('#nextpage').css('visibility', 'hidden');
 	            $('#prevpage').css('visibility', 'hidden');
 	            totalCnt = data;
@@ -874,7 +875,7 @@ function updateStartDate(period) {
 	       endPage = 10;
 	     }
 	     createPageCntBtn(startPage, endPage);
-	     console.log(startPage, endPage);
+	     //console.log(startPage, endPage);
 	     pageMove(startPage);
 	   }
 	   
@@ -888,6 +889,7 @@ function updateStartDate(period) {
 	   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 	 }
 	</script>
+	</div>
 	</div>
 </body>
 
