@@ -449,8 +449,6 @@ document.querySelector('form').addEventListener('submit', (event) => {
        }
 
        // 우편번호와 주소 정보를 해당 필드에 넣는다.
-       console.log(data.zonecode);
-       console.log(fullRoadAddr);
 
        $("[name=addr1]").val(data.zonecode);
        $("[name=addr2]").val(fullRoadAddr);
@@ -492,9 +490,7 @@ document.querySelector('form').addEventListener('submit', (event) => {
 			},
 			success : function(data){
 				count1++;
-				console.log(data);
 				if(data != null && data != ""){
-					console.log(data.tel);
 					$("#telCheck").text("가입 이력이 있는 회원입니다. 다시 확인해주세요")
 						.css({
 							"color": "#FA3E3E",
@@ -503,7 +499,6 @@ document.querySelector('form').addEventListener('submit', (event) => {
 						});
 				}else {
 					testcode = createSmsKey();
-					console.log(testcode);
 					sendFunc();
 				 //sms 발송
 					/* $.ajax({
@@ -550,10 +545,9 @@ document.querySelector('form').addEventListener('submit', (event) => {
          method: "POST",
          data: {
            to: toUser,
-           content: "[SMS] 인증번호 [" + testcode + "]를 입력해주세요",
+           content: "[ToTheMooN] 인증번호 [" + testcode + "]를 입력해주세요",
          },
          success: function (response) {
-           console.log("key: " + testcode);
          },
          error: function (err) {
            console.log(err);
@@ -572,8 +566,6 @@ document.querySelector('form').addEventListener('submit', (event) => {
 				$("#mname").focus();
 				return;
 			}
-			console.log("인증번호 비교");
-			console.log(testcode);
 			
 			if($("#codeCheckInput").val() != testcode){
 				count2++;

@@ -767,6 +767,19 @@ function deleteMemb(){
 			$("#modalBtn").html(spanbtn);
 			$("#delModal").show();
 		}
+	}else{
+		message='';
+		spanbtn='';
+		message += `<strong>정말 탈퇴하시겠어요?</strong> <br>
+								탈퇴 시 계정은 삭제되며, <br>
+								복구되지 않습니다.<br>`;
+		spanbtn +=`
+			<span class="pop_bt span_bt" onClick="close_pop();">취소</span>
+			<span class="pop_bt span_bt" onclick="delAjax()">탈퇴하기</span>
+		`;
+		$("#modalTxt").html(message);
+		$("#modalBtn").html(spanbtn);
+		$("#delModal").show();
 	}
 }
 

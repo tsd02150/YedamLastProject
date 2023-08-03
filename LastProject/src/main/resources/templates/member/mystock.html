@@ -385,7 +385,7 @@
 					<td>${taPrc}</td>
 					<td>${el.stockCnt}</td>
 					<td>${fee}</td>
-					<td>${(el.stockCnt*el.taPrc-((el.stockCnt*el.taPrc)*0.1))}</td>
+					<td>${commas((el.stockCnt*el.taPrc-((el.stockCnt*el.taPrc)*0.1)))}</td>
 				</tr>
 				`;
 			});

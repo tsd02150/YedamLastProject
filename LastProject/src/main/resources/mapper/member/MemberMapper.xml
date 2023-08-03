@@ -712,8 +712,8 @@
 	
 	<select id="shipList" parameterType="ShippingVO">
 		select * from(
-			select * from(
-			select rownum rn, o.order_no, o.pay_an,o.order_am, o.order_dt,o.order_st,s.ship_st, d.cnt ,d.order_deta_no, d.prdt_no, p.nm,p.thumb,s.ship_no
+			select rownum rn, a.* from(
+			select o.order_no, o.pay_an,o.order_am, o.order_dt,o.order_st,s.ship_st, d.cnt ,d.order_deta_no, d.prdt_no, p.nm,p.thumb,s.ship_no
 			from orders o
 			join order_detail d
 			on o.order_no = d.order_no
@@ -732,7 +732,7 @@
 			and trunc(o.order_dt) between to_date(#{startDate}, 'yyyy/MM/dd') and to_date(#{endDate}, 'yyyy/MM/dd')
 			</if>
 			order by o.order_dt desc
-			)
+			) a
 	 	<![CDATA[
 			WHERE rownum <= (${page}*10)
 			)
