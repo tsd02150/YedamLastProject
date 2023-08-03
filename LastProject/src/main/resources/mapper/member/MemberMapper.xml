@@ -518,7 +518,7 @@
 	           AND kind = #{kind}
 	       </otherwise>
 	    </choose>
-	    AND trunc(TA_DT) BETWEEN to_date(#{startDate}) AND to_date(#{endDate})
+	    AND trunc(TA_DT) BETWEEN to_date(#{startDate}, 'yyyy/MM/dd') AND to_date(#{endDate}, 'yyyy/MM/dd')
 	    ORDER BY TA_DT DESC
 	</select>
 	
@@ -540,7 +540,7 @@
 	           AND kind = #{kind}
 	       </otherwise>
 	    </choose>
-	    AND trunc(TA_DT) BETWEEN to_date(#{startDate}) AND to_date(#{endDate})
+	    AND trunc(TA_DT) BETWEEN to_date(#{startDate}, 'yyyy/MM/dd') AND to_date(#{endDate}, 'yyyy/MM/dd')
 	    <![CDATA[
     		and rownum<=(${page}*10)
     		]]>
