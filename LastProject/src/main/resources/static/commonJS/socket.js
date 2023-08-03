@@ -13,8 +13,15 @@ $(document).ready(function(){
 	stompClient.onConnect = (frame) => {
 	    
 	    console.log('Connected: ' + frame);
-	    stompClient.subscribe('/stock/greetings', (greeting) => {
-	        showGreeting(JSON.parse(greeting.body).content); // 구독된 url 에서 넘어오는 메세지 처리
+	    stompClient.subscribe('/stock/close', (greeting) => {
+	    	console.log('zz')
+	        console.log(greeting.body);
+	        if(greeting.body == 'close' && window.location.pathname == '/stock/chart'){
+	        	// 주문 공간 막아버리기
+	        	$('#forNonlogin').css('filter','blur(5px)');
+				$('#CP1D2 .blur').css('filter','blur(5px)');
+	        	$('#CP1D2').append($('<div id="closeMarket"/>').html(`<h1>개장 전 입니다 .</h1>`));
+	        }
 	    });
 	    //알람 - empController 에서 보낸 알람
 	    stompClient.subscribe(destination, (greeting) => {

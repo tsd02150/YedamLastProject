@@ -64,7 +64,7 @@ public interface StockMapper {
 	// 장마감시 종목 당일 정보 넣기
 	public int insertItemInfo(ItemInfoVO vo);
 	//스케줄러 작업
-	public void deleteJob();
+	public void deleteJob(Map<String,Object> params);
 	// 조회수 증가
 	public int updateInq(String itemNo);
 	// 일일 차트

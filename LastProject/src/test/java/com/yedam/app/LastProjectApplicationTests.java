@@ -108,4 +108,9 @@ class LastProjectApplicationTests {
 		
 		
 	}
+	
+	@Test
+	public void sendTest() {
+		stockService.testSend();
+	}
 }

@@ -533,12 +533,12 @@
 			select i.item_no , 0 as vol ,cl_prc op_prc , cl_prc ,cl_prc l_prc ,cl_prc h_prc , f.inq 
             from item_info f join item i 
             on f.item_no = i.item_no
-            where substr(item_no,5) in(
+            where substr(f.item_no,5) in(
             <foreach collection="list" item="item" separator=",">
             	#{item}
             </foreach>
             )
-            to_char(ta_dt,'yyyy-MM-dd') =  to_char(sysdate-1,'yyyy-MM-dd')
+            and to_char(ta_dt,'yyyy-MM-dd') =  to_char(sysdate-1,'yyyy-MM-dd')
 	</select>
 	<!-- 장마감시 주가정보 넣기 -->
 	<insert id="insertItemInfo" parameterType="ItemInfoVO">
@@ -573,8 +573,8 @@
 	<select id="deleteJob" statementType="CALLABLE">
 		{
     	call deleteOrder_prod(    #{del_result, mode=OUT, jdbcType=VARCHAR}
-    							, #{error_one, mode=OUT, jdbcType=DATE}
-			    				, #{error_two, mode=OUT, jdbcType=INTEGER}
+    							, #{error_one, mode=OUT, jdbcType=VARCHAR}
+			    				, #{error_two, mode=OUT, jdbcType=VARCHAR}
 			    				, #{error_thr, mode=OUT, jdbcType=VARCHAR}
 			    				)}
 	</select>

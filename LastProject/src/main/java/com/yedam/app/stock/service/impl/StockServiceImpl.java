@@ -281,6 +281,8 @@ public class StockServiceImpl implements StockService {
 	
 	@Override
 	public void schedulerJob() {
+		closeMarket();
+		
 		// 당일 주가 정보
 		List<ItemInfoVO> talist = stockMapper.todayItemInfo();
 		
@@ -314,7 +316,16 @@ public class StockServiceImpl implements StockService {
 			stockMapper.insertItemInfo(vo);
 		}
 		// 초기화 ( 조회수초기화 , 수량 남은 주문 반환 )
-		//stockMapper.deleteJob();
+		Map<String,Object> map = new HashMap<>();
+		map.put("del_result", null);
+		map.put("error_one", null);
+		map.put("error_two", null);
+		map.put("error_thr", null);
+		
+		stockMapper.deleteJob(map);
+		System.out.println((String)map.get("error_one"));
+		System.out.println((String)map.get("error_two"));
+		System.out.println((String)map.get("error_thr"));
 	}
 	
 	// 조회수 증가
@@ -373,5 +384,15 @@ public class StockServiceImpl implements StockService {
 		return stockMapper.getClPrc(itemNo);
 	}
 	
-	
+	// 체결시 실시간 알람전송
+	public void closeMarket() {
+		System.out.println("close 시간입니다.");
+		this.template.convertAndSend("/stock/close", "close");
+	}
+
+	@Override
+	public void testSend() {
+		closeMarket();
+		
+	}
 }

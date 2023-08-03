@@ -40,4 +40,5 @@ public interface StockService {
 	public Integer getPoint(String membNo);
 	public List<StockVO> getPossList(String membNo);
 	public int getClPrc(String itemNo);
+	public void testSend();
 }
