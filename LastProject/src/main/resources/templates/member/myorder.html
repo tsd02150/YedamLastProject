@@ -155,6 +155,9 @@ cursor: pointer;
 .prdtTr td{
 	font-weight: bold;
 }
+.prdtTr td:nth-child(2){
+	padding-bottom: 25px;
+}
 .del-order-btn{
 	width : 90px;
 	height: 38px;
@@ -342,7 +345,7 @@ cursor: pointer;
 									${item.thumb}
 									</div>
 								</td>
-								<td><span class="high">${item.orderSt}</span>${item.nm}</td>
+								<td><span class="high">${item.orderSt}</span><br>${item.nm}</td>
 								<td class="goods_table_price_td">${cnt}</td>
 								<td class="goods_table_shipSt_td">${item.shipSt}</td>
 							</tr>
