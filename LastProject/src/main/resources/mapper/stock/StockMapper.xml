@@ -530,18 +530,15 @@
 	
 	<!-- 당일 체결되지 않은 종목은 전날 item_info 에서 가져오기  -->
 	<select id="nonTaInfo" resultType="ItemInfoVO" >
-	select item_no , vol , op_prc , cl_prc , l_prc , h_prc , inq 
-            from item_info
+			select i.item_no , 0 as vol ,cl_prc op_prc , cl_prc ,cl_prc l_prc ,cl_prc h_prc , f.inq 
+            from item_info f join item i 
+            on f.item_no = i.item_no
             where substr(item_no,5) in(
             <foreach collection="list" item="item" separator=",">
             	#{item}
             </foreach>
-            
             )
-            and to_char(ta_dt,'yyyy-MM-dd') = (
-                                                select to_char(max(ta_dt),'yyyy-MM-dd')
-                                                from item_info
-                                                )
+            to_char(ta_dt,'yyyy-MM-dd') =  to_char(sysdate-1,'yyyy-MM-dd')
 	</select>
 	<!-- 장마감시 주가정보 넣기 -->
 	<insert id="insertItemInfo" parameterType="ItemInfoVO">

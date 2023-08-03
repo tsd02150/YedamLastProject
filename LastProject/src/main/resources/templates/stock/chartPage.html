@@ -333,7 +333,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 .searchItem.interest{
 	height:47.5px;
-	width:85%;
+	width:80%;
 }
 </style>
 <title>To The Moon - chartPage</title>
@@ -593,6 +593,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 			$('#changeInput').on('click','#returnBtn',function(){
 				$('section').append($('#interestInput').toggleClass('d-none'));
+				$('.searchItem.interest').val('');
 				let html = `<h3>
 								관심종목
 								<button class="btn btn-danger" id="myBtn">+</button>
@@ -911,6 +912,16 @@ input[type="number"]::-webkit-inner-spin-button {
 				$('#actualPrc').text((Number(total) + Math.floor((total*0.1))).toLocaleString('ko-KR'));
 			})
 			
+			//모든값 초기화
+			function resetData(){
+				$('#stockPrc').val(0);
+				$('#stockCnt').val(0);
+				$('#afford').val($('#possStockCnt').text());
+				$('#totalPrc').text(0);
+				$('#charge').text(0);
+				$('#actualPrc').text(0);
+			}
+			
 			//주문버튼 기능
 			$('#stockOrderBtn').on('click',function(){
 				
@@ -958,6 +969,7 @@ input[type="number"]::-webkit-inner-spin-button {
 						success:function(data){
 							if(data.code =='success'){	
 								if(orderType == 'buy'){
+									
 									toastShow('주문 완료',data.message ,'success');
 									let rate = data.possStock.rate > 0 ? "+ "+data.possStock.rate : data.possStock.rate;
 				  					let rateClass = data.possStock.cnt == 0 ? '' : (data.possStock.cnt > 0 ? 'plus' : 'minus');
@@ -965,7 +977,7 @@ input[type="number"]::-webkit-inner-spin-button {
 				  					$('#CP2D22 div p:nth-of-type(3) span').text(rate).addClass(rateClass);
 				  					$('#CP2D22 div p:nth-of-type(4)').attr('data-point',data.possStock.point);
 				  					$('#CP2D22 div p:nth-of-type(4) span').text(data.possStock.point.toLocaleString('ko-KR') + ' point');
-				  					
+				  					resetData();
 				  					// 변경된 포인트에 맞춰 구매가능주수 변경설정
 				  					$('#afford').val(Math.floor(data.possStock.point/stockPrc));
 								}else if (orderType == 'sell'){
@@ -976,7 +988,7 @@ input[type="number"]::-webkit-inner-spin-button {
 				  					$('#CP2D22 div p:nth-of-type(3) span').text(rate).addClass(rateClass);
 				  					$('#CP2D22 div p:nth-of-type(4)').attr('data-point',data.possStock.point);
 				  					$('#CP2D22 div p:nth-of-type(4) span').text(data.possStock.point.toLocaleString('ko-KR') + ' point');
-				  					
+				  					resetData();
 				  					//변경된 주식수량에 맞춰 판매가능주수 변경설정
 				  					$('#afford').val(data.possStock.cnt);
 								}

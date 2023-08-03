@@ -9,9 +9,24 @@
 <body>
 	<div layout:fragment="content">
 	<h3> 채팅 로그</h3>
+	<div class="btn-group m-2" role="group" aria-label="Basic outlined example">
+	  <button id="xlsxBtn" type="button" class="btn btn-outline-primary">xlsx</button>
+	  <button id="csvBtn" type="button" class="btn btn-outline-primary">csv</button>
+	  <button id="textBtn" type="button" class="btn btn-outline-primary">text</button>
+	</div>
 		<div id="grid"></div>
 		
 		<script th:inline="javascript">
+		$('.btn-group').on('click','button',function(){
+			if($(this).text() == 'xlsx'){
+				grid.export('xlsx',options);
+			}else if($(this).text() == 'csv'){
+				grid.export('csv',options);
+			}else if($(this).text() == 'text'){
+				grid.export('text',options);
+			}
+		});
+		
 		let roomList = [[${roomList}]]?.length;
 		if(roomList == 'undefined'){
 			roomList = [];
@@ -29,17 +44,22 @@
 	    			}
 	    		  }
 	    		};
-	      
+		const options = {
+				  includeHiddenColumns: true,
+				  onlySelected: true,
+				};
+		
         const grid = new tui.Grid({
              el: document.getElementById('grid'),
-             rowHeaders: ['rowNum','checkbox'],
+             rowHeaders: ['rowNum'],
              data:dataSource,
              scrollX: false,
              scrollY: false,
-   		  	 pageOptions: {
-   		  		 useClient:true,
-                 perPage: 10,
-               },
+             bodyHeight: 500,
+             pageOptions: {
+            	 type: 'scroll', 
+            	    perPage: 50 
+            	  },
              columns: [
             	   {
                      header: '채팅번호',
@@ -78,7 +98,12 @@
                       name:'drwupDt',
                       sortingType: 'asc',
                       sortable: true,
-                      width:150
+                      width:150,
+                      filter:{
+                    	  type:'date',
+                    	  showApplyBtn: true,
+                          showClearBtn: true
+                      }
                     }
                  ],
                  columnOptions: {

@@ -27,6 +27,7 @@
   		  console.log(checkedRows)
       	    if (checkedRows.length > 0) {
   	      // 선택된 행이 존재하는 경우에만 삭제 요청을 보냅니다.
+  	      const rowkeys = checkedRows.map(row => row.rowKey);
   	      const members = checkedRows.map(row => row.membNo); // 선택된 행의 rowKey를 추출합니다.
     	  
     	  Swal.fire({
@@ -57,9 +58,8 @@
           		    		
           		    		$.ajax('/admin/memberBan?list='+members+'&period='+period).done(function(data){
           		    			if(data > 0){
-          		    				let rowKeys = checkedRows.map(row => row.rowKey);
-          	    		    		for(let i of rowKeys){
-          	    		    			$('td[data-row-key='+i+'][data-column-name=state]').children(0).text('활동정지');
+          	    		    		for(let i of rowkeys){
+          	    		    			grid.setValue(i, 'state', '활동정지');
           	    		    		}
           		    				Swal.fire(checkedRows.length + ' 명 회원 '+ result.value+' 일 정지 성공')
           		    			}else{
@@ -81,9 +81,8 @@
     		    	console.log(data)
     		    	if(data > 0){
     		    		Swal.fire('정지가 해제되었습니다');
-    		    		let rowKeys = checkedRows.map(row => row.rowKey);
-    		    		for(let i of rowKeys){
-    		    			$('td[data-row-key='+i+'][data-column-name=state]').children(0).text('정상');
+    		    		for(let i of rowkeys){
+    		    			grid.setValue(i, 'state', '정상');
     		    		}
     		    	}else{
     		    		Swal.fire('정지 해제 실패');

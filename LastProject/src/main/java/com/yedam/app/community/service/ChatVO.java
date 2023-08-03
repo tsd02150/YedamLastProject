@@ -12,8 +12,8 @@ import lombok.Data;
 public class ChatVO {
 	private String chatNo;
 	private String cntn;
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	@DateTimeFormat(pattern = "yyyy/MM/dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd", timezone = "Asia/Seoul")
 	private Date drwupDt;
 	private String roomNo;
 	private String anonNick;
