@@ -421,20 +421,21 @@
         </otherwise>
     </choose>
      <if test="startDate != null and endDate != null">
-    		AND trunc(order_dt) BETWEEN to_date(#{startDate}) AND to_date(#{endDate})
+    		AND trunc(order_dt) BETWEEN to_date(#{startDate},'yyyy-MM-dd') AND to_date(#{endDate},'yyyy-MM-dd')
     </if>
     <if test="startDate != null and endDate == null">
-        AND trunc(order_dt) BETWEEN to_date(#{startDate}) AND CURRENT_DATE
+        AND trunc(order_dt) BETWEEN to_date(#{startDate},'yyyy-MM-dd') AND CURRENT_DATE
     </if>
     <if test="startDate == null and endDate != null">
-        AND trunc(order_dt) BETWEEN (SELECT MIN(order_dt) FROM a) AND to_date(#{endDate})
+        AND trunc(order_dt) BETWEEN (SELECT MIN(order_dt) FROM a) AND to_date(#{endDate},'yyyy-MM-dd')
     </if>
     ORDER BY trunc(order_dt) DESC
 </select>
 
 	<select id="dealList" parameterType="DealVO">
 		SELECT * FROM (
-    SELECT rownum rn, tablename, order_no, memb_no, order_dt, order_am as point, s.item_no, s.nm
+		SELECT rownum rn, a.* FROM (
+    SELECT tablename, order_no, memb_no, order_dt, order_am as point, s.item_no, s.nm
     FROM (
         SELECT '매도' AS tablename, ta_no  AS order_no, buy_memb_no as memb_no,ta_dt AS order_dt, (-1*stock_cnt * ta_prc)  AS order_am, item_no, nm
         FROM ta_hr join item 
@@ -471,19 +472,21 @@
         </otherwise>
     </choose>
      <if test="startDate != null and endDate != null">
-    		AND trunc(order_dt) BETWEEN to_date(#{startDate}) AND to_date(#{endDate})
+    		AND trunc(order_dt) BETWEEN to_date(#{startDate},'yyyy-MM-dd') AND to_date(#{endDate},'yyyy-MM-dd')
     </if>
     <if test="startDate != null and endDate == null">
-        AND trunc(order_dt) BETWEEN to_date(#{startDate}) AND CURRENT_DATE
+        AND trunc(order_dt) BETWEEN to_date(#{startDate},'yyyy-MM-dd') AND CURRENT_DATE
     </if>
     <if test="startDate == null and endDate != null">
-        AND trunc(order_dt) BETWEEN (SELECT MIN(order_dt) FROM a) AND to_date(#{endDate})
+        AND trunc(order_dt) BETWEEN (SELECT MIN(order_dt) FROM a) AND to_date(#{endDate},'yyyy-MM-dd')
     </if>
-    <![CDATA[
-    		and rownum<=(${page}*10)
-    		]]>
+    
     ORDER BY trunc(order_dt) DESC
     ) a
+    <![CDATA[
+    		where rownum<=(${page}*10)
+    		]]>
+    )
     WHERE rn > (${page}-1)*10
 </select>
 
@@ -518,13 +521,14 @@
 	           AND kind = #{kind}
 	       </otherwise>
 	    </choose>
-	    AND trunc(TA_DT) BETWEEN to_date(#{startDate}) AND to_date(#{endDate})
+	    AND trunc(TA_DT) BETWEEN to_date(#{startDate},'yyyy-MM-dd') AND to_date(#{endDate},'yyyy-MM-dd')
 	    ORDER BY TA_DT DESC
 	</select>
 	
 	<select id="buysellList" parameterType="DealVO">
 		SELECT * FROM(
-			SELECT rownum rn, a.* FROM(
+		SELECT rownum rn, b.* FROM(
+			SELECT a.* FROM(
 				SELECT t.TA_NO, t.STOCK_CNT, t.TA_PRC, t.TA_DT, t.BUY_MEMB_NO AS MEMB_NO, 'B' AS kind, i.ITEM_NO, i.NM TNM
 			FROM ta_hr t join item i on t.item_no = i.item_no
 			UNION ALL
@@ -540,11 +544,12 @@
 	           AND kind = #{kind}
 	       </otherwise>
 	    </choose>
-	    AND trunc(TA_DT) BETWEEN to_date(#{startDate}) AND to_date(#{endDate})
+	    AND trunc(TA_DT) BETWEEN to_date(#{startDate},'yyyy-MM-dd') AND to_date(#{endDate},'yyyy-MM-dd')
+	    ORDER BY TA_DT DESC)b
 	    <![CDATA[
-    		and rownum<=(${page}*10)
+    		where rownum<=(${page}*10)
     		]]>
-	    ORDER BY TA_DT DESC)
+	    )
     WHERE rn > (${page}-1)*10
 	</select>
 

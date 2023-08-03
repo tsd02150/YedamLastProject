@@ -226,7 +226,7 @@ padding-top : 40px;
 	      })
 	      }else{
 	    	  tr2 +=`<tr class="noOrder">
-		    		<td colspan="5"><h4>매수 주문 예약이 없습니다.</h4><br>
+		    		<td colspan="5"><h4>매도 주문 예약이 없습니다.</h4><br>
 		    		<a onclick="location.href='/stock/itemListPage'"><button class="btn btn-primary">주식페이지로 이동</button></a></td>
 		    		</tr>
 		    		`;
@@ -433,6 +433,7 @@ padding-top : 40px;
 	      if (res == 1) {
 	        $(target).closest("tr").remove(); 
 	        toastShow("Delete", "매수 주문 예약이 삭제되었습니다.", "success");
+	        buyOrder();
 	      }
 	    },
 	    error: function (err) {
@@ -456,6 +457,7 @@ padding-top : 40px;
 			  success : function(res){
 				  $(target).closest("tr").remove(); 
 				  toastShow("Delete","매도 주문 예약이 삭제되었습니다.","success");
+				  sellOrder();
 			  },
 			  error : function(err){
 				  console.log(err);
@@ -497,11 +499,11 @@ function myRaiseList(){
 		          ranges: [{
 		            from: 0,
 		            to: 100,
-		            color: '#E00B1E'
+		            color: '#F15B46'
 		          }, {
 		            from: -100,
 		            to: 0,
-		            color: '#2D3FE5'
+		            color: '#7094FF'
 		          }]
 		        },
 		        columnWidth: '50%',

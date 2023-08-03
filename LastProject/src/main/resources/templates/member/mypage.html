@@ -52,7 +52,7 @@
 	height: 120px;
 	border: 1px solid #dddddd;
 	display: inline-block;
-	padding: 15px 10px 15px 10px;
+	padding: 10px;
 	margin: 15px;
 }
 
@@ -327,12 +327,15 @@ $.ajax({
 	        console.log(el);
 	        let orderDt = new Date(el.orderDt); // 날짜 객체 생성
 	        let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
+	        let pnm = el.nm
+	        let nm= pnm.slice(0,10)+'...';
+	        console.log(nm)
 	        var orderAm = commas(el.orderAm); 
 	        prd += `
 	          <div class="orderDiv">
 	            <p class="orderDt">${formattedDt}</p>
 	            <p class="prdtimg" data-no="${el.prdtNo}">${el.thumb}</p> 
-	            <p class="prdtnm" data-no="${el.prdtNo}">${el.nm}</p>
+	            <p class="prdtnm" data-no="${el.prdtNo}">${nm}</p>
 	            <p class="orderAm">${orderAm} P</p>
 	          </div>`;
 	      });

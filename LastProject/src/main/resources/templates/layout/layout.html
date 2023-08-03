@@ -338,7 +338,7 @@
 	if (msg !== null && msg !== "") {
 	    toastShow(msg, "접근권한", "error");
 	    setTimeout(() => {
-	        fetch('/member/removeNoAccess', {
+	        fetch('http://43.202.20.221:83/member/removeNoAccess', {
 	            method: 'POST',
 	            credentials: 'same-origin', // 세션 쿠키를 전송하기 위해 필요한 옵션
 	            headers: {
@@ -347,15 +347,11 @@
 	            body: JSON.stringify({ key: 'noAccess' }),
 	        }).then((response) => {
 	            // 삭제가 성공하면, 세션의 'noAccess' 속성이 삭제됩니다.
-	            if(response == "success"){
-	            console.log('noAccess 속성 삭제됨.');
-	            }else{
-	            console.log('fail');
-	            }
+	           console.log(response)
 	        }).catch((error) => {
 	            console.error('noAccess 속성 삭제 실패:', error);
 	        });
-	    }, 5000);
+	    }, 3000);
 	}
 </script>
 </body>
