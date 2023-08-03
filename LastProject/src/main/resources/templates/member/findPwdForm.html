@@ -141,9 +141,6 @@ input[type=number] {
 		    return;
 		  }
 
-		  console.log($("#telInput").val());
-		  console.log($("#mname").val());
-
 		  toUser = $("#telInput")
 		    .val()
 		    .replace(/[^0-9]/g, "")
@@ -160,7 +157,6 @@ input[type=number] {
 		    success: function (data) {
 		      count1++;
 		      if(data == null && data == ""){
-		        console.log(data.tel);
 		        $("#telCheck")
 		          .text("가입 정보가 없습니다. 입력정보가 맞는지 다시 확인해주세요.")
 		          .css({
@@ -170,7 +166,6 @@ input[type=number] {
 		          });
 		      } else {
 		    	  testcode = createSmsKey();
-				  	console.log(testcode);
 				  	sendFunc();
 		        /*   // sms 발송 끝/ */
 		     		
@@ -203,10 +198,10 @@ input[type=number] {
 	          method: "POST",
 	          data: {
 	            to: toUser,
-	            content: "[SMS] 인증번호 [" + testcode + "]를 입력해주세요",
+	            content: "[ToTheMooN] 인증번호 [" + testcode + "]를 입력해주세요",
 	          },
 	          success: function (response) {
-	            console.log("key: " + testcode);
+	            //console.log("key: " + testcode);
 	          },
 	          error: function (err) {
 	            console.log(err);
@@ -224,8 +219,6 @@ input[type=number] {
 					$("#mname").focus();
 					return;
 				}
-				console.log("인증번호 비교");
-				console.log(testcode);
 				
 				if($("#codeCheckInput").val() != testcode){
 					count2++;
@@ -313,7 +306,7 @@ input[type=number] {
 						"id": $("#loginemail").val()
 					},
 					success: function (data) {
-						console.log("임시비밀번호: " + data);
+						//console.log("임시비밀번호: " + data);
 						
 						// 이메일 전송 완료 페이지 호출
 						document.getElementById('frm').submit();

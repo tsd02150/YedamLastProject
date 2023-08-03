@@ -132,12 +132,7 @@
 				$("#mname").focus();
 				return;
 			}
-			console.log($("#telInput").val());
-			console.log($("#mname").val());
-			
 			toUser = telInput.value.replace(/[^0-9]/g, '').replace(/^(\d{3})(\d{4})(\d{4})$/, '$1$2$3');
-			
-			//console.log(testcode);
 			
 			$.ajax({
 				url : "getMemberTel",
@@ -149,7 +144,6 @@
 				success : function(data){
 					count1++;
 					if(data == null && data == ""){
-						console.log(data.tel);
 						$("#telCheck").text("가입 정보가 없습니다. 입력정보가 맞는지 다시 확인해주세요.")
 							.css({
 								"color": "#FA3E3E",
@@ -158,7 +152,7 @@
 							});
 					}else {
 						testcode = createSmsKey();
-						console.log(testcode);
+						//console.log(testcode);
 						sendFunc();
 					  /* $.ajax({
 						    url: "sendSms",
@@ -200,10 +194,10 @@
 	          method: "POST",
 	          data: {
 	            to: toUser,
-	            content: "[SMS] 인증번호 [" + testcode + "]를 입력해주세요",
+	            content: "[ToTheMooN] 인증번호 [" + testcode + "]를 입력해주세요",
 	          },
 	          success: function (response) {
-	            console.log("key: " + testcode);
+	            //console.log("key: " + testcode);
 	          },
 	          error: function (err) {
 	            console.log(err);
@@ -295,8 +289,6 @@
 		      nm: $("#mname").val()
 				},
 				success : function(data){
-					console.log(data.id);
-					//let successUrl = "/member/findIdSuccess?id=" + encodeURI(data.id);
 					$.ajax({
 						type: "POST",
 			        url: "/member/getMemberTel",
@@ -305,8 +297,6 @@
 								"nm": $("#mname").val()
 							},
 			        success: function(data) {
-			        	//console.log("아이디 페이지 호출 완료");
-			        	//console.log(data.id);
 			        	
 								// 아이디찾기 완료 페이지 호출
 								document.getElementById('frm').submit();
