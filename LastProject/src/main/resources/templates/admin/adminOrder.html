@@ -24,7 +24,6 @@
 			</div>
 		</div>
 
-
 		<script>
 		let editor;
 		// 주문 상태 업데이트 버튼 클릭 이벤트 핸들러 변경
@@ -163,7 +162,7 @@
                 name: 'orderSt',
                 filter: 'select', // Dropdown Filter로 설정
                 filterOptions: {
-                  listItems: ['상품준비중', '배송완료', '주문취소', '환불', '배송중']
+                  listItems: ['상품준비중', '배송완료', '배송중']
                 },
                   editor:{
                  	 type:'select',
@@ -176,14 +175,6 @@
                  			 {
                  				 text:'배송완료' ,
                  				 value:'배송완료'
-                 			 },
-                 			 {
-                 				 text:'주문취소' ,
-                 				 value:'주문취소'
-                 			 },
-                 			 {
-                 				 text:'환불' ,
-                 				 value:'환불'
                  			 },
                  			 {
                  				 text:'배송중' ,
