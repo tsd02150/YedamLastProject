@@ -174,6 +174,8 @@
         					data : formData
         				})
         				.done(function(result){
+        					grid.reloadData();
+        					Swal.fire('작성');
 				for(let del of delList){
 					fetch("/community/deleteAttach",{
 						method: "POST",
@@ -203,14 +205,14 @@
 						success:function(result){
 							// 알림 띄울 부분;
 							grid.reloadData();
-							toastShow("Attach File Fail" , "첨부 성공" , "success");
+							toastShow("Attach File success" , "첨부 성공" , "success");
 						},
 						error:function(reject){
 							toastShow("Attach File Fail" , "첨부 실패" , "error");
 						}
 					});	
 				}else{
-					grid.reloadData();
+					
 					toastShow("add Notice" , "등록 성공" , "success");
 				}
 			})

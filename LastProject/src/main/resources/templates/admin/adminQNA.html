@@ -45,6 +45,7 @@
 		<script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0/jquery.serialize-object.min.js"></script>
 		<script>
+		let editor;
 		$('#faqWriteBtn').on('click',function(){
 			Swal.fire({
 				title:'faq 작성',
@@ -187,7 +188,7 @@
 	      	  }
 		});
 		
-		 	let editor;
+		 	
 			const faqDataSource = {
 		    		  contentType: 'application/json',
 		    		  api: {
@@ -326,8 +327,8 @@
 						    	  if(response.code == 'success'){
 						    	  let inputValue = $('#writeFaqTtl').val();
 						    	  let selectValue = $('#faqCategory').val();
-					    	  $('td[data-row-key='+ev.rowKey+'][data-column-name=ttl]').children(0).text(inputValue);
-					    	  $('td[data-row-key='+ev.rowKey+'][data-column-name=category]').children(0).text(selectValue);
+						    	  faqGrid.setValue(ev.rowKey , 'ttl',inputValue);
+						    	  faqGrid.setValue(ev.rowKey , 'category',selectValue);
 						        return response;
 						    		  
 						    	  }else if (response.code == 'fail'){
@@ -345,8 +346,10 @@
 	        		})
 	        		.then((result) => {	
 	        			console.log(result);
-	        			if(result.isConfirmed){
-	        				// 수정 기능
+	        			let code = result.value == null? 'fail' : result.value.code;
+	        			if(code == 'success'){
+	        				// 수정 기능 성공
+	        				Swal.fire('수정 완료');
 	        			}else if(result.isDenied){
 	        				// 삭제 기능z
 	        				Swal.fire({
@@ -564,8 +567,9 @@
 		        		})
 		        		.then((result) => {	
 		        			console.log(result);
-		        			if(result.isConfirmed){
-		        				// 수정 기능
+		        			let code = result.value == null? 'fail' : result.value.code;
+		        			if(code == 'success'){
+		        				Swal.fire('답변완료');
 		        			}else if(result.isDenied){
 		        				// 삭제 기능z
 		        				Swal.fire({

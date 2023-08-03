@@ -333,7 +333,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 .searchItem.interest{
 	height:47.5px;
-	width:85%;
+	width:80%;
 }
 </style>
 <title>To The Moon - chartPage</title>
@@ -593,6 +593,7 @@ input[type="number"]::-webkit-inner-spin-button {
 
 			$('#changeInput').on('click','#returnBtn',function(){
 				$('section').append($('#interestInput').toggleClass('d-none'));
+				$('.searchItem.interest').val('');
 				let html = `<h3>
 								관심종목
 								<button class="btn btn-danger" id="myBtn">+</button>

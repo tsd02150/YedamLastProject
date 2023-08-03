@@ -141,6 +141,7 @@ function addInterest(itemNumber) {
     method: "post",
     data: { membNo: membinfo, itemNo: iteminfo },
     success: function (data) {
+    	$('.searchItem.interest').val('');
     	if(data.code == 'success'){
     		  toastShow("관심종목 추가" , data.msg , "success");
     		  let html='';
