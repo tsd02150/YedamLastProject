@@ -207,6 +207,7 @@ th {
 	height: 80px;
 	background-color: #f2f2f2;
 	margin-right: 10px;
+	
 }
 
 .info {
@@ -370,6 +371,11 @@ th {
 p>img {
 	width: 100px;
 	height: 100px;
+}
+
+
+.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred {
+    height: 300px;
 }
 
 </style>
@@ -603,7 +609,7 @@ p>img {
 				<div style="display: flex;"	 class="pic" th:each="prdt : ${getFarm}">
 					<img id="modal-img" th:utext="${prdt.thumb}">
 					<span
-						style="margin-left: 10px; display:flex;" th:text="${prdt.nm}"></span>
+						style="margin-left: 10px; " th:text="${prdt.nm}"></span>
 					
 				</div>
 

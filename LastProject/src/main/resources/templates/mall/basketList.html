@@ -221,7 +221,6 @@
 	</div>
 
 		<script th:inline="javascript">
-		
 
 		/* top 버튼 */
 	document.querySelector('.top-btn').addEventListener('click', function() {
@@ -230,7 +229,6 @@
 	        behavior: 'smooth'
 	    });
 	});
-	
 	
 		
 		/* 수량버튼 */
@@ -412,13 +410,6 @@
 	// 최종 가격(총 가격 + 배송비)
 	$(".finalTotalPrice_span").text(finalTotalPrice.toLocaleString());		
 	
-
-	/* 체크여부에따른 종합 정보 변화 */
-	$(".individual_cart_checkbox").on("change", function(){
-		/* 총 주문 정보 세팅(배송비, 총 가격, 마일리지, 물품 수, 종류) */
-		setTotalInfo($(".cart_info_td"));
-	});
-
 		
 	//주문페이지 이동
 	function directOrder() {
@@ -427,10 +418,15 @@
   window.location.href = "/mall/orderList";
 
 }
+	
+	
 	/* 체크박스 전체 선택 */
-	$(".all_check_input").on("click", function() {
+	/* $(".all_check_input").on("click", function() {
 	  // 전체 체크박스 상태 확인
 	  const isChecked = $(this).prop("checked");
+	  console.log(isChecked);
+	  
+	  $(".totalPrice_span").text(totalPrice.toLocaleString());
 
 	  // 각 개별 체크박스의 상태 변경
 	  $(".individual_cart_checkbox").prop("checked", isChecked);
@@ -439,6 +435,11 @@
 	  setTotalInfo($(".cart_info_td"));
 	});
 	
+	/* 체크여부에따른 종합 정보 변화 */
+/* 	$(".individual_cart_checkbox").on("change", function(){
+		setTotalInfo($(".cart_info_td"));
+	}); */ 
+
 	
 	</script>
 	</div>
