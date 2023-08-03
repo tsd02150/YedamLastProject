@@ -158,49 +158,9 @@
               {
                 header: '주문상태',
                 name: 'orderSt',
-                filter: 'select', // Dropdown Filter로 설정
-                filterOptions: {
-                  listItems: ['상품준비중', '배송완료', '배송중']
+                filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
                 },
-                  editor:{
-                 	 type:'select',
-                 	 options:{
-                 		 listItems:[
-                 			 {
-                 				 text:'상품준비중' ,
-                 				 value:'상품준비중'
-                 			 },
-                 			 {
-                 				 text:'배송완료' ,
-                 				 value:'배송완료'
-                 			 },
-                 			 {
-                 				 text:'배송중' ,
-                 				 value:'배송중'
-                 			 },
-                 		 ]
-                 	 }
-                  },
-                  
-                  onAfterChange(ev) {
-               	  console.log(ev)
-               	   if(ev.value != '정상'){
-               	  //ajax 추가
-               	  
-               	   }else {
-               		   let list = [$('td[data-row-key='+ev.rowKey+'][data-column-name=orderNo]').children(0).text()];
-      		    		   let orderNm = $('td[data-row-key='+ev.rowKey+'][data-column-name=nm]').children(0).text();
-      		    		   
-               		   $.ajax('orderStUpdate?list='+list).done(function(data){
-               			   if(data > 0){
-               				   Swal.fire(orderNm +' 회원의 정지상태가 해제되었습니다.');
-               			   }else{
-               				   Swal.fire('정지해제 실패..')
-               			   }
-               		   })
-               	   }
-                 }
-              },
+                
               {
                 header: '주문일시',
                 name: 'orderDt',
