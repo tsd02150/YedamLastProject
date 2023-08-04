@@ -390,7 +390,7 @@ cursor: pointer;
 			},
 			success : function(data){
 				data.forEach(el=>{
-					//console.log(el);
+					console.log(el);
 					let orderDt = new Date(el.orderDt);
 		    	let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
 					div+= `
@@ -404,7 +404,7 @@ cursor: pointer;
 						<td>
 						<p class="high">${el.shipSt}</p> 
 						<strong>${el.nm}</strong><br>
-						${commas(el.cnt)}원
+						${commas(el.orderAm)}원
 						<br>
 						<br>
 						<h4>배송지 정보</h4>
