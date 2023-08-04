@@ -785,6 +785,8 @@ function deleteMemb(){
 
 //회원탈퇴
 function delAjax(){
+	console.log("회원탈퇴");
+	console.log(membNo);
 	$.ajax({
 		url : "deleteMemb",
 		method : "POST",

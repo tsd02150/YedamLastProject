@@ -479,6 +479,7 @@ function myRaiseList(){
 				console.log(el);
 				let chartDate = el.dt
 				chartArr1.push(chartDate)
+				console.log(chartDate)
 				
 				let chartData = el.raise
 				chartArr2.push(chartData)
@@ -526,7 +527,8 @@ function myRaiseList(){
 		      type: 'datetime',
 		      categories: chartArr1,
 		      labels: {
-		        rotate: -90
+		        rotate: -90,
+		        format: 'yyyy-MM-dd'
 		      }
 		    }
 		    };

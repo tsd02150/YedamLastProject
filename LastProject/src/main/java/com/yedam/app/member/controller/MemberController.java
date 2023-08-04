@@ -483,13 +483,18 @@ public class MemberController {
 	    
 	    //주소 등록
 	    AddrVO addrInfo = new AddrVO();
-	    addrInfo.setZip(zip);
-	    addrInfo.setAddr(addr);
-	    addrInfo.setDetaAddr(detaAddr);
-	    addrInfo.setMembNo(mem.getMembNo());
+	    if(zip != "" && addr != "" && detaAddr != "") {
+	   	    addrInfo.setZip(zip);
+	    	addrInfo.setAddr(addr);
+	    	addrInfo.setDetaAddr(detaAddr);
+	    	addrInfo.setMembNo(mem.getMembNo());
+
+	    	membService.insertAddr(addrInfo);
+	    	System.out.println("주소등록");
+	    	System.out.println(membService.insertAddr(addrInfo));
+	    }
 	    
 	    membService.updateMemberInfo(membVO);
-	    membService.insertAddr(addrInfo);
 
 	    //수정한 정보 다시 세션에 저장
 	    MembVO list = membService.memberList(id);
@@ -794,6 +799,8 @@ public class MemberController {
 	public int updateShip(ShippingVO vo, HttpSession session ) {
 		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 		int result = membService.updateShip(vo);
+		System.out.println("배송 수정");
+		System.out.println(membService.updateShip(vo));
 		return result;
 	}
 	
