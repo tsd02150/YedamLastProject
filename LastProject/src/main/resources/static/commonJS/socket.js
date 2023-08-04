@@ -1,5 +1,5 @@
 const stompClient = new StompJs.Client({
-    brokerURL: 'ws://localhost:80/socketserver' // 서버연결
+    brokerURL: 'ws://43.202.20.221:83/socketserver' // 서버연결
 });
 
 $(document).ready(function(){
@@ -94,6 +94,9 @@ function showChat(chat) {
 		`;	
 	}
     $("#chatSpace").append(chatContent);
+    if($("#chatSpace").children().length>50){
+    	$("#chatSpace").children().eq(0).remove();
+    }
 }
 
 function sendChat() {
