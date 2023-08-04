@@ -28,7 +28,6 @@
 	width: 50%;
 	height: 500px;
 	padding: 0px;
-	/* border: 1px solid; */
 }
 
 #prdt-img {
@@ -298,10 +297,10 @@ th {
 
 /* 상세정보 */
 #prdt-info {
-	border: 1px solid #e0e0e0;
 	background-color: #f9f9f9;
 	padding: 30px;
 	text-align: left; /* 텍스트를 왼쪽 정렬 */
+	color: black;
 }
 
 #prdt-info table {
@@ -436,43 +435,45 @@ p>img {
 			</section>
 
 			<section id="prdt-info" th:each="prdt : ${getFarm}">
-				<h1 th:text="${prdt.nm}" style="font-family: inherit;"></h1>
+				<h1 th:text="${prdt.nm}"
+					style="font-family: inherit; font-size: 30px;"></h1>
 				<div>&nbsp;</div>
 				<div>
 					<span class="real_price inline-blocked"
-						style="margin-right: 2px; font-size: 18px;"
-						th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + 'P'"></span>
+						style="margin-right: 2px; font-size: 18px; color: red; font-weight: bold;"
+						th:text="${#numbers.formatInteger(prdt.prc - (prdt.prc * (prdt.dcRate / 100.0)), 0, 'COMMA')} +' P'"></span>
 					<span class="sale_price body_font_color_50"
 						style="text-decoration: line-through; font-style: italic; font-size: 14px;"
-						th:text="${prdt.prc} + 'P'"> </span>
+						th:text="${#numbers.formatInteger(prdt.prc ,0,'COMMA')} +' P'"></span>
 				</div>
 				<div>&nbsp;</div>
 				<div style="box-shadow: 0 1px 0 #C8C8C8;">
-					<span>배송비</span> <span>10,000P 이상 결제 시 무료배송</span>
+					<span>배송비</span> <span>10,000 P 이상 결제 시 무료배송</span>
 					<div>&nbsp;</div>
 				</div>
 				<div>&nbsp;</div>
-		
-					<div class="button">
-						<div class="button_quantity">
-							주문수량 <input type="number" class="quantity_input" value="1"
-								data-prdt-prc="${prdt.prc}" data-dc-rate="${prdt.dcRate}"
-								data-delivery-fee="${deliveryFee}"> <span>
-								<button class="plus_btn">+</button>
-								<button class="minus_btn">-</button>
-							</span>
-						</div>
-						<div>&nbsp;</div>
-						<div>총 결제금액
-						<span class="totalPrc"
-							th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + 'P'"></span></div>
-							<div>&nbsp;</div>
-						<div class="button_set">
-							<a class="btn_cart">장바구니 담기</a> <a class="btn_buy"
-								onclick="directOrder()">바로구매</a>
-						</div>
+
+				<div class="button">
+					<div class="button_quantity">
+						주문수량 <input type="number" class="quantity_input" value="1"
+							data-prdt-prc="${prdt.prc}" data-dc-rate="${prdt.dcRate}"
+							data-delivery-fee="${deliveryFee}"> <span>
+							<button class="plus_btn">+</button>
+							<button class="minus_btn">-</button>
+						</span>
 					</div>
-			
+					<div>&nbsp;</div>
+					<div>
+						총 결제금액 <span class="totalPrc"
+							th:text="${#numbers.formatInteger(prdt.prc - (prdt.prc * (prdt.dcRate / 100.0)), 0, 'COMMA')} +' P'"></span>
+					</div>
+					<div>&nbsp;</div>
+					<div class="button_set">
+						<span><button class="btn_cart">장바구니 담기</button>
+							<button class="btn_buy" onclick="directOrder()">바로구매</button></span>
+					</div>
+				</div>
+
 			</section>
 		</div>
 		<!-- prdt Info end-->
@@ -580,23 +581,7 @@ p>img {
 					</tr>
 				</thead>
 				<tbody id="reviewList">
-					<!-- <tr th:each="rev : ${review}">
-						<td style="width: 70px; text-align: center;"
-							th:text="${rev.revNo}">40</td>
-						<td>
-							<div class="review-item">
-								<div class="pic">
-									<img style="width: 80px; height: 80px;"
-										th:src="|/mall/images/main/${rev.img}|">
-								</div>
-								<div class="info" th:text="${rev.cntn}">후기내용</div>
-							</div>
-						</td>
-						<td style="text-align: center;" class="maks" th:text="${rev.maks}">5</td>
-						<td style="text-align: center;" th:text="${rev.membNo}">test</td>
-						<td style="text-align: center;" th:text="${rev.drwupDt}">2023-07-16</td>
-
-					</tr> -->
+			
 				</tbody>
 			</table>
 		</div>
@@ -651,7 +636,8 @@ p>img {
 		<!-- 상품 후기 리스트 -->
 		<div id="reviewList"></div>
 		<!-- 후기 아이템 반복 출력 -->
-
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
 		<script
 			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
 		<script
@@ -665,6 +651,7 @@ p>img {
 		let totalPrc = 0;
 		let prdtCout = 0;
 		let count = 0;
+		//let realPrice = $(".realPrice").text(realPrice.toLocaleString());
 
 		//수량 버튼 조작 & 각 상품의 가격 정보인 prc를 가져와서 누적하여 총 가격 계산
 		let quantity = $(".quantity_input").val();

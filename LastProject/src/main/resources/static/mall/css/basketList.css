@@ -357,9 +357,13 @@ caption {
 
 .td_width_4 {
 	width: 15%;
+	font-size: 15px;
 }
 
-
+#bsk_ttl{
+	text-align : left;
+	
+}
 .price_td {
 	padding-left: 5px;
 }
@@ -402,6 +406,7 @@ caption {
 	font-size: 7px;
 	line-height: 6px;
 	vertical-align: middle;
+	cursor: pointer;
 }
 
 .plus_btn {
@@ -420,12 +425,14 @@ caption {
 	border: 1px solid #d0d0d0;
 	height: 30px;
 	line-height: 13px;
-	background-color: #fff;
+	background-color: #dc35451f;
 	text-align: center;
 	width: 0 auto;
 	display: inline-block;
 	padding: 3px 6px 2px;
 	margin-top: 3px;
+	cursor: pointer;
+	
 }
 
 .table_text_align_center {
@@ -442,6 +449,7 @@ caption {
 	display: inline-block;
 	padding: 3px 6px 2px;
 	margin-top: 3px;
+	cursor: pointer;
 }
 
 .content_total_section {

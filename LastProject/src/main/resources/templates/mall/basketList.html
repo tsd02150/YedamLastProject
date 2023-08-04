@@ -147,10 +147,11 @@
 						<img th:onclick="|location.href='@{getFarm(prdtNo=${item.prdtNo})}'|"><div class="bsk-img" th:utext="${item.thumb}"></div>
 					</div>
 				</td>
-				<td class="td_width_4" th:text="${item.nm}"></td>
+				<td class="td_width_4" id="bsk_ttl" th:text="${item.nm}"></td>
 				<td class="td_width_4 price_td"><del>정가 :
-						[[${item.prc}]]</del><br> <span class="red_color">판매가 :
-						<span>[[${item.prc - (item.prc * item.dcRate) / 100}]]</span>P</span><br>
+						<span th:text="${#numbers.formatInteger(item.prc ,0,'COMMA')} +' P'"></span></del><br>
+						<span class="red_color">판매가 :
+						<span >[[${item.prc - (item.prc * item.dcRate) / 100}]]</span>P</span><br>
 					<span class="green_color"></span></td>
 				<td class="td_width_4 ">
 					<div class="table_text_align_center quantity_div">
@@ -165,7 +166,7 @@
 						th:data-bskno="${item.bskNo}">변경</button>
 				</td>
 				<td class="td_width_4 table_text_align_center"
-					th:text="${(item.prc - (item.prc * item.dcRate) / 100) * item.cnt}+'P'">
+					th:text="${#numbers.formatInteger((item.prc - (item.prc * item.dcRate) / 100) * item.cnt, 0, 'COMMA')}+'P'">
 
 				</td>
 				<td class="td_width_4 table_text_align_center">
@@ -173,6 +174,7 @@
 						th:data-bskno="${item.bskNo}">삭제</button>
 				</td>
 			</tr>
+			<tr th:if="${basketList==null}"><td><p>ㅎㅎ없음</p></td></tr>
 		</tbody>
 	</table>
 
@@ -407,7 +409,7 @@
 	// 총 갯수
 	$(".totalCount_span").text(totalCount);
 	// 배송비
-	$(".delivery_price").text(deliveryPrice.toLocaleString());	
+	$(".delivery_price").text(deliveryPrice.toLocaleString());
 	// 최종 가격(총 가격 + 배송비)
 	$(".finalTotalPrice_span").text(finalTotalPrice.toLocaleString());		
 	
@@ -470,26 +472,6 @@
       handleCheckboxChange();
     });
 
-	
-	/* 체크박스 전체 선택 */
-	/* $(".all_check_input").on("click", function() {
-	  // 전체 체크박스 상태 확인
-	  const isChecked = $(this).prop("checked");
-	  console.log(isChecked);
-	  
-	  $(".totalPrice_span").text(totalPrice.toLocaleString());
-
-	  // 각 개별 체크박스의 상태 변경
-	  $(".individual_cart_checkbox").prop("checked", isChecked);
-
-	  // 총 주문 정보 세팅(배송비, 총 가격, 마일리지, 물품 수, 종류)
-	  setTotalInfo($(".cart_info_td"));
-	});
-	
-	/* 체크여부에따른 종합 정보 변화 */
-/* 	$(".individual_cart_checkbox").on("change", function(){
-		setTotalInfo($(".cart_info_td"));
-	}); */ 
 
 	
 	</script>
