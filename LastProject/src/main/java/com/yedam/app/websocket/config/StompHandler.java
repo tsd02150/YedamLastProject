@@ -41,7 +41,6 @@ public class StompHandler extends ChannelInterceptorAdapter{
             		chatService.subtractRoomCnt(targetMembNo);
             		chatService.deletePartici(targetMembNo);
             		if(!roomNo.equals("room-1")&&chatService.roomInfo(roomNo).getConn()==0) {
-                		System.out.println(roomNo);
                 		chatService.deleteRoom(roomNo);
                 	}
             	}

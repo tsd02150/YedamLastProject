@@ -94,9 +94,12 @@ function showChat(chat) {
 		`;	
 	}
     $("#chatSpace").append(chatContent);
+    
     if($("#chatSpace").children().length>50){
     	$("#chatSpace").children().eq(0).remove();
     }
+    
+    $("#scrollEvent").scrollTop($("#scrollEvent")[0].scrollHeight);
 }
 
 function sendChat() {
@@ -119,6 +122,9 @@ function sendChat() {
 }
 
 function enterkey() {
+	if($("#my-message").val()==null || $("#my-message").val()==''){
+		return;
+	}
 	if (window.event.keyCode == 13) {
     	sendChat();
     }
@@ -126,7 +132,12 @@ function enterkey() {
 
 
 $(function () {
-    $( "#sendChat" ).click(() => sendChat());
+    $( "#sendChat" ).click(() => {
+    	if($("#my-message").val()==null || $("#my-message").val()==''){
+			return;
+		}
+    	sendChat()
+    });
    
 });
 

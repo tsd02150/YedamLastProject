@@ -125,6 +125,18 @@
 .box-body{
 	max-height: 650px;
 }
+.box-body::-webkit-scrollbar{
+	width:10px;
+	background-color: #ddd;
+	border-radius: 10px;
+    box-shadow: inset 0px 0px 5px white;
+}
+
+.box-body::-webkit-scrollbar-thumb{
+	background-color: #555;
+	border-radius: 10px;
+    box-shadow: inset 0px 0px 5px white;
+}
 
 
 </style>
@@ -181,7 +193,7 @@
 						</div>
 					</div>
 					<!-- /.box-header -->
-					<div class="box-body">
+					<div class="box-body" id="scrollEvent">
 						<!-- Conversations are loaded here -->
 						<div id="chatSpace" class="direct-chat-messages">
 							
@@ -229,6 +241,7 @@
 		</div>
 
 		<script th:inline="javascript">
+			
 			let myAnonNick=[[${particiInfo.anonNick}]];
 			let myMembNo=[[${particiInfo.membNo}]];
 			let chatRoomNo="room-1";
@@ -276,6 +289,7 @@
 							</div>
 						`;
 						roomList.innerHTML+=divTag;
+						roomListClick();
 						closeModal();
 						moveRoom(result.roomNo);
 					}
@@ -289,11 +303,15 @@
 					headers: {
 						'Content-Type': 'application/x-www-form-urlencoded'
 					},
-					body:"roomNo="+roomNo
+					body:"roomNo="+roomNo+"&prevRoomNo="+chatRoomNo
 				})
 				.then(response=>response.json())
 				.then(result=>{
 					resetChat();
+					
+					if(result.prevRoomNo!=chatRoomNo){
+						$('[data-roomno='+chatRoomNo+']').remove();
+					}
 					
 					myAnonNick=result.anonNick;
 					$(".roomCnt").text(result.conn);
@@ -332,15 +350,17 @@
 				$('.roomCnt').text(roomInfo.conn);
 			}
 			
-			$('.roomListContent').click(function(){
-				if($(event.target).closest('div').data("roomno")!=chatRoomNo){
-					if(chatSubs!=null){
-						chatSubs.unsubscribe();						
+			roomListClick();
+			function roomListClick(){
+				$('.roomListContent').click(function(){
+					if($(event.target).closest('div').data("roomno")!=chatRoomNo){
+						if(chatSubs!=null){
+							chatSubs.unsubscribe();						
+						}
+						moveRoom($(event.target).closest('div').data("roomno"));
 					}
-					moveRoom($(event.target).closest('div').data("roomno"));
-				}
-			})
-			
+				})
+			}
 			function resetChat() {
 			    $("#chatSpace").html("");
 			}

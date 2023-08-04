@@ -93,22 +93,17 @@ public class ChatController {
 		particiInfo.setMembNo(membNo);
 		chatService.subtractRoomCnt(membNo);
 		chatService.deletePartici(membNo);
-		
-//		if(vo.getPrevRoomNo()!=null&&!vo.getPrevRoomNo().equals("")) {
-//			String prevRoomNo=vo.getPrevRoomNo();
-//			ChatRoomVO prevRoom=chatService.roomInfo(prevRoomNo);
-//			prevRoom.setParticiList(chatService.selectParticiList(prevRoomNo));
-//			System.out.println("방이동 : "+prevRoom);
-//			template.convertAndSend("/topic/partici/"+prevRoomNo,prevRoom);			
-//		}
+		String prev=vo.getPrevRoomNo();
+		if(!vo.getPrevRoomNo().equals("room-1")&&chatService.roomInfo(vo.getPrevRoomNo()).getConn()==0) {
+    		chatService.deleteRoom(vo.getPrevRoomNo());
+    		prev="0";
+    	}
 		
 		if(chatService.participation(particiInfo)) {
 			vo=chatService.roomInfo(vo.getRoomNo());
-			
+			vo.setPrevRoomNo(prev);
 			vo.setAnonNick(chatService.getParticipationInfo(membNo).getAnonNick());
 			vo.setParticiList(chatService.selectParticiList(vo.getRoomNo()));
-			System.out.println(vo);
-//			template.convertAndSend("/topic/partici/"+vo.getRoomNo(),vo);
 			
 			return vo;			
 		}else {
