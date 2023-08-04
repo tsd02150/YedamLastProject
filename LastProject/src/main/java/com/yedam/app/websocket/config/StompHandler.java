@@ -35,13 +35,18 @@ public class StompHandler extends ChannelInterceptorAdapter{
                 // 유저가 Websocket으로 disconnect() 를 한 뒤 호출됨 or 세션이 끊어졌을 때 발생함(페이지 이동~ 브라우저 닫기 등)
             	targetMembNo=memberService.selectOneMemb(accessor.getUser().getName()).getMembNo();
             	ChatParticipationVO particiInfo = chatService.getParticipationInfo(targetMembNo);
+            	String roomNo=particiInfo.getRoomNo();
             	
             	if(particiInfo!=null) {
             		chatService.subtractRoomCnt(targetMembNo);
             		chatService.deletePartici(targetMembNo);
+            		if(!roomNo.equals("room-1")&&chatService.roomInfo(roomNo).getConn()==0) {
+                		System.out.println(roomNo);
+                		chatService.deleteRoom(roomNo);
+                	}
             	}
-
             	targetMembNo="";
+            	
                 break;
             default:
                 break;

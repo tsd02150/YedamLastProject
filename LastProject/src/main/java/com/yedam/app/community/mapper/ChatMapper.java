@@ -33,4 +33,6 @@ public interface ChatMapper {
 	public int insertChatRoom(ChatRoomVO vo);
 	// 방 비교
 	public ChatRoomVO sameRoom(String nm);
+	// 방 삭제
+	public int deleteRoom(String roomNo);
 }
