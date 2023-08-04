@@ -469,6 +469,7 @@ public class MemberController {
 	                               @RequestParam String pwd, @RequestParam String id, @RequestParam String email,
 	                               @RequestParam String zip,@RequestParam String addr,@RequestParam String detaAddr,
 	                               MembVO membVO, Model model, HttpSession session) {
+		UserVO memb = (UserVO) session.getAttribute("loggedInMember");
 	    MembVO mem = membService.memberList(id);
 	    membVO.setId(id);
 	    membVO.setNick(nick);
@@ -483,17 +484,20 @@ public class MemberController {
 	    
 	    //주소 등록
 	    AddrVO addrInfo = new AddrVO();
-	    if(zip != "" && addr != "" && detaAddr != "") {
-	   	    addrInfo.setZip(zip);
-	    	addrInfo.setAddr(addr);
-	    	addrInfo.setDetaAddr(detaAddr);
-	    	addrInfo.setMembNo(mem.getMembNo());
-
-	    	membService.insertAddr(addrInfo);
+	    if(membService.membListInfo(memb.getMembNo())== null) {
 	    	System.out.println("주소등록");
-	    	System.out.println(membService.insertAddr(addrInfo));
+	    	System.out.println(membService.membListInfo(memb.getMembNo()));
+	    	if(zip !=""  && addr != "" && detaAddr != "") { //list.get(i).toString().zip
+	    		addrInfo.setZip(zip);
+	    		addrInfo.setAddr(addr);
+	    		addrInfo.setDetaAddr(detaAddr);
+	    		addrInfo.setMembNo(mem.getMembNo());
+	    		
+	    		membService.insertAddr(addrInfo);
+	    		System.out.println("주소등록");
+	    		System.out.println(membService.insertAddr(addrInfo));
+	    	}
 	    }
-	    
 	    membService.updateMemberInfo(membVO);
 
 	    //수정한 정보 다시 세션에 저장
@@ -508,6 +512,7 @@ public class MemberController {
 	    loggedInMember.setPoint(list.getPoint());
 	    loggedInMember.setMembNo(list.getMembNo());
 	    loggedInMember.setJoinDt(list.getJoinDt());
+	    loggedInMember.setNm(list.getNm());
 	    session.setAttribute("loggedInMember", loggedInMember);
 	    model.addAttribute("membList", list);
 
@@ -518,6 +523,7 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping("updateMemberAddr")
 	public AddrVO updateMemberAddr(@RequestParam String addrNo,@RequestParam String membNo,@RequestParam String zip,@RequestParam String addr,@RequestParam String detaAddr, AddrVO addrVO) {
+		System.out.println("주소변경");
 		addrVO.setAddrNo(addrNo);
 		addrVO.setZip(zip);
 		addrVO.setAddr(addr);
@@ -531,10 +537,8 @@ public class MemberController {
 	//주소 추가
 	@ResponseBody
 	@PostMapping("insertMemberAddr")
-	public AddrVO insertMemberAddr(@RequestParam String zip,@RequestParam String addr,@RequestParam String detaAddr, AddrVO addrVO) {
-		addrVO.setZip(zip);
-		addrVO.setAddr(addr);
-		addrVO.setDetaAddr(detaAddr);
+	public AddrVO insertMemberAddr(AddrVO addrVO) {
+		System.out.println("주소변경");
 		membService.insertAddr(addrVO);
 		System.out.println(membService.insertAddr(addrVO));
 		return addrVO;

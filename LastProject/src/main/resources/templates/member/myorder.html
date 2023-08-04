@@ -121,7 +121,7 @@ background-color : rgba(0,0,0,0.5);
 }
 .modal-dialog {
   width: 1000px;
-  margin-left : 600px;
+  margin-left : 650px;
 }
 
 .modal-content {
@@ -130,14 +130,23 @@ background-color : rgba(0,0,0,0.5);
     display: flex;
     -ms-flex-direction: column;
     flex-direction: column;
-    width: 800px;
-    height: 690px;
+    width: 700px;
+    height: 650px;
     pointer-events: auto;
     background-color: #fff;
     background-clip: padding-box;
     border: 1px solid rgba(0,0,0,.2);
     border-radius: 0.3rem;
     outline: 0;
+}
+.modal-header{
+	border-bottom: 1px solid #e7e7e7;
+}
+.modal-footer{
+	border-bottom: 1px solid #e7e7e7;
+}
+.modal-footer button{
+	margin-top : 10px;
 }
 .modatcnt{
 padding : 20px;
@@ -309,6 +318,7 @@ cursor: pointer;
 	let dtFormat = "[[${#dates.format(session.loggedInMember.joinDt, 'yyyy-MM-dd')}]]";
 	let orderSt = '';
 	let shipSt = '';
+	let tr ='';
 	let targetPage = 1;
 	let startPage = 1;
 	let endPage = 10;
@@ -351,7 +361,7 @@ cursor: pointer;
 	                    dataGroup[orderNo].push(item);
 	                });
 
-			              let tr='';
+			              tr='';
 	                for (let orderNo in dataGroup) {
 	                    tr += `<div class="order-group col-12">
 	                    			<button type="button" class="btn btn-dark" data-ordno="${orderNo}" onclick="delOrder(this)">주문취소</button>`;
@@ -359,7 +369,6 @@ cursor: pointer;
 	                        let prc = commas(item.orderAm);
 	                        let orderDt = new Date(item.orderDt);
 	                        let formattedDt = moment(orderDt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format("YYYY-MM-DD  (HH:mm:ss)");
-	                        //let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
 	                        tr += `
 	                            <tr id="dtTr" data-ord="${orderNo}"><td colspan="4">${formattedDt}</td></tr>
 	                            <tr class="prdtTr" data-no=${item.prdtNo} data-shipno="${item.shipNo}" onclick="modatShow(this)">
@@ -466,7 +475,7 @@ cursor: pointer;
 				data.forEach(el=>{
 					console.log(el);
 					let orderDt = new Date(el.orderDt);
-		    	let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
+					let formattedDt = moment(orderDt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format("YYYY-MM-DD  (HH:mm:ss)");
 					div+= `
 						<div class="modatcnt">
 						<h4 class="payNo" data-oddNo="${el.oddNo}">주문번호 : <span>${el.payAn}</span></h4>
@@ -476,9 +485,9 @@ cursor: pointer;
 						<tr>
 						<th>${el.thumb}</th>
 						<td>
-						<p class="high">${el.shipSt}</p> 
+						<p class="high"><strong>${el.shipSt}</strong></p> 
 						<strong>${el.nm}</strong><br>
-						${commas(el.orderAm)}원
+						${commas(el.orderAm)} P
 						<br>
 						<br>
 						<h4>배송지 정보</h4>
