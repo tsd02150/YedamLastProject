@@ -158,27 +158,30 @@
 	<div layout:fragment="content" class="outer-block">
 
 
-		<div style="border: 1px solid; text-align: center;">
+		<div style="text-align: center;">
 			<img src="images/재결제.jpg" style="width: 400px; height: 400px;">
-			
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+
 			<div>
-				<h1 style="margin-top: 0px;">신지은 고객님의</h1><br>
 				<h1>결제가 완료되지 못했습니다!</h1>
 			</div>
-			<button onclick="pointCharge()">포인트 충전</button> <button onclick="myPoint()">MY 포인트로 이동</button>
-			
+			<button onclick="pointCharge()">포인트 충전</button>
+			<button onclick="myPoint()">MY 포인트로 이동</button>
+
 		</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+
 		<script>
-		
-			function pointCharge (){
-				
-				location.href="/member/pointChargeForm";
+			function pointCharge() {
+
+				location.href = "/member/pointChargeForm";
 			}
-			
+
 			function myPoint() {
-				location.href="/member/mypoint";
+				location.href = "/member/mypoint";
 			}
-			
 		</script>
 	</div>
 </body>

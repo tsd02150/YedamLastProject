@@ -193,13 +193,13 @@ th {
 	align-items: center;
 }
 
-.review-item p{
-	font-size : 18px;
+.review-item p {
+	font-size: 18px;
 }
 
-.review-item img{
-	width : 150px;
-	height : 150px;
+.review-item img {
+	width: 150px;
+	height: 150px;
 }
 
 .pic {
@@ -207,7 +207,6 @@ th {
 	height: 80px;
 	background-color: #f2f2f2;
 	margin-right: 10px;
-	
 }
 
 .info {
@@ -274,6 +273,7 @@ th {
 	width: 200px;
 	height: 200px;
 }
+
 .modal-content {
 	background-color: #fefefe;
 	margin: 10% auto;
@@ -373,11 +373,10 @@ p>img {
 	height: 100px;
 }
 
-
-.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred {
-    height: 300px;
+.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred
+	{
+	height: 300px;
 }
-
 </style>
 
 </head>
@@ -431,13 +430,14 @@ p>img {
 			<section id="detail-img" class="news-style-one"
 				th:each="prdt : ${getFarm}">
 				<div class="zoom-image-container">
-					<div class="zoom-overlay" ></div>
+					<div class="zoom-overlay"></div>
 					<div class="zoom-image" id="prdt-img" th:utext="${prdt.thumb}"></div>
 				</div>
 			</section>
 
 			<section id="prdt-info" th:each="prdt : ${getFarm}">
-				<h1 th:text="${prdt.nm}" style="font-family:inherit;"></h1>
+				<h1 th:text="${prdt.nm}" style="font-family: inherit;"></h1>
+				<div>&nbsp;</div>
 				<div>
 					<span class="real_price inline-blocked"
 						style="margin-right: 2px; font-size: 18px;"
@@ -446,12 +446,13 @@ p>img {
 						style="text-decoration: line-through; font-style: italic; font-size: 14px;"
 						th:text="${prdt.prc} + 'P'"> </span>
 				</div>
-				<div
-					style=" box-shadow: 0 1px 0 #C8C8C8;">
+				<div>&nbsp;</div>
+				<div style="box-shadow: 0 1px 0 #C8C8C8;">
 					<span>배송비</span> <span>10,000P 이상 결제 시 무료배송</span>
+					<div>&nbsp;</div>
 				</div>
-
-				<div class="" >
+				<div>&nbsp;</div>
+		
 					<div class="button">
 						<div class="button_quantity">
 							주문수량 <input type="number" class="quantity_input" value="1"
@@ -461,15 +462,17 @@ p>img {
 								<button class="minus_btn">-</button>
 							</span>
 						</div>
-						<p>총 결제금액</p>
+						<div>&nbsp;</div>
+						<div>총 결제금액
 						<span class="totalPrc"
-							th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + 'P'"></span>
+							th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + 'P'"></span></div>
+							<div>&nbsp;</div>
 						<div class="button_set">
 							<a class="btn_cart">장바구니 담기</a> <a class="btn_buy"
 								onclick="directOrder()">바로구매</a>
 						</div>
 					</div>
-				</div>
+			
 			</section>
 		</div>
 		<!-- prdt Info end-->
@@ -504,9 +507,8 @@ p>img {
 		<div class="details" th:each="prdt : ${getFarm}">
 			<a name="detail"></a>
 
-			<div class="content" style="text-align: center;" th:utext="${prdt.img}">
-				
-			</div>
+			<div class="content" style="text-align: center;"
+				th:utext="${prdt.img}"></div>
 			<button class="toggle-button" th:onclick="toggleDetails()">상세정보
 				접기</button>
 		</div>
@@ -612,7 +614,7 @@ p>img {
 				<section id="modal-info" th:each="prdt : ${getFarm}">
 					<div th:text="${prdt.nm}"></div>
 				</section>
-				
+
 				<form class="mb-3" name="myform" id="myform" method="post">
 					<fieldset>
 						<span class="text-bold">별점을 선택해주세요</span> <input type="radio"
