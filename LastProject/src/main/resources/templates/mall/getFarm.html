@@ -606,18 +606,13 @@ p>img {
 				<span class="close">&times;</span>
 				<h2 style="text-align: center;">상품 후기</h2>
 				<div>&nbsp;</div>
-				<div style="display: flex;"	 class="pic" th:each="prdt : ${getFarm}">
-					<img id="modal-img" th:utext="${prdt.thumb}">
-					<span
-						style="margin-left: 10px; " th:text="${prdt.nm}"></span>
-					
-				</div>
-
-				<div>&nbsp;</div>
-				<div>&nbsp;</div>
-				<div>&nbsp;</div>
-				<div>&nbsp;</div>
-				<div>&nbsp;</div>
+				<section id="modal-img" th:each="prdt : ${getFarm}">
+					<div th:utext="${prdt.thumb}"></div>
+				</section>
+				<section id="modal-info" th:each="prdt : ${getFarm}">
+					<div th:text="${prdt.nm}"></div>
+				</section>
+				
 				<form class="mb-3" name="myform" id="myform" method="post">
 					<fieldset>
 						<span class="text-bold">별점을 선택해주세요</span> <input type="radio"
