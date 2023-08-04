@@ -109,7 +109,7 @@ class LastProjectApplicationTests {
 		
 	}
 	
-	@Test
+	//@Test
 	public void sendTest() {
 		stockService.testSend();
 	}

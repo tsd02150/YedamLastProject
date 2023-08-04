@@ -102,7 +102,11 @@ public class BasketController {
 	// 장바구니 전체삭제
 	@PostMapping("deleteAllBasket")
 	@ResponseBody
-	public String deleteAllBasket(BasketVO bskVO) {
+	public String deleteAllBasket(BasketVO bskVO, HttpSession session) {
+		
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		bskVO.setMembNo(mem.getMembNo());
+		
 		System.out.println(bskVO);
 		if (basketService.deleteAllBasket(bskVO)) {
 			return "success";

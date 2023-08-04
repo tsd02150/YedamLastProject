@@ -337,13 +337,14 @@
 	 
 	// 장바구니 전체 삭제
     function deleteAllBasket() {
-       	console.log(event.target);
+       	//console.log(document.querySelectAll('tr[data-bsk]');
+       	let list=[];
         fetch("/mall/deleteAllBasket", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body: "bskNo=" + event.target
+          
         })
         .then(response => response.text())
         .then(result => {
@@ -419,6 +420,56 @@
 
 }
 	
+	
+    // 총 주문금액을 계산하고 업데이트하는 함수
+    function updateTotalAmount() {
+      let totalPrice = 0;
+      let totalCount = 0;
+      let deliveryPrice = 3000; // 기본 배송비
+      let finalTotalPrice = 0;
+
+      // 각 개별 카트 항목을 순회하며 계산
+      $(".individual_cart_checkbox:checked").each(function () {
+        const quantity = $(this).closest("tr").find(".quantity_input").val();
+        const price = parseFloat($(this).closest("tr").find(".price_td span span").text());
+        totalPrice += price * quantity;
+        totalCount += parseInt(quantity);
+      });
+
+      // 총 가격이 10000 이상이면 배송비를 0으로 설정
+      if (totalPrice >= 10000) {
+        deliveryPrice = 0;
+      }
+
+      finalTotalPrice = totalPrice + deliveryPrice;
+
+      // 계산된 값으로 UI 업데이트
+      $(".totalPrice_span").text(totalPrice.toLocaleString());
+      $(".totalCount_span").text(totalCount);
+      $(".delivery_price").text(deliveryPrice.toLocaleString());
+      $(".finalTotalPrice_span").text(finalTotalPrice.toLocaleString());
+    }
+
+    // 체크박스 상태 변경 이벤트 처리 함수
+    function handleCheckboxChange() {
+      updateTotalAmount();
+    }
+
+    // 체크박스와 수량 버튼에 이벤트 리스너 등록
+    $(".all_check_input").on("click", function () {
+      const isChecked = $(this).prop("checked");
+      $(".individual_cart_checkbox").prop("checked", isChecked);
+      updateTotalAmount();
+    });
+
+    $(".individual_cart_checkbox").on("change", function () {
+      handleCheckboxChange();
+    });
+
+    $(".quantity_btn").on("click", function () {
+      handleCheckboxChange();
+    });
+
 	
 	/* 체크박스 전체 선택 */
 	/* $(".all_check_input").on("click", function() {
