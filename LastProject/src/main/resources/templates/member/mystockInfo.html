@@ -101,7 +101,7 @@ padding-top : 40px;
 				<tr>
 					<td th:text="|${#numbers.formatInteger(sumNowPrc, 0, 'COMMA')} P|"></td>
 					<td th:text="|${#numbers.formatInteger(sumTradePrc, 0, 'COMMA')} P|"></td>
-					<td th:text="|${#numbers.formatInteger((sumTradePrc-sumNowPrc), 0, 'COMMA')} P|"></td>
+					<td th:text="|${#numbers.formatInteger((sumNowPrc-sumTradePrc), 0, 'COMMA')} P|"></td>
 					<td th:text="|${#numbers.formatInteger(raise, 0, 'COMMA')} %|"></td>
 				</tr>
 				</tbody>
@@ -498,10 +498,10 @@ function myRaiseList(){
 		        colors: {
 		          ranges: [{
 		            from: 0,
-		            to: 100,
+		            to: 100000,
 		            color: '#F15B46'
 		          }, {
-		            from: -100,
+		            from: -100000,
 		            to: 0,
 		            color: '#7094FF'
 		          }]

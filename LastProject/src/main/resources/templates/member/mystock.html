@@ -145,6 +145,7 @@
 
 #intbody tr {
 	text-align: left;
+	cursor: pointer;
 }
 
 .bi {
@@ -176,11 +177,15 @@
 #buyOrder table, #sellOrder table{
 	border-top: 1px solid #FF3066;
 	border-bottom: 1px solid #FF3066;
+	cursor: pointer;
 }
 #buyOrder th, #buyOrder td, #sellOrder th, #sellOrder td{
 	border: 1px solid #DDDDDD;
 	border-bottom: 0;
 	font-weight: bold;
+}
+#recombody tr{
+	cursor: pointer;
 }
 </style>
 </head>
@@ -407,13 +412,14 @@
 			 if(data && data.length >0){
 				 $("#noOrderDiv").css("dispaly","none");
 			 data.forEach(el=>{
+				 console.log(el)
 				 let prc = (el.prc).toLocaleString();
 				 if(el.rmnCnt >0){
 					 div1 +=`
 					 				<div data-no="${el.buyNo}" style="text-align:center;border-top: 1px solid #FF3066;">
 					 					<span style="font-weight : bold;">매수 주문 예약</span>
 					 					<span style="color:red;font-size:20px;" onclick="delBuyOrder(this)">&times&nbsp</span>
-					 					<table style="width : 100%;">
+					 					<table style="width : 100%;" onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">
 					 						<tr>
 					 							<th>종목명</th>
 					 							<td>${el.nm}</td>
@@ -458,7 +464,7 @@
 		 				<div data-no="${el.sellNo}" style="text-align:center; border-top: 1px solid #FF3066;">
 		 					<span style="font-weight : bold;">매도 주문 예약</span>
 		 					<span style="color:red;font-size:20px;" onclick="delSellOrder(this)">&times&nbsp</span>
-		 					<table style="width : 100%;">
+		 					<table style="width : 100%;" onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">
 		 						<tr>
 		 							<th>종목명</th>
 		 							<td>${el.nm}</td>
@@ -555,8 +561,8 @@
          let itemNo = el.itemNo;
          //console.log(el);
          tr1 += `
-           <tr data-no="${el.itemNo}">
-             <td onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">${el.tnm}</td>
+           <tr data-no="${el.itemNo}" onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">
+             <td>${el.tnm}</td>
              <td>${formatNumber(el.tprc)}</td>
              <td class="rate">${el.rate}%</td>
              <td><span style="color:red;font-size:20px;" onclick="deleteInterest('${el.itemNo}')">&times&nbsp</span></td>
@@ -622,7 +628,7 @@ $.ajax({
 		  let invest = 0;
 
 		  data.forEach(el => {
-			  let formattedRaise = (el.tradePrc - el.nowPrc).toLocaleString();
+			  let formattedRaise = (el.nowPrc-el.tradePrc).toLocaleString();
 		    let tr = `
 		    	
 		      <tr data-no="${el.itemNo}">
@@ -683,8 +689,8 @@ $.ajax({
 				data.slice(0, 10).forEach(el => {
 					//console.log(el);
 	         tr3 += `
-	           <tr data-no="${el.itemNo}">
-	             <td onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">${el.tnm}</td>
+	           <tr data-no="${el.itemNo}"  onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">
+	             <td>${el.tnm}</td>
 	             <td>${formatNumber(el.tprc)}</td>
 	             <td class="rate" colspan="2">${~~(el.rate)}%</td>
 	           </tr>
