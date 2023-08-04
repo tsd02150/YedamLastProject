@@ -94,6 +94,9 @@ function showChat(chat) {
 		`;	
 	}
     $("#chatSpace").append(chatContent);
+    if($("#chatSpace").children().length>50){
+    	$("#chatSpace").children().eq(0).remove();
+    }
 }
 
 function sendChat() {

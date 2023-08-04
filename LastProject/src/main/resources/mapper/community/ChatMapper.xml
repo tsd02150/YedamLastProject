@@ -95,4 +95,9 @@
 		FROM CHAT_ROOM
 		WHERE nm=#{nm}
 	</select>
+	
+	<delete id="deleteRoom" parameterType="String">
+		DELETE FROM CHAT_ROOM
+		WHERE room_no=#{roomNo}
+	</delete>
 </mapper>
