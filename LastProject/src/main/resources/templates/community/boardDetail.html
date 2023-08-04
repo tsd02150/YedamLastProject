@@ -381,7 +381,7 @@
 			
 			// 삭제 버튼
 			function deleteBoardFunc(){
-				if(confirm("삭제허쉴?")){
+				if(confirm("삭제하시겠습니까?")){
 					fetch("/community/deleteBoard",{
 						method: "POST",
 						headers: {
@@ -406,7 +406,7 @@
 			
 			// 수정 버튼
 			function modifyBoardFunc(){
-				if(confirm("수정허쉴?")){
+				if(confirm("수정하시겠습니까?")){
 					window.location.href="/community/modifyBoard?ctgr="+[[${boardName}]]+"&commonCd="+[[${boardCode}]]+"&boardNo="+[[${board.boardNo}]];
 				}
 			}
@@ -540,7 +540,7 @@
 			function deleteComment(){
 				let target = event.target.parentNode.parentNode.parentNode.parentNode;
 				
-				if(confirm("삭제허쉴?")){
+				if(confirm("삭제하시겠습니까?")){
 					
 					fetch("/community/deleteComment",{
 						method: "POST",
