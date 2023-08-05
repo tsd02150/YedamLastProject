@@ -230,6 +230,51 @@
 	    });
 	});
 	
+	
+		 
+	// 장바구니 삭제 버튼을 클릭했을 때 해당 상품을 삭제하는 함수
+    function deleteBasket() {
+		console.log(event.target.dataset.bskno);
+        fetch("/mall/deleteBasket", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: "bskNo=" + event.target.dataset.bskno
+        })
+        .then(response => response.text())
+        .then(result => {
+            if (result=="success") {
+               //window.location.href="/mall/basketList"
+            		location.reload();
+            }else {
+            	toastShow("Fail Delete", "삭제 실패", "error");
+            }
+        })
+        .catch(err => console.log(err));
+    }
+	 
+	  // "장바구니 비우기" 버튼 클릭 이벤트 처리 함수
+	  function deleteAllBasket() {
+	    fetch("/mall/deleteAllBasket", {
+	      method: "POST",
+	      headers: {
+	        "Content-Type": "application/x-www-form-urlencoded",
+	      },
+	      body: "bskNo=" + event.target
+	    })
+	      .then((response) => response.text())
+	      .then((result) => {
+	        if (result == "success") {
+	          location.reload();
+	          document.getElementById(".basketDisplay").style.display = "none";
+	        } else {
+	          toastShow("Fail Delete", "삭제 실패", "error");
+	        }
+	      })
+	      .catch(err => console.log(err));
+	  }
+	  
 		
 		/* 수량버튼 */
 		$(".plus_btn").on("click", function(){
@@ -264,100 +309,8 @@
 				$(".finalTotalPrice_span").text(finalTotalPrice.toLocaleString());	
 			}
 		});
-		
-	//장바구니 리스트 출력
-	//basketList();
-	
-	/* function basketList() {
-		 fetch("/mall/basketList", {
-			 method:"POST",
-			 headers : {
-				 'Content-Type': 'application/x-www-form-urlencoded'
-			 },
-			 
-		 })
-		 .then(response=> response.json())
-		 .then(result=>{
-			 result.forEach(item=>{
-				 console.log(item);
-			let trTag =`
-			
-				<tr>
-				<td class="td_width_3" >${item.nm}</td>
-				<td class="td_width_4 price_td">
-					<del>정가 : ${item.prc}</del><br>
-					<span class="red_color" >판매가 : ${item.prc - (item.prc * (item.dcRate / 100.0))}P </span><br>
-					마일리지 : ${(item.prc - (item.prc * (item.dcRate / 100.0))) * 0.1}P<span class="green_color"></span>
-				</td>
-				<td class="td_width_4 table_text_align_center">
-					<div class="table_text_align_center quantity_div">
-						<input type="text" class="quantity_input">${item.cnt}	
-						<button class="quantity_btn plus_btn">+</button>
-						<button class="quantity_btn minus_btn">-</button>
-					</div>
-					<button class="quantity_modify_btn" onclick="updateCnt()" data-bskno="${item.bskNo}">변경</button>
-				</td>
-				<td class="td_width_4 table_text_align_center">${(item.prc - (item.prc * (item.dcRate / 100.0))) * item.cnt}P
-					
-				</td>
-				<td class="td_width_4 table_text_align_center">
-					<button class="delete_btn" onclick="deleteBasket()" data-bskno="${item.bskNo}">삭제</button>
-				</td>
-			</tr>
-			`;
-				document.querySelector("#basketList").innerHTML+=trTag;
-			 })
-		 })
-		 .catch(err=>console.log(err));
-	 } 
-	  */
-	
-		 
-	// 장바구니 삭제 버튼을 클릭했을 때 해당 상품을 삭제하는 함수
-    function deleteBasket() {
-		console.log(event.target.dataset.bskno);
-        fetch("/mall/deleteBasket", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: "bskNo=" + event.target.dataset.bskno
-        })
-        .then(response => response.text())
-        .then(result => {
-            if (result=="success") {
-               //window.location.href="/mall/basketList"
-            		location.reload();
-            }else {
-            	toastShow("Fail Delete", "삭제 실패", "error");
-            }
-        })
-        .catch(err => console.log(err));
-    }
-	 
-	// 장바구니 전체 삭제
-    function deleteAllBasket() {
-       	console.log(event.target);
-        fetch("/mall/deleteAllBasket", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: "bskNo=" + event.target
-        })
-        .then(response => response.text())
-        .then(result => {
-            if (result=="success") {
-               //window.location.href="/mall/basketList"
-            		location.reload();
-            		document.getElementById('.basketDisplay').style.display = 'none';
-            }else {
-            	toastShow("Fail Delete", "삭제 실패", "error");
-            }
-        })
-        .catch(err => console.log(err));
-    } 
-		 
+
+	  
 	// 장바구니 수량 변경 기능
 	 function updateCnt(){
 		console.log($(event.target).prev().find('input').val());
@@ -419,26 +372,54 @@
 
 }
 	
-	
-	/* 체크박스 전체 선택 */
-	/* $(".all_check_input").on("click", function() {
-	  // 전체 체크박스 상태 확인
-	  const isChecked = $(this).prop("checked");
-	  console.log(isChecked);
-	  
-	  $(".totalPrice_span").text(totalPrice.toLocaleString());
+	  // 총 주문금액을 계산하고 업데이트하는 함수
+	  function updateTotalAmount() {
+	    let totalPrice = 0;
+	    let totalCount = 0;
+	    let deliveryPrice = 3000; // 기본 배송비
+	    let finalTotalPrice = 0;
 
-	  // 각 개별 체크박스의 상태 변경
-	  $(".individual_cart_checkbox").prop("checked", isChecked);
+	    // 각 개별 카트 항목을 순회하며 계산
+	    $(".individual_cart_checkbox:checked").each(function () {
+	      const quantity = $(this).closest("tr").find(".quantity_input").val();
+	      const price = parseFloat($(this).closest("tr").find(".price_td span span").text());
+	      totalPrice += price * quantity;
+	      totalCount += parseInt(quantity);
+	    });
 
-	  // 총 주문 정보 세팅(배송비, 총 가격, 마일리지, 물품 수, 종류)
-	  setTotalInfo($(".cart_info_td"));
-	});
-	
-	/* 체크여부에따른 종합 정보 변화 */
-/* 	$(".individual_cart_checkbox").on("change", function(){
-		setTotalInfo($(".cart_info_td"));
-	}); */ 
+	    // 총 가격이 10000 이상이면 배송비를 0으로 설정
+	    if (totalPrice >= 10000) {
+	      deliveryPrice = 0;
+	    }
+
+	    finalTotalPrice = totalPrice + deliveryPrice;
+
+	    // 계산된 값으로 UI 업데이트
+	    $(".totalPrice_span").text(totalPrice.toLocaleString());
+	    $(".totalCount_span").text(totalCount);
+	    $(".delivery_price").text(deliveryPrice.toLocaleString());
+	    $(".finalTotalPrice_span").text(finalTotalPrice.toLocaleString());
+	  }
+
+	  // 체크박스 상태 변경 이벤트 처리 함수
+	  function handleCheckboxChange() {
+	    updateTotalAmount();
+	  }
+
+	  // 체크박스와 수량 버튼에 이벤트 리스너 등록
+	  $(".all_check_input").on("click", function () {
+	    const isChecked = $(this).prop("checked");
+	    $(".individual_cart_checkbox").prop("checked", isChecked);
+	    updateTotalAmount();
+	  });
+
+	  $(".individual_cart_checkbox").on("change", function () {
+	    handleCheckboxChange();
+	  });
+
+	  $(".quantity_btn").on("click", function () {
+	    handleCheckboxChange();
+	  });
 
 	
 	</script>
