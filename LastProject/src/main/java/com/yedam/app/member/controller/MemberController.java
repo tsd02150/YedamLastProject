@@ -616,9 +616,19 @@ public class MemberController {
 	//매수 주문 취소
 	@ResponseBody
 	@PostMapping("deleteBuyOrder")
-	public int deleteBuyOrder(@RequestParam String membNo, @RequestParam String buyNo, BuyOrderVO boVO) {
-		boVO.setMembNo(membNo);
-		boVO.setBuyNo(buyNo);
+	public int deleteBuyOrder(BuyOrderVO boVO, HttpSession session) {
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		
+		MembVO membVO = new MembVO();
+		int point = mem.getPoint()+boVO.getPoint();
+		membVO.setPoint(point);
+		membVO.setId(mem.getId());
+		membService.updateMemberInfo(membVO);
+		
+		//session 정보 업데이트
+		mem.setPoint(point);
+		
+		//주문 삭제
 		int result = membService.deleteBuyOrder(boVO);
 		return result;
 	}
@@ -720,13 +730,6 @@ public class MemberController {
 		List<PossVO> list = membService.myRaiseList(membNo);
 		return list;
 	}
-	
-	/*
-	 * @ResponseBody
-	 * 
-	 * @GetMapping("anoSelectKey") public String anoSelectKey() { String ano =
-	 * membService.anoSelectKey(); return ano; }
-	 */
 	
 	@ResponseBody
 	@PostMapping("recomList")

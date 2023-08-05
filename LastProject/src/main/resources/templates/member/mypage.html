@@ -24,6 +24,7 @@
 #mypagetbl th, .intehead, #myordertbl th {
 	padding: 20px;
 	width: 520px;
+	color : black;
 }
 
 #mypagetbl td, #intrestTbl td, #myordertbl td {
@@ -147,7 +148,7 @@ height: 50px;
 						<td></td>
 					</tr>
 					<tr>
-						<th th:text="${#numbers.formatInteger(session.loggedInMember.point, 0, 'COMMA')} +' point'"></th>
+						<th th:text="${#numbers.formatInteger(session.loggedInMember.point, 0, 'COMMA')} +' P'"></th>
 						<td><a href="pointChargeForm"><button type="button" class="btn btn-outline-secondary">충전</button></a></td>
 					</tr>
 				</table>

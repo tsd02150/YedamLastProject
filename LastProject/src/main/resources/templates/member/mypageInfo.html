@@ -76,6 +76,9 @@ input[type=number] {
 	text-align: center;
 	padding: 10px 30px 10px 30px;
 }
+.signup{
+	border:0;
+}
 </style>
 </head>
 <body>
@@ -87,7 +90,7 @@ input[type=number] {
 					<form id="updateFrm" action="updateMemberInfo" class="signup-form row" method="post">
 						<div class="col-md-12">
 							<div class="form-group">
-							<h3 class="mt-4">[[${session.loggedInMember.nm}]]</h3>
+							<h3 class="mt-4">[[${session.loggedInMember.nm}]] 님</h3>
 							</div>
 						</div>
 					<div class="col-md-12">
@@ -347,12 +350,30 @@ $("#changeNick").on("click", function() {
 	            .then(response => response.json())
 	            .then(result => {
 	                if (nick !== "") {
-	                	nickMsg.textContent = result === 1 ? "이미 사용중인 닉네임입니다." : "사용가능한 닉네임입니다.";
-	
+	                	if(result === 1){
+	                		nickMsg.textContent = "이미 사용중인 닉네임입니다.";
+	                		$("#nickmsg").css({
+		            				"color": "#FA3E3E",
+		            				"font-weight": "bold",
+		            				"font-size": "14px"
+	            				});
+	                	}else{
+	                		nickMsg.textContent = "사용가능한 닉네임입니다.";
+	                		$("#nickmsg").css({
+		            				"color": "#0D6EFD",
+		            				"font-weight": "bold",
+		            				"font-size": "14px"
+	            				});
+	                	}
 	                    // 중복확인이 완료되면 checkedBtn 클래스를 추가
 	                    nickBtn.classList.add("checkedBtn");
 	                } else {
 	                	 nickMsg.textContent = "닉네임을 입력하세요";
+	                	 $("#nickmsg").css({
+		            				"color": "#FA3E3E",
+		            				"font-weight": "bold",
+		            				"font-size": "14px"
+	         						});
 	                }
 	            })
 	            .catch(err => console.log(err));
@@ -568,11 +589,11 @@ function checkMailCode() {
     } else {
         mailcount2++;
         $("#mailCheck").text("다시 시도해주세요.")
-            .css({
-                "color": "#FA3E3E",
-                "font-weight": "bold",
-                "font-size": "14px"
-            });
+           .css({
+               "color": "#FA3E3E",
+               "font-weight": "bold",
+               "font-size": "14px"
+           });
     }
     if (mailcount2 >= 5) {
         $('#myModal').show();
@@ -850,8 +871,18 @@ function checkPwdValidity() {
 
     if (!pwdValue) {
         pwdWarning.textContent = "비밀번호를 입력해주세요.";
+        $("#pwd-warning").css({
+					"color": "#FA3E3E",
+					"font-weight": "bold",
+					"font-size": "14px"
+				});
     } else if (!pwdRegex.test(pwdValue)) {
         pwdWarning.textContent = "영어 대소문자, 숫자, 특수문자 1개이상 사용해야 합니다.";
+        $("#pwd-warning").css({
+					"color": "#FA3E3E",
+					"font-weight": "bold",
+					"font-size": "14px"
+				});
     } else {
         pwdWarning.textContent = "";
     }
@@ -864,6 +895,11 @@ function checkPwdMatch() {
     if (pwdValue !== pwdCorrectValue) {
         pwdWarning.style.borderWidth = "2px";
         pwdWarning.textContent = "입력한 비밀번호와 일치하지 않습니다.";
+	        $("#pwd-warning").css({
+					"color": "#FA3E3E",
+					"font-weight": "bold",
+					"font-size": "14px"
+				});
     } else {
         pwdWarning.style.borderWidth = "";
         pwdWarning.textContent = "";

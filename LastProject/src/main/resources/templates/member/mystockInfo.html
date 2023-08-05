@@ -420,14 +420,18 @@ padding-top : 40px;
 	
 	// 매수 주문 예약 삭제
 	function delBuyOrder(target) {
-		 let dataNo = $(target).closest("tr").attr('data-no');
-	  //console.log(dataNo);
-	  $.ajax({
+		let dataNo = $(target).closest("tr").attr('data-no');
+	  let rmnCnt = parseInt($(target).closest("tr").find("td:nth-child(3)").text());
+		let prc = parseInt($(target).closest("tr").find("td:nth-child(4)").text());
+		let total = rmnCnt*prc;
+		
+	 $.ajax({
 	    url: "deleteBuyOrder",
 	    method: "POST",
 	    data: {
 	      "membNo": membNo,
-	      "buyNo": dataNo
+	      "buyNo": dataNo,
+	      "point" : total
 	    },
 	    success: function (res) {
 	      if (res == 1) {
@@ -439,7 +443,7 @@ padding-top : 40px;
 	    error: function (err) {
 	      console.log(err);
 	    }
-	  });
+	  }); 
 	}
 
 	

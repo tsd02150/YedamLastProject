@@ -496,24 +496,28 @@
 	
 	//매수 주문 예약 삭제
  function delBuyOrder(target) {
-	  let dataNo = target.parentNode.getAttribute('data-no');
-	  console.log(target);
-	  /* $.ajax({
+   let dataNo = target.parentNode.getAttribute('data-no');
+	 let parentElement = target.parentNode;
+	 let rmnCnt = parseInt(parentElement.querySelector('table tr:nth-child(2) td:nth-child(2)').textContent.trim()); //수량
+   let prc = parseInt(parentElement.querySelector('table tr:nth-child(3) td:nth-child(2)').textContent.trim()); //주문가격
+   let total = rmnCnt*prc;
+	  $.ajax({
 		  url : "deleteBuyOrder",
 		  method : "POST",
 		  data : {
 			  "membNo" : memNo,
-			  "buyNo" : dataNo
+			  "buyNo" : dataNo,
+			  "point" : total
 		  },
 		  success : function(res){
 			  $(target).parent().remove();
 			  toastShow("Delete","매수 주문 예약이 삭제되었습니다.","success");
-			  window.location.reload();
+			  //window.location.reload();
 		  },
 		  error : function(err){
 			  console.log(err);
 		  }
-	  }); */
+	  }); 
 	}
 	//매도 주문 예약 삭제
  function delSellOrder(target) {
