@@ -43,8 +43,8 @@ public class MallServiceImpl implements MallService {
 	
 	// 삭제
 	@Override
-	public boolean deleteReviewInfo(String revNo) {
-		return mallMapper.deleteReviewInfo(revNo) > 0;
+	public boolean deleteReviewInfo(ProductReviewVO revVO) {
+		return mallMapper.deleteReviewInfo(revVO) > 0;
 	}
 
 	// 카테고리 정보
@@ -86,6 +86,11 @@ public class MallServiceImpl implements MallService {
 	@Override
 	public List<ProductVO> getSearchPrdt(ProductVO prdtVO) {
 		return mallMapper.getSearchPrdt(prdtVO);
+	}
+
+	@Override
+	public ProductReviewVO getProductReview(String revNo) {
+		return mallMapper.getProductReview(revNo);
 	}
 	
 }

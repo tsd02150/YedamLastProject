@@ -36,6 +36,9 @@ public interface MallService {
 	// 해당 상품후기 리스트
 	public List<ProductReviewVO> getProductReviewList(ProductReviewVO revVO);
 	
+	// 리뷰 단건 조회
+	public ProductReviewVO getProductReview(String revNo);
+	
 	// 리뷰 등록
 	public boolean addReview(ProductReviewVO revVO);
 	
@@ -43,7 +46,7 @@ public interface MallService {
 	public int updateReviewInfo(ProductReviewVO revVO);
 
 	// 리뷰 삭제
-	public boolean deleteReviewInfo(String revNo);
+	public boolean deleteReviewInfo(ProductReviewVO revVO);
 
 	
 

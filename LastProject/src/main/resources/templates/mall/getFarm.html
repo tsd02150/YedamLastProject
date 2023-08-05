@@ -50,13 +50,6 @@
 	list-style: none;
 }
 
-/* .fixed {
-	
-	top: 0;
-	opacity: 1;
-	transition: top 0.3s ease;
-}
- */
 .amount>li {
 	flex: 1;
 	height: 80px;
@@ -601,7 +594,7 @@ p>img {
 
 		<!-- 모달 창 -->
 		<div id="reviewModal" class="modal">
-			<div class="modal-content" onClick="closeModal()">
+			<div class="modal-content">
 
 				<span class="close">&times;</span>
 				<h2 style="text-align: center;">상품 후기</h2>
@@ -651,8 +644,7 @@ p>img {
 
 		<!-- 페이징 -->
 
-		<!-- 상품 후기 리스트 -->
-		<div id="reviewList"></div>
+		
 		<!-- 후기 아이템 반복 출력 -->
 
 		<script
@@ -805,15 +797,44 @@ p>img {
 	        method: 'POST',
 	        body: formData
 	    })
-	    .then(response => response.text())
+	    .then(response => response.json())
 	    .then(result => {
-	    	location.reload();
+	    	//location.reload();
+	    	closeModal();
+	    	console.log(result);
+	    	let trTag=`
+				<tr>
+				<td style="width: 70px; text-align: center;" >${result.revNo}</td>
+				<td>
+					<div class="review-item">
+						<div>
+						
+						${result.cntn}
+						</div>
+					</div>
+				</td>
+				<td style="text-align: center;" class="maks">${result.maks}</td>
+				<td style="text-align: center;" >${result.membNo}</td>
+				<td style="text-align: center;" >${result.drwupDt}</td>
+				<td style="text-align: center;">
+			       <button type="button" onclick="deleteReview()" class="delete-review-btn" data-rev-no="${result.revNo}">삭제</button>
+			    </td>
+
+			</tr>
+			`;
+			document.querySelector("#reviewList").innerHTML+=trTag;
+	    	
 	    })
 	    .catch(error => {
 	        toastShow("Insert Fail", "등록 실패", "error");
 	    });
 	});
 		
+	function closeModal() {
+		const modal = document.getElementById('reviewModal');
+		modal.style.display = 'none';
+		
+	}
 
 		
 		  document.addEventListener("DOMContentLoaded", function () {
@@ -824,7 +845,7 @@ p>img {
 		
     // 리뷰 삭제 버튼을 클릭했을 때 해당 리뷰를 삭제하는 함수
     function deleteReview() {
-       	
+       	let delTarget=$(event.target).closest('tr');
         fetch("/mall/deleteReview", {
             method: "POST",
             headers: {
@@ -838,7 +859,8 @@ p>img {
            // var reviewItem = document.getElementById("review-" + revNo);
             if (result=="success") {
                //window.location.href="/mall/reviewList"
-            	   location.reload();
+            	   //location.reload();
+               delTarget.remove();
             }else {
             	toastShow("Fail Delete", "삭제 실패", "error");
             }

@@ -68,7 +68,11 @@
 		PRODUCT_REVIEW
 		WHERE prdt_no = #{prdtNo}
 	</select>
-
+	 
+	<select id="getProductReview" resultType="ProductReviewVO">
+		SELECT * FROM PRODUCT_REVIEW 
+		WHERE rev_no =#{revNo}
+	</select>
 	<!-- 리스트 전체조회 -->
 	<select id="getCtgrList" resultType="ProductVO">
 
@@ -157,10 +161,10 @@
 		)
 	</insert>
 
-	<delete id="deleteReviewInfo" parameterType="String">
+	<delete id="deleteReviewInfo" parameterType="ProductReviewVO">
 		DELETE FROM
 		PRODUCT_REVIEW
-		WHERE rev_no=#{revNo}
+		WHERE rev_no=#{revNo} and memb_no = #{membNo}
 	</delete>
 
 </mapper>
