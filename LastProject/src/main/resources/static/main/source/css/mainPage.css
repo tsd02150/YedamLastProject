@@ -23,6 +23,10 @@
 		border-bottom: 1px solid #ddd;
 	}
 	
+	.tabSpace tr{
+		cursor: pointer;
+	}
+	
 	.redCol{
 		color:red;
 	}
@@ -50,13 +54,16 @@
 	}
 	#chartList{
 		width:150px;
-		background-color: #DDDDDD;
+		background-color: white;
 	}
 	#chartList a{
 		overflow:hidden;
 		text-overflow: ellipsis;
 		white-space:nowrap;
 		color:black;
+		cursor: pointer;
+		display:block;
+		height:100%;
 	}
 	
 	#chartList a.active{
