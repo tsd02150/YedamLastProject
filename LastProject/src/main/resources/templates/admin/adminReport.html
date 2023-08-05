@@ -25,7 +25,7 @@
 
 	
 	<div layout:fragment="content">
-	<h3>신고 리스트</h3>
+	<h3>신고 관리</h3>
 		<div class="m-2">
 		  	<button id="updateBtn" class="btn btn-primary btn-sm">수정</button>
 		  	<button id="deleteBtn" class="btn btn-danger btn-sm">삭제</button>
@@ -78,7 +78,7 @@
 	          		    				getReportAlarm();
 	          		    				let rowKeys = checkedRows.map(row => row.rowKey);
 	          	    		    		for(let i of rowKeys){
-	          	    		    			$('td[data-row-key='+i+'][data-column-name=rprtSt]').children(0).text('Y');
+	          	    		    			grid.setValue(i, 'rprtSt', 'Y');
 	          	    		    		}
 	          		    				Swal.fire(checkedRows.length + ' 명 회원 '+ result.value+' 일 정지 성공')
 	          		    			}else{
@@ -97,6 +97,8 @@
 	    		  }
 	    			
 	    		})//then 의 end
+	      }else{
+    		  Swal.fire('수정할 행을 선택해주세요')
 	      }
 	      })// updateBtn 클릭 기능 의  end
 		
@@ -167,7 +169,8 @@
             	   {
                      header: '신고번호',
                      name: 'rprtNo',
-                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true },
+                     align:'center'
                    },
                   	{
                       header: '신고처리',
@@ -175,7 +178,8 @@
                       filter: 'select', // Dropdown Filter로 설정
                       filterOptions: {
                         listItems: ['Y', 'N'],
-                      }
+                      },
+                      align:'center'
                    	},
                   	{
                       header: '피고',
@@ -199,7 +203,8 @@
                       header: '신고일시',
                       name: 'drwupDt',
                       sortingType: 'asc',
-                      sortable: true
+                      sortable: true,
+                      align:'center'
                     }
                  ]
                });
@@ -297,7 +302,7 @@
                   		    					if(data >0){
                   		    						getReportAlarm();
                   		    						Swal.fire(accused +' 회원 '+ result.value+' 일 정지 성공');
-                          		    				$('td[data-row-key='+ev.rowKey+'][data-column-name=rprtSt]').text("Y");
+                          		    				grid.setValue(ev.rowKey, 'rprtSt', 'Y');
                   		    					}else{
                   		    						Swal.fire('신고처리실패..')
                   		    					}

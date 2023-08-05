@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.yedam.app.admin.service.BeforeDelVO;
 import com.yedam.app.admin.service.MembManageVO;
 import com.yedam.app.community.service.AttachVO;
 import com.yedam.app.community.service.BoardVO;
@@ -128,7 +129,9 @@ public interface AdminMapper {
 
 	// 응답안한 신고 개수
 	public int nonChkRptCnt();
-	
-	
+	// 삭제전 포인트 보유주식 확인
+	public BeforeDelVO beforeDel(String membNo);
+	// 닉네임으로 멤버번호 가져오기
+	public String nmGetNo(String nm);
 	
 }

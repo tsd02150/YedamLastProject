@@ -64,8 +64,9 @@
 }
 
 #itemInfo p {
+	padding:12px;
 	margin-bottom: 5px;
-	font-size: 14px;
+	font-size: 20px;
 }
 #itemInfo button{
 	border-radius: 7%;
@@ -84,6 +85,8 @@
 }
 #hot ul {
 	list-style: none;
+	margin:0;
+	padding-left:10px;
 }
 #hot li {
 	padding: 10px;
@@ -323,28 +326,20 @@
             url: "itemInfo?value=" + ctg,
             success: function (result) {
             	console.log(result);
-              for (let i in result) {
-                if (i == "itemNo") {
-                  $("#itemInfo").append(
-                    $("<p/>")
-                      .css("display", "none")
-                      .text(result[i])
-                      .attr("data-in", result[i])
-                  );
-                }else if(i == "tprc"){
-                	$("#itemInfo").append($("<p/>").text("현재가 : " +result[i]+" 원"));
-                }else if(i == "change"){
-                	let plma = result[i]==0 ? 'zero' : (result[i] > 0 ? 'plus':'minus');
-                	$("#itemInfo").append($("<p class="+plma+"/>").text("전일비 : " +result[i]+" "));
-                }else if(i == "rate"){
-                	let plma = result[i]==0 ? 'zero' : (result[i] > 0 ? 'plus':'minus');
-                	$("#itemInfo").append($("<p class="+plma+"/>").text("변동률 : ( "+ result[i]+"% )"));
-                } else {
-                  $("#itemInfo").append($("<p/>").text(result[i]));
-                }
-              }
-
-              $("#itemInfo").append($('<button class="btn btn-danger btn-sm"/>').text("차트 페이지 이동").on("click", chartPage))
+            	let html ='';
+            	let cls = result.change == 0 ? '_' : result.change > 0 ? 'plus' : 'minus' ;
+            	let change = result.change == 0 ? result.change : result.change > 0 ? '+'+result.change : '-'+result.change;
+            	let rate = result.rate == 0 ? result.rate : result.rate > 0 ? '+'+result.rate : '-'+result.rate;
+            	html = `
+            		<p data-in="${result.itemNo}"></p>
+            		<p>${result.sc} > ${result.theme} > ${result.nm}</p>
+            		<p> ${result.origin} / ${result.desct}</p>
+            		<p> 현재가 : ${result.tprc} 전일비 : <span class="${cls}">${change}</span> 변동률 : <span class="${cls}">${rate}</span>%</p>
+            		
+            	`
+            	$('#itemInfo').html(html);
+           
+              	$("#itemInfo").append($('<button class="btn btn-danger btn-sm"/>').text("차트 페이지 이동").on("click", chartPage))
               				.append($('<button class="btn btn-danger btn-sm"/>').text("관심종목 추가").on("click",addInterest));
             },
           });

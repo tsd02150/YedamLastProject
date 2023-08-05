@@ -32,6 +32,12 @@
         		#{period})
 	</insert>
 	
+	<!-- 닉네임으로 멤버번호가져오기 -->
+	<select id="nmGetNo" resultType="String">
+		select memb_no
+		from member
+		where nm = #{nm}
+	</select>
 	<!-- 회원삭제 -->
 	<delete id="deleteMember" parameterType="list">
 		delete from member
@@ -81,9 +87,11 @@
 	
 	<!-- 신고된 글 리스트 -->
 	<select id="reportList" resultType="ReportVO">
-		select rprt_no ,rprt_st, accused , plaintiff, category , drwup_dt
-        from report
-        order by rprt_st , drwup_dt desc
+		select rprt_no ,rprt_st,m.nm accused , n.nm plaintiff, category , drwup_dt
+		from report r join member m
+		on r.accused  = m.memb_no
+		join member n on r.plaintiff = n.memb_no
+		order by rprt_st , drwup_dt desc 
 	</select>
 	<!-- 신고글 개수 -->
 	<select id="reportCnt">
@@ -480,5 +488,19 @@
 		select count(rprt_no) 
         from report 
         where rprt_st = 'N'
+	</select>
+	<select id="beforeDel" resultType="BeforeDelVO">
+		select decode(p.item_no,null,'n','y') stock, decode(m.point,0,'n','y') point
+        from member m full outer join(  select item_no ,memb_no
+                                        from poss_stock 
+                                        where memb_no = #{membNo}
+                                        and trade_prc = (
+                                                           select max(trade_prc)
+                                                           from poss_stock
+                                                           where memb_no = #{membNo}
+                                                           )
+                                       ) p
+        on m.memb_no = p.memb_no
+        where m.memb_no = #{membNo}
 	</select>
 </mapper>

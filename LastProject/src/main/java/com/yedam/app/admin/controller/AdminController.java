@@ -266,7 +266,7 @@ public class AdminController {
 	//회원삭제
 	@ResponseBody
 	@PostMapping("deleteMemb")
-	public int deleteMemb(@RequestBody List<String> rowKeys) {
+	public Map<String ,Object> deleteMemb(@RequestBody List<String> rowKeys) {
 		return adminService.deleteMember(rowKeys);
 	}
 	

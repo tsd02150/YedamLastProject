@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 
 import com.yedam.app.admin.mapper.AdminMapper;
 import com.yedam.app.admin.service.AdminService;
+import com.yedam.app.admin.service.BeforeDelVO;
 import com.yedam.app.admin.service.MembManageVO;
 import com.yedam.app.community.service.BoardVO;
 import com.yedam.app.community.service.FaqVO;
 import com.yedam.app.community.service.NoticeVO;
 import com.yedam.app.community.service.QuestionVO;
-import com.yedam.app.mall.service.CommonCdVO;
 import com.yedam.app.mall.service.OrderVO;
 import com.yedam.app.mall.service.ProductVO;
 
@@ -39,6 +39,9 @@ public class AdminServiceImpl implements AdminService {
 	// 회원정지
 	@Override
 	public int memberBan(List<String> list, Integer period) {
+		for(int i = 0 ; i < list.size() ; i++) {
+			list.set(i, adminMapper.nmGetNo(list.get(i)));
+		}
 		int cnt = list.size();
 		int result =0;
 		List<String> being = new ArrayList<>();
@@ -73,8 +76,36 @@ public class AdminServiceImpl implements AdminService {
 
 	// 회원삭제
 	@Override
-	public int deleteMember(List<String> list) {
-		return adminMapper.deleteMember(list);
+	public Map<String,Object> deleteMember(List<String> list) {
+		List<String> delList = new ArrayList<String>();
+		Map<String,Object> map = new HashMap<>();
+		int delResult=0;
+		
+		for(String str : list) {
+			BeforeDelVO vo = adminMapper.beforeDel(str);
+			if(vo.getPoint().equals("n") && vo.getStock().equals("n")) {
+				delList.add(str);
+			}
+		}
+		
+		if(delList.size() > 0) {
+			delResult = adminMapper.deleteMember(delList);
+			
+			if(delResult > 0) {
+				map.put("code", "success");
+				map.put("list", delList);
+				return map;
+			}else {
+				map.put("code", "fail");
+				return map;
+			}
+		}else {
+			map.put("code", "null");
+			return map;
+		}
+		
+		
+		
 	}
 	// 회원 정지해제
 	@Override

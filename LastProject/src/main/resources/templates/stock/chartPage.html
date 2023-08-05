@@ -358,7 +358,7 @@ input[type="number"]::-webkit-inner-spin-button {
 		</th:block>
 		<div class="cp container">
 			<div class="chartpage row">
-				<div class="p-1 col-md-3 border">
+				<div class="p-1 col-md-3 ">
 					<div id="CP1D12" class="mb-1 border">
 						<h3>
 							보유종목
@@ -367,15 +367,19 @@ input[type="number"]::-webkit-inner-spin-button {
 							<th:block th:if="${session.loggedInMember}==null">
 								<p>로그인 후 이용할 수 있는 기능입니다.</p>
 							</th:block>
-							<th:block th:unless="${session.loggedInMember}==null"
-								th:each="stock : ${possStock}">
-								<p class="border my-1 pointer" >
-								<input class="btn btn-danger btn-sm invisible" type="button" value="x" th:attr="data-info=${stock.itemNo}" disabled="disabled" >
-									[[${stock.nm}]] <span
-										th:class="${stock.change} == 0 ? '_' : (${stock.change} > 0 ?'plus':'minus')">[[${stock.change
-										== 0 ? stock.change : (stock.change > 0 ? "+"+stock.change :
-										stock.change) }]] ([[${stock.rate == 0 ? stock.rate : (stock.rate > 0 ? "+"+stock.rate : stock.rate) }]]%)</span>
-								</p>
+							<th:block th:unless="${session.loggedInMember}==null">
+								<th:block th:if="${possStock.size()} != 0" th:each="stock : ${possStock}">
+									<p class="border my-1 pointer" >
+									<input class="btn btn-danger btn-sm invisible" type="button" value="x" th:attr="data-info=${stock.itemNo}" disabled="disabled" >
+										[[${stock.nm}]] <span
+											th:class="${stock.change} == 0 ? '_' : (${stock.change} > 0 ?'plus':'minus')">[[${stock.change
+											== 0 ? stock.change : (stock.change > 0 ? "+"+stock.change :
+											stock.change) }]] ([[${stock.rate == 0 ? stock.rate : (stock.rate > 0 ? "+"+stock.rate : stock.rate) }]]%)</span>
+									</p>
+								</th:block>
+								<th:block th:unless="${possStock.size()} != 0">
+									<p>보유주식이 없습니다.</p>
+								</th:block>
 							</th:block>
 						</div>
 					</div>
@@ -403,7 +407,7 @@ input[type="number"]::-webkit-inner-spin-button {
 						</div>
 					</div>
 				</div>
-				<div class="p-1 col-md-6 border">
+				<div class="p-1 col-md-6 ">
 					<div id="CP2D1" class="mb-1 border">
 						<div id="itemPtag" style="display:inline-block">
 							<div><p th:attr="data-in=${itemInfo?.itemNo}">종목 : [[${itemInfo?.nm}]] <span th:class="${itemInfo?.change} == 0 ? '_' : (${itemInfo?.change} > 0 ? 'plus' : 'minus')"> 전일비 : [[${itemInfo?.change &gt; 0 ? "+ "+itemInfo?.change : itemInfo?.change}]] 변동률 : [[${itemInfo?.rate &gt; 0 ? "+"+itemInfo?.rate : itemInfo?.rate }]]%</span></p>
@@ -444,7 +448,7 @@ input[type="number"]::-webkit-inner-spin-button {
 					</div>
 					
 				</div>
-				<div class="p-1 col-md-3 border">
+				<div class="p-1 col-md-3 ">
 					<div id="CP3D1" class="mb-1 border">
 
 						<div id="CP3D11" class="col-md-12 border">
