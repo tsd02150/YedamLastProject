@@ -710,7 +710,10 @@
 														#{detaAddr}
 										)
 	</insert>
+	<select  id="ordList" parameterType="OrderVO">
 	
+	
+	</select>
 	<select id="shipList" parameterType="ShippingVO">
 		select * from(
 			select rownum rn, a.* from(
@@ -735,10 +738,10 @@
 			order by o.order_dt desc
 			) a
 	 	<![CDATA[
-			WHERE rownum <= (${page}*10)
+			WHERE rownum <= (${page}*5)
 			)
 		]]>
-		where rn >(${page}-1)*10
+		where rn >(${page}-1)*5
 	</select>
 	<select id="getShipListCount" resultType="int" parameterType="ShippingVO">
 		select count(*)
@@ -781,16 +784,16 @@
 		update orders
 		set order_st = '결제취소'
 		where memb_no = #{membNo}
-		and pay_an = #{payAn}
+		and order_no = #{orderNo}
 	</update>
 	<update id="updateShip" parameterType="ShippingVO">
 		update shipping
 		set ship_st = '주문취소'
-		where ship_no = #{shipNo}
+		where order_no = #{orderNo}
 	</update>
 	
 	<select id="selectOrderOne" parameterType="OrderVO" resultType="String">
 		select order_am from orders
-		where pay_an = #{payAn}
+		where order_no = #{orderNo}
 	</select>
 </mapper>

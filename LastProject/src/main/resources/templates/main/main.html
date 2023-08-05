@@ -52,7 +52,7 @@
 									<tr class="stockDetail" th:each="farm:${farmRank}" th:data-itemno="${farm.itemNo}">
 										<td>[[${farm.theme}]]</td>
 										<td>[[${farm.nm}]]</td>
-										<td>[[${farm.tprc}]]</td>
+										<td th:text="${#numbers.formatInteger(farm.tprc, 0, 'COMMA')} +' P'"></td>
 										<td th:class="${farm.rate>=0}?redCol:blueCol">[[${farm.rate}]]%</td>
 									</tr>
 								</table>
@@ -70,7 +70,7 @@
 									<tr class="stockDetail" th:each="sea:${seaRank}" th:data-itemno="${sea.itemNo}">
 										<td>[[${sea.theme}]]</td>
 										<td>[[${sea.nm}]]</td>
-										<td>[[${sea.tprc}]]</td>
+										<td th:text="${#numbers.formatInteger(sea.tprc, 0, 'COMMA')} +' P'"></td>
 										<td th:class="${sea.rate>=0}?redCol:blueCol">[[${sea.rate}]]%</td>
 									</tr>
 								</table>
@@ -100,7 +100,7 @@
 									<tr class="stockDetail" th:each="stock:${increaseStock}" th:data-itemno="${stock.itemNo}">
 										<td>[[${stock.theme}]]</td>
 										<td>[[${stock.nm}]]</td>
-										<td>[[${stock.tprc}]]</td>
+										<td th:text="${#numbers.formatInteger(stock.tprc, 0, 'COMMA')} +' P'"></td>
 										<td th:class="${stock.rate>=0}?redCol:blueCol">[[${stock.rate}]]%</td>
 									</tr>
 								</table>
@@ -118,7 +118,7 @@
 									<tr class="stockDetail" th:each="stock:${decreaseStock}" th:data-itemno="${stock.itemNo}">
 										<td>[[${stock.theme}]]</td>
 										<td>[[${stock.nm}]]</td>
-										<td>[[${stock.tprc}]]</td>
+										<td th:text="${#numbers.formatInteger(stock.tprc, 0, 'COMMA')} +' P'"></td>
 										<td th:class="${stock.rate>=0}?redCol:blueCol">[[${stock.rate}]]%</td>
 									</tr>
 								</table>
@@ -228,6 +228,7 @@
 				let a = document.createElement('a');
 				a.innerHTML=data.items[i].title;
 				a.href=data.items[i].link;
+				a.target='_blank';
 				p.append(a);
 				newsContent.append(p);
 			}

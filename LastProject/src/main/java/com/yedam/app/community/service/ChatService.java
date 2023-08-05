@@ -31,4 +31,6 @@ public interface ChatService {
 	public boolean insertChatRoom(ChatRoomVO vo);
 	// 방 비교
 	public boolean sameRoom(String nm);
+	// 방에 인원이 없으면 방 삭제
+	public boolean deleteRoom(String roomNo);
 }

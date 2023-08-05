@@ -23,7 +23,7 @@
 #ownList {
 	border-top: 1px solid #ddd;
 	height: 350px;
-	overflow: auto;
+	overflow: scroll;
 	padding-right: 0px;
 	padding-left: 0px;
 }
@@ -497,8 +497,8 @@
 	//매수 주문 예약 삭제
  function delBuyOrder(target) {
 	  let dataNo = target.parentNode.getAttribute('data-no');
-	  //console.log(dataNo);
-	  $.ajax({
+	  console.log(target);
+	  /* $.ajax({
 		  url : "deleteBuyOrder",
 		  method : "POST",
 		  data : {
@@ -506,7 +506,6 @@
 			  "buyNo" : dataNo
 		  },
 		  success : function(res){
-			  //console.log(res);
 			  $(target).parent().remove();
 			  toastShow("Delete","매수 주문 예약이 삭제되었습니다.","success");
 			  window.location.reload();
@@ -514,7 +513,7 @@
 		  error : function(err){
 			  console.log(err);
 		  }
-	  });
+	  }); */
 	}
 	//매도 주문 예약 삭제
  function delSellOrder(target) {
@@ -570,7 +569,7 @@
          `;
        });
      } else {
-    	 tr1 += `<a onclick="location.href='/stock/itemListPage'"><button class="btn btn-primary">주식페이지로 이동</button></a>`;
+    	 tr1 += `<td colspan="3"><a onclick="location.href='/stock/itemListPage'"><button class="btn btn-primary">주식페이지로 이동</button></a></td>`;
      }
 
      // 출력된 관심종목 리스트를 HTML에 추가합니다.

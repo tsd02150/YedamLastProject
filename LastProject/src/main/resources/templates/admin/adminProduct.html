@@ -10,7 +10,6 @@
 <style>
 .swal-cls {
 	width: 950px !important;
-
 }
 
 #reportDiv #productCntn {
@@ -27,13 +26,20 @@
 #productNm {
 	text-align: left;
 }
-#grid img{
-	width:200px;
-	height:100px;
+
+#grid img {
+	width: 200px;
+	height: 100px;
 }
-#grid td div{
+
+#grid td div {
 	text-align: center;
 	font-size: 16px;
+}
+
+.ck-rounded-corners .ck.ck-editor__main>.ck-editor__editable, .ck.ck-editor__main>.ck-editor__editable.ck-rounded-corners
+	{
+	height: 300px;
 }
 </style>
 </head>
@@ -47,7 +53,7 @@
 			<button id="deleteBtn" class="btn btn-danger">삭제</button>
 		</div>
 
-		<div id="grid" style="height:1000px;"></div>
+		<div id="grid" style="height: 1000px;"></div>
 
 		<script
 			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
@@ -412,7 +418,7 @@
 									<th>상품 썸네일</th>
 									<td colspan="3" class="text-left">
 										<div id="thumbCntn" >
-											<textarea id="productContent">${data.thumb}</textarea>
+											<textarea id="productContent" style="height: 100px;">${data.thumb}</textarea>
 										</div>
 									</td>
 								</tr>

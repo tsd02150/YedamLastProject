@@ -22,6 +22,10 @@
 #titlename span:after {
 	width: 150px;
 }
+#ttl{
+	background-color: white;
+	border-color: #ddd;
+}
 </style>
 </head>
 <body>
@@ -115,7 +119,7 @@
 		
 		btnCancel.addEventListener('click',function(){
 			if(confirm("글 작성을 취소 하시겠습니까?"))
-				window.location.href="/community/boardList?commonCd="+[[${boardInfo.commonCd}]];
+				window.location.href="/community/questionList";
 		});
 		</script>
 	</div>

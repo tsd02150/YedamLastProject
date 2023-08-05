@@ -239,6 +239,10 @@ const membNo = "[[${session.loggedInMember.membNo}]]";
 const memnick = "[[${session.loggedInMember.nick}]]";
 const pwd = "[[${session.loggedInMember.pwd}]]";
 
+let zipInput = '';
+let addrInput = '';
+let detaInput = '';
+
 //회원정보 변경
 function updateAjax(){
 	$.ajax({
@@ -382,6 +386,9 @@ $(aa).after(zipbtnHtml);
 
 let changeButton = $(target);
 changeButton.text('저장').removeAttr('onclick').on('click', function() {
+	console.log(zipInput.val());
+	console.log(addrInput.val());
+	console.log(detaInput.val());
  updateMemberAddr(); // 저장 버튼 클릭 시 주소 변경 요청
  $(target).next().remove();
  let addButtonHtml = '<button type="button" class="changeAddr btn btn-light" onclick="changeAddr(this)">변경</button>' +
@@ -402,9 +409,9 @@ reBtn.text('취소').attr('type', 'reset').on('click', function() {
 
 // 우편번호 찾기 버튼 클릭 이벤트 처리
 $(document).on('click', '.zipbtn', function() {
- let zipInput = $(this).closest('.form-group').find('input[name="zip"]');
- let addrInput = $(this).closest('.col-md-12').next().find('input[name="addr"]');
- let detaInput = $(this).closest('.col-md-12').next().next().find('input[name="detaAddr"]');
+ zipInput = $(this).closest('.form-group').find('input[name="zip"]');
+ addrInput = $(this).closest('.col-md-12').next().find('input[name="addr"]');
+ detaInput = $(this).closest('.col-md-12').next().next().find('input[name="detaAddr"]');
  detaInput.val("");
  detaInput.removeAttr("readonly");
 
@@ -429,6 +436,8 @@ $(document).on('click', '.zipbtn', function() {
 
      zipInput.val(data.zonecode);
      addrInput.val(fullRoadAddr);
+     console.log(zipInput.val());
+     console.log(addrInput.val());
    }
  }).open();
 });
@@ -436,10 +445,6 @@ $(document).on('click', '.zipbtn', function() {
 
 //주소 변경 요청
 function updateMemberAddr() {
-let zipInput = $('input[name="zip"]');
-let addrInput = $('input[name="addr"]');
-let detaInput = $('input[name="detaAddr"]');
-console.log(detaInput.val());
 
 $.ajax({
  url: "updateMemberAddr",
@@ -737,7 +742,7 @@ function deleteMemb(){
 	let point = parseInt("[[${session.loggedInMember.point}]]");
 	if(point != 0){
 		console.log("[[${#lists.isEmpty(stockList)}]]");
-		if("[[${#lists.isEmpty(stockList)}]]" == false){
+		if("[[${#lists.isEmpty(stockList)}]]" === "true"){
 			message='';
 			spanbtn='';
 			message += `현재 보유 포인트 <br>
@@ -785,6 +790,8 @@ function deleteMemb(){
 
 //회원탈퇴
 function delAjax(){
+	console.log("회원탈퇴");
+	console.log(membNo);
 	$.ajax({
 		url : "deleteMemb",
 		method : "POST",
