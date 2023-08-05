@@ -28,7 +28,6 @@
 	width: 50%;
 	height: 500px;
 	padding: 0px;
-	/* border: 1px solid; */
 }
 
 #prdt-img {
@@ -186,13 +185,13 @@ th {
 	align-items: center;
 }
 
-.review-item p{
-	font-size : 18px;
+.review-item p {
+	font-size: 18px;
 }
 
-.review-item img{
-	width : 150px;
-	height : 150px;
+.review-item img {
+	width: 150px;
+	height: 150px;
 }
 
 .pic {
@@ -200,7 +199,6 @@ th {
 	height: 80px;
 	background-color: #f2f2f2;
 	margin-right: 10px;
-	
 }
 
 .info {
@@ -267,6 +265,7 @@ th {
 	width: 200px;
 	height: 200px;
 }
+
 .modal-content {
 	background-color: #fefefe;
 	margin: 10% auto;
@@ -291,10 +290,10 @@ th {
 
 /* 상세정보 */
 #prdt-info {
-	border: 1px solid #e0e0e0;
 	background-color: #f9f9f9;
 	padding: 30px;
 	text-align: left; /* 텍스트를 왼쪽 정렬 */
+	color: black;
 }
 
 #prdt-info table {
@@ -366,11 +365,10 @@ p>img {
 	height: 100px;
 }
 
-
-.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred {
-    height: 300px;
+.ck.ck-content.ck-editor__editable.ck-rounded-corners.ck-editor__editable_inline.ck-blurred
+	{
+	height: 300px;
 }
-
 </style>
 
 </head>
@@ -424,45 +422,51 @@ p>img {
 			<section id="detail-img" class="news-style-one"
 				th:each="prdt : ${getFarm}">
 				<div class="zoom-image-container">
-					<div class="zoom-overlay" ></div>
+					<div class="zoom-overlay"></div>
 					<div class="zoom-image" id="prdt-img" th:utext="${prdt.thumb}"></div>
 				</div>
 			</section>
 
 			<section id="prdt-info" th:each="prdt : ${getFarm}">
-				<h1 th:text="${prdt.nm}" style="font-family:inherit;"></h1>
+				<h1 th:text="${prdt.nm}"
+					style="font-family: inherit; font-size: 30px;"></h1>
+				<div>&nbsp;</div>
 				<div>
 					<span class="real_price inline-blocked"
-						style="margin-right: 2px; font-size: 18px;"
-						th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + 'P'"></span>
+						style="margin-right: 2px; font-size: 18px; color: red; font-weight: bold;"
+						th:text="${#numbers.formatInteger(prdt.prc - (prdt.prc * (prdt.dcRate / 100.0)), 0, 'COMMA')} +' P'"></span>
 					<span class="sale_price body_font_color_50"
 						style="text-decoration: line-through; font-style: italic; font-size: 14px;"
-						th:text="${prdt.prc} + 'P'"> </span>
+						th:text="${#numbers.formatInteger(prdt.prc ,0,'COMMA')} +' P'"></span>
 				</div>
-				<div
-					style=" box-shadow: 0 1px 0 #C8C8C8;">
-					<span>배송비</span> <span>10,000P 이상 결제 시 무료배송</span>
+				<div>&nbsp;</div>
+				<div style="box-shadow: 0 1px 0 #C8C8C8;">
+					<span>배송비</span> <span>10,000 P 이상 결제 시 무료배송</span>
+					<div>&nbsp;</div>
 				</div>
+				<div>&nbsp;</div>
 
-				<div class="" >
-					<div class="button">
-						<div class="button_quantity">
-							주문수량 <input type="number" class="quantity_input" value="1"
-								data-prdt-prc="${prdt.prc}" data-dc-rate="${prdt.dcRate}"
-								data-delivery-fee="${deliveryFee}"> <span>
-								<button class="plus_btn">+</button>
-								<button class="minus_btn">-</button>
-							</span>
-						</div>
-						<p>총 결제금액</p>
-						<span class="totalPrc"
-							th:text="${prdt.prc - (prdt.prc * (prdt.dcRate / 100.0))} + 'P'"></span>
-						<div class="button_set">
-							<a class="btn_cart">장바구니 담기</a> <a class="btn_buy"
-								onclick="directOrder()">바로구매</a>
-						</div>
+				<div class="button">
+					<div class="button_quantity">
+						주문수량 <input type="number" class="quantity_input" value="1"
+							data-prdt-prc="${prdt.prc}" data-dc-rate="${prdt.dcRate}"
+							data-delivery-fee="${deliveryFee}"> <span>
+							<button class="plus_btn">+</button>
+							<button class="minus_btn">-</button>
+						</span>
+					</div>
+					<div>&nbsp;</div>
+					<div>
+						총 결제금액 <span class="totalPrc"
+							th:text="${#numbers.formatInteger(prdt.prc - (prdt.prc * (prdt.dcRate / 100.0)), 0, 'COMMA')} +' P'"></span>
+					</div>
+					<div>&nbsp;</div>
+					<div class="button_set">
+						<span><button class="btn_cart">장바구니 담기</button>
+							<button class="btn_buy" onclick="directOrder()">바로구매</button></span>
 					</div>
 				</div>
+
 			</section>
 		</div>
 		<!-- prdt Info end-->
@@ -497,9 +501,8 @@ p>img {
 		<div class="details" th:each="prdt : ${getFarm}">
 			<a name="detail"></a>
 
-			<div class="content" style="text-align: center;" th:utext="${prdt.img}">
-				
-			</div>
+			<div class="content" style="text-align: center;"
+				th:utext="${prdt.img}"></div>
 			<button class="toggle-button" th:onclick="toggleDetails()">상세정보
 				접기</button>
 		</div>
@@ -571,23 +574,7 @@ p>img {
 					</tr>
 				</thead>
 				<tbody id="reviewList">
-					<!-- <tr th:each="rev : ${review}">
-						<td style="width: 70px; text-align: center;"
-							th:text="${rev.revNo}">40</td>
-						<td>
-							<div class="review-item">
-								<div class="pic">
-									<img style="width: 80px; height: 80px;"
-										th:src="|/mall/images/main/${rev.img}|">
-								</div>
-								<div class="info" th:text="${rev.cntn}">후기내용</div>
-							</div>
-						</td>
-						<td style="text-align: center;" class="maks" th:text="${rev.maks}">5</td>
-						<td style="text-align: center;" th:text="${rev.membNo}">test</td>
-						<td style="text-align: center;" th:text="${rev.drwupDt}">2023-07-16</td>
-
-					</tr> -->
+			
 				</tbody>
 			</table>
 		</div>
@@ -599,18 +586,13 @@ p>img {
 				<span class="close">&times;</span>
 				<h2 style="text-align: center;">상품 후기</h2>
 				<div>&nbsp;</div>
-				<div style="display: flex;"	 class="pic" th:each="prdt : ${getFarm}">
-					<img id="modal-img" th:utext="${prdt.thumb}">
-					<span
-						style="margin-left: 10px; " th:text="${prdt.nm}"></span>
-					
-				</div>
+				<section id="modal-img" th:each="prdt : ${getFarm}">
+					<div th:utext="${prdt.thumb}"></div>
+				</section>
+				<section id="modal-info" th:each="prdt : ${getFarm}">
+					<div th:text="${prdt.nm}"></div>
+				</section>
 
-				<div>&nbsp;</div>
-				<div>&nbsp;</div>
-				<div>&nbsp;</div>
-				<div>&nbsp;</div>
-				<div>&nbsp;</div>
 				<form class="mb-3" name="myform" id="myform" method="post">
 					<fieldset>
 						<span class="text-bold">별점을 선택해주세요</span> <input type="radio"
@@ -646,7 +628,8 @@ p>img {
 
 		
 		<!-- 후기 아이템 반복 출력 -->
-
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
 		<script
 			src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
 		<script
@@ -660,6 +643,7 @@ p>img {
 		let totalPrc = 0;
 		let prdtCout = 0;
 		let count = 0;
+		//let realPrice = $(".realPrice").text(realPrice.toLocaleString());
 
 		//수량 버튼 조작 & 각 상품의 가격 정보인 prc를 가져와서 누적하여 총 가격 계산
 		let quantity = $(".quantity_input").val();

@@ -67,6 +67,7 @@
 		FROM
 		PRODUCT_REVIEW
 		WHERE prdt_no = #{prdtNo}
+		ORDER BY drwup_dt
 	</select>
 	 
 	<select id="getProductReview" resultType="ProductReviewVO">
@@ -130,7 +131,7 @@
 		SELECT *
 		FROM PRODUCT P JOIN COMMON_CODE C
 		USING(common_cd)
-		WHERE nm Like #{nm}||'%'
+		WHERE nm Like '%'|| #{nm}||'%'
 		ORDER BY nm DESC
 	</select>
 	

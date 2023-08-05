@@ -255,4 +255,11 @@ public class StockController {
 		vo.setPoint(stockservice.getPoint(vo.getMembNo()));
 		session.setAttribute("loggedInMember", vo);
 	}
+	
+	// test
+	@ResponseBody
+	@GetMapping("test")
+	public void testing() {
+		stockservice.testSend();
+	}
 }

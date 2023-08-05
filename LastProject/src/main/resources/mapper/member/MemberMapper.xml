@@ -637,7 +637,8 @@
 	</select>
 	
 	<select id="recomList" parameterType="String" resultType="PossVO">
-		select distinct bb.item_no, bb.nm tnm,bb.common_cd, bb.prc tprc, nvl((bb.cl_prc-bb.prc)/decode(bb.prc,0,null,bb.prc)*100,0) as rate from(
+		select distinct bb.item_no, bb.nm tnm,bb.common_cd, bb.prc tprc, trunc(NVL(DECODE(bb.prc,0,0,bb.prc - bb.cl_prc) / bb.cl_prc, 0)*100)as rate 
+		from(
 			WITH a AS (
 			    SELECT item_no, SUM(stock_cnt) stock_cnt, SUM(trade_prc*stock_cnt) trade_prc -- 보유주식 총 수량, 총금액
 			    FROM poss_stock
@@ -709,7 +710,10 @@
 														#{detaAddr}
 										)
 	</insert>
+	<select  id="ordList" parameterType="OrderVO">
 	
+	
+	</select>
 	<select id="shipList" parameterType="ShippingVO">
 		select * from(
 			select rownum rn, a.* from(
@@ -734,10 +738,10 @@
 			order by o.order_dt desc
 			) a
 	 	<![CDATA[
-			WHERE rownum <= (${page}*10)
+			WHERE rownum <= (${page}*5)
 			)
 		]]>
-		where rn >(${page}-1)*10
+		where rn >(${page}-1)*5
 	</select>
 	<select id="getShipListCount" resultType="int" parameterType="ShippingVO">
 		select count(*)
@@ -780,16 +784,16 @@
 		update orders
 		set order_st = '결제취소'
 		where memb_no = #{membNo}
-		and pay_an = #{payAn}
+		and order_no = #{orderNo}
 	</update>
 	<update id="updateShip" parameterType="ShippingVO">
 		update shipping
 		set ship_st = '주문취소'
-		where ship_no = #{shipNo}
+		where order_no = #{orderNo}
 	</update>
 	
 	<select id="selectOrderOne" parameterType="OrderVO" resultType="String">
 		select order_am from orders
-		where pay_an = #{payAn}
+		where order_no = #{orderNo}
 	</select>
 </mapper>

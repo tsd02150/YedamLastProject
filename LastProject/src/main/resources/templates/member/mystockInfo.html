@@ -101,7 +101,7 @@ padding-top : 40px;
 				<tr>
 					<td th:text="|${#numbers.formatInteger(sumNowPrc, 0, 'COMMA')} P|"></td>
 					<td th:text="|${#numbers.formatInteger(sumTradePrc, 0, 'COMMA')} P|"></td>
-					<td th:text="|${#numbers.formatInteger((sumTradePrc-sumNowPrc), 0, 'COMMA')} P|"></td>
+					<td th:text="|${#numbers.formatInteger((sumNowPrc-sumTradePrc), 0, 'COMMA')} P|"></td>
 					<td th:text="|${#numbers.formatInteger(raise, 0, 'COMMA')} %|"></td>
 				</tr>
 				</tbody>
@@ -420,14 +420,18 @@ padding-top : 40px;
 	
 	// 매수 주문 예약 삭제
 	function delBuyOrder(target) {
-		 let dataNo = $(target).closest("tr").attr('data-no');
-	  //console.log(dataNo);
-	  $.ajax({
+		let dataNo = $(target).closest("tr").attr('data-no');
+	  let rmnCnt = parseInt($(target).closest("tr").find("td:nth-child(3)").text());
+		let prc = parseInt($(target).closest("tr").find("td:nth-child(4)").text());
+		let total = rmnCnt*prc;
+		
+	 $.ajax({
 	    url: "deleteBuyOrder",
 	    method: "POST",
 	    data: {
 	      "membNo": membNo,
-	      "buyNo": dataNo
+	      "buyNo": dataNo,
+	      "point" : total
 	    },
 	    success: function (res) {
 	      if (res == 1) {
@@ -439,7 +443,7 @@ padding-top : 40px;
 	    error: function (err) {
 	      console.log(err);
 	    }
-	  });
+	  }); 
 	}
 
 	
@@ -479,6 +483,7 @@ function myRaiseList(){
 				console.log(el);
 				let chartDate = el.dt
 				chartArr1.push(chartDate)
+				console.log(chartDate)
 				
 				let chartData = el.raise
 				chartArr2.push(chartData)
@@ -498,10 +503,10 @@ function myRaiseList(){
 		        colors: {
 		          ranges: [{
 		            from: 0,
-		            to: 100,
+		            to: 100000,
 		            color: '#F15B46'
 		          }, {
-		            from: -100,
+		            from: -100000,
 		            to: 0,
 		            color: '#7094FF'
 		          }]
@@ -526,7 +531,8 @@ function myRaiseList(){
 		      type: 'datetime',
 		      categories: chartArr1,
 		      labels: {
-		        rotate: -90
+		        rotate: -90,
+		        format: 'yyyy-MM-dd'
 		      }
 		    }
 		    };

@@ -298,6 +298,9 @@
 #titlename span:after{
 	width:210px;
 }
+#tosimg {
+	cursor: pointer;
+}
 </style>
 
 <script
@@ -308,7 +311,7 @@
 
 		<div class="content_area">
 			<h1 class="news-title" id="titlename">
-				<span>주문내역리스트</span>
+				<span>주문리스트</span>
 			</h1>
 			<div class="content_main">
 
@@ -446,7 +449,7 @@
 								<td class="goods_table_price_td" th:text="${item.cnt}"><span>수량</span>
 									<br></td>
 								<td
-									th:text="${(item.prc - (item.prc * item.dcRate / 100)) * item.cnt}+'P'"></td>
+									th:text="${#numbers.formatInteger((item.prc - (item.prc * item.dcRate / 100)) * item.cnt , 0, 'COMMA')}+'P'"></td>
 							</tr>
 						</tbody>
 					</table>

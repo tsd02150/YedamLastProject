@@ -72,7 +72,7 @@ margin-top : 100px;
  
 		<script>
 		const id = "[[${session.loggedInMember.id}]]";
-		let count;
+		let count=0;
 		//비밀번호 비교 버튼 클릭 시
 		$("#checkPwd").on("click", function(){
 			count++;
@@ -83,6 +83,9 @@ margin-top : 100px;
 					"font-weight": "bold",
 					"font-size": "14px"
 				});
+				if(count>=5){ //클릭 5회 제한
+					$('#myModal').show();
+				} 
 				return;
 			}
 			
@@ -95,12 +98,10 @@ margin-top : 100px;
 					"pwd" : $("#pass").val()
 				},
 				success : function(res){
-					console.log(res)
 				 	if(res == "success"){
 						location.href="mypageInfo";
 					}else{
 						//$("#checkPwd").text("")
-						$("#pass").val("");
 						$("#pwdCheck").text("비밀번호가 일치하지 않습니다. 다시 입력하세요").css({
 							"color": "#FA3E3E",
 							"font-weight": "bold",
@@ -113,12 +114,11 @@ margin-top : 100px;
 					console.log(err);
 				}
 			}); //비밀번호 비교 끝
-			
 			if(count>=5){ //클릭 5회 제한
 				$('#myModal').show();
 			} 
-			
 		});
+		
 		
 //모달
 function close_pop(flag) {

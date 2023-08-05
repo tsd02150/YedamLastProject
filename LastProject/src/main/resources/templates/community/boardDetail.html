@@ -13,6 +13,9 @@
 .commentText{
 	margin-left: 20px;
 }
+.commentText span{
+	cursor: pointer;	
+}
 /* 모달 창 */
 .modal {
 	display: none;
@@ -185,7 +188,7 @@
 										</div>
 										<p style="margin: 5px 0px;vertical-align: bottom;">&nbsp([[${#dates.format(comment.drwupDt,'yyyy-MM-dd')}]])</p>
 									</div>
-									<div class="commentContent">
+									<div class="commentContent d-flex justify-content-between">
 										
 										<button th:disabled="${myInfo.membNo!=null and myInfo.stopNo!=null}?'disabled'" class="btn btn-light mt-2 mt-lg-0 commentRcom" th:data-commentno="${comment.commNo}" type="button" th:onclick="${myInfo.nick==null} ? 'needLogin()' : 'commentRcom()'">
 											추천
@@ -206,7 +209,7 @@
 								<div class="d-flex justify-content-between commentText">
 									<div class="d-flex">
 										<span th:if="${myInfo.membNo}==${comment.membNo}" style="color:red;font-size:20px;" onClick="deleteComment()">&times&nbsp</span>	
-										<p class="commentContent" th:text="${comment.cntn}">내용</p>	
+										<p class="commentContentP" style="white-space:pre;" th:text="${comment.cntn}">내용</p>	
 									</div>
 									<button th:disabled="${myInfo.membNo!=null and myInfo.stopNo!=null}?'disabled'" th:if="${comment.commNo==comment.hCommNo}" class="btn mt-2 mt-lg-0 commentAddBtn" th:data-commentno="${comment.commNo}" type="button" th:onclick="${myInfo.nick==null} ? 'needLogin()' : 'subCommentAddForm()'">
 										댓글 달기
@@ -220,7 +223,7 @@
 					</div>
 					<hr>
 					<div class="d-flex">
-						<textarea cols="105" rows="5" th:disabled="${myInfo.membNo!=null and myInfo.stopNo!=null}?'disabled'"></textarea>
+						<textarea cols="120" rows="5" th:disabled="${myInfo.membNo!=null and myInfo.stopNo!=null}?'disabled'"></textarea>
 						<button class="btn btn-light mt-2 mt-lg-0" th:disabled="${myInfo.membNo!=null and myInfo.stopNo!=null}?'disabled'" th:onclick="${myInfo.nick==null} ? 'needLogin()' : 'createCommentBtn()'" type="button">댓글 작성</button>
 					</div>
 					<hr>
@@ -316,12 +319,12 @@
 			})
 						
  			document.querySelectorAll('section.subComment').forEach(sub=>{
- 				let targetText=sub.querySelector('p.commentContent').textContent;
+ 				let targetText=sub.querySelector('p.commentContentP').textContent;
 				let hashTagStart=targetText.indexOf("@");
 				let hashTagEnd=targetText.indexOf(" ");
 				
 				if(hashTagStart>=0&&hashTagEnd>0){
-					sub.querySelector('p.commentContent').innerHTML="<span class='contentHighlight'>"+targetText.substring(hashTagStart,hashTagEnd)+"</span> "+targetText.substring(hashTagEnd+1);	
+					sub.querySelector('p.commentContentP').innerHTML="<span class='contentHighlight'>"+targetText.substring(hashTagStart,hashTagEnd)+"</span> "+targetText.substring(hashTagEnd+1);	
 				}
 			})
  		
@@ -378,7 +381,7 @@
 			
 			// 삭제 버튼
 			function deleteBoardFunc(){
-				if(confirm("삭제허쉴?")){
+				if(confirm("삭제하시겠습니까?")){
 					fetch("/community/deleteBoard",{
 						method: "POST",
 						headers: {
@@ -403,7 +406,7 @@
 			
 			// 수정 버튼
 			function modifyBoardFunc(){
-				if(confirm("수정허쉴?")){
+				if(confirm("수정하시겠습니까?")){
 					window.location.href="/community/modifyBoard?ctgr="+[[${boardName}]]+"&commonCd="+[[${boardCode}]]+"&boardNo="+[[${board.boardNo}]];
 				}
 			}
@@ -492,7 +495,7 @@
 									</div>
 									<p style="margin: 5px 0px;vertical-align: bottom;">&nbsp(${result.drwupDt})</p>
 								</div>
-								<div class="commentContent">
+								<div class="commentContent d-flex justify-content-between">
 									<button class="btn btn-light mt-2 mt-lg-0 commentRcom" data-commentno=`+result.commNo+` type="button" onClick="commentRcom()">
 										추천
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8692FF" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16">
@@ -512,7 +515,7 @@
 							<div class="d-flex justify-content-between commentText">
 								<div class="d-flex">
 									<span style="color:red;font-size:20px;" onClick="deleteComment()">&times&nbsp</span>	
-									<p class="commentContent">${result.cntn}</p>	
+									<p class="commentContentP" style="white-space:pre;">${result.cntn}</p>	
 								</div>
 								<button class="btn mt-2 mt-lg-0 commentAddBtn" data-commentno=${result.commNo} type="button" onclick="subCommentAddForm()">
 									댓글 달기
@@ -537,7 +540,7 @@
 			function deleteComment(){
 				let target = event.target.parentNode.parentNode.parentNode.parentNode;
 				
-				if(confirm("삭제허쉴?")){
+				if(confirm("삭제하시겠습니까?")){
 					
 					fetch("/community/deleteComment",{
 						method: "POST",
@@ -621,7 +624,7 @@
 									</div>
 									<p style="margin: 5px 0px;vertical-align: bottom;">&nbsp(${result.drwupDt})</p>
 								</div>
-								<div class="commentContent">
+								<div class="commentContent d-flex justify-content-between">
 									<button class="btn btn-light mt-2 mt-lg-0 commentRcom" data-commentno=`+result.commNo+` type="button" onClick="commentRcom()">
 										추천
 										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8692FF" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16">
@@ -641,7 +644,7 @@
 							<div class="d-flex justify-content-between commentText">
 								<div class="d-flex">
 									<span style="color:red;font-size:20px;" onClick="deleteComment()">&times&nbsp</span>	
-									<p class="commentContent">${result.cntn}</p>	
+									<p class="commentContentP"style="white-space:pre;" >${result.cntn}</p>	
 								</div>
 							</div>
 						</div>

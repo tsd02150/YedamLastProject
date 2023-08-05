@@ -58,7 +58,7 @@
 				</table>
 				<hr>
 				<div class="d-flex justify-content-end">
-					<button th:if="${session.loggedInMember}!=null" class="btn btn-primary mt-3 mt-lg-0" id="insertBoard" onclick="insertBoardFunc()" type="button">글쓰기</button>
+					<button th:if="${session.loggedInMember!=null AND session.loggedInMember.stopNo==null}" class="btn btn-primary mt-3 mt-lg-0" id="insertBoard" onclick="insertBoardFunc()" type="button">글쓰기</button>
 				</div>
 				<div>
 					<nav aria-label="Page navigation example" class="d-flex justify-content-center">

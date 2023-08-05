@@ -516,7 +516,7 @@
 										});	
 									}else{
 										//
-										alert('수정성공')
+										toastShow('수정완료','공지사항이 수정되었습니다.','success');
 									}
 						    	  const inputValue = $('#writeNoticeTtl').val();
 					    	  $('td[data-row-key='+ev.rowKey+'][data-column-name=ttl]').children(0).text(inputValue);

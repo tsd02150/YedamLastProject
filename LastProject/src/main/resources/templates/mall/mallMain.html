@@ -181,10 +181,11 @@
 }
 
 .contents1_bold {
-	font-size: 24px;
+	font-size: 20px;
 	font-weight: bold;
 	color: #333333;
 	margin-bottom: 10px;
+	text-align: left;
 }
 
 .contents2 {
@@ -314,7 +315,6 @@
 		<!-- 농산물 -->
 		<div>&nbsp;</div>
 		<div>&nbsp;</div>
-		<div>&nbsp;</div>
 
 		<div class="main_text0">
 			<h1>농산물</h1>
@@ -324,12 +324,14 @@
 
 			<div class="row">
 
-				<div class="col-md-3 col-sm-6" th:each="prdt, iterStat : ${farmProduct}"
+				<div class="col-md-3 col-sm-6"
+					th:each="prdt, iterStat : ${farmProduct}"
 					th:if="${iterStat.index} >= 1 and ${iterStat.index} <= 4 ">
 					<div class="product-grid">
 						<div class="product-image">
-							<a th:href="|/mall/getFarm?prdtNo=${prdt.prdtNo}|" class="image" th:utext="${prdt.thumb}">
-							</a> <span th:if="${prdt.dcRate!=0}" class="product-sale-label">sale</span> <a
+							<a th:href="|/mall/getFarm?prdtNo=${prdt.prdtNo}|" class="image"
+								th:utext="${prdt.thumb}"> </a> <span th:if="${prdt.dcRate!=0}"
+								class="product-sale-label">sale</span> <a
 								class="product-like-icon" href="#"><i class="far fa-heart"></i></a>
 							<a class="add-to-cart" href="#"><i
 								class="fas fa-shopping-bag"></i> add to cart </a>
@@ -337,11 +339,12 @@
 						<div class="product-content">
 							<div th:text="${prdt.nm}" class="contents1_bold"></div>
 							<div th:text="${prdt.desct}" class="contents2"></div>
-							<span th:text="${prdt.prc} + 'P'"></span>
+							<span style="font-weight: bold; text-align:left; color: red;"
+								th:text="${#numbers.formatInteger(prdt.prc, 0, 'COMMA')} + 'P'"></span>
 							<div>
 								<div
 									th:onclick="|location.href='@{getFarm(prdtNo=${prdt.prdtNo})}'|">
-									<a class="btn btn-outline-light">read more</a>
+									<a class="btn btn-outline-light" style="margin-left: -12px;">read more</a>
 								</div>
 							</div>
 						</div>
@@ -351,10 +354,12 @@
 			</div>
 
 		</div>
-
 		<div>&nbsp;</div>
 		<div>&nbsp;</div>
-
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
 		<!-- 수산물 -->
 		<div class="main_text0">
 			<h1>수산물</h1>
@@ -362,12 +367,14 @@
 			<div>&nbsp;</div>
 			<div class="row">
 
-				<div class="col-md-3 col-sm-6" th:each="prdt, iterStat : ${seaProduct}"
+				<div class="col-md-3 col-sm-6"
+					th:each="prdt, iterStat : ${seaProduct}"
 					th:if="${iterStat.index}  >= 1 and ${iterStat.index} <= 4 ">
 					<div class="product-grid">
 						<div class="product-image">
-							<a th:href="|/mall/getFarm?prdtNo=${prdt.prdtNo}|" class="image" th:utext="${prdt.thumb}">
-							</a> <span th:if="${prdt.dcRate!=0}" class="product-sale-label">sale</span> <a
+							<a th:href="|/mall/getFarm?prdtNo=${prdt.prdtNo}|" class="image"
+								th:utext="${prdt.thumb}"> </a> <span th:if="${prdt.dcRate!=0}"
+								class="product-sale-label">sale</span> <a
 								class="product-like-icon" href="#"><i class="far fa-heart"></i></a>
 							<a class="add-to-cart" href="#"><i
 								class="fas fa-shopping-bag"></i> add to cart </a>
@@ -375,11 +382,12 @@
 						<div class="product-content">
 							<div th:text="${prdt.nm}" class="contents1_bold"></div>
 							<div th:text="${prdt.desct}" class="contents2"></div>
-							<span th:text="${prdt.prc} + 'P'"></span>
+							<span style="font-weight: bold; color: red;"
+								th:text="${#numbers.formatInteger(prdt.prc, 0, 'COMMA')} + 'P'"></span>
 							<div>
 								<div
 									th:onclick="|location.href='@{getFarm(prdtNo=${prdt.prdtNo})}'|">
-									<a class="btn btn-outline-light">read more</a>
+									<a class="btn btn-outline-light" style="margin-left: -12px;">read more</a>
 								</div>
 							</div>
 						</div>
@@ -390,31 +398,31 @@
 		<div>&nbsp;</div>
 		<div>&nbsp;</div>
 		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
 		<section class="shop-banner">
 			<div class="container">
-				
-				<div class="sale-percent">
-					
-				</div>
-				
+
+				<div class="sale-percent"></div>
+
 			</div>
 		</section>
 
 		<!-- 슬라이더  -->
-	<div class="section">
-	
-	 <div class="slide slide_wrap">
-      <div class="slide_item item1"></div>
-      <div class="slide_item item2"></div>
-      <div class="slide_item item3"></div>
-      <div class="slide_item item4"></div>
-      <div class="slide_item item5"></div>
-      <div class="slide_prev_button slide_button">◀</div>
-      <div class="slide_next_button slide_button">▶</div>
-      <ul class="slide_pagination"></ul>
-    </div>
+		<div class="section">
 
-</div>
+			<div class="slide slide_wrap">
+				<div class="slide_item item1"></div>
+				<div class="slide_item item2"></div>
+				<div class="slide_item item3"></div>
+				<div class="slide_item item4"></div>
+				<div class="slide_item item5"></div>
+				<div class="slide_prev_button slide_button">◀</div>
+				<div class="slide_next_button slide_button">▶</div>
+				<ul class="slide_pagination"></ul>
+			</div>
+
+		</div>
 
 		<div>&nbsp;</div>
 		<div>&nbsp;</div>

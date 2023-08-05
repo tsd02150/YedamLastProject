@@ -384,10 +384,10 @@ public class StockServiceImpl implements StockService {
 		return stockMapper.getClPrc(itemNo);
 	}
 	
-	// 체결시 실시간 알람전송
+	// 장마감시 실시간 알람전송
 	public void closeMarket() {
 		System.out.println("close 시간입니다.");
-		this.template.convertAndSend("/stock/close", "close");
+		this.template.convertAndSend("/all", "close");
 	}
 
 	@Override

@@ -719,7 +719,7 @@
 	<select id="getPossList" resultType="StockVO">
 		select t.item_no, t.nm,DECODE(t.prc,0,i.cl_prc,t.prc) tprc, DECODE(t.prc,0,0,t.prc - i.cl_prc) change ,trunc(NVL(DECODE(t.prc,0,0,t.prc - i.cl_prc) / DECODE(i.cl_prc, 0, NULL, i.cl_prc), 0)*100) rate
 		from (select b.item_no, cl_prc 
-		      from item_info a join (select i.item_no ,t.nm
+		      from item_info a join (select distinct(i.item_no) ,t.nm
 		                            from poss_stock i join item t
 		                            on i.item_no = t.item_no
 		                            where memb_no = #{membNo}) b

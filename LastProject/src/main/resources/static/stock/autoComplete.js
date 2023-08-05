@@ -203,16 +203,20 @@ function addInterest(itemNumber) {
 	  		method:'post',
 	  		data:{membNo : membinfo},
 	  		success:function(data){
-	  			let html='';
-			      for (let i = 0; i < data.list.length; i++) {
-			        html += `<p class="border my-1 pointer"><input class="btn btn-danger btn-sm invisible" type="button" value="x"  disabled="disabled" data-info=${data.list[i].itemNo}>
-			                ${data.list[i].nm} <span class="${data.list[i].change == 0 ? '_' : (data.list[i].change > 0 ? 'plus' : 'minus')}">
-			                ${data.list[i].change == 0 ? data.list[i].change : (data.list[i].change > 0 ? "+" + data.list[i].change : data.list[i].change) }
-			                (${data.list[i].rate == 0 ? data.list[i].rate : (data.list[i].rate > 0 ? "+"+data.list[i].rate : data.list[i].rate) }%)
-			                </span>
-			                </p>`;
+	  			if(data.list.length != 0){
+	  				let html='';
+			     	for (let i = 0; i < data.list.length; i++) {
+				        html += `<p class="border my-1 pointer"><input class="btn btn-danger btn-sm invisible" type="button" value="x"  disabled="disabled" data-info=${data.list[i].itemNo}>
+				                ${data.list[i].nm} <span class="${data.list[i].change == 0 ? '_' : (data.list[i].change > 0 ? 'plus' : 'minus')}">
+				                ${data.list[i].change == 0 ? data.list[i].change : (data.list[i].change > 0 ? "+" + data.list[i].change : data.list[i].change) }
+				                (${data.list[i].rate == 0 ? data.list[i].rate : (data.list[i].rate > 0 ? "+"+data.list[i].rate : data.list[i].rate) }%)
+				                </span>
+				                </p>`;
+			      	}
+			      	$("#possItem").html(html);
+			      }else{
+			      	$("#possItem").html(`<p>보유주식이 없습니다.</p>`);
 			      }
-			      $("#possItem").html(html);
 	  		},
 	  		error:function(xhr){
 	  			console.log(xhr);

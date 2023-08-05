@@ -43,11 +43,6 @@
 	text-decoration: none;
 	color: #333;
 }
-
-.empty-basket-message {
-	font-size: 20px;
-	text-align: center;
-}
 </style>
 
 
@@ -55,187 +50,184 @@
 <body id="body">
 	<div layout:fragment="content" class="outer-block">
 
-		<!-- 퀵메뉴 -->
-		<div class="quick-menu">
-			<ul>
-				<li th:onclick="|location.href='@{mallMain}'|"
-					style="cursor: pointer;"><img
-					style="width: 40ox; height: 40px;"
-					src="https://cdn-icons-png.flaticon.com/128/4578/4578246.png"></li>
-				<li style="font-size: 12px;"
-					th:onclick="|location.href='@{mallMain}'|"><a href="#">포인트몰</a></li>
+	<!-- 퀵메뉴 -->
+	<div class="quick-menu">
+		<ul>
+			<li th:onclick="|location.href='@{mallMain}'|"
+				style="cursor: pointer;"><img
+				style="width: 40ox; height: 40px;"
+				src="https://cdn-icons-png.flaticon.com/128/4578/4578246.png"></li>
+			<li style="font-size: 12px;"
+				th:onclick="|location.href='@{mallMain}'|"><a href="#">포인트몰</a></li>
 
-				<li
-					th:onclick="|location.href='@{/mall/productList(commonCd=${'S1'})}'|"
-					style="cursor: pointer;"><img
-					style="width: 40ox; height: 40px;"
-					src="https://cdn-icons-png.flaticon.com/128/2230/2230446.png"></li>
-				<li style="font-size: 12px;"><a
-					href="/mall/productList?commonCd=S1">농산물</a></li>
-
-
-				<li
-					th:onclick="|location.href='@{/mall/productList(commonCd=${'S2'})}'|"
-					style="cursor: pointer;"><img
-					style="width: 40ox; height: 40px;"
-					src="https://cdn-icons-png.flaticon.com/128/3361/3361370.png"></li>
-				<li style="font-size: 12px;"><a
-					href="/mall/productList?commonCd=S2">수산물</a></li>
+			<li
+				th:onclick="|location.href='@{/mall/productList(commonCd=${'S1'})}'|"
+				style="cursor: pointer;"><img
+				style="width: 40ox; height: 40px;"
+				src="https://cdn-icons-png.flaticon.com/128/2230/2230446.png"></li>
+			<li style="font-size: 12px;"><a
+				href="/mall/productList?commonCd=S1">농산물</a></li>
 
 
-				<li th:onclick="|location.href='@{basketList}'|"
-					style="cursor: pointer;"><img
-					style="width: 40ox; height: 40px;"
-					src="https://cdn-icons-png.flaticon.com/128/545/545489.png"></li>
-				<li style="font-size: 12px;"
-					th:onclick="|location.href='@{basketList}'|"><a href="#">장바구니</a></li>
-				<li class="top-btn" style="font-size: 12px; cursor: pointer;"><img
-					style="width: 40px; height: 40px;"
-					src="https://cdn-icons-png.flaticon.com/128/6015/6015743.png"
-					alt="Top Button"><a href="#">TOP</a></li>
-			</ul>
-		</div>
+			<li
+				th:onclick="|location.href='@{/mall/productList(commonCd=${'S2'})}'|"
+				style="cursor: pointer;"><img
+				style="width: 40ox; height: 40px;"
+				src="https://cdn-icons-png.flaticon.com/128/3361/3361370.png"></li>
+			<li style="font-size: 12px;"><a
+				href="/mall/productList?commonCd=S2">수산물</a></li>
+
+
+			<li th:onclick="|location.href='@{basketList}'|"
+				style="cursor: pointer;"><img
+				style="width: 40ox; height: 40px;"
+				src="https://cdn-icons-png.flaticon.com/128/545/545489.png"></li>
+			<li style="font-size: 12px;"
+				th:onclick="|location.href='@{basketList}'|"><a href="#">장바구니</a></li>
+			<li class="top-btn" style="font-size: 12px; cursor: pointer;"><img
+				style="width: 40px; height: 40px;"
+				src="https://cdn-icons-png.flaticon.com/128/6015/6015743.png"
+				alt="Top Button"><a href="#">TOP</a></li>
+		</ul>
+	</div>
 
 		<!-- <form name="orderform" id="orderform" method="post" class="orderform"
 			action="/basketList"> -->
 
-		<div class="content_area">
-			<h1 class="news-title" id="titlename">
-				<span>장바구니</span>
-			</h1>
-			<div>&nbsp;</div>
-			<!-- 장바구니 리스트 -->
-			<div class="content_middle_section"></div>
-			<!-- 장바구니 가격 합계 -->
-			<!-- cartInfo -->
-			<div class="content_totalCount_section">
-				<!-- 테이블이 비어있을 경우 문구 보이기 -->
-				<table th:if="${basketList.isEmpty()}" class="empty-basket-table">
-					<tr>
-						<td colspan="7" class="empty-basket-message">장바구니가 비었습니다.</td>
-					</tr>
-				</table>
-				<div>&nbsp;</div>
-				<div>&nbsp;</div>
-				<div>&nbsp;</div>
-				<div>&nbsp;</div>
-				<!-- 체크박스 전체 여부 -->
-				<div class="all_check_input_div">
-					<input type="checkbox" class="all_check_input input_size_20"
-						checked="checked"><span class="all_chcek_span">전체선택</span>
-				</div>
+	<div class="content_area">
+		<h1 class="news-title" id="titlename">
+			<span>장바구니</span>
+		</h1>
+		
+		<!-- 장바구니 리스트 -->
+		<div class="content_middle_section"></div>
+		<!-- 장바구니 가격 합계 -->
+		<!-- cartInfo -->
+		<div class="content_totalCount_section">
 
-				<table th:if="${not basketList.isEmpty()}" class="subject_table">
-					<caption>표 제목 부분</caption>
-					<thead>
-						<tr>
-							<th class="td_width_1"></th>
-							<th class="td_width_4"></th>
-							<th class="td_width_4">상품명</th>
-							<th class="td_width_4">가격</th>
-							<th class="td_width_4">수량</th>
-							<th class="td_width_4">합계</th>
-							<th class="td_width_4">삭제</th>
-						</tr>
-					</thead>
-					<caption>표 내용 부분</caption>
-					<tbody id="basketList">
-						<tr th:each="item :${basketList}">
-							<td class="td_width_1 cart_info_td"><input type="checkbox"
-								class="individual_cart_checkbox input_size_20" checked="checked">
-								<input type="hidden" class="individual_bookPrice_input"
-								value="${item.prc}"> <input type="hidden"
-								class="individual_salePrice_input"
-								value="${item.prc - (item.prc * (item.dcRate / 100.0))}">
-								<input type="hidden" class="individual_bookCount_input"
-								value="${item.cnt}"> <input type="hidden"
-								class="individual_totalPrice_input"
-								value="${(item.prc - (item.prc * (item.dcRate / 100.0))) * item.cnt}">
-								<input type="hidden" class="individual_point_input"
-								value="${item.point}"> <input type="hidden"
-								class="individual_totalPoint_input" value="${ci.totalPoint}">
-								<input type="hidden" class="individual_bookId_input"
-								value="${item.prdtNo}"></td>
-							<td class="td_width_4">
-								<div class="image_wrap">
-									<img
-										th:onclick="|location.href='@{getFarm(prdtNo=${item.prdtNo})}'|">
-									<div class="bsk-img" th:utext="${item.thumb}"></div>
-								</div>
-							</td>
-							<td class="td_width_4" th:text="${item.nm}"></td>
-							<td class="td_width_4 price_td"><del>정가 :
-									[[${item.prc}]]</del><br> <span class="red_color">판매가 : <span>[[${item.prc
-										- (item.prc * item.dcRate) / 100}]]</span>P
-							</span><br> <span class="green_color"></span></td>
-							<td class="td_width_4 ">
-								<div class="table_text_align_center quantity_div">
-									<div class="d-flex">
-										<input type="text" class="quantity_input"
-											th:value="${item.cnt}">
-										<button class="quantity_btn plus_btn">+</button>
-										<button class="quantity_btn minus_btn">-</button>
-									</div>
-								</div>
-								<button class="quantity_modify_btn" onclick="updateCnt()"
-									th:data-bskno="${item.bskNo}">변경</button>
-							</td>
-							<td class="td_width_4 table_text_align_center"
-								th:text="${(item.prc - (item.prc * item.dcRate) / 100) * item.cnt}+'P'">
+<!-- 테이블이 비어있을 경우 문구 보이기 -->
+			<table th:if="${basketList.isEmpty()}" class="empty-basket-table">
+				<tr>
+					<td colspan="7" class="empty-basket-message">장바구니가 비었습니다.</td>
+				</tr>
+			</table>
+			
+	<!-- 체크박스 전체 여부 -->
+	<div class="all_check_input_div">
+		<input type="checkbox" class="all_check_input input_size_20"
+			checked="checked"><span class="all_chcek_span">전체선택</span>
+	</div>
 
-							</td>
-							<td class="td_width_4 table_text_align_center">
-								<button class="delete_btn" onclick="deleteBasket()"
-									th:data-bskno="${item.bskNo}">삭제</button>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-
-			</div>
-			<!-- 풋터 영억 -->
-			<div class="basketDisplay">
-				<!-- 가격 종합 -->
-				<div class="content_total_section">
-					<div class="total_wrap">
-						<table>
-							<tr>
-								<td>총 상품 가격</td>
-								<td><span class="totalPrice_span"></span> P</td>
-							</tr>
-							<tr>
-								<td>배송비</td>
-								<td><span class="delivery_price">3000</span>P</td>
-							</tr>
-							<tr>
-							<tr>
-								<td>총 주문 상품수</td>
-								<td><span class="totalKind_span"></span><span
-									class="totalCount_span"></span>EA</td>
-							</tr>
-
-							<tr>
-								<td colspan="2" style="box-shadow: 0 1px 0 #C8C8C8;"></td>
-							</tr>
-							<tr>
-								<td><strong>총 결제 예상 금액</strong></td>
-								<td><span class="finalTotalPrice_span">70000</span> P</td>
-							</tr>
-						</table>
-
+	<table th:if="${not basketList.isEmpty()}" class="subject_table">
+		<caption>표 제목 부분</caption>
+		<thead>
+			<tr class="td-size">
+				<th class="td_width_1"></th>
+				<th class="td_width_4"></th>
+				<th class="td_width_4">상품명</th>
+				<th class="td_width_4">가격</th>
+				<th class="td_width_4">수량</th>
+				<th class="td_width_4">합계</th>
+				<th class="td_width_4">삭제</th>
+			</tr>
+		</thead>
+		<caption>표 내용 부분</caption>
+		<tbody id="basketList">
+			<tr th:each="item :${basketList}">
+				<td class="td_width_1 cart_info_td"><input type="checkbox"
+					class="individual_cart_checkbox input_size_20" checked="checked">
+					<input type="hidden" class="individual_bookPrice_input"
+					value="${item.prc}"> <input type="hidden"
+					class="individual_salePrice_input"
+					value="${item.prc - (item.prc * (item.dcRate / 100.0))}">
+					<input type="hidden" class="individual_bookCount_input"
+					value="${item.cnt}"> <input type="hidden"
+					class="individual_totalPrice_input"
+					value="${(item.prc - (item.prc * (item.dcRate / 100.0))) * item.cnt}">
+					<input type="hidden" class="individual_point_input"
+					value="${item.point}"> <input type="hidden"
+					class="individual_totalPoint_input" value="${ci.totalPoint}">
+					<input type="hidden" class="individual_bookId_input"
+					value="${item.prdtNo}"></td>
+				<td class="td_width_4">
+					<div class="image_wrap">
+						<img th:onclick="|location.href='@{getFarm(prdtNo=${item.prdtNo})}'|"><div class="bsk-img" th:utext="${item.thumb}"></div>
 					</div>
-				</div>
+				</td>
+				<td class="td_width_4" id="bsk_ttl" th:text="${item.nm}"></td>
+				<td class="td_width_4 price_td"><del>정가 :
+						<span th:text="${#numbers.formatInteger(item.prc ,0,'COMMA')} +' P'"></span></del><br>
+						<span class="red_color">판매가 :
+						<span >[[${item.prc - (item.prc * item.dcRate) / 100}]]</span>P</span><br>
+					<span class="green_color"></span></td>
+				<td class="td_width_4 ">
+					<div class="table_text_align_center quantity_div">
+						<div class="d-flex">
+						<input type="text" class="quantity_input"
+							th:value="${item.cnt}">
+							<button class="quantity_btn plus_btn">+</button>
+							<button class="quantity_btn minus_btn">-</button>
+						</div>
+					</div>
+					<button class="quantity_modify_btn" onclick="updateCnt()"
+						th:data-bskno="${item.bskNo}">변경</button>
+				</td>
+				<td class="td_width_4 table_text_align_center"
+					th:text="${#numbers.formatInteger((item.prc - (item.prc * item.dcRate) / 100) * item.cnt, 0, 'COMMA')}+'P'">
 
+				</td>
+				<td class="td_width_4 table_text_align_center">
+					<button class="delete_btn" onclick="deleteBasket()"
+						th:data-bskno="${item.bskNo}">삭제</button>
+				</td>
+			</tr>
+			<tr th:if="${basketList==null}"><td><p>ㅎㅎ없음</p></td></tr>
+		</tbody>
+	</table>
 
-				<!-- 구매 버튼 영역 -->
-				<div class="right-align basketrowcmd">
-					<a onclick="deleteAllBasket()" class="btn btn-dark  mt-2 mt-lg-0"
-						style="color: white;">장바구니 비우기</a> <a onclick="directOrder()"
-						class="btn btn-dark  mt-2 mt-lg-0" style="color: white;">주문하기</a>
-				</div>
+	</div>
+	<!-- 풋터 영억 -->
+	<div class="basketDisplay">
+	<!-- 가격 종합 -->
+	<div class="content_total_section">
+		<div class="total_wrap">
+			<table>
+				<tr>
+					<td>총 상품 가격</td>
+					<td><span class="totalPrice_span"></span> P</td>
+				</tr>
+				<tr>
+					<td>배송비</td>
+					<td><span class="delivery_price">3000</span>P</td>
+				</tr>
+				<tr>
+				<tr>
+					<td>총 주문 상품수</td>
+					<td><span class="totalKind_span"></span><span
+						class="totalCount_span"></span>EA</td>
+				</tr>
 
-			</div>
+				<tr>
+					<td colspan="2" style=" box-shadow: 0 1px 0 #C8C8C8;"></td>
+				</tr>
+				<tr>
+					<td><strong>총 결제 예상 금액</strong></td>
+					<td><span class="finalTotalPrice_span">70000</span> P</td>
+				</tr>
+			</table>
+
 		</div>
+	</div>
+
+
+	<!-- 구매 버튼 영역 -->
+	<div class="right-align basketrowcmd">
+		<a onclick="deleteAllBasket()" class="btn btn-dark  mt-2 mt-lg-0" style="color: white;">장바구니 비우기</a>
+		<a onclick="directOrder()" class="btn btn-dark  mt-2 mt-lg-0" style="color: white;">주문하기</a>
+	</div>
+
+	</div>
+	</div>
 
 		<script th:inline="javascript">
 
@@ -247,51 +239,6 @@
 	    });
 	});
 	
-	
-		 
-	// 장바구니 삭제 버튼을 클릭했을 때 해당 상품을 삭제하는 함수
-    function deleteBasket() {
-		console.log(event.target.dataset.bskno);
-        fetch("/mall/deleteBasket", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: "bskNo=" + event.target.dataset.bskno
-        })
-        .then(response => response.text())
-        .then(result => {
-            if (result=="success") {
-               //window.location.href="/mall/basketList"
-            		location.reload();
-            }else {
-            	toastShow("Fail Delete", "삭제 실패", "error");
-            }
-        })
-        .catch(err => console.log(err));
-    }
-	 
-	  // "장바구니 비우기" 버튼 클릭 이벤트 처리 함수
-	  function deleteAllBasket() {
-	    fetch("/mall/deleteAllBasket", {
-	      method: "POST",
-	      headers: {
-	        "Content-Type": "application/x-www-form-urlencoded",
-	      },
-	      body: "bskNo=" + event.target
-	    })
-	      .then((response) => response.text())
-	      .then((result) => {
-	        if (result == "success") {
-	          location.reload();
-	          document.getElementById(".basketDisplay").style.display = "none";
-	        } else {
-	          toastShow("Fail Delete", "삭제 실패", "error");
-	        }
-	      })
-	      .catch(err => console.log(err));
-	  }
-	  
 		
 		/* 수량버튼 */
 		$(".plus_btn").on("click", function(){
@@ -326,8 +273,101 @@
 				$(".finalTotalPrice_span").text(finalTotalPrice.toLocaleString());	
 			}
 		});
-
-	  
+		
+	//장바구니 리스트 출력
+	//basketList();
+	
+	/* function basketList() {
+		 fetch("/mall/basketList", {
+			 method:"POST",
+			 headers : {
+				 'Content-Type': 'application/x-www-form-urlencoded'
+			 },
+			 
+		 })
+		 .then(response=> response.json())
+		 .then(result=>{
+			 result.forEach(item=>{
+				 console.log(item);
+			let trTag =`
+			
+				<tr>
+				<td class="td_width_3" >${item.nm}</td>
+				<td class="td_width_4 price_td">
+					<del>정가 : ${item.prc}</del><br>
+					<span class="red_color" >판매가 : ${item.prc - (item.prc * (item.dcRate / 100.0))}P </span><br>
+					마일리지 : ${(item.prc - (item.prc * (item.dcRate / 100.0))) * 0.1}P<span class="green_color"></span>
+				</td>
+				<td class="td_width_4 table_text_align_center">
+					<div class="table_text_align_center quantity_div">
+						<input type="text" class="quantity_input">${item.cnt}	
+						<button class="quantity_btn plus_btn">+</button>
+						<button class="quantity_btn minus_btn">-</button>
+					</div>
+					<button class="quantity_modify_btn" onclick="updateCnt()" data-bskno="${item.bskNo}">변경</button>
+				</td>
+				<td class="td_width_4 table_text_align_center">${(item.prc - (item.prc * (item.dcRate / 100.0))) * item.cnt}P
+					
+				</td>
+				<td class="td_width_4 table_text_align_center">
+					<button class="delete_btn" onclick="deleteBasket()" data-bskno="${item.bskNo}">삭제</button>
+				</td>
+			</tr>
+			`;
+				document.querySelector("#basketList").innerHTML+=trTag;
+			 })
+		 })
+		 .catch(err=>console.log(err));
+	 } 
+	  */
+	
+		 
+	// 장바구니 삭제 버튼을 클릭했을 때 해당 상품을 삭제하는 함수
+    function deleteBasket() {
+		console.log(event.target.dataset.bskno);
+        fetch("/mall/deleteBasket", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: "bskNo=" + event.target.dataset.bskno
+        })
+        .then(response => response.text())
+        .then(result => {
+            if (result=="success") {
+               //window.location.href="/mall/basketList"
+            		location.reload();
+            }else {
+            	toastShow("Fail Delete", "삭제 실패", "error");
+            }
+        })
+        .catch(err => console.log(err));
+    }
+	 
+	// 장바구니 전체 삭제
+    function deleteAllBasket() {
+       	//console.log(document.querySelectAll('tr[data-bsk]');
+       	let list=[];
+        fetch("/mall/deleteAllBasket", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+          
+        })
+        .then(response => response.text())
+        .then(result => {
+            if (result=="success") {
+               //window.location.href="/mall/basketList"
+            		location.reload();
+            		document.getElementById('.basketDisplay').style.display = 'none';
+            }else {
+            	toastShow("Fail Delete", "삭제 실패", "error");
+            }
+        })
+        .catch(err => console.log(err));
+    } 
+		 
 	// 장바구니 수량 변경 기능
 	 function updateCnt(){
 		console.log($(event.target).prev().find('input').val());
@@ -376,7 +416,7 @@
 	// 총 갯수
 	$(".totalCount_span").text(totalCount);
 	// 배송비
-	$(".delivery_price").text(deliveryPrice.toLocaleString());	
+	$(".delivery_price").text(deliveryPrice.toLocaleString());
 	// 최종 가격(총 가격 + 배송비)
 	$(".finalTotalPrice_span").text(finalTotalPrice.toLocaleString());		
 	
@@ -389,54 +429,56 @@
 
 }
 	
-	  // 총 주문금액을 계산하고 업데이트하는 함수
-	  function updateTotalAmount() {
-	    let totalPrice = 0;
-	    let totalCount = 0;
-	    let deliveryPrice = 3000; // 기본 배송비
-	    let finalTotalPrice = 0;
+	
+    // 총 주문금액을 계산하고 업데이트하는 함수
+    function updateTotalAmount() {
+      let totalPrice = 0;
+      let totalCount = 0;
+      let deliveryPrice = 3000; // 기본 배송비
+      let finalTotalPrice = 0;
 
-	    // 각 개별 카트 항목을 순회하며 계산
-	    $(".individual_cart_checkbox:checked").each(function () {
-	      const quantity = $(this).closest("tr").find(".quantity_input").val();
-	      const price = parseFloat($(this).closest("tr").find(".price_td span span").text());
-	      totalPrice += price * quantity;
-	      totalCount += parseInt(quantity);
-	    });
+      // 각 개별 카트 항목을 순회하며 계산
+      $(".individual_cart_checkbox:checked").each(function () {
+        const quantity = $(this).closest("tr").find(".quantity_input").val();
+        const price = parseFloat($(this).closest("tr").find(".price_td span span").text());
+        totalPrice += price * quantity;
+        totalCount += parseInt(quantity);
+      });
 
-	    // 총 가격이 10000 이상이면 배송비를 0으로 설정
-	    if (totalPrice >= 10000) {
-	      deliveryPrice = 0;
-	    }
+      // 총 가격이 10000 이상이면 배송비를 0으로 설정
+      if (totalPrice >= 10000) {
+        deliveryPrice = 0;
+      }
 
-	    finalTotalPrice = totalPrice + deliveryPrice;
+      finalTotalPrice = totalPrice + deliveryPrice;
 
-	    // 계산된 값으로 UI 업데이트
-	    $(".totalPrice_span").text(totalPrice.toLocaleString());
-	    $(".totalCount_span").text(totalCount);
-	    $(".delivery_price").text(deliveryPrice.toLocaleString());
-	    $(".finalTotalPrice_span").text(finalTotalPrice.toLocaleString());
-	  }
+      // 계산된 값으로 UI 업데이트
+      $(".totalPrice_span").text(totalPrice.toLocaleString());
+      $(".totalCount_span").text(totalCount);
+      $(".delivery_price").text(deliveryPrice.toLocaleString());
+      $(".finalTotalPrice_span").text(finalTotalPrice.toLocaleString());
+    }
 
-	  // 체크박스 상태 변경 이벤트 처리 함수
-	  function handleCheckboxChange() {
-	    updateTotalAmount();
-	  }
+    // 체크박스 상태 변경 이벤트 처리 함수
+    function handleCheckboxChange() {
+      updateTotalAmount();
+    }
 
-	  // 체크박스와 수량 버튼에 이벤트 리스너 등록
-	  $(".all_check_input").on("click", function () {
-	    const isChecked = $(this).prop("checked");
-	    $(".individual_cart_checkbox").prop("checked", isChecked);
-	    updateTotalAmount();
-	  });
+    // 체크박스와 수량 버튼에 이벤트 리스너 등록
+    $(".all_check_input").on("click", function () {
+      const isChecked = $(this).prop("checked");
+      $(".individual_cart_checkbox").prop("checked", isChecked);
+      updateTotalAmount();
+    });
 
-	  $(".individual_cart_checkbox").on("change", function () {
-	    handleCheckboxChange();
-	  });
+    $(".individual_cart_checkbox").on("change", function () {
+      handleCheckboxChange();
+    });
 
-	  $(".quantity_btn").on("click", function () {
-	    handleCheckboxChange();
-	  });
+    $(".quantity_btn").on("click", function () {
+      handleCheckboxChange();
+    });
+
 
 	
 	</script>

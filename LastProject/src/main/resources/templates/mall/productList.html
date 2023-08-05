@@ -69,7 +69,7 @@
 
 #productList img {
 	width: 300px;
-	height: 200px;
+	height: 300px;
 	object-fit: cover;
 }
 
@@ -246,10 +246,10 @@
 	let nm='';
 	let prc='';
 	let thumb='';
-	console.log("~~~~~~~~~~~~~~");
-	console.log(currentState);
-	console.log(prdtTargetPage);
+
 	productList();
+
+	
 	
 	//카테고리 별 정렬
 	$('.ctgr').on('click',function(){
@@ -290,8 +290,8 @@
 								</h4>
 								<p>
 									<span class="original-price"
-										style="text-decoration: line-through;">${items.prc}p</span> <br> <span
-										class="discounted-price">${items.prc - (items.prc * (items.dcRate / 100.0))}p</span>
+										style="text-decoration: line-through;">${items.prc.toLocaleString()}P</span> <br> 
+										<span class="discounted-price">${(items.prc - (items.prc * (items.dcRate / 100.0))).toLocaleString()}P</span>
 								</p>
 							</div>
 						</div>
@@ -343,8 +343,8 @@
 									<span class="nm"><a>${items.nm}</a></span>
 								</h4>
 								<p>
-									<span class="original-price" style="text-decoration: line-through;">${items.prc}p</span> <br> 
-									<span class="discounted-price">${items.prc - (items.prc * (items.dcRate / 100.0))}p</span>
+									<span class="original-price" style="text-decoration: line-through;">${items.prc.toLocaleString()}P</span> <br> 
+									<span class="discounted-price">${(items.prc - (items.prc * (items.dcRate / 100.0))).toLocaleString()}P</span>
 									
 								</p>
 							</div>
@@ -397,8 +397,8 @@
 									<span class="nm"><a>${items.nm}</a></span>
 								</h4>
 								<p>
-									<span class="original-price" style="text-decoration: line-through;">${items.prc}p</span><br>
-									<span class="discounted-price">${items.prc - (items.prc * (items.dcRate / 100.0))}p</span><br>
+									<span class="original-price" style="text-decoration: line-through;">${items.prc.toLocaleString()}P</span><br>
+									<span class="discounted-price">${(items.prc - (items.prc * (items.dcRate / 100.0))).toLocaleString()}P</span>
 										
 								</p>
 							</div>
@@ -415,11 +415,6 @@
 	} 
 	
 
-	//검색기능
-	/*  $('.searchPrdt').on('click',function(){
-		searchPrdt();
-	}); 
-	 */
 	function searchPrdt() {
 		console.log(searchI.value);
 		if(searchI.value != null && searchI.value != ''){
@@ -448,8 +443,8 @@
 								</h4>
 								<p>
 									<span class="original-price"
-										style="text-decoration: line-through;">${items.prc}p</span> <br> <span
-										class="discounted-price">${items.prc - (items.prc * (items.dcRate / 100.0))}p</span>
+										style="text-decoration: line-through;">${items.prc.toLocaleString()}P</span> <br> 
+										<span class="discounted-price">${(items.prc - (items.prc * (items.dcRate / 100.0))).toLocaleString()}P</span>
 								</p>
 							</div>
 						</div>
@@ -464,8 +459,6 @@
 	    .catch(err => console.log(err));
 		}
 	} 
-	
-	 
 	// 페이징위해 게시물 개수생성 및 페이지생성 호출
 	 function createPageBtn() {
 		console.log('test');

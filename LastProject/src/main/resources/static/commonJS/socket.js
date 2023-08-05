@@ -13,24 +13,20 @@ $(document).ready(function(){
 	stompClient.onConnect = (frame) => {
 	    
 	    console.log('Connected: ' + frame);
-	    stompClient.subscribe('/stock/close', (greeting) => {
-	    	console.log('zz')
-	        console.log(greeting.body);
-	        if(greeting.body == 'close' && window.location.pathname == '/stock/chart'){
+	   
+	    stompClient.subscribe("/all", (greeting) => {
+	     	if(greeting.body == 'close' && window.location.pathname == '/stock/chart'){
 	        	// 주문 공간 막아버리기
 	        	$('#forNonlogin').css('filter','blur(5px)');
 				$('#CP1D2 .blur').css('filter','blur(5px)');
-	        	$('#CP1D2').append($('<div id="closeMarket"/>').html(`<h1>개장 전 입니다 .</h1>`));
-	        }
+	        	$('#CP1D2').append($('<div id="closeMarket"/>').html(`<h1>개장 전 입니다 .</h1>`).css('width',$('#CP1D2').css('width')).css('height',$('#CP1D2').css('height')));
+	        	}
 	    });
-	    //알람 - empController 에서 보낸 알람
 	    stompClient.subscribe(destination, (greeting) => {
-	    	console.log('알림성공');
-	    	console.log(greeting);
-	        toastShow("체결 알림" ,greeting.body , "info"); // 구독된 url 에서 넘어오는 메세지 처리
-	        $('#newPlace').html('<span class="badge badge-danger">New</span>');
-	        $.ajax('/stock/resetPoint');
-	        
+		    	console.log('알림성공');
+		        toastShow("체결 알림" ,greeting.body , "info"); // 구독된 url 에서 넘어오는 메세지 처리
+		        $('#newPlace').html('<span class="badge badge-danger">New</span>');
+		        $.ajax('/stock/resetPoint');
 	    });
 	
 	};
@@ -98,6 +94,12 @@ function showChat(chat) {
 		`;	
 	}
     $("#chatSpace").append(chatContent);
+    
+    if($("#chatSpace").children().length>50){
+    	$("#chatSpace").children().eq(0).remove();
+    }
+    
+    $("#scrollEvent").scrollTop($("#scrollEvent")[0].scrollHeight);
 }
 
 function sendChat() {
@@ -120,6 +122,9 @@ function sendChat() {
 }
 
 function enterkey() {
+	if($("#my-message").val()==null || $("#my-message").val()==''){
+		return;
+	}
 	if (window.event.keyCode == 13) {
     	sendChat();
     }
@@ -127,7 +132,12 @@ function enterkey() {
 
 
 $(function () {
-    $( "#sendChat" ).click(() => sendChat());
+    $( "#sendChat" ).click(() => {
+    	if($("#my-message").val()==null || $("#my-message").val()==''){
+			return;
+		}
+    	sendChat()
+    });
    
 });
 

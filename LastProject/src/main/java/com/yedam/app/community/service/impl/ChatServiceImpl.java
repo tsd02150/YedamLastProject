@@ -104,6 +104,11 @@ public class ChatServiceImpl implements ChatService {
 			return true;			
 		}
 	}
+
+	@Override
+	public boolean deleteRoom(String roomNo) {
+		return chatMapper.deleteRoom(roomNo)>0;
+	}
 	
 	
 

@@ -16,7 +16,8 @@ function makeCandleChart(chartData){
         			}],
           chart: {
           height: 350,
-          type: 'candlestick',
+          
+          type: 'candlestick'
         },
         title: {
           text: '주가차트',
@@ -38,6 +39,14 @@ function makeCandleChart(chartData){
           tooltip: {
             enabled: true
           }
+        },
+        plotOptions: {
+            candlestick: {
+                colors: {
+                    upward: '#dc3545',
+                    downward: '#2C6EF2'
+                }
+            },
         }
         };
 

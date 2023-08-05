@@ -469,6 +469,7 @@ public class MemberController {
 	                               @RequestParam String pwd, @RequestParam String id, @RequestParam String email,
 	                               @RequestParam String zip,@RequestParam String addr,@RequestParam String detaAddr,
 	                               MembVO membVO, Model model, HttpSession session) {
+		UserVO memb = (UserVO) session.getAttribute("loggedInMember");
 	    MembVO mem = membService.memberList(id);
 	    membVO.setId(id);
 	    membVO.setNick(nick);
@@ -483,13 +484,21 @@ public class MemberController {
 	    
 	    //주소 등록
 	    AddrVO addrInfo = new AddrVO();
-	    addrInfo.setZip(zip);
-	    addrInfo.setAddr(addr);
-	    addrInfo.setDetaAddr(detaAddr);
-	    addrInfo.setMembNo(mem.getMembNo());
-	    
+	    if(membService.membListInfo(memb.getMembNo())== null) {
+	    	System.out.println("주소등록");
+	    	System.out.println(membService.membListInfo(memb.getMembNo()));
+	    	if(zip !=""  && addr != "" && detaAddr != "") { //list.get(i).toString().zip
+	    		addrInfo.setZip(zip);
+	    		addrInfo.setAddr(addr);
+	    		addrInfo.setDetaAddr(detaAddr);
+	    		addrInfo.setMembNo(mem.getMembNo());
+	    		
+	    		membService.insertAddr(addrInfo);
+	    		System.out.println("주소등록");
+	    		System.out.println(membService.insertAddr(addrInfo));
+	    	}
+	    }
 	    membService.updateMemberInfo(membVO);
-	    membService.insertAddr(addrInfo);
 
 	    //수정한 정보 다시 세션에 저장
 	    MembVO list = membService.memberList(id);
@@ -503,6 +512,7 @@ public class MemberController {
 	    loggedInMember.setPoint(list.getPoint());
 	    loggedInMember.setMembNo(list.getMembNo());
 	    loggedInMember.setJoinDt(list.getJoinDt());
+	    loggedInMember.setNm(list.getNm());
 	    session.setAttribute("loggedInMember", loggedInMember);
 	    model.addAttribute("membList", list);
 
@@ -513,6 +523,7 @@ public class MemberController {
 	@ResponseBody
 	@PostMapping("updateMemberAddr")
 	public AddrVO updateMemberAddr(@RequestParam String addrNo,@RequestParam String membNo,@RequestParam String zip,@RequestParam String addr,@RequestParam String detaAddr, AddrVO addrVO) {
+		System.out.println("주소변경");
 		addrVO.setAddrNo(addrNo);
 		addrVO.setZip(zip);
 		addrVO.setAddr(addr);
@@ -526,10 +537,8 @@ public class MemberController {
 	//주소 추가
 	@ResponseBody
 	@PostMapping("insertMemberAddr")
-	public AddrVO insertMemberAddr(@RequestParam String zip,@RequestParam String addr,@RequestParam String detaAddr, AddrVO addrVO) {
-		addrVO.setZip(zip);
-		addrVO.setAddr(addr);
-		addrVO.setDetaAddr(detaAddr);
+	public AddrVO insertMemberAddr(AddrVO addrVO) {
+		System.out.println("주소변경");
 		membService.insertAddr(addrVO);
 		System.out.println(membService.insertAddr(addrVO));
 		return addrVO;
@@ -607,9 +616,19 @@ public class MemberController {
 	//매수 주문 취소
 	@ResponseBody
 	@PostMapping("deleteBuyOrder")
-	public int deleteBuyOrder(@RequestParam String membNo, @RequestParam String buyNo, BuyOrderVO boVO) {
-		boVO.setMembNo(membNo);
-		boVO.setBuyNo(buyNo);
+	public int deleteBuyOrder(BuyOrderVO boVO, HttpSession session) {
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		
+		MembVO membVO = new MembVO();
+		int point = mem.getPoint()+boVO.getPoint();
+		membVO.setPoint(point);
+		membVO.setId(mem.getId());
+		membService.updateMemberInfo(membVO);
+		
+		//session 정보 업데이트
+		mem.setPoint(point);
+		
+		//주문 삭제
 		int result = membService.deleteBuyOrder(boVO);
 		return result;
 	}
@@ -712,13 +731,6 @@ public class MemberController {
 		return list;
 	}
 	
-	/*
-	 * @ResponseBody
-	 * 
-	 * @GetMapping("anoSelectKey") public String anoSelectKey() { String ano =
-	 * membService.anoSelectKey(); return ano; }
-	 */
-	
 	@ResponseBody
 	@PostMapping("recomList")
 	public List<PossVO> recomList(String membNo){
@@ -794,6 +806,8 @@ public class MemberController {
 	public int updateShip(ShippingVO vo, HttpSession session ) {
 		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 		int result = membService.updateShip(vo);
+		System.out.println("배송 수정");
+		System.out.println(membService.updateShip(vo));
 		return result;
 	}
 	

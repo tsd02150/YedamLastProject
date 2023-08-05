@@ -76,6 +76,9 @@ input[type=number] {
 	text-align: center;
 	padding: 10px 30px 10px 30px;
 }
+.signup{
+	border:0;
+}
 </style>
 </head>
 <body>
@@ -87,7 +90,7 @@ input[type=number] {
 					<form id="updateFrm" action="updateMemberInfo" class="signup-form row" method="post">
 						<div class="col-md-12">
 							<div class="form-group">
-							<h3 class="mt-4">[[${session.loggedInMember.nm}]]</h3>
+							<h3 class="mt-4">[[${session.loggedInMember.nm}]] 님</h3>
 							</div>
 						</div>
 					<div class="col-md-12">
@@ -239,6 +242,10 @@ const membNo = "[[${session.loggedInMember.membNo}]]";
 const memnick = "[[${session.loggedInMember.nick}]]";
 const pwd = "[[${session.loggedInMember.pwd}]]";
 
+let zipInput = '';
+let addrInput = '';
+let detaInput = '';
+
 //회원정보 변경
 function updateAjax(){
 	$.ajax({
@@ -343,12 +350,30 @@ $("#changeNick").on("click", function() {
 	            .then(response => response.json())
 	            .then(result => {
 	                if (nick !== "") {
-	                	nickMsg.textContent = result === 1 ? "이미 사용중인 닉네임입니다." : "사용가능한 닉네임입니다.";
-	
+	                	if(result === 1){
+	                		nickMsg.textContent = "이미 사용중인 닉네임입니다.";
+	                		$("#nickmsg").css({
+		            				"color": "#FA3E3E",
+		            				"font-weight": "bold",
+		            				"font-size": "14px"
+	            				});
+	                	}else{
+	                		nickMsg.textContent = "사용가능한 닉네임입니다.";
+	                		$("#nickmsg").css({
+		            				"color": "#0D6EFD",
+		            				"font-weight": "bold",
+		            				"font-size": "14px"
+	            				});
+	                	}
 	                    // 중복확인이 완료되면 checkedBtn 클래스를 추가
 	                    nickBtn.classList.add("checkedBtn");
 	                } else {
 	                	 nickMsg.textContent = "닉네임을 입력하세요";
+	                	 $("#nickmsg").css({
+		            				"color": "#FA3E3E",
+		            				"font-weight": "bold",
+		            				"font-size": "14px"
+	         						});
 	                }
 	            })
 	            .catch(err => console.log(err));
@@ -382,6 +407,9 @@ $(aa).after(zipbtnHtml);
 
 let changeButton = $(target);
 changeButton.text('저장').removeAttr('onclick').on('click', function() {
+	console.log(zipInput.val());
+	console.log(addrInput.val());
+	console.log(detaInput.val());
  updateMemberAddr(); // 저장 버튼 클릭 시 주소 변경 요청
  $(target).next().remove();
  let addButtonHtml = '<button type="button" class="changeAddr btn btn-light" onclick="changeAddr(this)">변경</button>' +
@@ -402,9 +430,9 @@ reBtn.text('취소').attr('type', 'reset').on('click', function() {
 
 // 우편번호 찾기 버튼 클릭 이벤트 처리
 $(document).on('click', '.zipbtn', function() {
- let zipInput = $(this).closest('.form-group').find('input[name="zip"]');
- let addrInput = $(this).closest('.col-md-12').next().find('input[name="addr"]');
- let detaInput = $(this).closest('.col-md-12').next().next().find('input[name="detaAddr"]');
+ zipInput = $(this).closest('.form-group').find('input[name="zip"]');
+ addrInput = $(this).closest('.col-md-12').next().find('input[name="addr"]');
+ detaInput = $(this).closest('.col-md-12').next().next().find('input[name="detaAddr"]');
  detaInput.val("");
  detaInput.removeAttr("readonly");
 
@@ -429,6 +457,8 @@ $(document).on('click', '.zipbtn', function() {
 
      zipInput.val(data.zonecode);
      addrInput.val(fullRoadAddr);
+     console.log(zipInput.val());
+     console.log(addrInput.val());
    }
  }).open();
 });
@@ -436,10 +466,6 @@ $(document).on('click', '.zipbtn', function() {
 
 //주소 변경 요청
 function updateMemberAddr() {
-let zipInput = $('input[name="zip"]');
-let addrInput = $('input[name="addr"]');
-let detaInput = $('input[name="detaAddr"]');
-console.log(detaInput.val());
 
 $.ajax({
  url: "updateMemberAddr",
@@ -563,11 +589,11 @@ function checkMailCode() {
     } else {
         mailcount2++;
         $("#mailCheck").text("다시 시도해주세요.")
-            .css({
-                "color": "#FA3E3E",
-                "font-weight": "bold",
-                "font-size": "14px"
-            });
+           .css({
+               "color": "#FA3E3E",
+               "font-weight": "bold",
+               "font-size": "14px"
+           });
     }
     if (mailcount2 >= 5) {
         $('#myModal').show();
@@ -737,7 +763,7 @@ function deleteMemb(){
 	let point = parseInt("[[${session.loggedInMember.point}]]");
 	if(point != 0){
 		console.log("[[${#lists.isEmpty(stockList)}]]");
-		if("[[${#lists.isEmpty(stockList)}]]" == false){
+		if("[[${#lists.isEmpty(stockList)}]]" === "true"){
 			message='';
 			spanbtn='';
 			message += `현재 보유 포인트 <br>
@@ -785,6 +811,8 @@ function deleteMemb(){
 
 //회원탈퇴
 function delAjax(){
+	console.log("회원탈퇴");
+	console.log(membNo);
 	$.ajax({
 		url : "deleteMemb",
 		method : "POST",
@@ -843,8 +871,18 @@ function checkPwdValidity() {
 
     if (!pwdValue) {
         pwdWarning.textContent = "비밀번호를 입력해주세요.";
+        $("#pwd-warning").css({
+					"color": "#FA3E3E",
+					"font-weight": "bold",
+					"font-size": "14px"
+				});
     } else if (!pwdRegex.test(pwdValue)) {
         pwdWarning.textContent = "영어 대소문자, 숫자, 특수문자 1개이상 사용해야 합니다.";
+        $("#pwd-warning").css({
+					"color": "#FA3E3E",
+					"font-weight": "bold",
+					"font-size": "14px"
+				});
     } else {
         pwdWarning.textContent = "";
     }
@@ -857,6 +895,11 @@ function checkPwdMatch() {
     if (pwdValue !== pwdCorrectValue) {
         pwdWarning.style.borderWidth = "2px";
         pwdWarning.textContent = "입력한 비밀번호와 일치하지 않습니다.";
+	        $("#pwd-warning").css({
+					"color": "#FA3E3E",
+					"font-weight": "bold",
+					"font-size": "14px"
+				});
     } else {
         pwdWarning.style.borderWidth = "";
         pwdWarning.textContent = "";
