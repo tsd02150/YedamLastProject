@@ -369,6 +369,10 @@ p>img {
 	{
 	height: 300px;
 }
+
+#openModalBtn {
+	
+}
 </style>
 
 </head>
@@ -462,8 +466,8 @@ p>img {
 					</div>
 					<div>&nbsp;</div>
 					<div class="button_set">
-						<span><button class="btn_cart">장바구니 담기</button>
-							<button class="btn_buy" onclick="directOrder()">바로구매</button></span>
+						<span><button class="btn_cart" th:disabled="${membNo=='' or membNo==null}?'disabled'">장바구니 담기</button>
+							<button class="btn_buy" onclick="directOrder()" th:disabled="${membNo=='' or membNo==null}?'disabled'">바로구매</button></span>
 					</div>
 				</div>
 
@@ -573,19 +577,21 @@ p>img {
 						<th style="width: 130px;"></th>
 					</tr>
 				</thead>
-				<tbody id="reviewList">
+				<tbody id="reviewList" >
 			
 				</tbody>
 			</table>
 		</div>
-
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
 		<!-- 모달 창 -->
 		<div id="reviewModal" class="modal">
 			<div class="modal-content">
 
 				<span class="close">&times;</span>
 				<h2 style="text-align: center;">상품 후기</h2>
-				<div>&nbsp;</div>
+				<div>&nbsp;</div>f
 				<section id="modal-img" th:each="prdt : ${getFarm}">
 					<div th:utext="${prdt.thumb}"></div>
 				</section>
@@ -717,9 +723,11 @@ p>img {
 			})
 			.then(response=>response.json())
 			.then(result=>{
+				
 				result.forEach(item=>{
 					console.log(item);
 					let trTag=`
+						
 						<tr>
 						<td style="width: 70px; text-align: center;" >${item.revNo}</td>
 						<td>
@@ -807,7 +815,19 @@ p>img {
 			</tr>
 			`;
 			document.querySelector("#reviewList").innerHTML+=trTag;
-	    	
+			
+			var maksValue = parseInt($("#reviewList tr:last-child").find('.maks').text());
+			var starRating = '';
+
+			for (var j = 0; j < 5; j++) {
+				if (j < maksValue) {
+					starRating += '★';
+				} else {
+					starRating += '☆';
+				}
+			}
+			$("#reviewList tr:last-child").find('.maks').text(starRating);
+			
 	    })
 	    .catch(error => {
 	        toastShow("Insert Fail", "등록 실패", "error");

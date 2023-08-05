@@ -144,7 +144,11 @@ public class MallController {
 		model.addAttribute("info", list);
 		System.out.println("주문정보 : " + list);
 		model.addAttribute("reviewInfo", revVO);
-		String membNo = ((UserVO) session.getAttribute("loggedInMember")).getMembNo();
+		String membNo="";
+		if(session.getAttribute("loggedInMember")!=null) {
+			membNo = ((UserVO) session.getAttribute("loggedInMember")).getMembNo();
+			
+		}
 
 		model.addAttribute("membNo", membNo);
 		System.out.println(membNo);
