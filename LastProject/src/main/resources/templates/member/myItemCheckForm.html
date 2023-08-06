@@ -62,134 +62,126 @@
 </style>
 </head>
 <body>
-	<section layout:fragment="content">
-		<div class="py-40"></div>
-		<h2 id="title">관심종목 선택 리스트</h2>
-		<input type="hidden" id="joinMembNo" th:value="${joinInfoNo}">
-		<div class="py-40"></div>
-		<div id="randomList">
-		</div>
-		<div id="Btn"></div>
+<section layout:fragment="content">
+	<div class="py-40"></div>
+	<h2 id="title">관심종목 선택 리스트</h2>
+	<input type="hidden" id="joinMembNo" th:value="${joinInfoNo}">
+	<div class="py-40"></div>
+	<div id="randomList">
+	</div>
+	<div id="Btn"></div>
 
-		<script>
-		$.ajax({
-		    url: "myItemCheck",
-		    success: function (data) {
-		        // 데이터를 랜덤하게 섞음
-		        let randomData = randomArray(data);
+	<script>
+	$.ajax({
+	   url: "myItemCheck",
+	   success: function (data) {
+	   	// 데이터를 랜덤하게 섞음
+    	let randomData = randomArray(data);
+	    // 랜덤하게 섞인 데이터에서 처음 25개만 선택
+  	  let selectedData = randomData.slice(0, 25);
 
-		        // 랜덤하게 섞인 데이터에서 처음 25개만 선택
-		        let selectedData = randomData.slice(0, 25);
+	    selectedData.forEach(function (item) {
+        let itemBox = $("<div>").addClass("itemBox");
+        $("<p>").text(item.itemNo).addClass("itemNo").attr("hidden", true).appendTo(itemBox).append("<br>");
+        $("<p>").text(item.commonCd).addClass("commonCd").appendTo(itemBox).append("<br>");
+        $("<h3>").text(item.nm).addClass("itemNm").appendTo(itemBox);
+        if(item.rate >0){
+        	$("<p>").text("+"+item.rate).addClass("rise_rate").appendTo(itemBox);
+        } else{
+        	$("<p>").text(item.rate).addClass("drop_rate").appendTo(itemBox);
+        }
+        $("<p>").text("현재가").addClass("txt").appendTo(itemBox);
+        $("<p>").text(item.tprc+"원").addClass("tprc").appendTo(itemBox);
+        itemBox.attr("data-common-cd", item.commonCd).appendTo("#randomList");
+     });
+      
+      $("<div>").addClass("py-30").appendTo("#Btn");
+      $("<button>").addClass("selectBtn").addClass("btn-primary").text("저장").appendTo("#Btn");
+      $("<button>").addClass("resetBtn").addClass("btn-dark").text("취소").appendTo("#Btn");
+      $("<div>").addClass("py-30").appendTo("#Btn");
 
-		        selectedData.forEach(function (item) {
-		            let itemBox = $("<div>").addClass("itemBox");
-		            $("<p>").text(item.itemNo).addClass("itemNo").attr("hidden", true).appendTo(itemBox).append("<br>");
-		            $("<p>").text(item.commonCd).addClass("commonCd").appendTo(itemBox).append("<br>");
-		            $("<h3>").text(item.nm).addClass("itemNm").appendTo(itemBox);
-		            if(item.rate >0){
-		            	$("<p>").text("+"+item.rate).addClass("rise_rate").appendTo(itemBox);
-		            } else{
-		            	$("<p>").text(item.rate).addClass("drop_rate").appendTo(itemBox);
-		            }
-		            $("<p>").text("현재가").addClass("txt").appendTo(itemBox);
-		            $("<p>").text(item.tprc+"원").addClass("tprc").appendTo(itemBox);
-		            itemBox.attr("data-common-cd", item.commonCd).appendTo("#randomList");
-		        });
-		        
-		        $("<div>").addClass("py-30").appendTo("#Btn");
-		        $("<button>").addClass("selectBtn").addClass("btn-primary").text("저장").appendTo("#Btn");
-		        $("<button>").addClass("resetBtn").addClass("btn-dark").text("취소").appendTo("#Btn");
-		        $("<div>").addClass("py-30").appendTo("#Btn");
+      // 배열을 랜덤하게 섞는 함수
+      function randomArray(array) {
+        let currentIndex = array.length;
+        let temporaryValue, randomIndex;
 
-		        // 배열을 랜덤하게 섞는 함수
-		        function randomArray(array) {
-		            let currentIndex = array.length;
-		            let temporaryValue, randomIndex;
+        while (0 !== currentIndex) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
 
-		            while (0 !== currentIndex) {
-		                randomIndex = Math.floor(Math.random() * currentIndex);
-		                currentIndex -= 1;
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+        }
+        return array;
+      }
 
-		                temporaryValue = array[currentIndex];
-		                array[currentIndex] = array[randomIndex];
-		                array[randomIndex] = temporaryValue;
-		            }
-		            return array;
-		        }
+      let selectedItems = [];
 
-		        let selectedItems = [];
+      // itemBox 클릭 이벤트 처리
+      $(document).on("click", ".itemBox", function () {
+        let itemBox = $(this);
+        let itemNo = itemBox.find(".itemNo").text();
 
-		        // itemBox 클릭 이벤트 처리
-		        $(document).on("click", ".itemBox", function () {
-		            let itemBox = $(this);
-		            let itemNo = itemBox.find(".itemNo").text();
-		            console.log($(this));
-		            console.log("this : " + itemNo);
-  
-		            // 이미 선택된 itemBox - 선택 취소
-		            if (itemBox.hasClass("selectedBox")) {
-		                console.log(itemBox);
-		                itemBox.removeClass("selectedBox");
-		                selectedItems = selectedItems.filter(item => item.itemNo !== itemNo);   
-		            } else if (selectedItems.length >= 5) {
-		                // 이미 5개가 선택되었을 때 경고창 표시
-		                alert("최대 5개까지만 선택할 수 있습니다.");
-		            } else {
-		                // 선택된 itemBox 추가
-		                itemBox.addClass("selectedBox");
-		                selectedItems.push({
-		                    "itemNo": itemNo
-		                });
-		            }
+        // 이미 선택된 itemBox - 선택 취소
+        if (itemBox.hasClass("selectedBox")) {
+            itemBox.removeClass("selectedBox");
+            selectedItems = selectedItems.filter(item => item.itemNo !== itemNo);   
+        } else if (selectedItems.length >= 5) {
+            // 이미 5개가 선택되었을 때 경고창 표시
+            alert("최대 5개까지만 선택할 수 있습니다.");
+        } else {
+            // 선택된 itemBox 추가
+            itemBox.addClass("selectedBox");
+            selectedItems.push({
+                "itemNo": itemNo
+            });
+        }
 
-		            // 선택된 아이템 리스트 출력
-		            console.log("Selected items:", selectedItems);
-		        });
+        // 선택된 아이템 리스트 출력
+      });
 
-		     // 저장 버튼 클릭 이벤트
-	        $(".selectBtn").on("click", function () {
-	            console.log("Selected items:", selectedItems);
-	            
-	            //promise
-	            selectedItems.forEach(function (item) {
-	            	console.log(item);
-	                $.ajax({
-	                    url: "insertInterestItem",
-	                    method: "POST",
-	                    data: {
-	                        itemNo: item.itemNo,
-	                        membNo: $("#joinMembNo").val()
-	                    },
-	                    async : false,
-	                    success: function (response) {
-	                        console.log("Item inserted:", item.itemNo);
-	                        window.location.href = "/";
-	                    },
-	                    error: function (error) {
-	                        console.error("Error inserting item:", item.itemNo);
-	                    }
-	                });
-	            });
-	        });
+   // 저장 버튼 클릭 이벤트
+     $(".selectBtn").on("click", function () {
+       //promise
+       selectedItems.forEach(function (item) {
+       	console.log(item);
+         $.ajax({
+             url: "insertInterestItem",
+             method: "POST",
+             data: {
+                 itemNo: item.itemNo,
+                 membNo: $("#joinMembNo").val()
+             },
+             async : false,
+             success: function (response) {
+                 window.location.href = "/";
+             },
+             error: function (error) {
+                 console.error("Error inserting item:", item.itemNo);
+             }
+          });
+        });
+     });
 
-		        // 취소 버튼 클릭 이벤트
-		        $(document).on("click", ".resetBtn", function () {
-		            $(".itemBox.selectedBox").removeClass("selectedBox");
+      // 취소 버튼 클릭 이벤트
+      $(document).on("click", ".resetBtn", function () {
+        $(".itemBox.selectedBox").removeClass("selectedBox");
 
-		            selectedItems = selectedItems.filter(item => {
-		                return !$(".itemBox").filter(function () {
-		                    return $(this).find(".itemNo").text() === item.item_no;
-		                }).hasClass("selectedBox");
-		            });
+        selectedItems = selectedItems.filter(item => {
+           return !$(".itemBox").filter(function () {
+               return $(this).find(".itemNo").text() === item.item_no;
+           }).hasClass("selectedBox");
+   	    });
 
-		            // 선택된 아이템 리스트 출력
-		            window.location.href = "/member/login";
-		        });
-		    }
-		});
-		</script>
-		
-	</section>
+        // 선택된 아이템 리스트 출력
+        window.location.href = "/member/login";
+      });
+    }
+	});
+	</script>
+	
+</section>
 
 </body>
 </html>

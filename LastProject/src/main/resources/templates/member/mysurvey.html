@@ -299,7 +299,7 @@ margin-top : 30px;
 		              <img src="/member/images/${el.typeNm}.png">
 		            `;
 		          });
-		          $("#membResult").html(img); // Update the #typeResult div
+		          $("#membResult").html(img);
 		          $("#membResult").css("display", "block");
 		        } else {
 		        	$("#nav-home-tab").addClass("active");
@@ -317,49 +317,49 @@ margin-top : 30px;
 		//설문조사 제출 - 회원
 		function doSubmitMemb(){
 			if($("input:radio[name=investKnowLevel]:checked").length==0) {
-				alert("1번항목을 선택해 주십시오.");
+				toastShow("","1번 항목을 선택해 주십시오.","error");
 				$("input:radio[name=investKnowLevel]")[0].focus();
 				return;
 			}
 
 			if($("input:radio[name=investPracticeSect]:checked").length==0) {
-				alert("2번항목을 선택해 주십시오.");
+				toastShow("","2번 항목을 선택해 주십시오.","error");
 				$("input:radio[name=investPracticeSect]")[0].focus();
 				return;
 			}
 
 			if($("input:radio[name=investTerm]:checked").length==0) {
-				alert("3번항목을 선택해 주십시오.");
+				toastShow("","3번 항목을 선택해 주십시오.","error");
 				$("input:radio[name=investTerm]")[0].focus();
 				return;
 			}
 
 			if($("input:radio[name=mnthIncomeCompareInvestAsstCd]:checked").length==0) {
-				alert("4번항목을 선택해 주십시오.");
+				toastShow("","4번 항목을 선택해 주십시오.","error");
 				$("input:radio[name=mnthIncomeCompareInvestAsstCd]")[0].focus();
 				return;
 			}
 
 			if($("input:radio[name=investAssetWeight]:checked").length==0) {
-				alert("5번항목을 선택해 주십시오.");
+				toastShow("","5번 항목을 선택해 주십시오.","error");
 				$("input:radio[name=investAssetWeight]")[0].focus();
 				return;
 			}
 
 			if($("input:radio[name=importOrigin]:checked").length==0) {
-				alert("6번항목을 선택해 주십시오.");
+				toastShow("","6번 항목을 선택해 주십시오.","error");
 				$("input:radio[name=importOrigin]")[0].focus();
 				return;
 			}
 
 			if($("input:radio[name=investPurpose]:checked").length==0) {
-				alert("7번항목을 선택해 주십시오.");
+				toastShow("","7번 항목을 선택해 주십시오.","error");
 				$("input:radio[name=investPurpose]")[0].focus();
 				return;
 			}
 
 			if($("input:radio[name=lossLevel]:checked").length==0) {
-				alert("8번항목을 선택해 주십시오.");
+				toastShow("","8번 항목을 선택해 주십시오.","error");
 				$("input:radio[name=lossLevel]")[0].focus();
 				return;
 			}
@@ -402,49 +402,49 @@ margin-top : 30px;
 		//설문조사 제출 -  익명
 		function doSubmit(){
 			if($("input:radio[name=investKnowLevel]:checked").length==0) {
-				alert("1번항목을 선택해 주십시오.");
+				toastShow("","1번 항목을 선택해 주십시오.","error");
 				$("input:radio[name=investKnowLevel]")[0].focus();
 				return;
 			}
 
 			if($("input:radio[name=investPracticeSect]:checked").length==0) {
-				alert("2번항목을 선택해 주십시오.");
+				toastShow("","2번 항목을 선택해 주십시오.","error");
 				$("input:radio[name=investPracticeSect]")[0].focus();
 				return;
 			}
 
 			if($("input:radio[name=investTerm]:checked").length==0) {
-				alert("3번항목을 선택해 주십시오.");
+				toastShow("","3번 항목을 선택해 주십시오.","error");
 				$("input:radio[name=investTerm]")[0].focus();
 				return;
 			}
 
 			if($("input:radio[name=mnthIncomeCompareInvestAsstCd]:checked").length==0) {
-				alert("4번항목을 선택해 주십시오.");
+				toastShow("","4번 항목을 선택해 주십시오.","error");
 				$("input:radio[name=mnthIncomeCompareInvestAsstCd]")[0].focus();
 				return;
 			}
 
 			if($("input:radio[name=investAssetWeight]:checked").length==0) {
-				alert("5번항목을 선택해 주십시오.");
+				toastShow("","5번 항목을 선택해 주십시오.","error");
 				$("input:radio[name=investAssetWeight]")[0].focus();
 				return;
 			}
 
 			if($("input:radio[name=importOrigin]:checked").length==0) {
-				alert("6번항목을 선택해 주십시오.");
+				toastShow("","6번 항목을 선택해 주십시오.","error");
 				$("input:radio[name=importOrigin]")[0].focus();
 				return;
 			}
 
 			if($("input:radio[name=investPurpose]:checked").length==0) {
-				alert("7번항목을 선택해 주십시오.");
+				toastShow("","7번 항목을 선택해 주십시오.","error");
 				$("input:radio[name=investPurpose]")[0].focus();
 				return;
 			}
 
 			if($("input:radio[name=lossLevel]:checked").length==0) {
-				alert("8번항목을 선택해 주십시오.");
+				toastShow("","8번 항목을 선택해 주십시오.","error");
 				$("input:radio[name=lossLevel]")[0].focus();
 				return;
 			}
@@ -502,7 +502,6 @@ margin-top : 30px;
 	    window.scrollTo(0, 0);
 		}
 	</script>
-	</div>
 	</div>
 </body>
 </html>

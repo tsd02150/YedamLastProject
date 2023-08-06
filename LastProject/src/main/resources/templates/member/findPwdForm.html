@@ -141,10 +141,8 @@ input[type=number] {
 		    return;
 		  }
 
-		  toUser = $("#telInput")
-		    .val()
-		    .replace(/[^0-9]/g, "")
-		    .replace(/^(\d{3})(\d{4})(\d{4})$/, "$1$2$3");
+		  //sms 발송할 연락처 '01011111111' 형식으로 변경
+		  toUser = $("#telInput").val().replace(/[^0-9]/g, "").replace(/^(\d{3})(\d{4})(\d{4})$/, "$1$2$3");
 
 		  // 연락처+이름 비교
 		  $.ajax({
@@ -157,26 +155,24 @@ input[type=number] {
 		    success: function (data) {
 		      count1++;
 		      if(data == null && data == ""){
-		        $("#telCheck")
-		          .text("가입 정보가 없습니다. 입력정보가 맞는지 다시 확인해주세요.")
-		          .css({
-		            color: "#FA3E3E",
-		            "font-weight": "bold",
-		            "font-size": "14px",
-		          });
+		        $("#telCheck").text("가입 정보가 없습니다. 입력정보가 맞는지 다시 확인해주세요.")
+								          .css({
+								            color: "#FA3E3E",
+								            "font-weight": "bold",
+								            "font-size": "14px",
+	          });
 		      } else {
 		    	  testcode = createSmsKey();
 				  	sendFunc();
 		        /*   // sms 발송 끝/ */
 		     		
 		        $("#idInput").val(data.id);
-		        $("#telCheck")
-		          .text("인증번호가 발송되었습니다.")
-		          .css({
-		            color: "#0D6EFD",
-		            "font-weight": "bold",
-		            "font-size": "14px",
-		          }); // 인증번호 확인 끝.
+		        $("#telCheck").text("인증번호가 발송되었습니다.")
+								          .css({
+								            color: "#0D6EFD",
+								            "font-weight": "bold",
+								            "font-size": "14px",
+        	  }); // 인증번호 확인 끝.
 
 		        $("#testBtn1").addClass("isOk"); //본인인증 실행 여부 체크
 		      }
@@ -201,119 +197,118 @@ input[type=number] {
 	            content: "[ToTheMooN] 인증번호 [" + testcode + "]를 입력해주세요",
 	          },
 	          success: function (response) {
-	            //console.log("key: " + testcode);
 	          },
 	          error: function (err) {
 	            console.log(err);
 	          },
 	        });
      }
-			//인증번호 비교
-			$("#testBtn2").on("click", function(){
-				if($("#telInput").val() == ""){
-					$("#telInput").focus();
-					return;
-				}
-				
-				if($("#mname").val() == ""){
-					$("#mname").focus();
-					return;
-				}
-				
-				if($("#codeCheckInput").val() != testcode){
-					count2++;
-					$("#codeCheck").text("인증번호가 일치하지 않습니다. 다시 입력하세요")
-					.css({
-						"color": "#FA3E3E",
-						"font-weight": "bold",
-						"font-size": "14px"
-					});
-				} else {
-					$("#codeCheck").text("인증이 완료되었습니다.")
-					.css({
-						"color": "#0D6EFD",
-						"font-weight": "bold",
-						"font-size": "14px"
-					});// 인증번호 확인 비교 끝
-					
-					$("#testBtn2").addClass("isOk"); //인증번호 비교 실행 여부 체크
-					
-				}
-				if (count2 >= 5) {
-					$('#myModal').show();
-				}
-			})
-
-			//연락처 저장 포맷 & 유효성검사
-		 const autoHyphen = (target) => {
-			    target.value = target.value.replace(/[^0-9]/g, '').replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`);
-			};
+	//인증번호 비교
+	$("#testBtn2").on("click", function(){
+		if($("#telInput").val() == ""){
+			$("#telInput").focus();
+			return;
+		}
+		
+		if($("#mname").val() == ""){
+			$("#mname").focus();
+			return;
+		}
+		
+		if($("#codeCheckInput").val() != testcode){
+			count2++;
+			$("#codeCheck").text("인증번호가 일치하지 않습니다. 다시 입력하세요")
+			.css({
+				"color": "#FA3E3E",
+				"font-weight": "bold",
+				"font-size": "14px"
+			});
+		} else {
+			$("#codeCheck").text("인증이 완료되었습니다.")
+			.css({
+				"color": "#0D6EFD",
+				"font-weight": "bold",
+				"font-size": "14px"
+			});// 인증번호 확인 비교 끝
 			
-			//이름 유효성 검사
-			const nameInput = document.querySelector("#mname");
-			const nameCheck = document.querySelector("#nameCheck");
-			const telInput = document.querySelector("#telInput");
-
-			nameInput.addEventListener("input", nameCheckFunc);
+			$("#testBtn2").addClass("isOk"); //인증번호 비교 실행 여부 체크
 			
-			function nameCheckFunc() {
-			    const name = nameInput.value;
+		}
+		if (count2 >= 5) {
+			$('#myModal').show();
+		}
+	})
 
-			    // Regular expression to validate Korean name
-			    const nameRegex = /^[가-힣]{2,5}$/;
+	//연락처 저장 포맷 & 유효성검사
+ const autoHyphen = (target) => {
+	    target.value = target.value.replace(/[^0-9]/g, '').replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`);
+	};
+	
+	//이름 유효성 검사
+	const nameInput = document.querySelector("#mname");
+	const nameCheck = document.querySelector("#nameCheck");
+	const telInput = document.querySelector("#telInput");
 
-			    if (nameRegex.test(name)) {
-			        nameCheck.textContent = "";
-			    } else {
-			        nameCheck.textContent = "잘못 입력하셨습니다.";
-			    }
-			};
-			
-			function createSmsKey() {
-				  let key = '';
-				  
-				  for (let i = 0; i < 5; i++) { 
-				    key += Math.floor(Math.random() * 10);
-				  }
-				  return key;
-				}
-			function validateForm() {
-				event.preventDefault();
-				
-				 if(!$("#testBtn1").hasClass("isOk")){
-						$("#telCheck").text("본인인증 확인 후 가능합니다.")
-						.css({
-							"color": "#FA3E3E",
-							"font-weight": "bold",
-							"font-size": "14px"
-						});
-						return;
-			   }
-				if(!$("#testBtn2").hasClass("isOk")){
-					$("#codeCheck").text("인증번호 확인해주세요.")
-					.css({
-						"color": "#FA3E3E",
-						"font-weight": "bold",
-						"font-size": "14px"
-					});
-					return;
-				}
-					//임시비밀번호 발급
-					$.ajax({
-					type: "POST",
-					url: "/member/mailConfirmPwd",
-					data: {
-						"id": $("#loginemail").val()
-					},
-					success: function (data) {
-						//console.log("임시비밀번호: " + data);
-						
-						// 이메일 전송 완료 페이지 호출
-						document.getElementById('frm').submit();
-					}
-				}); //임시비밀번호 발급 end
+	nameInput.addEventListener("input", nameCheckFunc);
+	
+	function nameCheckFunc() {
+	    const name = nameInput.value;
+
+	    // Regular expression to validate Korean name
+	    const nameRegex = /^[가-힣]{2,5}$/;
+
+	    if (nameRegex.test(name)) {
+	        nameCheck.textContent = "";
+	    } else {
+	        nameCheck.textContent = "잘못 입력하셨습니다.";
+	    }
+	};
+	
+	//인증번호 생성
+	function createSmsKey() {
+		  let key = '';
+		  
+		  for (let i = 0; i < 5; i++) { 
+		    key += Math.floor(Math.random() * 10);
+		  }
+	  return key;
+	}
+
+	function validateForm() {
+		event.preventDefault();
+		
+		 if(!$("#testBtn1").hasClass("isOk")){
+				$("#telCheck").text("본인인증 확인 후 가능합니다.")
+				.css({
+					"color": "#FA3E3E",
+					"font-weight": "bold",
+					"font-size": "14px"
+				});
+				return;
+	   }
+		if(!$("#testBtn2").hasClass("isOk")){
+			$("#codeCheck").text("인증번호 확인해주세요.")
+			.css({
+				"color": "#FA3E3E",
+				"font-weight": "bold",
+				"font-size": "14px"
+			});
+			return;
+		}
+			//임시비밀번호 발급
+			$.ajax({
+			type: "POST",
+			url: "/member/mailConfirmPwd",
+			data: {
+				"id": $("#loginemail").val()
+			},
+			success: function (data) {
+				// 이메일 전송 완료 페이지 호출
+				document.getElementById('frm').submit();
 			}
-		</script>
-	</section>
+		}); //임시비밀번호 발급 end
+	}
+</script>
+</section>
 </body>
 </html>

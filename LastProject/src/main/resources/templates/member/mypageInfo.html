@@ -76,6 +76,13 @@ input[type=number] {
 	text-align: center;
 	padding: 10px 30px 10px 30px;
 }
+.signup{
+	border:0;
+}
+
+#titlename span:after {
+	width: 110px;
+}
 </style>
 </head>
 <body>
@@ -83,11 +90,13 @@ input[type=number] {
 		<div class="row align-items-center justify-content-center">
 			<div class="col-lg-12">
 				<div class="signup">
-					<h3 class="mt-4">기본 정보</h3>
+					<h3 class="news-title" id="titlename">
+						<span>기본정보</span>
+					</h3>
 					<form id="updateFrm" action="updateMemberInfo" class="signup-form row" method="post">
 						<div class="col-md-12">
 							<div class="form-group">
-							<h3 class="mt-4">[[${session.loggedInMember.nm}]]</h3>
+							<h3 class="mt-4">[[${session.loggedInMember.nm}]] 님</h3>
 							</div>
 						</div>
 					<div class="col-md-12">
@@ -256,8 +265,6 @@ function updateAjax(){
       "tel": $("#telInput").val()
 		},
 		success : function(data){
-			console.log("정보변경 성공");
-			console.log(data);
 		},
 		error : function(err){
 			console.log(err);
@@ -278,7 +285,6 @@ $.ajax({
 	},
 	success: function (data) {
 		data.forEach(el => {
-			console.log(el);
 			div += `
 				<div class="col-md-12">
 					<div class="form-group" style="margin-bottom: 0px;">
@@ -347,12 +353,30 @@ $("#changeNick").on("click", function() {
 	            .then(response => response.json())
 	            .then(result => {
 	                if (nick !== "") {
-	                	nickMsg.textContent = result === 1 ? "이미 사용중인 닉네임입니다." : "사용가능한 닉네임입니다.";
-	
+	                	if(result === 1){
+	                		nickMsg.textContent = "이미 사용중인 닉네임입니다.";
+	                		$("#nickmsg").css({
+		            				"color": "#FA3E3E",
+		            				"font-weight": "bold",
+		            				"font-size": "14px"
+	            				});
+	                	}else{
+	                		nickMsg.textContent = "사용가능한 닉네임입니다.";
+	                		$("#nickmsg").css({
+		            				"color": "#0D6EFD",
+		            				"font-weight": "bold",
+		            				"font-size": "14px"
+	            				});
+	                	}
 	                    // 중복확인이 완료되면 checkedBtn 클래스를 추가
 	                    nickBtn.classList.add("checkedBtn");
 	                } else {
 	                	 nickMsg.textContent = "닉네임을 입력하세요";
+	                	 $("#nickmsg").css({
+		            				"color": "#FA3E3E",
+		            				"font-weight": "bold",
+		            				"font-size": "14px"
+	         						});
 	                }
 	            })
 	            .catch(err => console.log(err));
@@ -386,9 +410,6 @@ $(aa).after(zipbtnHtml);
 
 let changeButton = $(target);
 changeButton.text('저장').removeAttr('onclick').on('click', function() {
-	console.log(zipInput.val());
-	console.log(addrInput.val());
-	console.log(detaInput.val());
  updateMemberAddr(); // 저장 버튼 클릭 시 주소 변경 요청
  $(target).next().remove();
  let addButtonHtml = '<button type="button" class="changeAddr btn btn-light" onclick="changeAddr(this)">변경</button>' +
@@ -436,8 +457,6 @@ $(document).on('click', '.zipbtn', function() {
 
      zipInput.val(data.zonecode);
      addrInput.val(fullRoadAddr);
-     console.log(zipInput.val());
-     console.log(addrInput.val());
    }
  }).open();
 });
@@ -457,7 +476,6 @@ $.ajax({
    "membNo": membNo
  },
  success: function(result) {
- 	console.log(result);
  },
  error: function(err) {
    console.log(err);
@@ -534,49 +552,48 @@ function resetMailForm() {
 }
 
 function sendMailCode() {
-    $.ajax({
-        type: "POST",
-        url: "/member/smsConfirm",
-        data: {
-            "email": $("#email-address").val()
-        },
-        success: function (data) {
-            //console.log("임시코드: " + data);
-            mailcode = data;
-            $("#mainCheckInput").css("display", "inline");
-            $("#testBtn1").css("display", "inline");
-        },
-        error: function (err) {
-            console.log(err);
-        }
-    });
+  $.ajax({
+      type: "POST",
+      url: "/member/smsConfirm",
+      data: {
+          "email": $("#email-address").val()
+      },
+      success: function (data) {
+          mailcode = data;
+          $("#mainCheckInput").css("display", "inline");
+          $("#testBtn1").css("display", "inline");
+      },
+      error: function (err) {
+          console.log(err);
+      }
+  });
 }
 
 function checkMailCode() {
-    if ($("#mainCheckInput").val() === "") {
-        $("#mainCheckInput").focus();
-        return;
-    }
-    if ($("#mainCheckInput").val() === mailcode) {
-        $("#mailCheck").text("인증이 완료되었습니다.")
-            .css({
-                "color": "#0D6EFD",
-                "font-weight": "bold",
-                "font-size": "14px"
-            });
-        $("#testBtn1").addClass("checkedBtn");
-    } else {
-        mailcount2++;
-        $("#mailCheck").text("다시 시도해주세요.")
-            .css({
-                "color": "#FA3E3E",
-                "font-weight": "bold",
-                "font-size": "14px"
-            });
-    }
-    if (mailcount2 >= 5) {
-        $('#myModal').show();
-    }
+   if ($("#mainCheckInput").val() === "") {
+       $("#mainCheckInput").focus();
+       return;
+   }
+   if ($("#mainCheckInput").val() === mailcode) {
+       $("#mailCheck").text("인증이 완료되었습니다.")
+           .css({
+               "color": "#0D6EFD",
+               "font-weight": "bold",
+               "font-size": "14px"
+           });
+       $("#testBtn1").addClass("checkedBtn");
+   } else {
+       mailcount2++;
+       $("#mailCheck").text("다시 시도해주세요.")
+          .css({
+              "color": "#FA3E3E",
+              "font-weight": "bold",
+              "font-size": "14px"
+          });
+   }
+   if (mailcount2 >= 5) {
+       $('#myModal').show();
+   }
 }
 //연락처 변경 버튼 클릭
  let testcode;
@@ -601,7 +618,6 @@ $("#sendsms").on("click", function() {
 	    $("#telInput").attr("name", "to");
 	    let toUser = $("#telInput").val().replace(/[^0-9]/g, "").replace(/^(\d{3})(\d{4})(\d{4})$/, "$1$2$3");
 	    testcode = createSmsKey();
-	    //console.log(testcode);
 
 	    // SMS 발송
 	    $.ajax({
@@ -612,7 +628,6 @@ $("#sendsms").on("click", function() {
 	        content: "[SMS] 인증번호 [" + testcode + "]를 입력해주세요"
 	      },
 	      success: function(response) {
-	        console.log("key: " + testcode);
 	        $("#telCheck").text("인증번호가 발송되었습니다.")
 	          .css({
 	            color: "#0D6EFD",
@@ -741,7 +756,6 @@ $("#insertResetBtn").on("click", function(){
 function deleteMemb(){
 	let point = parseInt("[[${session.loggedInMember.point}]]");
 	if(point != 0){
-		console.log("[[${#lists.isEmpty(stockList)}]]");
 		if("[[${#lists.isEmpty(stockList)}]]" === "true"){
 			message='';
 			spanbtn='';
@@ -790,8 +804,6 @@ function deleteMemb(){
 
 //회원탈퇴
 function delAjax(){
-	console.log("회원탈퇴");
-	console.log(membNo);
 	$.ajax({
 		url : "deleteMemb",
 		method : "POST",
@@ -850,8 +862,18 @@ function checkPwdValidity() {
 
     if (!pwdValue) {
         pwdWarning.textContent = "비밀번호를 입력해주세요.";
+        $("#pwd-warning").css({
+					"color": "#FA3E3E",
+					"font-weight": "bold",
+					"font-size": "14px"
+				});
     } else if (!pwdRegex.test(pwdValue)) {
         pwdWarning.textContent = "영어 대소문자, 숫자, 특수문자 1개이상 사용해야 합니다.";
+        $("#pwd-warning").css({
+					"color": "#FA3E3E",
+					"font-weight": "bold",
+					"font-size": "14px"
+				});
     } else {
         pwdWarning.textContent = "";
     }
@@ -864,6 +886,11 @@ function checkPwdMatch() {
     if (pwdValue !== pwdCorrectValue) {
         pwdWarning.style.borderWidth = "2px";
         pwdWarning.textContent = "입력한 비밀번호와 일치하지 않습니다.";
+	        $("#pwd-warning").css({
+					"color": "#FA3E3E",
+					"font-weight": "bold",
+					"font-size": "14px"
+				});
     } else {
         pwdWarning.style.borderWidth = "";
         pwdWarning.textContent = "";

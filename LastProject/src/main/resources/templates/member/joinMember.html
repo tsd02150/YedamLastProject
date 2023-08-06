@@ -12,7 +12,6 @@
 	width: 15%;
 	height: 40px;
 }
-
 .olmessagef {
 	color: red;
 	font-style: Italic;
@@ -42,43 +41,53 @@ input[type='number'] {
 	padding: 0;
 	border :0;
 }
-
+.btn-light{
+	height: 53px;
+	font-size: 18px;
+}
+.py-20 {
+  clear: both;
+  height: 20px;
+ }
+ .form-group{
+ 	margin-bottom: 0px;
+ }
 .login-signup section-padding {
 	padding: 0;
 }
 * The Modal (background) */
-		.modal {
-		   display: none; /* Hidden by default */
-		   position: fixed; /* Stay in place */
-		   z-index: 1; /* Sit on top */
-		   left: 0;
-		   top: 0;
-		   width: 100%; /* Full width */
-		   height: 100%; /* Full height */
-		   overflow: auto; /* Enable scroll if needed */
-		   background-color: rgb(0,0,0); /* Fallback color */
-		   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-		}
-		
-		/* Modal Content/Box */
-		.modal-content {
-		    background-color: #fefefe;
-		    margin: 15% auto; /* 15% from the top and centered */
-		    padding: 20px;
-		    border: 1px solid #888;
-		    width: 30%; /* Could be more or less, depending on screen size */                          
-		}
-		/* Chrome, Safari, Edge, Opera */
-		input::-webkit-outer-spin-button,
-		input::-webkit-inner-spin-button {
-		  -webkit-appearance: none;
-		  margin: 0;
-		}
-		
-		/* Firefox */
-		input[type=number] {
-		  -moz-appearance: textfield;
-		}
+.modal {
+   display: none; /* Hidden by default */
+   position: fixed; /* Stay in place */
+   z-index: 1; /* Sit on top */
+   left: 0;
+   top: 0;
+   width: 100%; /* Full width */
+   height: 100%; /* Full height */
+   overflow: auto; /* Enable scroll if needed */
+   background-color: rgb(0,0,0); /* Fallback color */
+   background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%; /* Could be more or less, depending on screen size */                          
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 </style>
 </head>
 <body>
@@ -103,10 +112,9 @@ input[type='number'] {
 									class="form-control" id="nickname" name="nick"
 									placeholder="공백없이 2자~이하, 영어,숫자,한글만 가능합니다."
 									style="width: 60%; display: inline;">
-								<button type="button" id="checkNick">중복확인</button><br>
+								<button type="button" id="checkNick" class="btn btn-light">중복확인</button><br>
 								<span id="nickmsg"></span><br>
 							</div>
-
 						</div>
 						<div class="col-md-12">
 							<div class="form-group">
@@ -114,9 +122,9 @@ input[type='number'] {
 									class="form-control" name="id" id="id-address"
 									placeholder="이메일 형식으로 입력하세요"
 									style="width: 60%; display: inline;">
-								<button type="button" id="checkId">중복확인</button>
+								<button type="button" id="checkId" class="btn btn-light">중복확인</button>
 								<br>
-								<span id="idmsg"></span>
+								<span id="idmsg"></span><br>
 							</div>
 						</div>
 						<div class="col-md-12">
@@ -124,6 +132,7 @@ input[type='number'] {
 								<label for="pass">비밀번호</label> <input type="password"
 									class="form-control" id="pass" name="pwd"
 									placeholder="비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.">
+									<br>
 							</div>
 						</div>
 						<div class="col-md-12">
@@ -131,8 +140,7 @@ input[type='number'] {
 								<label for="passCheck">비밀번호 확인</label> <input type="password"
 									class="form-control" id="passCheck" name="pwdCheck"
 									placeholder="비밀번호를 다시 입력하세요">
-								<div id="pwd-warning"></div>
-								<div id="pwd-warning"></div>
+								<div id="pwd-warning"></div> <br>
 							</div>
 						</div>
 						<div class="col-md-12">
@@ -140,22 +148,23 @@ input[type='number'] {
 								<label for="email-address">이메일</label> <input type="email"
 									class="form-control" id="email-address" name="email"
 									placeholder="이메일 형식으로 입력하세요">
+									<br>
 							</div>
 						</div>
 						<div class="col-md-12">
 							<div class="form-group">
 								<label for="telInput">연락처</label><br><input type="text" class="form-control" oninput="autoHyphen(this)"
 									maxlength="13" name="to" id="telInput" placeholder="회원가입 시 입력한 전화번호를 입력하세요" style="width : 70%; display : inline;">
-								<button type="button" id="testBtn1">인증번호 발송</button>
+								<button type="button" id="testBtn1" class="btn btn-light">인증번호 발송</button>
 								<br><span id="telCheck"></span>
 							</div>
 						</div>
 						<div class="col-md-12">
 							<div class="form-group">
-								<label for="codeCheckInput"></label>
+								<label for="codeCheckInput"></label><br>
 								<input type="number" class="form-control" name="confirmcode" id="codeCheckInput" placeholder="인증번호를 입력하세요"style="width : 70%; display : inline;">
-								<button type="button" id="testBtn2">인증번호 확인</button><br>
-								<span id="codeCheck"></span>
+								<button type="button" id="testBtn2" class="btn btn-light">인증번호 확인</button><br>
+								<span id="codeCheck"></span><br>
 							</div>
 						</div>
 						<div class="col-md-12">
@@ -163,7 +172,7 @@ input[type='number'] {
 								<label for="addr1">주소</label><br> <input type="text"
 									class="form-control" style="width: 40%; display: inline;"
 									id="addr1" name="zip" placeholder="우편번호 검색" readonly>
-								<button type="button" class="zipbtn">우편번호 찾기</button>
+								<button type="button" class="zipbtn btn btn-light">우편번호 찾기</button>
 							</div>
 							<div class="form-group">
 								<label for="addr2"></label> <input type="text"
@@ -173,14 +182,14 @@ input[type='number'] {
 							<div class="form-group">
 								<label for="addr3"></label> <input type="text"
 									class="form-control" id="addr3" name="detaAddr"
-									placeholder="상세주소를 입력하세요">
+									placeholder="상세주소를 입력하세요"><br>
 							</div>
 						</div>
 						<div class="col-md-12">
 							<button class="btn btn-primary" type="submit" id="subBtn">Sign
 								Up</button>
 							<p class="mt-5 mb-0">
-								이미 회원이신가요? <a href="loginForm.html">로그인</a>
+								이미 회원이신가요? <a href="/member/login">로그인</a>
 							</p>
 						</div>
 					</form>
@@ -206,8 +215,6 @@ input[type='number'] {
  const pwdWarning = document.getElementById('pwd-warning');
  const idMsg = document.querySelector("#idmsg");
  const nickMsg = document.querySelector("#nickmsg");
- //const memailConfirmTxt = document.querySelector("#memailconfirmTxt");
-
  
  //이름 유효성 검사 : 한글로 2-5자리
 const nameInput = document.querySelector("#mname");
@@ -500,22 +507,9 @@ document.querySelector('form').addEventListener('submit', (event) => {
 						});
 				}else {
 					testcode = createSmsKey();
+					//sms 발송
 					sendFunc();
-				 //sms 발송
-					/* $.ajax({
-					    url: "sendSms",
-					    method: "POST",
-					    data: {
-					      to: toUser,
-					      content: "[SMS] 인증번호 [" + testcode + "]를 입력해주세요"
-					    },
-					    success: function(response) {
-					      console.log("key: " + testcode);
-					    },
-					    error: function(err) {
-					      console.log(err);
-					    }
-					  }); */
+					
 					$("#idInput").val(data.id);
 					$("#telCheck").text("인증번호가 발송되었습니다.")
 						.css({
@@ -642,10 +636,6 @@ document.querySelector('form').addEventListener('submit', (event) => {
 	        return; 
 	    }
 
-//	    if(memailConfirmTxt.textContent === "인증 확인되었습니다."){
-//	    	document.getElementById("memailconfirm").focus();
-//	    }
-	    
 	    // 모든 조건을 만족했을 때 호출
         document.getElementById('joinfrm').submit();
 	}

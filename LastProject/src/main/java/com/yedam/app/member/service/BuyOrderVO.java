@@ -22,6 +22,7 @@ public class BuyOrderVO {
 	private String nm;
 	private int prc;
 	private int rmnCnt;
+	private int point;
 	@DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
 	private Date buyDt;
 }

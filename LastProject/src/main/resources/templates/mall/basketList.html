@@ -105,13 +105,20 @@
 		<!-- cartInfo -->
 		<div class="content_totalCount_section">
 
+<!-- 테이블이 비어있을 경우 문구 보이기 -->
+			<table th:if="${basketList.isEmpty()}" class="empty-basket-table">
+				<tr>
+					<td colspan="7" class="empty-basket-message">장바구니가 비었습니다.</td>
+				</tr>
+			</table>
+			
 	<!-- 체크박스 전체 여부 -->
 	<div class="all_check_input_div">
 		<input type="checkbox" class="all_check_input input_size_20"
 			checked="checked"><span class="all_chcek_span">전체선택</span>
 	</div>
 
-	<table class="subject_table">
+	<table th:if="${not basketList.isEmpty()}" class="subject_table">
 		<caption>표 제목 부분</caption>
 		<thead>
 			<tr class="td-size">

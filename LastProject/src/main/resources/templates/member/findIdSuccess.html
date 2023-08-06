@@ -43,32 +43,32 @@
 				</div>
 			</div>
 		</div>
-		
-	<script>
+	
+<script>
 	let email = $("#spanTxt").text();
 	  
 	function maskEmail(email) {
-	    let atIndex = email.indexOf("@"); // @ 기준으로 인덱스 찾기
-	    if (atIndex > 4) {
-	      let maskedPart = email.substr(atIndex - 4, 4); // 가운데 4글자 추출
-	      let maskedEmail = email.replace(maskedPart, "****"); // 추출한 부분을 ****로 대체
-	      return maskedEmail;
-	    }
-	    return email;
-	  }
-		
-		let emailFormat = maskEmail(email);
-		$("#spanTxt").text(emailFormat);
-		
-		$("#subBtn").on("click",function(){
-			window.location.href = "/member/login";
-		})
-		
-		$("#findPwdBtn").on("click", function(){
-			window.location.href = "/member/findpwd";
-		})
-	</script>
-	</section>
+    let atIndex = email.indexOf("@"); // @ 기준으로 인덱스 찾기
+    if (atIndex > 4) {
+      let maskedPart = email.substr(atIndex - 4, 4); // 가운데 4글자 추출
+      let maskedEmail = email.replace(maskedPart, "****"); // 추출한 부분을 ****로 대체
+      return maskedEmail;
+    }
+    return email;
+  }
+	
+	let emailFormat = maskEmail(email);
+	$("#spanTxt").text(emailFormat);
+	
+	$("#subBtn").on("click",function(){
+		window.location.href = "/member/login";
+	})
+	
+	$("#findPwdBtn").on("click", function(){
+		window.location.href = "/member/findpwd";
+	})
+</script>
+</section>
 </body>
 
 </html>

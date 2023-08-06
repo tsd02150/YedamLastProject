@@ -144,7 +144,11 @@ public class MallController {
 		model.addAttribute("info", list);
 		System.out.println("주문정보 : " + list);
 		model.addAttribute("reviewInfo", revVO);
-		String membNo = ((UserVO) session.getAttribute("loggedInMember")).getMembNo();
+		String membNo="";
+		if(session.getAttribute("loggedInMember")!=null) {
+			membNo = ((UserVO) session.getAttribute("loggedInMember")).getMembNo();
+			
+		}
 
 		model.addAttribute("membNo", membNo);
 		System.out.println(membNo);
@@ -166,7 +170,7 @@ public class MallController {
 	// 리뷰등록
 	@PostMapping("addReview")
 	@ResponseBody
-	public String addReview(HttpSession session, ProductReviewVO revVO, Model model) {
+	public ProductReviewVO addReview(HttpSession session, ProductReviewVO revVO, Model model) {
 		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 
 		revVO.setMembNo(mem.getMembNo());
@@ -174,10 +178,11 @@ public class MallController {
 		boolean result = mallService.addReview(revVO);
 
 		if (result) {
-			return revVO.getRevNo();
+			revVO=mallService.getProductReview(revVO.getRevNo());
+			return revVO;
 		} else {
 
-			return "fail";
+			return null;
 		}
 
 	}
@@ -185,9 +190,11 @@ public class MallController {
 	// 리뷰삭제
 	@PostMapping("deleteReview")
 	@ResponseBody
-	public String deleteReview(ProductReviewVO revVO) {
-
-		if (mallService.deleteReviewInfo(revVO.getRevNo())) {
+	public String deleteReview(ProductReviewVO revVO, HttpSession session) {
+		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
+		revVO.setMembNo(mem.getMembNo());
+		System.out.println(revVO);
+		if (mallService.deleteReviewInfo(revVO)) {
 			return "success";
 		} else {
 			return "fail";

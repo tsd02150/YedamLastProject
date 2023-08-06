@@ -142,7 +142,7 @@
 							<div id="infoText">
 								<p><b><span th:text="${session.loggedInMember.nm}"></span>(<span th:text="${session.loggedInMember.nick}"></span>)</b> 님 환영합니다</p>
 								<p th:text="${session.loggedInMember.id}"></p>
-								<p><b>point : <span th:text="${session.loggedInMember.point}"></span>p</b></p>
+								<p><b>point : <span th:text="${#numbers.formatInteger(session.loggedInMember.point, 0, 'COMMA')}"></span>P</b></p>
 							</div>
 							<a href="/member/logout"><button class="btn-primary logout" type="button">LogOut</button></a>
 							<div id="infoBtnBlock">

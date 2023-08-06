@@ -46,8 +46,10 @@ public interface MallMapper {
 	public int updateReviewInfo(ProductReviewVO revVO);
 
 	// 리뷰삭제
-	public int deleteReviewInfo(String revNo);
+	public int deleteReviewInfo(ProductReviewVO revVO);
 
 	public ProductVO getProductInfo(String prdtNo);
-
+	
+	// 리뷰 단건 조회
+	public ProductReviewVO getProductReview(String revNo);
 }
