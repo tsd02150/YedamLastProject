@@ -272,7 +272,7 @@
 			<div class="hero-slider">
 				<div class="main-img"></div>
 				<div class="slider-item th-fullpage hero-area">
-					<video muted autoplay loop style="width: 1100px; height: 600px;">
+					<video muted autoplay loop style="width: 1100px; height: 400px;">
 						<source src="images/main/frame3.mp4" type="video/mp4">
 					</video>
 				</div>
@@ -282,8 +282,8 @@
 
 
 		<!-- second image -->
-		<!-- 
-		<div>
+
+	<!-- 	<div>
 			<section>
 				<div class="container-fluid p-sm-0">
 					<div class="row2 featured-post-slider">
@@ -313,8 +313,6 @@
  -->
 
 		<!-- 농산물 -->
-		<div>&nbsp;</div>
-		<div>&nbsp;</div>
 
 		<div class="main_text0">
 			<h1>농산물</h1>
@@ -331,19 +329,17 @@
 						<div class="product-image">
 							<a th:href="|/mall/getFarm?prdtNo=${prdt.prdtNo}|" class="image"
 								th:utext="${prdt.thumb}"> </a> <span th:if="${prdt.dcRate!=0}"
-								class="product-sale-label">sale</span> <a
-								class="product-like-icon" href="#"><i class="far fa-heart"></i></a>
-							<a class="add-to-cart" href="#"><i
-								class="fas fa-shopping-bag"></i> add to cart </a>
+								class="product-sale-label">sale</span> 
+							
 						</div>
 						<div class="product-content">
+						<div th:onclick="|location.href='@{getFarm(prdtNo=${prdt.prdtNo})}'|">
 							<div th:text="${prdt.nm}" class="contents1_bold"></div>
 							<div th:text="${prdt.desct}" class="contents2"></div>
 							<span style="font-weight: bold; text-align:left; color: red;"
 								th:text="${#numbers.formatInteger(prdt.prc, 0, 'COMMA')} + 'P'"></span>
 							<div>
-								<div
-									th:onclick="|location.href='@{getFarm(prdtNo=${prdt.prdtNo})}'|">
+								
 									<a class="btn btn-outline-light" style="margin-left: -12px;">read more</a>
 								</div>
 							</div>

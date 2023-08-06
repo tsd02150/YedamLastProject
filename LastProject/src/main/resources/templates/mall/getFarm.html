@@ -370,9 +370,56 @@ p>img {
 	height: 300px;
 }
 
-#openModalBtn {
-	
+
+a.reviewButton {
+  display: block;
+  position: relative;
+  float: left;
+  width: 120px;
+  padding: 0;
+  margin: 10px 20px 10px 0;
+  font-weight: 600;
+  text-align: center;
+  line-height: 50px;
+  color: #FFF;
+  border-radius: 5px;
+  transition: all 0.2s ;
 }
+
+#deleteBtn {
+  display: block;
+  position: relative;
+  float: left;
+  width: 120px;
+  padding: 7px;
+  margin: 10px 20px 10px 0;
+  font-weight: 600;
+  text-align: center;
+  line-height: 50px;
+  color: #FFF;
+  border-radius: 5px;
+  transition: all 0.2s ;
+}
+
+.btnBlueGreen {
+  background: #00AE68;
+}
+
+/* 3D */
+.btnBlueGreen.btnPush {
+  box-shadow: 0px 5px 0px 0px #007144;
+}
+
+.btnPush:hover {
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+.btnBlueGreen.btnPush:hover {
+  box-shadow: 0px 0px 0px 0px #007144;
+}
+
+
 </style>
 
 </head>
@@ -466,8 +513,11 @@ p>img {
 					</div>
 					<div>&nbsp;</div>
 					<div class="button_set">
-						<span><button class="btn_cart" th:disabled="${membNo=='' or membNo==null}?'disabled'">장바구니 담기</button>
-							<button class="btn_buy" onclick="directOrder()" th:disabled="${membNo=='' or membNo==null}?'disabled'">바로구매</button></span>
+						<span><button class="btn_cart"
+								th:disabled="${membNo=='' or membNo==null}?'disabled'">장바구니
+								담기</button>
+							<button class="btn_buy" onclick="directOrder()"
+								th:disabled="${membNo=='' or membNo==null}?'disabled'">바로구매</button></span>
 					</div>
 				</div>
 
@@ -560,8 +610,12 @@ p>img {
 			<div class="btn-insert" style="position: static;">
 				<div class="btn-group">
 					<!-- 로그인 회원만 리뷰작성 띄움 -->
-					<button th:if="${session.loggedInMember}!=null" id="openModalBtn"
-						type="button">리뷰 작성</button>
+					<!-- <button th:if="${session.loggedInMember}!=null" id="openModalBtn"
+						type="button">리뷰 작성</button> -->
+
+						<a th:if="${session.loggedInMember}!=null" id="openModalBtn"
+							title="Button push blue/green"
+							class="reviewButton btnPush btnBlueGreen" style="color: white;">리뷰 작성</a>
 
 				</div>
 			</div>
@@ -577,21 +631,21 @@ p>img {
 						<th style="width: 130px;"></th>
 					</tr>
 				</thead>
-				<tbody id="reviewList" >
-			
+				<tbody id="reviewList">
+
 				</tbody>
 			</table>
 		</div>
-			<div>&nbsp;</div>
-			<div>&nbsp;</div>
-			<div>&nbsp;</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
 		<!-- 모달 창 -->
 		<div id="reviewModal" class="modal">
 			<div class="modal-content">
 
 				<span class="close">&times;</span>
 				<h2 style="text-align: center;">상품 후기</h2>
-				<div>&nbsp;</div>f
+				<div>&nbsp;</div>
 				<section id="modal-img" th:each="prdt : ${getFarm}">
 					<div th:utext="${prdt.thumb}"></div>
 				</section>
@@ -632,7 +686,7 @@ p>img {
 
 		<!-- 페이징 -->
 
-		
+
 		<!-- 후기 아이템 반복 출력 -->
 		<div>&nbsp;</div>
 		<div>&nbsp;</div>
@@ -656,15 +710,15 @@ p>img {
 		$(".plus_btn").on("click", function(){
 			$(".quantity_input").val(++quantity);
 			count = Number($(".quantity_input").val());
-			totalPrc = prdtInfo.prc * count;
+			totalPrc = (prdtInfo.prc - (prdtInfo.prc * prdtInfo.dcRate)/100) * count;
 			$(".totalPrc").text(totalPrc.toLocaleString());
 		});
-		
+	
 		$(".minus_btn").on("click", function(){
 			if(quantity > 1){
 				$(".quantity_input").val(--quantity);	
 				count = Number($(".quantity_input").val());
-				totalPrc = prdtInfo.prc * count;
+				totalPrc = (prdtInfo.prc - (prdtInfo.prc * prdtInfo.dcRate)/100) * count;
 				$(".totalPrc").text(totalPrc.toLocaleString());
 			}
 		});
@@ -742,9 +796,9 @@ p>img {
 						<td style="text-align: center;" >${item.membNo}</td>
 						<td style="text-align: center;" >${item.drwupDt}</td>
 						<td style="text-align: center;">
-					       <button type="button" onclick="deleteReview()" class="delete-review-btn" data-rev-no="${item.revNo}">삭제</button>
+					       <button type="button" onclick="deleteReview()" class="delete-review-btn reviewButton btnBlueGreen" style="color: white; border: none;" data-rev-no="${item.revNo}" id="openModalBtn">삭제</button>
 					    </td>
-
+					    
 					</tr>
 					`;
 					document.querySelector("#reviewList").innerHTML+=trTag;
