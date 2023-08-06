@@ -133,5 +133,6 @@ public interface AdminMapper {
 	public BeforeDelVO beforeDel(String membNo);
 	// 닉네임으로 멤버번호 가져오기
 	public String nmGetNo(String nm);
-	
+	// 멤버번호로 활동중지중인번호 가져오기
+	public String membNoGetStopNo(String membNo);
 }

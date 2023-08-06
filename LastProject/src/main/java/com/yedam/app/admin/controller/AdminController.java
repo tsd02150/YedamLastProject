@@ -1,5 +1,7 @@
 package com.yedam.app.admin.controller;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -249,18 +251,14 @@ public class AdminController {
 	//회원정지
 	@ResponseBody
 	@GetMapping("memberBan")
-	public int memberBan(@RequestParam List<String> list	, Integer period , HttpServletRequest request) {
-		
+	public Map<String,Object> memberBan(@RequestParam List<String> list	, Integer period , HttpServletRequest request) {
+		Map<String,Object> map = new HashMap<>();
+		LocalDate date = LocalDate.now();
 		int result = adminService.memberBan(list, period);
-		if(result > 0) {
-			Enumeration<String> attributes = request.getSession().getAttributeNames();
-			while (attributes.hasMoreElements()) {
-			    String attribute = (String) attributes.nextElement();
-			    System.err.println(attribute+" : "+request.getSession().getAttribute(attribute));
-			}
-
-		}
-		return result;
+		
+		map.put("result", result);
+		map.put("endDt", date.plusDays(period));
+		return map;
 	}
 	
 	//회원삭제

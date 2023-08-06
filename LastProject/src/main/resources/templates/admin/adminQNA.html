@@ -170,7 +170,7 @@
 	  			      success: function(response) {
 	  			        // 삭제 요청이 성공한 경우, 그리드에서 선택된 행을 제거합니다.
 	  			        Swal.fire(response+ '/' +checkedRows.length + '건 성공했습니다.')
-	  			        faqGrid.removeCheckedRows(true);
+	  			        faqGrid.removeCheckedRows();
 	  			      },
 	  			      error: function(err) {
 	  			        console.error('행 삭제 오류:', err);
@@ -213,7 +213,8 @@
 	            	   {
 	                     header: 'faq번호',
 	                     name: 'faqNo',
-	                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+	                     filter: { type: 'text', showApplyBtn: true, showClearBtn: true },
+	                     align:'center'
 	                   },
 	                  	{
 	                      header: '제목',
@@ -226,7 +227,8 @@
 	                      filter: 'select', // Dropdown Filter로 설정
                        	  filterOptions: {
 	                         listItems: ['회원관리', '주식이용','포인트몰','커뮤니티']
-	                       }
+	                       },
+	                      align:'center'
 	                    }
 	                 ]
 	               });
@@ -411,7 +413,7 @@
 		  			      success: function(response) {
 		  			        // 삭제 요청이 성공한 경우, 그리드에서 선택된 행을 제거합니다.
 		  			        Swal.fire(response+ '/' +checkedRows.length + '건 성공했습니다.')
-		  			        qnaGrid.removeCheckedRows(true);
+		  			        qnaGrid.removeCheckedRows();
 		  			      },
 		  			      error: function(err) {
 		  			        console.error('행 삭제 오류:', err);
@@ -452,7 +454,8 @@
 	              	   {
 	                       header: 'qna번호',
 	                       name: 'qstNo',
-	                       filter: { type: 'text', showApplyBtn: true, showClearBtn: true }
+	                       filter: { type: 'text', showApplyBtn: true, showClearBtn: true },
+	                       align:'center'
 	                     },
                      {
 	                       header: '답변유무',
@@ -460,7 +463,8 @@
 	                       filter: 'select', // Dropdown Filter로 설정
 	                       filterOptions: {
 	                         listItems: ['Y', 'N']
-	                       }
+	                       },
+	                       align:'center'
 	                     },
                     	{
                         header: '닉네임',
@@ -477,7 +481,8 @@
                         name: 'drwupDt',
                         filter: { type: 'text', showApplyBtn: true, showClearBtn: true },
                         sortingType: 'asc',
-                        sortable: true
+                        sortable: true,
+                        align:'center'
                       }
 	                   ]
 	                 });

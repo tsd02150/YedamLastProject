@@ -1,5 +1,7 @@
 package com.yedam.app;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +12,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import com.yedam.app.admin.mapper.AdminMapper;
 import com.yedam.app.admin.service.AdminService;
-import com.yedam.app.admin.service.MembManageVO;
 import com.yedam.app.stock.mapper.StockMapper;
 import com.yedam.app.stock.service.ItemInfoVO;
 import com.yedam.app.stock.service.StockService;
@@ -104,7 +105,7 @@ class LastProjectApplicationTests {
 			}else {
 				System.out.println("result : " + str);
 			}
-		}
+		} 
 		
 		
 	}
@@ -112,5 +113,13 @@ class LastProjectApplicationTests {
 	//@Test
 	public void sendTest() {
 		stockService.schedulerJob();
+	}
+	
+	//@Test
+	public void dateTest() {
+		LocalDate date = LocalDate.now();
+		
+		System.out.println(date.plusDays(26));
+		System.out.println(date + "@@@@@");
 	}
 }

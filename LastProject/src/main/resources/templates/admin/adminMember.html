@@ -57,11 +57,14 @@
           		    		let period = result.value;
           		    		
           		    		$.ajax('/admin/memberBan?list='+members+'&period='+period).done(function(data){
-          		    			if(data > 0){
-          	    		    		for(let i of rowkeys){
+          		    			if(data.result > 0){
+          	    		    		/* for(let i of rowkeys){
           	    		    			grid.setValue(i, 'state', '활동정지');
-          	    		    		}
-          		    				Swal.fire(checkedRows.length + ' 명 회원 '+ result.value+' 일 정지 성공')
+          	    		    			grid.setValue(i,'endDt',data.endDt);
+          	    		    		} */
+          	    		    		grid.readData(grid.getPagination()._currentPage);
+          		    				Swal.fire(checkedRows.length + ' 명 회원 '+ result.value+' 일 정지 성공');
+          		    				
           		    			}else{
           		    				Swal.fire('실패했습니다.')
           		    			}
@@ -78,12 +81,13 @@
     		  } else if (result.isDenied) {
     		    // 정지 해제
     		    $.ajax('returnMemb?list='+members).done(function(data){
-    		    	console.log(data)
     		    	if(data > 0){
     		    		Swal.fire('정지가 해제되었습니다');
-    		    		for(let i of rowkeys){
+    		    		/* for(let i of rowkeys){
     		    			grid.setValue(i, 'state', '정상');
-    		    		}
+    		    			grid.setValue(i,'endDt','');
+    		    		} */
+    		    		grid.readData(grid.getPagination()._currentPage);
     		    	}else{
     		    		Swal.fire('정지 해제 실패');
     		    	}
@@ -267,8 +271,9 @@
                 		    		let membNm = $('td[data-row-key='+ev.rowKey+'][data-column-name=nm]').children(0).text();
                 		    		
                 		    		$.ajax('/admin/memberBan?list='+list+'&period='+period).done(function(data){
-                		    			if(data > 0){
+                		    			if(data.result > 0){
                 		    				Swal.fire(membNm+ ' 회원 '+ result.value+' 일 정지 성공')
+                		    				grid.setValue(ev.rowKey, 'endDt' ,data.endDt);
                 		    			}else{
                 		    				Swal.fire('실패했습니다.')
                 		    			}
@@ -289,6 +294,7 @@
                 		   $.ajax('returnMemb?list='+list).done(function(data){
                 			   if(data > 0){
                 				   Swal.fire(membNm +' 회원의 정지상태가 해제되었습니다.');
+                				   grid.setValue(ev.rowKey, 'endDt' ,'');
                 			   }else{
                 				   
                 			   }
@@ -303,7 +309,14 @@
                  sortingType: 'asc',
                  sortable: true,
                  align:'center'
-               }
+               },
+               {
+                   header: '정지종료일',
+                   name: 'endDt',
+                   sortingType: 'asc',
+                   sortable: true,
+                   align:'center'
+                 }
              ]
            });
       

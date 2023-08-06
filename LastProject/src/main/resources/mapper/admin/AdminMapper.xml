@@ -4,13 +4,13 @@
 
 <mapper namespace="com.yedam.app.admin.mapper.AdminMapper">
 	<select id="getMembList" resultType="MembManageVO">
-	 	 select m.memb_no , nm , id,decode(stop_no,null,'정상','활동중지') state, join_dt
+	 	 select m.memb_no , nm , id,decode(stop_no,null,'정상','활동중지') state, join_dt , end_dt
          from member m left join ( select *
                                   from stop_yn
                                   where end_dt > sysdate
                                   ) s
          on m.memb_no = s.memb_no
-         order by join_dt
+         order by to_number(substr(memb_no , 5)) desc
 	</select>
 	<!-- 멤버 전체수 -->
 	<select id="membCnt" resultType="int">
@@ -52,14 +52,11 @@
 	<update id="returnNorm"  >
 		update stop_yn
 		set end_dt = sysdate
-		where memb_no in (
+		where stop_no in (
 			<foreach collection="list" item="item" separator=",">
 				#{item}
 			</foreach>
 		)
-		<![CDATA[
-		and end_dt > sysdate
-		]]>
 	</update>
 	
 	<!-- 정지된 회원 조회 -->
@@ -75,7 +72,7 @@
 		update stop_yn
 		set end_dt = end_dt + #{period}
 		, stop_period = stop_period + #{period}
-		where memb_no in (
+		where stop_no in (
 			<foreach collection="list" item="item" separator=",">
 				#{item}
 			</foreach>
@@ -502,5 +499,15 @@
                                        ) p
         on m.memb_no = p.memb_no
         where m.memb_no = #{membNo}
+	</select>
+	
+	<!-- 멤버이름으로 활동정지중인 활동정지번호 가져오기 -->
+	<select id="membNoGetStopNo" resultType="String">
+		<![CDATA[
+			select stop_no 
+	        from stop_yn 
+	        where memb_no = #{membNo}
+	        and end_dt > sysdate
+        ]]>
 	</select>
 </mapper>

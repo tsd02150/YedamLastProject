@@ -39,16 +39,18 @@ public class AdminServiceImpl implements AdminService {
 	// 회원정지
 	@Override
 	public int memberBan(List<String> list, Integer period) {
-		for(int i = 0 ; i < list.size() ; i++) {
-			list.set(i, adminMapper.nmGetNo(list.get(i)));
-		}
+		if(!list.get(0).substring(0,4).equals("mem-")) {
+			for(int i = 0 ; i < list.size() ; i++) {
+				list.set(i, adminMapper.nmGetNo(list.get(i)));
+			};
+		};
+		
 		int cnt = list.size();
 		int result =0;
+		// 이미 벤리스트에 있는 사람들
 		List<String> being = new ArrayList<>();
+		//활동정지된 사람 리스트
 		List<String> banList = adminMapper.bannedMemb();
-		//			adminMapper.memberBan(str, period);
-
-		//adminMapper.addBanPeriod(str, period);
 		// 이미 정지 중인 사람들은 뽑아내고 새로 정지되는 사람은 정지
 		for(String str : list) {
 			int addcnt = 0;
@@ -63,6 +65,10 @@ public class AdminServiceImpl implements AdminService {
 			}else {
 				result += adminMapper.memberBan(str, period);
 			}
+		}
+		
+		for(int i = 0 ; i < being.size() ; i++) {
+			being.set(i, adminMapper.membNoGetStopNo(being.get(i)));
 		}
 		
 		// 정지되어있던 사람들은 정지기간 추가
@@ -110,6 +116,10 @@ public class AdminServiceImpl implements AdminService {
 	// 회원 정지해제
 	@Override
 	public int returnNorm(List<String> list) {
+		for(int i = 0 ; i < list.size() ; i++) {
+			list.set(i, adminMapper.membNoGetStopNo(list.get(i)));
+		}
+		
 		return adminMapper.returnNorm(list);
 	}
 	// 신고글 리스트
