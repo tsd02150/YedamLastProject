@@ -192,6 +192,13 @@ cursor: pointer;
 	height: 30px;
 	padding:5px;
 }
+.form-control {
+	width: 130px;
+	height: 30px;
+	display: inline-block;
+	padding: 8px 20px 8px 20px;
+}
+
 </style>
 </head>
 <body>
@@ -221,7 +228,7 @@ cursor: pointer;
 			<div id="myorderDiv">
 					<input type="date" id="startDate">
 					<input type="date" id="endDate">
-					<select id="orderSel" class="form-select">
+					<select id="orderSel" class="form-control">
 			    <option value="">전체</option>
 			    <option value="배송완료">배송완료</option>
 			    <option value="배송중">배송중</option>
@@ -339,125 +346,76 @@ cursor: pointer;
 	pageBtn();
 	
 	function shipList() {
-	    $.ajax({
-	        url: "shipList",
-	        method: "POST",
-	        data: {
-	            "orderSt": orderSt,
-	            "shipSt": shipSt,
-	            "startDate": startDate,
-	            "endDate": endDate,
-	            "page": targetPage
-	        },
-	        success: function (data) {
-	            let dataGroup = {};
-							
-	            if (data && data.length > 0) {
-	                data.forEach(item => {
-	                    let orderNo = item.orderNo;
-	                    if (!dataGroup[orderNo]) {
-	                    	dataGroup[orderNo] = [];
-	                    }
-	                    dataGroup[orderNo].push(item);
-	                });
+	   $.ajax({
+       url: "shipList",
+       method: "POST",
+       data: {
+         "orderSt": orderSt,
+         "shipSt": shipSt,
+         "startDate": startDate,
+         "endDate": endDate,
+         "page": targetPage
+       },
+       success: function (data) {
+         let dataGroup = {};
+			
+         if (data && data.length > 0) {
+           data.forEach(item => {
+               let orderNo = item.orderNo;
+               if (!dataGroup[orderNo]) {
+               	dataGroup[orderNo] = [];
+               }
+               dataGroup[orderNo].push(item);
+           });
 
-			              tr='';
-	                for (let orderNo in dataGroup) {
-	                    tr += `<div class="order-group col-12">
-	                    			<button type="button" class="btn btn-dark" data-ordno="${orderNo}" onclick="delOrder(this)">주문취소</button>`;
-	                    dataGroup[orderNo].forEach(item => {
-	                        let prc = commas(item.orderAm);
-	                        let orderDt = new Date(item.orderDt);
-	                        let formattedDt = moment(orderDt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format("YYYY-MM-DD  (HH:mm:ss)");
-	                        tr += `
-	                            <tr id="dtTr" data-ord="${orderNo}"><td colspan="4">${formattedDt}</td></tr>
-	                            <tr class="prdtTr" data-no=${item.prdtNo} data-shipno="${item.shipNo}" onclick="modatShow(this)">
-	                                <td>
-	                                    <div class="image_wrap">
-	                                        ${item.thumb}
-	                                    </div>
-	                                </td>
-	                                <td><span class="high">${item.orderSt}</span><br>${item.nm}</td>
-	                                <td class="goods_table_price_td">${prc}</td>
-	                                <td class="goods_table_shipSt_td">${item.shipSt}</td>
-	                            </tr>
-	                        `;
-	                    });
-	                    tr += `</div>`;
-	                }
+           tr='';
+           for (let orderNo in dataGroup) {
+             tr += `<div class="order-group col-12">
+             			<button type="button" class="btn btn-dark" data-ordno="${orderNo}" onclick="delOrder(this)">주문취소</button>`;
+             dataGroup[orderNo].forEach(item => {
+               let prc = commas(item.orderAm);
+               let orderDt = new Date(item.orderDt);
+               let formattedDt = moment(orderDt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format("YYYY-MM-DD  (HH:mm:ss)");
+               tr += `
+                   <tr id="dtTr" data-ord="${orderNo}"><td colspan="4">${formattedDt}</td></tr>
+                   <tr class="prdtTr" data-no=${item.prdtNo} data-shipno="${item.shipNo}" onclick="modatShow(this)">
+                       <td>
+                           <div class="image_wrap">
+                               ${item.thumb}
+                           </div>
+                       </td>
+                       <td><span class="high">${item.orderSt}</span><br>${item.nm}</td>
+                       <td class="goods_table_price_td">${prc}</td>
+                       <td class="goods_table_shipSt_td">${item.shipSt}</td>
+                   </tr>
+               `;
+             });
+             tr += `</div>`;
+           }
 
-	                $("#orderbody").html(tr);
-	            } else {
-	                tr += `
-	                    <tr style="text-align:center"><td colspan="4"><h4>거래내역이 없습니다.</h4></td></tr>
-	                `;
-	                $("#orderbody").html(tr);
-	            }
-	        },
-	        error: function (err) {
-	            console.log(err);
-	        }
-	    });
+             $("#orderbody").html(tr);
+         } else {
+             tr += `
+                 <tr style="text-align:center"><td colspan="4"><h4>거래내역이 없습니다.</h4></td></tr>
+             `;
+             $("#orderbody").html(tr);
+         }
+       },
+       error: function (err) {
+           console.log(err);
+       }
+	   });
 	}
 
-	
-	/* function shipList() {
-	    $.ajax({
-	        url: "shipList",
-	        method: "POST",
-	        data: {
-            "orderSt": orderSt,
-            "shipSt": shipSt,
-            "startDate": startDate,
-            "endDate": endDate,
-            "page": targetPage
-	        },
-	        success: function (data) {
-	        	let tr = '';
-	        	if(data && data.length >0){
-	            data.forEach(item => {
-	            	//console.log(item)
-	            	let prc = commas(item.orderAm);
-	            	let orderDt = new Date(item.orderDt);
-	            	let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
-	           tr+=`
-	           <tr id="dtTr"><td colspan="4">${formattedDt}</td></tr>
-        	   <tr class="prdtTr" data-no=${item.prdtNo} data-shipno="${item.shipNo}" onclick="modatShow(this)">
-								<td>
-									<div class="image_wrap">
-									${item.thumb}
-									</div>
-								</td>
-								<td><span class="high">${item.orderSt}</span><br>${item.nm}</td>
-								<td class="goods_table_price_td">${prc}</td>
-								<td class="goods_table_shipSt_td">${item.shipSt}</td>
-							</tr>
-	           `; 
-	            });
-	            
-	            $("#orderbody").html(tr);
-	        	}else{
-	        		tr+=`
-	        			<tr style="text-align:center"><td colspan="4"><h4>거래내역이 없습니다.</h4></td></tr>
-	        		`;
-	        		 $("#orderbody").html(tr);
-	        	}
-	        },
-	        error: function (err) {
-	            console.log(err);
-	        }
-	    });
-	} */
-	
+	//select option 선택 시 
 	$("#orderSel").on("change", function () {
-	    $("#orderbody").html("");
-	    shipSt = $("#orderSel option:selected").val();
-	    startDate = $("#startDate").val();
-	    endDate = $("#endDate").val();
-	    targetPage=1;
-	    shipList();
-	    pageBtn();
-
+    $("#orderbody").html("");
+    shipSt = $("#orderSel option:selected").val();
+    startDate = $("#startDate").val();
+    endDate = $("#endDate").val();
+    targetPage=1;
+    shipList();
+    pageBtn();
 	});
 	
 	//주문상세 모달
@@ -473,7 +431,6 @@ cursor: pointer;
 			},
 			success : function(data){
 				data.forEach(el=>{
-					console.log(el);
 					let orderDt = new Date(el.orderDt);
 					let formattedDt = moment(orderDt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format("YYYY-MM-DD  (HH:mm:ss)");
 					div+= `
@@ -514,7 +471,6 @@ cursor: pointer;
 	
 	
 	function delOrder(target){
-		console.log(target.dataset.ordno);
 		let ordNo = target.dataset.ordno;
 	
 		$.ajax({
@@ -546,7 +502,6 @@ cursor: pointer;
 				"orderNo" : no
 			},
 			success : function(data){
-				console.log("성공");
 				shipList();
 				pageBtn();
 			},error : function(err){
@@ -560,36 +515,36 @@ cursor: pointer;
 	})
 	
 	function pageBtn() {
-	    $.ajax({
-	        url: "getShipListCount",
-	        method: "POST",
-	        data: {
-	        	"orderSt": orderSt,
-            "shipSt": shipSt,
-            "startDate": startDate,
-            "endDate": endDate,
-            "page": targetPage
-	        },
-	        success: function (data) {
-	        	//console.log(data)
-	            $('#nextpage').css('visibility', 'hidden');
-	            $('#prevpage').css('visibility', 'hidden');
-	            totalCnt = data;
-	            if(totalCnt >100){
-	            	endPage = 10;
-	            }else{
-		            endPage=~~((totalCnt-1)/10 + 1);
-	            }
-	            createPageCntBtn(startPage, endPage);
-	            if(totalCnt>100){
-	            	$('#nextpage').css('visibility', 'hidden');
-		            $('#prevpage').css('visibility', 'hidden');
-							}
-	        },
-	        error: function (err) {
-	            console.log(err);
-	        }
-	       });
+    $.ajax({
+       url: "getShipListCount",
+       method: "POST",
+       data: {
+       	"orderSt": orderSt,
+          "shipSt": shipSt,
+          "startDate": startDate,
+          "endDate": endDate,
+          "page": targetPage
+       },
+        success: function (data) {
+        	//console.log(data)
+          $('#nextpage').css('visibility', 'hidden');
+          $('#prevpage').css('visibility', 'hidden');
+          totalCnt = data;
+          if(totalCnt >100){
+          	endPage = 10;
+          }else{
+           endPage=~~((totalCnt-1)/10 + 1);
+          }
+          createPageCntBtn(startPage, endPage);
+          if(totalCnt>100){
+          	$('#nextpage').css('visibility', 'hidden');
+           $('#prevpage').css('visibility', 'hidden');
+				}
+        },
+        error: function (err) {
+            console.log(err);
+        }
+       });
 	   }
 	   
 	   //페이지 버튼생성

@@ -375,7 +375,6 @@
 			let fee = commas(~~(el.stockCnt*el.taPrc*0.1));
 				let orderDt = new Date(el.taDt);
         let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
-				//console.log(el);
 				tr += `
 					<tr>
 					<td>${formattedDt}</td>`;
@@ -412,7 +411,6 @@
 			 if(data && data.length >0){
 				 $("#noOrderDiv").css("dispaly","none");
 			 data.forEach(el=>{
-				 console.log(el)
 				 let prc = (el.prc).toLocaleString();
 				 if(el.rmnCnt >0){
 					 div1 +=`
@@ -512,7 +510,6 @@
 		  success : function(res){
 			  $(target).parent().remove();
 			  toastShow("Delete","매수 주문 예약이 삭제되었습니다.","success");
-			  //window.location.reload();
 		  },
 		  error : function(err){
 			  console.log(err);
@@ -522,7 +519,6 @@
 	//매도 주문 예약 삭제
  function delSellOrder(target) {
 	  let dataNo = target.parentNode.getAttribute('data-no');
-	  //console.log(dataNo);
 	  $.ajax({
 		  url : "deleteSellOrder",
 		  method : "POST",
@@ -531,7 +527,6 @@
 			  "sellNo" : dataNo
 		  },
 		  success : function(res){
-			  console.log(res);
 			  $(target).parent().remove();
 			  toastShow("Delete","매도 주문 예약이 삭제되었습니다.","success");
 			  window.location.reload();
@@ -626,7 +621,6 @@ $.ajax({
 	    "membNo": memNo
 	  },
 	  success: function(data) {
-		  //console.log(data);
 		  let asset = 0;
 		  let invest = 0;
 
@@ -690,7 +684,6 @@ $.ajax({
 		success : function(data){
 			if(data && data.length >0){
 				data.slice(0, 10).forEach(el => {
-					//console.log(el);
 	         tr3 += `
 	           <tr data-no="${el.itemNo}"  onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">
 	             <td>${el.tnm}</td>
@@ -702,7 +695,6 @@ $.ajax({
 				$("#recombody").html(tr3);
 				   boxClass();
 			}else{
-				//console.log("랜덤")
 				$.ajax({
 				    url: "myItemCheck",
 				    success: function (data) {
@@ -802,7 +794,6 @@ function updateStartDate(period) {
             "endDate" : $("#dend").val()
 	        },
 	        success: function (data) {
-	        	//console.log(data);
 	            $('#nextpage').css('visibility', 'hidden');
 	            $('#prevpage').css('visibility', 'hidden');
 	            totalCnt = data;
@@ -885,7 +876,6 @@ function updateStartDate(period) {
 	       endPage = 10;
 	     }
 	     createPageCntBtn(startPage, endPage);
-	     //console.log(startPage, endPage);
 	     pageMove(startPage);
 	   }
 	   

@@ -156,22 +156,8 @@ input[type=number] {
 							});
 					}else {
 						testcode = createSmsKey();
-						//console.log(testcode);
+						//sms 발송 
 						sendFunc();
-					  /* $.ajax({
-						    url: "sendSms",
-						    method: "POST",
-						    data: {
-						      to: toUser,
-						      content: "[SMS] 인증번호 [" + testcode + "]를 입력해주세요"
-						    },
-						    success: function(response) {
-						      console.log("key: " + testcode);
-						    },
-						    error: function(err) {
-						      console.log(err);
-						    }
-						  });// sms 발송 끝 */
 						$("#idInput").val(data.id);
 						$("#telCheck").text("인증번호가 발송되었습니다.")
 							.css({
@@ -201,7 +187,6 @@ input[type=number] {
 	            content: "[ToTheMooN] 인증번호 [" + testcode + "]를 입력해주세요",
 	          },
 	          success: function (response) {
-	            //console.log("key: " + testcode);
 	          },
 	          error: function (err) {
 	            console.log(err);
@@ -224,8 +209,6 @@ input[type=number] {
 					$("#mname").focus();
 					return;
 				}
-				//console.log("인증번호 비교");
-				//console.log(testcode);
 				
 				if($("#codeCheckInput").val() != testcode){
 					count2++;
@@ -284,7 +267,6 @@ input[type=number] {
 			}
 			
 			// 아이디 찾기 성공 시 페이지 호출
-			
 			$.ajax({
 				url : "getMemberTel",
 				method: "POST",
@@ -301,7 +283,6 @@ input[type=number] {
 								"nm": $("#mname").val()
 							},
 			        success: function(data) {
-			        	
 								// 아이디찾기 완료 페이지 호출
 								document.getElementById('frm').submit();
 			        },
@@ -315,43 +296,42 @@ input[type=number] {
 				}
 			});
 		}
-			
-			//연락처 저장 포맷 & 유효성검사
-		 const autoHyphen = (target) => {
-			    target.value = target.value.replace(/[^0-9]/g, '').replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`);
-			};
-			
-			//이름 유효성 검사
-			const nameInput = document.querySelector("#mname");
-			const nameCheck = document.querySelector("#nameCheck");
-			const telInput = document.querySelector("#telInput");
+	
+	//연락처 저장 포맷 & 유효성검사
+ const autoHyphen = (target) => {
+	    target.value = target.value.replace(/[^0-9]/g, '').replace(/^(\d{3})(\d{4})(\d{4})$/, `$1-$2-$3`);
+	};
+	
+	//이름 유효성 검사
+	const nameInput = document.querySelector("#mname");
+	const nameCheck = document.querySelector("#nameCheck");
+	const telInput = document.querySelector("#telInput");
 
-			nameInput.addEventListener("input", nameCheckFunc);
-			
-			function nameCheckFunc() {
-			    const name = nameInput.value;
+	nameInput.addEventListener("input", nameCheckFunc);
+	
+	function nameCheckFunc() {
+	    const name = nameInput.value;
 
-			    // Regular expression to validate Korean name
-			    const nameRegex = /^[가-힣]{2,5}$/;
+	    const nameRegex = /^[가-힣]{2,5}$/;
 
-			    if (nameRegex.test(name)) {
-			        nameCheck.textContent = "";
-			    } else {
-			        nameCheck.textContent = "잘못 입력하셨습니다.";
-			    }
-			};
-			
-			function createSmsKey() {
-				  let key = '';
-				  
-				  for (let i = 0; i < 5; i++) { 
-				    key += Math.floor(Math.random() * 10);
-				  }
-				  return key;
-				}
-			
-		</script>
-	</section>
+	    if (nameRegex.test(name)) {
+	        nameCheck.textContent = "";
+	    } else {
+	        nameCheck.textContent = "잘못 입력하셨습니다.";
+	    }
+	};
+	
+	function createSmsKey() {
+		  let key = '';
+		  
+		  for (let i = 0; i < 5; i++) { 
+		    key += Math.floor(Math.random() * 10);
+		  }
+		  return key;
+		}
+	
+</script>
+</section>
 </body>
 
 </html>

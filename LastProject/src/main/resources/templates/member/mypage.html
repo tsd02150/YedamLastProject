@@ -226,12 +226,10 @@ $.ajax({
 		"membNo" : membNo
 	},
 	success : function(data){
-		console.log(data)
 		if(data && data.length >0){
 			
 		//보유주식 최대 8개까지만 출력(rate 기준 정렬)  stock/chart?itemNo=ite-1
 		data.slice(0, 8).forEach(el => {
-			//console.log(el);
 		let tprc = commas(el.nowPrc); 
 		let rate = commas(el.rate); 
 		  box += `<div class="int_item">
@@ -265,7 +263,6 @@ $.ajax({
 			"membNo" : membNo
 		},
 		success : function(data){
-			//보유주식 최대 4개까지만 출력(rate 기준 정렬)
 			if(data && data.length >0){
 			data.slice(0, 4).forEach(el=>{
 				let tprc = commas(el.tprc); 
@@ -325,12 +322,10 @@ $.ajax({
 	  success: function(data) {
 		  if(data && data.length >0){
 	      data.slice(0, 3).forEach(function(el) { //3개만 출력
-	        console.log(el);
 	        let orderDt = new Date(el.orderDt); // 날짜 객체 생성
 	        let formattedDt = `${orderDt.getFullYear()}-${(orderDt.getMonth() + 1).toString().padStart(2, '0')}-${orderDt.getDate().toString().padStart(2, '0')}`;
 	        let pnm = el.nm
 	        let nm= pnm.slice(0,10)+'...';
-	        console.log(nm)
 	        var orderAm = commas(el.orderAm); 
 	        prd += `
 	          <div class="orderDiv">

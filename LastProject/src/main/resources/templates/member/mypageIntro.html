@@ -8,10 +8,23 @@
 <title>ToTheMooN - 내 프로필 비밀번호 확인</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 <style>
-
+#mypageContent{
+	padding-left: 40px;
+}
 #mypageIntro{
 margin : auto;
 margin-top : 100px;
+}
+#titlename span:after {
+	width: 140px;
+}
+label{
+	font-weight: bold;
+	font-size: 20px;
+}
+.btn-light{
+	height: 53px;
+	width: 60px;
 }
 * The Modal (background) */
 .modal {
@@ -41,18 +54,19 @@ margin-top : 100px;
 	<div layout:fragment="mypage">
 	<!-- 비밀번호 비교 -->
 		<div id="mypageIntro">
-			<h2>개인정보 수정</h2>
-			<hr>
-			<h4>회원 정보 확인</h4>
+			<h3 class="news-title" id="titlename">
+				<span>회원 정보 확인</span>
+			</h3>
 			<div class="col-md-12">
 				<div class="form-group">
-					<label for="pass">비밀번호</label><input type="password"
+					<label for="pass" style="margin-right:10px;">비밀번호</label>
+					<input type="password"
 						class="form-control" id="pass" name="pwd"
 						placeholder="현재 비밀번호를 입력하세요."
 						style="width: 70%; display: inline;">
 						<button type="button" id="checkPwd" class="btn btn-light">확인</button><br>
 						<span id="pwdCheck"></span><br>
-						<span>비밀번호가 기억나지 않으신가요?<a href="/member/findpwd">비밀번호 찾기</a></span>
+						<span>비밀번호가 기억나지 않으신가요?<strong style="margin-left:10px;"><a href="/member/findpwd">비밀번호 찾기</a></strong></span>
 				</div>
 			</div>
 			</div>

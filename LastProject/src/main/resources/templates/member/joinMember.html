@@ -12,7 +12,6 @@
 	width: 15%;
 	height: 40px;
 }
-
 .olmessagef {
 	color: red;
 	font-style: Italic;
@@ -216,8 +215,6 @@ input[type=number] {
  const pwdWarning = document.getElementById('pwd-warning');
  const idMsg = document.querySelector("#idmsg");
  const nickMsg = document.querySelector("#nickmsg");
- //const memailConfirmTxt = document.querySelector("#memailconfirmTxt");
-
  
  //이름 유효성 검사 : 한글로 2-5자리
 const nameInput = document.querySelector("#mname");
@@ -510,22 +507,9 @@ document.querySelector('form').addEventListener('submit', (event) => {
 						});
 				}else {
 					testcode = createSmsKey();
+					//sms 발송
 					sendFunc();
-				 //sms 발송
-					/* $.ajax({
-					    url: "sendSms",
-					    method: "POST",
-					    data: {
-					      to: toUser,
-					      content: "[SMS] 인증번호 [" + testcode + "]를 입력해주세요"
-					    },
-					    success: function(response) {
-					      console.log("key: " + testcode);
-					    },
-					    error: function(err) {
-					      console.log(err);
-					    }
-					  }); */
+					
 					$("#idInput").val(data.id);
 					$("#telCheck").text("인증번호가 발송되었습니다.")
 						.css({
@@ -652,10 +636,6 @@ document.querySelector('form').addEventListener('submit', (event) => {
 	        return; 
 	    }
 
-//	    if(memailConfirmTxt.textContent === "인증 확인되었습니다."){
-//	    	document.getElementById("memailconfirm").focus();
-//	    }
-	    
 	    // 모든 조건을 만족했을 때 호출
         document.getElementById('joinfrm').submit();
 	}
