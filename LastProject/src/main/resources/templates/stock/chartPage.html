@@ -5,12 +5,20 @@
 <head>
 <meta charset="UTF-8">
 <style>
+#prcFont p{
+	font-size: 18px;
+	
+}
+.limitTag {
+	padding: 10px 0 13px 0;
+	margin:0;
+}
 .cp.container {
 	margin: 20px 0;
 }
 
 #favItem,#possItem {
-	height: 413px;
+	height: 423px;
 	overflow-y: scroll;
 }
 
@@ -53,6 +61,9 @@ h3 {
 #CP2D2 ol li span {
 	position:absolute;
 	right:50px;
+}
+#CP2D1{
+	padding:20px 20px 0 20px;
 }
 #CP2D1 p {
 	font-weight: 700;
@@ -102,13 +113,7 @@ h3 {
 #CP1D2 #forNonlogin h3{
 	margin:20px;
 }
-#CP2D22 table {
-	margin: 10px;
-}
 
-#CP2D22 table button {
-	margin-left: 10px;
-}
 
 #CP2D22 div {
 	text-align: center;
@@ -134,7 +139,7 @@ thead {
 	border-bottom: 1px solid black;
 }
 #CP3D2 {
-	height:365px;
+	height:385px;
 }
 #CP3D2 table {
 	width: 100%;
@@ -411,7 +416,7 @@ input[type="number"]::-webkit-inner-spin-button {
 					<div id="CP2D1" class="mb-1 border">
 						<div id="itemPtag" style="display:inline-block">
 							<div><p th:attr="data-in=${itemInfo?.itemNo}">종목 : [[${itemInfo?.nm}]] <span th:class="${itemInfo?.change} == 0 ? '_' : (${itemInfo?.change} > 0 ? 'plus' : 'minus')"> 전일비 : [[${itemInfo?.change &gt; 0 ? "+ "+itemInfo?.change : itemInfo?.change}]] 변동률 : [[${itemInfo?.rate &gt; 0 ? "+"+itemInfo?.rate : itemInfo?.rate }]]%</span></p>
-							<button class="btn btn-danger btn-sm" id="addInt2">관심종목추가</button></div>
+							<button class="btn btn-danger btn-sm mr-3" id="addInt2">관심종목추가</button></div>
 							<div style="position: absolute;float:left;" id="chartSelect">
 								<ul id="chartBtn" >
 									<li><input class="btn btn-danger" type="button" value="일"></li>
@@ -527,38 +532,49 @@ input[type="number"]::-webkit-inner-spin-button {
 			<div id="orderBox" class="row d-none" >
 				<div id="CP2D21" class="col-6">
 					<div>
-						<p class="m-0">상한가 : <span class="upLimit"></span> 하한가 : <span class="downLimit"></span></p>
+						<p class="limitTag">상한가 : <span class="upLimit"></span> 하한가 : <span class="downLimit"></span></p>
 						<input id="stockPrc" type="number" name="stockPrc" value="0">원<br>
 						<label style="margin:0"><input type="checkbox">시장가 주문</label>
 					</div>
-					<div class="py-0">
-						<input id="stockCnt" type="number" name="stockCnt" value="0" >주
-						<p class="mb-0">
-							<span id="orderName">구매</span>가능한 주수 <input class="btn btn-danger btn-sm" id="afford" type="button" value="0">주
-						</p>
-						<h5>총 금액 : <span id="totalPrc">0</span> </h5>
-						<h5>수수료 : <span id="charge">0</span> </h5>
-						<h5><span id="orderMessage"></span><span id="actualPrc"></span> point </h5>
-						<button class="btn btn-danger" id="stockOrderBtn" >주문</button> <span id="orderType" data-order=""></span>
+					<div id="prcFont" class="py-0">
+						
+						<p>총 금액 : <span id="totalPrc">0</span> </p>
+						<p>수수료 : <span id="charge">0</span> </p>
+						<p><span id="orderMessage"></span><span id="actualPrc"></span> point </p>
+						<button class="btn btn-danger btn-lg" id="stockOrderBtn" >주문</button> <span style="font-size: 18px;font-weight: 700" class="ml-3" id="orderType" data-order=""></span>
 					</div>
 				</div>
 				<div id="CP2D22" class="col-6">
-					<table style="margin:25px">
+					<table style="margin:15px">
 						<tr>
-							<td><button class="btn btn-danger btn-sm">10 %</button></td>
-							<td><button class="btn btn-danger btn-sm">50 %</button></td>
-							<td><button class="btn btn-danger btn-sm">100 %</button></td>
+							<td colspan="3">
+								<div class="btn-group m-0" role="group" aria-label="Basic outlined example">
+								  <button type="button" class="btn btn-outline-danger ">10 %</button>
+								  <button type="button" class="btn btn-outline-danger ">50 %</button>
+								  <button type="button" class="btn btn-outline-danger ">100 %</button>
+								</div>
+							</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<input class="mb-2" id="stockCnt" type="number" name="stockCnt" value="0" style="width:205px">주
+								<p class="mb-0">
+									<span id="orderName">구매</span>가능한 주수 <input class="btn btn-danger btn-sm" id="afford" type="button" value="0">주
+								</p> 
+							</td>
 						</tr>
 					</table>
-					<div style="margin-top:40px;">
-						<p>종목 : [[${itemInfo?.nm}]]</p>
-						<p>
+					<div style="margin-top:10px;text-align: left">
+						<p class="ml-3">종목 : [[${itemInfo?.nm}]]</p>
+						<p class="ml-3">
 							총 보유주 <span id="possStockCnt">0</span> 주
 						</p>
-						<p>
+						<p class="ml-3">
 							수익률 : <span>0</span>%
 						</p>
-						<p th:if="${session.loggedInMember} != null" th:attr="data-point=${session.loggedInMember.point}">보유 포인트 : <span th:text="${#numbers.formatInteger(session.loggedInMember.point, 3, 'COMMA') + 'point'}"></span></p>
+						<p class="ml-3" th:if="${session.loggedInMember} != null" th:attr="data-point=${session.loggedInMember.point}">보유 포인트 : <span th:text="${#numbers.formatInteger(session.loggedInMember.point, 3, 'COMMA') + 'point'}"></span></p>
 						<p th:unless="${session.loggedInMember} != null">로그인 해주세요.</p>
 					</div>
 				</div>
@@ -1081,7 +1097,9 @@ input[type="number"]::-webkit-inner-spin-button {
 			// stick chart 사이즈 조정
 			window.onresize = function() {
 				$('#stickChart').css('width',Number($('#candleChart').css('width').slice(0,-2))-18 + 'px')
-			}
+			};
+			$('#stickChart').css('width',Number($('#candleChart').css('width').slice(0,-2))-18 + 'px');
+			
 			$(function(){
 				document.querySelector('#sellOrderTab').click();
 			})
