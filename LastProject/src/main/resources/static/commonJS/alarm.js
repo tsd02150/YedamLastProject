@@ -40,7 +40,7 @@ jQuery(document).ready(function ($) {
 	// 알람벨 누를시 기능
   $('#alarmBellBtn').on('click','i',function(){
 		$('#newPlace').html('');
-	
+		
 			//미확인 알람 가져오기
 		  
 		  $.ajax('/stock/getNonChkAlm?membNo='+membNo).done(function(data){
@@ -49,6 +49,7 @@ jQuery(document).ready(function ($) {
 		  		let stockAlm =[];
 		  		let mallAlm =[];
 		  		let commAlm =[];
+		  		
 		  		
 		  		// 전체 데이터 반복문
 		  		for(let i of data){
@@ -66,21 +67,25 @@ jQuery(document).ready(function ($) {
 		  		
 		  		// stock 알림 반복문
 		  		let html = '';
-		  		for(let i of stockAlm){
-		  			if(i.checked == 'n') nCnt++;
-		  			html +=`<li data-alno="${i.alarmNo}">
-					          	<p class="list-group-item list-group-item-action h-100 ">
-					          		<button type="button" class="float-left close almXBtn" aria-label="Close">
-					          			<span aria-hidden="true" class="text-dark mr-1">&times;</span>
-					          		</button>
-					          		 체결 알림
-					          		<span class="text-muted small">${makeDay(new Date()) == makeDay(new Date(i.alarmDt)) ? '<span class="badge badge-primary">Today</span>' : ''} 
-					          		${i.checked == 'n' ? '<span class="badge badge-danger">New</span>' : ''} ${new Date(i.alarmDt).toLocaleDateString()}</span>
-					          		<span class="d-block"> ${i.cntn}</span>
-				          		</p>
-			          		</li>`	
+		  		if(stockAlm.length > 0){
+			  		for(let i of stockAlm){
+			  			if(i.checked == 'n') nCnt++;
+			  			html +=`<li data-alno="${i.alarmNo}">
+						          	<p class="list-group-item list-group-item-action h-100 ">
+						          		<button type="button" class="float-left close almXBtn" aria-label="Close">
+						          			<span aria-hidden="true" class="text-dark mr-1">&times;</span>
+						          		</button>
+						          		 체결 알림
+						          		<span class="text-muted small">${makeDay(new Date()) == makeDay(new Date(i.alarmDt)) ? '<span class="badge badge-primary">Today</span>' : ''} 
+						          		${i.checked == 'n' ? '<span class="badge badge-danger">New</span>' : ''} ${new Date(i.alarmDt).toLocaleDateString()}</span>
+						          		<span class="d-block"> ${i.cntn}</span>
+					          		</p>
+				          		</li>`	
+			  		}
+			  		$('#stock-alm ul').html(html);
+		  		}else{
+		  			$('#stock-alm ul').html(`<li><p class="ml-2">현재 체결된 알림이 없습니다. </p></li>`);
 		  		}
-		  		$('#stock-alm ul').html(html);
 		  		
 		  		let commLiTag='';
 		  		for(let i of commAlm){
@@ -113,6 +118,8 @@ jQuery(document).ready(function ($) {
 					window.location.href="/community/boardDetail?page=1&boardNo="+subdata.substring(0,subdata.length-2)+"&commonCd="+subdata.substring(subdata.length-2);
 				})
 		  });//end of ajax
+		  
+		  $('#firstTab').click();
 });//end of 알람벨 누를시 기능
 
 
