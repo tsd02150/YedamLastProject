@@ -151,7 +151,6 @@
 .bi {
 	font-size: 35px;
 	margin-top: 15px;
-	margin-left: 550px;
 }
 
 #buysellList input {
@@ -170,7 +169,9 @@
 #buysellList button {
 	color: black;
 }
-
+#titlename {
+	padding-bottom: 10px;
+}
 #titlename span:after {
 	width: 110px;
 }
@@ -187,14 +188,19 @@
 #recombody tr{
 	cursor: pointer;
 }
+.myOwn{
+	margin-left: 52	0px;
+	font-style: normal;
+}
+
 </style>
 </head>
 <body>
 	<div layout:fragment="mypage">
 		<div id="mypageBody" class="z-flex">
 			<h3 class="news-title" id="titlename">
-				<span>주식현황 <a href="mystockInfo"> <i
-						class="bi bi-arrow-right"></i>
+				<span>주식현황 <i class="myOwn">MY</i><a href="mystockInfo"> 
+				<i class="bi bi-arrow-right"></i>
 				</a>
 				</span>
 			</h3>

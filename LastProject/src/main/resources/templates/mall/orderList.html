@@ -639,7 +639,8 @@ $.ajax({
 					<div class="form-group" style="margin-bottom: 0px;">
 						<label for="addr1" data-no="${el.addrNo}">주소</label>
 						<button type="button" class="changeAddr btn btn-light"onclick="changeAddr(this)">변경</button>
-						<button type="button" class="deleteAddr btn btn-light"></button><br>
+						<br>
+						<br>
 						<input type="text" class="form-control" style="width: 40%; display: inline;" id="addr1" name="zip" value="${el.zip}" readonly>
 						<br>
 					</div>
@@ -685,8 +686,7 @@ let changeButton = $(target);
 changeButton.text('저장').removeAttr('onclick').on('click', function() {
  updateMemberAddr(); // 저장 버튼 클릭 시 주소 변경 요청
  $(target).next().remove();
- let addButtonHtml = '<button type="button" class="changeAddr btn btn-light" onclick="changeAddr(this)">변경</button>' +
-                      '<button type="button" class="deleteAddr btn btn-light"></button>';
+ let addButtonHtml = '<button type="button" class="changeAddr btn btn-light" onclick="changeAddr(this)">변경</button>' ;
  $(this).after(addButtonHtml);
  $(this).remove();
  $('input[name="detaAddr"]').attr("readonly", "readonly");
