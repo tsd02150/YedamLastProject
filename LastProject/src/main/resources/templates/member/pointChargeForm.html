@@ -40,16 +40,18 @@ input[type=number] {
 #tosspay{
 display: none; /* Hidden by default */
 position: fixed; /* Stay in place */
-z-index: 1; /* Sit on top */
+z-index: 1050; /* Sit on top */
 left: 60;
 top: 0;
 width: 730px; /* Full width */
 height: 650px; /* Full height */
-overflow: auto; /* Enable scroll if needed */
-background-color: rgb(0,0,0); /* Fallback color */
 background-color: white; /* Black w/ opacity */
-margin-top:200px;
+margin-top:30px;
 border: 1px solid #DDDDDD;
+padding: 20px;
+}
+.modal-open {
+  background-color: rgba(0, 0, 0, 0.5) !important;
 }
 #payBtn{
 	margin : auto;
@@ -152,6 +154,7 @@ width : 140px;
 	
 	$("#resetpay-button").on("click",function(){
 		 $("#tosspay").css("display", "none");
+		 $("body").removeClass("modal-open"); 
 	})
 	//콤마
 	function commas(target) {
@@ -173,6 +176,7 @@ width : 140px;
 			$("#chargeInput").focus();
 			return;
 		}
+		//$(".featured-posts").css("background-color","rgba(0,0,0,0.5)")
 		const pattern = /[^(0-9)]/gi;
 	  const clientKey = 'test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq' // 상점을 특정하는 키
 	  const customerKey = 'C57lz4-jzjw9_VF9insuD' // 결제 고객을 특정하는 키
@@ -187,6 +191,7 @@ width : 140px;
 	  /*약관 영역 렌더링*/
 	  const paymentAgreement = paymentWidget.renderAgreement('#agreement')
 		$("#tosspay").css("display","block");
+		$("body").addClass("modal-open"); 
 		
 	  /*결제요청 함수 정의*/
 		document.querySelector("#payment-button").addEventListener("click",()=>{
