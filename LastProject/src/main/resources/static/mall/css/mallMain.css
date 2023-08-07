@@ -270,6 +270,7 @@ Copy code
 .hero-slider video {
   width: 1100px;
   height: 100%;
+  
 }
 .row {
 	margin-left: auto;
@@ -496,7 +497,7 @@ h1 {
   /* position - 버튼 클릭시 left offset값을 적용시키기 위해 */
   position: relative;
   left: 0px;
-
+  margin-left: 0px;
   /* size */
   width: 100%;
   height: 300px;
@@ -506,6 +507,8 @@ h1 {
   /* transition */
   transition: left 0.15s;
 }
+
+
 .slide_button {
   /* layout */
   display: flex;
@@ -536,25 +539,33 @@ h1 {
 
 /* 각 슬라이드가 변경되는 것을 시각적으로 확인하기 쉽도록 각 슬라이드별 색상 적용 */
 .slide_item.item1 {
-  background-image: url("/mall/images/main/농축산물.png");
-  background-size: contain; 
+  background-image: url("/mall/images/main/slide.jpg");
+  background-size: cover; 
+  margin-left : 0px;
+  
+ 
 }
 .slide_item.item2 {
   background-image: url("/mall/images/main/사이소.png");
-  background-size: contain; 
+  background-size: cover; 
+  margin-left : 0px;
 }
 .slide_item.item3 {
   background-image: url("/mall/images/main/산청.png");
-  background-size: contain; 
+   background-size: cover; 
+  margin-left : 0px;
 }
 .slide_item.item4 {
   background-image: url("/mall/images/main/산청엑스포.png");
-  background-size: contain; 
+  background-size: cover; 
+  margin-left : 0px;
 }
 .slide_item.item5 {
   background-image: url("/mall/images/main/제주농산.png");
-  background-size: contain; 
+  background-size: cover; 
+  margin-left : 0px;
 }
+
 
 /* 페이지네이션 스타일 */
 ul,

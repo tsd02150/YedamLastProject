@@ -106,11 +106,16 @@
 		<div class="content_totalCount_section">
 
 <!-- 테이블이 비어있을 경우 문구 보이기 -->
+
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
 			<table th:if="${basketList.isEmpty()}" class="empty-basket-table">
 				<tr>
 					<td colspan="7" class="empty-basket-message">장바구니가 비었습니다.</td>
 				</tr>
 			</table>
+			<div>&nbsp;</div>
+			<div>&nbsp;</div>
 			
 	<!-- 체크박스 전체 여부 -->
 	<div class="all_check_input_div">
@@ -201,21 +206,24 @@
 					<td><span class="delivery_price">3000</span>P</td>
 				</tr>
 				<tr>
+				
 				<tr>
 					<td>총 주문 상품수</td>
 					<td><span class="totalKind_span"></span><span
 						class="totalCount_span"></span>EA</td>
 				</tr>
-
+				
 				<tr>
-					<td colspan="2" style=" box-shadow: 0 1px 0 #C8C8C8;"></td>
+					<td colspan="2" style=" box-shadow: 0 1px 0 #C8C8C8;" ></td>
 				</tr>
+				
 				<tr>
 					<td><strong>총 결제 예상 금액</strong></td>
 					<td><span class="finalTotalPrice_span">70000</span> P</td>
 				</tr>
+				
 			</table>
-
+<div>&nbsp;</div>
 		</div>
 	</div>
 

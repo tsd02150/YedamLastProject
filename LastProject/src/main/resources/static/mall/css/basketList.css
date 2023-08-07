@@ -2,7 +2,7 @@
 	font-size: 30px;
 }
 #titlename span{
-	line-height: 46px;
+	line-height: 42px;
 }
 #titlename span:after{
 	width:120px;
@@ -459,7 +459,7 @@ caption {
 }
 
 .total_wrap {
-	width: 80%;
+	width: 90%;
 	margin: auto;
 	padding: 10px 0 10px 0;
 }
@@ -526,4 +526,10 @@ caption {
 	padding-left: 8px;
 	font-size: 20px;
 	font-weight: bold;
+}
+
+.empty-basket-message {
+	text-align : center;
+	font-size : 18px;
+	
 }

@@ -272,7 +272,7 @@ th {
 	padding: 20px;
 	border: 1px solid #888;
 	width: 700px;
-	height: 800px;
+	height: 900px;
 }
 
 .close {
@@ -793,7 +793,7 @@ a.reviewButton {
 							</div>
 						</td>
 						<td style="text-align: center;" class="maks">${item.maks}</td>
-						<td style="text-align: center;" >${item.membNo}</td>
+						<td style="text-align: center;" >${item.nick}</td>
 						<td style="text-align: center;" >${item.drwupDt}</td>
 						<td style="text-align: center;">
 					       <button type="button" onclick="deleteReview()" class="delete-review-btn reviewButton btnBlueGreen" style="color: white; border: none;" data-rev-no="${item.revNo}" id="openModalBtn">삭제</button>
@@ -860,10 +860,10 @@ a.reviewButton {
 					</div>
 				</td>
 				<td style="text-align: center;" class="maks">${result.maks}</td>
-				<td style="text-align: center;" >${result.membNo}</td>
+				<td style="text-align: center;" >${result.nick}</td>
 				<td style="text-align: center;" >${result.drwupDt}</td>
 				<td style="text-align: center;">
-			       <button type="button" onclick="deleteReview()" class="delete-review-btn" data-rev-no="${result.revNo}">삭제</button>
+				<button type="button" onclick="deleteReview()" class="delete-review-btn reviewButton btnBlueGreen" style="color: white; border: none;" data-rev-no="rev_86" id="openModalBtn">삭제</button>
 			    </td>
 
 			</tr>

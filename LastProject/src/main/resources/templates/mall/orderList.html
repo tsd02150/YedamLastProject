@@ -12,14 +12,13 @@
 .content_area {
 	width: 100%;
 	min-height: 1000px;
-	margin-top:50px;
+	margin-top: 50px;
 }
 
 .content_area table {
 	border-collapse: collapse;
 	width: 100%;
 }
-
 
 /* content_main */
 .content_main {
@@ -239,7 +238,6 @@
 	height: 60px;
 }
 
-
 .modal {
 	display: none;
 	position: fixed;
@@ -249,8 +247,8 @@
 	width: 100%;
 	height: 100%;
 	overflow: auto;
-	background-color: rgb(0, 0, 0);
-	background-color: rgba(0, 0, 0, 0.4);
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 100;
 }
 
 /* Modal Content/Box */
@@ -261,7 +259,6 @@
 	border: 1px solid #888;
 	width: 30%;
 }
-
 
 .addDiv {
 	margin-bottom: 20px;
@@ -289,15 +286,19 @@
 	text-align: center;
 	padding: 10px 30px 10px 30px;
 }
-#titlename{
+
+#titlename {
 	font-size: 30px;
 }
-#titlename span{
-	line-height: 46px;
+
+#titlename span {
+	line-height: 42px;
 }
-#titlename span:after{
-	width:210px;
+
+#titlename span:after {
+	width: 210px;
 }
+
 #tosimg {
 	cursor: pointer;
 }
@@ -345,7 +346,7 @@
 					<div>&nbsp;</div>
 
 					<!-- 받는사람 정보 -->
-			
+
 					<div>
 						<h2 class="customer__h2">받는 사람 정보</h2>
 						<table class="customer__table">
@@ -355,7 +356,7 @@
 									<td class="customer__col customer__col--2" id="recipient_nm">신지은</td>
 								</tr>
 								<tr data-component="customer-realname-auth"></tr>
-								
+
 								<tr>
 									<td class="customer__col customer__col--1">휴대폰 번호</td>
 									<td class="customer__col customer__col--2" id="recipient_tel">010-1111-2222</td>
@@ -363,8 +364,8 @@
 							</tbody>
 						</table>
 					</div>
-						
-						<div>
+
+					<div>
 						<div class="row align-items-center justify-content-center">
 							<div class="col-lg-12">
 								<div class="signup">
@@ -398,8 +399,8 @@
 													placeholder="상세주소를 입력하세요">
 											</div>
 										</div>
-										<div id="addrDiv" th:if="${not #lists.isEmpty(membList)}" class="col-md-12" style=" padding-left: 0px;">
-										</div>
+										<div id="addrDiv" th:if="${not #lists.isEmpty(membList)}"
+											class="col-md-12" style="padding-left: 0px;"></div>
 									</form>
 								</div>
 							</div>
@@ -441,9 +442,7 @@
 
 							<tr th:each="item :${orderList}">
 								<td>
-									<div class="image_wrap" th:utext="${item.thumb}">
-										
-									</div>
+									<div class="image_wrap" th:utext="${item.thumb}"></div>
 								</td>
 								<td th:text="${item.nm}"></td>
 								<td class="goods_table_price_td" th:text="${item.cnt}"><span>수량</span>
@@ -455,13 +454,14 @@
 					</table>
 				</div>
 
-				
+
 				<!-- 주문 종합 정보 -->
 				<div class="total_info_div">
 					<!-- 가격 종합 정보 -->
 					<div class="total_info_price_div">
 						<ul>
-							<li><span class="price_span_label">사용 가능 금액</span><span class="order_point_input"></span>P</li>
+							<li><span class="price_span_label">사용 가능 금액</span><span
+								class="order_point_input"></span>P</li>
 							<li><span class="price_span_label">상품 금액</span> <span
 								class="totalPrice_span">100000</span>P</li>
 							<li><span class="price_span_label">배송비</span> <span
@@ -483,35 +483,40 @@
 				</div>
 
 			</div>
-			<div id="tosspay">
-				<!-- 결제위젯, 이용약관 영역 -->
-				<div id="payment-method"></div>
-				<div id="agreement"></div>
-				<!-- 결제하기 버튼 -->
-				<div id="payBtn">
-					<button id="payment-button" class="btn btn-primary btn-lg">결제하기</button>
-					<button id="resetpay-button" class="btn btn-primary btn-lg">취소하기</button>
+
+			<div class="modal" id="myModal">
+				<div class="modal-body">
+					<div id="tosspay">
+						<!-- 결제위젯, 이용약관 영역 -->
+						<div id="payment-method"></div>
+						<div id="agreement"></div>
+						<!-- 결제하기 버튼 -->
+						<div id="payBtn">
+							<button id="payment-button" class="btn btn-primary btn-lg">결제하기</button>
+							<button id="resetpay-button" class="btn btn-primary btn-lg">취소하기</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
-		
-		
+
 		<!-- modal -->
 
-	<!-- modal -->
-	<div id="delModal" class="modal">
-	  <!-- Modal content -->
-	  <div class="modal-content">
-	  	 <p class="bi bi-exclamation-circle" style="text-align: center; font-size: 24pt;"></p>
-	    <p style="text-align: center; line-height: 1.5;" id="modalTxt"></p>
-	    <p><br></p>
-	  	<div style="text-align: center;" id="modalBtn">
-	  		
-	  	</div>
-	  </div>
-	</div>
-	<!-- modal -->
-		
+		<!-- modal -->
+		<div id="delModal" class="modal">
+			<!-- Modal content -->
+			<div class="modal-content">
+				<p class="bi bi-exclamation-circle"
+					style="text-align: center; font-size: 24pt;"></p>
+				<p style="text-align: center; line-height: 1.5;" id="modalTxt"></p>
+				<p>
+					<br>
+				</p>
+				<div style="text-align: center;" id="modalBtn"></div>
+			</div>
+		</div>
+		<!-- modal -->
+
 		<script th:inline="javascript">
 		const id = [[${session.loggedInMember.id}]];
 		const membNo = [[${session.loggedInMember.membNo}]];
@@ -852,6 +857,7 @@ function createSmsKey() {
 	
 	$("#resetpay-button").on("click",function(){
 		 $("#tosspay").css("display", "none");
+		 $('#myModal').hide();
 	})
 		//콤마
 	function commas(target) {
@@ -890,7 +896,9 @@ function createSmsKey() {
 	  
 	  /*약관 영역 렌더링*/
 	  const paymentAgreement = paymentWidget.renderAgreement('#agreement')
-		$("#tosspay").css("display","block");
+		$("#tosspay").css("display","inline");
+	    $('#myModal').show();
+		$("body").addClass("modal-open"); 
 		
 	  /*결제요청 함수 정의*/
 		document.querySelector("#payment-button").addEventListener("click",()=>{
