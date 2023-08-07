@@ -73,18 +73,14 @@
 /* Main Image */
 .hero-slider {
 	position: relative;
-	height: 600px;
+	height: 400px;
+	width: 1100px;
 	background-color: transparent; /* 배경색 투명으로 설정 */
 }
 
-/* .main-img {
-	display: none; /* 배경 이미지 요소 숨김 */
-}
-* /
-
 .hero-area video {
 	width: 1100px;
-	height: 600px;
+	height: 400px;
 }
 
 /* Featured Posts */
@@ -213,14 +209,6 @@
 	border-bottom: 3px dotted #eee;
 }
 
-.shop-banner {
-	position: relative;
-	background-color: #f5f5f5;
-	background-image: url('images/main/mainImg.jpg');
-	background-size: cover;
-	padding: 200px 0px 130px;
-	background-size: cover;
-}
 </style>
 
 
@@ -267,50 +255,10 @@
 			</ul>
 		</div>
 
-		<div>
-			<!-- main image -->
-			<div class="hero-slider">
-				<div class="main-img"></div>
-				<div class="slider-item th-fullpage hero-area">
-					<video muted autoplay loop style="width: 1100px; height: 400px;">
-						<source src="images/main/frame3.mp4" type="video/mp4">
-					</video>
-				</div>
-			</div>
-		</div>
+			<section class="shop-banner">
+			<img src="images/main/mainImg.png">
+		</section> 
 
-
-
-		<!-- second image -->
-
-	<!-- 	<div>
-			<section>
-				<div class="container-fluid p-sm-0">
-					<div class="row2 featured-post-slider">
-						<div class="col-lg-3 col-sm-6 mb-2 mb-lg-0 px-1">
-							<article
-								class="card bg-dark text-center text-white border-0 rounded-0">
-								<img class="card-img rounded-0 img-fluid w-100">
-								<div class="card-img-overlay">
-									<iframe
-										src="https://assets.pinterest.com/ext/embed.html?id=374361787788782147?autoplay=1&mute=1"
-										height="100%" width="100%" frameborder="0" scrolling="no"></iframe>
-									<div class="card-content">
-										<p class="text-uppercase"></p>
-										<h4 class="card-title mb-4">
-											<a class="text-white" href="#"></a>
-										</h4>
-										<a class="btn btn-outline-light" href="#">read more</a>
-									</div>
-								</div>
-							</article>
-						</div>
-
-					</div>
-				</div>
-			</section>
-		</div>
- -->
 
 		<!-- 농산물 -->
 
@@ -329,18 +277,20 @@
 						<div class="product-image">
 							<a th:href="|/mall/getFarm?prdtNo=${prdt.prdtNo}|" class="image"
 								th:utext="${prdt.thumb}"> </a> <span th:if="${prdt.dcRate!=0}"
-								class="product-sale-label">sale</span> 
-							
+								class="product-sale-label">sale</span>
+
 						</div>
 						<div class="product-content">
-						<div th:onclick="|location.href='@{getFarm(prdtNo=${prdt.prdtNo})}'|">
-							<div th:text="${prdt.nm}" class="contents1_bold"></div>
-							<div th:text="${prdt.desct}" class="contents2"></div>
-							<span style="font-weight: bold; text-align:left; color: red;"
-								th:text="${#numbers.formatInteger(prdt.prc, 0, 'COMMA')} + 'P'"></span>
-							<div>
-								
-									<a class="btn btn-outline-light" style="margin-left: -12px;">read more</a>
+							<div
+								th:onclick="|location.href='@{getFarm(prdtNo=${prdt.prdtNo})}'|">
+								<div th:text="${prdt.nm}" class="contents1_bold"></div>
+								<div th:text="${prdt.desct}" class="contents2"></div>
+								<span style="font-weight: bold; text-align: left; color: red;"
+									th:text="${#numbers.formatInteger(prdt.prc, 0, 'COMMA')} + 'P'"></span>
+								<div>
+
+									<a class="btn btn-outline-light" style="margin-left: -12px;">read
+										more</a>
 								</div>
 							</div>
 						</div>
@@ -356,6 +306,15 @@
 		<div>&nbsp;</div>
 		<div>&nbsp;</div>
 		<div>&nbsp;</div>
+		
+		
+			<section class="shop-banner-">
+			<div class="container">
+
+				<div class="sale-percent"></div>
+
+			</div>
+		</section> 
 		<!-- 수산물 -->
 		<div class="main_text0">
 			<h1>수산물</h1>
@@ -365,25 +324,24 @@
 
 				<div class="col-md-3 col-sm-6"
 					th:each="prdt, iterStat : ${seaProduct}"
-					th:if="${iterStat.index}  >= 1 and ${iterStat.index} <= 4 ">
+					th:if="${iterStat.index}  >= 5 and ${iterStat.index} <= 8 ">
 					<div class="product-grid">
 						<div class="product-image">
 							<a th:href="|/mall/getFarm?prdtNo=${prdt.prdtNo}|" class="image"
 								th:utext="${prdt.thumb}"> </a> <span th:if="${prdt.dcRate!=0}"
-								class="product-sale-label">sale</span> <a
-								class="product-like-icon" href="#"><i class="far fa-heart"></i></a>
-							<a class="add-to-cart" href="#"><i
-								class="fas fa-shopping-bag"></i> add to cart </a>
+								class="product-sale-label">sale</span>
 						</div>
 						<div class="product-content">
-							<div th:text="${prdt.nm}" class="contents1_bold"></div>
-							<div th:text="${prdt.desct}" class="contents2"></div>
-							<span style="font-weight: bold; color: red;"
-								th:text="${#numbers.formatInteger(prdt.prc, 0, 'COMMA')} + 'P'"></span>
-							<div>
-								<div
-									th:onclick="|location.href='@{getFarm(prdtNo=${prdt.prdtNo})}'|">
-									<a class="btn btn-outline-light" style="margin-left: -12px;">read more</a>
+							<div
+								th:onclick="|location.href='@{getFarm(prdtNo=${prdt.prdtNo})}'|">
+								<div th:text="${prdt.nm}" class="contents1_bold"></div>
+								<div th:text="${prdt.desct}" class="contents2"></div>
+								<span style="font-weight: bold; color: red;"
+									th:text="${#numbers.formatInteger(prdt.prc, 0, 'COMMA')} + 'P'"></span>
+								<div>
+
+									<a class="btn btn-outline-light" style="margin-left: -12px;">read
+										more</a>
 								</div>
 							</div>
 						</div>
@@ -396,13 +354,10 @@
 		<div>&nbsp;</div>
 		<div>&nbsp;</div>
 		<div>&nbsp;</div>
-		<section class="shop-banner">
-			<div class="container">
-
-				<div class="sale-percent"></div>
-
-			</div>
-		</section>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
+		<div>&nbsp;</div>
 
 		<!-- 슬라이더  -->
 		<div class="section">

@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>ToTheMooN - 포인트|쿠폰</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <style>
 #myPointList, #myCouponList{
 	text-align: left;
@@ -58,14 +59,14 @@ margin-bottom:20px;
 	width:244px;
 	
 }
+#titlename span{
+	line-height: 25px;
+}
 #titlename2 span:after{
 	width:108px;
 }
 #titlename2 span{
-	line-height: 10px;
-}
-#titlename span{
-	line-height: 14px;
+	line-height: 25px;
 }
 .cDiv{
 	display: inline-block;
@@ -87,6 +88,29 @@ margin-bottom:20px;
 	height: 40px;
 	margin-bottom : 30px;
 	margin-right: 10px;
+}
+#prevpage {
+	visibility: hidden;
+}
+
+#nextpage {
+	visibility: hidden;
+}
+
+#prevpage {
+	visibility: hidden;
+}
+
+#nextpage {
+	visibility: hidden;
+}
+.pagination .page-item a {
+	margin : 0;
+	padding : 10px;
+	width: 48.5px;
+}
+.page-link{
+	padding : 10px;
 }
 </style>
 </head>
@@ -133,29 +157,26 @@ margin-bottom:20px;
 	</table>
 </div>
 <div>
-<nav aria-label="Page navigation example" class="d-flex justify-content-center">
-	<ul class="pagination">
-		<li class="page-item">
-			<a class="page-link" id="firstpage" href="javascript:firstPage()" aria-label="Previous">
-				<span aria-hidden="true">&laquo;</span>
-			</a>
-		</li>
-		<li class="page-item">
-			<a class="page-link" id="prevpage" href="javascript:prevPage()" aria-label="Previous">
-				<span aria-hidden="true" style="visibility: hidden;">&lt;</span>
-			</a>
-		</li>
-		<!-- 페이징버튼 들어갈 공간 -->
-		    <li class="page-item">
-				<a class="page-link" id="nextpage" href="javascript:nextPage()" aria-label="Next">
-					<span aria-hidden="true" style="visibility: hidden;">&rt;</span>
-				</a>
-			</li>
-		    <li class="page-item">
-				<a class="page-link" id="lastpage" href="javascript:lastPage()" aria-label="Next">
-					<span aria-hidden="true">&raquo;</span>
-				</a>
-			</li>
+	<nav aria-label="Page navigation example"
+		class="d-flex justify-content-center">
+		<ul class="pagination">
+			<li class="page-item"><a class="page-link" id="firstpage"
+				href="javascript:firstPage()" aria-label="Previous"> <span
+					aria-hidden="true">&laquo;</span>
+			</a></li>
+			<li class="page-item"><a class="page-link" id="prevpage"
+				href="javascript:prevPage()" aria-label="Previous"> <span
+					aria-hidden="true" style="visibility: hidden;"><</span>
+			</a></li>
+			<!-- 페이징버튼 들어갈 공간 -->
+			<li class="page-item"><a class="page-link" id="nextpage"
+				href="javascript:nextPage()" aria-label="Next"> <span
+					aria-hidden="true" style="visibility: hidden;">></span>
+			</a></li>
+			<li class="page-item"><a class="page-link" id="lastpage"
+				href="javascript:lastPage()" aria-label="Next"> <span
+					aria-hidden="true">&raquo;</span>
+			</a></li>
 		</ul>
 	</nav>
 </div>
@@ -193,7 +214,8 @@ let startDate = dt;
 $("#startDate").val(dtFormat);
 $("#endDate").val(`${year}-${month}-${date}`);
 
-
+//$("#dealbody").html("");
+let tr='';
 dealList();
 pageBtn();
 
@@ -210,7 +232,8 @@ function dealList() {
             "page" : targetPage
         },
         success: function (data) {
-            let tr = ''; // 각 호출마다 tr을 초기화
+        	tr='';
+        	$("#dealbody").html(""); // 각 호출마다 tr을 초기화
         	if(data && data.length >0){
             data.forEach(el => {
             let point = commas(el.point);
@@ -261,112 +284,111 @@ function dealList() {
 
 	});
 	
- function pageBtn() {
-	    $.ajax({
-	        url: "getDealCount",
-	        method: "POST",
-	        data: {
-	            "membNo": membNo,
-	            "tablename": tablename,
-	            "startDate": startDate,
-	            "endDate": endDate
-	        },
-	        success: function (data) {
-	            $('#nextpage').css('visibility', 'hidden');
-	            $('#prevpage').css('visibility', 'hidden');
-	            totalCnt = data;
-	            if(totalCnt >100){
-	            	endPage = 10;
-	            }else{
-		            endPage=~~((totalCnt-1)/10 + 1);
-	            }
-	            createPageCntBtn(startPage, endPage);
-	            if(totalCnt>100){
-	            	$('#nextpage').css('visibility', 'hidden');
-		            $('#prevpage').css('visibility', 'hidden');
-							}
-	        },
-	        error: function (err) {
-	            console.log(err);
-	        }
-	       });
-	   }
-	   
-	   //페이지 버튼생성
-	   function createPageCntBtn(start,end){
-	      $('.pagebtn').remove();
-	      
-	      for (let i = start; i <= end; i++) {
-	        let liTag = $('<li></li>').addClass('page-item').addClass('pagebtn');
-	        if (i % 10 === targetPage) {
-	          liTag.addClass('active');
-	        }
-	        let aTag = $('<a></a>').addClass('page-li	nk').attr('href', 'javascript:pageMove(' + i + ');').text(i);
-	        liTag.append(aTag);
-	        $('#nextpage').before(liTag);
-	      }
-	   }
-	   
-	   //페이징 버튼클릭
-	   function pageMove(page) {
-		   $("#dealbody").html("");
-		  $('.pagebtn.active').removeClass('active');
-		  targetPage = page;
-		  dealList();
-		  $('.pagebtn').each(function () {
-		    if ($(this).children('a').text() == page) {
-		      $(this).addClass('active');
-		       }
-		     });
-		  
-		  window.scrollTo(0, 200);
-	   }
-	      
-	   // 페이징 < 버튼 클릭
-	   function prevPage() {
-		   $("#dealbody").html("");
-	     $('#nextpage').css('visibility', 'visible');
-	     startPage -= 10;
-	     endPage -= 10;
-	     if (startPage === 1) {
-	       $('#prevpage').css('visibility', 'hidden');
-	     }
-	     createPageCntBtn(startPage, endPage);
-	     pageMove(startPage);
-	   }
-	   
-	   // 페이징 > 버튼 클릭
-	   function nextPage() {
-		   $("#dealbody").html("");
-	     $('#prevpage').css('visibility', 'visible');
-	     startPage += 10;
-	     endPage += 10;
-	     if (endPage >= ~~((totalCnt - 1) / 10 + 1)) {
-	       endPage = ~~((totalCnt - 1) / 10 + 1);
-	       $('#nextpage').css('visibility', 'hidden');
-	     }
-	     createPageCntBtn(startPage, endPage);
-	     pageMove(startPage);
-	   }
-	   
-	   function firstPage() {
-		   $("#dealbody").html("");
-	     startPage = 1;
-	     if (endPage > 10) {
-	       endPage = 10;
-	     }
-	     createPageCntBtn(startPage, endPage);
-	     pageMove(startPage);
-	   }
-	   
-	   function lastPage() {
-		   $("#dealbody").html("");
-       endPage = ~~((totalCnt - 1) / 10 + 1);
-	     startPage = endPage - endPage % 10 + 1;
-	     createPageCntBtn(startPage, endPage);
-	     pageMove(endPage);
-	   }
-
+ function pageBtn(){
+	 fetch("/member/getDealCount", {
+		 method : "POST",
+		 headers : {
+			 'Content-Type' : 'application/x-www-form-urlencoded'
+		 },
+		 body : 'membNo=' + membNo +'&tablename='+tablename+'&startDate='+startDate+'&endDate='+endDate
+	 })
+	 .then(result => result.json())
+	 .then(data => {
+		 let pageBtns = document.querySelectorAll('.pagebtn');
+		    if (pageBtns.length > 0) {
+		        pageBtns.forEach(el => {
+		        	el.parentNode.removeChild(el);
+		        });
+		    }
+		 totalCnt=data;
+		 if(totalCnt<=100) {
+			 endPage=~~((totalCnt-1)/10 + 1);
+		 }
+		 if(totalCnt>100) {
+			 nextpage.style.visibility="visible";
+			 document.querySelector("#nextpage span").style.visibility="visible";
+		 }
+		 createPageCntBtn(startPage,endPage);
+	 })
+ }
+ 
+// 페이징 버튼 생성
+function createPageCntBtn(start, end){
+	 document.querySelectorAll('.pagebtn').forEach(el => {
+	     el.parentNode.removeChild(el);
+	   });
+	for(let i=start; i<=end; i++){
+		let liTag = document.createElement('li');
+		liTag.classList.add('page-item','pagebtn');
+		if(i%10==targetPage){
+			liTag.classList.add('active');
+		}
+		let aTag = document.createElement('a');
+		aTag.classList.add('page-link');
+		aTag.href="javascript:pageMove("+i+");";
+		aTag.textContent=i;
+		liTag.append(aTag);
+		nextpage.before(liTag);
+	}
+}
+// 페이징 버튼 클릭
+	function pageMove(page){
+		document.querySelectorAll('.pagebtn.active').forEach(item => {
+		    item.classList.remove('active');
+		});
+		targetPage=page;
+		dealList();
+		pageBtn();
+		document.querySelectorAll('.pagebtn').forEach(item=>{
+			if(item.children[0].textContent==page){
+				item.classList.add('active');
+			}
+		})
+	}
+	
+	// 페이징 < 버튼 클릭
+	function prevPage(){
+		nextpage.style.visibility="visible";
+		if(startPage!=1){
+			startPage-=10;
+			endPage=startPage+9;
+		}
+		if(startPage===1){
+			prevpage.style.visibility="hidden";
+		}
+		createPageCntBtn(startPage, startPage);
+		pageMove(startPage);
+	}
+	
+	// 페이징 > 버튼 클릭
+	function nextPage(){
+		prevpage.style.visibility="visible";
+		document.querySelector("#prevpage span").style.visibility="visible";
+		startPage+=10;
+		endPage+=10;
+		if(endPage>=~~((totalCnt-1)/10+1)){
+			endPage=~~((totalCnt-1)/10+1);
+			nextpage.style.visibility="hidden";
+			document.querySelector("#nextPage span").style.visibility="hidden";
+		}
+		createPageCntBtn(startPage,endPage);
+		pageMove(startPage);
+	}
+	
+	function firstPage(){
+		startPage=1;
+		endPage=10;
+		createPageCntBtn(startPage,endPage);
+		pageMove(startPage);
+	}
+	
+	function lastPage(){
+		endPage=~~((totalCnt-1)/10 + 1);
+		startPage=endPage-endPage%10+1;
+		createPageCntBtn(startPage,endPage);
+		pageMove(endPage);
+	} 
+	 
 	
 	 function commas(number) {
 		  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');

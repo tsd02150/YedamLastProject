@@ -15,6 +15,7 @@ public class ProductReviewVO {
 	private String membNo;
 	private String cntn;
 	private String img;
+	private String nick;
 	/*
 	 * @DateTimeFormat(pattern="yyyy-MM-dd") private Date drwupDt;
 	 */
