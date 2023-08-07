@@ -625,7 +625,7 @@ $("#sendsms").on("click", function() {
 	      method: "POST",
 	      data: {
 	        to: toUser,
-	        content: "[SMS] 인증번호 [" + testcode + "]를 입력해주세요"
+	        content: "[ToTheMooN] 인증번호 [" + testcode + "]를 입력해주세요"
 	      },
 	      success: function(response) {
 	        $("#telCheck").text("인증번호가 발송되었습니다.")

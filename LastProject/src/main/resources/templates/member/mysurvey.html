@@ -22,7 +22,7 @@
 #surveySection{
    height: 1400px;
    text-align: center;
-   overflow: auto;
+   margin-top:50px;
 }
 #surveySection table{
 text-align: left;
@@ -34,6 +34,8 @@ text-align: left;
 
 #surveydiv{
 	padding : 10px;
+	overflow: auto;
+	height: 1600px;
 }
 #surveytbl{
 margin : auto;
@@ -53,7 +55,8 @@ margin-top : 30px;
 	margin-top: 100px;
 }
 #typeResult img{
-	width: 1100px;
+	width: 700px;
+	height: 440px;
 }
 #membResult{
 	margin-top:60px;
@@ -167,9 +170,8 @@ margin-top : 30px;
 						<td>
 							<span class="tit">7. 고객님께서 금융상품 투자를 통해 기대하는 수익과 감수할 수 있는 손실을 가장 잘 표현한 것은 어느 것입니까?</span>
 							<ul class="faqlist">
-								<li><input type="radio" class="radio" title="원금 초과 손실까지 감수하며 적극적인 투자를 통하여 시장수익률(예:주가지수)을 초과하는 높은 수익을 추구 선택" name="investPurpose" value="8" id="faq27">
-								
-								<label for="faq27">원금 초과 손실까지 감수하며 적극적인 투자를 통하여 시장수익률(예:주가지수)을 초과하는 높은 수익을 추구</label></li>
+								<li><input type="radio" class="radio" title="원금 초과 손실까지 감수하며 적극적인 투자를 통하여 시장수익률을 초과하는 높은 수익을 추구 선택" name="investPurpose" value="8" id="faq27">
+								<label for="faq27">원금 초과 손실까지 감수하며 적극적인 투자를 통하여 시장수익률을 초과하는 높은 수익을 추구</label></li>
 								<li><input type="radio" class="radio" title="원금손실을 감수하며 시장수익률과 비슷한 수준의 수익을 기대 선택" name="investPurpose" value="6" id="faq28"><label for="faq28">원금손실을 감수하며 시장수익률과 비슷한 수준의 수익을 기대</label></li>
 								<li><input type="radio" class="radio" title="원금의 일부 손실을 감수하며 시중금리보다 다소 높은 수준의 수익을 기대 선택" name="investPurpose" value="4" id="faq29"><label for="faq29">원금의 일부 손실을 감수하며 시중금리보다 다소 높은 수준의 수익을 기대</label></li>
 								<li><input type="radio" class="radio" title="제한적인 손실을 감수하며 시중금리 수준의 수익을 기대" name="investPurpose" value="2" id="faq30"><label for="faq30">제한적인 손실을 감수하며 시중금리 수준의 수익을 기대</label></li>
@@ -227,9 +229,9 @@ margin-top : 30px;
 				$("#nav-home-tab").addClass("active");
 			}
 			$("#nav-profile-tab").removeClass("active");
-			$("#surveydiv").css("display","block"); // 제출하기 버튼
+			$("#surveydiv").css("display","inline-block"); // 제출하기 버튼
 			$("#surveytbl").css("display","block"); // 설문조사 질문 table
-			$("#surveydiv button").css("display","block"); // 제출하기 버튼
+			$("#surveydiv button").css("display","inline-block"); // 제출하기 버튼
 			$("#noResult").css("display","none"); //참여결과 없을때 div
 			$("#membResult").css("display","none"); //설문조사 결과 div
 			$("#typeResult").css("display","none"); //타입 종류 div
