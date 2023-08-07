@@ -46,12 +46,31 @@ top: 0;
 width: 730px; /* Full width */
 height: 650px; /* Full height */
 background-color: white; /* Black w/ opacity */
-margin-top:30px;
-border: 1px solid #DDDDDD;
+margin-top:60px;
 padding: 20px;
 }
-.modal-open {
-  background-color: rgba(0, 0, 0, 0.5) !important;
+.modal{
+	background-color : rgba(0,0,0,0.5);
+  z-index : 100;
+}
+.modal-dialog {
+  width: 1000px;
+  margin-left : 800px;
+}
+
+.modal-content {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    width: 750px;
+    height: 685px;
+    pointer-events: auto;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.2);
+    border-radius: 0.3rem;
+    outline: 0;
 }
 #payBtn{
 	margin : auto;
@@ -132,16 +151,29 @@ width : 140px;
 			</div>
 			<img th:src="|/member/images/toss.png|" id="tosimg">
 		</div>
-		<div id="tosspay">
-	 	<!-- 결제위젯, 이용약관 영역 -->
-  	<div id="payment-method"></div>
-  	<div id="agreement"></div>
-	 	<!-- 결제하기 버튼 -->
-  	<div id="payBtn">
-  		<button id="payment-button" class="btn btn-primary btn-lg">다음</button>
-  		<button id="resetpay-button" class="btn btn-dark btn-lg">취소하기</button>
-  	</div>
-	</div>
+		
+  <div class="modal" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        
+        <!-- Modal body -->
+        <div class="modal-body">
+	        <div id="tosspay">
+					 	<!-- 결제위젯, 이용약관 영역 -->
+				  	<div id="payment-method"></div>
+				  	<div id="agreement"></div>
+					 	<!-- 결제하기 버튼 -->
+				  	<div id="payBtn">
+				  		<button id="payment-button" class="btn btn-primary btn-lg">다음</button>
+				  		<button id="resetpay-button" class="btn btn-dark btn-lg">취소하기</button>
+				  	</div>
+					</div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+		
 	</div>
 	<script>
 	//금액버튼 클릭 시 
@@ -153,8 +185,8 @@ width : 140px;
 	})
 	
 	$("#resetpay-button").on("click",function(){
-		 $("#tosspay").css("display", "none");
-		 $("body").removeClass("modal-open"); 
+		$("#tosspay").css("display","none");
+		$('#myModal').hide();
 	})
 	//콤마
 	function commas(target) {
@@ -191,6 +223,7 @@ width : 140px;
 	  /*약관 영역 렌더링*/
 	  const paymentAgreement = paymentWidget.renderAgreement('#agreement')
 		$("#tosspay").css("display","block");
+	  $('#myModal').show();
 		$("body").addClass("modal-open"); 
 		
 	  /*결제요청 함수 정의*/
