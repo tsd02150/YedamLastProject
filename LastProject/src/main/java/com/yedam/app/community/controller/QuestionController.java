@@ -82,7 +82,6 @@ public class QuestionController {
 			model.addAttribute("myInfo",myInfo);
 		}
 		model.addAttribute("qnaInfo",questionService.getQnaDetail(vo.getQstNo()));
-		System.out.println(questionService.getQnaDetail(vo.getQstNo()));
 		return "community/qnaDetail";
 	}
 	
