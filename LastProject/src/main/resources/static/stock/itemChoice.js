@@ -140,8 +140,8 @@
       			let list = '';
       			for(let i =0; i< data.length ; i++){
       				let cls = data[i].change == 0 ? '_' : data[i].change > 0 ? 'plus' : 'minus';
-      				let change = data[i].change == 0 ? data[i].change : data[i].change > 0 ? '+'+data[i].change : '-'+data[i].change;
-      				let rate = data[i].rate == 0 ? data[i].rate : data[i].rate > 0 ? '+'+data[i].rate : '-' + data[i].rate;
+      				let change = data[i].change == 0 ? data[i].change : data[i].change > 0 ? '+'+data[i].change : data[i].change;
+      				let rate = data[i].rate == 0 ? data[i].rate : data[i].rate > 0 ? '+'+data[i].rate :  data[i].rate;
       				list +=`<li><a href="chart?itemNo=${data[i].itemNo}">${i+1} ${data[i].nm}</a> <span class="${cls}"> ${change} (${rate}%)</span>`;
       			}
               $("#hot ul").html(list);
