@@ -1,5 +1,5 @@
 const stompClient = new StompJs.Client({
-    brokerURL: 'ws://43.202.20.221:83/socketserver' // 서버연결
+    brokerURL: 'ws://localhost:80/socketserver' // 서버연결
 });
 
 $(document).ready(function(){
@@ -24,7 +24,28 @@ $(document).ready(function(){
 	    });
 	    stompClient.subscribe(destination, (greeting) => {
 		    	console.log('알림성공');
-		        toastShow("체결 알림" ,greeting.body , "info"); // 구독된 url 에서 넘어오는 메세지 처리
+		        //toastShow("체결 알림" ,greeting.body , "info"); // 구독된 url 에서 넘어오는 메세지 처리
+		        Swal.fire({
+				    toast: true,
+				    icon: 'info',
+				    title: '체결 알림',
+				    text:greeting.body,
+				    animation: false,
+				    position: 'bottom-left',
+				    showConfirmButton: true,
+				    timer: 3000,
+				    timerProgressBar: true,
+				    confirmButtonText:'주문내역 이동하기',
+				    didOpen: (toast) => {
+				      toast.addEventListener('mouseenter', Swal.stopTimer)
+				      toast.addEventListener('mouseleave', Swal.resumeTimer)
+				    }
+				  })
+				  .then((result) => {
+				  	if (result.isConfirmed){
+				  		window.location.href="/member/mystock"
+				  	}
+				  });
 		        $('#newPlace').html('<span class="badge badge-danger">New</span>');
 		        $.ajax('/stock/resetPoint');
 	    });

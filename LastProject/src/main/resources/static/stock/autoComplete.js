@@ -121,7 +121,20 @@ $('#itemPtag').on('click','button',function(){
 					console.log('zz')
 					addInterest(itemNo);
 				}else{
-					toastShow('로그인 후 실행해주세요','회원서비스 입니다','info');
+					Swal.fire({
+							  title: '로그인',
+							  text: "로그인이 필요한 서비스입니다.",
+							  icon: 'info',
+							  showCancelButton: true,
+							  confirmButtonColor: '#3085d6',
+							  cancelButtonColor: '#d33',
+							  confirmButtonText: '로그인하기',
+							  cancelButtonText:'취소'
+							}).then((result) => {
+							  if (result.isConfirmed) {
+							   	window.location.href="/member/login"
+							  }
+							});
 				}
 			
 	
@@ -143,7 +156,21 @@ function addInterest(itemNumber) {
     success: function (data) {
     	$('.searchItem.interest').val('');
     	if(data.code == 'success'){
-    		  toastShow("관심종목 추가" , data.msg , "success");
+    		  Swal.fire({
+							    toast: true,
+							    icon: 'success',
+							    title: '관심종목 추가',
+							    text:data.msg,
+							    animation: false,
+							    position: 'bottom-right',
+							    showConfirmButton: false,
+							    timer: 3000,
+							    timerProgressBar: true,
+							    didOpen: (toast) => {
+							      toast.addEventListener('mouseenter', Swal.stopTimer)
+							      toast.addEventListener('mouseleave', Swal.resumeTimer)
+							    }
+							  });
     		  let html='';
 		      for (let i = 0; i < data.list.length; i++) {
 		        html += `<p class="border my-1"><input  class="btn btn-danger btn-sm" type="button" value="x" data-info="${data.list[i].itemNo}">
@@ -157,7 +184,21 @@ function addInterest(itemNumber) {
     	}else if(data.code == 'fail'){
     		toastShow("관심종목 추가" , data.msg , "error");
     	}else if(data.code == 'warning'){
-    		toastShow(data.msg ,"관심종목 추가" , "warning");
+    		Swal.fire({
+			    toast: true,
+			    icon: 'warning',
+			    title: '관심종목 추가',
+			    text:data.msg,
+			    animation: false,
+			    position: 'bottom-right',
+			    showConfirmButton: false,
+			    timer: 3000,
+			    timerProgressBar: true,
+			    didOpen: (toast) => {
+			      toast.addEventListener('mouseenter', Swal.stopTimer)
+			      toast.addEventListener('mouseleave', Swal.resumeTimer)
+			    }
+			  });
     	}
       
     },
@@ -280,6 +321,7 @@ function addInterest(itemNumber) {
   			if(data.length == 0){
 					return;  					
 	  			}
+	  		$('#noOrder').remove();
   			data.forEach(dt => {
   				html+=`<tr><td class="minus">${dt.CNT}</td><td>${dt.PRC}</td></tr>`
   			})
@@ -291,6 +333,7 @@ function addInterest(itemNumber) {
   			if(data.length == 0){
 					return;  					
 	  			}
+  			$('#noOrder').remove();
   			data.forEach(dt => {
   				html+=`<tr><td>${dt.PRC}</td><td class="plus">${dt.CNT}</td></tr>`
   			})
@@ -365,7 +408,7 @@ function addInterest(itemNumber) {
 		  await Promise.all([sellPromise, buyPromise]);
 		 
 		  // 여기에서 .then과 유사한 로직을 수행합니다.
-		  if(taBeing ==0 ) $('#price').append($('<p class="m-2" />').html('현재 해당 종목의 주문이 없습니다.'));
+		  if(taBeing ==0 ) $('#price').append($('<p id="noOrder" class="m-2" />').html('현재 해당 종목의 주문이 없습니다.'));
 		  // 모든 AJAX 요청이 완료되었을 때 실행될 코드를 작성할 수 있습니다.
 		  console.log('모든 AJAX 요청이 완료되었습니다.');
 		  // 추가 작업 수행 가능...

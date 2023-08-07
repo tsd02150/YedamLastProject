@@ -315,6 +315,7 @@ public class StockServiceImpl implements StockService {
 		map.put("error_thr", null);
 		
 		stockMapper.deleteJob(map);
+		System.out.println((String)map.get("del_result"));
 		System.out.println((String)map.get("error_one"));
 		System.out.println((String)map.get("error_two"));
 		System.out.println((String)map.get("error_thr"));

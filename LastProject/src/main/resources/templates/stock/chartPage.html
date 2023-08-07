@@ -4,6 +4,7 @@
 	layout:decorate="~{layout/layout}">
 <head>
 <meta charset="UTF-8">
+
 <style>
 #prcFont p{
 	font-size: 18px;
@@ -351,6 +352,7 @@ input[type="number"]::-webkit-inner-spin-button {
 	width:80%;
 }
 </style>
+
 <title>To The Moon - chartPage</title>
 </head>
 <body>
@@ -635,7 +637,20 @@ input[type="number"]::-webkit-inner-spin-button {
 					// 관심종목 위치에 input 오게하기
 					$('#changeInput').html('').append($('#interestInput').removeClass('d-none'));
 				}else{
-					toastShow('로그인 후 실행해주세요','회원서비스 입니다','info');
+					Swal.fire({
+							  title: '로그인',
+							  text: "로그인이 필요한 서비스입니다.",
+							  icon: 'info',
+							  showCancelButton: true,
+							  confirmButtonColor: '#3085d6',
+							  cancelButtonColor: '#d33',
+							  confirmButtonText: '로그인하기',
+							  cancelButtonText:'취소'
+							}).then((result) => {
+							  if (result.isConfirmed) {
+							   	window.location.href="/member/login"
+							  }
+							});
 				}
 			});
 			/*]]>*/
@@ -660,10 +675,38 @@ input[type="number"]::-webkit-inner-spin-button {
 					data:{ membNo: membInfo, itemNo:itemInfo},
 					success:function(data){
 						if(data.code == 'success'){
-							toastShow("관심종목 제거",data.msg,"success");
+							//toastShow("관심종목 제거",data.msg,"success");
+							Swal.fire({
+							    toast: true,
+							    icon: 'success',
+							    title: '관심종목 제거',
+							    animation: false,
+							    position: 'bottom-right',
+							    showConfirmButton: false,
+							    timer: 3000,
+							    timerProgressBar: true,
+							    didOpen: (toast) => {
+							      toast.addEventListener('mouseenter', Swal.stopTimer)
+							      toast.addEventListener('mouseleave', Swal.resumeTimer)
+							    }
+							  });
 							btn.parent().remove();
 						}else if(data.code == 'fail'){
-							toastShow("관심종목 제거",data.msg,"error");
+							//toastShow("관심종목 제거",data.msg,"error");
+							Swal.fire({
+							    toast: true,
+							    icon: 'error',
+							    title: '관심종목 제거',
+							    animation: false,
+							    position: 'bottom-right',
+							    showConfirmButton: false,
+							    timer: 3000,
+							    timerProgressBar: true,
+							    didOpen: (toast) => {
+							      toast.addEventListener('mouseenter', Swal.stopTimer)
+							      toast.addEventListener('mouseleave', Swal.resumeTimer)
+							    }
+							  });
 						}
 					},
 					error:function(xhr){
@@ -722,7 +765,6 @@ input[type="number"]::-webkit-inner-spin-button {
 					if(orderType == ''){
 						$('#CP2D21 input[type=number]').val('');
 						$('#CP2D21 input').attr('readonly',true);
-						toastShow('매도/매수 버튼 선택','주문의 종류를 선택해주세요.','info');
 					}
 				})
 				
@@ -735,13 +777,6 @@ input[type="number"]::-webkit-inner-spin-button {
 				let ckbox = $(this);
 				let point = $('p[data-point]').attr('data-point');//유저의 보유 포인트
 				let stockCnt = $('#stockCnt').val(); // 거래수량
-				
-				// 매수매도버튼을 클릭하지 않았을시 함수
-				if(orderType == ''){
-					$('#CP2D21 input').attr('checked',false);
-					toastShow('매도/매수 버튼 선택','주문의 종류를 선택해주세요.','info');
-					return;
-				}
 				
 				if(orderType == 'sell'){
 					// 호가 매수 테이블의 가장 높은 가격이 가격입력칸에 출력
@@ -823,7 +858,7 @@ input[type="number"]::-webkit-inner-spin-button {
 				
 				//공통기능
 				if(stockPrc > upLimit){
-					alert('상한가이상의 금액은 입력할 수 없습니다.')
+					Swal.fire('상한가이상의 금액은 입력할 수 없습니다.')
 					$('#stockPrc').val(upLimit);
 					return;
 				}
@@ -834,7 +869,7 @@ input[type="number"]::-webkit-inner-spin-button {
 					console.log($(this).val())
 					// 유효범위
 					if( $(this).val() > Number(point)  ){
-						alert('보유한 포인트보다 많게 주문할 수 없습니다.')
+						Swal.fire('보유한 포인트보다 많게 주문할 수 없습니다.')
 						$('#afford').val(1);
 						$(this).val($('p[data-point]').attr('data-point'));//보유포인트
 						return;
@@ -883,7 +918,7 @@ input[type="number"]::-webkit-inner-spin-button {
 				
 				// 주문주수 먼저 입력시 거래가격입력요청
 				if($('#stockPrc').val() == 0 && orderType == 'buy'){
-					alert('거래가격을 먼저 입력해주세요.')
+					Swal.fire('거래가격을 먼저 입력해주세요.')
 					$(this).val(0);
 					$('#stockPrc').focus();
 					return;
@@ -891,7 +926,7 @@ input[type="number"]::-webkit-inner-spin-button {
 				
 				// 공통 유효범위
 				if($(this).val() > affordStockCnt ){
-					alert('주문가능한 수량을 벗어났습니다.')
+					Swal.fire('주문가능한 수량을 벗어났습니다.');
 					$(this).val(affordStockCnt);
 					$('#totalPrc').text((affordStockCnt * stockPrc).toLocaleString('ko-KR'));
 					$('#charge').text(Math.floor((affordStockCnt * stockPrc)*0.1).toLocaleString('ko-KR'));
@@ -985,13 +1020,41 @@ input[type="number"]::-webkit-inner-spin-button {
 				let actualPrc = Number($('#actualPrc').text().replace(/\D/g,''));
 				// 개수나 가격이 0인 주문\
 				if(stockPrc == 0 || stockCnt == 0){
-					toastShow("주문 불가","개수나 가격이 0인 주문을 불가합니다","warning");
+					Swal.fire({
+					    toast: true,
+					    icon: 'warning',
+					    title: '주문 불가',
+					    title:'개수나 가격이 0인 주문은 불가합니다',
+					    animation: false,
+					    position: 'bottom-right',
+					    showConfirmButton: false,
+					    timer: 3000,
+					    timerProgressBar: true,
+					    didOpen: (toast) => {
+					      toast.addEventListener('mouseenter', Swal.stopTimer)
+					      toast.addEventListener('mouseleave', Swal.resumeTimer)
+					    }
+					  });
 					return;
 				}
 				
 				// 상한가 하한가 범위를 벗어나는 주문의 경우
 				if(stockPrc > upLimit || stockPrc < downLimit){
-					toastShow("주문 불가","주문가격은 상한가 하한가 범위를 벗어날 수 없습니다","warning");
+					Swal.fire({
+					    toast: true,
+					    icon: 'warning',
+					    title: '주문 불가',
+					    title:`주문가격은 상한가 하한가 범위를<br> 벗어날 수 없습니다`,
+					    animation: false,
+					    position: 'bottom-right',
+					    showConfirmButton: false,
+					    timer: 3000,
+					    timerProgressBar: true,
+					    didOpen: (toast) => {
+					      toast.addEventListener('mouseenter', Swal.stopTimer)
+					      toast.addEventListener('mouseleave', Swal.resumeTimer)
+					    }
+					  });
 					return;
 					
 				}
@@ -999,10 +1062,38 @@ input[type="number"]::-webkit-inner-spin-button {
 				//매수시 보유 포인트가 총 금액보다 적을시 return
 				if(orderType == 'buy' && actualPrc > Number($('p[data-point]').attr('data-point'))){
 					if(Number($('p[data-point]').attr('data-point')) == 0){
-						toastShow('자산이 없습니다','주문 불가','warning');
+						Swal.fire({
+					    toast: true,
+					    icon: 'warning',
+					    title: '주문 불가',
+					    title:`자산이 없습니다`,
+					    animation: false,
+					    position: 'bottom-right',
+					    showConfirmButton: false,
+					    timer: 3000,
+					    timerProgressBar: true,
+					    didOpen: (toast) => {
+					      toast.addEventListener('mouseenter', Swal.stopTimer)
+					      toast.addEventListener('mouseleave', Swal.resumeTimer)
+					    }
+					  });
 						return;
 					}
-					toastShow('보유한 자산이 주문 금액보다 적습니다.','주문 불가','warning');
+					Swal.fire({
+					    toast: true,
+					    icon: 'warning',
+					    title: '주문 불가',
+					    title:`보유한 자산이 주문 금액보다 적습니다.`,
+					    animation: false,
+					    position: 'bottom-right',
+					    showConfirmButton: false,
+					    timer: 3000,
+					    timerProgressBar: true,
+					    didOpen: (toast) => {
+					      toast.addEventListener('mouseenter', Swal.stopTimer)
+					      toast.addEventListener('mouseleave', Swal.resumeTimer)
+					    }
+					  });
 					return;
 				}
 				
@@ -1019,7 +1110,28 @@ input[type="number"]::-webkit-inner-spin-button {
 							if(data.code =='success'){	
 								if(orderType == 'buy'){
 									
-									toastShow('주문 완료',data.message ,'success');
+									//toastShow('주문 완료',data.message ,'success');
+									Swal.fire({
+									    toast: true,
+									    icon: 'success',
+									    title: '주문 완료',
+									    text:data.message,
+									    animation: false,
+									    position: 'bottom-right',
+									    showConfirmButton: true,
+									    timer: 3000,
+									    timerProgressBar: true,
+									    confirmButtonText:'주문내역 이동하기',
+									    didOpen: (toast) => {
+									      toast.addEventListener('mouseenter', Swal.stopTimer)
+									      toast.addEventListener('mouseleave', Swal.resumeTimer)
+									    }
+									  })
+									  .then((result) => {
+									  	if (result.isConfirmed){
+									  		window.location.href="/member/mystock"
+									  	}
+									  });
 									let rate = data.possStock.rate > 0 ? "+ "+data.possStock.rate : data.possStock.rate;
 				  					let rateClass = data.possStock.cnt == 0 ? '' : (data.possStock.cnt > 0 ? 'plus' : 'minus');
 				  					$('#CP2D22 div p:nth-of-type(2) span').text(data.possStock.cnt);
@@ -1030,7 +1142,28 @@ input[type="number"]::-webkit-inner-spin-button {
 				  					// 변경된 포인트에 맞춰 구매가능주수 변경설정
 				  					$('#afford').val(Math.floor(data.possStock.point/stockPrc));
 								}else if (orderType == 'sell'){
-									toastShow('주문 완료',data.message ,'success');
+									//toastShow('주문 완료',data.message ,'success');
+									Swal.fire({
+									    toast: true,
+									    icon: 'success',
+									    title: '주문 완료',
+									    text:data.message,
+									    animation: false,
+									    position: 'bottom-right',
+									    showConfirmButton: true,
+									    timer: 3000,
+									    timerProgressBar: true,
+									    confirmButtonText:'주문내역 이동하기',
+									    didOpen: (toast) => {
+									      toast.addEventListener('mouseenter', Swal.stopTimer)
+									      toast.addEventListener('mouseleave', Swal.resumeTimer)
+									    }
+									  })
+									  .then((result) => {
+									  	if(result.isConfirmed){
+									  		window.location.href="/member/mystock"
+									  	}
+									  });
 									let rate = data.possStock.rate > 0 ? "+ "+data.possStock.rate : data.possStock.rate;
 				  					let rateClass = data.possStock.cnt == 0 ? '' : (data.possStock.cnt > 0 ? 'plus' : 'minus');
 				  					$('#CP2D22 div p:nth-of-type(2) span').text(data.possStock.cnt);
@@ -1043,7 +1176,22 @@ input[type="number"]::-webkit-inner-spin-button {
 								}
 								
 							}else if(data.code =='fail'){
-								toastShow('주문 실패',data.message, 'error');
+								//toastShow('주문 실패',data.message, 'error');
+								Swal.fire({
+									    toast: true,
+									    icon: 'error',
+									    title: '주문 실패',
+									    text:data.message,
+									    animation: false,
+									    position: 'bottom-right',
+									    showConfirmButton: false,
+									    timer: 3000,
+									    timerProgressBar: true,
+									    didOpen: (toast) => {
+									      toast.addEventListener('mouseenter', Swal.stopTimer)
+									      toast.addEventListener('mouseleave', Swal.resumeTimer)
+									    }
+									  })
 							}
 						},
 						error:function(xhr){
