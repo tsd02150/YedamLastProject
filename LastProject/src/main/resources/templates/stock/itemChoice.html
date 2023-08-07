@@ -64,7 +64,7 @@
 }
 
 #itemInfo p {
-	padding:12px;
+	padding:10px;
 	margin-bottom: 5px;
 	font-size: 20px;
 }
@@ -328,13 +328,13 @@
             	console.log(result);
             	let html ='';
             	let cls = result.change == 0 ? '_' : result.change > 0 ? 'plus' : 'minus' ;
-            	let change = result.change == 0 ? result.change : result.change > 0 ? '+'+result.change : '-'+result.change;
-            	let rate = result.rate == 0 ? result.rate : result.rate > 0 ? '+'+result.rate : '-'+result.rate;
+            	let change = result.change == 0 ? result.change : result.change > 0 ? '+'+result.change : result.change;
+            	let rate = result.rate == 0 ? result.rate : result.rate > 0 ? '+'+result.rate : result.rate;
             	html = `
             		<p data-in="${result.itemNo}"></p>
             		<p>${result.sc} > ${result.theme} > ${result.nm}</p>
             		<p> ${result.origin} / ${result.desct}</p>
-            		<p> 현재가 : ${result.tprc} 전일비 : <span class="${cls}">${change}</span> 변동률 : <span class="${cls}">${rate}</span>%</p>
+            		<p> 현재가 : ${result.tprc} <br>전일비 : <span class="${cls}">${change}</span> 변동률 : <span class="${cls}">${rate}</span>%</p>
             		
             	`
             	$('#itemInfo').html(html);
