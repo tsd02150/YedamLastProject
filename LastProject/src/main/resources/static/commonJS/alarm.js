@@ -71,7 +71,7 @@ jQuery(document).ready(function ($) {
 			  		for(let i of stockAlm){
 			  			if(i.checked == 'n') nCnt++;
 			  			html +=`<li data-alno="${i.alarmNo}">
-						          	<p class="list-group-item list-group-item-action h-100 ">
+						          	<p class="list-group-item list-group-item-action h-100 " style="cursor:pointer;">
 						          		<button type="button" class="float-left close almXBtn" aria-label="Close">
 						          			<span aria-hidden="true" class="text-dark mr-1">&times;</span>
 						          		</button>
@@ -125,7 +125,7 @@ jQuery(document).ready(function ($) {
 
 
 	// 체결 tab 클릭 기능
-	$('a[href="#stock-alm"]').on('click',function(){
+	$('#alarmBell').on('click',function(){
 		if($('a[href="#stock-alm"]').attr('data-chk') == 'ok'){
 			$('a[href="#stock-alm"]').html('체결').attr('data-chk','');
 			$('#stock-alm li[data-alno]').each(function(idx,item){
@@ -163,3 +163,8 @@ function makeDay(Date){
 	
 	return dateString;
 }
+
+$('#stock-alm ul').on('click','p',function(){
+	if(event.target.tagName == 'SPAN' || event.target.tagName == 'BUTTON') return;
+	window.location.href="/member/mystock";
+});

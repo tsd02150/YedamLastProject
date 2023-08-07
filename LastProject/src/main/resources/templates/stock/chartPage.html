@@ -1110,28 +1110,8 @@ input[type="number"]::-webkit-inner-spin-button {
 							if(data.code =='success'){	
 								if(orderType == 'buy'){
 									
-									//toastShow('주문 완료',data.message ,'success');
-									Swal.fire({
-									    toast: true,
-									    icon: 'success',
-									    title: '주문 완료',
-									    text:data.message,
-									    animation: false,
-									    position: 'bottom-right',
-									    showConfirmButton: true,
-									    timer: 3000,
-									    timerProgressBar: true,
-									    confirmButtonText:'주문내역 이동하기',
-									    didOpen: (toast) => {
-									      toast.addEventListener('mouseenter', Swal.stopTimer)
-									      toast.addEventListener('mouseleave', Swal.resumeTimer)
-									    }
-									  })
-									  .then((result) => {
-									  	if (result.isConfirmed){
-									  		window.location.href="/member/mystock"
-									  	}
-									  });
+									toastShow('주문 완료',data.message ,'success');
+									
 									let rate = data.possStock.rate > 0 ? "+ "+data.possStock.rate : data.possStock.rate;
 				  					let rateClass = data.possStock.cnt == 0 ? '' : (data.possStock.cnt > 0 ? 'plus' : 'minus');
 				  					$('#CP2D22 div p:nth-of-type(2) span').text(data.possStock.cnt);
@@ -1142,28 +1122,8 @@ input[type="number"]::-webkit-inner-spin-button {
 				  					// 변경된 포인트에 맞춰 구매가능주수 변경설정
 				  					$('#afford').val(Math.floor(data.possStock.point/stockPrc));
 								}else if (orderType == 'sell'){
-									//toastShow('주문 완료',data.message ,'success');
-									Swal.fire({
-									    toast: true,
-									    icon: 'success',
-									    title: '주문 완료',
-									    text:data.message,
-									    animation: false,
-									    position: 'bottom-right',
-									    showConfirmButton: true,
-									    timer: 3000,
-									    timerProgressBar: true,
-									    confirmButtonText:'주문내역 이동하기',
-									    didOpen: (toast) => {
-									      toast.addEventListener('mouseenter', Swal.stopTimer)
-									      toast.addEventListener('mouseleave', Swal.resumeTimer)
-									    }
-									  })
-									  .then((result) => {
-									  	if(result.isConfirmed){
-									  		window.location.href="/member/mystock"
-									  	}
-									  });
+									toastShow('주문 완료',data.message ,'success');
+									
 									let rate = data.possStock.rate > 0 ? "+ "+data.possStock.rate : data.possStock.rate;
 				  					let rateClass = data.possStock.cnt == 0 ? '' : (data.possStock.cnt > 0 ? 'plus' : 'minus');
 				  					$('#CP2D22 div p:nth-of-type(2) span').text(data.possStock.cnt);
