@@ -214,8 +214,6 @@
         				formData.thumb = thumb;
         				formData.img=img;
         			
-        				
-        				
         				$.ajax({
         					url:'/admin/addProduct',
         					method : "POST",
@@ -402,7 +400,7 @@
 								<th>상품가격</th>
 									<td colspan="3" id="productNm" >
 										<div>
-											<input id="writeProductPrc" style="text-align:left;width:758px" name="prc" value="${data.prc}">
+											<input id="writeProductPrc" style="text-align:left;width:758px" name="prc" value="${data.prc.toLocaleString()}">
 										</div>
 									</td>
 								</tr>	

@@ -324,7 +324,7 @@
 
 				<div class="col-md-3 col-sm-6"
 					th:each="prdt, iterStat : ${seaProduct}"
-					th:if="${iterStat.index}  >= 1 and ${iterStat.index} <= 4 ">
+					th:if="${iterStat.index}  >= 5 and ${iterStat.index} <= 8 ">
 					<div class="product-grid">
 						<div class="product-image">
 							<a th:href="|/mall/getFarm?prdtNo=${prdt.prdtNo}|" class="image"
