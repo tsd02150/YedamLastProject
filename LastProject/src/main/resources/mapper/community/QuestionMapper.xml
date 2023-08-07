@@ -10,7 +10,7 @@
 	 		SELECT rownum rn ,faq_no,ttl,cntn,category
 	 		FROM FAQ
 	 		<![CDATA[
-		    WHERE rownum<=(${page}*10)
+		    WHERE rownum<=(${page}*5)
 		    ]]>
 	 		<if test="category!=null and(!category.equals(''))">
 	 		AND category=#{category}
@@ -19,7 +19,7 @@
 	 		AND ttl LIKE '%'||#{ttl}||'%'
 	 		</if>
 	 		)
-	 	WHERE rn > (${page}-1)*10
+	 	WHERE rn > (${page}-1)*5
 	</select> 
 	<select id="getFaqCount" resultType="int">
 		SELECT COUNT(faq_no)
