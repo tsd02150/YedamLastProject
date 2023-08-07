@@ -343,7 +343,7 @@ function addInterest(itemNumber) {
   		// 차트위에 아이템 정보
   		$.ajax('getItemInfo?itemNo='+itemNo).done(function(data){
   			let html=''; 																
-  			html = `<b style="font-size: 20px;"><p data-in="${data.itemNo}"> 종목 : ${data.nm} </b><br><span class="${data.change == 0 ? '_' : (data.change > 0 ? 'plus' : 'minus' )}"> 전일비 : ${data.change > 0? "+ "+data.change : data.change} 변동률 : ${data.rate > 0 ? "+"+data.rate+"%" : data.rate+"%"}</span></p><button class="btn btn-danger btn-sm" id="addInt2">관심종목추가</button>`
+  			html = `<b style="font-size: 20px;"><p data-in="${data.itemNo}"> 종목 : ${data.nm} </b><br><span class="${data.change == 0 ? '_' : (data.change > 0 ? 'plus' : 'minus' )}"> 전일비 : ${data.change > 0? "+ "+data.change : data.change} 변동률 : ${data.rate > 0 ? "+"+data.rate+"%" : data.rate+"%"}</span></p><button class="btn btn-danger btn-sm mr-3" id="addInt2">관심종목추가</button>`
   			$('#itemPtag div:first-of-type').html(html);
   		})
   },3000);
