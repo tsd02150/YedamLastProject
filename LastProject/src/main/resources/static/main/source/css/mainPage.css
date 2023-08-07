@@ -256,3 +256,18 @@
 		background-color: #DC3545;
 		border-color: #DC3545;
 	}
+	.news-title span{
+		line-height: 27px;
+	}
+	.news-title span:after{
+		width:80px;
+	}
+	.trend-news span:after{
+		width:150px;
+	}
+	.qna-title span:after{
+		width:50px;
+	}
+	.notice-title span:after{
+		width:70px;
+	}
