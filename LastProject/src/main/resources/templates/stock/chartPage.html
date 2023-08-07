@@ -18,7 +18,7 @@
 }
 
 #favItem,#possItem {
-	height: 423px;
+	height: 438px;
 	overflow-y: scroll;
 }
 
@@ -63,7 +63,7 @@ h3 {
 	right:50px;
 }
 #CP2D1{
-	padding:20px 20px 0 20px;
+	padding:20px 45px 0 20px;
 }
 #CP2D1 p {
 	font-weight: 700;
@@ -139,7 +139,7 @@ thead {
 	border-bottom: 1px solid black;
 }
 #CP3D2 {
-	height:385px;
+	height:413px;
 }
 #CP3D2 table {
 	width: 100%;
@@ -415,7 +415,11 @@ input[type="number"]::-webkit-inner-spin-button {
 				<div class="p-1 col-md-6 ">
 					<div id="CP2D1" class="mb-1 border">
 						<div id="itemPtag" style="display:inline-block">
-							<div><p th:attr="data-in=${itemInfo?.itemNo}">종목 : [[${itemInfo?.nm}]] <span th:class="${itemInfo?.change} == 0 ? '_' : (${itemInfo?.change} > 0 ? 'plus' : 'minus')"> 전일비 : [[${itemInfo?.change &gt; 0 ? "+ "+itemInfo?.change : itemInfo?.change}]] 변동률 : [[${itemInfo?.rate &gt; 0 ? "+"+itemInfo?.rate : itemInfo?.rate }]]%</span></p>
+							<div>
+							<p th:attr="data-in=${itemInfo?.itemNo}">
+								<b style="font-size: 20px;">종목 : [[${itemInfo?.nm}]]</b><br> 
+								<span th:class="${itemInfo?.change} == 0 ? '_' : (${itemInfo?.change} > 0 ? 'plus' : 'minus')"> 전일비 : [[${itemInfo?.change &gt; 0 ? "+ "+itemInfo?.change : itemInfo?.change}]] 변동률 : [[${itemInfo?.rate &gt; 0 ? "+"+itemInfo?.rate : itemInfo?.rate }]]%</span>
+							</p>
 							<button class="btn btn-danger btn-sm mr-3" id="addInt2">관심종목추가</button></div>
 							<div style="position: absolute;float:left;" id="chartSelect">
 								<ul id="chartBtn" >

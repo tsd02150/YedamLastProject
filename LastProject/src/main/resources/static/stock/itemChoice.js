@@ -178,14 +178,14 @@
         					list +=`<td><span class="${plma}"> ${data.itemList[i].change <= 0 ? data.itemList[i].change : "+"+data.itemList[i].change } </span></td>`;
         					list +=`<td><span class="${plma}" > (${data.itemList[i].rate <= 0 ? data.itemList[i].rate : "+"+data.itemList[i].rate}%) </span></td>`;
         					list +=`</tr>`;
-        			  } //dataList는 임의의 데이터임.. 각 소스에 맞게 변수를 넣어주면 됨...
+        			  } //
         			  
         		  }
         		  $("#allList").html(list);
         	  }
           })
              
-        }, 20000);
+        }, 3000);
 			
         
         

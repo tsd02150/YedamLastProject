@@ -183,7 +183,6 @@ public class StockServiceImpl implements StockService {
 	@Override
 	public PossStockVO getPossStock(String itemNo, String membNo) {
 		Integer point = stockMapper.getUserPoint(membNo);
-		System.out.println(point + "pppppp");
 		PossStockVO vo = stockMapper.getPossStock(itemNo, membNo);
 		
 		// 초기 값이 없을때
@@ -193,8 +192,6 @@ public class StockServiceImpl implements StockService {
 			vo.setRate(0);
 			vo.setCnt(0);
 		}
-		
-		System.out.println(vo + "zzzs");
 		
 		return vo;
 	}
@@ -229,9 +226,7 @@ public class StockServiceImpl implements StockService {
 		
 		// 체결 프로시저
 		String orderNo = (String)params.get("insert_after_no"); // 체결된 아이디
-		System.out.println(orderNo);
 		Date orderDt = stockMapper.getOrderDt(orderNo);
-		System.out.println(orderDt);
 		taMap.put("order_type",(String) params.get("order_type")); // 주문종류
 		taMap.put("order_dt", orderDt);
 		taMap.put("ta_result", null);
@@ -255,9 +250,7 @@ public class StockServiceImpl implements StockService {
 		System.out.println("error_two : " +errorTwo);
 		System.out.println("error_thr : " +errorThr);
 		if(taResult == 1) {
-			System.out.println("taResult : 성공 ");
 			//  실시간 알림
-			System.out.println("매도자 : " + seller + " 매수자 : " + buyer);
 			if(!seller.equals("none")) {
 				
 			sendOrderResult (seller , itemNm +"의 매도주문이 체결되었습니다" );
@@ -271,16 +264,15 @@ public class StockServiceImpl implements StockService {
 	
 	// 체결시 실시간 알람전송
 	public void sendOrderResult( String membNo , String text) {
-		System.out.println(membNo + " 알림 시행");
 		stockMapper.insertStockAlarm(membNo, text); // 알람 테이블에 추가
 		String destination = "/stock/alarm/"+membNo;
-		System.out.println(destination);
 		this.template.convertAndSend(destination, text);
 	}
 	
 	
 	@Override
 	public void schedulerJob() {
+		// 장마감시간에 주문div 막는 div 생성
 		closeMarket();
 		
 		// 당일 주가 정보
@@ -386,7 +378,6 @@ public class StockServiceImpl implements StockService {
 	
 	// 장마감시 실시간 알람전송
 	public void closeMarket() {
-		System.out.println("close 시간입니다.");
 		this.template.convertAndSend("/all", "close");
 	}
 

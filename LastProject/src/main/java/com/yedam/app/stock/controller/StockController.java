@@ -65,7 +65,6 @@ public class StockController {
 	@ResponseBody
 	public List<Map<String, Object>> themeList(String code) {
 		List<Map<String, Object>> list = stockservice.getThemeList(code);
-		System.out.println(list);
 		return list;
 	}
 
@@ -119,7 +118,6 @@ public class StockController {
 	@ResponseBody
 	@PostMapping("insertIntItem")
 	public Map<String,Object> insertIntItem(String membNo , String itemNo) {
-		System.out.println(membNo + " " + itemNo + "zzzzzzzzzzzzzzzzzzzzzzzzzzz");
 		Map<String,Object> map = stockservice.insertInterestItem(membNo, itemNo);
 		return map;
 	}
@@ -223,8 +221,6 @@ public class StockController {
 	@ResponseBody
 	@GetMapping("weekMonthChart")
 	public List<ItemInfoVO> getWeekMonthChart(String itemNo , String type){
-		System.out.println(type);
-		System.out.println(itemNo);
 		return stockservice.weekMonthChart(itemNo, type);
 	}
 	// 미확인 알람 가져오기
