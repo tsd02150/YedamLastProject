@@ -777,17 +777,13 @@ a.reviewButton {
 			})
 			.then(response=>response.json())
 			.then(result=>{
-				
 				result.forEach(item=>{
-					console.log(item);
 					let trTag=`
-						
 						<tr>
 						<td style="width: 70px; text-align: center;" >${item.revNo}</td>
 						<td>
 							<div class="review-item">
 								<div>
-								
 								${item.cntn}
 								</div>
 							</div>
@@ -798,14 +794,11 @@ a.reviewButton {
 						<td style="text-align: center;">
 					       <button type="button" onclick="deleteReview()" class="delete-review-btn reviewButton btnBlueGreen" style="color: white; border: none;" data-rev-no="${item.revNo}" id="openModalBtn">삭제</button>
 					    </td>
-					    
 					</tr>
 					`;
 					document.querySelector("#reviewList").innerHTML+=trTag;
-					
 				})
 				makeStar();
-			
 			})
 			.catch(err=>console.log(err));
 		}
