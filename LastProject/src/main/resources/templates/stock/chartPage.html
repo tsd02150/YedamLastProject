@@ -546,7 +546,7 @@ input[type="number"]::-webkit-inner-spin-button {
 						
 						<p>총 금액 : <span id="totalPrc">0</span> </p>
 						<p>수수료 : <span id="charge">0</span> </p>
-						<p><span id="orderMessage"></span><span id="actualPrc"></span> point </p>
+						<p style="font-size: 15px"><span id="orderMessage"></span><span id="actualPrc"></span> point </p>
 						<button class="btn btn-danger btn-lg" id="stockOrderBtn" >주문</button> <span style="font-size: 18px;font-weight: 700" class="ml-3" id="orderType" data-order=""></span>
 					</div>
 				</div>
@@ -860,6 +860,7 @@ input[type="number"]::-webkit-inner-spin-button {
 				if(stockPrc > upLimit){
 					Swal.fire('상한가이상의 금액은 입력할 수 없습니다.')
 					$('#stockPrc').val(upLimit);
+					$('#afford').val(Math.floor(point/upLimit));
 					return;
 				}
 				

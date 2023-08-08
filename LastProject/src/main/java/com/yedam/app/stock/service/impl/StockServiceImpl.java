@@ -24,6 +24,7 @@ import com.yedam.app.stock.service.PossStockVO;
 import com.yedam.app.stock.service.StockService;
 import com.yedam.app.stock.service.StockVO;
 
+
 @Service
 public class StockServiceImpl implements StockService {
 	
@@ -226,7 +227,8 @@ public class StockServiceImpl implements StockService {
 		
 		// 체결 프로시저
 		String orderNo = (String)params.get("insert_after_no"); // 체결된 아이디
-		Date orderDt = stockMapper.getOrderDt(orderNo);
+		String orderDt = stockMapper.getOrderDt(orderNo);
+		System.out.println(orderDt + "orderDt");
 		taMap.put("order_type",(String) params.get("order_type")); // 주문종류
 		taMap.put("order_dt", orderDt);
 		taMap.put("ta_result", null);
@@ -242,11 +244,15 @@ public class StockServiceImpl implements StockService {
 		String seller = (String) taMap.get("seller");
 		String buyer = (String) taMap.get("buyer");
 		String itemNm = (String) taMap.get("itemNm");
-		
+		System.out.println(taResult + "taResult");
+		System.out.println(seller + "seller");
+		System.out.println((String) taMap.get("error_one"));
+		System.out.println((String) taMap.get("error_two"));
+		System.out.println((String) taMap.get("error_thr"));
 		if(taResult == 1) {
 			//  실시간 알림
 			if(!seller.equals("none")) {
-				
+				System.out.println("체결기능 시작");
 			sendOrderResult (seller , itemNm +"의 매도주문이 체결되었습니다" );
 			sendOrderResult (buyer , itemNm + "의 매수주문이 체결되었습니다" );
 			}

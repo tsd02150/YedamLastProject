@@ -465,7 +465,7 @@
 	<select id="callTaProd" statementType="CALLABLE">
 	{
     	call transaction_prod(    #{order_type, mode=IN, jdbcType=VARCHAR}
-    							, #{order_dt, mode=IN, jdbcType=DATE}
+    							, #{order_dt, mode=IN, jdbcType=VARCHAR}
 			    				, #{ta_result, mode=OUT, jdbcType=INTEGER}
 			    				, #{error_one, mode=OUT, jdbcType=VARCHAR}
 			    				, #{error_two, mode=OUT, jdbcType=VARCHAR}
@@ -477,7 +477,7 @@
 	</select>
 	
 	<!-- 주문번호 일시 불러오기 -->
-	<select id="getOrderDt" resultType="Date">
+	<select id="getOrderDt" resultType="String">
 	select
 	<choose>
 		<when test='orderNo.substring(0,1).equals("s")'>

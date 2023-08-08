@@ -58,7 +58,7 @@ public interface StockMapper {
 	// 체결 프로시저
 	public void callTaProd(Map<String,Object> params);
 	// 주문번호로 주문일시 가져오기
-	public Date getOrderDt(String orderNo);
+	public String getOrderDt(String orderNo);
 	// 오늘 종목 주가정보
 	public List<ItemInfoVO> todayItemInfo();
 	// 장마감시 종목 당일 정보 넣기
