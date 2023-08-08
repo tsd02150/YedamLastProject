@@ -81,17 +81,19 @@
   	  let selectedData = randomData.slice(0, 25);
 
 	    selectedData.forEach(function (item) {
+	    	let rate = commas(item.rate)
+	    	let prc = commas(item.tprc);
         let itemBox = $("<div>").addClass("itemBox");
         $("<p>").text(item.itemNo).addClass("itemNo").attr("hidden", true).appendTo(itemBox).append("<br>");
         $("<p>").text(item.commonCd).addClass("commonCd").appendTo(itemBox).append("<br>");
         $("<h3>").text(item.nm).addClass("itemNm").appendTo(itemBox);
         if(item.rate >0){
-        	$("<p>").text("+"+item.rate).addClass("rise_rate").appendTo(itemBox);
+        	$("<p>").text("+"+rate).addClass("rise_rate").appendTo(itemBox);
         } else{
-        	$("<p>").text(item.rate).addClass("drop_rate").appendTo(itemBox);
+        	$("<p>").text(rate).addClass("drop_rate").appendTo(itemBox);
         }
         $("<p>").text("현재가").addClass("txt").appendTo(itemBox);
-        $("<p>").text(item.tprc+"원").addClass("tprc").appendTo(itemBox);
+        $("<p>").text(prc+"P").addClass("tprc").appendTo(itemBox);
         itemBox.attr("data-common-cd", item.commonCd).appendTo("#randomList");
      });
       
@@ -179,6 +181,10 @@
       });
     }
 	});
+	
+	function commas(number) {
+		  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+		}
 	</script>
 	
 </section>

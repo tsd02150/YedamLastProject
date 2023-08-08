@@ -92,6 +92,7 @@ public interface MemberService {
 	public int getDealCount(DealVO vo);
 	//보유자산
 	public List<PossVO> myPossStockList(String membNo);
+	public List<PossVO> myStockRaise(String membNo);
 	//매도 매수 거래내역
 	public List<DealVO> buysellList(DealVO vo);
 	//매도 매수 거래내역 개수

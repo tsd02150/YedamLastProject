@@ -261,7 +261,6 @@
 	});
 	
 	function productList() {
-		
 	    fetch("/mall/getCtgrList", {
 	        method: "POST",
 	        headers: {
@@ -343,9 +342,8 @@
 									<span class="nm"><a>${items.nm}</a></span>
 								</h4>
 								<p>
-									<span class="original-price" style="text-decoration: line-through;">${items.prc.toLocaleString()}P</span> <br> 
+									<span class="original-price" style="text-decoration: line-through;">${items.prc.toLocaleString()}P</span><br> 
 									<span class="discounted-price">${(items.prc - (items.prc * (items.dcRate / 100.0))).toLocaleString()}P</span>
-									
 								</p>
 							</div>
 						</div>

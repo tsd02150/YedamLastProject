@@ -288,4 +288,9 @@ public class MemberServiceImpl implements MemberService {
 		return membMapper.updatePoss(vo);
 	}
 
+	@Override
+	public List<PossVO> myStockRaise(String membNo) {
+		return membMapper.myStockRaise(membNo);
+	}
+
 }

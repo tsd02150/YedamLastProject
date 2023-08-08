@@ -214,7 +214,19 @@ public class MemberController {
 			membVO.setPwd(pwEncoder.encode(membVO.getPwd()));//비밀번호 암호화
 			int result = membService.updateTempPwd(membVO);
 			if(result == 1) {
-				session.setAttribute("loggedInMember", membVO);
+				MembVO list = membService.memberList(membVO.getId());
+			    UserVO updateMemb = new UserVO();
+			    updateMemb.setId(list.getId());
+			    updateMemb.setNick(list.getNick());
+			    updateMemb.setEmail(list.getEmail());
+			    updateMemb.setTel(list.getTel());
+			    updateMemb.setPwd(list.getPwd());
+			    updateMemb.setTempPwd(list.getTempPwd());
+			    updateMemb.setPoint(list.getPoint());
+			    updateMemb.setMembNo(list.getMembNo());
+			    updateMemb.setJoinDt(list.getJoinDt());
+			    updateMemb.setNm(list.getNm());
+			    session.setAttribute("loggedInMember", updateMemb);
 				return "redirect:/";							
 			}else {
 				model.addAttribute("id",membVO.getId());
@@ -446,6 +458,7 @@ public class MemberController {
 	    AddrVO addrInfo = new AddrVO();
 	    if(membService.membListInfo(memb.getMembNo())== null) {
 	    	if(zip !=""  && addr != "" && detaAddr != "") { //list.get(i).toString().zip
+	    		System.out.println("주소등록");
 	    		addrInfo.setZip(zip);
 	    		addrInfo.setAddr(addr);
 	    		addrInfo.setDetaAddr(detaAddr);
@@ -521,12 +534,14 @@ public class MemberController {
 	public String mystockInfo(HttpSession session, Model model) {
 		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 		
-		List<PossVO> possstockList = membService.myPossStockList(mem.getMembNo());
+		List<PossVO> possstockList = membService.myStockRaise(mem.getMembNo());
 		model.addAttribute("possstockList", possstockList);
 		
 		double sumNowPrc = possstockList.stream().mapToInt(PossVO::getNowPrc).sum(); //총 매수금액
 		double sumTradePrc = possstockList.stream().mapToInt(PossVO::getTradePrc).sum(); //총 평가금액
 	    double raise =(double) (sumTradePrc/sumNowPrc) * 100-100; //보유자산 총 수익률
+	    System.out.println("수익률");
+	    System.out.println(raise);
 	    if(sumNowPrc == 0 || sumTradePrc==0 ) {
 	    	raise = 0;
 	    }

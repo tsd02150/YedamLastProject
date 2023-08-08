@@ -477,6 +477,7 @@
 		 success : function(data){
 			 if(data && data.length >0){
 			 data.forEach(el=>{
+				 let prc = (el.prc).toLocaleString();
 				 if(el.rmnCnt >0){
 				 div2 +=`
 		 				<div data-no="${el.sellNo}" style="text-align:center; border-top: 1px solid #FF3066;">
@@ -493,7 +494,7 @@
 		 						</tr>
 		 						<tr>
 		 							<th>주문가격</th>
-		 							<td>${el.prc} P</td>
+		 							<td>${prc} P</td>
 		 						</tr>
 		 					</table>
 		 				</div>
@@ -645,7 +646,7 @@ $.ajax({
 		  let invest = 0;
 
 		  data.forEach(el => {
-			  let formattedRaise = (el.nowPrc-el.tradePrc).toLocaleString();
+			  let formattedRaise = ((el.nowPrc*el.stockCnt)-el.tradePrc).toLocaleString();
 		    let tr = `
 		    	
 		      <tr data-no="${el.itemNo}">

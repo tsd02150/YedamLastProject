@@ -147,7 +147,8 @@ input[type=number] {
 				},
 				success : function(data){
 					count1++;
-					if(data == null && data == ""){
+					console.log(data)
+					if(data === ""){
 						$("#telCheck").text("가입 정보가 없습니다. 입력정보가 맞는지 다시 확인해주세요.")
 							.css({
 								"color": "#FA3E3E",

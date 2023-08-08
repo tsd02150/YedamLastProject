@@ -57,20 +57,18 @@ public class WebSecurityConfig{
 	           SavedRequest savedRequest = requestCache.getRequest(request, response);
 	           HttpSession session = request.getSession();
 
-	           String uri = "/";
+	           String uri = "/"; // 메인페이지
 
 	           System.out.println(request.getHeader("referer"));
 	           if (request.getHeader("referer") != null && !request.getHeader("referer").isEmpty()) {
 	               uri = request.getHeader("referer");
 	           }
-
 	           if (savedRequest != null) {
 	               redirectStrategy.sendRedirect(request, response, savedRequest.getRedirectUrl());
 	               requestCache.removeRequest(request, response);
 	           } else {
 	               redirectStrategy.sendRedirect(request, response, uri);
 	           }
-
 	           if (accessDeniedException instanceof AccessDeniedException) {
 	               session.setAttribute("noAccess", "접근이 거부되었습니다. 권한이 없습니다.");
 	           } else {
@@ -81,42 +79,36 @@ public class WebSecurityConfig{
 	   
 	   @Bean
 	   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-	      http
-	      	 .csrf().disable()
-	         .authorizeHttpRequests()
-	         .antMatchers("/", "/member/mysurvey","/stock/**", "/static/**").permitAll()
-	         .antMatchers("/admin/**").hasRole("ADMIN")
-	         .antMatchers("/community/chat").hasAnyRole("ADMIN","USER")
-	         .antMatchers("/member/mypage", "/member/mystock","/member/mystockInfo","/member/mypageIntro"
-        		 		 ,"/member/mypageInfo","/member/mypoint","/member/pointChargeForm","/member/myorder"
+	      http.csrf().disable()
+	          .authorizeHttpRequests()
+	          .antMatchers("/", "/member/mysurvey","/stock/**", "/static/**").permitAll()
+	          .antMatchers("/admin/**").hasRole("ADMIN")
+	          .antMatchers("/community/chat").hasAnyRole("ADMIN","USER")
+	          .antMatchers("/member/mypage", "/member/mystock","/member/mystockInfo","/member/mypageIntro"
+         		 		 ,"/member/mypageInfo","/member/mypoint","/member/pointChargeForm","/member/myorder"
         		 		 ,"/mall/orderList","/mall/basketList").authenticated()
-	         .anyRequest().permitAll()
-	         .and()
- 		     .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
- 		     .and()
-	         .formLogin() // 로그인하는 경우에 대해 설정
-	         .passwordParameter("pwd")
-	         .successHandler(authenticationSuccessHandler())
-	         .failureHandler(authenticationFailureHandler())
-	         .loginPage("/member/login")
-	         .permitAll()
-	         .and()
-	         .logout(logout -> logout
-             .logoutSuccessHandler(logoutSuccessHandler)
-             .logoutUrl("/member/logout")
-             .permitAll()
-             )
-	         .exceptionHandling()
-             .accessDeniedHandler(accessDeniedHandler())
-             .and()
-	     	 .oauth2Login()				// OAuth2기반의 로그인인 경우
-             .loginPage("/member/login")		// 인증이 필요한 URL에 접근하면 /loginForm으로 이동
-             .successHandler(authenticationSuccessHandler())		// 로그인 성공하면 "/" 으로 이동
-             .failureHandler(authenticationFailureHandler())		// 로그인 실패 시 /loginForm으로 이동
-             .userInfoEndpoint()			// 로그인 성공 후 사용자정보를 가져온다
-             .userService(principalOauth2UserService);	//사용자정보를 처리할 때 사용한다
-             
-	      	
+	          .anyRequest().permitAll().and()
+ 		      .exceptionHandling().accessDeniedHandler(accessDeniedHandler())
+ 		      .and()
+ 		      // 일반 로그인
+	          .formLogin()
+  	          .passwordParameter("pwd")
+	          .successHandler(authenticationSuccessHandler())
+	          .failureHandler(authenticationFailureHandler())
+	          .loginPage("/member/login").permitAll()
+	          .and()
+	          .logout(logout -> logout.logoutSuccessHandler(logoutSuccessHandler)
+              .logoutUrl("/member/logout").permitAll())
+	          .exceptionHandling()
+              .accessDeniedHandler(accessDeniedHandler())
+              .and()
+              // OAuth2 API 로그인
+	      	  .oauth2Login()				
+              .loginPage("/member/login")		
+              .successHandler(authenticationSuccessHandler())		
+              .failureHandler(authenticationFailureHandler())		
+              .userInfoEndpoint()			
+              .userService(principalOauth2UserService);	
 	      return http.build();
 	   }
 	   
