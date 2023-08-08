@@ -526,7 +526,7 @@ public class MemberController {
 		
 		double sumNowPrc = possstockList.stream().mapToInt(PossVO::getNowPrc).sum(); //총 매수금액
 		double sumTradePrc = possstockList.stream().mapToInt(PossVO::getTradePrc).sum(); //총 평가금액
-	    double raise =(double) (sumTradePrc / sumNowPrc) * 100; //보유자산 총 수익률
+	    double raise =(double) (sumTradePrc/sumNowPrc) * 100-100; //보유자산 총 수익률
 	    if(sumNowPrc == 0 || sumTradePrc==0 ) {
 	    	raise = 0;
 	    }
