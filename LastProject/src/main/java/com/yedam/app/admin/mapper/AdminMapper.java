@@ -135,4 +135,5 @@ public interface AdminMapper {
 	public String nmGetNo(String nm);
 	// 멤버번호로 활동중지중인번호 가져오기
 	public String membNoGetStopNo(String membNo);
+	public String nickGetMembNo(String nick);
 }

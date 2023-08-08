@@ -39,12 +39,12 @@ public class AdminServiceImpl implements AdminService {
 	// 회원정지
 	@Override
 	public int memberBan(List<String> list, Integer period) {
-		if(!list.get(0).substring(0,4).equals("mem-")) {
+		if(list.get(0).lastIndexOf("mem-") == -1) {
 			for(int i = 0 ; i < list.size() ; i++) {
-				list.set(i, adminMapper.nmGetNo(list.get(i)));
+				list.set(i, adminMapper.nickGetMembNo(list.get(i)));
 			};
 		};
-		
+		System.out.println(list + "zzz");
 		int cnt = list.size();
 		int result =0;
 		// 이미 벤리스트에 있는 사람들
@@ -137,7 +137,7 @@ public class AdminServiceImpl implements AdminService {
 		Map<String, Object> map = new HashMap<>();
 		String boardNo = adminMapper.rprtNoGetBNo(rprtNo);
 		map.put("reportBoard", adminMapper.getReportBoard(boardNo));// 피고글
-		map.put("reportComments",adminMapper.getReportComments(accused, boardNo)); // 피고댓글
+		map.put("reportComments",adminMapper.getReportComments(adminMapper.nickGetMembNo(accused), boardNo)); // 피고댓글
 		
 		return map;
 	}

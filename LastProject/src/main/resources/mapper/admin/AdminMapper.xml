@@ -84,7 +84,7 @@
 	
 	<!-- 신고된 글 리스트 -->
 	<select id="reportList" resultType="ReportVO">
-		select rprt_no ,rprt_st,m.nm accused , n.nm plaintiff, category , drwup_dt
+		select rprt_no ,rprt_st,m.nick accused , n.nick plaintiff, category , drwup_dt
 		from report r join member m
 		on r.accused  = m.memb_no
 		join member n on r.plaintiff = n.memb_no
@@ -509,5 +509,10 @@
 	        where memb_no = #{membNo}
 	        and end_dt > sysdate
         ]]>
+	</select>
+	<select id="nickGetMembNo" resultType="String">
+		select memb_no 
+		from member
+		where nick = #{nick}
 	</select>
 </mapper>

@@ -297,7 +297,7 @@
                   		    		let period = result.value;
                   		    		
                   		    		$.ajax('/admin/memberBan?list='+[accused]+'&period='+period).done(function(data){
-                  		    			if(data > 0){
+                  		    			if(data.result > 0){
                   		    				$.ajax('rprtStChange?rprtNo='+rprtNo).done(function(data){
                   		    					if(data >0){
                   		    						getReportAlarm();

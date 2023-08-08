@@ -122,4 +122,11 @@ class LastProjectApplicationTests {
 		System.out.println(date.plusDays(26));
 		System.out.println(date + "@@@@@");
 	}
+	@Test
+	public void indexofTest() {
+		  String indexOfTestOne = "mem-123";
+
+	        System.out.println( indexOfTestOne.lastIndexOf("mem-") );  // 7
+
+	}
 }
