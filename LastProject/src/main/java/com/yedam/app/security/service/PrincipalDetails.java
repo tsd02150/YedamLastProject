@@ -56,15 +56,15 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 			list.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 			list.add(new SimpleGrantedAuthority("ROLE_USER"));
 		} else {
+			// 활동중지 회원 권한
 	        Date endDt = userVO.getEndDt(); 
 	        if (endDt != null && endDt.after(currentDate)) {
 	            list.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
-	        } else {
+	        } else { // 그 외 모든 사용자 권한
 	            list.add(new SimpleGrantedAuthority("ROLE_USER"));
 	        }
 	    }
 
-		System.out.println("권한" + list);
 		return list;
 	}
 

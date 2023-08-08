@@ -114,7 +114,7 @@ padding-top : 40px;
 					<td th:text="|${#numbers.formatInteger(sumNowPrc, 0, 'COMMA')} P|"></td>
 					<td th:text="|${#numbers.formatInteger(sumTradePrc, 0, 'COMMA')} P|"></td>
 					<td th:text="|${#numbers.formatInteger((sumTradePrc-sumNowPrc), 0, 'COMMA')} P|"></td>
-					<td th:text="|${#numbers.formatInteger(raise, 0, 'COMMA')} %|"></td>
+					<td th:text="|${#numbers.formatDecimal(raise, 1, 2)} %|"></td>
 				</tr>
 				</tbody>
 			</table>

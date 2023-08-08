@@ -378,6 +378,9 @@ cursor: pointer;
                let prc = commas(item.orderAm);
                let orderDt = new Date(item.orderDt);
                let formattedDt = moment(orderDt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format("YYYY-MM-DD  (HH:mm:ss)");
+               if(item.shipSt=="배송완료"){
+            	   $(".btn-dark").css("display","none");
+               }
                tr += `
                    <tr id="dtTr" data-ord="${orderNo}"><td colspan="4">${formattedDt}</td></tr>
                    <tr class="prdtTr" data-no=${item.prdtNo} data-shipno="${item.shipNo}" onclick="modatShow(this)">

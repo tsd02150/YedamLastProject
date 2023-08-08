@@ -23,10 +23,8 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 	                                    Authentication authentication) throws IOException, ServletException {
-	    System.out.println("success handler 실행");
 	    HttpSession session = request.getSession();
 	    String referer = (String) session.getAttribute("returnUrl");
-	    
 
 	    if (authentication != null && authentication.getPrincipal() instanceof PrincipalDetails) {
 	        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
