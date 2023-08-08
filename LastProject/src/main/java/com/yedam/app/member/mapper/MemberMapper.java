@@ -113,6 +113,7 @@ public interface MemberMapper {
 	
 	//보유자산
 	public List<PossVO> myPossStockList(String membNo);
+	public List<PossVO> myStockRaise(String membNo);
 	
 	//매도 매수 거래내역
 	public List<DealVO> buysellList(DealVO vo);

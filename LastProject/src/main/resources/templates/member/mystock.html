@@ -646,7 +646,7 @@ $.ajax({
 		  let invest = 0;
 
 		  data.forEach(el => {
-			  let formattedRaise = (el.nowPrc-el.tradePrc).toLocaleString();
+			  let formattedRaise = ((el.nowPrc*el.stockCnt)-el.tradePrc).toLocaleString();
 		    let tr = `
 		    	
 		      <tr data-no="${el.itemNo}">

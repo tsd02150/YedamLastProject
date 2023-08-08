@@ -27,15 +27,13 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 		
 		OAuth2UserInfo oauth2UserInfo = null;
 		String provider = userRequest.getClientRegistration().getRegistrationId();
-		
+
 		if(provider.equals("naver")) {
 			oauth2UserInfo = new NaverUserInfo(oauth2User.getAttributes());
 		}
 		
-		String providerId = oauth2UserInfo.getProviderId();
-		String uuid = UUID.randomUUID().toString().substring(0, 6);
-		String username = provider;
-		String pwd = pwEncord.encode("1234"+uuid);
+		String username = provider; 
+		String pwd = pwEncord.encode("1234");
 		if(oauth2UserInfo.getNick()!=null) {
 			username = oauth2UserInfo.getNick();
 		}

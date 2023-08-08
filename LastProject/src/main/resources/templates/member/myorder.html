@@ -372,15 +372,18 @@ cursor: pointer;
 
            tr='';
            for (let orderNo in dataGroup) {
-             tr += `<div class="order-group col-12">
-             			<button type="button" class="btn btn-dark" data-ordno="${orderNo}" onclick="delOrder(this)">주문취소</button>`;
+        	   tr += `<div class="order-group col-12">`;
+               if (dataGroup[orderNo][0].shipSt !== "주문취소" && dataGroup[orderNo][0].shipSt !== "배송완료") {
+                   tr += `<button type="button" class="btn btn-dark" data-ordno="${orderNo}" onclick="delOrder(this)">주문취소</button>`;
+               }
              dataGroup[orderNo].forEach(item => {
+            	 console.log(item)
                let prc = commas(item.orderAm);
                let orderDt = new Date(item.orderDt);
                let formattedDt = moment(orderDt, "YYYY-MM-DDTHH:mm:ss.SSSZ").format("YYYY-MM-DD  (HH:mm:ss)");
-               if(item.shipSt=="배송완료"){
-            	   $(".btn-dark").css("display","none");
-               }
+               /* if (item.shipSt == "배송완료") {
+            	    $(".btn-dark[data-ordno='" + orderNo + "']").hide();
+            	} */
                tr += `
                    <tr id="dtTr" data-ord="${orderNo}"><td colspan="4">${formattedDt}</td></tr>
                    <tr class="prdtTr" data-no=${item.prdtNo} data-shipno="${item.shipNo}" onclick="modatShow(this)">
@@ -485,14 +488,18 @@ cursor: pointer;
 			data : {
 				"orderNo" : ordNo
 			},
-			success : function(data){
-				if(data >0 ){
-					updateShip(ordNo);
-					$('#myModal').hide();
-					shipList();
-					pageBtn();
-			    toastShow("Delete","주문취소 완료","success");
-				}
+			success: function(data) {
+		    if (data > 0) {
+		        updateShip(ordNo);
+		        $('#myModal').hide();
+		        shipList();
+		        pageBtn();
+		        toastShow("Delete", "주문취소 완료", "success");
+
+		        setTimeout(function() {
+		            window.location.reload();
+		        }, 2500);
+		    }
 			},
 			error : function(err){
 				console.log(err);

@@ -534,7 +534,7 @@ public class MemberController {
 	public String mystockInfo(HttpSession session, Model model) {
 		UserVO mem = (UserVO) session.getAttribute("loggedInMember");
 		
-		List<PossVO> possstockList = membService.myPossStockList(mem.getMembNo());
+		List<PossVO> possstockList = membService.myStockRaise(mem.getMembNo());
 		model.addAttribute("possstockList", possstockList);
 		
 		double sumNowPrc = possstockList.stream().mapToInt(PossVO::getNowPrc).sum(); //총 매수금액

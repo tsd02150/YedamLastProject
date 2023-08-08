@@ -496,6 +496,20 @@
 			from poss_stock 
 			where memb_no = #{membNo}
 			group by item_no )
+		select i.item_no, n.nm tnm, n.common_cd, a.stock_cnt, a.trade_prc, i.cl_prc now_prc, NVL(round((DECODE((i.cl_prc*a.stock_cnt),0,NULL,(i.cl_prc*a.stock_cnt))/a.trade_prc)*100-100),0) rate
+		from a join item_info i on a.item_no = i.item_no
+		join item n on i.item_no = n.item_no
+		where TO_CHAR(ta_dt, 'yyyy-MM-dd') = TO_CHAR(sysdate-1, 'yyyy-MM-dd')
+		and stock_cnt>0
+		order by rate desc
+	</select>
+	
+	<select id="myStockRaise" parameterType="String" resultType="PossVO">
+		with a as (
+			select item_no, sum(stock_cnt) stock_cnt, sum(trade_prc*stock_cnt) trade_prc --보유주식 총 수량, 총금액
+			from poss_stock 
+			where memb_no = #{membNo}
+			group by item_no )
 		select i.item_no, n.nm tnm, n.common_cd, a.stock_cnt, a.trade_prc, i.cl_prc*a.stock_cnt now_prc, NVL(round((DECODE((i.cl_prc*a.stock_cnt),0,NULL,(i.cl_prc*a.stock_cnt))/a.trade_prc)*100-100),0) rate
 		from a join item_info i on a.item_no = i.item_no
 		join item n on i.item_no = n.item_no
@@ -587,6 +601,7 @@
       select TO_CHAR(ta_dt, 'yyyy-MM-dd') bdt, nvl(round(sum((((DECODE((i.cl_prc*a.stock_cnt),0,NULL,(i.cl_prc*a.stock_cnt)))/a.trade_prc)*100-100))/count(*),2),0) rate
       from a left outer join item_info i on a.item_no = i.item_no
       join item n on i.item_no = n.item_no
+      WHERE TO_CHAR(ta_dt, 'yyyy') > '2022'
       GROUP BY TO_CHAR(ta_dt, 'yyyy-MM-dd')
       order by bdt desc
 		)a left outer join (
@@ -636,46 +651,71 @@
 		FROM analysis_result
 	</select>
 	
+	
 	<select id="recomList" parameterType="String" resultType="PossVO">
-		select distinct bb.item_no, bb.nm tnm,bb.common_cd, bb.prc tprc, trunc(NVL(DECODE(bb.prc,0,0,bb.prc - bb.cl_prc) / bb.cl_prc, 0)*100)as rate 
-		from(
+		SELECT DISTINCT bb.item_no, 
+										bb.nm tnm,
+										bb.common_cd, 
+										bb.prc tprc, 
+										trunc(NVL(DECODE(bb.prc,0,0,bb.prc - bb.cl_prc) / bb.cl_prc, 0)*100) as rate 
+		FROM(
 			WITH a AS (
-			    SELECT item_no, SUM(stock_cnt) stock_cnt, SUM(trade_prc*stock_cnt) trade_prc -- 보유주식 총 수량, 총금액
-			    FROM poss_stock
-			    WHERE memb_no = #{membNo}
-			    GROUP BY item_no ),
+			    SELECT item_no, 
+			   				 SUM(stock_cnt) stock_cnt, 
+			   				 SUM(trade_prc*stock_cnt) trade_prc -- 보유주식 총 수량, 총금액
+			    	FROM poss_stock
+			   	 WHERE memb_no = #{membNo}
+			  	 GROUP BY item_no ),
 			b AS (
-			    SELECT i.item_no, n.nm tnm, (SUBSTR(n.common_cd,1,4)) common_cd,
-			        a.stock_cnt, a.trade_prc, i.cl_prc*a.stock_cnt now_prc,
-			        NVL(ROUND(a.trade_prc/DECODE((i.cl_prc*a.stock_cnt),0,NULL,(i.cl_prc*a.stock_cnt))*100-100),0) rate -- 현재 보유자산 / 시장가 / 수익률
-			    FROM a JOIN item_info i ON a.item_no = i.item_no
-			    JOIN item n ON i.item_no = n.item_no
-			    WHERE TO_CHAR(i.ta_dt, 'yyyy-MM-dd') = TO_CHAR(sysdate-1, 'yyyy-MM-dd') 
-			)
-			SELECT common_cd --, COUNT(common_cd) count
-			FROM b
-			GROUP BY common_cd
-			) aa left outer join
-			(
-			SELECT n.item_no, n.nm, n.common_cd, i.cl_prc, b.prc
-			FROM item n
-			JOIN item_info i ON i.item_no = n.item_no AND TO_CHAR(i.ta_dt, 'yyyy-MM-dd') = TO_CHAR(sysdate-1, 'yyyy-MM-dd')
-			LEFT JOIN (
-			    SELECT DISTINCT(a.item_no) item_no, nm, 'tah-'||a.tano ta_no, NVL(ta_prc,0) prc
-			    FROM (
-			        SELECT nm, i.item_no, MAX(to_number(substr(ta_no,5))) tano
-			        FROM (
-			            SELECT * FROM ta_hr WHERE to_char(ta_dt, 'yyyy-MM-dd') = ( SELECT to_char(max(ta_dt), 'yyyy-MM-dd') FROM ta_hr  )
-			        ) t
-			        RIGHT JOIN item i ON i.item_no = t.item_no
-			        GROUP BY nm, i.item_no
-			        ORDER BY to_number(substr(item_no,5))
-			    ) a
-			    LEFT JOIN ta_hr t ON a.item_no = t.item_no AND to_number(substr(t.ta_no,5)) = a.tano
-			    ORDER BY to_number(substr(item_no,5))
-			) b ON n.item_no = b.item_no) bb
-			on aa.common_cd = SUBSTR(bb.common_cd,1,4)
-			order by rate desc, tprc desc
+			    SELECT i.item_no, 
+			    			 n.nm tnm, 
+			    			 SUBSTR(n.common_cd,1,4) common_cd,
+			       		 a.stock_cnt, 
+			       		 a.trade_prc, 
+			       		 i.cl_prc*a.stock_cnt now_prc,
+			        	 NVL(ROUND(a.trade_prc/DECODE((i.cl_prc*a.stock_cnt),0,NULL,(i.cl_prc*a.stock_cnt))*100-100),0) rate
+			    	FROM a JOIN item_info i ON a.item_no = i.item_no
+			   		JOIN item n ON i.item_no = n.item_no
+			     WHERE TO_CHAR(i.ta_dt, 'yyyy-MM-dd') = TO_CHAR(sysdate-1, 'yyyy-MM-dd') 
+						)
+				SELECT common_cd --, COUNT(common_cd) count
+					FROM b
+					GROUP BY common_cd
+		) aa 
+		LEFT OUTER JOIN
+			(SELECT n.item_no, 
+							n.nm, 
+							n.common_cd, 
+							i.cl_prc, 
+							b.prc
+		  	 FROM item n
+				 JOIN item_info i 
+					ON i.item_no = n.item_no 
+	 			 AND TO_CHAR(i.ta_dt, 'yyyy-MM-dd') 
+							= TO_CHAR(sysdate-1, 'yyyy-MM-dd')
+				 LEFT JOIN (
+			    		SELECT DISTINCT(a.item_no) item_no, nm, 'tah-'||a.tano ta_no, NVL(ta_prc,0) prc
+			    			FROM (
+			        		SELECT nm, i.item_no, MAX(TO_NUMBER(SUBSTR(ta_no,5))) tano
+			        			FROM (
+			            		SELECT * FROM ta_hr 
+			            		 WHERE TO_CHAR(ta_dt, 'yyyy-MM-dd') 
+			           						 = (SELECT TO_CHAR(MAX(ta_dt), 'yyyy-MM-dd') 
+			           						 			FROM ta_hr)
+			       				 ) t
+		       				 RIGHT JOIN item i ON i.item_no = t.item_no
+			       			 GROUP BY nm, i.item_no
+			       			 ORDER BY TO_NUMBER(SUBSTR(item_no,5))
+			    			) a
+			    			LEFT JOIN ta_hr t 
+			    				ON a.item_no = t.item_no 
+		    				 AND TO_NUMBER(SUBSTR(t.ta_no,5)) = a.tano
+			   			 ORDER BY TO_NUMBER(SUBSTR(item_no,5))
+							) b 
+							ON n.item_no = b.item_no
+						) bb
+				ON aa.common_cd = SUBSTR(bb.common_cd,1,4)
+		 ORDER BY rate desc, tprc desc
 	</select>
 	<delete id="deleteMemb" parameterType="String">
 		delete from member
