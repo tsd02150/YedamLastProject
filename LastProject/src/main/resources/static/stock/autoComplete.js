@@ -56,61 +56,7 @@ $(".searchItem").autocomplete({
   },
 });
 
-// 증권 선택시 테마 리스트 출력
-$("#sc").on("click", "li", themeList);
 
-// 테마 리스트 출력
-function themeList(value) {
-$("#itemInfo").html("");
-  let ctg;
-  console.log(value);
-  if (typeof value == "object") {
-    ctg = $(event.target).data("cd");
-    console.log("1" + ctg);
-  } else {
-    ctg = value;
-    console.log("2" + ctg);
-  }
-  $("#theme").html("");
-  $("#item").html("");
-
-  $.ajax({
-    url: "themeList?code=" + encodeURI(ctg),
-    success: function (result) {
-      result.forEach((th) => {
-        $("#theme").append(
-          $("<li/>").text(th.CTGR).attr("data-cd", th.COMMON_CD)
-        );
-      });
-    },
-  });
-}
-
-//테마 클릭시 종목 리스트 출력
-$("#theme").on("click", "li", itemList);
-
-//종목리스트 출력
-function itemList(value) {
-$("#itemInfo").html("");
-  let ctg;
-  if (typeof value == "object") {
-    ctg = $(event.target).data("cd");
-  } else {
-    ctg = value;
-  }
-  $("#item").html("");
-
-  $.ajax({
-    url: "themeList?code=" + encodeURI(ctg),
-    success: function (result) {
-      result.forEach((th) => {
-        $("#item").append(
-          $("<li/>").text(th.CTGR).attr("data-cd", th.COMMON_CD)
-        );
-      });
-    },
-  });
-}
 
 
 
@@ -118,7 +64,6 @@ $("#itemInfo").html("");
 $('#itemPtag').on('click','button',function(){
 	
 				if($('#sessionMembNo').text() != 'nonLoginUser'){
-					console.log('zz')
 					addInterest(itemNo);
 				}else{
 					Swal.fire({

@@ -237,18 +237,12 @@ public class StockServiceImpl implements StockService {
 		taMap.put("buyer", null);
 		taMap.put("itemNm", null);
 		stockMapper.callTaProd(taMap);
-		Integer taResult = (Integer) taMap.get("ta_result");
-		String errorOne = (String) taMap.get("error_one");
-		String errorTwo = (String) taMap.get("error_two");
-		String errorThr = (String) taMap.get("error_thr");
 		
+		Integer taResult = (Integer) taMap.get("ta_result");
 		String seller = (String) taMap.get("seller");
 		String buyer = (String) taMap.get("buyer");
 		String itemNm = (String) taMap.get("itemNm");
 		
-		System.out.println("error_one : " +errorOne);
-		System.out.println("error_two : " +errorTwo);
-		System.out.println("error_thr : " +errorThr);
 		if(taResult == 1) {
 			//  실시간 알림
 			if(!seller.equals("none")) {
@@ -315,10 +309,6 @@ public class StockServiceImpl implements StockService {
 		map.put("error_thr", null);
 		
 		stockMapper.deleteJob(map);
-		System.out.println((String)map.get("del_result"));
-		System.out.println((String)map.get("error_one"));
-		System.out.println((String)map.get("error_two"));
-		System.out.println((String)map.get("error_thr"));
 	}
 	
 	// 조회수 증가

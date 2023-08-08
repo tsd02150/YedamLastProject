@@ -18,7 +18,7 @@ public class StockSchedule {
 	}
 	
 	
-	//@Scheduled(cron = "0 0 18 * * ?") 
+	//@Scheduled(cron = "0 0 18 * * *") 
 	public void stockJob() {
 	stockService.schedulerJob(); 
 	}
