@@ -210,7 +210,7 @@
 	overflow: auto; /* Enable scroll if needed */
 	background-color: rgb(0, 0, 0); /* Fallback color */
 	background-color: white; /* Black w/ opacity */
-	margin-top: 200px;
+	margin: 0 auto;
 	border: 1px solid #DDDDDD;
 }
 
@@ -252,14 +252,12 @@
 }
 
 /* Modal Content/Box */
-.modal-content {
+/* .modal-content {
 	background-color: #fefefe;
-	margin: 15% auto;
-	padding: 20px;
 	border: 1px solid #888;
 	width: 30%;
 }
-
+ */
 .addDiv {
 	margin-bottom: 20px;
 }
@@ -485,39 +483,43 @@
 			</div>
 
 			<div class="modal" id="myModal">
-				<div class="modal-body">
-					<div id="tosspay">
-						<!-- 결제위젯, 이용약관 영역 -->
-						<div id="payment-method"></div>
-						<div id="agreement"></div>
-						<!-- 결제하기 버튼 -->
-						<div id="payBtn">
-							<button id="payment-button" class="btn btn-primary btn-lg">결제하기</button>
-							<button id="resetpay-button" class="btn btn-primary btn-lg">취소하기</button>
-						</div>
+				<div class="modal-dialog">
+					<div class="modal-content">
+
+
+						
+							<div id="tosspay">
+								<!-- 결제위젯, 이용약관 영역 -->
+								<div id="payment-method"></div>
+								<div id="agreement"></div>
+								<!-- 결제하기 버튼 -->
+								<div id="payBtn">
+									<button id="payment-button" class="btn btn-primary btn-lg">결제하기</button>
+									<button id="resetpay-button" class="btn btn-primary btn-lg">취소하기</button>
+								</div>
+							</div>
 					</div>
 				</div>
 			</div>
-		</div>
 
-		<!-- modal -->
 
-		<!-- modal -->
-		<div id="delModal" class="modal">
-			<!-- Modal content -->
-			<div class="modal-content">
-				<p class="bi bi-exclamation-circle"
-					style="text-align: center; font-size: 24pt;"></p>
-				<p style="text-align: center; line-height: 1.5;" id="modalTxt"></p>
-				<p>
-					<br>
-				</p>
-				<div style="text-align: center;" id="modalBtn"></div>
-			</div>
-		</div>
-		<!-- modal -->
+					<!-- modal -->
+					<div id="delModal" class="modal">
+						<!-- Modal content -->
+						<div class="modal-content">
+							<p class="bi bi-exclamation-circle"
+								style="text-align: center; font-size: 24pt;"></p>
+							<p style="text-align: center; line-height: 1.5;" id="modalTxt"></p>
+							<p>
+								<br>
+							</p>
+							<div style="text-align: center;" id="modalBtn"></div>
+						</div>
+					</div>
+				</div>
+				<!-- modal -->
 
-		<script th:inline="javascript">
+				<script th:inline="javascript">
 		const id = [[${session.loggedInMember.id}]];
 		const membNo = [[${session.loggedInMember.membNo}]];
 	 //주문자 정보
@@ -862,8 +864,6 @@ function createSmsKey() {
 		//콤마
 	function commas(target) {
 	  target.value = target.value.replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-	  console.log(target.value);
-	  console.log(typeof(target.value));
 	}
 	
 	let amount=0;
@@ -873,6 +873,7 @@ function createSmsKey() {
 			$("#chargeInput").focus();
 			return;
 		}
+		$("#chargeInput").val("");
 	})
 	
 	$("#tosimg").on("click", function(){
@@ -896,13 +897,12 @@ function createSmsKey() {
 	  
 	  /*약관 영역 렌더링*/
 	  const paymentAgreement = paymentWidget.renderAgreement('#agreement')
-		$("#tosspay").css("display","inline");
+		$("#tosspay").css("display","block");
 	    $('#myModal').show();
 		$("body").addClass("modal-open"); 
 		
 	  /*결제요청 함수 정의*/
 		document.querySelector("#payment-button").addEventListener("click",()=>{
-			console.log(amount);
 			
 				let rec = '';
 				let recTel ='';
@@ -923,7 +923,6 @@ function createSmsKey() {
 				 },
 				 
 				 success: function(result) {
-					 console.log(result);
 					 paymentWidget.requestPayment({
 					    	orderId: 'u0XHU8mFoZkItvhSh6972',
 					    	orderName: '포인트몰',
@@ -935,10 +934,8 @@ function createSmsKey() {
 					    	if (error.code === 'USER_CANCEL') {
 					    	// 결제 고객이 결제창을 닫았을 때 에러 처리
 					    	location.href="orderCancel";
-					    	console.log(error.code);
 					    	} if (error.code === 'INVALID_CARD_COMPANY') {
 			          // 유효하지 않은 카드 코드에 대한 에러 처리
-					    	console.log(error.code);
 					    	location.href="orderCancel";
 			        			}
 				     		 }) 
@@ -947,6 +944,6 @@ function createSmsKey() {
 			 	})
 			})
 	</script>
-	</div>
+			</div>
 </body>
 </html>
