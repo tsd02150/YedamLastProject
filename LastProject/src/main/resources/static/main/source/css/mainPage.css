@@ -6,6 +6,12 @@
 		padding: 20px;
 		height: 100%;	
 	}
+	.Space p{
+		width:200px;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		white-space:nowrap;
+	}
 	.tabSpace{
 		border:1px solid #dddddd;
 		border-top:0px;
