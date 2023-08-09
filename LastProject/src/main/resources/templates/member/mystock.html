@@ -709,7 +709,7 @@ $.ajax({
 	           <tr data-no="${el.itemNo}"  onclick="location.href='/stock/chart?itemNo=${el.itemNo}'">
 	             <td>${el.tnm}</td>
 	             <td>${formatNumber(el.tprc)}</td>
-	             <td class="rate" colspan="2">${~~(el.rate)}%</td>
+	             <td class="rate" colspan="2">${commas(~~(el.rate))}%</td>
 	           </tr>
 	         `;
 	       });

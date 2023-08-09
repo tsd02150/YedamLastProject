@@ -111,9 +111,9 @@ padding-top : 40px;
 				</thead>
 				<tbody>
 				<tr>
-					<td th:text="|${#numbers.formatInteger(sumNowPrc, 0, 'COMMA')} P|"></td>
 					<td th:text="|${#numbers.formatInteger(sumTradePrc, 0, 'COMMA')} P|"></td>
-					<td th:text="|${#numbers.formatInteger((sumTradePrc-sumNowPrc), 0, 'COMMA')} P|"></td>
+					<td th:text="|${#numbers.formatInteger(sumNowPrc, 0, 'COMMA')} P|"></td>
+					<td th:text="|${#numbers.formatInteger((sumNowPrc-sumTradePrc), 0, 'COMMA')} P|"></td>
 					<td th:text="|${#numbers.formatDecimal(raise, 1, 2)} %|"></td>
 				</tr>
 				</tbody>
@@ -135,7 +135,7 @@ padding-top : 40px;
 		    <tr th:each="stock : ${possstockList}">
 		      <td th:text="${stock.commonCd}"></td>
 		      <td th:text="${stock.tnm}" th:onclick="|location.href='@{/stock/chart(itemNo=${stock.itemNo})}'|"></td>
-		      <td th:text="|${#numbers.formatInteger(stock.nowPrc, 0, 'COMMA')} P|"></td>
+		      <td th:text="|${#numbers.formatInteger(stock.tprc, 0, 'COMMA')} P|"></td>
 		      <td th:text="${stock.rate}+' %'" th:classappend="${stock.rate >= 0 ? 'high' : 'low'}"></td>
 		      <td th:text="${stock.stockCnt}"></td>
 		      <td th:text="|${#numbers.formatInteger(stock.tradePrc, 0, 'COMMA')} P|"></td>
@@ -143,7 +143,7 @@ padding-top : 40px;
 		    </tr>
 		    <tr style="border-top: 1px solid #ddd; font-weight: bold; font-size:19px;">
 		      <td colspan="5"></td>
-		      <td th:text="|${#numbers.formatInteger(sumTradePrc, 0, 'COMMA')} P|"></td>
+		      <td th:text="|${#numbers.formatInteger(sumNowPrc, 0, 'COMMA')} P|"></td>
 		      <td>100%</td>
 		    </tr>
 		  </table>
