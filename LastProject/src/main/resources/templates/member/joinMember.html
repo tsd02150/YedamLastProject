@@ -295,7 +295,7 @@ nameInput.addEventListener("input", function() {
  
  $("#nickname").on("input", function(){
 	 if(!nickRegex.test($("#nickname").val())){
-		 nickMsg.textContent = "만 가능합니다.";
+		 nickMsg.textContent = "공백없이 2자~16자 이하, 영어,숫자,한글만 가능합니다.";
 		 $("#nickmsg").css({
 				"color": "#FA3E3E",
 				"font-weight": "bold",
