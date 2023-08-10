@@ -1,5 +1,5 @@
 const stompClient = new StompJs.Client({
-    brokerURL: 'ws://43.202.20.221:83/socketserver' // 서버연결
+    brokerURL: 'ws://http://43.202.20.221:83//socketserver' // 서버연결
 });
 
 $(document).ready(function(){
@@ -49,7 +49,9 @@ $(document).ready(function(){
 		        $('#newPlace').html('<span class="badge badge-danger">New</span>');
 		        $.ajax('/stock/resetPoint');
 	    });
-	
+		chatSubs=stompClient.subscribe('/topic/sendto/room-1', (chatMessage) => {
+			showChat(JSON.parse(chatMessage.body));
+		});
 	};
 });
 stompClient.onWebSocketError = (error) => {
