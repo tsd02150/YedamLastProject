@@ -1,5 +1,5 @@
 const stompClient = new StompJs.Client({
-    brokerURL: 'ws://http://43.202.20.221:83//socketserver' // 서버연결
+    brokerURL: 'ws://43.202.20.221:83/socketserver' // 서버연결
 });
 
 $(document).ready(function(){
