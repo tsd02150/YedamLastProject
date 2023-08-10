@@ -248,7 +248,7 @@
 			let myMembNo=[[${particiInfo.membNo}]];
 			let chatRoomNo="room-1";
 			let chatSubs;
-			//$(moveRoom("room-1"));
+			$(startChat("room-1"));
 			
 
 			function addRoomBtn(){
@@ -295,6 +295,41 @@
 						closeModal();
 						moveRoom(result.roomNo);
 					}
+				})
+				.catch(err=>console.log(err));
+			}
+			
+			function startChat(roomNo){
+				fetch("/community/moveRoom",{
+					method: "POST",
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					},
+					body:"roomNo="+roomNo+"&prevRoomNo="+chatRoomNo
+				})
+				.then(response=>response.json())
+				.then(result=>{
+					resetChat();
+					
+					if(result.prevRoomNo!=chatRoomNo){
+						$('[data-roomno='+chatRoomNo+']').remove();
+					}
+					
+					myAnonNick=result.anonNick;
+					$(".roomCnt").text(result.conn);
+					$("#mainRoomName").text(result.nm);
+					$("#mainRoomName").attr("data-roomno",result.roomNo);
+					chatRoomNo=result.roomNo;
+					$('#particiList').empty();
+					
+					for(let partici of result.particiList){
+						let divTag=`
+							<div>
+								<p>${partici.anonNick}</p>
+							</div>
+						`;
+						particiList.innerHTML+=divTag;
+					}		
 				})
 				.catch(err=>console.log(err));
 			}
