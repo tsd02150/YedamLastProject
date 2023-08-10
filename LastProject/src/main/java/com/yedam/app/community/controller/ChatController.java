@@ -119,5 +119,11 @@ public class ChatController {
 		
 		return vo;
 	}
+	
+	@PostMapping("initRoomList")
+	@ResponseBody
+	public List<ChatRoomVO> initRoomlist(){
+		return chatService.selectRoomList();
+	}
 
 }

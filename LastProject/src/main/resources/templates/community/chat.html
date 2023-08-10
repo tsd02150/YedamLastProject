@@ -382,8 +382,28 @@
 					})
 					.catch(err=>console.log(err));
 				}
+				
+				fetch("/community/initRoomList",{
+					method:"POST",
+					headers: {
+						'Content-Type': 'application/x-www-form-urlencoded'
+					}
+				})
+				.then(response=>response.json())
+				.then(result=>{
+					initRoomList(result);
+				})
+				.catch(err=>console.log(err));
 			}, 2000);
-					
+			
+			function initRoomList(roomLi){
+				$('#roomList').empty();
+				for(let room of roomLi){
+					roomList.innerHTML+=`<div data-roomno="${room.roomNo}" class="roomListContent">
+						<p>${room.nm}</p>
+					</div>`
+				}
+			}
 		</script>
 	</div>
 </body>
